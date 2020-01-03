@@ -1,2 +1,2 @@
 # codec
-Codec lib
+Codec library
