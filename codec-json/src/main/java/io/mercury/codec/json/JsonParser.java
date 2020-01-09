@@ -18,7 +18,7 @@ import org.eclipse.collections.api.map.MutableMap;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import io.mercury.common.annotations.lang.MayThrowsRuntimeException;
+import io.mercury.common.annotation.lang.MayThrowsRuntimeException;
 import io.mercury.common.collections.ImmutableLists;
 import io.mercury.common.collections.ImmutableMaps;
 import io.mercury.common.collections.MutableLists;
