@@ -62,13 +62,13 @@
 
 	<distributionManagement>
 		<repository>
-			<id>betball-releases</id>
-			<name>betball-releases</name>
+			<id>releases</id>
+			<name>releases</name>
 			<url>http://203.60.1.16:10000/nexus/repository/maven-releases/</url>
 		</repository>
 		<snapshotRepository>
-			<id>betball-snapshots</id>
-			<name>betball-snapshots</name>
+			<id>snapshots</id>
+			<name>snapshots</name>
 			<url>http://203.60.1.16:10000/nexus/repository/maven-snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
