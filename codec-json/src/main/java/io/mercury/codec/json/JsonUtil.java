@@ -1,7 +1,5 @@
 package io.mercury.codec.json;
 
-import static com.alibaba.fastjson.JSON.isValidArray;
-import static com.alibaba.fastjson.JSON.isValidObject;
 import static com.alibaba.fastjson.JSON.parseArray;
 import static com.alibaba.fastjson.JSON.parseObject;
 
@@ -19,6 +17,8 @@ import org.eclipse.collections.api.map.MutableMap;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONValidator;
+import com.alibaba.fastjson.JSONValidator.Type;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -42,12 +42,16 @@ public final class JsonUtil {
 		return GsonHasNulls.toJson(obj);
 	}
 
-	public static boolean isJsonObject(String str) {
-		return isValidObject(str);
+	public static boolean isJsonValue(String str) {
+		return JSONValidator.from(str).getType() == Type.Value;
 	}
 
 	public static boolean isJsonArray(String str) {
-		return isValidArray(str);
+		return JSONValidator.from(str).getType() == Type.Array;
+	}
+
+	public static boolean isJsonObject(String str) {
+		return JSONValidator.from(str).getType() == Type.Object;
 	}
 
 	@MayThrowsRuntimeException(JsonParseException.class)
