@@ -12,7 +12,8 @@ import io.mercury.common.character.Charsets;
 import io.mercury.common.serialization.TextSerializer;
 
 @NotThreadSafe
-public class AvroTextSerializer extends BaseAvroSerializer implements TextSerializer<SpecificRecord> {
+@Deprecated
+public class AvroTextSerializer  implements TextSerializer<SpecificRecord> {
 
 	private JsonEncoder encoder;
 

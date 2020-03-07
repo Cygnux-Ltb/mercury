@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,23 +15,46 @@ import org.apache.avro.io.BinaryDecoder;
 import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.specific.SpecificRecord;
+import org.slf4j.Logger;
 
+import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.BytesDeserializer;
 
 @NotThreadSafe
-public final class AvroBytesDeserializer<T extends SpecificRecord> extends BaseAvroDeserializer<T>
+@Deprecated
+public final class AvroBytesDeserializer<T extends SpecificRecord> 
 		implements BytesDeserializer<T> {
+	
+	private static final Logger logger = CommonLoggerFactory.getLogger(AvroBytesDeserializer.class);
 
 	private BinaryDecoder decoder;
 
 	private Class<T> tClass;
+	
+	private SpecificDatumReader<T> datumReader;
+
+	protected final SpecificDatumReader<T> getDatumReader(Class<T> tClass) {
+		if (datumReader == null) {
+			datumReader = initDatumReader(tClass);
+		}
+		return datumReader;
+	}
+
+	private final SpecificDatumReader<T> initDatumReader(Class<T> tClass) {
+		return new SpecificDatumReader<>(tClass);
+	}
 
 	public AvroBytesDeserializer(Class<T> tClass) {
 		this.tClass = tClass;
 	}
-
+	
 	@Override
-	public T deSerializationSingle(byte[] bytes) {
+	public T deserialization(ByteBuffer source) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public T deserialization(byte[] bytes) {
 		try {
 			return getDatumReader(tClass).read(null, decoder);
 		} catch (IOException e) {
@@ -46,7 +70,6 @@ public final class AvroBytesDeserializer<T extends SpecificRecord> extends BaseA
 	private int offset;
 	private byte remainingBytes[];
 
-	@Override
 	public List<T> deSerializationMultiple(byte[] bytes) {
 		byte[] allBytes;
 		if (remainingBytes != null) {
@@ -90,6 +113,9 @@ public final class AvroBytesDeserializer<T extends SpecificRecord> extends BaseA
 		}
 		return resultList;
 	}
+
+
+	
 
 
 }

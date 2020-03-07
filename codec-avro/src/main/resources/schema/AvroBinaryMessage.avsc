@@ -1,0 +1,46 @@
+{
+    "namespace": "io.mercury.codec.avro",
+    "type": "record",
+    "name": "AvroBinaryMessage",
+    "fields": [
+        {
+            "name": "sequence",
+            "type": "long"
+        },
+        {
+            "name": "envelope",
+            "type": {
+                "namespace": "io.mercury.codec.avro",
+                "type": "record",
+                "name": "Envelope",
+                "fields": [
+                    {
+                        "name": "version",
+                        "type": "int"
+                    },
+                    {
+                        "name": "type",
+                        "type": "int"
+                    },
+                    {
+                        "name": "contentType",
+                        "type": {
+                            "namespace": "io.mercury.codec.avro",
+                            "type": "enum",
+                            "name": "ContentType",
+                            "symbols": [
+                                "OBJECT",
+                                "LIST",
+                                "STRING"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "content",
+            "type": "bytes"
+        }
+    ]
+}

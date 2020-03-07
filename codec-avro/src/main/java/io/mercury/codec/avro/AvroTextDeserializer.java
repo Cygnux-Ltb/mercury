@@ -15,7 +15,8 @@ import org.apache.avro.specific.SpecificRecord;
 import io.mercury.common.serialization.TextDeserializer;
 
 @NotThreadSafe
-public final class AvroTextDeserializer<T extends SpecificRecord> extends BaseAvroDeserializer<T>
+@Deprecated
+public final class AvroTextDeserializer<T extends SpecificRecord> 
 		implements TextDeserializer<T> {
 
 	private JsonDecoder decoder;
@@ -26,7 +27,6 @@ public final class AvroTextDeserializer<T extends SpecificRecord> extends BaseAv
 		this.tClass = tClass;
 	}
 
-	@Override
 	public T deSerializationSingle(String str) {
 		try {
 			SpecificDatumReader<T> datumReader = getDatumReader(tClass);
@@ -45,7 +45,6 @@ public final class AvroTextDeserializer<T extends SpecificRecord> extends BaseAv
 		return DecoderFactory.get().jsonDecoder(schema, "");
 	}
 
-	@Override
 	public List<T> deSerializationMultiple(String f) {
 		throw new AvroRuntimeException("deSerializationMultiple() -> " + f);
 	}
