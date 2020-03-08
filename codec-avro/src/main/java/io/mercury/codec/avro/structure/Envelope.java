@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT DIRECTLY
  */
-package io.mercury.codec.avro;
+package io.mercury.codec.avro.structure;
 
 import org.apache.avro.message.BinaryMessageDecoder;
 import org.apache.avro.message.BinaryMessageEncoder;
@@ -14,10 +14,10 @@ import org.apache.avro.specific.SpecificData;
 public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		implements org.apache.avro.specific.SpecificRecord {
 
-	private static final long serialVersionUID = 7432590565187603805L;
+	private static final long serialVersionUID = -7700848145311377641L;
 
 	public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse(
-			"{\"type\":\"record\",\"name\":\"Envelope\",\"namespace\":\"io.mercury.codec.avro\",\"fields\":[{\"name\":\"version\",\"type\":\"int\"},{\"name\":\"type\",\"type\":\"int\"},{\"name\":\"contentType\",\"type\":{\"type\":\"enum\",\"name\":\"ContentType\",\"symbols\":[\"OBJECT\",\"LIST\",\"STRING\"]}}]}");
+			"{\"type\":\"record\",\"name\":\"Envelope\",\"namespace\":\"io.mercury.codec.avro.structure\",\"fields\":[{\"name\":\"version\",\"type\":\"int\"},{\"name\":\"type\",\"type\":\"int\"},{\"name\":\"contentType\",\"type\":{\"type\":\"enum\",\"name\":\"ContentType\",\"symbols\":[\"OBJECT\",\"LIST\",\"STRING\"]}}]}");
 
 	public static org.apache.avro.Schema getClassSchema() {
 		return SCHEMA$;
@@ -83,7 +83,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 
 	private int version;
 	private int type;
-	private io.mercury.codec.avro.ContentType contentType;
+	private io.mercury.codec.avro.structure.ContentType contentType;
 
 	/**
 	 * Default constructor. Note that this does not initialize fields to their
@@ -100,7 +100,8 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 	 * @param type        The new value for type
 	 * @param contentType The new value for contentType
 	 */
-	public Envelope(java.lang.Integer version, java.lang.Integer type, io.mercury.codec.avro.ContentType contentType) {
+	public Envelope(java.lang.Integer version, java.lang.Integer type,
+			io.mercury.codec.avro.structure.ContentType contentType) {
 		this.version = version;
 		this.type = type;
 		this.contentType = contentType;
@@ -138,7 +139,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 			type = (java.lang.Integer) value$;
 			break;
 		case 2:
-			contentType = (io.mercury.codec.avro.ContentType) value$;
+			contentType = (io.mercury.codec.avro.structure.ContentType) value$;
 			break;
 		default:
 			throw new org.apache.avro.AvroRuntimeException("Bad index");
@@ -186,7 +187,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 	 * 
 	 * @return The value of the 'contentType' field.
 	 */
-	public io.mercury.codec.avro.ContentType getContentType() {
+	public io.mercury.codec.avro.structure.ContentType getContentType() {
 		return contentType;
 	}
 
@@ -195,7 +196,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 	 * 
 	 * @param value the value to set.
 	 */
-	public void setContentType(io.mercury.codec.avro.ContentType value) {
+	public void setContentType(io.mercury.codec.avro.structure.ContentType value) {
 		this.contentType = value;
 	}
 
@@ -204,8 +205,8 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 	 * 
 	 * @return A new Envelope RecordBuilder
 	 */
-	public static io.mercury.codec.avro.Envelope.Builder newBuilder() {
-		return new io.mercury.codec.avro.Envelope.Builder();
+	public static io.mercury.codec.avro.structure.Envelope.Builder newBuilder() {
+		return new io.mercury.codec.avro.structure.Envelope.Builder();
 	}
 
 	/**
@@ -214,11 +215,12 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 	 * @param other The existing builder to copy.
 	 * @return A new Envelope RecordBuilder
 	 */
-	public static io.mercury.codec.avro.Envelope.Builder newBuilder(io.mercury.codec.avro.Envelope.Builder other) {
+	public static io.mercury.codec.avro.structure.Envelope.Builder newBuilder(
+			io.mercury.codec.avro.structure.Envelope.Builder other) {
 		if (other == null) {
-			return new io.mercury.codec.avro.Envelope.Builder();
+			return new io.mercury.codec.avro.structure.Envelope.Builder();
 		} else {
-			return new io.mercury.codec.avro.Envelope.Builder(other);
+			return new io.mercury.codec.avro.structure.Envelope.Builder(other);
 		}
 	}
 
@@ -229,11 +231,12 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 	 * @param other The existing instance to copy.
 	 * @return A new Envelope RecordBuilder
 	 */
-	public static io.mercury.codec.avro.Envelope.Builder newBuilder(io.mercury.codec.avro.Envelope other) {
+	public static io.mercury.codec.avro.structure.Envelope.Builder newBuilder(
+			io.mercury.codec.avro.structure.Envelope other) {
 		if (other == null) {
-			return new io.mercury.codec.avro.Envelope.Builder();
+			return new io.mercury.codec.avro.structure.Envelope.Builder();
 		} else {
-			return new io.mercury.codec.avro.Envelope.Builder(other);
+			return new io.mercury.codec.avro.structure.Envelope.Builder(other);
 		}
 	}
 
@@ -245,7 +248,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 
 		private int version;
 		private int type;
-		private io.mercury.codec.avro.ContentType contentType;
+		private io.mercury.codec.avro.structure.ContentType contentType;
 
 		/** Creates a new Builder */
 		private Builder() {
@@ -257,7 +260,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		 * 
 		 * @param other The existing Builder to copy.
 		 */
-		private Builder(io.mercury.codec.avro.Envelope.Builder other) {
+		private Builder(io.mercury.codec.avro.structure.Envelope.Builder other) {
 			super(other);
 			if (isValidValue(fields()[0], other.version)) {
 				this.version = data().deepCopy(fields()[0].schema(), other.version);
@@ -278,7 +281,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		 * 
 		 * @param other The existing instance to copy.
 		 */
-		private Builder(io.mercury.codec.avro.Envelope other) {
+		private Builder(io.mercury.codec.avro.structure.Envelope other) {
 			super(SCHEMA$);
 			if (isValidValue(fields()[0], other.version)) {
 				this.version = data().deepCopy(fields()[0].schema(), other.version);
@@ -309,7 +312,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		 * @param value The value of 'version'.
 		 * @return This builder.
 		 */
-		public io.mercury.codec.avro.Envelope.Builder setVersion(int value) {
+		public io.mercury.codec.avro.structure.Envelope.Builder setVersion(int value) {
 			validate(fields()[0], value);
 			this.version = value;
 			fieldSetFlags()[0] = true;
@@ -330,7 +333,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		 * 
 		 * @return This builder.
 		 */
-		public io.mercury.codec.avro.Envelope.Builder clearVersion() {
+		public io.mercury.codec.avro.structure.Envelope.Builder clearVersion() {
 			fieldSetFlags()[0] = false;
 			return this;
 		}
@@ -350,7 +353,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		 * @param value The value of 'type'.
 		 * @return This builder.
 		 */
-		public io.mercury.codec.avro.Envelope.Builder setType(int value) {
+		public io.mercury.codec.avro.structure.Envelope.Builder setType(int value) {
 			validate(fields()[1], value);
 			this.type = value;
 			fieldSetFlags()[1] = true;
@@ -371,7 +374,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		 * 
 		 * @return This builder.
 		 */
-		public io.mercury.codec.avro.Envelope.Builder clearType() {
+		public io.mercury.codec.avro.structure.Envelope.Builder clearType() {
 			fieldSetFlags()[1] = false;
 			return this;
 		}
@@ -381,7 +384,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		 * 
 		 * @return The value.
 		 */
-		public io.mercury.codec.avro.ContentType getContentType() {
+		public io.mercury.codec.avro.structure.ContentType getContentType() {
 			return contentType;
 		}
 
@@ -391,7 +394,8 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		 * @param value The value of 'contentType'.
 		 * @return This builder.
 		 */
-		public io.mercury.codec.avro.Envelope.Builder setContentType(io.mercury.codec.avro.ContentType value) {
+		public io.mercury.codec.avro.structure.Envelope.Builder setContentType(
+				io.mercury.codec.avro.structure.ContentType value) {
 			validate(fields()[2], value);
 			this.contentType = value;
 			fieldSetFlags()[2] = true;
@@ -412,7 +416,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		 * 
 		 * @return This builder.
 		 */
-		public io.mercury.codec.avro.Envelope.Builder clearContentType() {
+		public io.mercury.codec.avro.structure.Envelope.Builder clearContentType() {
 			contentType = null;
 			fieldSetFlags()[2] = false;
 			return this;
@@ -425,7 +429,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 				record.version = fieldSetFlags()[0] ? this.version : (java.lang.Integer) defaultValue(fields()[0]);
 				record.type = fieldSetFlags()[1] ? this.type : (java.lang.Integer) defaultValue(fields()[1]);
 				record.contentType = fieldSetFlags()[2] ? this.contentType
-						: (io.mercury.codec.avro.ContentType) defaultValue(fields()[2]);
+						: (io.mercury.codec.avro.structure.ContentType) defaultValue(fields()[2]);
 				return record;
 			} catch (org.apache.avro.AvroMissingFieldException e) {
 				throw e;
@@ -476,7 +480,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 
 			this.type = in.readInt();
 
-			this.contentType = io.mercury.codec.avro.ContentType.values()[in.readEnum()];
+			this.contentType = io.mercury.codec.avro.structure.ContentType.values()[in.readEnum()];
 
 		} else {
 			for (int i = 0; i < 3; i++) {
@@ -490,7 +494,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 					break;
 
 				case 2:
-					this.contentType = io.mercury.codec.avro.ContentType.values()[in.readEnum()];
+					this.contentType = io.mercury.codec.avro.structure.ContentType.values()[in.readEnum()];
 					break;
 
 				default:

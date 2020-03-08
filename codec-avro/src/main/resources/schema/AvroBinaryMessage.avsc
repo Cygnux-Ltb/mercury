@@ -1,5 +1,5 @@
 {
-    "namespace": "io.mercury.codec.avro",
+    "namespace": "io.mercury.codec.avro.structure",
     "type": "record",
     "name": "AvroBinaryMessage",
     "fields": [
@@ -10,7 +10,7 @@
         {
             "name": "envelope",
             "type": {
-                "namespace": "io.mercury.codec.avro",
+                "namespace": "io.mercury.codec.avro.structure",
                 "type": "record",
                 "name": "Envelope",
                 "fields": [
@@ -25,7 +25,7 @@
                     {
                         "name": "contentType",
                         "type": {
-                            "namespace": "io.mercury.codec.avro",
+                            "namespace": "io.mercury.codec.avro.structure",
                             "type": "enum",
                             "name": "ContentType",
                             "symbols": [

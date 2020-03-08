@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT DIRECTLY
  */
-package io.mercury.codec.avro;
+package io.mercury.codec.avro.structure;
 
 @org.apache.avro.specific.AvroGenerated
 public enum ContentType implements org.apache.avro.generic.GenericEnumSymbol<ContentType> {
@@ -11,7 +11,7 @@ public enum ContentType implements org.apache.avro.generic.GenericEnumSymbol<Con
 	OBJECT, LIST, STRING;
 
 	public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse(
-			"{\"type\":\"enum\",\"name\":\"ContentType\",\"namespace\":\"io.mercury.codec.avro\",\"symbols\":[\"OBJECT\",\"LIST\",\"STRING\"]}");
+			"{\"type\":\"enum\",\"name\":\"ContentType\",\"namespace\":\"io.mercury.codec.avro.structure\",\"symbols\":[\"OBJECT\",\"LIST\",\"STRING\"]}");
 
 	public static org.apache.avro.Schema getClassSchema() {
 		return SCHEMA$;

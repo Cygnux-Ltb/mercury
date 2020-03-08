@@ -6,47 +6,50 @@ import java.util.List;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.apache.avro.AvroRuntimeException;
-import org.apache.avro.Schema;
 import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.io.JsonDecoder;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.specific.SpecificRecord;
+import org.slf4j.Logger;
 
-import io.mercury.common.serialization.TextDeserializer;
+import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.serialization.specific.TextDeserializer;
 
 @NotThreadSafe
-@Deprecated
-public final class AvroTextDeserializer<T extends SpecificRecord> 
-		implements TextDeserializer<T> {
+public final class AvroTextDeserializer<T extends SpecificRecord> implements TextDeserializer<T> {
+
+	private static final Logger logger = CommonLoggerFactory.getLogger(AvroTextDeserializer.class);
 
 	private JsonDecoder decoder;
 
-	private Class<T> tClass;
+	private SpecificDatumReader<T> datumReader;
 
 	public AvroTextDeserializer(Class<T> tClass) {
-		this.tClass = tClass;
+		this.datumReader = new SpecificDatumReader<>(tClass);
+		this.decoder = initDecoder();
 	}
 
-	public T deSerializationSingle(String str) {
+	private JsonDecoder initDecoder() {
 		try {
-			SpecificDatumReader<T> datumReader = getDatumReader(tClass);
-			if (decoder == null) {
-				decoder = initDecoder(datumReader.getSchema());
-			}
-			decoder.configure(str);
-			return datumReader.read(null, decoder);
+			return DecoderFactory.get().jsonDecoder(datumReader.getSchema(), "");
 		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			throw new RuntimeException("AvroTextDeserializer.deSerialization(str, tClass) -> " + e.getMessage());
+			throw new RuntimeException(e);
 		}
 	}
 
-	private JsonDecoder initDecoder(Schema schema) throws IOException {
-		return DecoderFactory.get().jsonDecoder(schema, "");
+	@Override
+	public T deserialization(T reuse, String str) {
+		try {
+			decoder.configure(str);
+			return datumReader.read(reuse, decoder);
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+			throw new RuntimeException("AvroTextDeserializer.deserialization(str) -> " + e.getMessage());
+		}
 	}
 
-	public List<T> deSerializationMultiple(String f) {
-		throw new AvroRuntimeException("deSerializationMultiple() -> " + f);
+	public List<T> deserializationMultiple(String source) {
+		throw new AvroRuntimeException("deserializationMultiple() -> " + source);
 	}
 
 }

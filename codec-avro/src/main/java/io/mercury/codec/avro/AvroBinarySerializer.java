@@ -14,13 +14,12 @@ import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
 
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.BytesSerializer;
+import io.mercury.common.serialization.specific.BinarySerializer;
 
 @NotThreadSafe
-@Deprecated
-public final class AvroBytesSerializer<T extends SpecificRecord> implements BytesSerializer<T> {
+public final class AvroBinarySerializer<T extends SpecificRecord> implements BinarySerializer<T> {
 
-	private static final Logger logger = CommonLoggerFactory.getLogger(AvroBytesSerializer.class);
+	private static final Logger logger = CommonLoggerFactory.getLogger(AvroBinarySerializer.class);
 
 	private BinaryEncoder encoder;
 
@@ -31,7 +30,7 @@ public final class AvroBytesSerializer<T extends SpecificRecord> implements Byte
 	/**
 	 * Use default ByteArrayOutputStream size
 	 */
-	public AvroBytesSerializer(Class<T> recordClass) {
+	public AvroBinarySerializer(Class<T> recordClass) {
 		this(recordClass, 8192);
 	}
 
@@ -40,17 +39,17 @@ public final class AvroBytesSerializer<T extends SpecificRecord> implements Byte
 	 * @param recordClass : object type
 	 * @param size        : size is inner ByteArrayOutputStream size
 	 */
-	protected AvroBytesSerializer(Class<T> recordClass, int size) {
+	protected AvroBinarySerializer(Class<T> recordClass, int size) {
 		this.writer = new SpecificDatumWriter<>(recordClass);
 		this.outputStream = new ByteArrayOutputStream(size);
 	}
 
 	@Override
-	public ByteBuffer serialization(T source) {
-		writer.setSchema(source.getSchema());
+	public ByteBuffer serialization(T obj) {
 		try {
+			// TODO 对象可重用
 			encoder = EncoderFactory.get().binaryEncoder(outputStream, encoder);
-			writer.write(source, encoder);
+			writer.write(obj, encoder);
 			encoder.flush();
 			ByteBuffer wrap = ByteBuffer.wrap(outputStream.toByteArray());
 			outputStream.reset();
