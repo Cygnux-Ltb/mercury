@@ -19,46 +19,46 @@ import io.mercury.common.serialization.specific.TextSerializer;
 @NotThreadSafe
 public class AvroTextSerializer<T extends SpecificRecord> implements TextSerializer<T> {
 
-	private static final Logger logger = CommonLoggerFactory.getLogger(AvroTextSerializer.class);
+    private static final Logger log = CommonLoggerFactory.getLogger(AvroTextSerializer.class);
 
-	private JsonEncoder encoder;
+    private JsonEncoder encoder;
 
-	private ByteArrayOutputStream outputStream;
+    private ByteArrayOutputStream outputStream;
 
-	private DatumWriter<T> writer;
+    private DatumWriter<T> writer;
 
-	/**
-	 * Use default ByteArrayOutputStream size
-	 */
-	public AvroTextSerializer(Class<T> recordClass) {
-		this(recordClass, 8192);
+    /**
+     * Use default ByteArrayOutputStream size
+     */
+    public AvroTextSerializer(Class<T> recordClass) {
+	this(recordClass, 8192);
+    }
+
+    public AvroTextSerializer(Class<T> recordClass, int size) {
+	this.writer = new SpecificDatumWriter<>(recordClass);
+	this.outputStream = new ByteArrayOutputStream(size);
+    }
+
+    @Override
+    public String serialization(T obj) {
+	try {
+	    // TODO 对象可重用
+	    encoder = EncoderFactory.get().jsonEncoder(obj.getSchema(), outputStream);
+	    writer.write(obj, encoder);
+	    encoder.flush();
+	    byte[] bytes = outputStream.toByteArray();
+	    outputStream.reset();
+	    return new String(bytes, Charsets.UTF8);
+	} catch (IOException e) {
+	    log.error(e.getMessage(), e);
+	    try {
+		outputStream.close();
+	    } catch (IOException e1) {
+		log.error(e1.getMessage(), e);
+	    }
+	    throw new RuntimeException("AvroTextSerializer serialization exception -> " + e.getMessage());
 	}
 
-	public AvroTextSerializer(Class<T> recordClass, int size) {
-		this.writer = new SpecificDatumWriter<>(recordClass);
-		this.outputStream = new ByteArrayOutputStream(size);
-	}
-
-	@Override
-	public String serialization(T obj) {
-		try {
-			// TODO 对象可重用
-			encoder = EncoderFactory.get().jsonEncoder(obj.getSchema(), outputStream);
-			writer.write(obj, encoder);
-			encoder.flush();
-			byte[] bytes = outputStream.toByteArray();
-			outputStream.reset();
-			return new String(bytes, Charsets.UTF8);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			try {
-				outputStream.close();
-			} catch (IOException e1) {
-				logger.error(e1.getMessage(), e);
-			}
-			throw new RuntimeException("AvroTextSerializer.serialization(record) -> " + e.getMessage());
-		}
-
-	}
+    }
 
 }

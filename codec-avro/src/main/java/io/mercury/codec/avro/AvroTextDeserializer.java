@@ -18,38 +18,38 @@ import io.mercury.common.serialization.specific.TextDeserializer;
 @NotThreadSafe
 public final class AvroTextDeserializer<T extends SpecificRecord> implements TextDeserializer<T> {
 
-	private static final Logger logger = CommonLoggerFactory.getLogger(AvroTextDeserializer.class);
+    private static final Logger log = CommonLoggerFactory.getLogger(AvroTextDeserializer.class);
 
-	private JsonDecoder decoder;
+    private JsonDecoder decoder;
 
-	private SpecificDatumReader<T> datumReader;
+    private SpecificDatumReader<T> datumReader;
 
-	public AvroTextDeserializer(Class<T> tClass) {
-		this.datumReader = new SpecificDatumReader<>(tClass);
-		this.decoder = initDecoder();
+    public AvroTextDeserializer(Class<T> tClass) {
+	this.datumReader = new SpecificDatumReader<>(tClass);
+	this.decoder = initDecoder();
+    }
+
+    private JsonDecoder initDecoder() {
+	try {
+	    return DecoderFactory.get().jsonDecoder(datumReader.getSchema(), "");
+	} catch (IOException e) {
+	    throw new RuntimeException(e);
 	}
+    }
 
-	private JsonDecoder initDecoder() {
-		try {
-			return DecoderFactory.get().jsonDecoder(datumReader.getSchema(), "");
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+    @Override
+    public T deserialization(T reuse, String str) {
+	try {
+	    decoder.configure(str);
+	    return datumReader.read(reuse, decoder);
+	} catch (IOException e) {
+	    log.error(e.getMessage(), e);
+	    throw new RuntimeException("AvroTextDeserializer.deserialization(str) -> " + e.getMessage());
 	}
+    }
 
-	@Override
-	public T deserialization(T reuse, String str) {
-		try {
-			decoder.configure(str);
-			return datumReader.read(reuse, decoder);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			throw new RuntimeException("AvroTextDeserializer.deserialization(str) -> " + e.getMessage());
-		}
-	}
-
-	public List<T> deserializationMultiple(String source) {
-		throw new AvroRuntimeException("deserializationMultiple() -> " + source);
-	}
+    public List<T> deserializationMultiple(String source) {
+	throw new AvroRuntimeException("deserializationMultiple() -> " + source);
+    }
 
 }
