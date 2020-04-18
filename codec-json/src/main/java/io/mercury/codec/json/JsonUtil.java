@@ -22,7 +22,7 @@ import com.alibaba.fastjson.JSONValidator.Type;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import io.mercury.common.annotation.lang.MayThrowsRuntimeException;
+import io.mercury.common.annotation.lang.ThrowsRuntimeException;
 import io.mercury.common.collections.ImmutableLists;
 import io.mercury.common.collections.ImmutableMaps;
 import io.mercury.common.collections.MutableLists;
@@ -54,7 +54,7 @@ public final class JsonUtil {
 		return JSONValidator.from(str).getType() == Type.Object;
 	}
 
-	@MayThrowsRuntimeException(JsonParseException.class)
+	@ThrowsRuntimeException(JsonParseException.class)
 	public static final JSONObject toJsonObject(@Nonnull String json) {
 		try {
 			return parseObject(json);
@@ -63,7 +63,7 @@ public final class JsonUtil {
 		}
 	}
 
-	@MayThrowsRuntimeException(JsonParseException.class)
+	@ThrowsRuntimeException(JsonParseException.class)
 	public static final JSONArray toJsonArray(@Nonnull String json) {
 		try {
 			return parseArray(json);
@@ -72,7 +72,7 @@ public final class JsonUtil {
 		}
 	}
 
-	@MayThrowsRuntimeException(JsonParseException.class)
+	@ThrowsRuntimeException(JsonParseException.class)
 	public static final <T> T toObject(@Nonnull String json, @Nonnull Class<T> clazz) {
 		try {
 			return parseObject(json, clazz);
@@ -81,7 +81,7 @@ public final class JsonUtil {
 		}
 	}
 
-	@MayThrowsRuntimeException(JsonParseException.class)
+	@ThrowsRuntimeException(JsonParseException.class)
 	public static final List<Object> toList(@Nonnull String json) {
 		try {
 			return parseArray(json);
@@ -90,7 +90,7 @@ public final class JsonUtil {
 		}
 	}
 
-	@MayThrowsRuntimeException(JsonParseException.class)
+	@ThrowsRuntimeException(JsonParseException.class)
 	public static final <T> List<T> toList(@Nonnull String json, @Nonnull Class<T> clazz) {
 		try {
 			return parseArray(json, clazz);
@@ -99,7 +99,7 @@ public final class JsonUtil {
 		}
 	}
 
-	@MayThrowsRuntimeException(JsonParseException.class)
+	@ThrowsRuntimeException(JsonParseException.class)
 	public static final MutableList<Object> toMutableList(@Nonnull String json) {
 		try {
 			return MutableLists.newFastList(
@@ -110,7 +110,7 @@ public final class JsonUtil {
 		}
 	}
 
-	@MayThrowsRuntimeException(JsonParseException.class)
+	@ThrowsRuntimeException(JsonParseException.class)
 	public static final ImmutableList<Object> toImmutableList(@Nonnull String json) {
 		try {
 			return ImmutableLists.newList(
@@ -121,7 +121,7 @@ public final class JsonUtil {
 		}
 	}
 
-	@MayThrowsRuntimeException(JsonParseException.class)
+	@ThrowsRuntimeException(JsonParseException.class)
 	public static final Map<String, Object> toMap(@Nonnull String json) {
 		try {
 			return parseObject(json);
@@ -130,7 +130,7 @@ public final class JsonUtil {
 		}
 	}
 
-	@MayThrowsRuntimeException(JsonParseException.class)
+	@ThrowsRuntimeException(JsonParseException.class)
 	public static final MutableMap<String, Object> toMutableMap(@Nonnull String json) {
 		try {
 			return MutableMaps.newUnifiedMap(
@@ -141,7 +141,7 @@ public final class JsonUtil {
 		}
 	}
 
-	@MayThrowsRuntimeException(JsonParseException.class)
+	@ThrowsRuntimeException(JsonParseException.class)
 	public static final ImmutableMap<String, Object> toImmutableMap(@Nonnull String json) {
 		try {
 			return ImmutableMaps.newMap(
