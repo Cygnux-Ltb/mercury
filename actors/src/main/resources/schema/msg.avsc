@@ -1,0 +1,15 @@
+{
+    "namespace": "io.mercury.actors.messages",
+    "type": "record",
+    "name": "AvroMsg",
+    "fields": [
+        {
+            "name": "msgType",
+            "type": "int"
+        },
+        {
+            "name": "msgContent",
+            "type": "bytes"
+        }
+    ]
+}
