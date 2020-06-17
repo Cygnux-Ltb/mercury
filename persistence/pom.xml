@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- This is persistence pom.xml -->
+	<groupId>io.mercury</groupId>
+	<artifactId>persistence</artifactId>
+	<version>1.0-SNAPSHOT</version>
+
+	<url>https://github.com/yellow013/persistence.git</url>
+
+	<name>persistence</name>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>persistence-chronicle</module>
+		<module>persistence-mapdb</module>
+		<module>persistence-rocksdb</module>
+		<module>persistence-sqlite</module>
+		<module>serialization-avro</module>
+		<module>serialization-json</module>
+		<module>persistence-redis</module>
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<io.mercury.commons.version>1.0-SNAPSHOT</io.mercury.commons.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<compilerArgument>-parameters</compilerArgument>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<!-- Junit4 dependency -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- commons-core -->
+		<dependency>
+			<groupId>io.mercury</groupId>
+			<artifactId>commons-core</artifactId>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.mercury</groupId>
+				<artifactId>commons-core</artifactId>
+				<version>${io.mercury.commons.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.mercury</groupId>
+				<artifactId>commons-concurrent</artifactId>
+				<version>${io.mercury.commons.version}</version>
+			</dependency>
+
+			<!-- Java(TM) Persistence API -->
+			<dependency>
+				<groupId>javax.persistence</groupId>
+				<artifactId>javax.persistence-api</artifactId>
+				<version>2.2</version>
+			</dependency>
+
+			<!-- A set of annotations used for code inspection support and code documentation -->
+			<dependency>
+				<groupId>org.jetbrains</groupId>
+				<artifactId>annotations</artifactId>
+				<version>19.0.0</version>
+			</dependency>
+
+			<!-- General data-binding functionality for Jackson: works on core streaming 
+				API -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>2.11.0</version>
+			</dependency>
+
+			<!-- Kotlin Standard Library for JVM -->
+			<dependency>
+				<groupId>org.jetbrains.kotlin</groupId>
+				<artifactId>kotlin-stdlib</artifactId>
+				<version>1.3.72</version>
+			</dependency>
+
+			<!-- Netty/Buffer -->
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-buffer</artifactId>
+				<version>4.1.50.Final</version>
+			</dependency>
+
+			<!-- Netty/Handler -->
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-handler</artifactId>
+				<version>4.1.50.Final</version>
+			</dependency>
+
+			<!-- Netty/Codec -->
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-codec</artifactId>
+				<version>4.1.50.Final</version>
+			</dependency>
+
+			<!-- Netty/Common -->
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-common</artifactId>
+				<version>4.1.50.Final</version>
+			</dependency>
+
+			<!-- Netty/Transport -->
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-transport</artifactId>
+				<version>4.1.50.Final</version>
+			</dependency>
+
+			<!-- Netty/Resolver -->
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-resolver</artifactId>
+				<version>4.1.50.Final</version>
+			</dependency>
+
+			<!-- Apache Commons Compress software defines an API for working with 
+				compression and archive formats. These include: bzip2, gzip, pack200, lzma, 
+				xz, Snappy, traditional Unix Compress, DEFLATE, DEFLATE64, LZ4, Brotli, Zstandard 
+				and ar, cpio, jar, tar, zip, dump, 7z, arj. -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-compress</artifactId>
+				<version>1.20</version>
+			</dependency>
+
+			<!-- Java ports and bindings of the LZ4 compression algorithm and the 
+				xxHash hashing algorithm -->
+			<dependency>
+				<groupId>org.lz4</groupId>
+				<artifactId>lz4-java</artifactId>
+				<version>1.7.1</version>
+			</dependency>
+
+			<!-- A fast compression/decompression library -->
+			<dependency>
+				<groupId>org.xerial.snappy</groupId>
+				<artifactId>snappy-java</artifactId>
+				<version>1.1.7.5</version>
+			</dependency>
+
+			<!-- Zero-allocation implementations of fast non-cryptographic hash functions 
+				for byte sequences or blocks of memory -->
+			<dependency>
+				<groupId>net.openhft</groupId>
+				<artifactId>zero-allocation-hashing</artifactId>
+				<version>0.11</version>
+			</dependency>
+
+			<!-- JNI bindings for Zstd native library that provides fast and high 
+				compression lossless algorithm for Java and all JVM languages -->
+			<dependency>
+				<groupId>com.github.luben</groupId>
+				<artifactId>zstd-jni</artifactId>
+				<version>1.4.5-4</version>
+			</dependency>
+
+			<!-- Date and time library to replace JDK date handling -->
+			<dependency>
+				<groupId>joda-time</groupId>
+				<artifactId>joda-time</artifactId>
+				<version>2.10.6</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>releases</name>
+			<url>http://203.60.1.16:10000/nexus/repository/maven-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>snapshots</name>
+			<url>http://203.60.1.16:10000/nexus/repository/maven-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+</project>

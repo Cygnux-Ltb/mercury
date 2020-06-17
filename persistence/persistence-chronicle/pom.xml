@@ -1,0 +1,272 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.mercury</groupId>
+		<artifactId>persistence</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>persistence-chronicle</artifactId>
+	<name>persistence-chronicle</name>
+
+	<properties>
+		<!-- chronicle-queue last version : 5.19.2 -->
+		<chronicle-queue.version>5.17.43</chronicle-queue.version>
+		<!-- chronicle-map last version : 3.19.3 -->
+		<chronicle-map.version>3.17.8</chronicle-map.version>
+		<!-- chronicle-component last version : 3.19.3 -->
+		<chronicle-component.version>2.19.0</chronicle-component.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>io.mercury</groupId>
+			<artifactId>commons-concurrent</artifactId>
+		</dependency>
+
+		<!-- chronicle common component start -->
+		<!-- ######## chronicle-core ######## -->
+		<dependency>
+			<groupId>net.openhft</groupId>
+			<artifactId>chronicle-core</artifactId>
+			<version>2.19.8</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jetbrains</groupId>
+					<artifactId>annotations</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- ######## chronicle-wire ######## -->
+		<dependency>
+			<groupId>net.openhft</groupId>
+			<artifactId>chronicle-wire</artifactId>
+			<version>2.19.11</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.intellij</groupId>
+					<artifactId>annotations</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- ######## chronicle-bytes ######## -->
+		<dependency>
+			<groupId>net.openhft</groupId>
+			<artifactId>chronicle-bytes</artifactId>
+			<version>2.19.12</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jetbrains</groupId>
+					<artifactId>annotations</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- ######## chronicle-threads ######## -->
+		<dependency>
+			<groupId>net.openhft</groupId>
+			<artifactId>chronicle-threads</artifactId>
+			<version>2.19.7</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jetbrains</groupId>
+					<artifactId>annotations</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.java.dev.jna</groupId>
+					<artifactId>jna</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.java.dev.jna</groupId>
+					<artifactId>jna-platform</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- ######## chronicle-values ######## -->
+		<dependency>
+			<groupId>net.openhft</groupId>
+			<artifactId>chronicle-values</artifactId>
+			<version>2.19.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jetbrains</groupId>
+					<artifactId>annotations</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- ######## chronicle-algorithms ######## -->
+		<dependency>
+			<groupId>net.openhft</groupId>
+			<artifactId>chronicle-algorithms</artifactId>
+			<version>2.19.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jetbrains</groupId>
+					<artifactId>annotations</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- chronicle common component end -->
+
+		<!-- ################################################################ -->
+		<!-- chronicle-queue Java library for persisted low latency messaging -->
+		<dependency>
+			<groupId>net.openhft</groupId>
+			<artifactId>chronicle-queue</artifactId>
+			<version>5.19.16</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<!-- exclusion jna-platform version 4.2.1 and import latest version jna-platform -->
+				<exclusion>
+					<groupId>net.openhft</groupId>
+					<artifactId>chronicle-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.openhft</groupId>
+					<artifactId>chronicle-wire</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.openhft</groupId>
+					<artifactId>chronicle-bytes</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.openhft</groupId>
+					<artifactId>chronicle-wire</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.openhft</groupId>
+					<artifactId>chronicle-threads</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- ######################################################### -->
+		<!-- chronicle-map off-heap and high performance map framework -->
+		<dependency>
+			<groupId>net.openhft</groupId>
+			<artifactId>chronicle-map</artifactId>
+			<version>3.19.4</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.java.dev.jna</groupId>
+					<artifactId>jna</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.java.dev.jna</groupId>
+					<artifactId>jna-platform</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.openhft</groupId>
+					<artifactId>chronicle-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.openhft</groupId>
+					<artifactId>chronicle-wire</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.openhft</groupId>
+					<artifactId>chronicle-bytes</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.openhft</groupId>
+					<artifactId>chronicle-threads</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jettison</groupId>
+					<artifactId>jettison</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.ops4j.pax.url</groupId>
+					<artifactId>pax-url-aether</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.thoughtworks.xstream</groupId>
+					<artifactId>xstream</artifactId>
+				</exclusion>
+				<!-- java 11 use this exclusion -->
+				<!-- <exclusion> <groupId>com.sun.java</groupId> <artifactId>tools</artifactId> 
+					</exclusion> -->
+			</exclusions>
+		</dependency>
+
+		<!-- ######################################## -->
+		<!-- These are: chronicle-map base dependency -->
+		<!-- A StAX implementation for JSON -->
+		<dependency>
+			<groupId>org.codehaus.jettison</groupId>
+			<artifactId>jettison</artifactId>
+			<version>1.4.1</version>
+		</dependency>
+		<!-- OPS4J Pax Url - mvn: protocol handler -->
+		<dependency>
+			<groupId>org.ops4j.pax.url</groupId>
+			<artifactId>pax-url-aether</artifactId>
+			<version>2.6.2</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>jcl-over-slf4j</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- XStream Core : XML Processing -->
+		<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>1.4.12</version>
+		</dependency>
+
+
+		<!-- A set of annotations used for code inspection support and code documentation. -->
+		<dependency>
+			<groupId>org.jetbrains</groupId>
+			<artifactId>annotations</artifactId>
+		</dependency>
+
+		<!-- Java Native Access Platform -->
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna-platform</artifactId>
+			<version>5.5.0</version>
+		</dependency>
+
+	</dependencies>
+</project>
