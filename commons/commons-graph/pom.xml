@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.mercury</groupId>
+		<artifactId>commons</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>commons-graph</artifactId>
+	<packaging>jar</packaging>
+
+	<name>commons-graph</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>io.mercury</groupId>
+			<artifactId>commons-core</artifactId>
+		</dependency>
+		<!-- JGraphT Core -->
+		<dependency>
+			<groupId>org.jgrapht</groupId>
+			<artifactId>jgrapht-core</artifactId>
+			<version>1.4.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.jheaps</groupId>
+					<artifactId>jheaps</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- A free, production-ready, efficient Java library containing a collection 
+			of heap data-structures. -->
+		<dependency>
+			<groupId>org.jheaps</groupId>
+			<artifactId>jheaps</artifactId>
+			<version>0.13</version>
+		</dependency>
+	</dependencies>
+</project>
