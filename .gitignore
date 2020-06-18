@@ -39,6 +39,8 @@ hs_err_pid*
 common/.factorypath
 transport/.factorypath
 /target/
+*/target/
+*/*/target/
 /.apt_generated/
 /.apt_generated_tests/
 .factorypath
