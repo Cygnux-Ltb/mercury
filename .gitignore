@@ -20,6 +20,9 @@
 *.project
 .settings/
 */.settings/
+*/.settings/org.eclipse.jdt.core.prefs
+actors/.settings/org.eclipse.jdt.core.prefs
+*/*/.settings/
 
 # Maven
 */target/

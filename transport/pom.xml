@@ -5,14 +5,16 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- This is transport module pom.xml -->
+	<parent>
+		<groupId>io.mercury</groupId>
+		<artifactId>mercury</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
 
-	<groupId>io.mercury</groupId>
 	<artifactId>transport</artifactId>
-	<version>1.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
-
 	<name>transport</name>
-	<url>https://github.com/yellow013/transport.git</url>
+
+	<packaging>pom</packaging>
 
 	<modules>
 		<module>transport-core</module>
@@ -49,7 +51,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
