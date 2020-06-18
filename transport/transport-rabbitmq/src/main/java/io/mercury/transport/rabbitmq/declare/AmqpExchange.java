@@ -2,20 +2,25 @@ package io.mercury.transport.rabbitmq.declare;
 
 import static java.lang.String.valueOf;
 
+import java.util.Map;
+
+import io.mercury.common.collections.MapUtil;
 import io.mercury.common.util.Assertor;
 
 public final class AmqpExchange {
 
-	// ExchangeType
-	private ExchangeType type;
-	// name
+	// 交换器名称
 	private String name;
+	// 交换器类型
+	private ExchangeType type;
 	// 是否持久化
 	private boolean durable = true;
 	// 没有使用时自动删除
 	private boolean autoDelete = false;
 	// 是否为内部Exchange
 	private boolean internal = false;
+	// 交换器参数
+	private Map<String, Object> args;
 
 	public static AmqpExchange fanout(String name) {
 		return new AmqpExchange(ExchangeType.Fanout, Assertor.nonEmpty(name, "name"));
@@ -80,6 +85,14 @@ public final class AmqpExchange {
 	}
 
 	/**
+	 * 
+	 * @return the exchange args
+	 */
+	public Map<String, Object> args() {
+		return args;
+	}
+
+	/**
 	 * @param durable the durable to set
 	 */
 	public AmqpExchange durable(boolean durable) {
@@ -103,18 +116,30 @@ public final class AmqpExchange {
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param args the args to set
+	 * @return
+	 */
+	public AmqpExchange args(Map<String, Object> args) {
+		this.args = args;
+		return this;
+	}
+
 	private final static String Template = "Exchange([name==$name], [type==$type], [durable==$durable], "
-			+ "[autoDelete==$autoDelete], [internal==$internal])";
+			+ "[autoDelete==$autoDelete], [internal==$internal], [args==$args])";
 
 	@Override
 	public String toString() {
 		return Template.replace("$name", name).replace("$type", valueOf(type)).replace("$durable", valueOf(durable))
-				.replace("$autoDelete", valueOf(autoDelete)).replace("$internal", valueOf(internal));
+				.replace("$autoDelete", valueOf(autoDelete)).replace("$internal", valueOf(internal))
+				.replace("$args", valueOf(args));
 	}
 
 	public boolean idempotent(AmqpExchange another) {
 		return name.equals(another.name) && type == another.type && durable == another.durable
-				&& autoDelete == another.autoDelete && internal == another.internal;
+				&& autoDelete == another.autoDelete && internal == another.internal
+				&& MapUtil.isEquals(args, another.args);
 	}
 
 	public static enum ExchangeType {

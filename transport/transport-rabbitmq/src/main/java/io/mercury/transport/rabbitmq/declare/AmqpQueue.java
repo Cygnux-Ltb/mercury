@@ -2,10 +2,14 @@ package io.mercury.transport.rabbitmq.declare;
 
 import static java.lang.String.valueOf;
 
+import java.util.Map;
+
+import io.mercury.common.collections.MapUtil;
 import io.mercury.common.util.Assertor;
 
 public final class AmqpQueue {
 
+	// 队列名称
 	private String name;
 	// 是否持久化
 	private boolean durable = true;
@@ -13,6 +17,8 @@ public final class AmqpQueue {
 	private boolean exclusive = false;
 	// channel关闭后自动删除队列
 	private boolean autoDelete = false;
+	// 队列参数
+	private Map<String, Object> args;
 
 	public static AmqpQueue named(String name) {
 		return new AmqpQueue(Assertor.nonEmpty(name, "name"));
@@ -51,6 +57,14 @@ public final class AmqpQueue {
 	}
 
 	/**
+	 * 
+	 * @return the args
+	 */
+	public Map<String, Object> args() {
+		return args;
+	}
+
+	/**
 	 * @param durable the durable to set
 	 */
 	public AmqpQueue durable(boolean durable) {
@@ -74,12 +88,29 @@ public final class AmqpQueue {
 		return this;
 	}
 
-	private final static String Template = "Queue([name==$name],[durable==$durable],[exclusive==$exclusive],[autoDelete==$autoDelete])";
+	/**
+	 * 
+	 * @param args the args to set
+	 * @return
+	 */
+	public AmqpQueue args(Map<String, Object> args) {
+		this.args = args;
+		return this;
+	}
+
+	private final static String Template = "Queue([name==$name], [durable==$durable], [exclusive==$exclusive], "
+			+ "[autoDelete==$autoDelete], [args==$args])";
 
 	@Override
 	public String toString() {
 		return Template.replace("$name", name).replace("$durable", valueOf(durable))
-				.replace("$exclusive", valueOf(exclusive)).replace("$autoDelete", valueOf(autoDelete));
+				.replace("$exclusive", valueOf(exclusive)).replace("$autoDelete", valueOf(autoDelete))
+				.replace("$args", valueOf(args));
+	}
+
+	public boolean idempotent(AmqpQueue another) {
+		return name.equals(another.name) && durable == another.durable && exclusive == another.exclusive
+				&& autoDelete == another.autoDelete && MapUtil.isEquals(args, another.args);
 	}
 
 }
