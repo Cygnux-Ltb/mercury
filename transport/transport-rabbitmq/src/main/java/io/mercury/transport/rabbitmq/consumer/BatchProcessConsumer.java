@@ -15,28 +15,29 @@ import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.eclipse.collections.api.list.MutableList;
 import org.slf4j.Logger;
 
-import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 
 import io.mercury.common.collections.MutableLists;
+import io.mercury.common.functional.BytesDeserializer;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 
 /**
- * @author xuejian.sun
- * @date 2018/11/17 13:14
+ * @author yellow013
+ * @date 2019.03.15
  */
-public class QosBatchProcessConsumer<T> extends DefaultConsumer {
+public class BatchProcessConsumer<T> extends DefaultConsumer {
 
 	private Logger log = CommonLoggerFactory.getLogger(getClass());
 
 	private Channel channel;
 
-	private QosBatchHandler<T> qosBatchHandler;
+	private BatchHandler<T> qosBatchHandler;
 
-	private QueueMessageDeserializer<T> deserializer;
+	private BytesDeserializer<T> deserializer;
 
 	/**
 	 * prefetchCount : rabbit consumer最多接受的数量
@@ -75,9 +76,8 @@ public class QosBatchProcessConsumer<T> extends DefaultConsumer {
 	 * @param millisSecond     自动flush的时间间隔
 	 * @param qosBatchCallBack 当达到prefetchCount值或自动flush触发此回调
 	 */
-	public QosBatchProcessConsumer(Channel channel, int prefetchCount, long millisSecond,
-			QosBatchHandler<T> qosBatchHandler, QueueMessageDeserializer<T> deserializer,
-			RefreshNowEvent<T> refreshNowEvent, Predicate<T> filter) {
+	public BatchProcessConsumer(Channel channel, int prefetchCount, long millisSecond, BatchHandler<T> batchHandler,
+			BytesDeserializer<T> deserializer, RefreshNowEvent<T> refreshNowEvent, Predicate<T> filter) {
 		super(channel);
 		this.channel = channel;
 		this.refreshNowEvent = refreshNowEvent;
@@ -93,8 +93,7 @@ public class QosBatchProcessConsumer<T> extends DefaultConsumer {
 		init();
 	}
 
-	public QosBatchProcessConsumer(Channel channel, QueueMessageDeserializer<T> serializable,
-			QosBatchHandler<T> qosBatchHandler) {
+	public BatchProcessConsumer(Channel channel, BytesDeserializer<T> serializable, BatchHandler<T> batchHandler) {
 		super(channel);
 		this.channel = channel;
 		this.qosBatchHandler = Assertor.nonNull(qosBatchHandler, "qosBatchHandler");
@@ -120,7 +119,7 @@ public class QosBatchProcessConsumer<T> extends DefaultConsumer {
 	}
 
 	@Override
-	public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) {
+	public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties, byte[] body) {
 		// 序列化
 		T t = deserializer.deserialization(body);
 		// 过滤器
