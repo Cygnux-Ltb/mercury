@@ -94,6 +94,20 @@
 			</exclusions>
 		</dependency>
 
+		<!-- Core Jackson processing abstractions (aka Streaming API), implementation 
+			for JSON -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+		</dependency>
+
+		<!-- General data-binding functionality for Jackson: works on core streaming 
+			API -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+
 		<!-- Support for reading and writing AVRO-encoded data via Jackson abstractions -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
