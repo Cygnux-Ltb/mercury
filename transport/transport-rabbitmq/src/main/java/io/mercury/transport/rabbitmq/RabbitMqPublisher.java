@@ -24,7 +24,7 @@ import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
 import io.mercury.transport.rabbitmq.exception.AmqpDeclareRuntimeException;
 import io.mercury.transport.rabbitmq.exception.AmqpNoConfirmException;
 
-public class RabbitMqPublisher extends AbstractRabbitMqTransport implements Publisher<byte[]>, Sender<byte[]> {
+public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publisher<byte[]>, Sender<byte[]> {
 
 	// 发布消息使用的[ExchangeDeclare]
 	private final ExchangeRelation publishExchange;
@@ -78,7 +78,7 @@ public class RabbitMqPublisher extends AbstractRabbitMqTransport implements Publ
 	 */
 	public RabbitMqPublisher(String tag, @Nonnull RmqPublisherConfigurator configurator, Consumer<Long> ackCallback,
 			Consumer<Long> noAckCallback) {
-		super(tag, "publisher", configurator.connection());
+		super(tag, "Publisher", configurator.connection());
 		this.publishExchange = Assertor.nonNull(configurator.publishExchange(), "exchangeRelation");
 		this.exchangeName = publishExchange.exchangeName();
 		this.defaultRoutingKey = configurator.defaultRoutingKey();

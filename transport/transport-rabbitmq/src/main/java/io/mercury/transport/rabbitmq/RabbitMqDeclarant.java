@@ -16,7 +16,7 @@ import io.mercury.transport.rabbitmq.declare.AmqpExchange;
 import io.mercury.transport.rabbitmq.declare.AmqpQueue;
 import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
 
-public final class RabbitMqDeclarant extends AbstractRabbitMqTransport {
+public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 
 	/**
 	 * Create OperationalChannel of host, port, username and password

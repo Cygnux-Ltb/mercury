@@ -5,7 +5,7 @@ import static io.mercury.common.util.StringUtil.isNullOrEmpty;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.concurrent.TimeoutException;
 
 import javax.annotation.Nonnull;
@@ -19,6 +19,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Method;
 import com.rabbitmq.client.ShutdownSignalException;
 
+import io.mercury.common.datetime.TimeZone;
 import io.mercury.common.functional.ShutdownEvent;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
@@ -26,7 +27,7 @@ import io.mercury.common.util.StringUtil;
 import io.mercury.transport.core.TransportModule;
 import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 
-public abstract class AbstractRabbitMqTransport implements TransportModule, Closeable {
+public abstract class BaseRabbitMqTransport implements TransportModule, Closeable {
 
 	// 连接RabbitMQ Server使用的组件
 	protected ConnectionFactory connectionFactory;
@@ -44,7 +45,7 @@ public abstract class AbstractRabbitMqTransport implements TransportModule, Clos
 
 	protected String tag;
 
-	protected AbstractRabbitMqTransport() {
+	protected BaseRabbitMqTransport() {
 		// Generally not used
 	}
 
@@ -54,8 +55,8 @@ public abstract class AbstractRabbitMqTransport implements TransportModule, Clos
 	 * @param moduleType
 	 * @param rmqConnection
 	 */
-	protected AbstractRabbitMqTransport(String tag, @Nonnull String moduleType, @Nonnull RmqConnection rmqConnection) {
-		this.tag = isNullOrEmpty(tag) ? moduleType + "-" + Instant.now() : tag;
+	protected BaseRabbitMqTransport(String tag, @Nonnull String moduleType, @Nonnull RmqConnection rmqConnection) {
+		this.tag = isNullOrEmpty(tag) ? moduleType + "-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT) : tag;
 		this.rmqConnection = Assertor.nonNull(rmqConnection, "rmqConnection");
 		this.shutdownEvent = rmqConnection.shutdownEvent();
 	}
