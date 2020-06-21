@@ -1,4 +1,4 @@
-package io.mercury.transport.rabbitmq.consumer;
+package io.mercury.transport.rabbitmq.batch;
 
 import java.util.function.Predicate;
 

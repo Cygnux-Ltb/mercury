@@ -1,4 +1,4 @@
-package io.mercury.transport.rabbitmq.consumer;
+package io.mercury.transport.rabbitmq.batch;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -15,7 +15,7 @@ import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.eclipse.collections.api.list.MutableList;
 import org.slf4j.Logger;
 
-import com.rabbitmq.client.AMQP.BasicProperties;
+import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
@@ -119,7 +119,7 @@ public class BatchProcessConsumer<T> extends DefaultConsumer {
 	}
 
 	@Override
-	public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties, byte[] body) {
+	public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) {
 		// 序列化
 		T t = deserializer.deserialization(body);
 		// 过滤器

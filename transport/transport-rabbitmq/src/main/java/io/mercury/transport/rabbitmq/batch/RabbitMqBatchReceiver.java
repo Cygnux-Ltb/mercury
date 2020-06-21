@@ -1,4 +1,4 @@
-package io.mercury.transport.rabbitmq.consumer;
+package io.mercury.transport.rabbitmq.batch;
 
 import java.io.IOException;
 import java.util.function.Predicate;
@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 
 import io.mercury.common.functional.BytesDeserializer;
 import io.mercury.transport.core.api.Receiver;
-import io.mercury.transport.rabbitmq.AbstractRabbitMqTransport;
+import io.mercury.transport.rabbitmq.BaseRabbitMqTransport;
 import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfigurator;
 
 /**
@@ -15,7 +15,7 @@ import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfigurator;
  * @date 2019.03.15
  * 
  */
-public class RabbitMqBatchReceiver<T> extends AbstractRabbitMqTransport implements Receiver, Runnable {
+public class RabbitMqBatchReceiver<T> extends BaseRabbitMqTransport implements Receiver, Runnable {
 
 	private String receiverName;
 
@@ -31,17 +31,6 @@ public class RabbitMqBatchReceiver<T> extends AbstractRabbitMqTransport implemen
 	private BatchProcessConsumer<T> consumer;
 
 	public RabbitMqBatchReceiver(String tag, @Nonnull RmqReceiverConfigurator configurator, long autoFlushInterval,
-			BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent,
-			Predicate<T> filter) {
-		super(tag, "QosBatchReceiver", configurator.connection());
-		this.receiveQueue = configurator.receiveQueue().queue().name();
-		createConnection();
-		queueDeclare();
-		consumer = new BatchProcessConsumer<T>(super.channel, configurator.qos(), autoFlushInterval, batchHandler,
-				deserializer, refreshNowEvent, filter);
-	}
-
-	public RabbitMqBatchReceiver(String tag, @Nonnull RmqReceiverConfigurator configurator, long autoFlushInterval,
 			BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent) {
 		super(tag, "QosBatchReceiver", configurator.connection());
 		this.receiveQueue = configurator.receiveQueue().queue().name();
@@ -50,6 +39,19 @@ public class RabbitMqBatchReceiver<T> extends AbstractRabbitMqTransport implemen
 		consumer = new BatchProcessConsumer<T>(channel, configurator.qos(), autoFlushInterval, batchHandler,
 				deserializer, refreshNowEvent, null);
 	}
+	
+	public RabbitMqBatchReceiver(String tag, @Nonnull RmqReceiverConfigurator configurator, long autoFlushInterval,
+			BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent,
+			Predicate<T> filter) {
+		super(tag, "BatchReceiver", configurator.connection());
+		this.receiveQueue = configurator.receiveQueue().queueName();
+		createConnection();
+		queueDeclare();
+		consumer = new BatchProcessConsumer<T>(super.channel, configurator.qos(), autoFlushInterval, batchHandler,
+				deserializer, refreshNowEvent, filter);
+	}
+
+
 
 	private void queueDeclare() {
 		this.receiverName = "receiver::" + rmqConnection.fullInfo() + "$" + receiveQueue;
