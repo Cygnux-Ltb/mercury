@@ -5,10 +5,12 @@
  */
 package io.mercury.serialization.avro.structure;
 
-import org.apache.avro.message.BinaryMessageDecoder;
-import org.apache.avro.message.BinaryMessageEncoder;
-import org.apache.avro.message.SchemaStore;
+import org.apache.avro.generic.GenericArray;
 import org.apache.avro.specific.SpecificData;
+import org.apache.avro.util.Utf8;
+import org.apache.avro.message.BinaryMessageEncoder;
+import org.apache.avro.message.BinaryMessageDecoder;
+import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class AvroBinaryMessage extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
@@ -105,6 +107,7 @@ public class AvroBinaryMessage extends org.apache.avro.specific.SpecificRecordBa
   }
 
   // Used by DatumReader.  Applications should not call.
+  @SuppressWarnings(value="unchecked")
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
     case 0: sequence = (java.lang.Long)value$; break;
@@ -415,6 +418,7 @@ public class AvroBinaryMessage extends org.apache.avro.specific.SpecificRecordBa
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public AvroBinaryMessage build() {
       try {
         AvroBinaryMessage record = new AvroBinaryMessage();
