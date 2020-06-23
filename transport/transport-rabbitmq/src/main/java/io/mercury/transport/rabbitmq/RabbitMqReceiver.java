@@ -307,6 +307,7 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 			if (!autoAck)
 				channel.basicQos(qos);
 
+			//TODO 使用新的API
 //			channel.basicConsume(queueName, autoAck, tag, false, false, null, (consumerTag, delivery) -> {
 //				log.info("DeliverCallback receive consumerTag -> {}", consumerTag);
 //			}, consumerTag -> {
@@ -314,6 +315,7 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 //			}, (consumerTag, sig) -> {
 //				log.info("ConsumerShutdownSignalCallback receive consumerTag -> {}", consumerTag);
 //			});
+			
 
 			channel.basicConsume(
 					// param1: the name of the queue
