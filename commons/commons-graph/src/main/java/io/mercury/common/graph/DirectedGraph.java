@@ -14,8 +14,8 @@ public final class DirectedGraph<V> {
 
 	private final Graph<V, Edge> graph;
 
-	private DirectedGraph(Class<V> vclass) {
-		this.graph = GraphTypeBuilder.directed().vertexClass(vclass).edgeSupplier(EdgeSupplier).buildGraph();
+	private DirectedGraph(Class<V> vertexClass) {
+		this.graph = GraphTypeBuilder.directed().vertexClass(vertexClass).edgeSupplier(EdgeSupplier).buildGraph();
 	}
 
 	public static <V> DirectedGraph<V> buildOf(Class<V> vertexClass) {
@@ -23,8 +23,9 @@ public final class DirectedGraph<V> {
 	}
 
 	public DirectedGraph<V> addVertex(V vertex) {
-		if (vertex != null)
+		if (vertex != null) {
 			graph.addVertex(vertex);
+		}
 		return this;
 	}
 

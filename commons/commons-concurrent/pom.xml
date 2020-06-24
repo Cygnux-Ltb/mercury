@@ -13,7 +13,7 @@
 
 	<artifactId>commons-concurrent</artifactId>
 	<packaging>jar</packaging>
-	
+
 	<name>commons-concurrent</name>
 
 	<dependencies>
@@ -30,7 +30,7 @@
 			<version>3.0.0</version>
 		</dependency>
 
-		<!-- Disruptor Concurrent Programming Framework -->
+		<!-- Concurrent Programming Framework -->
 		<dependency>
 			<groupId>com.lmax</groupId>
 			<artifactId>disruptor</artifactId>
