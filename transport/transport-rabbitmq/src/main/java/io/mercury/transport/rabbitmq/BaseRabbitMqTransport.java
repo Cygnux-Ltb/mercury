@@ -71,18 +71,7 @@ public abstract class BaseRabbitMqTransport implements TransportModule, Closeabl
 			connection.setId(tag + "-" + System.nanoTime());
 			log.info("Call method connectionFactory.newConnection() finished, tag -> {}, connection id -> {}", tag,
 					connection.getId());
-			connection.addShutdownListener(signal -> {
-				// 输出信号到控制台
-				log.info("Shutdown listener message -> {}", signal.getMessage());
-				if (isNormalShutdown(signal))
-					log.info("connection id -> {}, is normal shutdown", connection.getId());
-				else {
-					log.error("connection id -> {}, not normal shutdown", connection.getId());
-					// 如果回调函数不为null, 则执行此函数
-					if (shutdownEvent != null)
-						shutdownEvent.accept(signal);
-				}
-			});
+			connection.addShutdownListener(this::handleShutdownSignal);
 			channel = connection.createChannel();
 			log.info("Call method connection.createChannel() finished, connection id -> {}, channel number -> {}",
 					connection.getId(), channel.getChannelNumber());
@@ -108,7 +97,20 @@ public abstract class BaseRabbitMqTransport implements TransportModule, Closeabl
 		return isConnected();
 	}
 
-	private boolean isNormalShutdown(ShutdownSignalException sig) {
+	protected void handleShutdownSignal(ShutdownSignalException sig) {
+		// 输出信号到控制台
+		log.info("Shutdown listener message -> {}", sig.getMessage());
+		if (isNormalShutdown(sig)) {
+			log.info("connection id -> {}, is normal shutdown", connection.getId());
+		} else {
+			log.error("connection id -> {}, not normal shutdown", connection.getId());
+			// 如果回调函数不为null, 则执行此函数
+			if (shutdownEvent != null)
+				shutdownEvent.accept(sig);
+		}
+	}
+
+	protected boolean isNormalShutdown(ShutdownSignalException sig) {
 		Method reason = sig.getReason();
 		if (reason instanceof AMQP.Channel.Close) {
 			AMQP.Channel.Close channelClose = (AMQP.Channel.Close) reason;

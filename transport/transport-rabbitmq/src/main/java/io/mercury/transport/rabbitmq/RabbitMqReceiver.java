@@ -100,6 +100,17 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 			@Nonnull Consumer<byte[]> consumer) {
 		return create(null, configurator, consumer);
 	}
+	
+	/**
+	 * 
+	 * @param configurator
+	 * @param consumer
+	 * @return
+	 */
+	public static final RabbitMqReceiver<byte[]> create(@Nonnull RmqReceiverConfigurator configurator,
+			@Nonnull BiConsumer<String, Delivery> deliveryConsumer) {
+		return create(null, configurator, deliveryConsumer);
+	}
 
 	/**
 	 * 
@@ -111,6 +122,18 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 	public static final RabbitMqReceiver<byte[]> create(String tag, @Nonnull RmqReceiverConfigurator configurator,
 			@Nonnull Consumer<byte[]> consumer) {
 		return create(tag, configurator, msg -> msg, consumer);
+	}
+	
+	/**
+	 * 
+	 * @param tag
+	 * @param configurator
+	 * @param consumer
+	 * @return
+	 */
+	public static final RabbitMqReceiver<byte[]> create(String tag, @Nonnull RmqReceiverConfigurator configurator,
+			@Nonnull BiConsumer<String, Delivery> deliveryConsumer) {
+		return create(tag, configurator, msg -> msg, null, deliveryConsumer);
 	}
 
 	/**
@@ -308,13 +331,13 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 				channel.basicQos(qos);
 
 			//TODO 使用新的API
-//			channel.basicConsume(queueName, autoAck, tag, false, false, null, (consumerTag, delivery) -> {
-//				log.info("DeliverCallback receive consumerTag -> {}", consumerTag);
-//			}, consumerTag -> {
-//				log.info("CancelCallback receive consumerTag -> {}", consumerTag);
-//			}, (consumerTag, sig) -> {
-//				log.info("ConsumerShutdownSignalCallback receive consumerTag -> {}", consumerTag);
-//			});
+			channel.basicConsume(queueName, autoAck, tag, false, false, null, (consumerTag, delivery) -> {
+				log.info("DeliverCallback receive consumerTag -> {}", consumerTag);
+			}, consumerTag -> {
+				log.info("CancelCallback receive consumerTag -> {}", consumerTag);
+			}, (consumerTag, sig) -> {
+				log.info("ConsumerShutdownSignalCallback receive consumerTag -> {}", consumerTag);
+			});
 			
 
 			channel.basicConsume(
