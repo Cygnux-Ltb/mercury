@@ -1,6 +1,6 @@
 package io.mercury.persistence.chronicle.exception;
 
-public class ChronicleIOException extends RuntimeException {
+public final class ChronicleIOException extends RuntimeException {
 
 	/**
 	 * 
