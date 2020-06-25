@@ -25,7 +25,7 @@ public enum FileCycle {
 
 	;
 
-	/* 每个滚动文件包含的秒数 */
+	// 每个滚动文件包含的秒数
 	private int seconds;
 
 	private RollCycle rollCycle;
@@ -65,7 +65,6 @@ public enum FileCycle {
 
 	public static void main(String[] args) {
 		System.out.println(FileCycle.MINUTELY.toIndex(System.currentTimeMillis() / 1000));
-
 		System.out.println(Integer.MAX_VALUE);
 		System.out.println(Instant.now().getEpochSecond() / 60);
 
