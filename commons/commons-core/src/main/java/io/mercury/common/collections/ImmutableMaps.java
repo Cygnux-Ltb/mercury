@@ -30,40 +30,72 @@ public final class ImmutableMaps {
 
 	/**
 	 * 
-	 * factory
+	 * ImmutableIntIntMapFactory
 	 */
 	public static ImmutableIntIntMapFactory IntIntMapFactory() {
 		return ImmutableIntIntMapFactoryImpl.INSTANCE;
 	}
 
+	/**
+	 * 
+	 * ImmutableIntLongMapFactory
+	 */
 	public static ImmutableIntLongMapFactory IntLongMapFactory() {
 		return ImmutableIntLongMapFactoryImpl.INSTANCE;
 	}
 
+	/**
+	 * 
+	 * ImmutableIntDoubleMapFactory
+	 */
 	public static ImmutableIntDoubleMapFactory IntDoubleMapFactory() {
 		return ImmutableIntDoubleMapFactoryImpl.INSTANCE;
 	}
 
+	/**
+	 * 
+	 * ImmutableIntObjectMapFactory
+	 */
 	public static ImmutableIntObjectMapFactory IntObjectMapFactory() {
 		return ImmutableIntObjectMapFactoryImpl.INSTANCE;
 	}
 
+	/**
+	 * 
+	 * ImmutableLongIntMapFactory
+	 */
 	public static ImmutableLongIntMapFactory LongIntMapFactory() {
 		return ImmutableLongIntMapFactoryImpl.INSTANCE;
 	}
 
+	/**
+	 * 
+	 * ImmutableLongLongMapFactory
+	 */
 	public static ImmutableLongLongMapFactory LongLongMapFactory() {
 		return ImmutableLongLongMapFactoryImpl.INSTANCE;
 	}
 
+	/**
+	 * 
+	 * ImmutableLongDoubleMapFactory
+	 */
 	public static ImmutableLongDoubleMapFactory LongDoubleMapFactory() {
 		return ImmutableLongDoubleMapFactoryImpl.INSTANCE;
 	}
 
+	/**
+	 * 
+	 * ImmutableLongObjectMapFactory
+	 */
 	public static ImmutableLongObjectMapFactory LongObjectMapFactory() {
 		return ImmutableLongObjectMapFactoryImpl.INSTANCE;
 	}
 
+	/**
+	 * 
+	 * MapFactory
+	 */
 	public static ImmutableMapFactory MapFactory() {
 		return ImmutableMapFactoryImpl.INSTANCE;
 	}

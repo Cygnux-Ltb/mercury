@@ -19,7 +19,7 @@ public final class ImmutableLists {
 
 	/**
 	 * 
-	 * immutable int list
+	 * ImmutableIntListFactory
 	 */
 	public static ImmutableIntListFactory IntListFactory() {
 		return ImmutableIntListFactoryImpl.INSTANCE;
@@ -33,7 +33,7 @@ public final class ImmutableLists {
 
 	/**
 	 * 
-	 * immutable long list
+	 * ImmutableLongListFactory
 	 */
 	public static ImmutableLongListFactory LongListFactory() {
 		return ImmutableLongListFactoryImpl.INSTANCE;
@@ -47,7 +47,7 @@ public final class ImmutableLists {
 
 	/**
 	 * 
-	 * immutable list
+	 * ImmutableListFactory
 	 */
 	public static ImmutableListFactory ListFactory() {
 		return ImmutableListFactoryImpl.INSTANCE;

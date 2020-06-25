@@ -26,7 +26,8 @@ public final class ImmutableSets {
 	}
 
 	/**
-	 * immutable int set
+	 * 
+	 * ImmutableIntSetFactory
 	 */
 	public static ImmutableIntSetFactory IntSetFactory() {
 		return ImmutableIntSetFactoryImpl.INSTANCE;
@@ -43,7 +44,7 @@ public final class ImmutableSets {
 	}
 
 	/**
-	 * immutable long set
+	 * ImmutableLongSetFactory
 	 */
 	public static ImmutableLongSetFactory LongSetFactory() {
 		return ImmutableLongSetFactoryImpl.INSTANCE;
@@ -60,7 +61,7 @@ public final class ImmutableSets {
 	}
 
 	/**
-	 * immutable double set
+	 * ImmutableDoubleSetFactory
 	 */
 	public static ImmutableDoubleSetFactory DoubleSetFactory() {
 		return ImmutableDoubleSetFactoryImpl.INSTANCE;
@@ -77,7 +78,7 @@ public final class ImmutableSets {
 	}
 
 	/**
-	 * immutable set
+	 * ImmutableSetFactory
 	 */
 	public static ImmutableSetFactory SetFactory() {
 		return ImmutableSetFactoryImpl.INSTANCE;
@@ -103,7 +104,7 @@ public final class ImmutableSets {
 	}
 
 	/**
-	 * immutable sorted set
+	 * ImmutableSortedSetFactory
 	 */
 	public static ImmutableSortedSetFactory SortedSetFactory() {
 		return ImmutableSortedSetFactoryImpl.INSTANCE;
@@ -123,12 +124,10 @@ public final class ImmutableSets {
 	}
 
 	public static void main(String[] args) {
-
 		for (int i = 1; i < 32; i++) {
 			System.out.println("1 << " + i + " : " + (1 << i));
 		}
 		System.out.println(Integer.MAX_VALUE);
-
 	}
 
 }
