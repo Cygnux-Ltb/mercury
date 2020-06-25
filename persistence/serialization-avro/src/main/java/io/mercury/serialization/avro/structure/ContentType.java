@@ -4,10 +4,19 @@
  * DO NOT EDIT DIRECTLY
  */
 package io.mercury.serialization.avro.structure;
+
 @org.apache.avro.specific.AvroGenerated
 public enum ContentType implements org.apache.avro.generic.GenericEnumSymbol<ContentType> {
-  OBJECT, LIST, STRING  ;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"enum\",\"name\":\"ContentType\",\"namespace\":\"io.mercury.serialization.avro.structure\",\"symbols\":[\"OBJECT\",\"LIST\",\"STRING\"]}");
-  public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
-  public org.apache.avro.Schema getSchema() { return SCHEMA$; }
+	OBJECT, LIST, STRING;
+
+	public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse(
+			"{\"type\":\"enum\",\"name\":\"ContentType\",\"namespace\":\"io.mercury.serialization.avro.structure\",\"symbols\":[\"OBJECT\",\"LIST\",\"STRING\"]}");
+
+	public static org.apache.avro.Schema getClassSchema() {
+		return SCHEMA$;
+	}
+
+	public org.apache.avro.Schema getSchema() {
+		return SCHEMA$;
+	}
 }
