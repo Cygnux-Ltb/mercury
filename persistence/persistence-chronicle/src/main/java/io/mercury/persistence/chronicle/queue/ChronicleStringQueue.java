@@ -55,19 +55,19 @@ public class ChronicleStringQueue
 
 	public static void main(String[] args) {
 		ChronicleStringQueue queue = ChronicleStringQueue.newBuilder().fileCycle(FileCycle.MINUTELY).build();
-		ChronicleStringAppender queueWriter = queue.acquireAppender();
-		ChronicleStringReader queueReader = queue.createReader(next -> System.out.println(next));
+		ChronicleStringAppender writer = queue.acquireAppender();
+		ChronicleStringReader reader = queue.createReader(next -> System.out.println(next));
 		new Thread(() -> {
 			for (;;) {
 				try {
-					queueWriter.append(String.valueOf(RandomNumber.randomLong()));
+					writer.append(String.valueOf(RandomNumber.randomLong()));
 					ThreadTool.sleep(100);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		}).start();
-		queueReader.runningOnNewThread();
+		reader.runningOnNewThread();
 	}
 
 }

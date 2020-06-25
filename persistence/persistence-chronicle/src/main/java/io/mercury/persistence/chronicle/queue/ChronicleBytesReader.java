@@ -6,6 +6,7 @@ import static net.openhft.chronicle.bytes.Bytes.elasticHeapByteBuffer;
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
+import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
@@ -13,16 +14,17 @@ import org.slf4j.Logger;
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.queue.ExcerptTailer;
 
+@Immutable
 @NotThreadSafe
 public final class ChronicleBytesReader extends AbstractChronicleReader<ByteBuffer> {
 
 	private final int bufferSize;
 	private final boolean useDirectMemory;
 
-	ChronicleBytesReader(long allocationNo, String readerName, FileCycle fileCycle, ReaderParam readerParam,
+	ChronicleBytesReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam readerParam,
 			Logger logger, int bufferSize, boolean useDirectMemory, ExcerptTailer excerptTailer,
 			Consumer<ByteBuffer> consumer) {
-		super(allocationNo, readerName, fileCycle, readerParam, logger, excerptTailer, consumer);
+		super(allocateSeq, readerName, fileCycle, readerParam, logger, excerptTailer, consumer);
 		this.bufferSize = bufferSize;
 		this.useDirectMemory = useDirectMemory;
 	}
