@@ -68,7 +68,7 @@ public class RabbitMqBuffer<E> implements Queue<E>, Closeable {
 				exchangeNames.stream().map(exchangeName -> routingKeys.isEmpty() ? AmqpExchange.fanout(exchangeName)
 						: AmqpExchange.direct(exchangeName)).collect(Collectors.toList()),
 				routingKeys);
-		queueRelation.declare(RabbitMqDeclarant.withChannel(rabbitMqChannel.internalChannel()));
+		queueRelation.declare(RabbitMqDeclarant.newWithChannel(rabbitMqChannel.internalChannel()));
 	}
 
 	private void buildName() {

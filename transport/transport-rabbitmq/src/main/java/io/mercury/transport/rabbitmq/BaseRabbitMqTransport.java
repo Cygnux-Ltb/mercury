@@ -40,13 +40,14 @@ public abstract class BaseRabbitMqTransport implements TransportModule, Closeabl
 	// 停机事件, 在监听到ShutdownSignalException时调用
 	protected ShutdownEvent<Exception> shutdownEvent;
 
-	// 子类共用Logger
-	protected Logger log = CommonLoggerFactory.getLogger(getClass());
+	// 继承子类通用Logger
+	protected final Logger log = CommonLoggerFactory.getLogger(getClass());
 
-	protected String tag;
+	protected final String tag;
 
-	protected BaseRabbitMqTransport() {
+	protected BaseRabbitMqTransport(String tag) {
 		// Generally not used
+		this.tag = tag;
 	}
 
 	/**
@@ -68,7 +69,7 @@ public abstract class BaseRabbitMqTransport implements TransportModule, Closeabl
 		}
 		try {
 			connection = connectionFactory.newConnection();
-			connection.setId(tag + "-" + System.nanoTime());
+			connection.setId(tag + "-[" + System.currentTimeMillis() + "]");
 			log.info("Call method connectionFactory.newConnection() finished, tag -> {}, connection id -> {}", tag,
 					connection.getId());
 			connection.addShutdownListener(this::handleShutdownSignal);

@@ -100,11 +100,11 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 			@Nonnull Consumer<byte[]> consumer) {
 		return create(null, configurator, consumer);
 	}
-	
+
 	/**
 	 * 
 	 * @param configurator
-	 * @param consumer
+	 * @param deliveryConsumer
 	 * @return
 	 */
 	public static final RabbitMqReceiver<byte[]> create(@Nonnull RmqReceiverConfigurator configurator,
@@ -123,12 +123,12 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 			@Nonnull Consumer<byte[]> consumer) {
 		return create(tag, configurator, msg -> msg, consumer);
 	}
-	
+
 	/**
 	 * 
 	 * @param tag
 	 * @param configurator
-	 * @param consumer
+	 * @param deliveryConsumer
 	 * @return
 	 */
 	public static final RabbitMqReceiver<byte[]> create(String tag, @Nonnull RmqReceiverConfigurator configurator,
@@ -207,7 +207,7 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 	}
 
 	private void declare() {
-		RabbitMqDeclarant declarant = RabbitMqDeclarant.withChannel(channel);
+		RabbitMqDeclarant declarant = RabbitMqDeclarant.newWithChannel(channel);
 		try {
 			this.receiveQueue.declare(declarant);
 		} catch (AmqpDeclareException e) {
@@ -330,15 +330,14 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 			if (!autoAck)
 				channel.basicQos(qos);
 
-			//TODO 使用新的API
-			channel.basicConsume(queueName, autoAck, tag, false, false, null, (consumerTag, delivery) -> {
-				log.info("DeliverCallback receive consumerTag -> {}", consumerTag);
-			}, consumerTag -> {
-				log.info("CancelCallback receive consumerTag -> {}", consumerTag);
-			}, (consumerTag, sig) -> {
-				log.info("ConsumerShutdownSignalCallback receive consumerTag -> {}", consumerTag);
-			});
-			
+			// TODO 使用新的API
+//			channel.basicConsume(queueName, autoAck, tag, false, false, null, (consumerTag, delivery) -> {
+//				log.info("DeliverCallback receive consumerTag -> {}", consumerTag);
+//			}, consumerTag -> {
+//				log.info("CancelCallback receive consumerTag -> {}", consumerTag);
+//			}, (consumerTag, sig) -> {
+//				log.info("ConsumerShutdownSignalCallback receive consumerTag -> {}", consumerTag);
+//			});
 
 			channel.basicConsume(
 					// param1: the name of the queue

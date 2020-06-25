@@ -68,7 +68,7 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	 * @param channel
 	 * @return
 	 */
-	public static RabbitMqDeclarant withChannel(Channel channel) {
+	public static RabbitMqDeclarant newWithChannel(Channel channel) {
 		return new RabbitMqDeclarant(channel);
 	}
 
@@ -78,6 +78,7 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	}
 
 	private RabbitMqDeclarant(Channel channel) {
+		super("channel-" + channel.getChannelNumber());
 		this.channel = channel;
 	}
 
