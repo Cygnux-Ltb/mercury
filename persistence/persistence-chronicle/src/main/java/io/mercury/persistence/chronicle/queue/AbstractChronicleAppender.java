@@ -19,15 +19,15 @@ public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAcc
 	protected final Logger logger;
 	protected final ExcerptAppender excerptAppender;
 
-	private Supplier<T> dataProducer;
+	private Supplier<T> dataSupplier;
 
 	AbstractChronicleAppender(long allocationNo, String appenderName, Logger logger, ExcerptAppender excerptAppender,
-			Supplier<T> dataProducer) {
+			Supplier<T> dataSupplier) {
 		super(allocationNo);
 		this.appenderName = appenderName;
 		this.logger = logger;
 		this.excerptAppender = excerptAppender;
-		this.dataProducer = dataProducer;
+		this.dataSupplier = dataSupplier;
 	}
 
 	public ExcerptAppender excerptAppender() {
@@ -72,13 +72,13 @@ public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAcc
 
 	@Override
 	public void run() {
-		if (dataProducer != null) {
+		if (dataSupplier != null) {
 			for (;;) {
 				if (isClose) {
 					logger.info("Chronicle queue is closed, Thread exit");
 					break;
 				} else {
-					T t = dataProducer.get();
+					T t = dataSupplier.get();
 					append(t);
 				}
 			}

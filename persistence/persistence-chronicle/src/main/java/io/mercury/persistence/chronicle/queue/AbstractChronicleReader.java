@@ -163,15 +163,16 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 			}
 			if (next == null) {
 				// 等待新数据
-				if (waitingData)
+				if (waitingData) {
 					sleep(readIntervalUnit, readIntervalTime);
-				else {
+				} else {
 					// 数据读取完毕, 退出线程
 					exit();
 					break;
 				}
-			} else
+			} else {
 				consumer.accept(next);
+			}
 		}
 	}
 

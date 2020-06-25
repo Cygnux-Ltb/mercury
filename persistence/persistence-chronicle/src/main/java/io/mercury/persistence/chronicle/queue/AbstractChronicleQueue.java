@@ -39,6 +39,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	private final boolean readOnly;
 	private final long epoch;
 	private final FileCycle fileCycle;
+	// 文件清理周期
 	private final int fileClearCycle;
 	private final ObjIntConsumer<File> storeFileListener;
 
@@ -90,15 +91,20 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 		logger.info("ChronicleQueue [{}] shutdown hook finished", queueName);
 	}
 
+	// 最后文件周期
 	private AtomicInteger lastCycle;
+	// 周期文件Map
 	private ConcurrentMap<Integer, String> cycleFileMap;
+	// 周期文件清理线程
 	private Thread fileClearThread;
+	// 清理线程运行状态
 	private AtomicBoolean isClearRunning = new AtomicBoolean(true);
 
 	private void buildClearThread() {
 		if (fileClearCycle > 0) {
 			this.lastCycle = new AtomicInteger();
 			this.cycleFileMap = new ConcurrentHashMap<>();
+			// 周期文件清理间隔
 			long delay = fileCycle.getSeconds() * fileClearCycle;
 			this.fileClearThread = ThreadTool.startNewThread(() -> {
 				do {
@@ -109,18 +115,15 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 						fileClearTask();
 						logger.info("{} exit now", ThreadTool.currentThreadName());
 					}
-					runFileClearTask();
+					if (isClearRunning.get()) {
+						fileClearTask();
+					}
 				} while (isClearRunning.get());
 			}, queueName + "-FileClear");
 			// singleThreadScheduleWithFixedDelay(delay, delay, TimeUnit.SECONDS,
 			// this::runFileClearTask);
 			logger.info("Build clear thread is finished");
 		}
-	}
-
-	private void runFileClearTask() {
-		if (isClearRunning.get())
-			fileClearTask();
 	}
 
 	private void fileClearTask() {
@@ -134,9 +137,10 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 				logger.info("Delete cycle file : cycle==[{}], fileAbsolutePath==[{}]", saveCycle, fileAbsolutePath);
 				File file = new File(fileAbsolutePath);
 				if (file.exists()) {
-					if (!file.delete()) {
-						logger.warn("File delete failure !!!");
+					if (file.delete()) {
 						cycleFileMap.remove(saveCycle);
+					} else {
+						logger.warn("File : [{}] delete failure !!!", fileAbsolutePath);
 					}
 				} else {
 					logger.error("File not exists, Please check the ChronicleQueue save path : [{}]",
@@ -203,7 +207,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	}
 
 	private String generateReaderName() {
-		return queueName + "-Reader-" + randomUnsignedInt();
+		return queueName + "-reader-" + randomUnsignedInt();
 	}
 
 	private static final String EMPTY_CONSUMER_MSG = "Reader consumer is an empty implementation";
@@ -280,7 +284,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 			throws IllegalStateException;
 
 	private String generateAppenderName() {
-		return queueName + "-Appender-" + randomUnsignedInt();
+		return queueName + "-appender-" + randomUnsignedInt();
 	}
 
 	/**
@@ -346,6 +350,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 
 	/**
 	 * 添加访问器
+	 * 
 	 * @param accessor
 	 */
 	private void addAccessor(CloseableChronicleAccessor accessor) {
