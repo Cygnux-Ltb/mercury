@@ -14,6 +14,8 @@ import java.util.function.Consumer;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
 
@@ -25,6 +27,8 @@ import io.mercury.persistence.chronicle.queue.AbstractChronicleQueue.CloseableCh
 import net.openhft.chronicle.queue.ExcerptTailer;
 import net.openhft.chronicle.queue.TailerState;
 
+@Immutable
+@NotThreadSafe
 public abstract class AbstractChronicleReader<T> extends CloseableChronicleAccessor implements Runnable {
 
 	private final String readerName;
@@ -37,9 +41,9 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 
 	private final Consumer<T> consumer;
 
-	AbstractChronicleReader(long allocationNo, String readerName, FileCycle fileCycle, ReaderParam readerParam,
+	AbstractChronicleReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam readerParam,
 			Logger logger, ExcerptTailer excerptTailer, Consumer<T> consumer) {
-		super(allocationNo);
+		super(allocateSeq);
 		this.readerName = readerName;
 		this.fileCycle = fileCycle;
 		this.readerParam = readerParam;

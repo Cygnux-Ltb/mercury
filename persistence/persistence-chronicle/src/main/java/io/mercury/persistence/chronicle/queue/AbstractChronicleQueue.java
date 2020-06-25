@@ -16,6 +16,8 @@ import java.util.function.Consumer;
 import java.util.function.ObjIntConsumer;
 import java.util.function.Supplier;
 
+import javax.annotation.concurrent.Immutable;
+
 import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
 import org.slf4j.Logger;
 
@@ -31,6 +33,7 @@ import io.mercury.persistence.chronicle.queue.AbstractChronicleReader.ReaderPara
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueue;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
 
+@Immutable
 public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReader<T>, A extends AbstractChronicleAppender<T>>
 		implements net.openhft.chronicle.core.io.Closeable {
 
@@ -70,13 +73,13 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	private SingleChronicleQueue buildChronicleQueue() {
 		if (!savePath.exists())
 			savePath.mkdirs();
-		SingleChronicleQueueBuilder queueBuilder = SingleChronicleQueueBuilder.single(savePath)
+		SingleChronicleQueueBuilder builder = SingleChronicleQueueBuilder.single(savePath)
 				.rollCycle(fileCycle.getRollCycle()).readOnly(readOnly).storeFileListener(this::storeFileHandle);
 		if (epoch > 0L)
-			queueBuilder.epoch(epoch);
+			builder.epoch(epoch);
 		// TODO 解决CPU缓存行填充问题
 		ShutdownHooks.addShutdownHookThread("ChronicleQueue-Cleanup", this::shutdownHandle);
-		return queueBuilder.build();
+		return builder.build();
 	}
 
 	private void shutdownHandle() {
@@ -355,7 +358,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	 */
 	private void addAccessor(CloseableChronicleAccessor accessor) {
 		synchronized (allocatedAccessor) {
-			allocatedAccessor.put(accessor.allocationNo, accessor);
+			allocatedAccessor.put(accessor.allocateSeq, accessor);
 		}
 	}
 
@@ -445,10 +448,10 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 
 		protected volatile boolean isClose = false;
 
-		private final long allocationNo;
+		private final long allocateSeq;
 
-		protected CloseableChronicleAccessor(long allocationNo) {
-			this.allocationNo = allocationNo;
+		protected CloseableChronicleAccessor(long allocateSeq) {
+			this.allocateSeq = allocateSeq;
 		}
 
 		@Override

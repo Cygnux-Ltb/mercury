@@ -3,6 +3,8 @@ package io.mercury.persistence.chronicle.queue;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
 
@@ -12,6 +14,8 @@ import io.mercury.persistence.chronicle.exception.ChronicleWriteException;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleQueue.CloseableChronicleAccessor;
 import net.openhft.chronicle.queue.ExcerptAppender;
 
+@Immutable
+@NotThreadSafe
 public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAccessor implements Runnable {
 
 	private final String appenderName;
@@ -21,9 +25,9 @@ public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAcc
 
 	private Supplier<T> dataSupplier;
 
-	AbstractChronicleAppender(long allocationNo, String appenderName, Logger logger, ExcerptAppender excerptAppender,
+	AbstractChronicleAppender(long allocateSeq, String appenderName, Logger logger, ExcerptAppender excerptAppender,
 			Supplier<T> dataSupplier) {
-		super(allocationNo);
+		super(allocateSeq);
 		this.appenderName = appenderName;
 		this.logger = logger;
 		this.excerptAppender = excerptAppender;
