@@ -13,11 +13,12 @@
 	<artifactId>persistence-mapdb</artifactId>
 	<name>persistence-mapdb</name>
 
-	<!-- MapDB provides concurrent Maps, Sets and Queues backed by disk storage 
-		or off-heap memory. It is a fast, scalable and easy to use embedded Java 
-		database. -->
+
 	<dependencies>
 
+		<!-- MapDB provides concurrent Maps, Sets and Queues backed by disk storage 
+			or off-heap memory. It is a fast, scalable and easy to use embedded Java 
+			database. -->
 		<dependency>
 			<groupId>org.mapdb</groupId>
 			<artifactId>mapdb</artifactId>
@@ -26,6 +27,10 @@
 				<exclusion>
 					<groupId>net.jpountz.lz4</groupId>
 					<artifactId>lz4</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.mapdb</groupId>
+					<artifactId>elsa</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
