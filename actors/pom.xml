@@ -17,7 +17,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<akka.version>2.6.5</akka.version>
+		<akka.version>2.6.6</akka.version>
 		<persistence.version>1.0-SNAPSHOT</persistence.version>
 	</properties>
 
@@ -73,7 +73,9 @@
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 
-		<!-- akka dependency -->
+		<!-- ####### Akka dependency ####### -->
+		<!-- Akka is a toolkit for building highly concurrent, distributed, and 
+			resilient message-driven applications for Java and Scala. -->
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-actor_2.13</artifactId>
@@ -85,31 +87,45 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-remote_2.13</artifactId>
 			<version>${akka.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.scala-lang</groupId>
+					<artifactId>scala-library</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-slf4j_2.13</artifactId>
 			<version>${akka.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.scala-lang</groupId>
+					<artifactId>scala-library</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-actor-typed_2.13</artifactId>
 			<version>${akka.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.scala-lang</groupId>
+					<artifactId>scala-library</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
-
-		<!-- akka third party dependence -->
+		<!-- Standard library for the Scala Programming Language -->
 		<dependency>
 			<groupId>org.scala-lang</groupId>
 			<artifactId>scala-library</artifactId>
-			<version>2.13.2</version>
+			<version>2.13.3</version>
 		</dependency>
 
 		<dependency>
@@ -117,9 +133,13 @@
 			<artifactId>akka-testkit_2.13</artifactId>
 			<version>${akka.version}</version>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.scala-lang</groupId>
+					<artifactId>scala-library</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-
-
 
 	</dependencies>
 
