@@ -13,10 +13,12 @@
 	<name>transport-http</name>
 
 	<dependencies>
+	
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>transport-core</artifactId>
 		</dependency>
+	
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>serialization-json</artifactId>

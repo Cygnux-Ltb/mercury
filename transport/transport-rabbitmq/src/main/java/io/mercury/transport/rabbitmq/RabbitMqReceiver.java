@@ -331,13 +331,14 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 				channel.basicQos(qos);
 
 			// TODO 使用新的API
-//			channel.basicConsume(queueName, autoAck, tag, false, false, null, (consumerTag, delivery) -> {
-//				log.info("DeliverCallback receive consumerTag -> {}", consumerTag);
-//			}, consumerTag -> {
-//				log.info("CancelCallback receive consumerTag -> {}", consumerTag);
-//			}, (consumerTag, sig) -> {
-//				log.info("ConsumerShutdownSignalCallback receive consumerTag -> {}", consumerTag);
-//			});
+			channel.basicConsume(queueName, autoAck, tag, false, false, null, (consumerTag, delivery) -> {
+				log.info("DeliverCallback receive consumerTag -> {}", consumerTag);
+			}, consumerTag -> {
+				log.info("CancelCallback receive consumerTag -> {}", consumerTag);
+			}, (consumerTag, sig) -> {
+				log.info("Consumer received ShutdownSignalException, consumerTag==[{}]", consumerTag);
+				handleShutdownSignal(sig);
+			});
 
 			channel.basicConsume(
 					// param1: the name of the queue

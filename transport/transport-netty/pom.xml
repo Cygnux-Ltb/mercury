@@ -14,17 +14,18 @@
 	<name>transport-netty</name>
 
 	<dependencies>
+		
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>transport-core</artifactId>
 		</dependency>
+		
 		<!-- Netty All In One -->
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-all</artifactId>
 			<version>4.1.50.Final</version>
 		</dependency>
-
 		
 	</dependencies>
 
