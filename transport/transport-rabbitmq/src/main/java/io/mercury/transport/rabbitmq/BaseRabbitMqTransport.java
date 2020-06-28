@@ -29,6 +29,8 @@ import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 
 public abstract class BaseRabbitMqTransport implements TransportModule, Closeable {
 
+	private static final Logger log = CommonLoggerFactory.getLogger(BaseRabbitMqTransport.class);
+
 	// 连接RabbitMQ Server使用的组件
 	protected ConnectionFactory connectionFactory;
 	protected volatile Connection connection;
@@ -39,9 +41,6 @@ public abstract class BaseRabbitMqTransport implements TransportModule, Closeabl
 
 	// 停机事件, 在监听到ShutdownSignalException时调用
 	protected ShutdownEvent<Exception> shutdownEvent;
-
-	// 继承子类通用Logger
-	protected final Logger log = CommonLoggerFactory.getLogger(getClass());
 
 	protected final String tag;
 
