@@ -9,9 +9,12 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 
+import org.slf4j.Logger;
+
 import com.rabbitmq.client.AMQP.BasicProperties;
 
 import io.mercury.common.character.Charsets;
+import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.ThreadTool;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.core.api.Publisher;
@@ -25,6 +28,8 @@ import io.mercury.transport.rabbitmq.exception.AmqpDeclareRuntimeException;
 import io.mercury.transport.rabbitmq.exception.AmqpNoConfirmException;
 
 public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publisher<byte[]>, Sender<byte[]> {
+
+	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqPublisher.class);
 
 	// 发布消息使用的[ExchangeDeclare]
 	private final ExchangeRelation publishExchange;

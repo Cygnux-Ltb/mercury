@@ -9,6 +9,8 @@ import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
+import org.slf4j.Logger;
+
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Delivery;
@@ -16,6 +18,7 @@ import com.rabbitmq.client.Envelope;
 
 import io.mercury.common.character.Charsets;
 import io.mercury.common.codec.DecodeException;
+import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.core.api.Receiver;
 import io.mercury.transport.core.api.Subscriber;
@@ -36,6 +39,8 @@ import io.mercury.transport.rabbitmq.exception.AmqpMsgHandleException;
  *
  */
 public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscriber, Receiver, Runnable {
+
+	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqReceiver.class);
 
 	// 接收消息使用的反序列化器
 	private final Function<byte[], T> deserializer;
@@ -88,6 +93,7 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 	// QOS预取
 	private int qos;
 
+	// Receiver名称
 	private final String receiverName;
 
 	/**
@@ -331,14 +337,14 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 				channel.basicQos(qos);
 
 			// TODO 使用新的API
-			channel.basicConsume(queueName, autoAck, tag, false, false, null, (consumerTag, delivery) -> {
-				log.info("DeliverCallback receive consumerTag -> {}", consumerTag);
-			}, consumerTag -> {
-				log.info("CancelCallback receive consumerTag -> {}", consumerTag);
-			}, (consumerTag, sig) -> {
-				log.info("Consumer received ShutdownSignalException, consumerTag==[{}]", consumerTag);
-				handleShutdownSignal(sig);
-			});
+//			channel.basicConsume(queueName, autoAck, tag, false, false, null, (consumerTag, delivery) -> {
+//				log.info("DeliverCallback receive consumerTag -> {}", consumerTag);
+//			}, consumerTag -> {
+//				log.info("CancelCallback receive consumerTag -> {}", consumerTag);
+//			}, (consumerTag, sig) -> {
+//				log.info("Consumer received ShutdownSignalException, consumerTag==[{}]", consumerTag);
+//				handleShutdownSignal(sig);
+//			});
 
 			channel.basicConsume(
 					// param1: the name of the queue
@@ -369,12 +375,12 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 							} catch (Exception e) {
 								log.error("Consumer accept msg==[{}] throw Exception -> {}", bytesToStr(body),
 										e.getMessage(), e);
-								dumpError(e, consumerTag, envelope, properties, body);
+								dumpUnprocessableMsg(e, consumerTag, envelope, properties, body);
 							}
 							if (!autoAck) {
-								if (ack(envelope.getDeliveryTag()))
+								if (ack(envelope.getDeliveryTag())) {
 									log.debug("Message handle and ack finished");
-								else {
+								} else {
 									log.info("Ack failure envelope.getDeliveryTag()==[{}], Reject message");
 									channel.basicReject(envelope.getDeliveryTag(), true);
 								}
@@ -387,8 +393,8 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 		}
 	}
 
-	private void dumpError(Throwable cause, String consumerTag, Envelope envelope, BasicProperties properties,
-			byte[] body) throws IOException {
+	private void dumpUnprocessableMsg(Throwable cause, String consumerTag, Envelope envelope,
+			BasicProperties properties, byte[] body) throws IOException {
 		if (hasErrMsgExchange) {
 			// Sent message to error dump exchange.
 			log.error("Exception handling -> Sent to ErrMsgExchange [{}]", errMsgExchangeName);
@@ -466,6 +472,55 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 	public void reconnect() {
 		closeAndReconnection();
 		receive();
+	}
+
+	public static class AckDelegate<T> {
+
+		private RabbitMqReceiver<T> owner;
+
+		private AckDelegate(RabbitMqReceiver<T> owner) {
+			this.owner = owner;
+		}
+
+		private boolean ack(long deliveryTag) {
+			return ack0(deliveryTag, 0);
+		}
+
+		private boolean ack0(long deliveryTag, int retry) {
+			if (retry == owner.maxAckTotal) {
+				log.error("Has been retry ack {}, Quit ack", owner.maxAckTotal);
+				return false;
+			}
+			log.debug("Has been retry ack {}, Do next ack", retry);
+			try {
+				int reconnectionCount = 0;
+				while (!owner.isConnected()) {
+					reconnectionCount++;
+					log.debug("Detect connection isConnected() == false, Reconnection count {}", reconnectionCount);
+					owner.closeAndReconnection();
+					if (reconnectionCount > owner.maxAckReconnection) {
+						log.debug("Reconnection count -> {}, Quit current ack", reconnectionCount);
+						break;
+					}
+				}
+				if (owner.isConnected()) {
+					log.debug("Last detect connection isConnected() == true, Reconnection count {}", reconnectionCount);
+					owner.channel.basicAck(deliveryTag, owner.multipleAck);
+					log.debug("Method channel.basicAck() finished");
+					return true;
+				} else {
+					log.error("Last detect connection isConnected() == false, Reconnection count {}",
+							reconnectionCount);
+					log.error("Unable to call method channel.basicAck()");
+					return ack0(deliveryTag, retry);
+				}
+			} catch (IOException e) {
+				log.error("Call method channel.basicAck(deliveryTag==[{}], multiple==[{}]) throw IOException -> {}",
+						deliveryTag, owner.multipleAck, e.getMessage(), e);
+				return ack0(deliveryTag, ++retry);
+			}
+		}
+
 	}
 
 	public static void main(String[] args) {
