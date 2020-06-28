@@ -5,7 +5,10 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 
+import org.slf4j.Logger;
+
 import io.mercury.common.functional.BytesDeserializer;
+import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.transport.core.api.Receiver;
 import io.mercury.transport.rabbitmq.BaseRabbitMqTransport;
 import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfigurator;
@@ -17,6 +20,8 @@ import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfigurator;
  */
 public class RabbitMqBatchReceiver<T> extends BaseRabbitMqTransport implements Receiver, Runnable {
 
+	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqBatchReceiver.class);
+	
 	private String receiverName;
 
 	private String receiveQueue;
