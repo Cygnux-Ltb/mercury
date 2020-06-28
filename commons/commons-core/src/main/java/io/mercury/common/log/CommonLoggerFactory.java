@@ -8,11 +8,11 @@ import org.slf4j.LoggerFactory;
 import io.mercury.common.thread.ThreadTool;
 import io.mercury.common.util.StringUtil;
 
-public class CommonLoggerFactory {
+public final class CommonLoggerFactory {
 
 //	private static final String DefaultFolder = "default";
 
-	private static final String DefaultFileName = "jruntime";
+	private static final String DefaultFileName = "runtime";
 
 	public static Logger getLogger(Class<?> clazz) {
 //		if (!LoggerSetter.logFolderSetted()) {
