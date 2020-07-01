@@ -10,7 +10,7 @@ import com.rabbitmq.client.MessageProperties;
 import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringUtil;
 import io.mercury.transport.rabbitmq.declare.AmqpQueue;
-import io.mercury.transport.rabbitmq.declare.ExchangeRelation;
+import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
 
 /**
  * 
@@ -20,7 +20,7 @@ import io.mercury.transport.rabbitmq.declare.ExchangeRelation;
 public final class RmqPublisherConfigurator extends RmqConfigurator {
 
 	// 发布者ExchangeDeclare
-	private ExchangeRelation publishExchange;
+	private ExchangeRelationship publishExchange;
 	// 默认RoutingKey
 	private String defaultRoutingKey;
 	// 默认消息发布参数
@@ -74,7 +74,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	 * @return
 	 */
 	public static Builder configuration(@Nonnull RmqConnection connection) {
-		return configuration(connection, ExchangeRelation.Anonymous);
+		return configuration(connection, ExchangeRelationship.Anonymous);
 	}
 
 	/**
@@ -83,7 +83,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	 * @param exchangeRelation
 	 * @return
 	 */
-	public static Builder configuration(@Nonnull RmqConnection connection, @Nonnull ExchangeRelation publishExchange) {
+	public static Builder configuration(@Nonnull RmqConnection connection, @Nonnull ExchangeRelationship publishExchange) {
 		return new Builder(Assertor.nonNull(connection, "connection"),
 				Assertor.nonNull(publishExchange, "publishExchange"));
 	}
@@ -91,7 +91,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	/**
 	 * @return the exchangeDeclare
 	 */
-	public ExchangeRelation publishExchange() {
+	public ExchangeRelationship publishExchange() {
 		return publishExchange;
 	}
 
@@ -152,7 +152,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 		// 连接配置
 		private RmqConnection connection;
 
-		private ExchangeRelation publishExchange;
+		private ExchangeRelationship publishExchange;
 
 		private String defaultRoutingKey = "";
 		private BasicProperties defaultMsgProps = MessageProperties.PERSISTENT_BASIC;
@@ -175,7 +175,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 		 * @param connection
 		 * @param publishExchange
 		 */
-		private Builder(RmqConnection connection, ExchangeRelation publishExchange) {
+		private Builder(RmqConnection connection, ExchangeRelationship publishExchange) {
 			this.connection = connection;
 			this.publishExchange = publishExchange;
 		}
@@ -240,7 +240,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 
 	public static void main(String[] args) {
 		System.out.println(configuration(RmqConnection.configuration("localhost", 5672, "user0", "userpass").build(),
-				ExchangeRelation.direct("TEST").bindingQueue(AmqpQueue.named("TEST_0"))).build());
+				ExchangeRelationship.direct("TEST").bindingQueue(AmqpQueue.named("TEST_0"))).build());
 	}
 
 }

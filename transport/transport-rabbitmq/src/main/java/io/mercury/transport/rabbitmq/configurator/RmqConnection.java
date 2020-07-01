@@ -182,6 +182,10 @@ public final class RmqConnection implements TransportConfigurator {
 		return toStringCache;
 	}
 
+	/**
+	 * 
+	 * @return ConnectionFactory
+	 */
 	public ConnectionFactory createConnectionFactory() {
 		ConnectionFactory factory = new ConnectionFactory();
 		factory.setHost(host);
