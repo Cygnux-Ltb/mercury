@@ -44,6 +44,10 @@ public abstract class BaseRabbitMqTransport implements TransportModule, Closeabl
 
 	protected final String tag;
 
+	/**
+	 * 
+	 * @param tag
+	 */
 	protected BaseRabbitMqTransport(String tag) {
 		// Generally not used
 		this.tag = tag;

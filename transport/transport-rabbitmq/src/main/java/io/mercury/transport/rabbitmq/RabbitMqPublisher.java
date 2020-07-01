@@ -22,7 +22,7 @@ import io.mercury.transport.core.api.Sender;
 import io.mercury.transport.core.exception.PublishFailedException;
 import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 import io.mercury.transport.rabbitmq.configurator.RmqPublisherConfigurator;
-import io.mercury.transport.rabbitmq.declare.ExchangeRelation;
+import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
 import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
 import io.mercury.transport.rabbitmq.exception.AmqpDeclareRuntimeException;
 import io.mercury.transport.rabbitmq.exception.AmqpNoConfirmException;
@@ -32,7 +32,7 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqPublisher.class);
 
 	// 发布消息使用的[ExchangeDeclare]
-	private final ExchangeRelation publishExchange;
+	private final ExchangeRelationship publishExchange;
 	// 发布消息使用的[Exchange]
 	private final String exchangeName;
 
@@ -102,7 +102,7 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 
 	private void declare() throws AmqpDeclareRuntimeException {
 		try {
-			if (publishExchange == ExchangeRelation.Anonymous) {
+			if (publishExchange == ExchangeRelationship.Anonymous) {
 				log.warn("Publisher -> {} use anonymous exchange, Please specify [queue name] "
 						+ "as the [routing key] when publish", tag);
 			} else {
@@ -245,7 +245,7 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 
 		RmqConnection connectionConfigurator0 = RmqConnection.configuration("", 5672, "", "").build();
 
-		ExchangeRelation fanoutExchange = ExchangeRelation.fanout("");
+		ExchangeRelationship fanoutExchange = ExchangeRelationship.fanout("");
 
 		try (RabbitMqPublisher publisher = new RabbitMqPublisher("",
 				RmqPublisherConfigurator.configuration(connectionConfigurator0, fanoutExchange).build())) {
