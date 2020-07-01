@@ -9,11 +9,11 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.transport.rabbitmq.RabbitMqDeclarant;
 import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
 
-public abstract class Relation {
+public abstract class Relationship {
 
-	protected Logger log = CommonLoggerFactory.getLogger(getClass());
+	protected final Logger log = CommonLoggerFactory.getLogger(getClass());
 
-	protected MutableList<Binding> bindings = MutableLists.newFastList();
+	protected final MutableList<Binding> bindings = MutableLists.newFastList();
 
 	/**
 	 * 

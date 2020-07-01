@@ -14,19 +14,19 @@ import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
  * @author yellow013
  *
  */
-public final class QueueRelation extends Relation {
+public final class QueueRelationship extends Relationship {
 
 	private AmqpQueue queue;
 
-	public static QueueRelation named(String queueName) {
-		return new QueueRelation(AmqpQueue.named(queueName));
+	public static QueueRelationship named(String queueName) {
+		return new QueueRelationship(AmqpQueue.named(queueName));
 	}
 
-	public static QueueRelation withQueue(AmqpQueue queue) {
-		return new QueueRelation(queue);
+	public static QueueRelationship withQueue(AmqpQueue queue) {
+		return new QueueRelationship(queue);
 	}
 
-	private QueueRelation(AmqpQueue queue) {
+	private QueueRelationship(AmqpQueue queue) {
 		this.queue = queue;
 	}
 
@@ -56,26 +56,26 @@ public final class QueueRelation extends Relation {
 		return queue.name();
 	}
 
-	public QueueRelation queueDurable(boolean durable) {
+	public QueueRelationship queueDurable(boolean durable) {
 		queue.durable(durable);
 		return this;
 	}
 
-	public QueueRelation queueAutoDelete(boolean autoDelete) {
+	public QueueRelationship queueAutoDelete(boolean autoDelete) {
 		queue.autoDelete(autoDelete);
 		return this;
 	}
 
-	public QueueRelation queueExclusive(boolean exclusive) {
+	public QueueRelationship queueExclusive(boolean exclusive) {
 		queue.exclusive(exclusive);
 		return this;
 	}
 
-	public QueueRelation binding(AmqpExchange... exchanges) {
+	public QueueRelationship binding(AmqpExchange... exchanges) {
 		return binding(exchanges != null ? MutableLists.newFastList(exchanges) : null, null);
 	}
 
-	public QueueRelation binding(List<AmqpExchange> exchanges, List<String> routingKeys) {
+	public QueueRelationship binding(List<AmqpExchange> exchanges, List<String> routingKeys) {
 		if (exchanges != null) {
 			exchanges.forEach(exchange -> {
 				if (CollectionUtils.isNotEmpty(routingKeys))
@@ -88,7 +88,7 @@ public final class QueueRelation extends Relation {
 	}
 
 	public static void main(String[] args) {
-		QueueRelation.named("TEST");
+		QueueRelationship.named("TEST");
 	}
 
 }
