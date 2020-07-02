@@ -17,11 +17,11 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>commons-core</module>
 		<module>commons-concurrent</module>
-		<module>commons-di</module>
+		<module>commons-core</module>
 		<module>commons-graph</module>
 		<module>commons-jmh</module>
+		<module>commons-log</module>
 	</modules>
 
 	<properties>
@@ -58,6 +58,11 @@
 			<dependency>
 				<groupId>io.mercury</groupId>
 				<artifactId>commons-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.mercury</groupId>
+				<artifactId>commons-log</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 		</dependencies>
