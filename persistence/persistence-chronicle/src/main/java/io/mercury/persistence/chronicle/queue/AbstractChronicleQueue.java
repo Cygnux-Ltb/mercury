@@ -387,7 +387,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 		private String folder = "auto-create-" + datetimeOfSecond() + "/";
 		private boolean readOnly = false;
 		private long epoch = 0L;
-		private FileCycle fileCycle = FileCycle.SMALL_DAILY;
+		private FileCycle fileCycle = FileCycle.DAILY_SMALL;
 		private ObjIntConsumer<File> storeFileListener;
 		private int fileClearCycle = 0;
 

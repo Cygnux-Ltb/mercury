@@ -15,13 +15,15 @@ public enum FileCycle {
 
 	HOURLY(SECONDS_PER_HOUR, RollCycles.HOURLY, "256 million entries per hour"),
 
-	LARGE_HOURLY(SECONDS_PER_HOUR, RollCycles.LARGE_HOURLY, "2 billion entries per hour"),
+	HOURLY_LARGE(SECONDS_PER_HOUR, RollCycles.LARGE_HOURLY, "2 billion entries per hour"),
 
-	SMALL_DAILY(SECONDS_PER_DAY, RollCycles.SMALL_DAILY, "512 million entries per day"),
+	DAILY_SMALL(SECONDS_PER_DAY, RollCycles.SMALL_DAILY, "512 million entries per day"),
 
 	DAILY(SECONDS_PER_DAY, RollCycles.DAILY, "4 billion entries per day"),
 
-	LARGE_DAILY(SECONDS_PER_DAY, RollCycles.LARGE_DAILY, "128 billion entries per day"),
+	DAILY_LARGE(SECONDS_PER_DAY, RollCycles.LARGE_DAILY, "128 billion entries per day"),
+
+	DAILY_XLARGE(SECONDS_PER_DAY, RollCycles.XLARGE_DAILY, "4 trillion entries per day, indexing every 256th entry"),
 
 	;
 
