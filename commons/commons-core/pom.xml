@@ -16,12 +16,10 @@
 	<name>commons-core</name>
 
 	<properties>
-		<slf4j.version>1.7.30</slf4j.version>
-		<log4j2.version>2.13.3</log4j2.version>
 	</properties>
 
 	<dependencies>
-	
+
 		<!-- JSR305 Annotations for Findbugs -->
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>
@@ -61,59 +59,9 @@
 			<version>10.2.0</version>
 		</dependency>
 
-		<!-- #################### Log dependency #################### -->
-		<!-- ### Use slf4j API + log4j2 Implement + slf4j Adaptor ### -->
-		<!-- The slf4j API -->
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-
-		<!-- The Apache Log4j Implementation -->
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.13.3</version>
-			<scope>runtime</scope>
-		</dependency>
-
-		<!-- The Apache Log4j SLF4J API binding to Log4j 2 Core -->
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-			<version>${log4j2.version}</version>
-			<scope>runtime</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<!-- Log4j implemented over SLF4J -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>log4j-over-slf4j</artifactId>
-			<version>${slf4j.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-
-		<!-- JCL 1.2 implemented over SLF4J -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>${slf4j.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-
-		<!-- JUL to SLF4J bridge -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jul-to-slf4j</artifactId>
-			<version>${slf4j.version}</version>
-			<scope>runtime</scope>
+			<groupId>io.mercury</groupId>
+			<artifactId>commons-log</artifactId>
 		</dependency>
 
 		<!-- ####### Unit test mock tool ####### -->
@@ -126,5 +74,5 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
+
 </project>
