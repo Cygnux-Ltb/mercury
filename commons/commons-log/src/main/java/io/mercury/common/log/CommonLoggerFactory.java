@@ -5,9 +5,6 @@ import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.mercury.common.thread.ThreadTool;
-import io.mercury.common.util.StringUtil;
-
 public final class CommonLoggerFactory {
 
 //	private static final String DefaultFolder = "default";
@@ -22,12 +19,12 @@ public final class CommonLoggerFactory {
 //		}
 		if (!LoggerSetter.logFilenameSetted()) {
 			String logFilename = System.getProperty(LoggerConst.LOG4J2_FILENAME);
-			if (StringUtil.isNullOrEmpty(logFilename))
+			if (logFilename == null || logFilename.isEmpty())
 				LoggerSetter.logFileName(DefaultFileName);
 		}
 		if (!LoggerSetter.logLevelSetted()) {
 			String logLevel = System.getProperty(LoggerConst.LOG4J2_LEVEL);
-			if (StringUtil.isNullOrEmpty(logLevel))
+			if (logLevel == null || logLevel.isEmpty())
 				LoggerSetter.logLevel(LogLevel.INFO);
 		}
 		return LoggerFactory.getLogger(clazz);
@@ -53,7 +50,11 @@ public final class CommonLoggerFactory {
 			log.warn("this is warn");
 			log.info("this is info");
 			log.debug("this is debug");
-			ThreadTool.sleep(3000);
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
