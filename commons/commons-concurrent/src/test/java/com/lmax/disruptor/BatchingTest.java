@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.concurrent.locks.LockSupport;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -92,9 +91,9 @@ public class BatchingTest {
 			Thread.sleep(1);
 		}
 
-		Assert.assertThat(handler1.publishedValue, CoreMatchers.is((long) eventCount - 2));
-		Assert.assertThat(handler1.eventCount, CoreMatchers.is((long) eventCount / 2));
-		Assert.assertThat(handler2.publishedValue, CoreMatchers.is((long) eventCount - 1));
-		Assert.assertThat(handler2.eventCount, CoreMatchers.is((long) eventCount / 2));
+		org.hamcrest.MatcherAssert.assertThat(handler1.publishedValue, CoreMatchers.is((long) eventCount - 2));
+		org.hamcrest.MatcherAssert.assertThat(handler1.eventCount, CoreMatchers.is((long) eventCount / 2));
+		org.hamcrest.MatcherAssert.assertThat(handler2.publishedValue, CoreMatchers.is((long) eventCount - 1));
+		org.hamcrest.MatcherAssert.assertThat(handler2.eventCount, CoreMatchers.is((long) eventCount / 2));
 	}
 }

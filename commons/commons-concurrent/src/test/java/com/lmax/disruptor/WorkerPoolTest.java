@@ -1,7 +1,7 @@
 package com.lmax.disruptor;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;

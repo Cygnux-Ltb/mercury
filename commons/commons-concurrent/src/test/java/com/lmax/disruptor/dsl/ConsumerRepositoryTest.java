@@ -15,6 +15,17 @@
  */
 package com.lmax.disruptor.dsl;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import com.lmax.disruptor.EventProcessor;
 import com.lmax.disruptor.Sequence;
 import com.lmax.disruptor.SequenceBarrier;
@@ -22,11 +33,6 @@ import com.lmax.disruptor.dsl.stubs.SleepingEventHandler;
 import com.lmax.disruptor.support.DummyEventProcessor;
 import com.lmax.disruptor.support.DummySequenceBarrier;
 import com.lmax.disruptor.support.TestEvent;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
 
 public class ConsumerRepositoryTest {
 	private ConsumerRepository<TestEvent> consumerRepository;

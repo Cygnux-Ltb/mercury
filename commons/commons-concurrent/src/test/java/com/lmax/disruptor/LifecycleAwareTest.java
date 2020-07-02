@@ -17,7 +17,7 @@ package com.lmax.disruptor;
 
 import static com.lmax.disruptor.RingBuffer.createMultiProducer;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.concurrent.CountDownLatch;
 
