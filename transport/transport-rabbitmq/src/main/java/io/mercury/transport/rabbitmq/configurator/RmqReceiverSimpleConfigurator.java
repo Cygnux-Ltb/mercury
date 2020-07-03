@@ -7,20 +7,15 @@ import javax.annotation.Nonnull;
  * @author yellow013
  *
  */
-@Deprecated
-public final class ReceiverConfigurator0 {
+public final class RmqReceiverSimpleConfigurator {
 
 	/**
 	 * 接收者参数
 	 */
 	// 接受者队列
 	private String receiveQueue;
-	// 需要绑定的Exchange
-	private String exchange[];
-	// 需要绑定的routingKey
-	private String routingKey[];
 
-	// 错误消息Ecchange
+	// 错误消息Exchange
 	private String errorMsgToExchange;
 	// 是否持久化
 	private boolean durable = true;
@@ -40,26 +35,18 @@ public final class ReceiverConfigurator0 {
 	private int qos = 256;
 
 	// 连接配置
-	private RmqConnection connectionConfigurator;
+	private RmqConnection rmqConnection;
 
-	private ReceiverConfigurator0(RmqConnection connectionConfigurator) {
-		this.connectionConfigurator = connectionConfigurator;
+	private RmqReceiverSimpleConfigurator(RmqConnection rmqConnection) {
+		this.rmqConnection = rmqConnection;
 	}
 
-	public static ReceiverConfigurator0 configuration(@Nonnull RmqConnection connectionConfigurator) {
-		return new ReceiverConfigurator0(connectionConfigurator);
+	public static RmqReceiverSimpleConfigurator configuration(@Nonnull RmqConnection rmqConnection) {
+		return new RmqReceiverSimpleConfigurator(rmqConnection);
 	}
 
-	public RmqConnection getConnectionConfigurator() {
-		return connectionConfigurator;
-	}
-
-	public String[] getExchange() {
-		return exchange;
-	}
-
-	public String[] getRoutingKey() {
-		return routingKey;
+	public RmqConnection getRmqConnection() {
+		return rmqConnection;
 	}
 
 	public String getReceiveQueue() {
@@ -102,61 +89,52 @@ public final class ReceiverConfigurator0 {
 		return qos;
 	}
 
-	public ReceiverConfigurator0 setExchange(String... exchange) {
-		this.exchange = exchange;
-		return this;
-	}
-
-	public void setRoutingKey(String... routingKey) {
-		this.routingKey = routingKey;
-	}
-
-	public ReceiverConfigurator0 setReceiveQueue(String receiveQueue) {
+	public RmqReceiverSimpleConfigurator setReceiveQueue(String receiveQueue) {
 		this.receiveQueue = receiveQueue;
 		return this;
 	}
 
-	public ReceiverConfigurator0 setErrorMsgToExchange(String errorMsgToExchange) {
+	public RmqReceiverSimpleConfigurator setErrorMsgToExchange(String errorMsgToExchange) {
 		this.errorMsgToExchange = errorMsgToExchange;
 		return this;
 	}
 
-	public ReceiverConfigurator0 setDurable(boolean durable) {
+	public RmqReceiverSimpleConfigurator setDurable(boolean durable) {
 		this.durable = durable;
 		return this;
 	}
 
-	public ReceiverConfigurator0 setExclusive(boolean exclusive) {
+	public RmqReceiverSimpleConfigurator setExclusive(boolean exclusive) {
 		this.exclusive = exclusive;
 		return this;
 	}
 
-	public ReceiverConfigurator0 setAutoDelete(boolean autoDelete) {
+	public RmqReceiverSimpleConfigurator setAutoDelete(boolean autoDelete) {
 		this.autoDelete = autoDelete;
 		return this;
 	}
 
-	public ReceiverConfigurator0 setAutoAck(boolean isAutoAck) {
+	public RmqReceiverSimpleConfigurator setAutoAck(boolean isAutoAck) {
 		this.isAutoAck = isAutoAck;
 		return this;
 	}
 
-	public ReceiverConfigurator0 setMultipleAck(boolean isMultipleAck) {
+	public RmqReceiverSimpleConfigurator setMultipleAck(boolean isMultipleAck) {
 		this.isMultipleAck = isMultipleAck;
 		return this;
 	}
 
-	public ReceiverConfigurator0 setMaxAckTotal(int maxAckTotal) {
+	public RmqReceiverSimpleConfigurator setMaxAckTotal(int maxAckTotal) {
 		this.maxAckTotal = maxAckTotal;
 		return this;
 	}
 
-	public ReceiverConfigurator0 setMaxAckReconnection(int maxAckReconnection) {
+	public RmqReceiverSimpleConfigurator setMaxAckReconnection(int maxAckReconnection) {
 		this.maxAckReconnection = maxAckReconnection;
 		return this;
 	}
 
-	public ReceiverConfigurator0 setQos(int qos) {
+	public RmqReceiverSimpleConfigurator setQos(int qos) {
 		this.qos = qos;
 		return this;
 	}

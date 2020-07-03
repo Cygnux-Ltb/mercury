@@ -3,11 +3,7 @@ package io.mercury.transport.rabbitmq.configurator;
 import javax.annotation.Nonnull;
 
 import com.rabbitmq.client.AMQP.BasicProperties;
-import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.MessageProperties;
-
-import io.mercury.common.util.StringUtil;
-import io.mercury.transport.rabbitmq.declare.AmqpExchange.ExchangeType;
 
 /**
  * 
@@ -16,17 +12,14 @@ import io.mercury.transport.rabbitmq.declare.AmqpExchange.ExchangeType;
  *         TODO 扩展针对多个routingKey的绑定关系
  */
 
-@Deprecated
-public final class PublisherConfigurator0 {
+public final class RmqPublisherSimpleConfigurator {
 
 	/**
 	 * 发布者参数
 	 */
 	private String exchange = "";
 	private String routingKey = "";
-	private String[] bindQueues = null;
 	private BasicProperties msgProperties = MessageProperties.PERSISTENT_BASIC;
-	private BuiltinExchangeType builtinExchangeType = BuiltinExchangeType.FANOUT;
 	// 是否持久化
 	private boolean durable = true;
 	// 没有使用时自动删除
@@ -41,18 +34,14 @@ public final class PublisherConfigurator0 {
 	private int confirmRetry = 3;
 
 	// 连接配置
-	private RmqConnection connectionConfigurator;
+	private RmqConnection rmqConnection;
 
-	private PublisherConfigurator0(RmqConnection connectionConfigurator) {
-		this.connectionConfigurator = connectionConfigurator;
+	private RmqPublisherSimpleConfigurator(RmqConnection rmqConnection) {
+		this.rmqConnection = rmqConnection;
 	}
 
-	public static PublisherConfigurator0 configuration(@Nonnull RmqConnection connectionConfigurator) {
-		return new PublisherConfigurator0(connectionConfigurator);
-	}
-
-	public RmqConnection getConnectionConfigurator() {
-		return connectionConfigurator;
+	public static RmqPublisherSimpleConfigurator configuration(@Nonnull RmqConnection rmqConnection) {
+		return new RmqPublisherSimpleConfigurator(rmqConnection);
 	}
 
 	public String getExchange() {
@@ -63,16 +52,8 @@ public final class PublisherConfigurator0 {
 		return routingKey;
 	}
 
-	public String[] getBindQueues() {
-		return bindQueues;
-	}
-
 	public BasicProperties getMsgProperties() {
 		return msgProperties;
-	}
-
-	public BuiltinExchangeType getBuiltinExchangeType() {
-		return builtinExchangeType;
 	}
 
 	public boolean isDurable() {
@@ -103,98 +84,63 @@ public final class PublisherConfigurator0 {
 		return confirmRetry;
 	}
 
-	public void setDurable(boolean durable) {
-		this.durable = durable;
+	public RmqConnection getRmqConnection() {
+		return rmqConnection;
 	}
 
-	public void setAutoDelete(boolean autoDelete) {
-		this.autoDelete = autoDelete;
-	}
-
-	public void setInternal(boolean internal) {
-		this.internal = internal;
-	}
-
-	public void setExclusive(boolean exclusive) {
-		this.exclusive = exclusive;
-	}
-
-	public void setConfirm(boolean isConfirm) {
-		this.isConfirm = isConfirm;
-	}
-
-	public PublisherConfigurator0 setConfirmTimeout(long confirmTimeout) {
-		this.confirmTimeout = confirmTimeout;
+	public RmqPublisherSimpleConfigurator setExchange(String exchange) {
+		this.exchange = exchange;
 		return this;
 	}
 
-	public PublisherConfigurator0 setConfirmRetry(int confirmRetry) {
-		this.confirmRetry = confirmRetry;
+	public RmqPublisherSimpleConfigurator setRoutingKey(String routingKey) {
+		this.routingKey = routingKey;
 		return this;
 	}
 
-	public PublisherConfigurator0 setMsgProperties(BasicProperties msgProperties) {
+	public RmqPublisherSimpleConfigurator setMsgProperties(BasicProperties msgProperties) {
 		this.msgProperties = msgProperties;
 		return this;
 	}
 
-	public PublisherConfigurator0 setFanoutExchange(String exchange) {
-		return setFanoutExchange(exchange, null);
+	public RmqPublisherSimpleConfigurator setDurable(boolean durable) {
+		this.durable = durable;
+		return this;
 	}
 
-	public PublisherConfigurator0 setFanoutExchange(String exchange, String[] bindQueues) {
-		return setExchange(ExchangeType.Fanout, exchange, "", bindQueues);
+	public RmqPublisherSimpleConfigurator setAutoDelete(boolean autoDelete) {
+		this.autoDelete = autoDelete;
+		return this;
 	}
 
-	public PublisherConfigurator0 setDirectExchange(String exchange) {
-		return setDirectExchange(exchange, "");
+	public RmqPublisherSimpleConfigurator setInternal(boolean internal) {
+		this.internal = internal;
+		return this;
 	}
 
-	public PublisherConfigurator0 setDirectExchange(String exchange, String routingKey) {
-		return setDirectExchange(exchange, routingKey, null);
+	public RmqPublisherSimpleConfigurator setExclusive(boolean exclusive) {
+		this.exclusive = exclusive;
+		return this;
 	}
 
-	public PublisherConfigurator0 setDirectExchange(String exchange, String[] bindQueues) {
-		return setDirectExchange(exchange, "", bindQueues);
+	public RmqPublisherSimpleConfigurator setConfirm(boolean isConfirm) {
+		this.isConfirm = isConfirm;
+		return this;
 	}
 
-	public PublisherConfigurator0 setDirectExchange(String exchange, String routingKey, String[] bindQueues) {
-		return setExchange(ExchangeType.Direct, exchange, routingKey, bindQueues);
+	public RmqPublisherSimpleConfigurator setConfirmTimeout(long confirmTimeout) {
+		this.confirmTimeout = confirmTimeout;
+		return this;
 	}
 
-	public PublisherConfigurator0 setTopicExchange(String exchange) {
-		return setTopicExchange(exchange, "", null);
+	public RmqPublisherSimpleConfigurator setConfirmRetry(int confirmRetry) {
+		this.confirmRetry = confirmRetry;
+		return this;
 	}
 
-	public PublisherConfigurator0 setTopicExchange(String exchange, String routingKey, String[] bindQueues) {
-		return setExchange(ExchangeType.Topic, exchange, routingKey, bindQueues);
-	}
-
-	private PublisherConfigurator0 setExchange(ExchangeType exchangeType, String exchange, String routingKey,
-			String[] bindQueues) {
-		if (StringUtil.isNullOrEmpty(exchange))
-			throw new IllegalArgumentException("Param exchange not allowed null");
-		// 设置exchange
-		this.exchange = exchange;
-		// 设置routingKey
-		if (!StringUtil.isNullOrEmpty(routingKey))
-			this.routingKey = routingKey;
-		// 设置需要绑定的Queue
-		if (bindQueues != null)
-			this.bindQueues = bindQueues;
-		switch (exchangeType) {
-		case Direct:
-			this.builtinExchangeType = BuiltinExchangeType.DIRECT;
-			return this;
-		case Fanout:
-			this.builtinExchangeType = BuiltinExchangeType.FANOUT;
-			return this;
-		case Topic:
-			this.builtinExchangeType = BuiltinExchangeType.TOPIC;
-			return this;
-		default:
-			throw new IllegalArgumentException("exchangeType is error : " + exchangeType);
-		}
+	public RmqPublisherSimpleConfigurator setRmqConnection(RmqConnection rmqConnection) {
+		this.rmqConnection = rmqConnection;
+		return this;
 	}
 
 }

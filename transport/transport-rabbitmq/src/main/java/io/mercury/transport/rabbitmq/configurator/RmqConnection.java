@@ -178,7 +178,7 @@ public final class RmqConnection implements TransportConfigurator {
 	@Override
 	public String toString() {
 		if (toStringCache == null)
-			toStringCache = StringUtil.reflectionToString(this);
+			toStringCache = StringUtil.toStringForReflection(this);
 		return toStringCache;
 	}
 

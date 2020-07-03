@@ -1,6 +1,6 @@
 package io.mercury.transport.socket;
 
-import io.mercury.common.annotation.lang.ProtectedAbstractMethod;
+import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.collections.queue.api.SCQueue;
 import io.mercury.transport.core.api.Sender;
 
@@ -58,7 +58,7 @@ public abstract class BaseTransceiver<T> implements Transceiver<T> {
 		queue.start();
 	}
 
-	@ProtectedAbstractMethod
+	@AbstractFunction
 	protected abstract SCQueue<T> initSendQueue();
 
 }

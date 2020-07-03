@@ -3,6 +3,7 @@ package io.mercury.transport.rabbitmq;
 import static io.mercury.common.util.StringUtil.bytesToStr;
 
 import java.io.IOException;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.DefaultConsumer;
+import com.rabbitmq.client.Delivery;
 import com.rabbitmq.client.Envelope;
 
 import io.mercury.common.character.Charsets;
@@ -36,15 +38,18 @@ import io.mercury.transport.rabbitmq.exception.AmqpMsgHandleException;
  *         [已完成]改造升级, 使用共同的构建者建立Exchange, RoutingKey, Queue的绑定关系
  *
  */
-public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscriber, Receiver, Runnable {
+public class RabbitMqReceiver0<T> extends BaseRabbitMqTransport implements Subscriber, Receiver, Runnable {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqReceiver.class);
+	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqReceiver0.class);
 
 	// 接收消息使用的反序列化器
 	private final Function<byte[], T> deserializer;
 
 	// 接收消息时使用的回调函数
 	private final Consumer<T> consumer;
+
+	// 接受消费全部消息内容, 包括[consumerTag, 信封, 消息体, 参数]
+	private final BiConsumer<String, Delivery> deliveryConsumer;
 
 	// 接受者QueueDeclare
 	private final QueueRelationship receiveQueue;
@@ -97,9 +102,20 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 	 * @param consumer
 	 * @return
 	 */
-	public static final RabbitMqReceiver<byte[]> create(@Nonnull RmqReceiverConfigurator configurator,
+	public static final RabbitMqReceiver0<byte[]> create(@Nonnull RmqReceiverConfigurator configurator,
 			@Nonnull Consumer<byte[]> consumer) {
 		return create(null, configurator, consumer);
+	}
+
+	/**
+	 * 
+	 * @param configurator
+	 * @param deliveryConsumer
+	 * @return
+	 */
+	public static final RabbitMqReceiver0<byte[]> create(@Nonnull RmqReceiverConfigurator configurator,
+			@Nonnull BiConsumer<String, Delivery> deliveryConsumer) {
+		return create(null, configurator, deliveryConsumer);
 	}
 
 	/**
@@ -109,9 +125,34 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 	 * @param consumer
 	 * @return
 	 */
-	public static final RabbitMqReceiver<byte[]> create(String tag, @Nonnull RmqReceiverConfigurator configurator,
+	public static final RabbitMqReceiver0<byte[]> create(String tag, @Nonnull RmqReceiverConfigurator configurator,
 			@Nonnull Consumer<byte[]> consumer) {
 		return create(tag, configurator, msg -> msg, consumer);
+	}
+
+	/**
+	 * 
+	 * @param tag
+	 * @param configurator
+	 * @param deliveryConsumer
+	 * @return
+	 */
+	public static final RabbitMqReceiver0<byte[]> create(String tag, @Nonnull RmqReceiverConfigurator configurator,
+			@Nonnull BiConsumer<String, Delivery> deliveryConsumer) {
+		return create(tag, configurator, msg -> msg, null, deliveryConsumer);
+	}
+
+	/**
+	 * 
+	 * @param <T>
+	 * @param configurator
+	 * @param deserializer
+	 * @param consumer
+	 * @return
+	 */
+	public static final <T> RabbitMqReceiver0<T> create(@Nonnull RmqReceiverConfigurator configurator,
+			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
+		return create(null, configurator, deserializer, consumer);
 	}
 
 	/**
@@ -123,9 +164,24 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 	 * @param consumer
 	 * @return
 	 */
-	public static final <T> RabbitMqReceiver<T> create(String tag, @Nonnull RmqReceiverConfigurator configurator,
+	public static final <T> RabbitMqReceiver0<T> create(String tag, @Nonnull RmqReceiverConfigurator configurator,
 			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
-		return new RabbitMqReceiver<T>(tag, configurator, deserializer, consumer);
+		return create(tag, configurator, deserializer, consumer, null);
+	}
+
+	/**
+	 * 
+	 * @param <T>
+	 * @param tag
+	 * @param configurator
+	 * @param deserializer
+	 * @param consumer
+	 * @return
+	 */
+	public static final <T> RabbitMqReceiver0<T> create(String tag, @Nonnull RmqReceiverConfigurator configurator,
+			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer,
+			BiConsumer<String, Delivery> deliveryConsumer) {
+		return new RabbitMqReceiver0<T>(tag, configurator, deserializer, consumer, deliveryConsumer);
 	}
 
 	/**
@@ -135,13 +191,14 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 	 * @param deserializer
 	 * @param callback
 	 */
-	private RabbitMqReceiver(String tag, @Nonnull RmqReceiverConfigurator configurator,
-			Function<byte[], T> deserializer, Consumer<T> consumer) {
+	private RabbitMqReceiver0(String tag, @Nonnull RmqReceiverConfigurator configurator,
+			Function<byte[], T> deserializer, Consumer<T> consumer, BiConsumer<String, Delivery> deliveryConsumer) {
 		super(tag, "Receiver", configurator.connection());
 		this.receiveQueue = configurator.receiveQueue();
 		this.queueName = receiveQueue.queueName();
 		this.deserializer = deserializer;
 		this.consumer = consumer;
+		this.deliveryConsumer = deliveryConsumer;
 		this.errMsgExchange = configurator.errMsgExchange();
 		this.errMsgRoutingKey = configurator.errMsgRoutingKey();
 		this.errMsgQueue = configurator.errMsgQueue();
@@ -417,8 +474,57 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 		receive();
 	}
 
+	public static class AckDelegate<T> {
+
+		private RabbitMqReceiver0<T> receiver;
+
+		private AckDelegate(RabbitMqReceiver0<T> receiver) {
+			this.receiver = receiver;
+		}
+
+		private boolean ack(long deliveryTag) {
+			return ack0(deliveryTag, 0);
+		}
+
+		private boolean ack0(long deliveryTag, int retry) {
+			if (retry == receiver.maxAckTotal) {
+				log.error("Has been retry ack {}, Quit ack", receiver.maxAckTotal);
+				return false;
+			}
+			log.debug("Has been retry ack {}, Do next ack", retry);
+			try {
+				int reconnectionCount = 0;
+				while (!receiver.isConnected()) {
+					reconnectionCount++;
+					log.debug("Detect connection isConnected() == false, Reconnection count {}", reconnectionCount);
+					receiver.closeAndReconnection();
+					if (reconnectionCount > receiver.maxAckReconnection) {
+						log.debug("Reconnection count -> {}, Quit current ack", reconnectionCount);
+						break;
+					}
+				}
+				if (receiver.isConnected()) {
+					log.debug("Last detect connection isConnected() == true, Reconnection count {}", reconnectionCount);
+					receiver.channel.basicAck(deliveryTag, receiver.multipleAck);
+					log.debug("Method channel.basicAck() finished");
+					return true;
+				} else {
+					log.error("Last detect connection isConnected() == false, Reconnection count {}",
+							reconnectionCount);
+					log.error("Unable to call method channel.basicAck()");
+					return ack0(deliveryTag, retry);
+				}
+			} catch (IOException e) {
+				log.error("Call method channel.basicAck(deliveryTag==[{}], multiple==[{}]) throw IOException -> {}",
+						deliveryTag, receiver.multipleAck, e.getMessage(), e);
+				return ack0(deliveryTag, ++retry);
+			}
+		}
+
+	}
+
 	public static void main(String[] args) {
-		RabbitMqReceiver<byte[]> receiver = RabbitMqReceiver.create("test",
+		RabbitMqReceiver0<byte[]> receiver = RabbitMqReceiver0.create("test",
 				RmqReceiverConfigurator
 						.configuration(RmqConnection.configuration("127.0.0.1", 5672, "user", "u_pass").build(),
 								QueueRelationship.named("TEST"))

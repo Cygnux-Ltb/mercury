@@ -4,7 +4,7 @@ import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.annotation.lang.ProtectedAbstractMethod;
+import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.netty.configurator.NettyConfigurator;
@@ -31,7 +31,7 @@ public abstract class NettyTransport {
 		init();
 	}
 
-	@ProtectedAbstractMethod
+	@AbstractFunction
 	protected abstract void init();
 
 	public String name() {

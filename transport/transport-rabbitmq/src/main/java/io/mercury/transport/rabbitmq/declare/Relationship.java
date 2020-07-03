@@ -3,7 +3,7 @@ package io.mercury.transport.rabbitmq.declare;
 import org.eclipse.collections.api.list.MutableList;
 import org.slf4j.Logger;
 
-import io.mercury.common.annotation.lang.ProtectedAbstractMethod;
+import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.transport.rabbitmq.RabbitMqDeclarant;
@@ -79,7 +79,7 @@ public abstract class Relationship {
 		}
 	}
 
-	@ProtectedAbstractMethod
+	@AbstractFunction
 	protected abstract void declare0(RabbitMqDeclarant operator);
 
 }
