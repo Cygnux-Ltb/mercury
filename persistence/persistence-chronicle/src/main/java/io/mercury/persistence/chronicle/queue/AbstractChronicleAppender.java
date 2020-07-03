@@ -8,7 +8,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.annotation.lang.ProtectedAbstractMethod;
+import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.annotation.lang.ThrowsRuntimeException;
 import io.mercury.persistence.chronicle.exception.ChronicleWriteException;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleQueue.CloseableChronicleAccessor;
@@ -50,7 +50,7 @@ public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAcc
 		return appenderName;
 	}
 
-	@ProtectedAbstractMethod
+	@AbstractFunction
 	protected abstract void append0(@Nonnull T t);
 
 	/**

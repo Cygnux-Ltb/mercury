@@ -19,7 +19,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.annotation.lang.ProtectedAbstractMethod;
+import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.annotation.lang.ThrowsRuntimeException;
 import io.mercury.common.datetime.TimeConst;
 import io.mercury.persistence.chronicle.exception.ChronicleReadException;
@@ -118,7 +118,7 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 	 * 
 	 * @return
 	 */
-	@ProtectedAbstractMethod
+	@AbstractFunction
 	protected abstract T next0();
 
 	/**

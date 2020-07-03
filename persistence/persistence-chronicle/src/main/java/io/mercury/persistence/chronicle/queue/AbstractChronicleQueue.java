@@ -21,7 +21,7 @@ import javax.annotation.concurrent.Immutable;
 import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
 import org.slf4j.Logger;
 
-import io.mercury.common.annotation.lang.ProtectedAbstractMethod;
+import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.collections.MutableMaps;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.sys.SysProperties;
@@ -282,7 +282,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	@ProtectedAbstractMethod
+	@AbstractFunction
 	protected abstract R createReader(String readerName, ReaderParam readerParam, Logger logger, Consumer<T> consumer)
 			throws IllegalStateException;
 
@@ -342,7 +342,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	@ProtectedAbstractMethod
+	@AbstractFunction
 	protected abstract A acquireAppender(String appenderName, Logger logger, Supplier<T> dataProducer)
 			throws IllegalStateException;
 
@@ -433,7 +433,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 			return self();
 		}
 
-		@ProtectedAbstractMethod
+		@AbstractFunction
 		protected abstract B self();
 
 	}
@@ -471,7 +471,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 			return isClose;
 		}
 
-		@ProtectedAbstractMethod
+		@AbstractFunction
 		protected abstract void close0();
 
 	}
