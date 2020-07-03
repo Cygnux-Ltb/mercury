@@ -64,25 +64,41 @@ public abstract class Pattern {
 	private final String pattern;
 	private final DateTimeFormatter formatter;
 
-	Pattern(String pattern) {
+	private Pattern(String pattern) {
 		this.pattern = pattern;
 		this.formatter = DateTimeFormatter.ofPattern(pattern);
 	}
 
+	/**
+	 * 
+	 * @return String
+	 */
 	public String getPattern() {
 		return pattern;
 	}
 
+	/**
+	 * 
+	 * @return DateTimeFormatter
+	 */
 	public DateTimeFormatter getFormatter() {
 		return formatter;
 	}
 
-	public DateFormat newSimpleDateFormat() {
-		return new SimpleDateFormat(pattern);
+	/**
+	 * 
+	 * @return new DateTimeFormatter
+	 */
+	public DateTimeFormatter newDateTimeFormatter() {
+		return DateTimeFormatter.ofPattern(pattern);
 	}
 
-	public DateTimeFormatter newFormatter() {
-		return DateTimeFormatter.ofPattern(pattern);
+	/**
+	 * 
+	 * @return new DateFormat
+	 */
+	public DateFormat newSimpleDateFormat() {
+		return new SimpleDateFormat(pattern);
 	}
 
 	/**

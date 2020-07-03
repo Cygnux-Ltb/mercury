@@ -23,17 +23,23 @@ public interface TimeZone {
 	ZoneOffset SYS_DEFAULT_OFFSET = ZonedDateTime.ofInstant(Instant.EPOCH, SYS_DEFAULT).getOffset();
 
 	/**
-	 * Chinese Standard Time
+	 * Chinese Standard Time ZoneId
 	 */
 	ZoneId CST = ZoneId.of("Asia/Shanghai");
 
+	/**
+	 * Chinese Standard Time ZoneOffset
+	 */
 	ZoneOffset CST_OFFSET = ZonedDateTime.ofInstant(Instant.EPOCH, CST).getOffset();
 
 	/**
-	 * Japan Standard Time
+	 * Japan Standard Time ZoneId
 	 */
 	ZoneId JST = ZoneId.of("Asia/Tokyo");
 
+	/**
+	 * Japan Standard Time ZoneOffset
+	 */
 	ZoneOffset JST_OFFSET = ZonedDateTime.ofInstant(Instant.EPOCH, JST).getOffset();
 
 }
