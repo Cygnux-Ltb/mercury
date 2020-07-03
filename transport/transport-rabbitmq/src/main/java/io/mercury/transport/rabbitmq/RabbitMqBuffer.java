@@ -57,7 +57,7 @@ public class RabbitMqBuffer<E> implements Queue<E>, Closeable {
 		this.routingKeys = routingKeys;
 		this.serializer = serializer;
 		this.deserializer = deserializer;
-		this.rabbitMqChannel = RabbitMqChannel.create(connection);
+		this.rabbitMqChannel = RabbitMqChannel.newWith(connection);
 		declareQueue();
 		buildName();
 	}
@@ -68,7 +68,7 @@ public class RabbitMqBuffer<E> implements Queue<E>, Closeable {
 				exchangeNames.stream().map(exchangeName -> routingKeys.isEmpty() ? AmqpExchange.fanout(exchangeName)
 						: AmqpExchange.direct(exchangeName)).collect(Collectors.toList()),
 				routingKeys);
-		queueRelationship.declare(RabbitMqDeclarant.newWithChannel(rabbitMqChannel.internalChannel()));
+		queueRelationship.declare(RabbitMqDeclarant.newWith(rabbitMqChannel.internalChannel()));
 	}
 
 	private void buildName() {

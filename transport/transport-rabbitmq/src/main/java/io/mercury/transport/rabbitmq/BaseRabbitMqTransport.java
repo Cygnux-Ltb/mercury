@@ -72,12 +72,13 @@ public abstract class BaseRabbitMqTransport implements TransportModule, Closeabl
 		}
 		try {
 			connection = connectionFactory.newConnection();
-			connection.setId(tag + "-[" + System.currentTimeMillis() + "]");
-			log.info("Call method connectionFactory.newConnection() finished, tag -> {}, connection id -> {}", tag,
-					connection.getId());
+			connection.setId(tag + "$[" + System.currentTimeMillis() + "]");
+			log.info("Call function -> [connectionFactory.newConnection()] finished, tag -> {}, connection id -> {}",
+					tag, connection.getId());
 			connection.addShutdownListener(this::handleShutdownSignal);
 			channel = connection.createChannel();
-			log.info("Call method connection.createChannel() finished, connection id -> {}, channel number -> {}",
+			log.info(
+					"Call function -> [connection.createChannel()] finished, connection id -> {}, channel number -> {}",
 					connection.getId(), channel.getChannelNumber());
 			log.info("Create connection finished");
 		} catch (IOException e) {
@@ -102,10 +103,10 @@ public abstract class BaseRabbitMqTransport implements TransportModule, Closeabl
 	}
 
 	protected void handleShutdownSignal(ShutdownSignalException sig) {
-		// 输出信号到控制台
+		// 输出关闭信号
 		log.info("Shutdown listener message -> {}", sig.getMessage());
 		if (isNormalShutdown(sig)) {
-			log.info("connection id -> {}, is normal shutdown", connection.getId());
+			log.info("connection id -> {}, normal shutdown", connection.getId());
 		} else {
 			log.error("connection id -> {}, not normal shutdown", connection.getId());
 			// 如果回调函数不为null, 则执行此函数
@@ -132,17 +133,30 @@ public abstract class BaseRabbitMqTransport implements TransportModule, Closeabl
 		log.info("Call method closeConnection()");
 		try {
 			if (channel != null && channel.isOpen()) {
-				channel.close();
-				log.info("Channel is closeed!");
+				try {
+					channel.close();
+					log.info("Channel is closed!");
+				} catch (IOException e) {
+					log.error("Function -> [channel.close()] throw IOException : [{}]", e.getMessage());
+					throw e;
+				} catch (TimeoutException e) {
+					log.error("Function -> [channel.close()] throw TimeoutException : [{}]", e.getMessage());
+					throw e;
+				}
 			}
 			if (connection != null && connection.isOpen()) {
-				connection.close();
-				log.info("Connection is closeed!");
+				try {
+					connection.close();
+					log.info("Connection is closed!");
+				} catch (IOException e) {
+					log.error("Function -> [connection.close()] throw TimeoutException : [{}]", e.getMessage());
+					throw e;
+				}
 			}
 		} catch (IOException e) {
-			log.error("Method closeConnection() throw IOException -> {}", e.getMessage(), e);
+			log.error("Catch IOException...", e);
 		} catch (TimeoutException e) {
-			log.error("Method closeConnection() throw TimeoutException -> {}", e.getMessage(), e);
+			log.error("Catch TimeoutException...", e);
 		}
 	}
 

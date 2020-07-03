@@ -106,7 +106,7 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 				log.warn("Publisher -> {} use anonymous exchange, Please specify [queue name] "
 						+ "as the [routing key] when publish", tag);
 			} else {
-				this.publishExchange.declare(RabbitMqDeclarant.newWithChannel(channel));
+				this.publishExchange.declare(RabbitMqDeclarant.newWith(channel));
 			}
 		} catch (AmqpDeclareException e) {
 			// 在定义Exchange和进行绑定时抛出任何异常都需要终止程序

@@ -117,6 +117,19 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 	/**
 	 * 
 	 * @param <T>
+	 * @param configurator
+	 * @param deserializer
+	 * @param consumer
+	 * @return
+	 */
+	public static final <T> RabbitMqReceiver<T> create(@Nonnull RmqReceiverConfigurator configurator,
+			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
+		return create(null, configurator, deserializer, consumer);
+	}
+
+	/**
+	 * 
+	 * @param <T>
 	 * @param tag
 	 * @param configurator
 	 * @param deserializer
@@ -156,7 +169,7 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 	}
 
 	private void declare() {
-		RabbitMqDeclarant declarant = RabbitMqDeclarant.newWithChannel(channel);
+		RabbitMqDeclarant declarant = RabbitMqDeclarant.newWith(channel);
 		try {
 			this.receiveQueue.declare(declarant);
 		} catch (AmqpDeclareException e) {

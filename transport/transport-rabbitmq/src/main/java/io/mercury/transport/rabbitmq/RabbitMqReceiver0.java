@@ -213,7 +213,7 @@ public class RabbitMqReceiver0<T> extends BaseRabbitMqTransport implements Subsc
 	}
 
 	private void declare() {
-		RabbitMqDeclarant declarant = RabbitMqDeclarant.newWithChannel(channel);
+		RabbitMqDeclarant declarant = RabbitMqDeclarant.newWith(channel);
 		try {
 			this.receiveQueue.declare(declarant);
 		} catch (AmqpDeclareException e) {

@@ -29,8 +29,8 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqDeclarant create(String host, int port, String username, String password) {
-		return create(RmqConnection.configuration(host, port, username, password).build());
+	public static RabbitMqDeclarant newWith(String host, int port, String username, String password) {
+		return newWith(RmqConnection.configuration(host, port, username, password).build());
 	}
 
 	/**
@@ -45,9 +45,9 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqDeclarant create(String host, int port, String username, String password,
+	public static RabbitMqDeclarant newWith(String host, int port, String username, String password,
 			String virtualHost) {
-		return create(RmqConnection.configuration(host, port, username, password, virtualHost).build());
+		return newWith(RmqConnection.configuration(host, port, username, password, virtualHost).build());
 	}
 
 	/**
@@ -58,7 +58,7 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqDeclarant create(RmqConnection connection) {
+	public static RabbitMqDeclarant newWith(RmqConnection connection) {
 		return new RabbitMqDeclarant(connection);
 	}
 
@@ -68,7 +68,7 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	 * @param channel
 	 * @return
 	 */
-	public static RabbitMqDeclarant newWithChannel(Channel channel) {
+	public static RabbitMqDeclarant newWith(Channel channel) {
 		return new RabbitMqDeclarant(channel);
 	}
 
@@ -89,7 +89,7 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	 *                         false<br>
 	 * @throws QueueDeclareException
 	 */
-	public boolean declareQueueDefault(@Nonnull String queue) throws AmqpDeclareException {
+	public boolean declareQueueWithDefault(@Nonnull String queue) throws AmqpDeclareException {
 		return declareQueue(queue, true, false, false, null);
 	}
 
@@ -253,7 +253,7 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	public static void main(String[] args) {
 
 		try {
-			RabbitMqDeclarant declareOperator = create("127.0.0.1", 5672, "guest", "guest");
+			RabbitMqDeclarant declareOperator = newWith("127.0.0.1", 5672, "guest", "guest");
 			System.out.println(declareOperator.isConnected());
 			try {
 				declareOperator.declareFanoutExchange("MarketData", true, false, false, null);

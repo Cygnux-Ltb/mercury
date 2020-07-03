@@ -20,8 +20,8 @@ public final class RabbitMqChannel extends BaseRabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqChannel create(String host, int port, String username, String password) {
-		return create(RmqConnection.configuration(host, port, username, password).build());
+	public static RabbitMqChannel newWith(String host, int port, String username, String password) {
+		return newWith(RmqConnection.configuration(host, port, username, password).build());
 	}
 
 	/**
@@ -36,8 +36,8 @@ public final class RabbitMqChannel extends BaseRabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqChannel create(String host, int port, String username, String password, String virtualHost) {
-		return create(RmqConnection.configuration(host, port, username, password, virtualHost).build());
+	public static RabbitMqChannel newWith(String host, int port, String username, String password, String virtualHost) {
+		return newWith(RmqConnection.configuration(host, port, username, password, virtualHost).build());
 	}
 
 	/**
@@ -48,7 +48,7 @@ public final class RabbitMqChannel extends BaseRabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqChannel create(RmqConnection connection) {
+	public static RabbitMqChannel newWith(RmqConnection connection) {
 		return new RabbitMqChannel(null, connection);
 	}
 
@@ -58,7 +58,7 @@ public final class RabbitMqChannel extends BaseRabbitMqTransport {
 	 * @param channel
 	 * @return
 	 */
-	public static RabbitMqChannel ofChannel(Channel channel) {
+	public static RabbitMqChannel newWith(Channel channel) {
 		return new RabbitMqChannel(channel);
 	}
 
