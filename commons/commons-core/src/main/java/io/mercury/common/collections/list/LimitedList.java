@@ -2,7 +2,7 @@ package io.mercury.common.collections.list;
 
 import java.util.List;
 
-import io.mercury.common.annotation.lang.ProtectedAbstractMethod;
+import io.mercury.common.annotation.lang.AbstractFunction;
 
 public abstract class LimitedList<L extends List<E>, E> extends LimitedContainer<E> {
 
@@ -13,7 +13,7 @@ public abstract class LimitedList<L extends List<E>, E> extends LimitedContainer
 		this.innerList = initList(capacity);
 	}
 
-	@ProtectedAbstractMethod
+	@AbstractFunction
 	protected abstract L initList(int capacity);
 
 	@Override

@@ -69,7 +69,7 @@ public final class StringUtil {
 	 * @return String
 	 * 
 	 */
-	public static final String reflectionToString(Object obj) {
+	public static final String toStringForReflection(Object obj) {
 		return obj == null ? StringConst.NULL_STR
 				: ToStringBuilder.reflectionToString(obj, ToStringStyle.SHORT_PREFIX_STYLE, false);
 	}

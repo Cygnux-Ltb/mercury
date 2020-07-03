@@ -6,7 +6,7 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import org.eclipse.collections.api.map.ConcurrentMutableMap;
 
-import io.mercury.common.annotation.lang.ProtectedAbstractMethod;
+import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.MutableMaps;
 
@@ -33,7 +33,7 @@ public abstract class BaseKeeper<K, V> implements Keeper<K, V> {
 		return savedMap.get(k);
 	}
 
-	@ProtectedAbstractMethod
+	@AbstractFunction
 	protected abstract V createWithKey(K k);
 
 }

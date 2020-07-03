@@ -2,7 +2,7 @@ package io.mercury.common.fsm;
 
 import javax.annotation.concurrent.ThreadSafe;
 
-import io.mercury.common.annotation.lang.ProtectedAbstractMethod;
+import io.mercury.common.annotation.lang.AbstractFunction;
 
 @ThreadSafe
 public abstract class EnableComponent<T extends Enable<T>> implements Enable<T> {
@@ -31,7 +31,7 @@ public abstract class EnableComponent<T extends Enable<T>> implements Enable<T> 
 		return returnThis();
 	}
 
-	@ProtectedAbstractMethod
+	@AbstractFunction
 	protected abstract T returnThis();
 
 }

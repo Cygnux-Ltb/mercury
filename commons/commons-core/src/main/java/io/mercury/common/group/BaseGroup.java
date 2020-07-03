@@ -6,7 +6,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.map.ConcurrentMutableMap;
 
-import io.mercury.common.annotation.lang.ProtectedAbstractMethod;
+import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.ImmutableLists;
 import io.mercury.common.collections.MutableMaps;
@@ -27,7 +27,7 @@ public abstract class BaseGroup<K, V> implements Group<K, V> {
 	}
 
 	@Nonnull
-	@ProtectedAbstractMethod
+	@AbstractFunction
 	protected abstract V createMember(@Nonnull K k);
 
 }

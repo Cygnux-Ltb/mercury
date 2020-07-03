@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.SOURCE)
-public @interface ProtectedAbstractMethod {
+public @interface AbstractFunction {
 
 }
