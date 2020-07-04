@@ -14,12 +14,7 @@
 	<name>persistence-chronicle</name>
 
 	<properties>
-		<!-- chronicle-queue last version : 5.19.2 -->
-		<chronicle-queue.version>5.17.43</chronicle-queue.version>
-		<!-- chronicle-map last version : 3.19.3 -->
-		<chronicle-map.version>3.17.8</chronicle-map.version>
-		<!-- chronicle-component last version : 3.19.3 -->
-		<chronicle-component.version>2.19.0</chronicle-component.version>
+		
 	</properties>
 
 	<dependencies>
@@ -33,7 +28,7 @@
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-core</artifactId>
-			<version>2.19.48</version>
+			<version>2.19.52</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -49,7 +44,7 @@
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-wire</artifactId>
-			<version>2.19.45</version>
+			<version>2.19.48</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -65,7 +60,7 @@
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-bytes</artifactId>
-			<version>2.19.46</version>
+			<version>2.19.47</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -81,7 +76,7 @@
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-threads</artifactId>
-			<version>2.19.46</version>
+			<version>2.19.48</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -140,7 +135,7 @@
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-queue</artifactId>
-			<version>5.19.44</version>
+			<version>5.19.48</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -266,7 +261,7 @@
 			<artifactId>annotations</artifactId>
 		</dependency>
 
-		<!-- Java Native Access Platform -->
+	<!-- Java Native Access Platform -->
 		<dependency>
 			<groupId>net.java.dev.jna</groupId>
 			<artifactId>jna-platform</artifactId>
