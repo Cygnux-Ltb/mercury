@@ -1,9 +1,10 @@
 package io.mercury.common.datetime;
 
+import static java.time.ZonedDateTime.ofInstant;
+
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 
 public interface TimeZone {
 
@@ -20,7 +21,7 @@ public interface TimeZone {
 	/**
 	 * ZoneOffset from runtime
 	 */
-	ZoneOffset SYS_DEFAULT_OFFSET = ZonedDateTime.ofInstant(Instant.EPOCH, SYS_DEFAULT).getOffset();
+	ZoneOffset SYS_DEFAULT_OFFSET = ofInstant(Instant.EPOCH, SYS_DEFAULT).getOffset();
 
 	/**
 	 * Chinese Standard Time ZoneId
@@ -30,7 +31,7 @@ public interface TimeZone {
 	/**
 	 * Chinese Standard Time ZoneOffset
 	 */
-	ZoneOffset CST_OFFSET = ZonedDateTime.ofInstant(Instant.EPOCH, CST).getOffset();
+	ZoneOffset CST_OFFSET = ofInstant(Instant.EPOCH, CST).getOffset();
 
 	/**
 	 * Japan Standard Time ZoneId
@@ -40,6 +41,16 @@ public interface TimeZone {
 	/**
 	 * Japan Standard Time ZoneOffset
 	 */
-	ZoneOffset JST_OFFSET = ZonedDateTime.ofInstant(Instant.EPOCH, JST).getOffset();
+	ZoneOffset JST_OFFSET = ofInstant(Instant.EPOCH, JST).getOffset();
+
+	/**
+	 * America Chicago Time ZoneId
+	 */
+	ZoneId AMERICA_CHICAGO = ZoneId.of("America/Chicago");
+
+	/**
+	 * America Chicago Time ZoneOffset
+	 */
+	ZoneOffset AMERICA_CHICAGO_OFFSET = ofInstant(Instant.EPOCH, AMERICA_CHICAGO).getOffset();
 
 }

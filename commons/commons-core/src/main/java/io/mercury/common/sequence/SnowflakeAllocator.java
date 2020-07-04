@@ -21,6 +21,7 @@ public final class SnowflakeAllocator {
 	/**
 	 * 支持的最大机器id，结果是31 (这个移位算法可以很快的计算出几位二进制数所能表示的最大十进制数)
 	 */
+	@SuppressWarnings("unused")
 	private final long maxWorkerId = -1L ^ (-1L << workerIdBits);
 
 	/**

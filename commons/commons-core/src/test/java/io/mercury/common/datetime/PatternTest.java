@@ -6,11 +6,7 @@ public class PatternTest {
 
 	@Test
 	public void test() {
-		
-		
-		
-		
-		
+
 	}
 
 }
