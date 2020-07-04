@@ -24,6 +24,7 @@ import io.netty.channel.udt.nio.NioUdtProvider;
  * Handler implementation for the echo server.
  */
 @Sharable
+@Deprecated
 public class MsgEchoServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override

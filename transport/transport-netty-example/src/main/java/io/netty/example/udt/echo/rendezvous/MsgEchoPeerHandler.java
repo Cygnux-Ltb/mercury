@@ -27,6 +27,7 @@ import io.netty.channel.udt.nio.NioUdtProvider;
  * between the echo peers by sending the first message to the other peer on
  * activation.
  */
+@Deprecated
 public class MsgEchoPeerHandler extends SimpleChannelInboundHandler<UdtMessage> {
 
     private final UdtMessage message;

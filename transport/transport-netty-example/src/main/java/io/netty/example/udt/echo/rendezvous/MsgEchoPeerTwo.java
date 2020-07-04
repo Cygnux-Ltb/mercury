@@ -25,6 +25,7 @@ import java.net.InetSocketAddress;
  * Sends one message when a connection is open and echoes back any received data
  * to the other peer.
  */
+@Deprecated
 public class MsgEchoPeerTwo extends MsgEchoPeerBase {
 
     public MsgEchoPeerTwo(final InetSocketAddress self, final InetSocketAddress peer, final int messageSize) {

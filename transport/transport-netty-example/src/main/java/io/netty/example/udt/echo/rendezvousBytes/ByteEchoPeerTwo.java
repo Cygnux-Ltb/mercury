@@ -30,6 +30,7 @@ import java.net.SocketAddress;
  * server.
  * <p/>
  */
+@Deprecated
 public class ByteEchoPeerTwo extends ByteEchoPeerBase {
 
     public ByteEchoPeerTwo(int messageSize, SocketAddress myAddress, SocketAddress peerAddress) {

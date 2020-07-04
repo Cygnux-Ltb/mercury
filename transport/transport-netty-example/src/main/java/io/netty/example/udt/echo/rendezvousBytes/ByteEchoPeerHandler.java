@@ -26,6 +26,7 @@ import io.netty.channel.udt.nio.NioUdtProvider;
  * traffic between the echo client and server by sending the first message to
  * the server on activation.
  */
+@Deprecated
 public class ByteEchoPeerHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     private final ByteBuf message;

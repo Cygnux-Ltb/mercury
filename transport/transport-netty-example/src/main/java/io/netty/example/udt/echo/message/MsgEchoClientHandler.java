@@ -27,6 +27,7 @@ import io.netty.channel.udt.nio.NioUdtProvider;
  * traffic between the echo client and server by sending the first message to
  * the server on activation.
  */
+@Deprecated
 public class MsgEchoClientHandler extends SimpleChannelInboundHandler<UdtMessage> {
 
     private final UdtMessage message;

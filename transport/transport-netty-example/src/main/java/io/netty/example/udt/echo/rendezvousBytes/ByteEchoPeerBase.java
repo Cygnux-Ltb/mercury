@@ -37,6 +37,7 @@ import java.util.concurrent.ThreadFactory;
  * server.
  * <p/>
  */
+@Deprecated
 public class ByteEchoPeerBase {
 
     protected final int messageSize;

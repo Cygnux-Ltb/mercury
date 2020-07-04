@@ -19,7 +19,6 @@
 
 package io.netty.example.worldclock;
 
-@SuppressWarnings("all")
 public final class WorldClockProtocol {
 	private WorldClockProtocol() {
 	}
@@ -399,7 +398,6 @@ public final class WorldClockProtocol {
 				com.google.protobuf.ExtensionRegistryLite extensionRegistry)
 				throws com.google.protobuf.InvalidProtocolBufferException {
 			initFields();
-			int mutable_bitField0_ = 0;
 			com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet
 					.newBuilder();
 			try {
@@ -1340,7 +1338,6 @@ public final class WorldClockProtocol {
 			public io.netty.example.worldclock.WorldClockProtocol.Locations buildPartial() {
 				io.netty.example.worldclock.WorldClockProtocol.Locations result = new io.netty.example.worldclock.WorldClockProtocol.Locations(
 						this);
-				int from_bitField0_ = bitField0_;
 				if (locationBuilder_ == null) {
 					if (((bitField0_ & 0x00000001) == 0x00000001)) {
 						location_ = java.util.Collections.unmodifiableList(location_);
@@ -1806,7 +1803,6 @@ public final class WorldClockProtocol {
 				com.google.protobuf.ExtensionRegistryLite extensionRegistry)
 				throws com.google.protobuf.InvalidProtocolBufferException {
 			initFields();
-			int mutable_bitField0_ = 0;
 			com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet
 					.newBuilder();
 			try {
@@ -3122,7 +3118,6 @@ public final class WorldClockProtocol {
 			public io.netty.example.worldclock.WorldClockProtocol.LocalTimes buildPartial() {
 				io.netty.example.worldclock.WorldClockProtocol.LocalTimes result = new io.netty.example.worldclock.WorldClockProtocol.LocalTimes(
 						this);
-				int from_bitField0_ = bitField0_;
 				if (localTimeBuilder_ == null) {
 					if (((bitField0_ & 0x00000001) == 0x00000001)) {
 						localTime_ = java.util.Collections.unmodifiableList(localTime_);

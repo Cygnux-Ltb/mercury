@@ -35,6 +35,7 @@ import java.util.concurrent.ThreadFactory;
  * between the echo client and server by sending the first message to the
  * server.
  */
+@Deprecated
 public final class ByteEchoClient {
 
     static final String HOST = System.getProperty("host", "127.0.0.1");

@@ -15,6 +15,8 @@
  */
 package io.netty.example.udt.echo.message;
 
+import java.util.concurrent.ThreadFactory;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -25,9 +27,6 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.concurrent.DefaultThreadFactory;
 
-import java.util.concurrent.ThreadFactory;
-import java.util.logging.Logger;
-
 /**
  * UDT Message Flow client
  * <p>
@@ -36,9 +35,8 @@ import java.util.logging.Logger;
  * between the echo client and server by sending the first message to the
  * server.
  */
+@Deprecated
 public final class MsgEchoClient {
-
-    private static final Logger log = Logger.getLogger(MsgEchoClient.class.getName());
 
     static final String HOST = System.getProperty("host", "127.0.0.1");
     static final int PORT = Integer.parseInt(System.getProperty("port", "8007"));

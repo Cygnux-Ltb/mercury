@@ -33,6 +33,7 @@ import java.util.concurrent.ThreadFactory;
  * <p>
  * Echoes back any received data from a client.
  */
+@Deprecated
 public final class ByteEchoServer {
 
     static final int PORT = Integer.parseInt(System.getProperty("port", "8007"));

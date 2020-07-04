@@ -34,6 +34,7 @@ import java.util.concurrent.ThreadFactory;
  * Sends one message when a connection is open and echoes back any received data
  * to the other peer.
  */
+@Deprecated
 public abstract class MsgEchoPeerBase {
 
     protected final int messageSize;
