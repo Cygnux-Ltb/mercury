@@ -16,32 +16,26 @@
 	<name>commons-graph</name>
 
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>commons-core</artifactId>
 		</dependency>
-		
+
 		<!-- JGraphT Core -->
 		<dependency>
 			<groupId>org.jgrapht</groupId>
 			<artifactId>jgrapht-core</artifactId>
-			<version>1.4.0</version>
-			<!-- <exclusions>
-				<exclusion>
-					<groupId>org.jheaps</groupId>
-					<artifactId>jheaps</artifactId>
-				</exclusion>
-			</exclusions> -->
+			<version>1.5.0</version>
 		</dependency>
-		
+
 		<!-- A free, production-ready, efficient Java library containing a collection 
 			of heap data-structures. -->
 		<dependency>
 			<groupId>org.jheaps</groupId>
 			<artifactId>jheaps</artifactId>
-			<version>0.13</version>
+			<version>0.14</version>
 		</dependency>
-		
+
 	</dependencies>
 </project>

@@ -1,71 +1,83 @@
 package io.mercury.common.graph;
 
-import static io.mercury.common.graph.Edge.EdgeSupplier;
+import java.util.function.Supplier;
 
 import org.eclipse.collections.api.set.ImmutableSet;
 import org.jgrapht.Graph;
+import org.jgrapht.GraphType;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.traverse.BreadthFirstIterator;
 
 import io.mercury.common.collections.ImmutableSets;
 import io.mercury.common.collections.MutableSets;
 
-public final class DirectedGraph<V> {
+public final class DirectedGraph<V, E extends Edge> {
 
-	private final Graph<V, Edge> graph;
+	private final Graph<V, E> savedGraph;
 
-	private DirectedGraph(Class<V> vertexClass) {
-		this.graph = GraphTypeBuilder.directed().vertexClass(vertexClass).edgeSupplier(EdgeSupplier).buildGraph();
+	private DirectedGraph(Class<V> vertexClass, Supplier<E> edgeSupplier) {
+		this.savedGraph = GraphTypeBuilder.directed().vertexClass(vertexClass).edgeSupplier(edgeSupplier).buildGraph();
 	}
 
-	public static <V> DirectedGraph<V> buildOf(Class<V> vertexClass) {
-		return new DirectedGraph<>(vertexClass);
+	public static <V> DirectedGraph<V, Edge> newWith(Class<V> vertexClass) {
+		return new DirectedGraph<>(vertexClass, Edge::new);
 	}
 
-	public DirectedGraph<V> addVertex(V vertex) {
+	public static <V, E extends Edge> DirectedGraph<V, E> newWith(Class<V> vertexClass, Supplier<E> edgeSupplier) {
+		return new DirectedGraph<>(vertexClass, edgeSupplier);
+	}
+
+	public GraphType getType() {
+		return savedGraph.getType();
+	}
+
+	public DirectedGraph<V, E> addVertex(V vertex) {
 		if (vertex != null) {
-			graph.addVertex(vertex);
+			savedGraph.addVertex(vertex);
 		}
 		return this;
 	}
 
-	public DirectedGraph<V> addEdge(V source, V target) {
-		graph.addVertex(source);
-		graph.addVertex(target);
-		graph.addEdge(source, target);
+	public DirectedGraph<V, E> addEdge(V source, V target) {
+		savedGraph.addEdge(source, target);
+		return this;
+	}
+
+	public DirectedGraph<V, E> addEdge(V source, V target, E edge) {
+		savedGraph.addEdge(source, target, edge);
 		return this;
 	}
 
 	public boolean containsVertex(V v) {
-		return graph.containsVertex(v);
+		return savedGraph.containsVertex(v);
 	}
 
-	public boolean containsEdge(Edge e) {
-		return graph.containsEdge(e);
+	public boolean containsEdge(E e) {
+		return savedGraph.containsEdge(e);
 	}
 
 	public boolean containsEdge(V source, V target) {
-		return graph.containsEdge(source, target);
+		return savedGraph.containsEdge(source, target);
 	}
 
 	public ImmutableSet<V> allVertex() {
-		return ImmutableSets.newSet(graph.vertexSet());
+		return ImmutableSets.newSet(savedGraph.vertexSet());
 	}
 
-	public ImmutableSet<Edge> allEdge() {
-		return ImmutableSets.newSet(graph.edgeSet());
+	public ImmutableSet<E> allEdge() {
+		return ImmutableSets.newSet(savedGraph.edgeSet());
 	}
 
 	public ImmutableSet<V> allChildVertex(V vertex) {
-		return MutableSets.newUnifiedSet(new BreadthFirstIterator<>(graph, vertex)).toImmutable();
+		return MutableSets.newUnifiedSet(new BreadthFirstIterator<>(savedGraph, vertex)).toImmutable();
 	}
 
-	public Graph<V, Edge> internalGraph() {
-		return graph;
+	public Graph<V, E> savedGraph() {
+		return savedGraph;
 	}
 
 	public static void main(String[] args) {
-		DirectedGraph<Integer> graph = DirectedGraph.buildOf(Integer.class);
+		DirectedGraph<Integer, Edge> graph = DirectedGraph.newWith(Integer.class);
 
 		graph.addVertex(1);
 		graph.addVertex(11);
@@ -100,7 +112,7 @@ public final class DirectedGraph<V> {
 
 		System.out.println(allChildVertex);
 
-		System.out.println(graph.internalGraph().getType());
+		System.out.println(graph.savedGraph().getType());
 
 	}
 
