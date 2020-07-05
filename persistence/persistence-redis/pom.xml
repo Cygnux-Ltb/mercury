@@ -21,13 +21,11 @@
 			<artifactId>commons-core</artifactId>
 		</dependency>
 
-		<!-- Advanced and thread-safe Java Redis client for synchronous, asynchronous, 
-			and reactive usage. Supports Cluster, Sentinel, Pipelining, Auto-Reconnect, 
-			Codecs and much more. -->
+		<!-- Jedis is a blazingly small and sane Redis java client. -->
 		<dependency>
-			<groupId>io.lettuce</groupId>
-			<artifactId>lettuce-core</artifactId>
-			<version>5.3.0.RELEASE</version>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>3.3.0</version>
 		</dependency>
 
 	</dependencies>
