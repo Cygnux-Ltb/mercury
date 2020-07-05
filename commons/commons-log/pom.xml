@@ -101,15 +101,6 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Swing GUI to remotely edit Log4j configurations. This includes a JConsole 
-			plugin and a StatusLogger monitor. -->
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-jmx-gui</artifactId>
-			<version>${log4j2.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-
 		<!-- The Apache Log4j SLF4J API binding to Log4j 2 Core -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
@@ -122,6 +113,15 @@
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<!-- Swing GUI to remotely edit Log4j configurations. This includes a JConsole 
+			plugin and a StatusLogger monitor. -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-jmx-gui</artifactId>
+			<version>${log4j2.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>
