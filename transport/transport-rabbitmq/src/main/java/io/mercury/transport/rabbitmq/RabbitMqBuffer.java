@@ -23,6 +23,8 @@ import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
 
 public class RabbitMqBuffer<E> implements Queue<E>, Closeable {
 
+	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqBuffer.class);
+
 	private RmqConnection connection;
 	private RabbitMqChannel rabbitMqChannel;
 	private String queueName;
@@ -32,9 +34,7 @@ public class RabbitMqBuffer<E> implements Queue<E>, Closeable {
 	private Function<E, byte[]> serializer;
 	private Function<byte[], E> deserializer;
 
-	private String name;
-
-	private Logger log = CommonLoggerFactory.getLogger(getClass());
+	private final String name;
 
 	public static final <E> RabbitMqBuffer<E> newQueue(RmqConnection connection, String queueName,
 			Function<E, byte[]> serializer, Function<byte[], E> deserializer) throws AmqpDeclareException {
@@ -58,8 +58,8 @@ public class RabbitMqBuffer<E> implements Queue<E>, Closeable {
 		this.serializer = serializer;
 		this.deserializer = deserializer;
 		this.rabbitMqChannel = RabbitMqChannel.newWith(connection);
+		this.name = "rabbitmq-buffer::" + connection.connectionInfo() + "/" + queueName + "";
 		declareQueue();
-		buildName();
 	}
 
 	private void declareQueue() throws AmqpDeclareException {
@@ -71,8 +71,12 @@ public class RabbitMqBuffer<E> implements Queue<E>, Closeable {
 		queueRelationship.declare(RabbitMqDeclarant.newWith(rabbitMqChannel.internalChannel()));
 	}
 
-	private void buildName() {
-		this.name = "rabbit-queue::" + connection.fullInfo() + "/" + queueName;
+	/**
+	 * 
+	 * @return
+	 */
+	public RmqConnection getConnection() {
+		return connection;
 	}
 
 	@Override
