@@ -17,6 +17,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>persistence-arangodb</module>
 		<module>persistence-chronicle</module>
 		<module>persistence-mapdb</module>
 		<module>persistence-redis</module>
@@ -27,7 +28,7 @@
 	</modules>
 
 	<properties>
-		<jackson.version>2.11.0</jackson.version>
+		<jackson.version>2.11.1</jackson.version>
 		<netty.version>4.1.50.Final</netty.version>
 	</properties>
 
@@ -125,38 +126,10 @@
 				<version>${netty.version}</version>
 			</dependency>
 
-			<!-- Netty/Handler -->
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-handler</artifactId>
-				<version>${netty.version}</version>
-			</dependency>
-
 			<!-- Netty/Codec -->
 			<dependency>
 				<groupId>io.netty</groupId>
 				<artifactId>netty-codec</artifactId>
-				<version>${netty.version}</version>
-			</dependency>
-
-			<!-- Netty/Common -->
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-common</artifactId>
-				<version>${netty.version}</version>
-			</dependency>
-
-			<!-- Netty/Transport -->
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-transport</artifactId>
-				<version>${netty.version}</version>
-			</dependency>
-
-			<!-- Netty/Resolver -->
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-resolver</artifactId>
 				<version>${netty.version}</version>
 			</dependency>
 
@@ -182,7 +155,7 @@
 			<dependency>
 				<groupId>org.xerial.snappy</groupId>
 				<artifactId>snappy-java</artifactId>
-				<version>1.1.7.5</version>
+				<version>1.1.7.6</version>
 			</dependency>
 
 			<!-- Zero-allocation implementations of fast non-cryptographic hash functions 
