@@ -11,6 +11,7 @@ import com.arangodb.ArangoDatabase;
 import com.arangodb.Protocol;
 import com.arangodb.entity.BaseDocument;
 import com.arangodb.model.DBCreateOptions;
+import com.arangodb.velocypack.VPackSlice;
 
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.log.LogLevel;
@@ -20,8 +21,7 @@ import io.mercury.common.log.LoggerSetter;
  * Hello world!
  *
  */
-public class ArangoDemo
-{
+public class ArangoDemo {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(ArangoDemo.class);
 
@@ -71,6 +71,11 @@ public class ArangoDemo
 				}
 			}
 			log.info("collection count -> {}", collect.count().getCount());
+
+			VPackSlice vUser = collect.getDocument("user0", VPackSlice.class);
+			log.info("Key: {}", vUser.get("_key").getAsString());
+			log.info("Attribute username: {}", vUser.get("username").getAsString());
+			log.info("Attribute age: {}", vUser.get("age").getAsInt());
 		} catch (ArangoDBException e) {
 			log.error("Failed to create document -> {}", e.getMessage(), e);
 		}
