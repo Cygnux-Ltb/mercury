@@ -68,10 +68,10 @@ public class ArangoDemo {
 			}
 			log.info("collection count -> {}", collect.count().getCount());
 
-			VPackSlice vUser = collect.getDocument("user0", VPackSlice.class);
-			log.info("Key: {}", vUser.get("_key").getAsString());
-			log.info("Attribute username: {}", vUser.get("username").getAsString());
-			log.info("Attribute age: {}", vUser.get("age").getAsInt());
+			VPackSlice pack = collect.getDocument("user0", VPackSlice.class);
+			log.info("Key: {}", pack.get("_key").getAsString());
+			log.info("Attribute username: {}", pack.get("username").getAsString());
+			log.info("Attribute age: {}", pack.get("age").getAsInt());
 		} catch (ArangoDBException e) {
 			log.error("Failed to create document -> {}", e.getMessage(), e);
 		}
