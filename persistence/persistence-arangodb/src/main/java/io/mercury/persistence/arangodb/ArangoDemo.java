@@ -17,10 +17,6 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.log.LogLevel;
 import io.mercury.common.log.LoggerSetter;
 
-/**
- * Hello world!
- *
- */
 public class ArangoDemo {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(ArangoDemo.class);
