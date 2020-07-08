@@ -8,7 +8,7 @@ import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
-import io.mercury.common.thread.ThreadTool;
+import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.core.api.Publisher;
 import io.mercury.transport.zmq.configurator.ZmqConfigurator;
@@ -72,7 +72,7 @@ public class ZmqPublisher implements Publisher<byte[]>, Closeable {
 
 			for (;;) {
 				publisher.publish(String.valueOf(random.nextInt()).getBytes());
-				ThreadTool.sleep(1000);
+				Threads.sleep(1000);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
