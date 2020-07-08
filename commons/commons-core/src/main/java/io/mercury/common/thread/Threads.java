@@ -7,18 +7,19 @@ import org.slf4j.Logger;
 
 import io.mercury.common.log.CommonLoggerFactory;
 
-public final class ThreadTool {
+public final class Threads {
 
-	private ThreadTool() {
+	private Threads() {
 	}
 
-	private static final Logger log = CommonLoggerFactory.getLogger(ThreadTool.class);
+	private static final Logger log = CommonLoggerFactory.getLogger(Threads.class);
 
 	/**
 	 * 
 	 * @return
 	 */
 	public static ThreadPoolExecutor newCommonThreadPool() {
+		
 		return CommonThreadPool.newBuilder().build();
 	}
 

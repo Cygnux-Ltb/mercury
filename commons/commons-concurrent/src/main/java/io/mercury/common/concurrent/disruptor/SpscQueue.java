@@ -13,7 +13,7 @@ import io.mercury.common.collections.queue.api.SCQueue;
 import io.mercury.common.collections.queue.base.LoadContainer;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.thread.ThreadTool;
+import io.mercury.common.thread.Threads;
 
 /**
  * 
@@ -52,7 +52,7 @@ public class SpscQueue<T> extends SCQueue<T> {
 				// 队列容量
 				bufferSize.value(),
 				// 实现ThreadFactory的Lambda
-				(Runnable runnable) -> ThreadTool.newMaxPriorityThread(runnable,
+				(Runnable runnable) -> Threads.newMaxPriorityThread(runnable,
 						"DisruptorQueue-" + super.queueName + "-WorkingThread"),
 				// DaemonThreadFactory.INSTANCE,
 				// 生产者策略, 使用单生产者
@@ -111,7 +111,7 @@ public class SpscQueue<T> extends SCQueue<T> {
 	public void stop() {
 		isStop.set(true);
 		while (disruptor.getBufferSize() != 0)
-			ThreadTool.sleep(1);
+			Threads.sleep(1);
 		disruptor.shutdown();
 		log.info("Call stop() success, disruptor is shutdown.");
 	}
@@ -121,13 +121,13 @@ public class SpscQueue<T> extends SCQueue<T> {
 		SpscQueue<Integer> queue = new SpscQueue<>("Test-Queue", BufferSize.POW2_6, true,
 				(integer) -> System.out.println(integer));
 
-		ThreadTool.startNewThread(() -> {
+		Threads.startNewThread(() -> {
 			int i = 0;
 			for (;;)
 				queue.enqueue(++i);
 		});
 
-		ThreadTool.sleep(10000);
+		Threads.sleep(10000);
 
 		queue.stop();
 

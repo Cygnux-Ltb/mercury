@@ -1,6 +1,6 @@
 package io.mercury.common.sequence;
 
-import static io.mercury.common.thread.ThreadTool.sleep;
+import static io.mercury.common.thread.Threads.sleep;
 import static io.mercury.common.util.BitOperator.intBinaryFormat;
 import static io.mercury.common.util.BitOperator.longBinaryFormat;
 import static io.mercury.common.util.BitOperator.shortBinaryFormat;

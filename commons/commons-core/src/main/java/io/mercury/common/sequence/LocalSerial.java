@@ -3,7 +3,7 @@ package io.mercury.common.sequence;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
-import io.mercury.common.thread.ThreadTool;
+import io.mercury.common.thread.Threads;
 
 public final class LocalSerial {
 
@@ -35,7 +35,7 @@ public final class LocalSerial {
 
 		Random random = new Random(2);
 
-		ThreadTool.startNewThread(() -> {
+		Threads.startNewThread(() -> {
 			if (atomicLong.get() < 0) {
 				return;
 			} else if (atomicLong.get() > 100) {

@@ -11,7 +11,7 @@ import io.mercury.common.collections.queue.RunMode;
 import io.mercury.common.collections.queue.api.SCQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.thread.ThreadTool;
+import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringUtil;
 
 public class MpscArrayBlockingQueue<E> extends SCQueue<E> {
@@ -36,7 +36,7 @@ public class MpscArrayBlockingQueue<E> extends SCQueue<E> {
 			start();
 			break;
 		case Delay:
-			ThreadTool.sleep(delayMillis);
+			Threads.sleep(delayMillis);
 			start();
 			break;
 		default:
@@ -106,7 +106,7 @@ public class MpscArrayBlockingQueue<E> extends SCQueue<E> {
 			log.error("Error call ->  This queue is started.");
 			return;
 		}
-		ThreadTool.startNewThread(() -> {
+		Threads.startNewThread(() -> {
 			try {
 				while (isRun.get() || !innerQueue.isEmpty()) {
 					@SpinWaiting
@@ -132,7 +132,7 @@ public class MpscArrayBlockingQueue<E> extends SCQueue<E> {
 
 		MpscArrayBlockingQueue<Integer> queue = MpscArrayBlockingQueue.autoStartQueue(100, (value) -> {
 			System.out.println(value);
-			ThreadTool.sleep(500);
+			Threads.sleep(500);
 		});
 
 		int i = 0;
