@@ -399,15 +399,15 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 			if (isConnected()) {
 				log.debug("Last detect connection isConnected() == true, Reconnection count {}", reconnectionCount);
 				channel.basicAck(deliveryTag, multipleAck);
-				log.debug("Method channel.basicAck() finished");
+				log.debug("Call function channel.basicAck() finished");
 				return true;
 			} else {
 				log.error("Last detect connection isConnected() == false, Reconnection count {}", reconnectionCount);
-				log.error("Unable to call method channel.basicAck()");
+				log.error("Can't call function channel.basicAck()");
 				return ack0(deliveryTag, retry);
 			}
 		} catch (IOException e) {
-			log.error("Call method channel.basicAck(deliveryTag==[{}], multiple==[{}]) throw IOException -> {}",
+			log.error("Call function channel.basicAck(deliveryTag==[{}], multiple==[{}]) throw IOException -> {}",
 					deliveryTag, multipleAck, e.getMessage(), e);
 			return ack0(deliveryTag, ++retry);
 		}
@@ -415,7 +415,7 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 
 	@Override
 	public boolean destroy() {
-		log.info("Call method destroy() from Receiver name==[{}]", receiverName);
+		log.info("Call function destroy() from Receiver name==[{}]", receiverName);
 		return super.destroy();
 	}
 

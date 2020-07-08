@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 
@@ -27,6 +28,7 @@ import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
 import io.mercury.transport.rabbitmq.exception.AmqpDeclareRuntimeException;
 import io.mercury.transport.rabbitmq.exception.AmqpNoConfirmException;
 
+@ThreadSafe
 public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publisher<byte[]>, Sender<byte[]> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqPublisher.class);
@@ -43,7 +45,7 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 	// [MessageProperties]的提供者
 	private final Supplier<BasicProperties> msgPropsSupplier;
 	// 是否有[MessageProperties]的提供者
-	private boolean hasPropsSupplier;
+	private final boolean hasPropsSupplier;
 
 	private final boolean confirm;
 	private final long confirmTimeout;
@@ -237,6 +239,7 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 		return publisherName;
 	}
 
+	// TODO 重试计数器
 	public class ResendCounter {
 
 	}
