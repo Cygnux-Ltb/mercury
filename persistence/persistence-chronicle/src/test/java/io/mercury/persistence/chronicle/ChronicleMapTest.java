@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.sys.SysProperties;
-import io.mercury.common.thread.ThreadTool;
+import io.mercury.common.thread.Threads;
 import io.mercury.persistence.chronicle.hash.ChronicleMapConfigurator;
 import io.mercury.persistence.chronicle.hash.ChronicleMapKeeperOfDate;
 import net.openhft.chronicle.map.ChronicleMap;
@@ -27,7 +27,7 @@ public class ChronicleMapTest {
 			ChronicleMap<String, byte[]> acquire = mapKeeper.acquire("2019.10.11");
 			while (true) {
 				System.out.println(acquire.size());
-				ThreadTool.sleep(2000);
+				Threads.sleep(2000);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -2,7 +2,7 @@ package io.mercury.persistence.rocksdb.map;
 
 import org.rocksdb.Options;
 
-import io.mercury.common.thread.ThreadTool;
+import io.mercury.common.thread.Threads;
 import io.mercury.persistence.rocksdb.map.entity.RocksReversibleKey;
 import io.mercury.persistence.rocksdb.map.entity.RocksValue;
 
@@ -14,7 +14,7 @@ public class RocksReversibleMap<K extends RocksReversibleKey, V extends RocksVal
 
 		Options options = new Options();
 
-		Runtime.getRuntime().addShutdownHook(ThreadTool.newThread(() -> options.close(), "RocksContainerCloseThread"));
+		Runtime.getRuntime().addShutdownHook(Threads.newThread(() -> options.close(), "RocksContainerCloseThread"));
 
 	}
 

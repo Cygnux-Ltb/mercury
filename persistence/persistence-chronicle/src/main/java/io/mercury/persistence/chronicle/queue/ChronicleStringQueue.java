@@ -8,7 +8,7 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 
 import io.mercury.common.number.RandomNumber;
-import io.mercury.common.thread.ThreadTool;
+import io.mercury.common.thread.Threads;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleReader.ReaderParam;
 
 @Immutable
@@ -61,7 +61,7 @@ public class ChronicleStringQueue
 			for (;;) {
 				try {
 					writer.append(String.valueOf(RandomNumber.randomLong()));
-					ThreadTool.sleep(100);
+					Threads.sleep(100);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

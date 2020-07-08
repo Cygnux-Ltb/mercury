@@ -27,7 +27,7 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.sys.SysProperties;
 import io.mercury.common.thread.RuntimeInterruptedException;
 import io.mercury.common.thread.ShutdownHooks;
-import io.mercury.common.thread.ThreadTool;
+import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringUtil;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleReader.ReaderParam;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueue;
@@ -109,14 +109,14 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 			this.cycleFileMap = new ConcurrentHashMap<>();
 			// 周期文件清理间隔
 			long delay = fileCycle.getSeconds() * fileClearCycle;
-			this.fileClearThread = ThreadTool.startNewThread(() -> {
+			this.fileClearThread = Threads.startNewThread(() -> {
 				do {
 					try {
-						ThreadTool.sleep(TimeUnit.SECONDS, delay);
+						Threads.sleep(TimeUnit.SECONDS, delay);
 					} catch (RuntimeInterruptedException e) {
 						logger.info("Last execution fileClearTask");
 						fileClearTask();
-						logger.info("{} exit now", ThreadTool.currentThreadName());
+						logger.info("{} exit now", Threads.currentThreadName());
 					}
 					if (isClearRunning.get()) {
 						fileClearTask();
