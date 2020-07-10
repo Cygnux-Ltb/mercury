@@ -1,6 +1,7 @@
 package io.mercury.transport.core.api;
 
 import io.mercury.transport.core.TransportModule;
+import io.mercury.transport.core.exception.ConnectionBreakException;
 import io.mercury.transport.core.exception.ReceiverStartException;
 
 public interface Receiver extends TransportModule {
@@ -11,8 +12,8 @@ public interface Receiver extends TransportModule {
 	void receive() throws ReceiverStartException;
 
 	/**
-	 * 
+	 * Reconnect
 	 */
-	void reconnect() throws ReceiverStartException;
+	void reconnect() throws ConnectionBreakException, ReceiverStartException;
 
 }

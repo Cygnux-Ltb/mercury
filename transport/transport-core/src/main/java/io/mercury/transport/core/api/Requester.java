@@ -4,6 +4,10 @@ import io.mercury.transport.core.TransportModule;
 
 public interface Requester<T> extends TransportModule {
 
+	/**
+	 * 
+	 * @return <T> T
+	 */
 	T request();
 
 }

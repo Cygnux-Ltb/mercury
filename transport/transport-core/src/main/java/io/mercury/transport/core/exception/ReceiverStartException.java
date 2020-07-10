@@ -7,12 +7,16 @@ public class ReceiverStartException extends RuntimeException {
 	 */
 	private static final long serialVersionUID = 5792361596324344884L;
 
-	public ReceiverStartException(Throwable throwable) {
-		super(throwable);
+	public ReceiverStartException(String message) {
+		super(message);
 	}
 
-	public ReceiverStartException(Throwable throwable, String message) {
-		super(message, throwable);
+	public ReceiverStartException(Throwable cause) {
+		super(cause);
+	}
+
+	public ReceiverStartException(String message, Throwable cause) {
+		super(message, cause);
 	}
 
 }

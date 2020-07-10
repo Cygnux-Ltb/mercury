@@ -11,12 +11,12 @@ public class PublishFailedException extends RuntimeException {
 		super(message);
 	}
 
-	public PublishFailedException(Throwable throwable) {
-		super(throwable);
+	public PublishFailedException(Throwable cause) {
+		super(cause);
 	}
 
-	public PublishFailedException(String message, Throwable throwable) {
-		super(message, throwable);
+	public PublishFailedException(String message, Throwable cause) {
+		super(message, cause);
 	}
 
 }
