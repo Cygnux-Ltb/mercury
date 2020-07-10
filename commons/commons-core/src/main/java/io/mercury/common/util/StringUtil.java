@@ -75,6 +75,18 @@ public final class StringUtil {
 	}
 
 	/**
+	 * Use ToStringBuilder.reflectionToString(obj, ToStringStyle.JSON_STYLE)
+	 * 
+	 * @param obj
+	 * @return String
+	 * 
+	 */
+	public static final String toStringForJson(Object obj) {
+		return obj == null ? StringConst.NULL_STR
+				: ToStringBuilder.reflectionToString(obj, ToStringStyle.JSON_STYLE, false);
+	}
+
+	/**
 	 * 
 	 * @param cs
 	 * @return
