@@ -66,27 +66,27 @@
 			<dependency>
 				<groupId>io.mercury</groupId>
 				<artifactId>transport-core</artifactId>
-				<version>${mercury.commons.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.mercury</groupId>
 				<artifactId>commons-core</artifactId>
-				<version>${mercury.commons.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.mercury</groupId>
 				<artifactId>commons-concurrent</artifactId>
-				<version>${mercury.commons.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.mercury</groupId>
 				<artifactId>serialization-json</artifactId>
-				<version>${mercury.commons.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.mercury</groupId>
 				<artifactId>serialization-avro</artifactId>
-				<version>${mercury.commons.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
