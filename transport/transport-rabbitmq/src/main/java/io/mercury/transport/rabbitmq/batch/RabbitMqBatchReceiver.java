@@ -15,13 +15,14 @@ import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfigurator;
 
 /**
  * @author yellow013
- * @date 2019.03.15
+ * 
+ *         处理批量数据, 手动ACK
  * 
  */
 public class RabbitMqBatchReceiver<T> extends BaseRabbitMqTransport implements Receiver, Runnable {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqBatchReceiver.class);
-	
+
 	private String receiverName;
 
 	private String receiveQueue;
@@ -44,7 +45,7 @@ public class RabbitMqBatchReceiver<T> extends BaseRabbitMqTransport implements R
 		consumer = new BatchProcessConsumer<T>(channel, configurator.qos(), autoFlushInterval, batchHandler,
 				deserializer, refreshNowEvent, null);
 	}
-	
+
 	public RabbitMqBatchReceiver(String tag, @Nonnull RmqReceiverConfigurator configurator, long autoFlushInterval,
 			BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent,
 			Predicate<T> filter) {
@@ -55,8 +56,6 @@ public class RabbitMqBatchReceiver<T> extends BaseRabbitMqTransport implements R
 		consumer = new BatchProcessConsumer<T>(super.channel, configurator.qos(), autoFlushInterval, batchHandler,
 				deserializer, refreshNowEvent, filter);
 	}
-
-
 
 	private void queueDeclare() {
 		this.receiverName = "receiver::" + rmqConnection.fullInfo() + "$" + receiveQueue;

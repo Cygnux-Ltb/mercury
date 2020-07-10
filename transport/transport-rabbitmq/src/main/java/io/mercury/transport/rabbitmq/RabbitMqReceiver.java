@@ -20,6 +20,7 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.core.api.Receiver;
 import io.mercury.transport.core.api.Subscriber;
+import io.mercury.transport.core.exception.ConnectionBreakException;
 import io.mercury.transport.core.exception.ReceiverStartException;
 import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfigurator;
@@ -36,7 +37,7 @@ import io.mercury.transport.rabbitmq.exception.AmqpMsgHandleException;
  *         [已完成]改造升级, 使用共同的构建者建立Exchange, RoutingKey, Queue的绑定关系
  *
  */
-public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscriber, Receiver, Runnable {
+public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Receiver, Subscriber, Runnable {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqReceiver.class);
 
@@ -345,7 +346,7 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 					});
 		} catch (IOException e) {
 			log.error("Method basicConsume() IOException message -> {}", e.getMessage(), e);
-			throw new ReceiverStartException(e, e.getMessage());
+			throw new ReceiverStartException(e.getMessage(), e);
 		}
 	}
 
@@ -425,7 +426,7 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Subscr
 	}
 
 	@Override
-	public void reconnect() {
+	public void reconnect() throws ConnectionBreakException, ReceiverStartException {
 		closeAndReconnection();
 		receive();
 	}

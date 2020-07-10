@@ -27,7 +27,6 @@ import io.mercury.common.util.Assertor;
 
 /**
  * @author yellow013
- * @date 2019.03.15
  */
 public class BatchProcessConsumer<T> extends DefaultConsumer {
 

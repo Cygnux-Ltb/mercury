@@ -22,6 +22,7 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.core.api.Receiver;
 import io.mercury.transport.core.api.Subscriber;
+import io.mercury.transport.core.exception.ConnectionBreakException;
 import io.mercury.transport.core.exception.ReceiverStartException;
 import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfigurator;
@@ -389,7 +390,7 @@ public class RabbitMqReceiver0<T> extends BaseRabbitMqTransport implements Subsc
 					});
 		} catch (IOException e) {
 			log.error("Method basicConsume() IOException message -> {}", e.getMessage(), e);
-			throw new ReceiverStartException(e, e.getMessage());
+			throw new ReceiverStartException(e.getMessage(), e);
 		}
 	}
 
@@ -469,7 +470,7 @@ public class RabbitMqReceiver0<T> extends BaseRabbitMqTransport implements Subsc
 	}
 
 	@Override
-	public void reconnect() {
+	public void reconnect() throws ConnectionBreakException, ReceiverStartException {
 		closeAndReconnection();
 		receive();
 	}

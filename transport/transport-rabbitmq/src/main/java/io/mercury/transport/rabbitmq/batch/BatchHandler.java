@@ -5,7 +5,6 @@ import java.util.function.Predicate;
 
 /**
  * @author yellow013
- * @date 2019.03.15
  */
 @FunctionalInterface
 public interface BatchHandler<T> extends Predicate<Collection<T>> {
