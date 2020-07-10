@@ -8,7 +8,6 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
-import io.mercury.common.annotation.lang.ThrowsRuntimeException;
 import io.mercury.common.collections.customize.BaseKeeper;
 import io.mercury.common.util.Assertor;
 import io.mercury.persistence.chronicle.exception.ChronicleIOException;
@@ -27,7 +26,6 @@ public class ChronicleMapKeeper<K, V> extends BaseKeeper<String, ChronicleMap<K,
 	private final Object lock = new Object();
 
 	@Override
-	@ThrowsRuntimeException(ChronicleIOException.class)
 	public ChronicleMap<K, V> acquire(String filename) throws ChronicleIOException {
 		synchronized (lock) {
 			return super.acquire(Assertor.nonEmpty(filename, "filename"));
@@ -35,7 +33,6 @@ public class ChronicleMapKeeper<K, V> extends BaseKeeper<String, ChronicleMap<K,
 	}
 
 	@Override
-	@ThrowsRuntimeException(ChronicleIOException.class)
 	protected ChronicleMap<K, V> createWithKey(String filename) throws ChronicleIOException {
 		ChronicleMapBuilder<K, V> builder = ChronicleMapBuilder.of(configurator.keyClass(), configurator.valueClass())
 				.putReturnsNull(configurator.putReturnsNull()).removeReturnsNull(configurator.removeReturnsNull())

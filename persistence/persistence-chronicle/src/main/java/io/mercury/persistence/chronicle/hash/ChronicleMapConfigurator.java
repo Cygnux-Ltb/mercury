@@ -7,7 +7,6 @@ import java.io.File;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import io.mercury.common.annotation.lang.ThrowsRuntimeException;
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.config.Configurator;
 import io.mercury.common.datetime.DateTimeUtil;
@@ -66,28 +65,24 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 
 	private static final String FixedFolder = "chronicle-map/";
 
-	@ThrowsRuntimeException(NullPointerException.class)
 	public static <K, V> Builder<K, V> builder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass)
 			throws NullPointerException {
 		return new Builder<>(Assertor.nonNull(keyClass, "keyClass"), Assertor.nonNull(valueClass, "valueClass"),
 				SysProperties.JAVA_IO_TMPDIR + "/", "auto-create-" + DateTimeUtil.datetimeOfSecond() + "/");
 	}
 
-	@ThrowsRuntimeException(NullPointerException.class)
 	public static <K, V> Builder<K, V> builder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass, String folder)
 			throws NullPointerException {
 		return new Builder<>(Assertor.nonNull(keyClass, "keyClass"), Assertor.nonNull(valueClass, "valueClass"),
 				SysProperties.JAVA_IO_TMPDIR + "/", Assertor.nonNull(folder, "folder"));
 	}
 
-	@ThrowsRuntimeException(NullPointerException.class)
 	public static <K, V> Builder<K, V> builder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass,
 			String rootPath, String folder) throws NullPointerException {
 		return new Builder<>(Assertor.nonNull(keyClass, "keyClass"), Assertor.nonNull(valueClass, "valueClass"),
 				Assertor.nonNull(rootPath, "rootPath"), Assertor.nonNull(folder, "folder"));
 	}
 
-	@ThrowsRuntimeException(NullPointerException.class)
 	public static <K, V> Builder<K, V> reset(@Nonnull ChronicleMapConfigurator<K, V> original)
 			throws NullPointerException {
 		return Assertor.nonNull(original, "original").builder;

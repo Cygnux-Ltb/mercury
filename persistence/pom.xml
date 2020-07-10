@@ -65,13 +65,13 @@
 			<dependency>
 				<groupId>io.mercury</groupId>
 				<artifactId>commons-core</artifactId>
-				<version>${mercury.commons.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.mercury</groupId>
 				<artifactId>commons-concurrent</artifactId>
-				<version>${mercury.commons.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 
 			<!-- Java(TM) Persistence API -->
