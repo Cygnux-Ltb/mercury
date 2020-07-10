@@ -16,7 +16,7 @@ public class NettySender implements Sender<byte[]> {
 
 	// private ByteBuf byteBuf;
 
-	private final Logger log = CommonLoggerFactory.getLogger(getClass());
+	private static final Logger log = CommonLoggerFactory.getLogger(NettySender.class);
 
 	public NettySender(ChannelHandlerContext context) {
 		this.context = context;
