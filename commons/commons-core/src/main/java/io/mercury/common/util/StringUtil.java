@@ -58,8 +58,9 @@ public final class StringUtil {
 		return new String(chars);
 	}
 
+	@Nonnull
 	public static final String toText(Object obj) {
-		return "\"" + obj + "\"";
+		return "\"" + toString(obj) + "\"";
 	}
 
 	/**
@@ -69,6 +70,7 @@ public final class StringUtil {
 	 * @return String
 	 * 
 	 */
+	@Nonnull
 	public static final String toStringForReflection(Object obj) {
 		return obj == null ? StringConst.NULL_STR
 				: ToStringBuilder.reflectionToString(obj, ToStringStyle.SHORT_PREFIX_STYLE, false);
@@ -81,6 +83,7 @@ public final class StringUtil {
 	 * @return String
 	 * 
 	 */
+	@Nonnull
 	public static final String toStringForJson(Object obj) {
 		return obj == null ? StringConst.NULL_STR
 				: ToStringBuilder.reflectionToString(obj, ToStringStyle.JSON_STYLE, false);
