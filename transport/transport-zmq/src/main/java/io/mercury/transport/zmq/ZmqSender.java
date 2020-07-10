@@ -33,7 +33,7 @@ public class ZmqSender implements Sender<byte[]>, Closeable {
 		this.zCtx = new ZContext(configurator.ioThreads());
 		this.zSocket = zCtx.createSocket(SocketType.REQ);
 		this.zSocket.connect(configurator.host());
-		this.senderName = "JeroMQ.REQ$" + configurator.host();
+		this.senderName = "ZMQ::REQ$" + configurator.connectionInfo();
 	}
 
 	@Override
@@ -54,6 +54,16 @@ public class ZmqSender implements Sender<byte[]>, Closeable {
 		return senderName;
 	}
 
+	@Override
+	public boolean isConnected() {
+		return !zCtx.isClosed();
+	}
+
+	@Override
+	public void close() throws IOException {
+		destroy();
+	}
+
 	public static void main(String[] args) {
 
 		ZmqConfigurator configurator = ZmqConfigurator.builder().setIoThreads(1).setHost("tcp://localhost:5551")
@@ -69,16 +79,6 @@ public class ZmqSender implements Sender<byte[]>, Closeable {
 			e.printStackTrace();
 		}
 
-	}
-
-	@Override
-	public boolean isConnected() {
-		return !zCtx.isClosed();
-	}
-
-	@Override
-	public void close() throws IOException {
-		destroy();
 	}
 
 }

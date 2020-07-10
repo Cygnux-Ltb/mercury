@@ -9,14 +9,15 @@ public class ZmqConfigurator implements TransportConfigurator {
 	private String topic;
 	private int ioThreads;
 
-	private final String fullInfo = "JeroMqConfigurator";
-	private final String connectionInfo = "";
+	private final String fullInfo = "ZmqConfigurator";
+	private final String connectionInfo;
 
 	private ZmqConfigurator(Builder builder) {
 		this.host = builder.host;
 		this.port = builder.port;
 		this.topic = builder.topic;
 		this.ioThreads = builder.ioThreads;
+		this.connectionInfo = host + ":" + port + "/" + topic;
 	}
 
 	public static Builder builder() {
@@ -45,7 +46,7 @@ public class ZmqConfigurator implements TransportConfigurator {
 	public String fullInfo() {
 		return fullInfo;
 	}
-	
+
 	@Override
 	public String connectionInfo() {
 		return connectionInfo;

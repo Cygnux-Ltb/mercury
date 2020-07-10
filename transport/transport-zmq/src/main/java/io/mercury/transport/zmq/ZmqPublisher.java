@@ -34,7 +34,7 @@ public class ZmqPublisher implements Publisher<byte[]>, Closeable {
 		this.zSocket = zCtx.createSocket(SocketType.PUB);
 		this.zSocket.bind(configurator.host());
 		this.topic = configurator.topic();
-		this.publisherName = "JeroMQ.Pub$" + configurator.host();
+		this.publisherName = "ZMQ::PUB$" + configurator.host();
 	}
 
 	@Override
