@@ -11,7 +11,6 @@ import java.util.Date;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
-import io.mercury.common.annotation.lang.ThrowsRuntimeException;
 import io.mercury.common.datetime.Pattern.DatePattern;
 import io.mercury.common.datetime.Pattern.DateTimePattern;
 import io.mercury.common.datetime.Pattern.TimePattern;
@@ -350,7 +349,6 @@ public final class DateTimeUtil {
 	 * @throws IllegalArgumentException
 	 * @throws DateTimeParseException
 	 */
-	@ThrowsRuntimeException({ IllegalArgumentException.class, DateTimeParseException.class })
 	public final static LocalDate toLocalDate(@Nonnull DatePattern pattern, @Nonnull String str)
 			throws IllegalArgumentException, DateTimeParseException {
 		checkFormatParam(pattern, str);
@@ -365,7 +363,6 @@ public final class DateTimeUtil {
 	 * @throws IllegalArgumentException
 	 * @throws DateTimeParseException
 	 */
-	@ThrowsRuntimeException({ IllegalArgumentException.class, DateTimeParseException.class })
 	public final static LocalTime toLocalTime(@Nonnull TimePattern pattern, @Nonnull String str)
 			throws IllegalArgumentException, DateTimeParseException {
 		checkFormatParam(pattern, str);
@@ -380,7 +377,6 @@ public final class DateTimeUtil {
 	 * @throws IllegalArgumentException
 	 * @throws DateTimeParseException
 	 */
-	@ThrowsRuntimeException({ IllegalArgumentException.class, DateTimeParseException.class })
 	public final static LocalDateTime toLocalDateTime(@Nonnull DateTimePattern pattern, @Nonnull String str)
 			throws IllegalArgumentException, DateTimeParseException {
 		checkFormatParam(pattern, str);

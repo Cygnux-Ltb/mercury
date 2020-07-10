@@ -12,7 +12,6 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import io.mercury.common.annotation.lang.ThrowsRuntimeException;
 import io.mercury.common.character.Separator;
 import io.mercury.common.sys.SysProperties;
 
@@ -45,9 +44,8 @@ public final class FileChannelWriter {
 	 * @return
 	 * @throws IOException
 	 */
-	@ThrowsRuntimeException(NullPointerException.class)
 	public static final File write(List<String> data, @Nonnull final File target, final int capacity)
-			throws IOException {
+			throws NullPointerException, IOException {
 		if (target == null)
 			throw new NullPointerException("target file must not be null.");
 		File parentFile = target.getParentFile();

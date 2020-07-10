@@ -97,30 +97,30 @@ public final class Assertor {
 	/**
 	 * 
 	 * @param <T>
-	 * @param obj
+	 * @param t
 	 * @param objName
 	 * @return
 	 * @throws NullPointerException
 	 */
-	public static <T> T nonNull(T obj, String objName) throws NullPointerException {
-		if (obj == null)
+	public static <T> T nonNull(T t, String objName) throws NullPointerException {
+		if (t == null)
 			throw new NullPointerException(objName + " can not be null");
-		return obj;
+		return t;
 	}
 
 	/**
 	 * 
 	 * @param <T>
 	 * @param <E>
-	 * @param obj
+	 * @param t
 	 * @param e
 	 * @return
 	 * @throws E
 	 */
-	public static <T, E extends Throwable> T nonNull(T obj, E e) throws E {
-		if (obj == null)
+	public static <T, E extends Throwable> T nonNull(T t, E e) throws E {
+		if (t == null)
 			throw e;
-		return obj;
+		return t;
 	}
 
 	/**
@@ -179,79 +179,79 @@ public final class Assertor {
 	 * 
 	 * @param <T>
 	 * @param array
-	 * @param minLength
+	 * @param requiredLength
 	 * @param arrayName
 	 * @return
 	 * @throws NullPointerException
 	 * @throws IllegalArgumentException
 	 */
-	public static <T> T[] requiredLength(T[] array, int minLength, String arrayName)
+	public static <T> T[] requiredLength(T[] array, int requiredLength, String arrayName)
 			throws NullPointerException, IllegalArgumentException {
 		if (array == null)
 			throw new NullPointerException(arrayName + " can not be null");
-		if (array.length < minLength)
-			throw new IllegalArgumentException(arrayName + " length must be greater than " + minLength);
+		if (array.length < requiredLength)
+			throw new IllegalArgumentException(arrayName + " length must be greater than " + requiredLength);
 		return array;
 	}
 
 	/**
 	 * 
 	 * @param array
-	 * @param minLength
+	 * @param requiredLength
 	 * @param arrayName
 	 * @return
 	 * @throws NullPointerException
 	 * @throws IllegalArgumentException
 	 */
-	public static byte[] requiredLength(byte[] array, int minLength, String arrayName)
+	public static byte[] requiredLength(byte[] array, int requiredLength, String arrayName)
 			throws NullPointerException, IllegalArgumentException {
 		if (array == null)
 			throw new NullPointerException(arrayName + " can not be null");
-		if (array.length < minLength)
-			throw new IllegalArgumentException(arrayName + " length must be greater than " + minLength);
+		if (array.length < requiredLength)
+			throw new IllegalArgumentException(arrayName + " length must be greater than " + requiredLength);
 		return array;
 	}
 
 	/**
 	 * 
 	 * @param array
-	 * @param minLength
+	 * @param requiredLength
 	 * @param arrayName
 	 * @return
 	 * @throws NullPointerException
 	 * @throws IllegalArgumentException
 	 */
-	public static char[] requiredLength(char[] array, int minLength, String arrayName)
+	public static char[] requiredLength(char[] array, int requiredLength, String arrayName)
 			throws NullPointerException, IllegalArgumentException {
 		if (array == null)
 			throw new NullPointerException(arrayName + " can not be null");
-		if (array.length < minLength)
-			throw new IllegalArgumentException(arrayName + " length must be greater than " + minLength);
+		if (array.length < requiredLength)
+			throw new IllegalArgumentException(arrayName + " length must be greater than " + requiredLength);
 		return array;
 	}
 
 	/**
 	 * 
 	 * @param array
-	 * @param minLength
+	 * @param requiredLength
 	 * @param arrayName
 	 * @return
 	 * @throws NullPointerException
 	 * @throws IllegalArgumentException
 	 */
-	public static int[] requiredLength(int[] array, int minLength, String arrayName)
+	public static int[] requiredLength(int[] array, int requiredLength, String arrayName)
 			throws NullPointerException, IllegalArgumentException {
 		if (array == null)
 			throw new NullPointerException(arrayName + " can not be null");
-		if (array.length < minLength)
-			throw new IllegalArgumentException(arrayName + " length must be greater than " + minLength);
+		if (array.length < requiredLength)
+			throw new IllegalArgumentException(arrayName + " length must be greater than " + requiredLength);
 		return array;
 	}
 
 	/**
 	 * 
 	 * @param array
-	 * @param minLength
+	 * @param requiredLength
 	 * @param arrayName
 	 * @return
 	 * @throws NullPointerException
