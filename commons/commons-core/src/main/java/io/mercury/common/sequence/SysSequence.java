@@ -3,6 +3,7 @@ package io.mercury.common.sequence;
 import org.slf4j.Logger;
 
 import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.LogConfigurator;
 
 public final class SysSequence {
 
@@ -20,6 +21,7 @@ public final class SysSequence {
 
 	public static void main(String[] args) {
 
+		LogConfigurator.logFileName("test-log");
 		Logger log = CommonLoggerFactory.getLogger(SysSequence.class);
 
 		for (int i = 0; i < 20; i++) {

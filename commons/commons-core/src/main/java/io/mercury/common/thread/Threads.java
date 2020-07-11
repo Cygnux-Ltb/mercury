@@ -18,8 +18,7 @@ public final class Threads {
 	 * 
 	 * @return
 	 */
-	public static ThreadPoolExecutor newCommonThreadPool() {
-		
+	public static final ThreadPoolExecutor newCommonThreadPool() {
 		return CommonThreadPool.newBuilder().build();
 	}
 
@@ -28,7 +27,7 @@ public final class Threads {
 	 * @param runnable
 	 * @return
 	 */
-	public static Thread newThread(Runnable runnable) {
+	public static final Thread newThread(Runnable runnable) {
 		return new Thread(runnable);
 	}
 
@@ -38,7 +37,7 @@ public final class Threads {
 	 * @param threadName
 	 * @return
 	 */
-	public static Thread newThread(Runnable runnable, String threadName) {
+	public static final Thread newThread(Runnable runnable, String threadName) {
 		return new Thread(runnable, threadName);
 	}
 
@@ -47,7 +46,7 @@ public final class Threads {
 	 * @param runnable
 	 * @return
 	 */
-	public static Thread newMaxPriorityThread(Runnable runnable) {
+	public static final Thread newMaxPriorityThread(Runnable runnable) {
 		return setThreadPriority(newThread(runnable), Thread.MAX_PRIORITY);
 	}
 
@@ -57,7 +56,7 @@ public final class Threads {
 	 * @param threadName
 	 * @return
 	 */
-	public static Thread newMaxPriorityThread(Runnable runnable, String threadName) {
+	public static final Thread newMaxPriorityThread(Runnable runnable, String threadName) {
 		return setThreadPriority(newThread(runnable, threadName), Thread.MAX_PRIORITY);
 	}
 
@@ -66,7 +65,7 @@ public final class Threads {
 	 * @param runnable
 	 * @return
 	 */
-	public static Thread newMinPriorityThread(Runnable runnable) {
+	public static final Thread newMinPriorityThread(Runnable runnable) {
 		return setThreadPriority(newThread(runnable), Thread.MIN_PRIORITY);
 	}
 
@@ -76,7 +75,7 @@ public final class Threads {
 	 * @param threadName
 	 * @return
 	 */
-	public static Thread newMinPriorityThread(Runnable runnable, String threadName) {
+	public static final Thread newMinPriorityThread(Runnable runnable, String threadName) {
 		return setThreadPriority(newThread(runnable, threadName), Thread.MIN_PRIORITY);
 	}
 
@@ -96,7 +95,7 @@ public final class Threads {
 	 * @param runnable
 	 * @return
 	 */
-	public static Thread startNewThread(Runnable runnable) {
+	public static final Thread startNewThread(Runnable runnable) {
 		return startThread(newThread(runnable));
 	}
 
@@ -106,7 +105,7 @@ public final class Threads {
 	 * @param threadName
 	 * @return
 	 */
-	public static Thread startNewThread(Runnable runnable, String threadName) {
+	public static final Thread startNewThread(Runnable runnable, String threadName) {
 		return startThread(newThread(runnable, threadName));
 	}
 
@@ -115,7 +114,7 @@ public final class Threads {
 	 * @param runnable
 	 * @return
 	 */
-	public static Thread startNewMaxPriorityThread(Runnable runnable) {
+	public static final Thread startNewMaxPriorityThread(Runnable runnable) {
 		return startThread(newMaxPriorityThread(runnable));
 	}
 
@@ -125,7 +124,7 @@ public final class Threads {
 	 * @param threadName
 	 * @return
 	 */
-	public static Thread startNewMaxPriorityThread(Runnable runnable, String threadName) {
+	public static final Thread startNewMaxPriorityThread(Runnable runnable, String threadName) {
 		return startThread(newMaxPriorityThread(runnable, threadName));
 	}
 
@@ -134,7 +133,7 @@ public final class Threads {
 	 * @param runnable
 	 * @return
 	 */
-	public static Thread startNewMinPriorityThread(Runnable runnable) {
+	public static final Thread startNewMinPriorityThread(Runnable runnable) {
 		return startThread(newMinPriorityThread(runnable));
 	}
 
@@ -144,7 +143,7 @@ public final class Threads {
 	 * @param threadName
 	 * @return
 	 */
-	public static Thread startNewMinPriorityThread(Runnable runnable, String threadName) {
+	public static final Thread startNewMinPriorityThread(Runnable runnable, String threadName) {
 		return startThread(newMinPriorityThread(runnable, threadName));
 	}
 
@@ -153,7 +152,7 @@ public final class Threads {
 	 * @param thread
 	 * @return
 	 */
-	private static Thread startThread(Thread thread) {
+	private static final Thread startThread(Thread thread) {
 		thread.start();
 		return thread;
 	}
@@ -162,7 +161,7 @@ public final class Threads {
 	 * 
 	 * @param millis
 	 */
-	public static void sleepIgnoreInterrupts(long millis) {
+	public static final void sleepIgnoreInterrupts(long millis) {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
@@ -175,7 +174,7 @@ public final class Threads {
 	 * @param millis
 	 * @param nanos
 	 */
-	public static void sleepIgnoreInterrupts(long millis, int nanos) {
+	public static final void sleepIgnoreInterrupts(long millis, int nanos) {
 		try {
 			Thread.sleep(millis, nanos);
 		} catch (InterruptedException e) {
@@ -188,7 +187,7 @@ public final class Threads {
 	 * @param millis
 	 * @throws RuntimeInterruptedException
 	 */
-	public static void sleep(long millis) throws RuntimeInterruptedException {
+	public static final void sleep(long millis) throws RuntimeInterruptedException {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
@@ -203,7 +202,7 @@ public final class Threads {
 	 * @param nanos
 	 * @throws RuntimeInterruptedException
 	 */
-	public static void sleep(long millis, int nanos) throws RuntimeInterruptedException {
+	public static final void sleep(long millis, int nanos) throws RuntimeInterruptedException {
 		try {
 			Thread.sleep(millis, nanos);
 		} catch (InterruptedException e) {
@@ -219,7 +218,7 @@ public final class Threads {
 	 * @param time
 	 * @throws RuntimeInterruptedException
 	 */
-	public static void sleep(TimeUnit timeUnit, long time) throws RuntimeInterruptedException {
+	public static final void sleep(TimeUnit timeUnit, long time) throws RuntimeInterruptedException {
 		try {
 			timeUnit.sleep(time);
 		} catch (InterruptedException e) {
@@ -229,11 +228,18 @@ public final class Threads {
 		}
 	}
 
-	public static void join() {
+	/**
+	 * 
+	 */
+	public static final void join() {
 		join(Thread.currentThread());
 	}
 
-	public static void join(Thread thread) {
+	/**
+	 * 
+	 * @param thread
+	 */
+	public static final void join(Thread thread) {
 		try {
 			thread.join();
 		} catch (InterruptedException e) {
@@ -243,7 +249,11 @@ public final class Threads {
 		}
 	}
 
-	public static String currentThreadName() {
+	/**
+	 * 
+	 * @return
+	 */
+	public static final String currentThreadName() {
 		return Thread.currentThread().getName();
 	}
 

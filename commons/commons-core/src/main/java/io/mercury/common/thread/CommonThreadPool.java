@@ -26,7 +26,7 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
 
 	private String threadPoolName;
 
-	private final Logger log = LoggerFactory.getLogger(CommonThreadPool.class);
+	private static final Logger log = LoggerFactory.getLogger(CommonThreadPool.class);
 
 	private CommonThreadPool(String threadPoolName, ThreadPoolBuilder builder,
 			BiConsumer<Thread, Runnable> beforeHandler, BiConsumer<Runnable, Throwable> afterHandler) {

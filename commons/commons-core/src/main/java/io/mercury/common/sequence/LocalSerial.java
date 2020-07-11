@@ -7,32 +7,48 @@ import io.mercury.common.thread.Threads;
 
 public final class LocalSerial {
 
-	private final AtomicLong internalSerial;
+	private final AtomicLong serial;
 
 	private LocalSerial(long initValue) {
-		this.internalSerial = new AtomicLong(initValue);
+		this.serial = new AtomicLong(initValue);
 	}
 
+	/**
+	 * 
+	 * @param initValue
+	 * @return
+	 */
 	public static LocalSerial newInstance(long initValue) {
 		return new LocalSerial(initValue);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public static LocalSerial newInstance() {
-		return new LocalSerial(0);
+		return new LocalSerial(0L);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public long incrementAndGet() {
-		return internalSerial.incrementAndGet();
+		return serial.incrementAndGet();
 	}
 
-	public AtomicLong internalSerial() {
-		return internalSerial;
+	/**
+	 * 
+	 * @return
+	 */
+	public long getAndIncrement() {
+		return serial.getAndIncrement();
 	}
 
 	public static void main(String[] args) {
 
 		AtomicLong atomicLong = new AtomicLong(50);
-
 		Random random = new Random(2);
 
 		Threads.startNewThread(() -> {
