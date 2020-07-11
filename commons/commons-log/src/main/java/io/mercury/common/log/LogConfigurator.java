@@ -1,36 +1,51 @@
 package io.mercury.common.log;
 
-public class LoggerSetter {
+public final class LogConfigurator {
 
-//	private static volatile boolean logFolderSetted;
-	private static volatile boolean logFilenameSetted;
-	private static volatile boolean logLevelSetted;
+	private static final String Log4j2Folder = "log4j2.folder";
 
-//	public static boolean logFolderSetted() {
-//		return logFolderSetted;
-//	}
+	private static final String Log4j2Filename = "log4j2.filename";
 
-	public static boolean logFilenameSetted() {
-		return logFilenameSetted;
+	private static final String Log4j2Level = "log4j2.level";
+
+	public static synchronized void logFolder(String logFolder) {
+		System.setProperty(Log4j2Folder, logFolder);
 	}
 
-	public static boolean logLevelSetted() {
-		return logLevelSetted;
+	public static synchronized void logFileName(String logFileName) {
+		System.setProperty(Log4j2Filename, logFileName);
 	}
 
-//	public static void logFolder(String logFolder) {
-//		System.setProperty(LoggerConst.LOG4J2_FOLDER, logFolder);
-//		logFolderSetted = true;
-//	}
-
-	public static void logFileName(String logFileName) {
-		System.setProperty(LoggerConst.LOG4J2_FILENAME, logFileName);
-		logFilenameSetted = true;
+	public static synchronized void logLevel(LogLevel logLevel) {
+		System.setProperty(Log4j2Level, logLevel.name());
 	}
 
-	public static void logLevel(LogLevel logLevel) {
-		System.setProperty(LoggerConst.LOG4J2_LEVEL, logLevel.name());
-		logLevelSetted = true;
+	public static synchronized String getLogFolder() {
+		return System.getProperty(Log4j2Folder);
+	}
+
+	public static synchronized String getLogFileName() {
+		return System.getProperty(Log4j2Filename);
+	}
+
+	public static synchronized String getLogLevel() {
+		return System.getProperty(Log4j2Level);
+	}
+
+	public static enum LogLevel {
+
+		DEBUG,
+
+		INFO,
+
+		WARN,
+
+		ERROR,
+
+		FATAL,
+
+		;
+
 	}
 
 }

@@ -5,37 +5,34 @@ import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.mercury.common.log.LogConfigurator.LogLevel;
+
 public final class CommonLoggerFactory {
 
-//	private static final String DefaultFolder = "default";
+	public static final String DefaultLogFolder = "default";
 
-	private static final String DefaultFileName = "runtime";
+	public static final String DefaultLogFileName = "runtime";
+
+	public static final LogLevel DefaultLogLevel = LogLevel.ERROR;
 
 	public static Logger getLogger(Class<?> clazz) {
-//		if (!LoggerSetter.logFolderSetted()) {
-//			String logFolder = System.getProperty(LoggerConst.LOG4J2_FOLDER);
-//			if (StringUtil.isNullOrEmpty(logFolder))
-//				LoggerSetter.logFolder(DefaultFolder);
-//		}
-		if (!LoggerSetter.logFilenameSetted()) {
-			String logFilename = System.getProperty(LoggerConst.LOG4J2_FILENAME);
-			if (logFilename == null || logFilename.isEmpty())
-				LoggerSetter.logFileName(DefaultFileName);
-		}
-		if (!LoggerSetter.logLevelSetted()) {
-			String logLevel = System.getProperty(LoggerConst.LOG4J2_LEVEL);
-			if (logLevel == null || logLevel.isEmpty())
-				LoggerSetter.logLevel(LogLevel.INFO);
-		}
+		String logFolder = LogConfigurator.getLogFolder();
+		if (logFolder == null || logFolder.isEmpty())
+			LogConfigurator.logFolder(DefaultLogFolder);
+		String logFilename = LogConfigurator.getLogFileName();
+		if (logFilename == null || logFilename.isEmpty())
+			LogConfigurator.logFileName(DefaultLogFileName);
+		String logLevel = LogConfigurator.getLogLevel();
+		if (logLevel == null || logLevel.isEmpty())
+			LogConfigurator.logLevel(DefaultLogLevel);
 		return LoggerFactory.getLogger(clazz);
 	}
 
 	public static void main(String[] args) {
 
 		System.out.println(System.getProperty("user.home"));
-		LoggerSetter.logFileName("new");
-
-		LoggerSetter.logLevel(LogLevel.ERROR);
+		LogConfigurator.logFileName("new");
+		LogConfigurator.logLevel(LogLevel.ERROR);
 		Logger log = getLogger(CommonLoggerFactory.class);
 
 		log.error("this is error");
