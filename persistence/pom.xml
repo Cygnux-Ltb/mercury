@@ -119,6 +119,14 @@
 				<version>${jackson.version}</version>
 			</dependency>
 
+			<!-- Add-on datatype-support module for Jackson (https://github.com/FasterXML/jackson) 
+				that handles eclipse-collections (https://www.eclipse.org/collections/) types -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.datatype</groupId>
+				<artifactId>jackson-datatype-eclipse-collections</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+
 			<!-- Netty/Buffer -->
 			<dependency>
 				<groupId>io.netty</groupId>
@@ -171,7 +179,7 @@
 			<dependency>
 				<groupId>com.github.luben</groupId>
 				<artifactId>zstd-jni</artifactId>
-				<version>1.4.5-4</version>
+				<version>1.4.5-5</version>
 			</dependency>
 
 			<!-- Date and time library to replace JDK date handling -->

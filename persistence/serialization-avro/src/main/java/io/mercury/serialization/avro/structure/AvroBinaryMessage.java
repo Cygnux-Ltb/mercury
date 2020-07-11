@@ -13,7 +13,9 @@ import org.apache.avro.specific.SpecificData;
 @org.apache.avro.specific.AvroGenerated
 public class AvroBinaryMessage extends org.apache.avro.specific.SpecificRecordBase
 		implements org.apache.avro.specific.SpecificRecord {
+
 	private static final long serialVersionUID = 5916830266823486498L;
+
 	public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse(
 			"{\"type\":\"record\",\"name\":\"AvroBinaryMessage\",\"namespace\":\"io.mercury.serialization.avro.structure\",\"fields\":[{\"name\":\"sequence\",\"type\":\"long\"},{\"name\":\"envelope\",\"type\":{\"type\":\"record\",\"name\":\"Envelope\",\"fields\":[{\"name\":\"version\",\"type\":\"int\"},{\"name\":\"type\",\"type\":\"int\"},{\"name\":\"contentType\",\"type\":{\"type\":\"enum\",\"name\":\"ContentType\",\"symbols\":[\"OBJECT\",\"LIST\",\"STRING\"]}}]}},{\"name\":\"content\",\"type\":\"bytes\"}]}");
 
