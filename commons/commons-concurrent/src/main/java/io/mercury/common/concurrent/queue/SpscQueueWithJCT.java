@@ -17,7 +17,7 @@ public class SpscQueueWithJCT<E> extends SCQueue<E> {
 
 	private SpscArrayQueue<E> queue;
 
-	private Logger log = CommonLoggerFactory.getLogger(getClass());
+	private static final Logger log = CommonLoggerFactory.getLogger(SpscQueueWithJCT.class);
 
 	private WaitingStrategy waitingStrategy;
 

@@ -1,7 +1,5 @@
 package io.mercury.common.log;
 
-import java.time.LocalDateTime;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,30 +27,6 @@ public final class CommonLoggerFactory {
 	}
 
 	public static void main(String[] args) {
-
-		System.out.println(System.getProperty("user.home"));
-		LogConfigurator.logFileName("new");
-		LogConfigurator.logLevel(LogLevel.ERROR);
-		Logger log = getLogger(CommonLoggerFactory.class);
-
-		log.error("this is error");
-		log.warn("this is warn");
-		log.info("this is info");
-		log.debug("this is debug");
-
-		System.out.println(LocalDateTime.now());
-
-		for (;;) {
-			log.error("this is error");
-			log.warn("this is warn");
-			log.info("this is info");
-			log.debug("this is debug");
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
 
 	}
 

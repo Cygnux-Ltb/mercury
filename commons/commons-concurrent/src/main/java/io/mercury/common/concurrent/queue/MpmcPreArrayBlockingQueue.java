@@ -16,6 +16,8 @@ import io.mercury.common.log.CommonLoggerFactory;
 @ThreadSafe
 public class MpmcPreArrayBlockingQueue<E> implements MCQueue<E> {
 
+	private static final Logger log = CommonLoggerFactory.getLogger(MpmcPreArrayBlockingQueue.class);
+
 	private LoadContainer<E>[] containers;
 
 	private final int size;
@@ -28,8 +30,6 @@ public class MpmcPreArrayBlockingQueue<E> implements MCQueue<E> {
 
 	private Condition notEmpty;
 	private Condition notFull;
-
-	private Logger log = CommonLoggerFactory.getLogger(MpmcPreArrayBlockingQueue.class);
 
 	@SuppressWarnings("unchecked")
 	public MpmcPreArrayBlockingQueue(int size) {

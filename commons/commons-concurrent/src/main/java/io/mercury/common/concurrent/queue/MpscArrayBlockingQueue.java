@@ -16,9 +16,9 @@ import io.mercury.common.util.StringUtil;
 
 public class MpscArrayBlockingQueue<E> extends SCQueue<E> {
 
-	private ArrayBlockingQueue<E> innerQueue;
+	private static final Logger log = CommonLoggerFactory.getLogger(MpscArrayBlockingQueue.class);
 
-	private Logger log = CommonLoggerFactory.getLogger(MpscArrayBlockingQueue.class);
+	private ArrayBlockingQueue<E> innerQueue;
 
 	private AtomicBoolean isRun = new AtomicBoolean(false);
 

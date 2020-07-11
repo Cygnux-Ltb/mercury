@@ -17,7 +17,7 @@ import io.mercury.common.thread.Threads;
 
 public class SpscQueueWithSupplier<T> extends SCQueue<T> {
 
-	private Logger log = CommonLoggerFactory.getLogger(SpscQueueWithSupplier.class);
+	private static final Logger log = CommonLoggerFactory.getLogger(SpscQueueWithSupplier.class);
 
 	private Disruptor<T> disruptor;
 
