@@ -27,7 +27,7 @@
 	</modules>
 
 	<properties>
-	
+
 	</properties>
 
 	<build>
@@ -51,14 +51,6 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>io.mercury</groupId>
-			<artifactId>commons-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.mercury</groupId>
-			<artifactId>commons-concurrent</artifactId>
-		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -66,16 +58,6 @@
 			<dependency>
 				<groupId>io.mercury</groupId>
 				<artifactId>transport-core</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.mercury</groupId>
-				<artifactId>commons-core</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.mercury</groupId>
-				<artifactId>commons-concurrent</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

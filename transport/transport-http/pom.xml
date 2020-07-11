@@ -13,29 +13,29 @@
 	<name>transport-http</name>
 
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>transport-core</artifactId>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>serialization-json</artifactId>
 		</dependency>
 
 		<!-- Apache HttpComponents Client -->
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.apache.httpcomponents.client5</groupId>
 			<artifactId>httpclient5</artifactId>
-			<version>5.0</version>
+			<version>5.0.1</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency> -->
+		</dependency>
 
 		<!-- okhttp 3 -->
 		<dependency>
@@ -53,10 +53,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
-		<!-- A modern I/O API for Java -->
-		<!-- <dependency> <groupId>com.squareup.okio</groupId> <artifactId>okio</artifactId> 
-			<version>2.4.3</version> </dependency> -->
 
 		<!-- Kotlin Standard Library for JVM -->
 		<dependency>
