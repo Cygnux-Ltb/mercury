@@ -9,6 +9,7 @@
 	<artifactId>mercury</artifactId>
 	<version>1.0-SNAPSHOT</version>
 
+	<inceptionYear>2015</inceptionYear>
 	<url>https://github.com/yellow013/mercury.git</url>
 
 	<name>mercury</name>

@@ -6,7 +6,6 @@ import static io.mercury.common.util.Assertor.requiredLength;
 import static java.lang.Boolean.parseBoolean;
 import static java.lang.Integer.parseInt;
 import static java.lang.Double.parseDouble;
-import static java.lang.System.out;
 
 import java.util.Map;
 import java.util.Properties;
@@ -128,7 +127,7 @@ public final class ImmutableParamMap<K extends ParamKey> {
 
 	public void printParam(Logger log) {
 		if (log == null)
-			paramMap.forEachKeyValue((key, value) -> out.println("key -> " + key.key() + ", value -> " + value));
+			paramMap.forEachKeyValue((key, value) -> System.out.println("key -> " + key.key() + ", value -> " + value));
 		else
 			paramMap.forEachKeyValue((key, value) -> log.info("key -> {}, value -> {}", key.key(), value));
 	}

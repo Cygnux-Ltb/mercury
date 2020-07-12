@@ -20,10 +20,10 @@ public final class PropertiesReader {
 	private static final Logger log = CommonLoggerFactory.getLogger(PropertiesReader.class);
 
 	// fileName-propertyName -> value
-	private static final MutableMap<String, String> AllPropItemMap = MutableMaps.newUnifiedMap();
+	private static final MutableMap<String, String> PropertiesItemMap = MutableMaps.newUnifiedMap();
 
 	// fileName -> properties
-	private static final MutableMap<String, Properties> AllPropMap = MutableMaps.newUnifiedMap();
+	private static final MutableMap<String, Properties> PropertiesMap = MutableMaps.newUnifiedMap();
 
 	private static final String FILE_SUFFIX = ".properties";
 
@@ -37,17 +37,17 @@ public final class PropertiesReader {
 				String fileName = propFile.getName();
 				Properties prop = new Properties();
 				prop.load(new FileInputStream(propFile));
-				AllPropMap.put(deleteSuffix(fileName), prop);
+				PropertiesMap.put(deleteSuffix(fileName), prop);
 				for (String propName : prop.stringPropertyNames()) {
 					String propKey = mergePropertiesKey(fileName, propName);
 					String propValue = prop.getProperty(propName);
-					String currentValue = AllPropItemMap.get(propKey);
+					String currentValue = PropertiesItemMap.get(propKey);
 					if (currentValue != null) {
 						log.warn("Current item value modified, propKey==[{}], currentValue==[{}], propValue==[{}]",
 								propKey, currentValue, propValue);
 					}
 					log.info("Put property item, propKey==[{}], propValue==[{}]", propKey, propValue);
-					AllPropItemMap.put(propKey, propValue);
+					PropertiesItemMap.put(propKey, propValue);
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -72,7 +72,7 @@ public final class PropertiesReader {
 	}
 
 	public static Properties getProperty(String fileName) {
-		Properties properties = AllPropMap.get(deleteSuffix(fileName));
+		Properties properties = PropertiesMap.get(deleteSuffix(fileName));
 		if (properties == null)
 			return new Properties();
 		return properties;
@@ -80,7 +80,7 @@ public final class PropertiesReader {
 
 	public static String getProperty(String fileName, String propName) {
 		String mergeKey = mergePropertiesKey(fileName, propName);
-		String propValue = AllPropItemMap.get(mergeKey);
+		String propValue = PropertiesItemMap.get(mergeKey);
 		if (propValue == null) {
 			log.error("Property name -> [{}] is not found of file name -> [{}], mergeKey==[{}]", propName, fileName,
 					mergeKey);

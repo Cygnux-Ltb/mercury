@@ -60,21 +60,23 @@ public final class FileChannelWriter {
 				ByteBuffer buffer = ByteBuffer.allocateDirect(capacity);
 				for (int i = 0; i < data.size(); i++) {
 					byte[] bytes = data.get(i).getBytes();
-					if (bytes.length < capacity)
+					if (bytes.length < capacity) {
 						// [bytes#length] < [capacity], Only need to write once
 						flipAndChannelWrite(buffer.put(bytes), channel);
-					else {
+					} else {
 						// Count writes
 						int count = bytes.length / capacity;
 						int offset = 0;
-						for (int r = 0; r < count; r++)
+						for (int r = 0; r < count; r++) {
 							// Write from the last [offset], Write length is buffer [capacity]
 							flipAndChannelWrite(buffer.put(bytes, offset = r * capacity, capacity), channel);
+						}
 						// Remaining data
 						int remaining = bytes.length % capacity;
-						if (remaining > 0)
+						if (remaining > 0) {
 							// Write from the last [offset], Write length is remaining
 							flipAndChannelWrite(buffer.put(bytes, offset += capacity, remaining), channel);
+						}
 					}
 				}
 				channel.force(true);
@@ -87,8 +89,9 @@ public final class FileChannelWriter {
 		// Flip buffer to output
 		buffer.flip();
 		// Loop write
-		while (buffer.hasRemaining())
+		while (buffer.hasRemaining()) {
 			channel.write(buffer);
+		}
 		// Clear buffer to input
 		buffer.clear();
 	}

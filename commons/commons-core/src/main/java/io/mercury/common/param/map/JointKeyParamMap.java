@@ -36,8 +36,8 @@ public class JointKeyParamMap<K extends JointKey> {
 		paramMap.put(mergeJointKey(key.key0(), key.key1()), Double.toString(d));
 	}
 
-	public void put(K key, String s) {
-		paramMap.put(mergeJointKey(key.key0(), key.key1()), s);
+	public void put(K key, String str) {
+		paramMap.put(mergeJointKey(key.key0(), key.key1()), str);
 	}
 
 	public void put(K key, LocalDate date) {
