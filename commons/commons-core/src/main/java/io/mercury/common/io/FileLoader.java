@@ -21,8 +21,8 @@ public final class FileLoader {
 	 * @return
 	 */
 	@Nonnull
-	public static final MutableSet<File> recursiveLoad(@Nonnull File path) {
-		return recursiveLoad(path, any -> true);
+	public static final MutableSet<File> depthFirst(@Nonnull File path) {
+		return depthFirst(path, any -> true);
 	}
 
 	/**
@@ -33,29 +33,30 @@ public final class FileLoader {
 	 * @return
 	 */
 	@Nonnull
-	public static final MutableSet<File> recursiveLoad(@Nonnull File path, Predicate<File> fileFilter) {
+	public static final MutableSet<File> depthFirst(@Nonnull File path, Predicate<File> fileFilter) {
 		if (fileFilter == null)
 			fileFilter = any -> true;
 		MutableSet<File> files = MutableSets.newUnifiedSet();
-		recursiveLoad0(files, path, fileFilter);
+		depthFirst0(files, path, fileFilter);
 		return files;
 	}
 
-	private static final void recursiveLoad0(MutableSet<File> files, File path, Predicate<File> fileFilter) {
+	private static final void depthFirst0(MutableSet<File> files, File path, Predicate<File> fileFilter) {
 		if (path == null || fileFilter == null)
 			return;
 		File[] listFiles = path.listFiles();
 		if (listFiles != null && listFiles.length != 0) {
-			for (File file : listFiles)
+			for (File file : listFiles) {
 				if (file.isDirectory()) {
 					// 如果文件是一个目录, 递归执行
-					recursiveLoad0(files, file, fileFilter);
+					depthFirst0(files, file, fileFilter);
 				} else if (fileFilter.test(file)) {
 					// 如果文件符合过滤器断言, 则加入Set
 					files.add(file);
 				} else
 					// 否则忽略此文件
 					continue;
+			}
 		} else
 			return;
 	}

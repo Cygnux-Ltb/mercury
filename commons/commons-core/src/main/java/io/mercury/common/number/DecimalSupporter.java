@@ -132,7 +132,6 @@ public final class DecimalSupporter {
 	public static void main(String[] args) {
 
 		System.out.println();
-
 		System.out.println(longToDouble8(doubleToLong8(4.981312)));
 
 	}

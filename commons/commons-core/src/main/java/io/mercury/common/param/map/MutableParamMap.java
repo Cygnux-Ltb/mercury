@@ -22,7 +22,7 @@ import io.mercury.common.param.ParamType;
 public final class MutableParamMap<K extends ParamKey> {
 
 	private MutableIntBooleanMap booleanParamMap = new IntBooleanHashMap();
-	private MutableIntIntMap integerParamMap = new IntIntHashMap();
+	private MutableIntIntMap intParamMap = new IntIntHashMap();
 	private MutableIntDoubleMap doubleParamMap = new IntDoubleHashMap();
 	private MutableIntObjectMap<String> stringParamMap = new IntObjectHashMap<>();
 	private MutableIntObjectMap<Temporal> temporalParamMap = new IntObjectHashMap<>();
@@ -65,11 +65,11 @@ public final class MutableParamMap<K extends ParamKey> {
 		return booleanParamMap.get(key.id());
 	}
 
-	public int getInteger(K key) {
+	public int getInt(K key) {
 		if (key.type() != ParamType.INT)
 			throw new IllegalArgumentException(
 					"Key -> " + key + " paramType is not INT. paramType()==" + key.type());
-		return integerParamMap.get(key.id());
+		return intParamMap.get(key.id());
 	}
 
 	public double getDouble(K key) {
@@ -112,7 +112,7 @@ public final class MutableParamMap<K extends ParamKey> {
 	}
 
 	private void putParam(K key, int value) {
-		integerParamMap.put(key.id(), value);
+		intParamMap.put(key.id(), value);
 	}
 
 	private void putParam(K key, double value) {

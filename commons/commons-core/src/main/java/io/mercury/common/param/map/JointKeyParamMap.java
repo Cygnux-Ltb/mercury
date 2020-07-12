@@ -1,6 +1,6 @@
 package io.mercury.common.param.map;
 
-import static io.mercury.common.param.JointIdSupporter.mergeJointId;
+import static io.mercury.common.param.JointKeySupporter.mergeJointKey;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,23 +21,23 @@ public class JointKeyParamMap<K extends JointKey> {
 	}
 
 	public void put(K key, boolean b) {
-		paramMap.put(mergeJointId(key.key0(), key.key1()), Boolean.toString(b));
+		paramMap.put(mergeJointKey(key.key0(), key.key1()), Boolean.toString(b));
 	}
 
 	public void put(K key, int i) {
-		paramMap.put(mergeJointId(key.key0(), key.key1()), Integer.toString(i));
+		paramMap.put(mergeJointKey(key.key0(), key.key1()), Integer.toString(i));
 	}
 
 	public void put(K key, long l) {
-		paramMap.put(mergeJointId(key.key0(), key.key1()), Long.toString(l));
+		paramMap.put(mergeJointKey(key.key0(), key.key1()), Long.toString(l));
 	}
 
 	public void put(K key, double d) {
-		paramMap.put(mergeJointId(key.key0(), key.key1()), Double.toString(d));
+		paramMap.put(mergeJointKey(key.key0(), key.key1()), Double.toString(d));
 	}
 
 	public void put(K key, String s) {
-		paramMap.put(mergeJointId(key.key0(), key.key1()), s);
+		paramMap.put(mergeJointKey(key.key0(), key.key1()), s);
 	}
 
 	public void put(K key, LocalDate date) {
@@ -53,7 +53,7 @@ public class JointKeyParamMap<K extends JointKey> {
 	}
 
 	public boolean getBoolean(K key) {
-		return Boolean.parseBoolean(paramMap.get(mergeJointId(key.key0(), key.key1())));
+		return Boolean.parseBoolean(paramMap.get(mergeJointKey(key.key0(), key.key1())));
 	}
 
 }
