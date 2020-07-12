@@ -17,8 +17,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<akka.version>2.6.6</akka.version>
-		<persistence.version>1.0-SNAPSHOT</persistence.version>
+		<akka.version>2.6.7</akka.version>
 	</properties>
 
 	<build>
@@ -35,7 +34,7 @@
 			<plugin>
 				<groupId>org.apache.avro</groupId>
 				<artifactId>avro-maven-plugin</artifactId>
-				<version>1.9.2</version>
+				<version>1.10.0</version>
 				<executions>
 					<execution>
 						<phase>generate-sources</phase>
@@ -47,6 +46,7 @@
 							<outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
 							<fieldVisibility>private</fieldVisibility>
 							<stringType>String</stringType>
+							<createOptionalGetters>true</createOptionalGetters>
 						</configuration>
 					</execution>
 				</executions>
@@ -64,13 +64,13 @@
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>persistence-chronicle</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>serialization-avro</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<!-- ####### Akka dependency ####### -->

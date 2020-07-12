@@ -18,13 +18,17 @@ public abstract class GenericActorT4<T1, T2, T3, T4> extends CommonActor {
 
 	@Override
 	public final Receive createReceive() {
-		return receiveBuilder().match(type1, this::onEvent1).match(type2, this::onEvent2).match(type3, this::onEvent3)
-				.match(type4, this::onEvent4).matchAny(this::handleUnknown).build();
-	}
-	
-	private void handleUnknown(Object obj) {
-		commonHandleUnknown(obj);
-		handleUnknown0(obj);
+		return commonReceiveBuilder()
+
+				.match(type1, this::onEvent1)
+
+				.match(type2, this::onEvent2)
+
+				.match(type3, this::onEvent3)
+
+				.match(type4, this::onEvent4)
+
+				.build();
 	}
 
 	protected abstract Class<T1> eventType1();
@@ -42,7 +46,5 @@ public abstract class GenericActorT4<T1, T2, T3, T4> extends CommonActor {
 	protected abstract void onEvent3(T3 t2);
 
 	protected abstract void onEvent4(T4 t4);
-	
-	protected abstract void handleUnknown0(Object t);
 
 }
