@@ -9,6 +9,7 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 
+import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.queue.api.SCQueue;
 import io.mercury.common.collections.queue.base.LoadContainer;
 import io.mercury.common.functional.Processor;
@@ -31,15 +32,15 @@ public class SpscQueue<T> extends SCQueue<T> {
 
 	private AtomicBoolean isStop = new AtomicBoolean(false);
 
-	public SpscQueue(String queueName, BufferSize bufferSize) {
+	public SpscQueue(String queueName, Capacity bufferSize) {
 		this(queueName, bufferSize, false, null);
 	}
 
-	public SpscQueue(String queueName, BufferSize bufferSize, boolean autoRun, Processor<T> processor) {
+	public SpscQueue(String queueName, Capacity bufferSize, boolean autoRun, Processor<T> processor) {
 		this(queueName, bufferSize, autoRun, processor, WaitStrategyOption.BusySpin);
 	}
 
-	public SpscQueue(String queueName, BufferSize bufferSize, boolean autoRun, Processor<T> processor,
+	public SpscQueue(String queueName, Capacity bufferSize, boolean autoRun, Processor<T> processor,
 			WaitStrategyOption option) {
 		super(processor);
 		if (queueName != null)
@@ -50,7 +51,7 @@ public class SpscQueue<T> extends SCQueue<T> {
 				// 实现EventFactory<LoadContainer<>>的Lambda
 				LoadContainer::new,
 				// 队列容量
-				bufferSize.value(),
+				bufferSize.size(),
 				// 实现ThreadFactory的Lambda
 				(Runnable runnable) -> Threads.newMaxPriorityThread(runnable,
 						"DisruptorQueue-" + super.queueName + "-WorkingThread"),
@@ -118,7 +119,7 @@ public class SpscQueue<T> extends SCQueue<T> {
 
 	public static void main(String[] args) {
 
-		SpscQueue<Integer> queue = new SpscQueue<>("Test-Queue", BufferSize.POW2_6, true,
+		SpscQueue<Integer> queue = new SpscQueue<>("Test-Queue", Capacity.L06_SIZE_64, true,
 				(integer) -> System.out.println(integer));
 
 		Threads.startNewThread(() -> {

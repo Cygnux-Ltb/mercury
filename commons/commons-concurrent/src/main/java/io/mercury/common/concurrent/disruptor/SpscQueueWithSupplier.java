@@ -10,6 +10,7 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 
+import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.queue.api.SCQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
@@ -25,8 +26,8 @@ public class SpscQueueWithSupplier<T> extends SCQueue<T> {
 
 	private AtomicBoolean isStop = new AtomicBoolean(false);
 
-	public SpscQueueWithSupplier(BufferSize bufferSize, boolean autoRun, WaitStrategyOption option,
-			Supplier<T> supplier, Processor<T> processor) {
+	public SpscQueueWithSupplier(Capacity bufferSize, boolean autoRun, WaitStrategyOption option, Supplier<T> supplier,
+			Processor<T> processor) {
 		super(processor);
 		// if (queueSize == 0 || queueSize % 2 != 0)
 		// throw new IllegalArgumentException("queueSize set error...");
@@ -35,7 +36,7 @@ public class SpscQueueWithSupplier<T> extends SCQueue<T> {
 				// 实现EventFactory的Lambda
 				() -> supplier.get(),
 				// 队列容量
-				bufferSize.value(),
+				bufferSize.size(),
 				// 实现ThreadFactory的Lambda
 				(Runnable runnable) -> Threads.newMaxPriorityThread(runnable,
 						"DisruptorQueue-" + super.queueName + "-WorkingThread"),
@@ -109,7 +110,7 @@ public class SpscQueueWithSupplier<T> extends SCQueue<T> {
 
 	public static void main(String[] args) {
 
-		SpscQueueWithSupplier<Integer> queue = new SpscQueueWithSupplier<>(BufferSize.POW2_10, true,
+		SpscQueueWithSupplier<Integer> queue = new SpscQueueWithSupplier<>(Capacity.L10_SIZE_1024, true,
 				WaitStrategyOption.BusySpin, () -> Integer.valueOf(0), (integer) -> System.out.println(integer));
 
 		Threads.startNewThread(() -> {

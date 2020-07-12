@@ -10,8 +10,8 @@ import java.util.function.Consumer;
 
 import org.apache.commons.io.IOUtils;
 
+import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.queue.api.SCQueue;
-import io.mercury.common.concurrent.disruptor.BufferSize;
 import io.mercury.common.concurrent.disruptor.SpscQueue;
 import io.mercury.common.thread.Threads;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
@@ -134,7 +134,7 @@ public class SocketTransceiver extends BaseTransceiver<String> {
 
 	@Override
 	protected SCQueue<String> initSendQueue() {
-		return new SpscQueue<>("", BufferSize.POW2_10, true, (msg) -> {
+		return new SpscQueue<>("", Capacity.L07_SIZE_128, true, (msg) -> {
 			processSendQueue(msg);
 		});
 	}
