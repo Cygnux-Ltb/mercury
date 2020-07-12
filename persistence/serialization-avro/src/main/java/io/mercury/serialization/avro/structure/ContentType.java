@@ -7,7 +7,7 @@ package io.mercury.serialization.avro.structure;
 
 @org.apache.avro.specific.AvroGenerated
 public enum ContentType implements org.apache.avro.generic.GenericEnumSymbol<ContentType> {
-
+	
 	OBJECT, LIST, STRING;
 
 	public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse(
@@ -20,5 +20,4 @@ public enum ContentType implements org.apache.avro.generic.GenericEnumSymbol<Con
 	public org.apache.avro.Schema getSchema() {
 		return SCHEMA$;
 	}
-
 }

@@ -5,6 +5,8 @@
  */
 package io.mercury.serialization.avro.structure;
 
+import java.util.Optional;
+
 import org.apache.avro.message.BinaryMessageDecoder;
 import org.apache.avro.message.BinaryMessageEncoder;
 import org.apache.avro.message.SchemaStore;
@@ -127,7 +129,7 @@ public class AvroBinaryMessage extends org.apache.avro.specific.SpecificRecordBa
 		case 2:
 			return content;
 		default:
-			throw new org.apache.avro.AvroRuntimeException("Bad index");
+			throw new IndexOutOfBoundsException("Invalid index: " + field$);
 		}
 	}
 
@@ -144,7 +146,7 @@ public class AvroBinaryMessage extends org.apache.avro.specific.SpecificRecordBa
 			content = (java.nio.ByteBuffer) value$;
 			break;
 		default:
-			throw new org.apache.avro.AvroRuntimeException("Bad index");
+			throw new IndexOutOfBoundsException("Invalid index: " + field$);
 		}
 	}
 
@@ -155,6 +157,15 @@ public class AvroBinaryMessage extends org.apache.avro.specific.SpecificRecordBa
 	 */
 	public long getSequence() {
 		return sequence;
+	}
+
+	/**
+	 * Gets the value of the 'sequence' field as an Optional&lt;java.lang.Long&gt;.
+	 * 
+	 * @return The value wrapped in an Optional&lt;java.lang.Long&gt;.
+	 */
+	public Optional<java.lang.Long> getOptionalSequence() {
+		return Optional.<java.lang.Long>ofNullable(sequence);
 	}
 
 	/**
@@ -176,6 +187,17 @@ public class AvroBinaryMessage extends org.apache.avro.specific.SpecificRecordBa
 	}
 
 	/**
+	 * Gets the value of the 'envelope' field as an
+	 * Optional&lt;io.mercury.serialization.avro.structure.Envelope&gt;.
+	 * 
+	 * @return The value wrapped in an
+	 *         Optional&lt;io.mercury.serialization.avro.structure.Envelope&gt;.
+	 */
+	public Optional<io.mercury.serialization.avro.structure.Envelope> getOptionalEnvelope() {
+		return Optional.<io.mercury.serialization.avro.structure.Envelope>ofNullable(envelope);
+	}
+
+	/**
 	 * Sets the value of the 'envelope' field.
 	 * 
 	 * @param value the value to set.
@@ -191,6 +213,16 @@ public class AvroBinaryMessage extends org.apache.avro.specific.SpecificRecordBa
 	 */
 	public java.nio.ByteBuffer getContent() {
 		return content;
+	}
+
+	/**
+	 * Gets the value of the 'content' field as an
+	 * Optional&lt;java.nio.ByteBuffer&gt;.
+	 * 
+	 * @return The value wrapped in an Optional&lt;java.nio.ByteBuffer&gt;.
+	 */
+	public Optional<java.nio.ByteBuffer> getOptionalContent() {
+		return Optional.<java.nio.ByteBuffer>ofNullable(content);
 	}
 
 	/**
@@ -316,6 +348,15 @@ public class AvroBinaryMessage extends org.apache.avro.specific.SpecificRecordBa
 		}
 
 		/**
+		 * Gets the value of the 'sequence' field as an Optional&lt;java.lang.Long&gt;.
+		 * 
+		 * @return The value wrapped in an Optional&lt;java.lang.Long&gt;.
+		 */
+		public Optional<java.lang.Long> getOptionalSequence() {
+			return Optional.<java.lang.Long>ofNullable(sequence);
+		}
+
+		/**
 		 * Sets the value of the 'sequence' field.
 		 * 
 		 * @param value The value of 'sequence'.
@@ -354,6 +395,17 @@ public class AvroBinaryMessage extends org.apache.avro.specific.SpecificRecordBa
 		 */
 		public io.mercury.serialization.avro.structure.Envelope getEnvelope() {
 			return envelope;
+		}
+
+		/**
+		 * Gets the value of the 'envelope' field as an
+		 * Optional&lt;io.mercury.serialization.avro.structure.Envelope&gt;.
+		 * 
+		 * @return The value wrapped in an
+		 *         Optional&lt;io.mercury.serialization.avro.structure.Envelope&gt;.
+		 */
+		public Optional<io.mercury.serialization.avro.structure.Envelope> getOptionalEnvelope() {
+			return Optional.<io.mercury.serialization.avro.structure.Envelope>ofNullable(envelope);
 		}
 
 		/**
@@ -438,6 +490,16 @@ public class AvroBinaryMessage extends org.apache.avro.specific.SpecificRecordBa
 		 */
 		public java.nio.ByteBuffer getContent() {
 			return content;
+		}
+
+		/**
+		 * Gets the value of the 'content' field as an
+		 * Optional&lt;java.nio.ByteBuffer&gt;.
+		 * 
+		 * @return The value wrapped in an Optional&lt;java.nio.ByteBuffer&gt;.
+		 */
+		public Optional<java.nio.ByteBuffer> getOptionalContent() {
+			return Optional.<java.nio.ByteBuffer>ofNullable(content);
 		}
 
 		/**

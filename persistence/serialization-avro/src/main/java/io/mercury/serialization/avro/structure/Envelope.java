@@ -5,6 +5,8 @@
  */
 package io.mercury.serialization.avro.structure;
 
+import java.util.Optional;
+
 import org.apache.avro.message.BinaryMessageDecoder;
 import org.apache.avro.message.BinaryMessageEncoder;
 import org.apache.avro.message.SchemaStore;
@@ -13,9 +15,9 @@ import org.apache.avro.specific.SpecificData;
 @org.apache.avro.specific.AvroGenerated
 public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		implements org.apache.avro.specific.SpecificRecord {
-	
+
 	private static final long serialVersionUID = -8756341448754197972L;
-	
+
 	public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse(
 			"{\"type\":\"record\",\"name\":\"Envelope\",\"namespace\":\"io.mercury.serialization.avro.structure\",\"fields\":[{\"name\":\"version\",\"type\":\"int\"},{\"name\":\"type\",\"type\":\"int\"},{\"name\":\"contentType\",\"type\":{\"type\":\"enum\",\"name\":\"ContentType\",\"symbols\":[\"OBJECT\",\"LIST\",\"STRING\"]}}]}");
 
@@ -125,7 +127,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		case 2:
 			return contentType;
 		default:
-			throw new org.apache.avro.AvroRuntimeException("Bad index");
+			throw new IndexOutOfBoundsException("Invalid index: " + field$);
 		}
 	}
 
@@ -142,7 +144,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 			contentType = (io.mercury.serialization.avro.structure.ContentType) value$;
 			break;
 		default:
-			throw new org.apache.avro.AvroRuntimeException("Bad index");
+			throw new IndexOutOfBoundsException("Invalid index: " + field$);
 		}
 	}
 
@@ -153,6 +155,16 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 	 */
 	public int getVersion() {
 		return version;
+	}
+
+	/**
+	 * Gets the value of the 'version' field as an
+	 * Optional&lt;java.lang.Integer&gt;.
+	 * 
+	 * @return The value wrapped in an Optional&lt;java.lang.Integer&gt;.
+	 */
+	public Optional<java.lang.Integer> getOptionalVersion() {
+		return Optional.<java.lang.Integer>ofNullable(version);
 	}
 
 	/**
@@ -174,6 +186,15 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 	}
 
 	/**
+	 * Gets the value of the 'type' field as an Optional&lt;java.lang.Integer&gt;.
+	 * 
+	 * @return The value wrapped in an Optional&lt;java.lang.Integer&gt;.
+	 */
+	public Optional<java.lang.Integer> getOptionalType() {
+		return Optional.<java.lang.Integer>ofNullable(type);
+	}
+
+	/**
 	 * Sets the value of the 'type' field.
 	 * 
 	 * @param value the value to set.
@@ -189,6 +210,17 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 	 */
 	public io.mercury.serialization.avro.structure.ContentType getContentType() {
 		return contentType;
+	}
+
+	/**
+	 * Gets the value of the 'contentType' field as an
+	 * Optional&lt;io.mercury.serialization.avro.structure.ContentType&gt;.
+	 * 
+	 * @return The value wrapped in an
+	 *         Optional&lt;io.mercury.serialization.avro.structure.ContentType&gt;.
+	 */
+	public Optional<io.mercury.serialization.avro.structure.ContentType> getOptionalContentType() {
+		return Optional.<io.mercury.serialization.avro.structure.ContentType>ofNullable(contentType);
 	}
 
 	/**
@@ -308,6 +340,16 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		}
 
 		/**
+		 * Gets the value of the 'version' field as an
+		 * Optional&lt;java.lang.Integer&gt;.
+		 * 
+		 * @return The value wrapped in an Optional&lt;java.lang.Integer&gt;.
+		 */
+		public Optional<java.lang.Integer> getOptionalVersion() {
+			return Optional.<java.lang.Integer>ofNullable(version);
+		}
+
+		/**
 		 * Sets the value of the 'version' field.
 		 * 
 		 * @param value The value of 'version'.
@@ -349,6 +391,15 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		}
 
 		/**
+		 * Gets the value of the 'type' field as an Optional&lt;java.lang.Integer&gt;.
+		 * 
+		 * @return The value wrapped in an Optional&lt;java.lang.Integer&gt;.
+		 */
+		public Optional<java.lang.Integer> getOptionalType() {
+			return Optional.<java.lang.Integer>ofNullable(type);
+		}
+
+		/**
 		 * Sets the value of the 'type' field.
 		 * 
 		 * @param value The value of 'type'.
@@ -387,6 +438,17 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		 */
 		public io.mercury.serialization.avro.structure.ContentType getContentType() {
 			return contentType;
+		}
+
+		/**
+		 * Gets the value of the 'contentType' field as an
+		 * Optional&lt;io.mercury.serialization.avro.structure.ContentType&gt;.
+		 * 
+		 * @return The value wrapped in an
+		 *         Optional&lt;io.mercury.serialization.avro.structure.ContentType&gt;.
+		 */
+		public Optional<io.mercury.serialization.avro.structure.ContentType> getOptionalContentType() {
+			return Optional.<io.mercury.serialization.avro.structure.ContentType>ofNullable(contentType);
 		}
 
 		/**
