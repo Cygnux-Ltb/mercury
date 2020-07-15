@@ -10,52 +10,92 @@ public final class DecimalSupporter {
 	/**
 	 * 
 	 */
-	public static final long L_MULTIPLIER_1 = 1L;
+	public static final long LONG_MULTIPLIER_1L = 1L;
 
 	/**
 	 * 
 	 */
-	public static final double D_MULTIPLIER_1 = 1.0D;
+	public static final double DOUBLE_MULTIPLIER_1D = 1.0D;
 
 	/**
 	 * 
 	 */
-	public static final long L_MULTIPLIER_100 = 100L;
+	public static final long LONG_MULTIPLIER_10L = 10L;
 
 	/**
 	 * 
 	 */
-	public static final double D_MULTIPLIER_100 = 100.0D;
+	public static final double DOUBLE_MULTIPLIER_10D = 10.0D;
 
 	/**
 	 * 
 	 */
-	public static final long L_MULTIPLIER_10000 = 10_000L;
+	public static final long LONG_MULTIPLIER_100L = 100L;
 
 	/**
 	 * 
 	 */
-	public static final double D_MULTIPLIER_10000 = 10_000.0D;
+	public static final double DOUBLE_MULTIPLIER_100D = 100.0D;
 
 	/**
 	 * 
 	 */
-	public static final long L_MULTIPLIER_1000000 = 1_000_000L;
+	public static final long LONG_MULTIPLIER_1000L = 1000L;
 
 	/**
 	 * 
 	 */
-	public static final double D_MULTIPLIER_1000000 = 1_000_000.0D;
+	public static final double DOUBLE_MULTIPLIER_1000D = 1000.0D;
 
 	/**
 	 * 
 	 */
-	public static final long L_MULTIPLIER_100000000 = 100_000_000L;
+	public static final long LONG_MULTIPLIER_10000L = 10000L;
 
 	/**
 	 * 
 	 */
-	public static final double D_MULTIPLIER_100000000 = 100_000_000.0D;
+	public static final double DOUBLE_MULTIPLIER_10000D = 10000.0D;
+
+	/**
+	 * 
+	 */
+	public static final long LONG_MULTIPLIER_100000L = 100000L;
+
+	/**
+	 * 
+	 */
+	public static final double DOUBLE_MULTIPLIER_100000D = 100000.0D;
+
+	/**
+	 * 
+	 */
+	public static final long LONG_MULTIPLIER_1000000L = 1000000L;
+
+	/**
+	 * 
+	 */
+	public static final double DOUBLE_MULTIPLIER_1000000D = 1000000.0D;
+
+	/**
+	 * 
+	 */
+	public static final long LONG_MULTIPLIER_10000000L = 10000000L;
+
+	/**
+	 * 
+	 */
+	public static final double DOUBLE_MULTIPLIER_10000000D = 10000000.0D;
+
+	/**
+	 * 
+	 */
+	public static final long LONG_MULTIPLIER_100000000L = 100000000L;
+
+	/**
+	 * 
+	 */
+	public static final double DOUBLE_MULTIPLIER_100000000D = 100000000.0D;
 
 	/**
 	 * 
@@ -63,7 +103,7 @@ public final class DecimalSupporter {
 	 * @return
 	 */
 	public final static long doubleToLong2(double d) {
-		return (long) (d * L_MULTIPLIER_100);
+		return (long) (d * LONG_MULTIPLIER_100L);
 	}
 
 	/**
@@ -72,7 +112,7 @@ public final class DecimalSupporter {
 	 * @return
 	 */
 	public final static double longToDouble2(long l) {
-		return l / D_MULTIPLIER_100;
+		return l / DOUBLE_MULTIPLIER_100D;
 	}
 
 	/**
@@ -81,7 +121,7 @@ public final class DecimalSupporter {
 	 * @return
 	 */
 	public final static long doubleToLong4(double d) {
-		return (long) (d * L_MULTIPLIER_10000);
+		return (long) (d * LONG_MULTIPLIER_10000L);
 	}
 
 	/**
@@ -90,7 +130,7 @@ public final class DecimalSupporter {
 	 * @return
 	 */
 	public final static double longToDouble4(long l) {
-		return l / D_MULTIPLIER_10000;
+		return l / DOUBLE_MULTIPLIER_10000D;
 	}
 
 	/**
@@ -99,7 +139,7 @@ public final class DecimalSupporter {
 	 * @return
 	 */
 	public final static long doubleToLong6(double d) {
-		return (long) (d * L_MULTIPLIER_1000000);
+		return (long) (d * LONG_MULTIPLIER_1000000L);
 	}
 
 	/**
@@ -108,7 +148,7 @@ public final class DecimalSupporter {
 	 * @return
 	 */
 	public final static double longToDouble6(long l) {
-		return l / D_MULTIPLIER_1000000;
+		return l / DOUBLE_MULTIPLIER_1000000D;
 	}
 
 	/**
@@ -117,7 +157,7 @@ public final class DecimalSupporter {
 	 * @return
 	 */
 	public final static long doubleToLong8(double d) {
-		return (long) (d * L_MULTIPLIER_100000000);
+		return (long) (d * LONG_MULTIPLIER_100000000L);
 	}
 
 	/**
@@ -126,7 +166,7 @@ public final class DecimalSupporter {
 	 * @return
 	 */
 	public final static double longToDouble8(long l) {
-		return l / D_MULTIPLIER_100000000;
+		return l / DOUBLE_MULTIPLIER_100000000D;
 	}
 
 	public static void main(String[] args) {

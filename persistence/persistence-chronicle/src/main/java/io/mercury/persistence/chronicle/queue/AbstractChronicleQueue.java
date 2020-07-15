@@ -202,11 +202,12 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 		internalQueue.close();
 		// 停止运行文件清理线程
 		isClearRunning.set(false);
-		// 中断正在休眠的清理线程
-		if (fileClearThread != null)
+		// 中断正在休眠的文件清理线程
+		if (fileClearThread != null) {
 			fileClearThread.interrupt();
-		while (fileClearThread.getState() != State.TERMINATED)
-			;
+			while (fileClearThread.getState() != State.TERMINATED)
+				Threads.sleep(1);
+		}
 	}
 
 	private String generateReaderName() {

@@ -6,6 +6,10 @@ public final class AdjustableChronicleMap<K, V> implements AdjustableChronicle<C
 
 	private ChronicleMap<K, V> entity;
 
+	public AdjustableChronicleMap(ChronicleMap<K, V> entity) {
+		this.entity = entity;
+	}
+
 	@Override
 	public ChronicleMap<K, V> entity() {
 		return entity;

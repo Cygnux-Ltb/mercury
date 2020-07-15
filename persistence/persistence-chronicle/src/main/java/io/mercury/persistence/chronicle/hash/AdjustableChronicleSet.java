@@ -6,6 +6,10 @@ public final class AdjustableChronicleSet<K> implements AdjustableChronicle<Chro
 
 	private ChronicleSet<K> entity;
 
+	public AdjustableChronicleSet(ChronicleSet<K> entity) {
+		this.entity = entity;
+	}
+
 	@Override
 	public ChronicleSet<K> entity() {
 		return entity;

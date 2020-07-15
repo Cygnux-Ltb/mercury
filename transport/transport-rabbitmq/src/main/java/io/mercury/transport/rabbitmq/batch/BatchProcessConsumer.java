@@ -34,7 +34,7 @@ public class BatchProcessConsumer<T> extends DefaultConsumer {
 
 	private Channel channel;
 
-	private BatchHandler<T> qosBatchHandler;
+	private BatchHandler<T> batchHandler;
 
 	private BytesDeserializer<T> deserializer;
 
@@ -81,7 +81,7 @@ public class BatchProcessConsumer<T> extends DefaultConsumer {
 		this.channel = channel;
 		this.refreshNowEvent = refreshNowEvent;
 		this.filter = filter;
-		this.qosBatchHandler = Assertor.nonNull(qosBatchHandler, "qosBatchHandler");
+		this.batchHandler = Assertor.nonNull(batchHandler, "batchHandler");
 		this.deserializer = Assertor.nonNull(deserializer, "deserializer");
 		this.prefetchCount = prefetchCount;
 		if (millisSecond > 0) {
@@ -95,7 +95,7 @@ public class BatchProcessConsumer<T> extends DefaultConsumer {
 	public BatchProcessConsumer(Channel channel, BytesDeserializer<T> serializable, BatchHandler<T> batchHandler) {
 		super(channel);
 		this.channel = channel;
-		this.qosBatchHandler = Assertor.nonNull(qosBatchHandler, "qosBatchHandler");
+		this.batchHandler = Assertor.nonNull(batchHandler, "qosBatchHandler");
 		this.deserializer = Assertor.nonNull(serializable, "deserializer");
 		init();
 	}
@@ -157,7 +157,7 @@ public class BatchProcessConsumer<T> extends DefaultConsumer {
 		lock.lock();
 		try {
 			if (cacheSize.longValue() != 0) {
-				if (qosBatchHandler.handle(bufferList)) {
+				if (batchHandler.handle(bufferList)) {
 					channel.basicAck(lastDeliveryTag, true);
 					log.info("ack tag -> {}", lastDeliveryTag);
 					bufferList.clear();

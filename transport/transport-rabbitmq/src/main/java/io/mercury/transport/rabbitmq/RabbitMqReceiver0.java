@@ -138,6 +138,7 @@ public class RabbitMqReceiver0<T> extends BaseRabbitMqTransport implements Subsc
 	 * @param deliveryConsumer
 	 * @return
 	 */
+	@Deprecated
 	public static final RabbitMqReceiver0<byte[]> create(String tag, @Nonnull RmqReceiverConfigurator configurator,
 			@Nonnull BiConsumer<String, Delivery> deliveryConsumer) {
 		return create(tag, configurator, msg -> msg, null, deliveryConsumer);
