@@ -16,6 +16,11 @@
 
 	<dependencies>
 
+		<dependency>
+			<groupId>io.mercury</groupId>
+			<artifactId>commons-core</artifactId>
+		</dependency>
+
 		<!-- MapDB provides concurrent Maps, Sets and Queues backed by disk storage 
 			or off-heap memory. It is a fast, scalable and easy to use embedded Java 
 			database. -->

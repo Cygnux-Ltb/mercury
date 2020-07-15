@@ -48,12 +48,6 @@
 	</build>
 
 	<dependencies>
-		<!-- commons-core -->
-		<dependency>
-			<groupId>io.mercury</groupId>
-			<artifactId>commons-core</artifactId>
-		</dependency>
-
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

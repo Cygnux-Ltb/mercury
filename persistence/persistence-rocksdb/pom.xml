@@ -15,6 +15,11 @@
 
 	<dependencies>
 
+		<dependency>
+			<groupId>io.mercury</groupId>
+			<artifactId>commons-concurrent</artifactId>
+		</dependency>
+
 		<!-- RocksDB fat jar that contains .so files for linux32 and linux64 (glibc 
 			and musl-libc), jnilib files for Mac OSX, and a .dll for Windows x64. -->
 		<dependency>
