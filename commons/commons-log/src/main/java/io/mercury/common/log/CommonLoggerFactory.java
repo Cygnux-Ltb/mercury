@@ -14,15 +14,21 @@ public final class CommonLoggerFactory {
 	public static final LogLevel DefaultLogLevel = LogLevel.ERROR;
 
 	public static Logger getLogger(Class<?> clazz) {
+		// 配置日志存储目录, 基于${user.home}
 		String logFolder = LogConfigurator.getLogFolder();
-		if (logFolder == null || logFolder.isEmpty())
+		if (logFolder == null || logFolder.isEmpty()) {
 			LogConfigurator.logFolder(DefaultLogFolder);
+		}
+		// 配置日志文件名
 		String logFilename = LogConfigurator.getLogFileName();
-		if (logFilename == null || logFilename.isEmpty())
+		if (logFilename == null || logFilename.isEmpty()) {
 			LogConfigurator.logFileName(DefaultLogFileName);
+		}
+		// 配置日志級別
 		String logLevel = LogConfigurator.getLogLevel();
-		if (logLevel == null || logLevel.isEmpty())
+		if (logLevel == null || logLevel.isEmpty()) {
 			LogConfigurator.logLevel(DefaultLogLevel);
+		}
 		return LoggerFactory.getLogger(clazz);
 	}
 
