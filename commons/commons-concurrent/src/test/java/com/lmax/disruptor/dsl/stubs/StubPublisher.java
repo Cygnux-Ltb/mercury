@@ -19,6 +19,7 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.support.TestEvent;
 
 public class StubPublisher implements Runnable {
+
 	private volatile boolean running = true;
 	private volatile int publicationCount = 0;
 

@@ -35,6 +35,7 @@ import org.junit.Test;
 import com.lmax.disruptor.support.StubEvent;
 
 public final class BatchEventProcessorTest {
+
 	private final RingBuffer<StubEvent> ringBuffer = createMultiProducer(StubEvent.EVENT_FACTORY, 16);
 	private final SequenceBarrier sequenceBarrier = ringBuffer.newBarrier();
 

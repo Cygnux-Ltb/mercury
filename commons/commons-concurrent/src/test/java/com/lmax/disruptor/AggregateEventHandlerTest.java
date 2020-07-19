@@ -24,6 +24,7 @@ import com.lmax.disruptor.support.DummyEventHandler;
 
 @SuppressWarnings("unchecked")
 public final class AggregateEventHandlerTest {
+
 	private final DummyEventHandler<int[]> eh1 = new DummyEventHandler<int[]>();
 	private final DummyEventHandler<int[]> eh2 = new DummyEventHandler<int[]>();
 	private final DummyEventHandler<int[]> eh3 = new DummyEventHandler<int[]>();
