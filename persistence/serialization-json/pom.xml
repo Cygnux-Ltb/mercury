@@ -14,6 +14,8 @@
 	<artifactId>serialization-json</artifactId>
 	<name>serialization-json</name>
 
+	<packaging>jar</packaging>
+
 	<dependencies>
 
 		<dependency>

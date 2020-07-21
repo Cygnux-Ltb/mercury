@@ -13,6 +13,8 @@
 	<artifactId>persistence-mapdb</artifactId>
 	<name>persistence-mapdb</name>
 
+	<packaging>jar</packaging>
+	
 
 	<dependencies>
 

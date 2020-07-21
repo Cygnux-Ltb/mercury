@@ -13,6 +13,8 @@
 	<artifactId>persistence-arangodb</artifactId>
 	<name>persistence-arangodb</name>
 
+	<packaging>jar</packaging>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -29,18 +31,19 @@
 	</build>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>commons-concurrent</artifactId>
 		</dependency>
 
+		<!-- ArangoDB Java Driver -->
 		<dependency>
 			<groupId>com.arangodb</groupId>
 			<artifactId>arangodb-java-driver</artifactId>
 			<version>6.7.1</version>
 		</dependency>
 
+		<!-- ArangoDB Graphql -->
 		<dependency>
 			<groupId>com.arangodb</groupId>
 			<artifactId>arangodb-graphql</artifactId>
@@ -54,9 +57,25 @@
 					<groupId>com.arangodb</groupId>
 					<artifactId>arangodb-java-driver</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>com.graphql-java</groupId>
+					<artifactId>graphql-java</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 
+		<!-- GraphqL Java -->
+		<dependency>
+			<groupId>com.graphql-java</groupId>
+			<artifactId>graphql-java</artifactId>
+			<version>15.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 	</dependencies>
 
 </project>

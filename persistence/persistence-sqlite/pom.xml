@@ -13,6 +13,8 @@
 	<artifactId>persistence-sqlite</artifactId>
 	<name>persistence-sqlite</name>
 
+	<packaging>jar</packaging>
+
 	<dependencies>
 
 		<dependency>
@@ -30,7 +32,7 @@
 		<dependency>
 			<groupId>org.xerial</groupId>
 			<artifactId>sqlite-jdbc</artifactId>
-			<version>3.32.3</version>
+			<version>3.32.3.1</version>
 		</dependency>
 
 		<!-- Ultimate JDBC Connection Pool -->
