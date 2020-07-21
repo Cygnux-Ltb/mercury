@@ -13,6 +13,8 @@
 
 	<artifactId>transport-core</artifactId>
 	<name>transport-core</name>
+	
+	<packaging>jar</packaging>
 
 	<dependencies>
 		<dependency>

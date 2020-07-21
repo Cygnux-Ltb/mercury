@@ -12,6 +12,8 @@
 
 	<artifactId>transport-rabbitmq</artifactId>
 	<name>transport-rabbitmq</name>
+	
+	<packaging>jar</packaging>
 
 	<dependencies>
 		<dependency>

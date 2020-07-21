@@ -27,7 +27,7 @@
 	</modules>
 
 	<properties>
-
+		<netty.version>4.1.51.Final</netty.version>
 	</properties>
 
 	<build>
@@ -72,19 +72,5 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
-
-	<distributionManagement>
-		<repository>
-			<id>releases</id>
-			<name>releases</name>
-			<url>http://203.60.1.16:10000/nexus/repository/maven-releases/</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>snapshots</name>
-			<url>http://203.60.1.16:10000/nexus/repository/maven-snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
 
 </project>

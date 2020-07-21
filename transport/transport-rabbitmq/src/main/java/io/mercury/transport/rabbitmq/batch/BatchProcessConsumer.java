@@ -45,7 +45,7 @@ public class BatchProcessConsumer<T> extends DefaultConsumer {
 	/**
 	 * seconds: automatic flush check in the specified time
 	 */
-	private long millisSecond = 500L;
+	private long millisecond = 500L;
 	/**
 	 * 上一次的buffer -> (bufferList) 大小
 	 */
@@ -75,7 +75,7 @@ public class BatchProcessConsumer<T> extends DefaultConsumer {
 	 * @param millisSecond     自动flush的时间间隔
 	 * @param qosBatchCallBack 当达到prefetchCount值或自动flush触发此回调
 	 */
-	public BatchProcessConsumer(Channel channel, int prefetchCount, long millisSecond, BatchHandler<T> batchHandler,
+	public BatchProcessConsumer(Channel channel, int prefetchCount, long millisecond, BatchHandler<T> batchHandler,
 			BytesDeserializer<T> deserializer, RefreshNowEvent<T> refreshNowEvent, Predicate<T> filter) {
 		super(channel);
 		this.channel = channel;
@@ -84,10 +84,10 @@ public class BatchProcessConsumer<T> extends DefaultConsumer {
 		this.batchHandler = Assertor.nonNull(batchHandler, "batchHandler");
 		this.deserializer = Assertor.nonNull(deserializer, "deserializer");
 		this.prefetchCount = prefetchCount;
-		if (millisSecond > 0) {
-			this.millisSecond = millisSecond;
+		if (millisecond > 0) {
+			this.millisecond = millisecond;
 		} else {
-			log.info("usr default seconds {}", this.millisSecond);
+			log.warn("Use default millisecond: {}", this.millisecond);
 		}
 		init();
 	}
@@ -196,7 +196,7 @@ public class BatchProcessConsumer<T> extends DefaultConsumer {
 			} catch (Exception e) {
 				log.error("automatic flush execute failure,deleveryTag[{}]", e, this.lastDeliveryTag);
 			}
-		}, 0, millisSecond, TimeUnit.MILLISECONDS);
+		}, 0, millisecond, TimeUnit.MILLISECONDS);
 	}
 
 	@SuppressWarnings("unused")

@@ -11,6 +11,8 @@
 	</parent>
 	<artifactId>transport-http</artifactId>
 	<name>transport-http</name>
+	
+	<packaging>jar</packaging>
 
 	<dependencies>
 
