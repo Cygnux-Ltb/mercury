@@ -11,12 +11,11 @@
 	</parent>
 
 	<artifactId>commons-graph</artifactId>
-	<packaging>jar</packaging>
-
 	<name>commons-graph</name>
 
-	<dependencies>
+	<packaging>jar</packaging>
 
+	<dependencies>
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>commons-core</artifactId>
@@ -36,6 +35,6 @@
 			<artifactId>jheaps</artifactId>
 			<version>0.14</version>
 		</dependency>
-
 	</dependencies>
+	
 </project>

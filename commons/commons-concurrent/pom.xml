@@ -12,12 +12,11 @@
 	</parent>
 
 	<artifactId>commons-concurrent</artifactId>
+	<name>commons-concurrent</name>
+	
 	<packaging>jar</packaging>
 
-	<name>commons-concurrent</name>
-
 	<dependencies>
-
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>commons-core</artifactId>
@@ -36,7 +35,6 @@
 			<artifactId>disruptor</artifactId>
 			<version>3.4.2</version>
 		</dependency>
-
 	</dependencies>
 
 </project>

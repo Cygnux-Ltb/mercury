@@ -10,9 +10,9 @@
 	</parent>
 
 	<artifactId>commons-jmh</artifactId>
-	<packaging>jar</packaging>
-
 	<name>commons-jmh</name>
+
+	<packaging>jar</packaging>
 
 	<properties>
 		<jmh.version>1.23</jmh.version>
