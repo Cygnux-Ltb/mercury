@@ -4,8 +4,8 @@ import static io.mercury.common.util.Assertor.nonEmpty;
 import static io.mercury.common.util.Assertor.nonNull;
 import static io.mercury.common.util.Assertor.requiredLength;
 import static java.lang.Boolean.parseBoolean;
-import static java.lang.Integer.parseInt;
 import static java.lang.Double.parseDouble;
+import static java.lang.Integer.parseInt;
 
 import java.util.Map;
 import java.util.Properties;
@@ -53,14 +53,14 @@ public final class ImmutableParamMap<K extends ParamKey> {
 	 * @throws NullPointerException
 	 * @throws IllegalArgumentException
 	 */
-	public ImmutableParamMap(@Nonnull K[] keys, @Nonnull Properties properties)
+	public ImmutableParamMap(@Nonnull K[] keys, @Nonnull Properties prop)
 			throws NullPointerException, IllegalArgumentException {
 		requiredLength(keys, 1, "keys");
-		nonNull(properties, "properties");
+		nonNull(prop, "prop");
 		MutableMap<K, String> tempMap = MutableMaps.newUnifiedMap();
 		for (K key : keys) {
-			if (properties.containsKey(key.key()))
-				tempMap.put(key, properties.get(key.key()).toString());
+			if (prop.containsKey(key.key()))
+				tempMap.put(key, prop.get(key.key()).toString());
 		}
 		this.paramMap = tempMap.toImmutable();
 	}
