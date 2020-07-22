@@ -350,6 +350,15 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Receiv
 		}
 	}
 
+	/**
+	 * 
+	 * @param cause
+	 * @param consumerTag
+	 * @param envelope
+	 * @param properties
+	 * @param body
+	 * @throws IOException
+	 */
 	private void dumpUnprocessableMsg(Throwable cause, String consumerTag, Envelope envelope,
 			BasicProperties properties, byte[] body) throws IOException {
 		if (hasErrMsgExchange) {
@@ -376,10 +385,21 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Receiv
 		}
 	}
 
+	/**
+	 * 
+	 * @param deliveryTag
+	 * @return
+	 */
 	private boolean ack(long deliveryTag) {
 		return ack0(deliveryTag, 0);
 	}
 
+	/**
+	 * 
+	 * @param deliveryTag
+	 * @param retry
+	 * @return
+	 */
 	private boolean ack0(long deliveryTag, int retry) {
 		if (retry == maxAckTotal) {
 			log.error("Has been retry ack {}, Quit ack", maxAckTotal);

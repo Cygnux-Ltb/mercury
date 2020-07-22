@@ -18,10 +18,20 @@ public final class QueueRelationship extends Relationship {
 
 	private AmqpQueue queue;
 
+	/**
+	 * 
+	 * @param queueName
+	 * @return
+	 */
 	public static QueueRelationship named(String queueName) {
 		return new QueueRelationship(AmqpQueue.named(queueName));
 	}
 
+	/**
+	 * 
+	 * @param queue
+	 * @return
+	 */
 	public static QueueRelationship withQueue(AmqpQueue queue) {
 		return new QueueRelationship(queue);
 	}
@@ -56,25 +66,51 @@ public final class QueueRelationship extends Relationship {
 		return queue.name();
 	}
 
+	/**
+	 * 
+	 * @param durable
+	 * @return
+	 */
 	public QueueRelationship queueDurable(boolean durable) {
 		queue.durable(durable);
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param autoDelete
+	 * @return
+	 */
 	public QueueRelationship queueAutoDelete(boolean autoDelete) {
 		queue.autoDelete(autoDelete);
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param exclusive
+	 * @return
+	 */
 	public QueueRelationship queueExclusive(boolean exclusive) {
 		queue.exclusive(exclusive);
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param exchanges
+	 * @return
+	 */
 	public QueueRelationship binding(AmqpExchange... exchanges) {
 		return binding(exchanges != null ? MutableLists.newFastList(exchanges) : null, null);
 	}
 
+	/**
+	 * 
+	 * @param exchanges
+	 * @param routingKeys
+	 * @return
+	 */
 	public QueueRelationship binding(List<AmqpExchange> exchanges, List<String> routingKeys) {
 		if (exchanges != null) {
 			exchanges.forEach(exchange -> {

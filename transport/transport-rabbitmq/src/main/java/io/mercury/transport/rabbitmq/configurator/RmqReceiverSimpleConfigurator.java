@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
  * @author yellow013
  *
  */
+@Deprecated
 public final class RmqReceiverSimpleConfigurator {
 
 	/**

@@ -42,6 +42,7 @@ public abstract class BaseRabbitMqTransport implements TransportModule, Closeabl
 	// 停机事件, 在监听到ShutdownSignalException时调用
 	protected ShutdownEvent<Exception> shutdownEvent;
 
+	// 组件标记
 	protected final String tag;
 
 	/**
@@ -60,8 +61,9 @@ public abstract class BaseRabbitMqTransport implements TransportModule, Closeabl
 	 * @param rmqConnection
 	 */
 	protected BaseRabbitMqTransport(String tag, @Nonnull String moduleType, @Nonnull RmqConnection rmqConnection) {
+		Assertor.nonNull(rmqConnection, "rmqConnection");
 		this.tag = isNullOrEmpty(tag) ? moduleType + "-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT) : tag;
-		this.rmqConnection = Assertor.nonNull(rmqConnection, "rmqConnection");
+		this.rmqConnection = rmqConnection;
 		this.shutdownEvent = rmqConnection.shutdownEvent();
 	}
 

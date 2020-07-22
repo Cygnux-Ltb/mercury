@@ -144,7 +144,7 @@ public class BatchProcessConsumer<T> extends DefaultConsumer {
 					cacheSize.longValue(), prefetchCount, this.lastDeliveryTag);
 			flush();
 		} else if (refreshNowEvent != null && refreshNowEvent.flushNow(t)) {
-			log.info("----- 触发立刻刷新事件! tag -> {}-----", lastDeliveryTag);
+			log.info("-----触发立刻刷新事件! tag -> {}-----", lastDeliveryTag);
 			flush();
 		}
 

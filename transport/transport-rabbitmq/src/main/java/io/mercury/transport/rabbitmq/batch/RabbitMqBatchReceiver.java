@@ -79,7 +79,7 @@ public class RabbitMqBatchReceiver<T> extends BaseRabbitMqTransport implements R
 		try {
 			channel.basicConsume(receiveQueue, false, tag, consumer);
 		} catch (IOException e) {
-			log.error("basicConsume error", e.getMessage(), e);
+			log.error("basicConsume error : {}", e.getMessage(), e);
 		}
 	}
 
@@ -98,6 +98,5 @@ public class RabbitMqBatchReceiver<T> extends BaseRabbitMqTransport implements R
 	@Override
 	public void reconnect() {
 		// TODO Auto-generated method stub
-
 	}
 }

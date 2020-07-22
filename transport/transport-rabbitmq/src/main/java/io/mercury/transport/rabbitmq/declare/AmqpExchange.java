@@ -22,14 +22,32 @@ public final class AmqpExchange {
 	// 交换器参数
 	private Map<String, Object> args;
 
+	/**
+	 * 定义 fanout 交换器
+	 * 
+	 * @param name
+	 * @return
+	 */
 	public static AmqpExchange fanout(String name) {
 		return new AmqpExchange(ExchangeType.Fanout, Assertor.nonEmpty(name, "name"));
 	}
 
+	/**
+	 * 定义 direct 交换器
+	 * 
+	 * @param name
+	 * @return
+	 */
 	public static AmqpExchange direct(String name) {
 		return new AmqpExchange(ExchangeType.Direct, Assertor.nonEmpty(name, "name"));
 	}
 
+	/**
+	 * 定义 topic 交换器
+	 * 
+	 * @param name
+	 * @return
+	 */
 	public static AmqpExchange topic(String name) {
 		return new AmqpExchange(ExchangeType.Topic, Assertor.nonEmpty(name, "name"));
 	}
@@ -136,6 +154,11 @@ public final class AmqpExchange {
 				.replace("$args", valueOf(args));
 	}
 
+	/**
+	 * 
+	 * @param another
+	 * @return
+	 */
 	public boolean idempotent(AmqpExchange another) {
 		return name.equals(another.name) && type == another.type && durable == another.durable
 				&& autoDelete == another.autoDelete && internal == another.internal

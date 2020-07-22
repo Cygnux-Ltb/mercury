@@ -9,9 +9,9 @@ import com.rabbitmq.client.MessageProperties;
  * 
  * @author yellow013
  * 
- *         TODO 扩展针对多个routingKey的绑定关系
+ *         已扩展针对多个routingKey的绑定关系
  */
-
+@Deprecated
 public final class RmqPublisherSimpleConfigurator {
 
 	/**

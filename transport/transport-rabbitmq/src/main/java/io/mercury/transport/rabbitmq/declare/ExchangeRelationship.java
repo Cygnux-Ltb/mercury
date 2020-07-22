@@ -22,18 +22,38 @@ public final class ExchangeRelationship extends Relationship {
 
 	private AmqpExchange exchange;
 
+	/**
+	 * 
+	 * @param exchangeName
+	 * @return
+	 */
 	public static ExchangeRelationship fanout(@Nonnull String exchangeName) {
 		return new ExchangeRelationship(AmqpExchange.fanout(exchangeName));
 	}
 
+	/**
+	 * 
+	 * @param exchangeName
+	 * @return
+	 */
 	public static ExchangeRelationship direct(@Nonnull String exchangeName) {
 		return new ExchangeRelationship(AmqpExchange.direct(exchangeName));
 	}
 
+	/**
+	 * 
+	 * @param exchangeName
+	 * @return
+	 */
 	public static ExchangeRelationship topic(@Nonnull String exchangeName) {
 		return new ExchangeRelationship(AmqpExchange.topic(exchangeName));
 	}
 
+	/**
+	 * 
+	 * @param exchange
+	 * @return
+	 */
 	public static ExchangeRelationship withExchange(@Nonnull AmqpExchange exchange) {
 		return new ExchangeRelationship(exchange);
 	}
@@ -68,25 +88,51 @@ public final class ExchangeRelationship extends Relationship {
 		return exchange.name();
 	}
 
+	/**
+	 * 
+	 * @param durable
+	 * @return
+	 */
 	public ExchangeRelationship exchangeDurable(boolean durable) {
 		exchange.durable(durable);
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param autoDelete
+	 * @return
+	 */
 	public ExchangeRelationship exchangeAutoDelete(boolean autoDelete) {
 		exchange.autoDelete(autoDelete);
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param internal
+	 * @return
+	 */
 	public ExchangeRelationship exchangeInternal(boolean internal) {
 		exchange.internal(internal);
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param exchanges
+	 * @return
+	 */
 	public ExchangeRelationship bindingExchange(AmqpExchange... exchanges) {
 		return bindingExchange(exchanges != null ? MutableLists.newFastList(exchanges) : null, null);
 	}
 
+	/**
+	 * 
+	 * @param exchanges
+	 * @param routingKeys
+	 * @return
+	 */
 	public ExchangeRelationship bindingExchange(List<AmqpExchange> exchanges, List<String> routingKeys) {
 		if (exchanges != null) {
 			exchanges.forEach(exchange -> {
@@ -99,10 +145,21 @@ public final class ExchangeRelationship extends Relationship {
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param queues
+	 * @return
+	 */
 	public ExchangeRelationship bindingQueue(AmqpQueue... queues) {
 		return bindingQueue(queues != null ? MutableLists.newFastList(queues) : null, null);
 	}
 
+	/**
+	 * 
+	 * @param queues
+	 * @param routingKeys
+	 * @return
+	 */
 	public ExchangeRelationship bindingQueue(List<AmqpQueue> queues, List<String> routingKeys) {
 		if (queues != null) {
 			queues.forEach(queue -> {

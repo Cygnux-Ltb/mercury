@@ -9,11 +9,11 @@ import java.util.function.Predicate;
 @FunctionalInterface
 public interface BatchHandler<T> extends Predicate<Collection<T>> {
 
-	boolean handle(Collection<T> t);
+	boolean handle(Collection<T> collection);
 
 	@Override
-	default boolean test(Collection<T> t) {
-		return handle(t);
+	default boolean test(Collection<T> collection) {
+		return handle(collection);
 	}
 
 }

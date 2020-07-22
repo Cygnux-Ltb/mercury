@@ -154,28 +154,76 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 		}
 	}
 
+	/**
+	 * 
+	 * @param exchange
+	 * @return
+	 * @throws AmqpDeclareException
+	 */
 	public boolean declareDefaultDirectExchange(@Nonnull String exchange) throws AmqpDeclareException {
 		return declareDirectExchange(exchange, true, false, false, null);
 	}
 
+	/**
+	 * 
+	 * @param exchange
+	 * @param durable
+	 * @param autoDelete
+	 * @param internal
+	 * @param args
+	 * @return
+	 * @throws AmqpDeclareException
+	 */
 	public boolean declareDirectExchange(@Nonnull String exchange, boolean durable, boolean autoDelete,
 			boolean internal, Map<String, Object> args) throws AmqpDeclareException {
 		return declareExchange(exchange, BuiltinExchangeType.DIRECT, durable, autoDelete, internal, args);
 	}
 
+	/**
+	 * 
+	 * @param exchange
+	 * @return
+	 * @throws AmqpDeclareException
+	 */
 	public boolean declareDefaultFanoutExchange(@Nonnull String exchange) throws AmqpDeclareException {
 		return declareFanoutExchange(exchange, true, false, false, null);
 	}
 
+	/**
+	 * 
+	 * @param exchange
+	 * @param durable
+	 * @param autoDelete
+	 * @param internal
+	 * @param args
+	 * @return
+	 * @throws AmqpDeclareException
+	 */
 	public boolean declareFanoutExchange(@Nonnull String exchange, boolean durable, boolean autoDelete,
 			boolean internal, Map<String, Object> args) throws AmqpDeclareException {
 		return declareExchange(exchange, BuiltinExchangeType.FANOUT, durable, autoDelete, internal, args);
 	}
 
+	/**
+	 * 
+	 * @param exchange
+	 * @return
+	 * @throws AmqpDeclareException
+	 */
 	public boolean declareDefaultTopicExchange(@Nonnull String exchange) throws AmqpDeclareException {
 		return declareTopicExchange(exchange, true, false, false, null);
 	}
 
+	/**
+	 * 
+	 * @param exchange
+	 * @param durable
+	 * @param autoDelete
+	 * @param internal
+	 * @param args
+	 * @return
+	 * @throws AmqpDeclareException
+	 */
 	public boolean declareTopicExchange(@Nonnull String exchange, boolean durable, boolean autoDelete, boolean internal,
 			Map<String, Object> args) throws AmqpDeclareException {
 		return declareExchange(exchange, BuiltinExchangeType.TOPIC, durable, autoDelete, internal, args);
@@ -196,10 +244,25 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 		}
 	}
 
+	/**
+	 * 
+	 * @param queue
+	 * @param exchange
+	 * @return
+	 * @throws AmqpDeclareException
+	 */
 	public boolean bindQueue(String queue, String exchange) throws AmqpDeclareException {
 		return bindQueue(queue, exchange, "");
 	}
 
+	/**
+	 * 
+	 * @param queue
+	 * @param exchange
+	 * @param routingKey
+	 * @return
+	 * @throws AmqpDeclareException
+	 */
 	public boolean bindQueue(String queue, String exchange, String routingKey) throws AmqpDeclareException {
 		try {
 			Assertor.nonEmpty(queue, "queue");
@@ -215,10 +278,25 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 		}
 	}
 
+	/**
+	 * 
+	 * @param destExchange
+	 * @param sourceExchange
+	 * @return
+	 * @throws AmqpDeclareException
+	 */
 	public boolean bindExchange(String destExchange, String sourceExchange) throws AmqpDeclareException {
 		return bindExchange(destExchange, sourceExchange, "");
 	}
 
+	/**
+	 * 
+	 * @param destExchange
+	 * @param sourceExchange
+	 * @param routingKey
+	 * @return
+	 * @throws AmqpDeclareException
+	 */
 	public boolean bindExchange(String destExchange, String sourceExchange, String routingKey)
 			throws AmqpDeclareException {
 		try {
@@ -235,11 +313,25 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 		}
 	}
 
+	/**
+	 * 
+	 * @param queue
+	 * @param force
+	 * @return
+	 * @throws IOException
+	 */
 	public int deleteQueue(String queue, boolean force) throws IOException {
 		DeleteOk delete = channel.queueDelete(queue, !force, !force);
 		return delete.getMessageCount();
 	}
 
+	/**
+	 * 
+	 * @param exchange
+	 * @param force
+	 * @return
+	 * @throws IOException
+	 */
 	public boolean deleteExchange(String exchange, boolean force) throws IOException {
 		channel.exchangeDelete(exchange, !force);
 		return true;

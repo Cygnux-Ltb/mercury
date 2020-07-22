@@ -135,6 +135,13 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 		publish(target, msg, hasPropsSupplier ? msgPropsSupplier.get() : defaultMsgProps);
 	}
 
+	/**
+	 * 
+	 * @param target
+	 * @param msg
+	 * @param props
+	 * @throws PublishFailedException
+	 */
 	public void publish(String target, byte[] msg, BasicProperties props) throws PublishFailedException {
 		// 记录重试次数
 		int retry = 0;
@@ -183,7 +190,16 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 		confirmPublish0(routingKey, msg, props, 0);
 	}
 
-	// TODO 优化异常处理逻辑
+	/**
+	 * TODO 优化异常处理逻辑
+	 * 
+	 * @param routingKey
+	 * @param msg
+	 * @param props
+	 * @param retry
+	 * @throws IOException
+	 * @throws AmqpNoConfirmException
+	 */
 	private void confirmPublish0(String routingKey, byte[] msg, BasicProperties props, int retry)
 			throws IOException, AmqpNoConfirmException {
 		try {
@@ -208,6 +224,13 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 		}
 	}
 
+	/**
+	 * 
+	 * @param routingKey
+	 * @param msg
+	 * @param props
+	 * @throws IOException
+	 */
 	private void basicPublish(String routingKey, byte[] msg, BasicProperties props) throws IOException {
 		try {
 			channel.basicPublish(
@@ -246,11 +269,12 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 
 	public static void main(String[] args) {
 
-		RmqConnection connectionConfigurator0 = RmqConnection.configuration("", 5672, "", "").build();
+		RmqConnection connectionConfigurator0 = RmqConnection.configuration("127.0.0.1", 5672, "guest", "guest")
+				.build();
 
-		ExchangeRelationship fanoutExchange = ExchangeRelationship.fanout("");
+		ExchangeRelationship fanoutExchange = ExchangeRelationship.fanout("fanout-test");
 
-		try (RabbitMqPublisher publisher = new RabbitMqPublisher("",
+		try (RabbitMqPublisher publisher = new RabbitMqPublisher(
 				RmqPublisherConfigurator.configuration(connectionConfigurator0, fanoutExchange).build())) {
 			Threads.startNewThread(() -> {
 				int count = 0;

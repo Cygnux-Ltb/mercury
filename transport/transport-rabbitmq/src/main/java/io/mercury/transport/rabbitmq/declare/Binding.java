@@ -97,6 +97,7 @@ public final class Binding {
 
 		AmqpExchange exchange0 = AmqpExchange.direct("ABC");
 		AmqpExchange exchange1 = AmqpExchange.direct("ABC");
+
 		System.out.println(exchange0);
 		System.out.println(exchange1);
 		System.out.println(exchange0 == exchange1);

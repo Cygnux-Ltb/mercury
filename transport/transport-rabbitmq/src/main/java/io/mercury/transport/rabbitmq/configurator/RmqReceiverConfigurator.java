@@ -36,6 +36,10 @@ public final class RmqReceiverConfigurator extends RmqConfigurator {
 	// QOS预取
 	private int qos;
 
+	/**
+	 * 
+	 * @param builder
+	 */
 	private RmqReceiverConfigurator(Builder builder) {
 		super(builder.connection);
 		this.receiveQueue = builder.receiveQueue;

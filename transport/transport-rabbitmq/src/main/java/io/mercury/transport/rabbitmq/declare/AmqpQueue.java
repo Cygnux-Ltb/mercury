@@ -20,6 +20,11 @@ public final class AmqpQueue {
 	// 队列参数
 	private Map<String, Object> args;
 
+	/**
+	 * 定义队列
+	 * @param name
+	 * @return
+	 */
 	public static AmqpQueue named(String name) {
 		return new AmqpQueue(Assertor.nonEmpty(name, "name"));
 	}

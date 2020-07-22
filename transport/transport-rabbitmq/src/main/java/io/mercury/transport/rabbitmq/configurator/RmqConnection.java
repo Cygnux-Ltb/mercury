@@ -63,11 +63,28 @@ public final class RmqConnection implements TransportConfigurator {
 		return username + "@" + host + ":" + port + (virtualHost.equals("/") ? virtualHost : "/" + virtualHost);
 	}
 
+	/**
+	 * 
+	 * @param host
+	 * @param port
+	 * @param username
+	 * @param password
+	 * @return
+	 */
 	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
 			@Nonnull String password) {
 		return new Builder(host, port, username, password);
 	}
 
+	/**
+	 * 
+	 * @param host
+	 * @param port
+	 * @param username
+	 * @param password
+	 * @param virtualHost
+	 * @return
+	 */
 	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
 			@Nonnull String password, String virtualHost) {
 		return new Builder(host, port, username, password, virtualHost);
@@ -233,7 +250,7 @@ public final class RmqConnection implements TransportConfigurator {
 
 		private Builder(String host, int port, String username, String password) {
 			this.host = Assertor.nonNull(host, "host");
-			this.port = Assertor.withinRange(port, 1024, 65536, "port");
+			this.port = Assertor.withinRange(port, 4096, 65536, "port");
 			this.username = Assertor.nonNull(username, "username");
 			this.password = Assertor.nonNull(password, "password");
 		}

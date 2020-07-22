@@ -34,6 +34,10 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	// 发布确认重试次数
 	private int confirmRetry;
 
+	/**
+	 * 
+	 * @param builder
+	 */
 	private RmqPublisherConfigurator(Builder builder) {
 		super(builder.connection);
 		this.publishExchange = builder.publishExchange;
@@ -83,7 +87,8 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	 * @param exchangeRelation
 	 * @return
 	 */
-	public static Builder configuration(@Nonnull RmqConnection connection, @Nonnull ExchangeRelationship publishExchange) {
+	public static Builder configuration(@Nonnull RmqConnection connection,
+			@Nonnull ExchangeRelationship publishExchange) {
 		return new Builder(Assertor.nonNull(connection, "connection"),
 				Assertor.nonNull(publishExchange, "publishExchange"));
 	}
