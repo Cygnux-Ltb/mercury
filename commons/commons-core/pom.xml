@@ -15,6 +15,10 @@
 
 	<packaging>jar</packaging>
 
+	<properties>
+		<eclipse-collections.version>10.2.0</eclipse-collections.version>
+	</properties>
+
 	<dependencies>
 		<!-- JSR305 Annotations for Findbugs -->
 		<dependency>
@@ -48,13 +52,24 @@
 			<version>4.4</version>
 		</dependency>
 
-		<!-- Eclipse Collections Main Library -->
+		<!-- Eclipse Collections Library -->
+		<dependency>
+			<groupId>org.eclipse.collections</groupId>
+			<artifactId>eclipse-collections-api</artifactId>
+			<version>${eclipse-collections.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.eclipse.collections</groupId>
 			<artifactId>eclipse-collections</artifactId>
-			<version>10.2.0</version>
+			<version>${eclipse-collections.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.collections</groupId>
+			<artifactId>eclipse-collections-forkjoin</artifactId>
+			<version>${eclipse-collections.version}</version>
 		</dependency>
 
+		<!-- commons logger -->
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>commons-log</artifactId>
