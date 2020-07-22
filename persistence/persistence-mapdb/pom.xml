@@ -14,10 +14,8 @@
 	<name>persistence-mapdb</name>
 
 	<packaging>jar</packaging>
-	
 
 	<dependencies>
-
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>commons-core</artifactId>
@@ -36,8 +34,16 @@
 					<artifactId>lz4</artifactId>
 				</exclusion>
 				<exclusion>
-					<groupId>org.mapdb</groupId>
-					<artifactId>elsa</artifactId>
+					<groupId>org.eclipse.collections</groupId>
+					<artifactId>eclipse-collections-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.collections</groupId>
+					<artifactId>eclipse-collections</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.collections</groupId>
+					<artifactId>eclipse-collections-forkjoin</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -49,6 +55,8 @@
 			<version>3.0.0-M7</version>
 		</dependency>
 
+		<!-- Java ports and bindings of the LZ4 compression algorithm and the xxHash 
+			hashing algorithm -->
 		<dependency>
 			<groupId>org.lz4</groupId>
 			<artifactId>lz4-java</artifactId>

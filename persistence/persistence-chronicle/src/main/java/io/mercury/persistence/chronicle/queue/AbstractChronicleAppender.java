@@ -24,8 +24,8 @@ public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAcc
 
 	private Supplier<T> dataSupplier;
 
-	AbstractChronicleAppender(long allocateSeq, String appenderName, Logger logger, ExcerptAppender excerptAppender,
-			Supplier<T> dataSupplier) {
+	protected AbstractChronicleAppender(long allocateSeq, String appenderName, Logger logger,
+			ExcerptAppender excerptAppender, Supplier<T> dataSupplier) {
 		super(allocateSeq);
 		this.appenderName = appenderName;
 		this.logger = logger;

@@ -67,25 +67,33 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 
 	public static <K, V> Builder<K, V> builder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass)
 			throws NullPointerException {
-		return new Builder<>(Assertor.nonNull(keyClass, "keyClass"), Assertor.nonNull(valueClass, "valueClass"),
-				SysProperties.JAVA_IO_TMPDIR + "/", "auto-create-" + DateTimeUtil.datetimeOfSecond() + "/");
-	}
-
-	public static <K, V> Builder<K, V> builder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass, String folder)
-			throws NullPointerException {
-		return new Builder<>(Assertor.nonNull(keyClass, "keyClass"), Assertor.nonNull(valueClass, "valueClass"),
-				SysProperties.JAVA_IO_TMPDIR + "/", Assertor.nonNull(folder, "folder"));
+		Assertor.nonNull(keyClass, "keyClass");
+		Assertor.nonNull(valueClass, "valueClass");
+		return new Builder<>(keyClass, valueClass, SysProperties.JAVA_IO_TMPDIR,
+				"auto-create-" + DateTimeUtil.datetimeOfSecond());
 	}
 
 	public static <K, V> Builder<K, V> builder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass,
-			String rootPath, String folder) throws NullPointerException {
-		return new Builder<>(Assertor.nonNull(keyClass, "keyClass"), Assertor.nonNull(valueClass, "valueClass"),
-				Assertor.nonNull(rootPath, "rootPath"), Assertor.nonNull(folder, "folder"));
+			@Nonnull String folder) throws NullPointerException {
+		Assertor.nonNull(keyClass, "keyClass");
+		Assertor.nonNull(valueClass, "valueClass");
+		Assertor.nonNull(folder, "folder");
+		return new Builder<>(keyClass, valueClass, SysProperties.JAVA_IO_TMPDIR, folder);
+	}
+
+	public static <K, V> Builder<K, V> builder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass,
+			@Nonnull String rootPath, @Nonnull String folder) throws NullPointerException {
+		Assertor.nonNull(keyClass, "keyClass");
+		Assertor.nonNull(valueClass, "valueClass");
+		Assertor.nonNull(rootPath, "rootPath");
+		Assertor.nonNull(folder, "folder");
+		return new Builder<>(keyClass, valueClass, rootPath, folder);
 	}
 
 	public static <K, V> Builder<K, V> reset(@Nonnull ChronicleMapConfigurator<K, V> original)
 			throws NullPointerException {
-		return Assertor.nonNull(original, "original").builder;
+		Assertor.nonNull(original, "original");
+		return original.builder;
 	}
 
 	@Override
@@ -163,7 +171,8 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 		private long entries = Capacity.L16_SIZE_65536.size();
 		private int actualChunkSize;
 
-		private Builder(Class<K> keyClass, Class<V> valueClass, String rootPath, String folder) {
+		private Builder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass, @Nonnull String rootPath,
+				@Nonnull String folder) {
 			this.keyClass = keyClass;
 			this.valueClass = valueClass;
 			this.rootPath = fixPath(rootPath);
@@ -180,18 +189,18 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 			return this;
 		}
 
-		public Builder<K, V> putReturnsNull(boolean putReturnsNull) {
-			this.putReturnsNull = putReturnsNull;
+		public Builder<K, V> enablePutReturnsNull() {
+			this.putReturnsNull = true;
 			return this;
 		}
 
-		public Builder<K, V> removeReturnsNull(boolean removeReturnsNull) {
-			this.removeReturnsNull = removeReturnsNull;
+		public Builder<K, V> enableRemoveReturnsNull() {
+			this.removeReturnsNull = true;
 			return this;
 		}
 
-		public Builder<K, V> recover(boolean recover) {
-			this.recover = recover;
+		public Builder<K, V> enableRecover() {
+			this.recover = true;
 			return this;
 		}
 

@@ -27,8 +27,9 @@ public class ChronicleMapKeeper<K, V> extends BaseKeeper<String, ChronicleMap<K,
 
 	@Override
 	public ChronicleMap<K, V> acquire(String filename) throws ChronicleIOException {
+		Assertor.nonEmpty(filename, "filename");
 		synchronized (lock) {
-			return super.acquire(Assertor.nonEmpty(filename, "filename"));
+			return super.acquire(filename);
 		}
 	}
 
@@ -75,8 +76,9 @@ public class ChronicleMapKeeper<K, V> extends BaseKeeper<String, ChronicleMap<K,
 			Set<String> keySet = savedMap.keySet();
 			for (String key : keySet) {
 				ChronicleMap<K, V> map = savedMap.get(key);
-				if (map.isOpen())
+				if (map.isOpen()) {
 					map.close();
+				}
 				savedMap.remove(key);
 			}
 		}

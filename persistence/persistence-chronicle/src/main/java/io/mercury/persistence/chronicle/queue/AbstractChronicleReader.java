@@ -40,7 +40,17 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 
 	private final Consumer<T> consumer;
 
-	AbstractChronicleReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam readerParam,
+	/**
+	 * 
+	 * @param allocateSeq
+	 * @param readerName
+	 * @param fileCycle
+	 * @param readerParam
+	 * @param logger
+	 * @param excerptTailer
+	 * @param consumer
+	 */
+	protected AbstractChronicleReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam readerParam,
 			Logger logger, ExcerptTailer excerptTailer, Consumer<T> consumer) {
 		super(allocateSeq);
 		this.readerName = readerName;
@@ -85,30 +95,59 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 		excerptTailer.toEnd();
 	}
 
+	/**
+	 * 
+	 * @return int
+	 */
 	public int cycle() {
 		return excerptTailer.cycle();
 	}
 
+	/**
+	 * 
+	 * @return long
+	 */
 	public long epochSecond() {
 		return ((long) excerptTailer.cycle()) * fileCycle.getSeconds();
 	}
 
+	/**
+	 * 
+	 * @return long
+	 */
 	public long index() {
 		return excerptTailer.index();
 	}
 
+	/**
+	 * 
+	 * @return TailerState
+	 */
 	public TailerState state() {
 		return excerptTailer.state();
 	}
 
+	/**
+	 * 
+	 * @return String
+	 */
 	public String readerName() {
 		return readerName;
 	}
 
+	/**
+	 * 
+	 * @return Thread
+	 */
 	public Thread runningOnNewThread() {
 		return runningOnNewThread(readerName);
 	}
 
+	/**
+	 * 
+	 * @param threadName
+	 * @return Thread
+	 */
 	public Thread runningOnNewThread(String threadName) {
 		return startNewThread(this, threadName);
 	}

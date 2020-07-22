@@ -4,6 +4,8 @@ import static io.mercury.common.util.StringUtil.fixPath;
 
 import java.io.File;
 
+import javax.annotation.Nonnull;
+
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.sys.SysProperties;
@@ -40,12 +42,22 @@ public final class ChronicleSetConfigurator<K> {
 
 	private static final String FixedFolder = "chronicle-set/";
 
-	public static <K> Builder<K> builder(Class<K> keyClass) {
-		return new Builder<>(Assertor.nonNull(keyClass, "keyClass"));
+	public static <K> Builder<K> builder(@Nonnull Class<K> keyClass) {
+		Assertor.nonNull(keyClass, "keyClass");
+		return new Builder<>(keyClass, SysProperties.JAVA_IO_TMPDIR, "auto-create-" + DateTimeUtil.datetimeOfSecond());
 	}
 
-	public static <K> Builder<K> builder(Class<K> keyClass, String rootPath, String folder) {
-		return new Builder<>(Assertor.nonNull(keyClass, "keyClass"), rootPath, folder);
+	public static <K> Builder<K> builder(@Nonnull Class<K> keyClass, @Nonnull String folder) {
+		Assertor.nonNull(keyClass, "keyClass");
+		Assertor.nonNull(folder, "folder");
+		return new Builder<>(keyClass, SysProperties.JAVA_IO_TMPDIR, folder);
+	}
+
+	public static <K> Builder<K> builder(@Nonnull Class<K> keyClass, @Nonnull String rootPath, @Nonnull String folder) {
+		Assertor.nonNull(keyClass, "keyClass");
+		Assertor.nonNull(rootPath, "rootPath");
+		Assertor.nonNull(folder, "folder");
+		return new Builder<>(keyClass, rootPath, folder);
 	}
 
 	public Class<K> keyClass() {
@@ -87,22 +99,18 @@ public final class ChronicleSetConfigurator<K> {
 	public static class Builder<K> {
 
 		private Class<K> keyClass;
-		private String rootPath = SysProperties.JAVA_IO_TMPDIR + "/";
-		private String folder = "auto-create-" + DateTimeUtil.datetimeOfSecond() + "/";
+		private String rootPath;
+		private String folder;
 
 		private K averageKey;
 
 		private boolean recover = false;
 		private boolean persistent = true;
 
-		private long entries = 32 << 16;
+		private long entries = Capacity.L16_SIZE_65536.size();
 		private int actualChunkSize;
 
-		private Builder(Class<K> keyClass) {
-			this.keyClass = keyClass;
-		}
-
-		private Builder(Class<K> keyClass, String rootPath, String folder) {
+		private Builder(@Nonnull Class<K> keyClass, @Nonnull String rootPath, @Nonnull String folder) {
 			this.keyClass = keyClass;
 			this.rootPath = fixPath(rootPath);
 			this.folder = fixPath(rootPath);
@@ -113,8 +121,8 @@ public final class ChronicleSetConfigurator<K> {
 			return this;
 		}
 
-		public Builder<K> recover(boolean recover) {
-			this.recover = recover;
+		public Builder<K> enableRecover() {
+			this.recover = true;
 			return this;
 		}
 

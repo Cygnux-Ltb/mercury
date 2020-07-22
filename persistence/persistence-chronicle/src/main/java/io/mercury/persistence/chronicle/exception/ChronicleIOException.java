@@ -11,4 +11,8 @@ public final class ChronicleIOException extends RuntimeException {
 		super(throwable.getMessage(), throwable);
 	}
 
+	public ChronicleIOException(String message, Throwable throwable) {
+		super(message, throwable);
+	}
+
 }
