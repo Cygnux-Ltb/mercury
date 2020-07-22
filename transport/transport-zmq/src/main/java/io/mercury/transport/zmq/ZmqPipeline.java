@@ -4,11 +4,14 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.function.Function;
 
+import javax.annotation.Nonnull;
+
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
 import io.mercury.common.thread.Threads;
+import io.mercury.common.util.Assertor;
 import io.mercury.transport.core.api.Receiver;
 import io.mercury.transport.zmq.configurator.ZmqConfigurator;
 
@@ -24,9 +27,9 @@ public class ZmqPipeline implements Receiver, Closeable {
 
 	private volatile boolean isRun = true;
 
-	public ZmqPipeline(ZmqConfigurator configurator, Function<byte[], byte[]> pipeline) {
-		if (configurator == null || pipeline == null)
-			throw new IllegalArgumentException("configurator is null in JeroMQReceiver init mothed !");
+	public ZmqPipeline(@Nonnull ZmqConfigurator configurator, @Nonnull Function<byte[], byte[]> pipeline) {
+		Assertor.nonNull(configurator, "configurator");
+		Assertor.nonNull(pipeline, "pipeline");
 		this.configurator = configurator;
 		this.pipeline = pipeline;
 		init();
@@ -65,7 +68,6 @@ public class ZmqPipeline implements Receiver, Closeable {
 	}
 
 	public static void main(String[] args) {
-
 		try (ZmqPipeline receiver = new ZmqPipeline(
 				ZmqConfigurator.builder().setIoThreads(10).setHost("tcp://*:5551").build(), (byte[] byteMsg) -> {
 					System.out.println(new String(byteMsg));
@@ -87,7 +89,6 @@ public class ZmqPipeline implements Receiver, Closeable {
 	@Override
 	public void reconnect() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override

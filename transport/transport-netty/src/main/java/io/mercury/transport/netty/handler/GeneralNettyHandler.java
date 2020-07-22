@@ -1,6 +1,5 @@
 package io.mercury.transport.netty.handler;
 
-
 import org.slf4j.Logger;
 
 import io.mercury.common.log.CommonLoggerFactory;
@@ -14,7 +13,7 @@ public abstract class GeneralNettyHandler extends ChannelInboundHandlerAdapter {
 
 	protected int byteBufSize;
 
-	protected final Logger log = CommonLoggerFactory.getLogger(getClass());
+	private static final Logger log = CommonLoggerFactory.getLogger(GeneralNettyHandler.class);
 
 	/**
 	 * Use default bytebufSize;
@@ -31,7 +30,7 @@ public abstract class GeneralNettyHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-		log.error(cause.getMessage() , cause);
+		log.error(cause.getMessage(), cause);
 		ctx.close();
 	}
 

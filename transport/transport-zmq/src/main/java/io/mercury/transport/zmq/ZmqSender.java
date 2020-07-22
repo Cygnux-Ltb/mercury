@@ -3,12 +3,14 @@ package io.mercury.transport.zmq;
 import java.io.Closeable;
 import java.io.IOException;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
+import io.mercury.common.util.Assertor;
 import io.mercury.transport.core.api.Sender;
 import io.mercury.transport.zmq.configurator.ZmqConfigurator;
 
@@ -22,9 +24,8 @@ public class ZmqSender implements Sender<byte[]>, Closeable {
 
 	private ZmqConfigurator configurator;
 
-	public ZmqSender(ZmqConfigurator configurator) {
-		if (configurator == null)
-			throw new IllegalArgumentException("configurator is null in JeroMQPublisher init mothed !");
+	public ZmqSender(@Nonnull ZmqConfigurator configurator) {
+		Assertor.nonNull(configurator, "configurator");
 		this.configurator = configurator;
 		init();
 	}

@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
+import javax.annotation.Nonnull;
+
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
 import io.mercury.common.character.Charsets;
+import io.mercury.common.util.Assertor;
 import io.mercury.transport.core.api.Subscriber;
 import io.mercury.transport.zmq.configurator.ZmqConfigurator;
 
@@ -20,16 +23,16 @@ public class ZmqSubscriber implements Subscriber, Closeable {
 
 	private String subscriberName;
 
-	private Consumer<byte[]> callback;
+	private Consumer<byte[]> consumer;
 	private ZmqConfigurator configurator;
 
 	private AtomicBoolean isRun = new AtomicBoolean(true);
 
-	public ZmqSubscriber(ZmqConfigurator configurator, Consumer<byte[]> callback) {
-		if (configurator == null || callback == null)
-			throw new IllegalArgumentException("configurator is null in JeroMQSubscriber init mothed !");
+	public ZmqSubscriber(@Nonnull ZmqConfigurator configurator, @Nonnull Consumer<byte[]> consumer) {
+		Assertor.nonNull(configurator, "configurator");
+		Assertor.nonNull(consumer, "consumer");
 		this.configurator = configurator;
-		this.callback = callback;
+		this.consumer = consumer;
 		init();
 	}
 
@@ -50,7 +53,7 @@ public class ZmqSubscriber implements Subscriber, Closeable {
 		while (isRun.get()) {
 			zSocket.recv();
 			byte[] msgBytes = zSocket.recv();
-			callback.accept(msgBytes);
+			consumer.accept(msgBytes);
 		}
 	}
 
@@ -96,7 +99,7 @@ public class ZmqSubscriber implements Subscriber, Closeable {
 	@Override
 	public void reconnect() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

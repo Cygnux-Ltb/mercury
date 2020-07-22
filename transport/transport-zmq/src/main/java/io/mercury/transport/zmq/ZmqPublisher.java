@@ -4,6 +4,8 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
@@ -24,8 +26,9 @@ public class ZmqPublisher implements Publisher<byte[]>, Closeable {
 
 	private ZmqConfigurator configurator;
 
-	public ZmqPublisher(ZmqConfigurator configurator) {
-		this.configurator = Assertor.nonNull(configurator, "configurator");
+	public ZmqPublisher(@Nonnull ZmqConfigurator configurator) {
+		Assertor.nonNull(configurator, "configurator");
+		this.configurator = configurator;
 		init();
 	}
 
