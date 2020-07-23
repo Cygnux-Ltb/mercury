@@ -1,6 +1,6 @@
 # mercury
 
-Basic library collection
+Basic Library Collection
 
 https://github.com/yellow013/actors.git
 
