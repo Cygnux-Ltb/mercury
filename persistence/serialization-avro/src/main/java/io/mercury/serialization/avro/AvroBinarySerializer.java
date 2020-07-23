@@ -14,7 +14,7 @@ import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
 
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.specific.BinarySerializer;
+import io.mercury.common.serialization.BinarySerializer;
 
 @NotThreadSafe
 public final class AvroBinarySerializer<T extends SpecificRecord> implements BinarySerializer<T> {

@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 
 import io.mercury.common.character.Charsets;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.specific.TextSerializer;
+import io.mercury.common.serialization.TextSerializer;
 
 @NotThreadSafe
 public class AvroTextSerializer<T extends SpecificRecord> implements TextSerializer<T> {

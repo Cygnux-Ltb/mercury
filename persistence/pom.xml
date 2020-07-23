@@ -20,7 +20,6 @@
 		<module>persistence-arangodb</module>
 		<module>persistence-chronicle</module>
 		<module>persistence-kyotocabinet</module>
-		<module>persistence-mapdb</module>
 		<module>persistence-redis</module>
 		<module>persistence-rocksdb</module>
 		<module>persistence-sqlite</module>
