@@ -15,6 +15,9 @@
 
 	<packaging>jar</packaging>
 
+	<properties>
+		<jna.version>5.6.0</jna.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -28,48 +31,18 @@
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-core</artifactId>
 			<version>2.19.72</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jetbrains</groupId>
-					<artifactId>annotations</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<!-- ######## chronicle-wire ######## -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-wire</artifactId>
 			<version>2.19.75</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.intellij</groupId>
-					<artifactId>annotations</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<!-- ######## chronicle-bytes ######## -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-bytes</artifactId>
 			<version>2.19.72</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jetbrains</groupId>
-					<artifactId>annotations</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<!-- ######## chronicle-threads ######## -->
 		<dependency>
@@ -85,6 +58,7 @@
 					<groupId>org.jetbrains</groupId>
 					<artifactId>annotations</artifactId>
 				</exclusion>
+				<!-- exclusion jna-platform version 4.2.1 and import latest version jna-platform -->
 				<exclusion>
 					<groupId>net.java.dev.jna</groupId>
 					<artifactId>jna</artifactId>
@@ -100,32 +74,12 @@
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-values</artifactId>
 			<version>2.19.42</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jetbrains</groupId>
-					<artifactId>annotations</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<!-- ######## chronicle-algorithms ######## -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-algorithms</artifactId>
 			<version>2.19.42</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jetbrains</groupId>
-					<artifactId>annotations</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<!-- chronicle common component end -->
 
@@ -136,11 +90,6 @@
 			<artifactId>chronicle-queue</artifactId>
 			<version>5.19.74</version>
 			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-				<!-- exclusion jna-platform version 4.2.1 and import latest version jna-platform -->
 				<exclusion>
 					<groupId>net.openhft</groupId>
 					<artifactId>chronicle-core</artifactId>
@@ -171,10 +120,6 @@
 			<artifactId>chronicle-map</artifactId>
 			<version>3.19.42</version>
 			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
 				<exclusion>
 					<groupId>net.java.dev.jna</groupId>
 					<artifactId>jna</artifactId>
@@ -263,8 +208,13 @@
 		<!-- Java Native Access Platform -->
 		<dependency>
 			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna</artifactId>
+			<version>${jna.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
 			<artifactId>jna-platform</artifactId>
-			<version>5.6.0</version>
+			<version>${jna.version}</version>
 		</dependency>
 
 	</dependencies>

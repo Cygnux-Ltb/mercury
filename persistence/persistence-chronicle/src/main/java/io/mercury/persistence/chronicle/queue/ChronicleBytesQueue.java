@@ -25,6 +25,10 @@ public class ChronicleBytesQueue
 		this.useDirectMemory = builder.useDirectMemory;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public static Builder newBuilder() {
 		return new Builder();
 	}
@@ -43,6 +47,11 @@ public class ChronicleBytesQueue
 				supplier);
 	}
 
+	/**
+	 * 
+	 * @author yellow013
+	 *
+	 */
 	public static final class Builder extends QueueBuilder<Builder> {
 
 		private int bufferSize = 256;

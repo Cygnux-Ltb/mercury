@@ -54,7 +54,7 @@ public enum FileCycle {
 
 	/**
 	 * 输入<b> [epochSecond] </b><br>
-	 * 计算滚动周期计算文件的<b> [cycle] </b>
+	 * 计算文件的滚动周期<b> [cycle] </b>
 	 * 
 	 * @param epochSecond
 	 * @return

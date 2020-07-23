@@ -37,6 +37,11 @@ public class ChronicleStringQueue
 				supplier);
 	}
 
+	/**
+	 * 
+	 * @author yellow013
+	 *
+	 */
 	public static final class Builder extends QueueBuilder<Builder> {
 
 		private Builder() {
