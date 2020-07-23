@@ -45,7 +45,7 @@ public class ZmqSubscriber implements Subscriber, Closeable {
 		this.zSocket.setTCPKeepAliveCount(10);
 		this.zSocket.setTCPKeepAliveIdle(15);
 		this.zSocket.setTCPKeepAliveInterval(15);
-		this.subscriberName = "JeroMQ.SUB$" + configurator.host() + "::" + configurator.topic();
+		this.subscriberName = "ZMQ.SUB$" + configurator.host() + "::" + configurator.topic();
 	}
 
 	@Override

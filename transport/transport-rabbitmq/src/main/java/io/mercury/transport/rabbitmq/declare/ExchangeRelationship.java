@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import org.apache.commons.collections4.CollectionUtils;
 
 import io.mercury.common.collections.MutableLists;
+import io.mercury.serialization.json.JsonUtil;
 import io.mercury.transport.rabbitmq.RabbitMqDeclarant;
 import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
 
@@ -172,8 +173,13 @@ public final class ExchangeRelationship extends Relationship {
 		return this;
 	}
 
+	@Override
+	public String toString() {
+		return JsonUtil.toJsonHasNulls(this);
+	}
+
 	public static void main(String[] args) {
-		ExchangeRelationship.direct("TEST_DIRECT").exchangeAutoDelete(true).exchangeInternal(true);
+		System.out.println(ExchangeRelationship.direct("TEST_DIRECT").exchangeAutoDelete(true).exchangeInternal(true));
 	}
 
 }

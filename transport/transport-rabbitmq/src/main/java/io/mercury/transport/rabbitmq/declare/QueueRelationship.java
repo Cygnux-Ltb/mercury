@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 
 import io.mercury.common.collections.MutableLists;
+import io.mercury.serialization.json.JsonUtil;
 import io.mercury.transport.rabbitmq.RabbitMqDeclarant;
 import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
 
@@ -123,8 +124,13 @@ public final class QueueRelationship extends Relationship {
 		return this;
 	}
 
+	@Override
+	public String toString() {
+		return JsonUtil.toJsonHasNulls(this);
+	}
+
 	public static void main(String[] args) {
-		QueueRelationship.named("TEST");
+		System.out.println(QueueRelationship.named("TEST"));
 	}
 
 }

@@ -1,11 +1,10 @@
 package io.mercury.transport.rabbitmq.declare;
 
-import static java.lang.String.valueOf;
-
 import java.util.Map;
 
 import io.mercury.common.collections.MapUtil;
 import io.mercury.common.util.Assertor;
+import io.mercury.serialization.json.JsonUtil;
 
 public final class AmqpQueue {
 
@@ -22,11 +21,13 @@ public final class AmqpQueue {
 
 	/**
 	 * 定义队列
+	 * 
 	 * @param name
 	 * @return
 	 */
 	public static AmqpQueue named(String name) {
-		return new AmqpQueue(Assertor.nonEmpty(name, "name"));
+		Assertor.nonEmpty(name, "name");
+		return new AmqpQueue(name);
 	}
 
 	private AmqpQueue(String name) {
@@ -103,14 +104,9 @@ public final class AmqpQueue {
 		return this;
 	}
 
-	private final static String Template = "Queue([name==$name], [durable==$durable], [exclusive==$exclusive], "
-			+ "[autoDelete==$autoDelete], [args==$args])";
-
 	@Override
 	public String toString() {
-		return Template.replace("$name", name).replace("$durable", valueOf(durable))
-				.replace("$exclusive", valueOf(exclusive)).replace("$autoDelete", valueOf(autoDelete))
-				.replace("$args", valueOf(args));
+		return JsonUtil.toJsonHasNulls(this);
 	}
 
 	public boolean idempotent(AmqpQueue another) {

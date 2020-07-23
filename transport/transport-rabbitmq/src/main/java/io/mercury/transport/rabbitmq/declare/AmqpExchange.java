@@ -1,11 +1,10 @@
 package io.mercury.transport.rabbitmq.declare;
 
-import static java.lang.String.valueOf;
-
 import java.util.Map;
 
 import io.mercury.common.collections.MapUtil;
 import io.mercury.common.util.Assertor;
+import io.mercury.serialization.json.JsonUtil;
 
 public final class AmqpExchange {
 
@@ -29,7 +28,8 @@ public final class AmqpExchange {
 	 * @return
 	 */
 	public static AmqpExchange fanout(String name) {
-		return new AmqpExchange(ExchangeType.Fanout, Assertor.nonEmpty(name, "name"));
+		Assertor.nonEmpty(name, "name");
+		return new AmqpExchange(ExchangeType.Fanout, name);
 	}
 
 	/**
@@ -39,7 +39,8 @@ public final class AmqpExchange {
 	 * @return
 	 */
 	public static AmqpExchange direct(String name) {
-		return new AmqpExchange(ExchangeType.Direct, Assertor.nonEmpty(name, "name"));
+		Assertor.nonEmpty(name, "name");
+		return new AmqpExchange(ExchangeType.Direct, name);
 	}
 
 	/**
@@ -49,7 +50,8 @@ public final class AmqpExchange {
 	 * @return
 	 */
 	public static AmqpExchange topic(String name) {
-		return new AmqpExchange(ExchangeType.Topic, Assertor.nonEmpty(name, "name"));
+		Assertor.nonEmpty(name, "name");
+		return new AmqpExchange(ExchangeType.Topic, name);
 	}
 
 	/**
@@ -144,14 +146,9 @@ public final class AmqpExchange {
 		return this;
 	}
 
-	private final static String Template = "Exchange([name==$name], [type==$type], [durable==$durable], "
-			+ "[autoDelete==$autoDelete], [internal==$internal], [args==$args])";
-
 	@Override
 	public String toString() {
-		return Template.replace("$name", name).replace("$type", valueOf(type)).replace("$durable", valueOf(durable))
-				.replace("$autoDelete", valueOf(autoDelete)).replace("$internal", valueOf(internal))
-				.replace("$args", valueOf(args));
+		return JsonUtil.toJsonHasNulls(this);
 	}
 
 	/**

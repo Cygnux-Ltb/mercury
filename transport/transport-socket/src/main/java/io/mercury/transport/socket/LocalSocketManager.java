@@ -8,7 +8,7 @@ import io.mercury.transport.socket.configurator.SocketConfigurator;
 
 public class LocalSocketManager {
 
-	private static Map<String, SocketTransceiver> serverSocketMap = new ConcurrentHashMap<>(8);
+	private static final Map<String, SocketTransceiver> ServerSocketMap = new ConcurrentHashMap<>(8);
 
 	/**
 	 * 
@@ -20,14 +20,14 @@ public class LocalSocketManager {
 	public static synchronized SocketTransceiver getSocketTransceiver(String host, int port,
 			Consumer<byte[]> callback) {
 		String socketName = socketName(host, port);
-		if (serverSocketMap.containsKey(socketName))
-			return serverSocketMap.get(socketName);
+		if (ServerSocketMap.containsKey(socketName))
+			return ServerSocketMap.get(socketName);
 		else {
 			if (port <= 7000 || port >= 8000)
 				throw new RuntimeException("port error.");
 			SocketTransceiver transceiver = new SocketTransceiver(SocketConfigurator.builder().port(port).build(),
 					callback);
-			serverSocketMap.put(socketName, transceiver);
+			ServerSocketMap.put(socketName, transceiver);
 			return transceiver;
 		}
 	}
@@ -40,8 +40,8 @@ public class LocalSocketManager {
 	 * @return
 	 */
 	public static SocketTransceiver acquireSocketTransceiver(String name, int port) {
-		if (serverSocketMap.containsKey(name))
-			return serverSocketMap.get(name);
+		if (ServerSocketMap.containsKey(name))
+			return ServerSocketMap.get(name);
 		else
 			return null;
 	}

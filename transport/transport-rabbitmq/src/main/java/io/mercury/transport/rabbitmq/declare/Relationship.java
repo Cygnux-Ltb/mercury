@@ -11,7 +11,7 @@ import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
 
 public abstract class Relationship {
 
-	protected final Logger log = CommonLoggerFactory.getLogger(getClass());
+	protected static final Logger log = CommonLoggerFactory.getLogger(Relationship.class);
 
 	protected final MutableList<Binding> bindings = MutableLists.newFastList();
 

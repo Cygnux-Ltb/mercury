@@ -1,6 +1,6 @@
 package io.mercury.transport.rabbitmq.declare;
 
-import io.mercury.common.util.Assertor;
+import static io.mercury.common.util.Assertor.nonNull;
 
 public final class Binding {
 
@@ -30,9 +30,9 @@ public final class Binding {
 	 * @param routingKey
 	 */
 	Binding(AmqpExchange source, AmqpExchange destExchange, String routingKey) {
-		this.source = Assertor.nonNull(source, "source");
-		this.destExchange = Assertor.nonNull(destExchange, "destExchange");
-		this.routingKey = Assertor.nonNull(routingKey, "routingKey");
+		this.source = nonNull(source, "source");
+		this.destExchange = nonNull(destExchange, "destExchange");
+		this.routingKey = nonNull(routingKey, "routingKey");
 		this.destType = DestType.Exchange;
 	}
 
@@ -52,9 +52,9 @@ public final class Binding {
 	 * @param routingKey
 	 */
 	Binding(AmqpExchange source, AmqpQueue destQueue, String routingKey) {
-		this.source = Assertor.nonNull(source, "source");
-		this.destQueue = Assertor.nonNull(destQueue, "destQueue");
-		this.routingKey = Assertor.nonNull(routingKey, "routingKey");
+		this.source = nonNull(source, "source");
+		this.destQueue = nonNull(destQueue, "destQueue");
+		this.routingKey = nonNull(routingKey, "routingKey");
 		this.destType = DestType.Queue;
 	}
 

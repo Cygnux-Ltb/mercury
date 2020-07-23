@@ -30,7 +30,7 @@ import io.mercury.common.util.Assertor;
  */
 public class BatchProcessConsumer<T> extends DefaultConsumer {
 
-	private Logger log = CommonLoggerFactory.getLogger(getClass());
+	private static final Logger log = CommonLoggerFactory.getLogger(BatchProcessConsumer.class);
 
 	private Channel channel;
 

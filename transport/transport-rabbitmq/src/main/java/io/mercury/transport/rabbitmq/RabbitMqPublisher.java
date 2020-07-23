@@ -86,7 +86,8 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 	public RabbitMqPublisher(String tag, @Nonnull RmqPublisherConfigurator configurator, Consumer<Long> ackCallback,
 			Consumer<Long> noAckCallback) {
 		super(tag, "Publisher", configurator.connection());
-		this.publishExchange = Assertor.nonNull(configurator.publishExchange(), "exchangeRelation");
+		Assertor.nonNull(configurator.publishExchange(), "exchangeRelation");
+		this.publishExchange = configurator.publishExchange();
 		this.exchangeName = publishExchange.exchangeName();
 		this.defaultRoutingKey = configurator.defaultRoutingKey();
 		this.defaultMsgProps = configurator.defaultMsgProps();
@@ -121,17 +122,17 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 	}
 
 	@Override
-	public void send(byte[] msg) throws PublishFailedException {
+	public void send(@Nonnull byte[] msg) throws PublishFailedException {
 		publish(msg);
 	}
 
 	@Override
-	public void publish(byte[] msg) throws PublishFailedException {
+	public void publish(@Nonnull byte[] msg) throws PublishFailedException {
 		publish(defaultRoutingKey, msg, defaultMsgProps);
 	}
 
 	@Override
-	public void publish(String target, byte[] msg) throws PublishFailedException {
+	public void publish(@Nonnull String target, @Nonnull byte[] msg) throws PublishFailedException {
 		publish(target, msg, hasPropsSupplier ? msgPropsSupplier.get() : defaultMsgProps);
 	}
 
@@ -142,7 +143,8 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 	 * @param props
 	 * @throws PublishFailedException
 	 */
-	public void publish(String target, byte[] msg, BasicProperties props) throws PublishFailedException {
+	public void publish(@Nonnull String target, @Nonnull byte[] msg, @Nonnull BasicProperties props)
+			throws PublishFailedException {
 		// 记录重试次数
 		int retry = 0;
 		// 调用isConnected(), 检查channel和connection是否打开, 如果没有打开, 先销毁连接, 再重新创建连接.
