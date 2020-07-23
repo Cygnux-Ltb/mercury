@@ -1,6 +1,4 @@
-package io.mercury.common.serialization.specific;
-
-import io.mercury.common.serialization.Serializer;
+package io.mercury.common.serialization;
 
 @FunctionalInterface
 public interface TextSerializer<T> extends Serializer<T, String> {
