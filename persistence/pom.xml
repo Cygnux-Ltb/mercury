@@ -22,7 +22,7 @@
 		<module>persistence-kyotocabinet</module>
 		<module>persistence-redis</module>
 		<module>persistence-rocksdb</module>
-		<module>persistence-sqlite</module>
+		<module>persistence-h2</module>
 		<module>serialization-avro</module>
 		<module>serialization-json</module>
 	</modules>

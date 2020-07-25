@@ -1,4 +1,4 @@
-package io.mercury.persistence.sqlite;
+package io.mercury.persistence.h2;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
