@@ -9,7 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SQLiteJDBCUtils {
+public class H2ConnectorUtils {
 
 	private Connection connection;
 	private Statement statement;

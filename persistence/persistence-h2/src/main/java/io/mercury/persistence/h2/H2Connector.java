@@ -5,7 +5,7 @@ public class H2Connector {
 	/**
 	 * Connect to a sample database
 	 */
-	public static void connect() {
+	public void connect() {
 
 	}
 
@@ -13,7 +13,8 @@ public class H2Connector {
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
-		connect();
+		H2Connector connector = new H2Connector();
+		connector.connect();
 	}
 
 }
