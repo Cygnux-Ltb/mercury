@@ -3,7 +3,7 @@ package io.mercury.serialization.json;
 import static com.alibaba.fastjson.JSON.parseArray;
 import static com.alibaba.fastjson.JSON.parseObject;
 import static io.mercury.common.collections.ImmutableLists.newList;
-import static io.mercury.common.collections.ImmutableMaps.newMap;
+import static io.mercury.common.collections.ImmutableMaps.newImmutableMap;
 import static io.mercury.common.collections.MutableLists.newFastList;
 import static io.mercury.common.collections.MutableMaps.newUnifiedMap;
 
@@ -197,7 +197,7 @@ public final class JsonParser2 {
 	 */
 	public static final ImmutableMap<String, Object> toImmutableMap(@Nonnull String json) throws JsonParseException {
 		try {
-			return newMap(
+			return newImmutableMap(
 					// JSONObject实现Map接口, 转换为ImmutableMap
 					parseObject(json));
 		} catch (Exception e) {
