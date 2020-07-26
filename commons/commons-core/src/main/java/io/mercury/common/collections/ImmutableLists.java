@@ -21,11 +21,11 @@ public final class ImmutableLists {
 	 * 
 	 * ImmutableIntListFactory
 	 */
-	public static ImmutableIntListFactory IntListFactory() {
+	public static ImmutableIntListFactory getIntListFactory() {
 		return ImmutableIntListFactoryImpl.INSTANCE;
 	}
 
-	public static ImmutableIntList newIntList(int... values) {
+	public static ImmutableIntList newImmutableIntList(int... values) {
 		if (ArrayUtil.isNullOrEmpty(values))
 			return ImmutableIntListFactoryImpl.INSTANCE.empty();
 		return ImmutableIntListFactoryImpl.INSTANCE.with(values);
@@ -35,11 +35,11 @@ public final class ImmutableLists {
 	 * 
 	 * ImmutableLongListFactory
 	 */
-	public static ImmutableLongListFactory LongListFactory() {
+	public static ImmutableLongListFactory getLongListFactory() {
 		return ImmutableLongListFactoryImpl.INSTANCE;
 	}
 
-	public static ImmutableLongList newLongList(long... values) {
+	public static ImmutableLongList newImmutableLongList(long... values) {
 		if (ArrayUtil.isNullOrEmpty(values))
 			return ImmutableLongListFactoryImpl.INSTANCE.empty();
 		return ImmutableLongListFactoryImpl.INSTANCE.with(values);
@@ -49,24 +49,24 @@ public final class ImmutableLists {
 	 * 
 	 * ImmutableListFactory
 	 */
-	public static ImmutableListFactory ListFactory() {
+	public static ImmutableListFactory getListFactory() {
 		return ImmutableListFactoryImpl.INSTANCE;
 	}
 
-	public static <E> ImmutableList<E> newList(Iterable<E> iterable) {
+	public static <E> ImmutableList<E> newImmutableList(Iterable<E> iterable) {
 		if (iterable == null)
 			return ImmutableListFactoryImpl.INSTANCE.empty();
 		return ImmutableListFactoryImpl.INSTANCE.withAll(iterable);
 	}
 
-	public static <E> ImmutableList<E> newList(E e) {
+	public static <E> ImmutableList<E> newImmutableList(E e) {
 		if (e == null)
 			return ImmutableListFactoryImpl.INSTANCE.empty();
 		return ImmutableListFactoryImpl.INSTANCE.with(e);
 	}
 
 	@SafeVarargs
-	public static <E> ImmutableList<E> newList(E... values) {
+	public static <E> ImmutableList<E> newImmutableList(E... values) {
 		if (ArrayUtil.isNullOrEmpty(values))
 			return ImmutableListFactoryImpl.INSTANCE.empty();
 		return ImmutableListFactoryImpl.INSTANCE.with(values);

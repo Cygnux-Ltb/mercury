@@ -1,5 +1,8 @@
 package io.mercury.common.graph;
 
+import static io.mercury.common.collections.ImmutableSets.newImmutableSet;
+import static io.mercury.common.collections.MutableSets.newUnifiedSet;
+
 import java.util.function.Supplier;
 
 import org.eclipse.collections.api.set.ImmutableSet;
@@ -7,9 +10,6 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.traverse.BreadthFirstIterator;
-
-import io.mercury.common.collections.ImmutableSets;
-import io.mercury.common.collections.MutableSets;
 
 public final class DirectedGraph<V, E extends Edge> {
 
@@ -61,15 +61,15 @@ public final class DirectedGraph<V, E extends Edge> {
 	}
 
 	public ImmutableSet<V> allVertex() {
-		return ImmutableSets.newSet(savedGraph.vertexSet());
+		return newImmutableSet(savedGraph.vertexSet());
 	}
 
 	public ImmutableSet<E> allEdge() {
-		return ImmutableSets.newSet(savedGraph.edgeSet());
+		return newImmutableSet(savedGraph.edgeSet());
 	}
 
 	public ImmutableSet<V> allChildVertex(V vertex) {
-		return MutableSets.newUnifiedSet(new BreadthFirstIterator<>(savedGraph, vertex)).toImmutable();
+		return newUnifiedSet(new BreadthFirstIterator<>(savedGraph, vertex)).toImmutable();
 	}
 
 	public Graph<V, E> savedGraph() {
@@ -90,7 +90,7 @@ public final class DirectedGraph<V, E extends Edge> {
 
 		graph.addEdge(1, 11);
 		graph.addEdge(1, 12);
-		// graph.addEdge(12, 1);
+		graph.addEdge(12, 1);
 		graph.addEdge(1, 13);
 		graph.addEdge(12, 22);
 		graph.addEdge(22, 221);

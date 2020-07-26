@@ -32,7 +32,7 @@ public final class ImmutableMaps {
 	 * 
 	 * ImmutableIntIntMapFactory
 	 */
-	public static ImmutableIntIntMapFactory IntIntMapFactory() {
+	public static ImmutableIntIntMapFactory getIntIntMapFactory() {
 		return ImmutableIntIntMapFactoryImpl.INSTANCE;
 	}
 
@@ -40,7 +40,7 @@ public final class ImmutableMaps {
 	 * 
 	 * ImmutableIntLongMapFactory
 	 */
-	public static ImmutableIntLongMapFactory IntLongMapFactory() {
+	public static ImmutableIntLongMapFactory getIntLongMapFactory() {
 		return ImmutableIntLongMapFactoryImpl.INSTANCE;
 	}
 
@@ -48,7 +48,7 @@ public final class ImmutableMaps {
 	 * 
 	 * ImmutableIntDoubleMapFactory
 	 */
-	public static ImmutableIntDoubleMapFactory IntDoubleMapFactory() {
+	public static ImmutableIntDoubleMapFactory getIntDoubleMapFactory() {
 		return ImmutableIntDoubleMapFactoryImpl.INSTANCE;
 	}
 
@@ -56,7 +56,7 @@ public final class ImmutableMaps {
 	 * 
 	 * ImmutableIntObjectMapFactory
 	 */
-	public static ImmutableIntObjectMapFactory IntObjectMapFactory() {
+	public static ImmutableIntObjectMapFactory getIntObjectMapFactory() {
 		return ImmutableIntObjectMapFactoryImpl.INSTANCE;
 	}
 
@@ -64,7 +64,7 @@ public final class ImmutableMaps {
 	 * 
 	 * ImmutableLongIntMapFactory
 	 */
-	public static ImmutableLongIntMapFactory LongIntMapFactory() {
+	public static ImmutableLongIntMapFactory getLongIntMapFactory() {
 		return ImmutableLongIntMapFactoryImpl.INSTANCE;
 	}
 
@@ -72,7 +72,7 @@ public final class ImmutableMaps {
 	 * 
 	 * ImmutableLongLongMapFactory
 	 */
-	public static ImmutableLongLongMapFactory LongLongMapFactory() {
+	public static ImmutableLongLongMapFactory getLongLongMapFactory() {
 		return ImmutableLongLongMapFactoryImpl.INSTANCE;
 	}
 
@@ -80,7 +80,7 @@ public final class ImmutableMaps {
 	 * 
 	 * ImmutableLongDoubleMapFactory
 	 */
-	public static ImmutableLongDoubleMapFactory LongDoubleMapFactory() {
+	public static ImmutableLongDoubleMapFactory getLongDoubleMapFactory() {
 		return ImmutableLongDoubleMapFactoryImpl.INSTANCE;
 	}
 
@@ -88,7 +88,7 @@ public final class ImmutableMaps {
 	 * 
 	 * ImmutableLongObjectMapFactory
 	 */
-	public static ImmutableLongObjectMapFactory LongObjectMapFactory() {
+	public static ImmutableLongObjectMapFactory getLongObjectMapFactory() {
 		return ImmutableLongObjectMapFactoryImpl.INSTANCE;
 	}
 
@@ -96,7 +96,7 @@ public final class ImmutableMaps {
 	 * 
 	 * ImmutableMapFactory
 	 */
-	public static ImmutableMapFactory getFactory() {
+	public static ImmutableMapFactory getMapFactory() {
 		return ImmutableMapFactoryImpl.INSTANCE;
 	}
 

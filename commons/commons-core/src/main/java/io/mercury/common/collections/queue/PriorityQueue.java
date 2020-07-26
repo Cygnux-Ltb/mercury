@@ -15,19 +15,19 @@ public class PriorityQueue<E> {
 	private MutableSortedSet<E> prioritySet = MutableSets.newTreeSortedSet();
 	private MutableSortedSet<E> secondarySet = MutableSets.newTreeSortedSet();
 
-	public boolean addAllToPrioritySet(Collection<E> collection) {
+	public boolean addPriority(Collection<E> collection) {
 		return prioritySet.addAll(collection);
 	}
 
-	public boolean addToPrioritySet(E e) {
+	public boolean addPriority(E e) {
 		return prioritySet.add(e);
 	}
 
-	public boolean addAllToSecondarySet(Collection<E> collection) {
+	public boolean addSecondary(Collection<E> collection) {
 		return secondarySet.addAll(collection);
 	}
 
-	public boolean addToSecondarySet(E e) {
+	public boolean addSecondary(E e) {
 		return secondarySet.add(e);
 	}
 

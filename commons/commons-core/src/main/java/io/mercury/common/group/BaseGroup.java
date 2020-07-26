@@ -23,7 +23,7 @@ public abstract class BaseGroup<K, V> implements Group<K, V> {
 
 	@Override
 	public ImmutableList<V> memberList() {
-		return ImmutableLists.newList(savedMap.values());
+		return ImmutableLists.newImmutableList(savedMap.values());
 	}
 
 	@Nonnull

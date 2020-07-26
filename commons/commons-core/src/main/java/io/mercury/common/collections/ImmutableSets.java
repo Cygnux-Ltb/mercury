@@ -29,15 +29,15 @@ public final class ImmutableSets {
 	 * 
 	 * ImmutableIntSetFactory
 	 */
-	public static ImmutableIntSetFactory IntSetFactory() {
+	public static ImmutableIntSetFactory getIntSetFactory() {
 		return ImmutableIntSetFactoryImpl.INSTANCE;
 	}
 
-	public static ImmutableIntSet newIntSet(int i) {
+	public static ImmutableIntSet newImmutableIntSet(int i) {
 		return ImmutableIntSetFactoryImpl.INSTANCE.with(i);
 	}
 
-	public static ImmutableIntSet newIntSet(@Nonnull int... values) {
+	public static ImmutableIntSet newImmutableIntSet(@Nonnull int... values) {
 		if (isNullOrEmpty(values))
 			return ImmutableIntSetFactoryImpl.INSTANCE.empty();
 		return ImmutableIntSetFactoryImpl.INSTANCE.with(values);
@@ -46,15 +46,15 @@ public final class ImmutableSets {
 	/**
 	 * ImmutableLongSetFactory
 	 */
-	public static ImmutableLongSetFactory LongSetFactory() {
+	public static ImmutableLongSetFactory getLongSetFactory() {
 		return ImmutableLongSetFactoryImpl.INSTANCE;
 	}
 
-	public static ImmutableLongSet newLongSet(long l) {
+	public static ImmutableLongSet newImmutableLongSet(long l) {
 		return ImmutableLongSetFactoryImpl.INSTANCE.with(l);
 	}
 
-	public static ImmutableLongSet newLongSet(@Nonnull long... values) {
+	public static ImmutableLongSet newImmutableLongSet(@Nonnull long... values) {
 		if (isNullOrEmpty(values))
 			return ImmutableLongSetFactoryImpl.INSTANCE.empty();
 		return ImmutableLongSetFactoryImpl.INSTANCE.with(values);
@@ -63,15 +63,15 @@ public final class ImmutableSets {
 	/**
 	 * ImmutableDoubleSetFactory
 	 */
-	public static ImmutableDoubleSetFactory DoubleSetFactory() {
+	public static ImmutableDoubleSetFactory getDoubleSetFactory() {
 		return ImmutableDoubleSetFactoryImpl.INSTANCE;
 	}
 
-	public static ImmutableDoubleSet newDoubleSet(double d) {
+	public static ImmutableDoubleSet newImmutableDoubleSet(double d) {
 		return ImmutableDoubleSetFactoryImpl.INSTANCE.with(d);
 	}
 
-	public static ImmutableDoubleSet newDoubleSet(@Nonnull double... values) {
+	public static ImmutableDoubleSet newImmutableDoubleSet(@Nonnull double... values) {
 		if (isNullOrEmpty(values))
 			return ImmutableDoubleSetFactoryImpl.INSTANCE.empty();
 		return ImmutableDoubleSetFactoryImpl.INSTANCE.with(values);
@@ -80,24 +80,24 @@ public final class ImmutableSets {
 	/**
 	 * ImmutableSetFactory
 	 */
-	public static ImmutableSetFactory SetFactory() {
+	public static ImmutableSetFactory getSetFactory() {
 		return ImmutableSetFactoryImpl.INSTANCE;
 	}
 
-	public static <E> ImmutableSet<E> newSet(@Nonnull Iterable<E> iterable) {
+	public static <E> ImmutableSet<E> newImmutableSet(@Nonnull Iterable<E> iterable) {
 		if (iterable == null)
 			return ImmutableSetFactoryImpl.INSTANCE.empty();
 		return ImmutableSetFactoryImpl.INSTANCE.withAll(iterable);
 	}
 
-	public static <E> ImmutableSet<E> newSet(E e) {
+	public static <E> ImmutableSet<E> newImmutableSet(E e) {
 		if (e == null)
 			return ImmutableSetFactoryImpl.INSTANCE.empty();
 		return ImmutableSetFactoryImpl.INSTANCE.with(e);
 	}
 
 	@SafeVarargs
-	public static <E> ImmutableSet<E> newSet(@Nonnull E... values) {
+	public static <E> ImmutableSet<E> newImmutableSet(@Nonnull E... values) {
 		if (isNullOrEmpty(values))
 			return ImmutableSetFactoryImpl.INSTANCE.empty();
 		return ImmutableSetFactoryImpl.INSTANCE.with(values);
@@ -110,14 +110,14 @@ public final class ImmutableSets {
 		return ImmutableSortedSetFactoryImpl.INSTANCE;
 	}
 
-	public static <E> ImmutableSortedSet<E> newSortedSet(@Nonnull Iterable<E> iterable) {
+	public static <E> ImmutableSortedSet<E> newImmutableSortedSet(@Nonnull Iterable<E> iterable) {
 		if (iterable == null)
 			return ImmutableSortedSetFactoryImpl.INSTANCE.empty();
 		return ImmutableSortedSetFactoryImpl.INSTANCE.withAll(iterable);
 	}
 
 	@SafeVarargs
-	public static <E> ImmutableSortedSet<E> newSortedSet(@Nonnull E... values) {
+	public static <E> ImmutableSortedSet<E> newImmutableSortedSet(@Nonnull E... values) {
 		if (isNullOrEmpty(values))
 			return ImmutableSortedSetFactoryImpl.INSTANCE.empty();
 		return ImmutableSortedSetFactoryImpl.INSTANCE.with(values);
