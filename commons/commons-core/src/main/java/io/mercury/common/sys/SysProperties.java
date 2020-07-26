@@ -15,7 +15,7 @@ public final class SysProperties {
 	/**
 	 * System.getProperties()
 	 */
-	public static final ImmutableMap<String, String> All = ImmutableMaps.newMap(() -> {
+	private static final ImmutableMap<String, String> Properties = ImmutableMaps.newImmutableMap(() -> {
 		MutableMap<String, String> map = MutableMaps.newUnifiedMap();
 		System.getProperties().entrySet()
 				.forEach(entity -> map.put(entity.getKey().toString(), entity.getValue().toString()));
@@ -23,7 +23,7 @@ public final class SysProperties {
 	});
 
 	public static final String get(String key) {
-		return All.get(key);
+		return Properties.get(key);
 	}
 
 	/*
@@ -117,7 +117,7 @@ public final class SysProperties {
 	public static final String USER_COUNTRY = System.getProperty("user.country");
 
 	public static void main(String[] args) {
-		All.forEachKeyValue((key, value) -> System.out.println(key + " -> " + value));
+		Properties.forEachKeyValue((key, value) -> System.out.println(key + " -> " + value));
 
 		System.getProperties().entrySet().forEach(
 				entity -> System.out.println(entity.getKey().toString() + "---" + entity.getValue().toString()));

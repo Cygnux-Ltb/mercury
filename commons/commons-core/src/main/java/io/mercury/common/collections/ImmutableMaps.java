@@ -94,28 +94,46 @@ public final class ImmutableMaps {
 
 	/**
 	 * 
-	 * MapFactory
+	 * ImmutableMapFactory
 	 */
-	public static ImmutableMapFactory MapFactory() {
+	public static ImmutableMapFactory getFactory() {
 		return ImmutableMapFactoryImpl.INSTANCE;
 	}
 
-	public static <K, V> ImmutableMap<K, V> newMap(K key, V value) {
-		if (key == null || value == null)
-			return ImmutableMapFactoryImpl.INSTANCE.empty();
+	/**
+	 * 
+	 * @param <K>
+	 * @param <V>
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	public static <K, V> ImmutableMap<K, V> newImmutableMap(K key, V value) {
 		return ImmutableMapFactoryImpl.INSTANCE.with(key, value);
 	}
 
-	public static <K, V> ImmutableMap<K, V> newMap(Map<K, V> map) {
+	/**
+	 * 
+	 * @param <K>
+	 * @param <V>
+	 * @param map
+	 * @return
+	 */
+	public static <K, V> ImmutableMap<K, V> newImmutableMap(Map<K, V> map) {
 		if (map == null || map.isEmpty())
 			return ImmutableMapFactoryImpl.INSTANCE.empty();
 		return ImmutableMapFactoryImpl.INSTANCE.withAll(map);
 	}
 
-	public static <K, V> ImmutableMap<K, V> newMap(Supplier<Map<K, V>> supplier) {
+	/**
+	 * @param <Map<K,  V>>
+	 * @param supplier
+	 * @return ImmutableMap<K, V>
+	 */
+	public static <K, V> ImmutableMap<K, V> newImmutableMap(Supplier<Map<K, V>> supplier) {
 		if (supplier == null)
-			return newMap(MutableMaps.newUnifiedMap());
-		return newMap(supplier.get());
+			return newImmutableMap(MutableMaps.newUnifiedMap());
+		return newImmutableMap(supplier.get());
 	}
 
 }
