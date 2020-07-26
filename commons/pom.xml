@@ -22,10 +22,8 @@
 		<module>commons-graph</module>
 		<module>commons-jmh</module>
 		<module>commons-log</module>
+		<module>commons-reflect</module>
 	</modules>
-
-	<properties>
-	</properties>
 
 	<build>
 		<plugins>
@@ -53,11 +51,13 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- commons core -->
 			<dependency>
 				<groupId>io.mercury</groupId>
 				<artifactId>commons-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<!-- commons log -->
 			<dependency>
 				<groupId>io.mercury</groupId>
 				<artifactId>commons-log</artifactId>
