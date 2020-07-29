@@ -1,7 +1,5 @@
 package io.mercury.serialization.json;
 
-import static com.alibaba.fastjson.JSON.parseArray;
-import static com.alibaba.fastjson.JSON.parseObject;
 import static io.mercury.common.collections.ImmutableLists.newImmutableList;
 import static io.mercury.common.collections.ImmutableMaps.newImmutableMap;
 import static io.mercury.common.collections.MutableLists.newFastList;
@@ -19,12 +17,21 @@ import org.eclipse.collections.api.map.ImmutableMap;
 import org.eclipse.collections.api.map.MutableMap;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONValidator;
 import com.alibaba.fastjson.JSONValidator.Type;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+
+import io.mercury.common.util.Assertor;
 
 public final class JsonParser2 {
+
+	private static final ObjectMapper Mapper = new ObjectMapper()
+	// TODO 添加反序列化属性
+	;
+
+	private static final TypeFactory TypeFactory = Mapper.getTypeFactory();
 
 	/**
 	 * 
@@ -32,6 +39,7 @@ public final class JsonParser2 {
 	 * @return
 	 */
 	public static boolean isJsonValue(String str) {
+		// TODO 使用Jackson
 		return JSONValidator.from(str).getType() == Type.Value;
 	}
 
@@ -41,6 +49,7 @@ public final class JsonParser2 {
 	 * @return
 	 */
 	public static boolean isJsonArray(String str) {
+		// TODO 使用Jackson
 		return JSONValidator.from(str).getType() == Type.Array;
 	}
 
@@ -55,34 +64,6 @@ public final class JsonParser2 {
 
 	/**
 	 * 
-	 * @param json
-	 * @return
-	 * @throws JsonParseException
-	 */
-	public static final JSONObject toJsonObject(@Nonnull String json) throws JsonParseException {
-		try {
-			return parseObject(json);
-		} catch (Exception e) {
-			throw new JsonParseException(json, e);
-		}
-	}
-
-	/**
-	 * 
-	 * @param json
-	 * @return
-	 * @throws JsonParseException
-	 */
-	public static final JSONArray toJsonArray(@Nonnull String json) throws JsonParseException {
-		try {
-			return parseArray(json);
-		} catch (Exception e) {
-			throw new JsonParseException(json, e);
-		}
-	}
-
-	/**
-	 * 
 	 * @param <T>
 	 * @param json
 	 * @param clazz
@@ -91,7 +72,9 @@ public final class JsonParser2 {
 	 */
 	public static final <T> T toObject(@Nonnull String json, @Nonnull Class<T> clazz) throws JsonParseException {
 		try {
-			return parseObject(json, clazz);
+			Assertor.nonNull(json, "json");
+			Assertor.nonNull(clazz, "clazz");
+			return Mapper.readValue(json, clazz);
 		} catch (Exception e) {
 			throw new JsonParseException(json, e);
 		}
@@ -103,9 +86,10 @@ public final class JsonParser2 {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final List<Object> toList(@Nonnull String json) throws JsonParseException {
+	public static final <T> List<T> toList(@Nonnull String json) throws JsonParseException {
 		try {
-			return parseArray(json);
+			return Mapper.readValue(json, new TypeReference<List<T>>() {
+			});
 		} catch (Exception e) {
 			throw new JsonParseException(json, e);
 		}
@@ -121,7 +105,7 @@ public final class JsonParser2 {
 	 */
 	public static final <T> List<T> toList(@Nonnull String json, @Nonnull Class<T> clazz) throws JsonParseException {
 		try {
-			return parseArray(json, clazz);
+			return Mapper.readValue(json, TypeFactory.constructCollectionLikeType(List.class, clazz));
 		} catch (Exception e) {
 			throw new JsonParseException(json, e);
 		}
@@ -133,11 +117,12 @@ public final class JsonParser2 {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final MutableList<Object> toMutableList(@Nonnull String json) throws JsonParseException {
+	public static final <T> MutableList<T> toMutableList(@Nonnull String json) throws JsonParseException {
 		try {
 			return newFastList(
-					// JSONArray实现List接口, 转换为MutableList
-					parseArray(json));
+					// List接口, 转换为MutableList
+					Mapper.readValue(json, new TypeReference<List<T>>() {
+					}));
 		} catch (Exception e) {
 			throw new JsonParseException(json, e);
 		}
@@ -149,11 +134,12 @@ public final class JsonParser2 {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final ImmutableList<Object> toImmutableList(@Nonnull String json) throws JsonParseException {
+	public static final <T> ImmutableList<T> toImmutableList(@Nonnull String json) throws JsonParseException {
 		try {
 			return newImmutableList(
-					// JSONArray实现List接口, 转换为ImmutableList
-					parseArray(json));
+					// List接口, 转换为MutableList
+					Mapper.readValue(json, new TypeReference<List<T>>() {
+					}));
 		} catch (Exception e) {
 			throw new JsonParseException(json, e);
 		}
@@ -165,9 +151,10 @@ public final class JsonParser2 {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final Map<String, Object> toMap(@Nonnull String json) throws JsonParseException {
+	public static final <K, V> Map<K, V> toMap(@Nonnull String json) throws JsonParseException {
 		try {
-			return parseObject(json);
+			return Mapper.readValue(json, new TypeReference<Map<K, V>>() {
+			});
 		} catch (Exception e) {
 			throw new JsonParseException(json, e);
 		}
@@ -179,11 +166,27 @@ public final class JsonParser2 {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final MutableMap<String, Object> toMutableMap(@Nonnull String json) throws JsonParseException {
+	public static final <K, V> Map<K, V> toMap(@Nonnull String json, Class<K> keyClass, Class<V> valueClass)
+			throws JsonParseException {
+		try {
+			return Mapper.readValue(json, TypeFactory.constructMapLikeType(Map.class, keyClass, valueClass));
+		} catch (Exception e) {
+			throw new JsonParseException(json, e);
+		}
+	}
+
+	/**
+	 * 
+	 * @param json
+	 * @return
+	 * @throws JsonParseException
+	 */
+	public static final <K, V> MutableMap<K, V> toMutableMap(@Nonnull String json) throws JsonParseException {
 		try {
 			return newUnifiedMap(
-					// JSONObject实现Map接口, 转换为MutableMap
-					parseObject(json));
+					// Map接口, 转换为MutableMap
+					Mapper.readValue(json, new TypeReference<Map<K, V>>() {
+					}));
 		} catch (Exception e) {
 			throw new JsonParseException(json, e);
 		}
@@ -195,11 +198,12 @@ public final class JsonParser2 {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final ImmutableMap<String, Object> toImmutableMap(@Nonnull String json) throws JsonParseException {
+	public static final <K, V> ImmutableMap<K, V> toImmutableMap(@Nonnull String json) throws JsonParseException {
 		try {
 			return newImmutableMap(
 					// JSONObject实现Map接口, 转换为ImmutableMap
-					parseObject(json));
+					Mapper.readValue(json, new TypeReference<Map<K, V>>() {
+					}));
 		} catch (Exception e) {
 			throw new JsonParseException(json, e);
 		}
