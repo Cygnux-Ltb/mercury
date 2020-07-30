@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- This is persistence pom.xml -->
@@ -17,14 +19,14 @@
 	<modules>
 		<module>persistence-arangodb</module>
 		<module>persistence-chronicle</module>
+		<module>persistence-h2</module>
 		<module>persistence-kyotocabinet</module>
 		<module>persistence-redis</module>
 		<module>persistence-rocksdb</module>
-		<module>persistence-h2</module>
 		<module>serialization-avro</module>
 		<module>serialization-json</module>
-    <module>serialization-kryo</module>
-  </modules>
+		<module>serialization-kryo</module>
+	</modules>
 
 	<properties>
 		<jackson.version>2.11.1</jackson.version>

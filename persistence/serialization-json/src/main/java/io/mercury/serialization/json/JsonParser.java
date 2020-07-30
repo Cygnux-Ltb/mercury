@@ -28,29 +28,29 @@ public final class JsonParser {
 
 	/**
 	 * 
-	 * @param str
+	 * @param json
 	 * @return
 	 */
-	public static boolean isJsonValue(String str) {
-		return JSONValidator.from(str).getType() == Type.Value;
+	public static boolean isJsonValue(String json) {
+		return JSONValidator.from(json).getType() == Type.Value;
 	}
 
 	/**
 	 * 
-	 * @param str
+	 * @param json
 	 * @return
 	 */
-	public static boolean isJsonArray(String str) {
-		return JSONValidator.from(str).getType() == Type.Array;
+	public static boolean isJsonArray(String json) {
+		return JSONValidator.from(json).getType() == Type.Array;
 	}
 
 	/**
 	 * 
-	 * @param str
+	 * @param json
 	 * @return
 	 */
-	public static boolean isJsonObject(String str) {
-		return JSONValidator.from(str).getType() == Type.Object;
+	public static boolean isJsonObject(String json) {
+		return JSONValidator.from(json).getType() == Type.Object;
 	}
 
 	/**

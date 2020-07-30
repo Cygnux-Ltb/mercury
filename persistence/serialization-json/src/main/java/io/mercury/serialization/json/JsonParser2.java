@@ -23,8 +23,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
-import io.mercury.common.util.Assertor;
-
 public final class JsonParser2 {
 
 	private static final ObjectMapper Mapper = new ObjectMapper()
@@ -35,12 +33,12 @@ public final class JsonParser2 {
 
 	/**
 	 * 
-	 * @param str
+	 * @param json
 	 * @return
 	 */
-	public static boolean isJsonValue(String str) {
+	public static boolean isJsonValue(String json) {
 		// TODO 使用Jackson
-		return JSONValidator.from(str).getType() == Type.Value;
+		return JSONValidator.from(json).getType() == Type.Value;
 	}
 
 	/**
@@ -48,18 +46,19 @@ public final class JsonParser2 {
 	 * @param str
 	 * @return
 	 */
-	public static boolean isJsonArray(String str) {
+	public static boolean isJsonArray(String json) {
 		// TODO 使用Jackson
-		return JSONValidator.from(str).getType() == Type.Array;
+		return JSONValidator.from(json).getType() == Type.Array;
 	}
 
 	/**
 	 * 
-	 * @param str
+	 * @param json
 	 * @return
 	 */
-	public static boolean isJsonObject(String str) {
-		return JSONValidator.from(str).getType() == Type.Object;
+	public static boolean isJsonObject(String json) {
+		// TODO 使用Jackson
+		return JSONValidator.from(json).getType() == Type.Object;
 	}
 
 	/**
@@ -72,8 +71,8 @@ public final class JsonParser2 {
 	 */
 	public static final <T> T toObject(@Nonnull String json, @Nonnull Class<T> clazz) throws JsonParseException {
 		try {
-			Assertor.nonNull(json, "json");
-			Assertor.nonNull(clazz, "clazz");
+			if (json == null || clazz == null)
+				return null;
 			return Mapper.readValue(json, clazz);
 		} catch (Exception e) {
 			throw new JsonParseException(json, e);
@@ -163,6 +162,8 @@ public final class JsonParser2 {
 	/**
 	 * 
 	 * @param json
+	 * @param keyClass
+	 * @param valueClass
 	 * @return
 	 * @throws JsonParseException
 	 */
