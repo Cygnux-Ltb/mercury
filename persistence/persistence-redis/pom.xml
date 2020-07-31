@@ -16,9 +16,7 @@
 
 	<packaging>jar</packaging>
 
-
 	<dependencies>
-
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>commons-concurrent</artifactId>
@@ -30,7 +28,6 @@
 			<artifactId>jedis</artifactId>
 			<version>3.3.0</version>
 		</dependency>
-
 	</dependencies>
 
 </project>

@@ -24,7 +24,7 @@ public class UseExample {
 		RocksDB.loadLibrary();
 	}
 
-	RocksDB rocksDB;
+	private RocksDB rocksdb;
 
 	// RocksDB.DEFAULT_COLUMN_FAMILY
 	public void testDefaultColumnFamily() throws RocksDBException, IOException {
@@ -34,29 +34,29 @@ public class UseExample {
 		// 文件不存在，则先创建文件
 		if (!Files.isSymbolicLink(Paths.get(dbPath)))
 			Files.createDirectories(Paths.get(dbPath));
-		rocksDB = RocksDB.open(options, dbPath);
+		rocksdb = RocksDB.open(options, dbPath);
 
 		/**
 		 * 简单key-value
 		 */
 		byte[] key = "Hello".getBytes();
 		byte[] value = "World".getBytes();
-		rocksDB.put(key, value);
+		rocksdb.put(key, value);
 
-		byte[] getValue = rocksDB.get(key);
+		byte[] getValue = rocksdb.get(key);
 		System.out.println(new String(getValue));
 
 		/**
 		 * 通过List做主键查询
 		 */
-		rocksDB.put("SecondKey".getBytes(), "SecondValue".getBytes());
+		rocksdb.put("SecondKey".getBytes(), "SecondValue".getBytes());
 
 		List<byte[]> keys = new ArrayList<>();
 		keys.add(key);
 		keys.add("SecondKey".getBytes());
 
 		@SuppressWarnings("deprecation")
-		Map<byte[], byte[]> valueMap = rocksDB.multiGet(keys);
+		Map<byte[], byte[]> valueMap = rocksdb.multiGet(keys);
 		for (Map.Entry<byte[], byte[]> entry : valueMap.entrySet()) {
 			System.out.println(new String(entry.getKey()) + ":" + new String(entry.getValue()));
 		}
@@ -64,7 +64,7 @@ public class UseExample {
 		/**
 		 * 打印全部[key - value]
 		 */
-		RocksIterator iter = rocksDB.newIterator();
+		RocksIterator iter = rocksdb.newIterator();
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			System.out.println("iter key:" + new String(iter.key()) + ", iter value:" + new String(iter.value()));
 		}
@@ -72,10 +72,10 @@ public class UseExample {
 		/**
 		 * 删除一个key
 		 */
-		rocksDB.delete(key);
+		rocksdb.delete(key);
 		System.out.println("after remove key:" + new String(key));
 
-		iter = rocksDB.newIterator();
+		iter = rocksdb.newIterator();
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			System.out.println("iter key:" + new String(iter.key()) + ", iter value:" + new String(iter.value()));
 		}
@@ -104,21 +104,21 @@ public class UseExample {
 		DBOptions dbOptions = new DBOptions();
 		dbOptions.setCreateIfMissing(true);
 
-		rocksDB = RocksDB.open(dbOptions, dbPath, columnFamilyDescriptors, columnFamilyHandles);
+		rocksdb = RocksDB.open(dbOptions, dbPath, columnFamilyDescriptors, columnFamilyHandles);
 		for (int i = 0; i < columnFamilyDescriptors.size(); i++) {
 			if (new String(columnFamilyDescriptors.get(i).getName()).equals(table)) {
-				rocksDB.dropColumnFamily(columnFamilyHandles.get(i));
+				rocksdb.dropColumnFamily(columnFamilyHandles.get(i));
 			}
 		}
 
-		ColumnFamilyHandle columnFamilyHandle = rocksDB
+		ColumnFamilyHandle columnFamilyHandle = rocksdb
 				.createColumnFamily(new ColumnFamilyDescriptor(table.getBytes(), new ColumnFamilyOptions()));
-		rocksDB.put(columnFamilyHandle, key.getBytes(), value.getBytes());
+		rocksdb.put(columnFamilyHandle, key.getBytes(), value.getBytes());
 
-		byte[] getValue = rocksDB.get(columnFamilyHandle, key.getBytes());
+		byte[] getValue = rocksdb.get(columnFamilyHandle, key.getBytes());
 		System.out.println("get Value : " + new String(getValue));
 
-		rocksDB.put(columnFamilyHandle, "SecondKey".getBytes(), "SecondValue".getBytes());
+		rocksdb.put(columnFamilyHandle, "SecondKey".getBytes(), "SecondValue".getBytes());
 
 		List<byte[]> keys = new ArrayList<byte[]>();
 		keys.add(key.getBytes());
@@ -129,14 +129,14 @@ public class UseExample {
 		handleList.add(columnFamilyHandle);
 
 		@SuppressWarnings("deprecation")
-		Map<byte[], byte[]> multiGet = rocksDB.multiGet(handleList, keys);
+		Map<byte[], byte[]> multiGet = rocksdb.multiGet(handleList, keys);
 		for (Map.Entry<byte[], byte[]> entry : multiGet.entrySet()) {
 			System.out.println(new String(entry.getKey()) + "--" + new String(entry.getValue()));
 		}
 
-		rocksDB.delete(columnFamilyHandle, key.getBytes());
+		rocksdb.delete(columnFamilyHandle, key.getBytes());
 
-		RocksIterator iter = rocksDB.newIterator(columnFamilyHandle);
+		RocksIterator iter = rocksdb.newIterator(columnFamilyHandle);
 		for (iter.seekToFirst(); iter.isValid(); iter.next()) {
 			System.out.println(new String(iter.key()) + ":" + new String(iter.value()));
 		}
