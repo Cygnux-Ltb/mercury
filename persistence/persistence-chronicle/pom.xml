@@ -89,28 +89,6 @@
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-queue</artifactId>
 			<version>5.19.75</version>
-			<exclusions>
-				<exclusion>
-					<groupId>net.openhft</groupId>
-					<artifactId>chronicle-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>net.openhft</groupId>
-					<artifactId>chronicle-wire</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>net.openhft</groupId>
-					<artifactId>chronicle-bytes</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>net.openhft</groupId>
-					<artifactId>chronicle-wire</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>net.openhft</groupId>
-					<artifactId>chronicle-threads</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<!-- ######################################################### -->
@@ -132,22 +110,24 @@
 					<groupId>net.java.dev.jna</groupId>
 					<artifactId>jna-platform</artifactId>
 				</exclusion>
+
 				<exclusion>
 					<groupId>net.openhft</groupId>
 					<artifactId>chronicle-core</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>net.openhft</groupId>
-					<artifactId>chronicle-wire</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>net.openhft</groupId>
-					<artifactId>chronicle-bytes</artifactId>
+					<artifactId>chronicle-values</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>net.openhft</groupId>
 					<artifactId>chronicle-threads</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>net.openhft</groupId>
+					<artifactId>chronicle-wire</artifactId>
+				</exclusion>
+
 				<exclusion>
 					<groupId>org.codehaus.jettison</groupId>
 					<artifactId>jettison</artifactId>
