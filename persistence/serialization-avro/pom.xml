@@ -118,7 +118,7 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-avro</artifactId>
-			<version>2.11.1</version>
+			<version>${jackson.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.apache.avro</groupId>
@@ -126,7 +126,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
 	</dependencies>
 
 </project>

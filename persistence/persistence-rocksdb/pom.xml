@@ -17,7 +17,6 @@
 	
 
 	<dependencies>
-
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>commons-concurrent</artifactId>
@@ -28,7 +27,7 @@
 		<dependency>
 			<groupId>org.rocksdb</groupId>
 			<artifactId>rocksdbjni</artifactId>
-			<version>6.10.2</version>
+			<version>6.11.4</version>
 		</dependency>
 
 		<dependency>
