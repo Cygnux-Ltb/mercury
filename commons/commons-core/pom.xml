@@ -52,6 +52,14 @@
 			<version>4.4</version>
 		</dependency>
 
+		<!-- Guava is a suite of core and expanded libraries that include utility 
+			classes, google's collections, io classes, and much much more. -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>29.0-jre</version>
+		</dependency>
+
 		<!-- Eclipse Collections Library -->
 		<dependency>
 			<groupId>org.eclipse.collections</groupId>
