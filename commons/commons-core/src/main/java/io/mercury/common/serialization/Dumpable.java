@@ -1,4 +1,4 @@
-package io.mercury.common.file;
+package io.mercury.common.serialization;
 
 import java.io.Serializable;
 
