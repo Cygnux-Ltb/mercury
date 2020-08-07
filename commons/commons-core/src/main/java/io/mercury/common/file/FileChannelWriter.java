@@ -1,4 +1,4 @@
-package io.mercury.common.io;
+package io.mercury.common.file;
 
 import java.io.File;
 import java.io.IOException;
@@ -98,10 +98,12 @@ public final class FileChannelWriter {
 
 	public static void main(String[] args) {
 
+		long nanoTime0 = System.nanoTime();
+
 		List<String> lines = new ArrayList<String>();
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 1000000; i++) {
 			StringBuilder builder = new StringBuilder();
-			for (int j = 0; j < 1000; j++) {
+			for (int j = 0; j < 100; j++) {
 				builder.append(j);
 				builder.append(',');
 			}
@@ -114,7 +116,9 @@ public final class FileChannelWriter {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		long nanoTime1 = System.nanoTime();
 
+		System.out.println((nanoTime1 - nanoTime0) / 1000);
 	}
 
 }
