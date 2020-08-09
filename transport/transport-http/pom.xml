@@ -15,7 +15,6 @@
 	<packaging>jar</packaging>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>transport-core</artifactId>
