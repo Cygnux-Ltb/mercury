@@ -20,12 +20,14 @@
 		<module>persistence-arangodb</module>
 		<module>persistence-chronicle</module>
 		<module>persistence-h2</module>
+		<module>persistence-janusgraph</module>
 		<module>persistence-kyotocabinet</module>
 		<module>persistence-redis</module>
 		<module>persistence-rocksdb</module>
 		<module>serialization-avro</module>
 		<module>serialization-json</module>
 		<module>serialization-kryo</module>
+		<module>persistence-cassandra</module>
 	</modules>
 
 	<properties>
@@ -134,6 +136,13 @@
 				<groupId>io.netty</groupId>
 				<artifactId>netty-codec</artifactId>
 				<version>${netty.version}</version>
+			</dependency>
+
+			<!-- Netty/Handler -->
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-handler</artifactId>
+				<version>4.1.51.Final</version>
 			</dependency>
 
 			<!-- Apache Commons Compress software defines an API for working with 
