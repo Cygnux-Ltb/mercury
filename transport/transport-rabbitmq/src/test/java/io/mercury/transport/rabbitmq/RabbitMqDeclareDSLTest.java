@@ -8,9 +8,11 @@ public class RabbitMqDeclareDSLTest {
 
 	@Test
 	public void test() {
-		
-		ExchangeRelationship.fanout("FAN_T1");
-		
+
+		ExchangeRelationship fanout = ExchangeRelationship.fanout("FAN_T1");
+
+		System.out.println(fanout);
+
 	}
 
 }
