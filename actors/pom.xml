@@ -74,8 +74,8 @@
 		</dependency>
 
 		<!-- ####### Akka dependency ####### -->
-		<!-- Akka is a toolkit for building highly concurrent, distributed, and 
-			resilient message-driven applications for Java and Scala. -->
+		<!-- At the core of Akka: A model for concurrency and distribution without 
+			all the pain of threading primitives. -->
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-actor_2.13</artifactId>
@@ -121,13 +121,6 @@
 			</exclusions>
 		</dependency>
 
-		<!-- Standard library for the Scala Programming Language -->
-		<dependency>
-			<groupId>org.scala-lang</groupId>
-			<artifactId>scala-library</artifactId>
-			<version>2.13.3</version>
-		</dependency>
-
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-testkit_2.13</artifactId>
@@ -139,6 +132,13 @@
 					<artifactId>scala-library</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<!-- Standard library for the Scala Programming Language -->
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-library</artifactId>
+			<version>2.13.3</version>
 		</dependency>
 
 	</dependencies>
