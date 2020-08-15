@@ -18,6 +18,7 @@
 
 	<modules>
 		<module>persistence-arangodb</module>
+		<module>persistence-cassandra</module>
 		<module>persistence-chronicle</module>
 		<module>persistence-h2</module>
 		<module>persistence-janusgraph</module>
@@ -27,7 +28,6 @@
 		<module>serialization-avro</module>
 		<module>serialization-json</module>
 		<module>serialization-kryo</module>
-		<module>persistence-cassandra</module>
 	</modules>
 
 	<properties>
