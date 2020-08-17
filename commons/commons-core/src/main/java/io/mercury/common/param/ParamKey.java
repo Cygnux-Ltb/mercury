@@ -4,7 +4,7 @@ public interface ParamKey {
 
 	int id();
 
-	String key();
+	String kname();
 
 	ParamType type();
 

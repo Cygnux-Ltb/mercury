@@ -6,6 +6,7 @@ import static io.mercury.common.util.Assertor.requiredLength;
 import static java.lang.Boolean.parseBoolean;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
+import static java.lang.System.out;
 
 import java.util.Map;
 import java.util.Properties;
@@ -22,7 +23,7 @@ import io.mercury.common.param.ParamType;
 
 public final class ImmutableParamMap<K extends ParamKey> {
 
-	private final ImmutableMap<K, String> immutableParam;
+	private final ImmutableMap<K, String> immutableMap;
 
 	/**
 	 * 根据传入的Key获取Map中的相应字段
@@ -36,13 +37,12 @@ public final class ImmutableParamMap<K extends ParamKey> {
 			throws NullPointerException, IllegalArgumentException {
 		requiredLength(keys, 1, "keys");
 		nonEmpty(map, "map");
-		MutableMap<K, String> param = MutableMaps.newUnifiedMap();
+		MutableMap<K, String> mutableMap = MutableMaps.newUnifiedMap();
 		for (K key : keys) {
-			if (map.containsKey(key.key())) {
-				param.put(key, map.get(key.key()).toString());
-			}
+			if (map.containsKey(key.kname()))
+				mutableMap.put(key, map.get(key.kname()).toString());
 		}
-		this.immutableParam = param.toImmutable();
+		this.immutableMap = mutableMap.toImmutable();
 	}
 
 	/**
@@ -59,10 +59,10 @@ public final class ImmutableParamMap<K extends ParamKey> {
 		nonNull(prop, "prop");
 		MutableMap<K, String> tempMap = MutableMaps.newUnifiedMap();
 		for (K key : keys) {
-			if (prop.containsKey(key.key()))
-				tempMap.put(key, prop.get(key.key()).toString());
+			if (prop.containsKey(key.kname()))
+				tempMap.put(key, prop.get(key.kname()).toString());
 		}
-		this.immutableParam = tempMap.toImmutable();
+		this.immutableMap = tempMap.toImmutable();
 	}
 
 	/**
@@ -75,7 +75,7 @@ public final class ImmutableParamMap<K extends ParamKey> {
 	public boolean getBoolean(K key) throws IllegalArgumentException, NullPointerException {
 		if (key.type() != ParamType.BOOLEAN)
 			throw new IllegalArgumentException("Key -> " + key + " ParamType is not BOOLEAN. paramType==" + key.type());
-		return parseBoolean(nonNull(immutableParam.get(key), key.key()));
+		return parseBoolean(nonNull(immutableMap.get(key), key.kname()));
 	}
 
 	/**
@@ -89,7 +89,7 @@ public final class ImmutableParamMap<K extends ParamKey> {
 	public int getInt(K key) throws IllegalArgumentException, NullPointerException, NumberFormatException {
 		if (key.type() != ParamType.INT)
 			throw new IllegalArgumentException("Key -> " + key + " ParamType is not [INT]. paramType==" + key.type());
-		return parseInt(nonNull(immutableParam.get(key), key.key()));
+		return parseInt(nonNull(immutableMap.get(key), key.kname()));
 	}
 
 	/**
@@ -104,7 +104,7 @@ public final class ImmutableParamMap<K extends ParamKey> {
 		if (key.type() != ParamType.DOUBLE)
 			throw new IllegalArgumentException(
 					"Key -> " + key + " ParamType is not [DOUBLE], paramType==" + key.type());
-		return parseDouble(nonNull(immutableParam.get(key), key.key()));
+		return parseDouble(nonNull(immutableMap.get(key), key.kname()));
 	}
 
 	/**
@@ -118,7 +118,7 @@ public final class ImmutableParamMap<K extends ParamKey> {
 		if (key.type() != ParamType.STRING)
 			throw new IllegalArgumentException(
 					"Key -> " + key + " ParamType is not [STRING], paramType==" + key.type());
-		return nonNull(immutableParam.get(key), key.key());
+		return nonNull(immutableMap.get(key), key.kname());
 	}
 
 	public void printParam() {
@@ -127,10 +127,10 @@ public final class ImmutableParamMap<K extends ParamKey> {
 
 	public void printParam(Logger log) {
 		if (log == null)
-			immutableParam
-					.forEachKeyValue((key, value) -> System.out.println("key -> " + key.key() + ", value -> " + value));
+			immutableMap
+					.forEachKeyValue((key, value) -> out.println("key -> " + key.kname() + ", value -> " + value));
 		else
-			immutableParam.forEachKeyValue((key, value) -> log.info("key -> {}, value -> {}", key.key(), value));
+			immutableMap.forEachKeyValue((key, value) -> log.info("key -> {}, value -> {}", key.kname(), value));
 	}
 
 }
