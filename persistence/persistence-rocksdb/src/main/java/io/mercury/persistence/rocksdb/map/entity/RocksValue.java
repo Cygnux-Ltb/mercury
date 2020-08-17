@@ -16,9 +16,18 @@ public interface RocksValue {
 		return value(Unpooled.buffer(valueLength()));
 	}
 
+	/**
+	 * 
+	 * @param useBuf
+	 * @return
+	 */
 	@Nonnull
 	ByteBuf value(@Nonnull ByteBuf useBuf);
 
+	/**
+	 * 
+	 * @return
+	 */
 	int valueLength();
 
 }

@@ -16,9 +16,6 @@ import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.map.ImmutableMap;
 import org.eclipse.collections.api.map.MutableMap;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONValidator;
-import com.alibaba.fastjson.JSONValidator.Type;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
@@ -26,39 +23,29 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 public final class JsonParser2 {
 
 	private static final ObjectMapper Mapper = new ObjectMapper()
-	// TODO 添加反序列化属性
+	// 添加反序列化属性
 	;
 
-	private static final TypeFactory TypeFactory = Mapper.getTypeFactory();
+	private static final TypeFactory TypeFactory = Mapper.getTypeFactory()
+	// 添加配置信息
+	;
 
 	/**
 	 * 
+	 * @param <T>
 	 * @param json
 	 * @return
+	 * @throws JsonParseException
 	 */
-	public static boolean isJsonValue(String json) {
-		// TODO 使用Jackson
-		return JSONValidator.from(json).getType() == Type.Value;
-	}
-
-	/**
-	 * 
-	 * @param str
-	 * @return
-	 */
-	public static boolean isJsonArray(String json) {
-		// TODO 使用Jackson
-		return JSONValidator.from(json).getType() == Type.Array;
-	}
-
-	/**
-	 * 
-	 * @param json
-	 * @return
-	 */
-	public static boolean isJsonObject(String json) {
-		// TODO 使用Jackson
-		return JSONValidator.from(json).getType() == Type.Object;
+	public static final <T> T toObject(@Nonnull String json) throws JsonParseException {
+		try {
+			if (json == null)
+				return null;
+			return Mapper.readValue(json, new TypeReference<T>() {
+			});
+		} catch (Exception e) {
+			throw new JsonParseException(json, e);
+		}
 	}
 
 	/**
@@ -130,6 +117,25 @@ public final class JsonParser2 {
 	/**
 	 * 
 	 * @param json
+	 * @param clazz
+	 * @return
+	 * @throws JsonParseException
+	 */
+	public static final <T> MutableList<T> toMutableList(@Nonnull String json, @Nonnull Class<T> clazz)
+			throws JsonParseException {
+		try {
+			List<T> list = Mapper.readValue(json, TypeFactory.constructCollectionLikeType(List.class, clazz));
+			return newFastList(
+					// List接口, 转换为MutableList
+					list);
+		} catch (Exception e) {
+			throw new JsonParseException(json, e);
+		}
+	}
+
+	/**
+	 * 
+	 * @param json
 	 * @return
 	 * @throws JsonParseException
 	 */
@@ -139,6 +145,25 @@ public final class JsonParser2 {
 					// List接口, 转换为MutableList
 					Mapper.readValue(json, new TypeReference<List<T>>() {
 					}));
+		} catch (Exception e) {
+			throw new JsonParseException(json, e);
+		}
+	}
+
+	/**
+	 * 
+	 * @param json
+	 * @param clazz
+	 * @return
+	 * @throws JsonParseException
+	 */
+	public static final <T> ImmutableList<T> toImmutableList(@Nonnull String json, @Nonnull Class<T> clazz)
+			throws JsonParseException {
+		try {
+			List<T> list = Mapper.readValue(json, TypeFactory.constructCollectionLikeType(List.class, clazz));
+			return newImmutableList(
+					// List接口, 转换为MutableList
+					list);
 		} catch (Exception e) {
 			throw new JsonParseException(json, e);
 		}
@@ -217,7 +242,7 @@ public final class JsonParser2 {
 		map.put("C", "11");
 		map.put("D", null);
 		map.put("E", null);
-		System.out.println(JSON.toJSONString(map));
+		System.out.println();
 	}
 
 }

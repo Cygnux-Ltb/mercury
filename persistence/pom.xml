@@ -142,7 +142,7 @@
 			<dependency>
 				<groupId>io.netty</groupId>
 				<artifactId>netty-handler</artifactId>
-				<version>4.1.51.Final</version>
+				<version>${netty.version}</version>
 			</dependency>
 
 			<!-- Apache Commons Compress software defines an API for working with 

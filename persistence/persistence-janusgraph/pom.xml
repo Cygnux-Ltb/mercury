@@ -18,7 +18,7 @@
 			<groupId>io.mercury</groupId>
 			<artifactId>commons-concurrent</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.janusgraph</groupId>
 			<artifactId>janusgraph-core</artifactId>
@@ -37,8 +37,32 @@
 					<artifactId>commons-lang3</artifactId>
 				</exclusion>
 				<exclusion>
+					<groupId>commons-io</groupId>
+					<artifactId>commons-io</artifactId>
+				</exclusion>
+				<exclusion>
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tinkerpop</groupId>
+			<artifactId>gremlin-driver</artifactId>
+			<version>3.4.6</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>jcl-over-slf4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-lang3</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>

@@ -2,6 +2,7 @@ package io.mercury.persistence.rocksdb.map;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Collection;
 
 import org.eclipse.collections.api.set.MutableSet;
 import org.eclipse.collections.api.tuple.Pair;
@@ -40,11 +41,8 @@ public class RocksMap<K extends RocksKey, V extends RocksValue> implements Close
 	}
 
 	public static void main(String[] args) {
-
 		Options options = new Options();
-
 		Runtime.getRuntime().addShutdownHook(Threads.newThread(() -> options.close(), "RocksContainerCloseThread"));
-
 	}
 
 	public void scan() {
@@ -55,33 +53,56 @@ public class RocksMap<K extends RocksKey, V extends RocksValue> implements Close
 		return !rocksdb.keyMayExist(key.key(), new Holder<>());
 	}
 
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 */
 	public V get(K key) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public V scan(K key0, K key1) {
-		// TODO Auto-generated method stub
+	/**
+	 * 
+	 * @param key0
+	 * @param key1
+	 * @return
+	 */
+	public Collection<V> scan(K key0, K key1) {
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param key
+	 * @param value
+	 * @return
+	 */
 	public V put(K key, V value) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 */
 	public V remove(K key) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param keyValues
+	 */
 	public void put(MutableSet<Pair<K, V>> keyValues) {
-		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * 
+	 */
 	public void clear() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -89,6 +110,7 @@ public class RocksMap<K extends RocksKey, V extends RocksValue> implements Close
 	public void close() throws IOException {
 		if (options != null)
 			options.close();
+
 		if (rocksdb != null)
 			rocksdb.close();
 	}

@@ -8,8 +8,6 @@ import io.mercury.persistence.rocksdb.map.entity.RocksValue;
 
 public class RocksReversibleMap<K extends RocksReversibleKey, V extends RocksValue> {
 
-	
-
 	public static void main(String[] args) {
 
 		Options options = new Options();
@@ -19,12 +17,10 @@ public class RocksReversibleMap<K extends RocksReversibleKey, V extends RocksVal
 	}
 
 	public V get(K key) {
-
 		return null;
 	}
 
 	public V get(byte[] key) {
-
 		return null;
 	}
 

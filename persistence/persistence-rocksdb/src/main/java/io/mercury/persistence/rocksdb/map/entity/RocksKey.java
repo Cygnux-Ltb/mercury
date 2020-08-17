@@ -17,6 +17,10 @@ public interface RocksKey {
 	@Nonnull
 	byte[] key();
 
+	/**
+	 * 
+	 * @return
+	 */
 	default int length() {
 		return key().length;
 	}
