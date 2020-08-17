@@ -1,9 +1,9 @@
 package io.mercury.actors;
 
 import akka.actor.Props;
-import io.mercury.actors.reference.GenericActorT1;
+import io.mercury.actors.reference.GenericActorE1;
 
-public class UserActor extends GenericActorT1<User> {
+public class UserActor extends GenericActorE1<User> {
 //    private Object parameters;
 
 	public static Props props() {
@@ -32,7 +32,6 @@ public class UserActor extends GenericActorT1<User> {
 
 	@Override
 	protected void handleUnknown0(Object t) {
-		// TODO Auto-generated method stub
 
 	}
 

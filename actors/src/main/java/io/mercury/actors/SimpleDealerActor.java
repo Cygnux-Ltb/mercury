@@ -3,10 +3,10 @@ package io.mercury.actors;
 import org.eclipse.collections.api.list.MutableList;
 
 import akka.actor.ActorRef;
-import io.mercury.actors.reference.GenericActorT2;
+import io.mercury.actors.reference.GenericActorE2;
 import io.mercury.common.collections.MutableLists;
 
-public abstract class SimpleDealerActor<T> extends GenericActorT2<ActorRef, T> {
+public abstract class SimpleDealerActor<T> extends GenericActorE2<ActorRef, T> {
 
 	private MutableList<ActorRef> registered;
 	private int turn = -1;

@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 
 import io.mercury.actors.messages.AvroMsg;
 
-public abstract class AvroBinaryActor extends GenericActorT1<ByteBuffer> {
+public abstract class AvroBinaryActor extends GenericActorE1<ByteBuffer> {
 
 	@Override
 	protected Class<ByteBuffer> eventType() {
