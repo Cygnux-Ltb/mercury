@@ -13,7 +13,7 @@
 
 	<artifactId>commons-concurrent</artifactId>
 	<name>commons-concurrent</name>
-	
+
 	<packaging>jar</packaging>
 
 	<dependencies>
@@ -26,7 +26,7 @@
 		<dependency>
 			<groupId>org.jctools</groupId>
 			<artifactId>jctools-core</artifactId>
-			<version>3.0.0</version>
+			<version>3.1.0</version>
 		</dependency>
 
 		<!-- Concurrent Programming Framework -->

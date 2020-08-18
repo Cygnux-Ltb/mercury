@@ -60,17 +60,20 @@
 			<version>29.0-jre</version>
 		</dependency>
 
-		<!-- Eclipse Collections Library -->
+		<!-- ##### Eclipse Collections Library ##### -->
+		<!-- Eclipse Collections API -->
 		<dependency>
 			<groupId>org.eclipse.collections</groupId>
 			<artifactId>eclipse-collections-api</artifactId>
 			<version>${eclipse-collections.version}</version>
 		</dependency>
+		<!-- Eclipse Collections Main Library -->
 		<dependency>
 			<groupId>org.eclipse.collections</groupId>
 			<artifactId>eclipse-collections</artifactId>
 			<version>${eclipse-collections.version}</version>
 		</dependency>
+		<!-- Eclipse Collections Fork Join Utilities -->
 		<dependency>
 			<groupId>org.eclipse.collections</groupId>
 			<artifactId>eclipse-collections-forkjoin</artifactId>

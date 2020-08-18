@@ -36,6 +36,12 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>net.openhft</groupId>
+			<artifactId>jlbh</artifactId>
+			<version>1.19.41</version>
+		</dependency>
+
 		<!-- Lightweight time ticker library -->
 		<dependency>
 			<groupId>net.openhft</groupId>
