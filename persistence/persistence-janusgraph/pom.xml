@@ -19,6 +19,7 @@
 			<artifactId>commons-concurrent</artifactId>
 		</dependency>
 
+		<!-- JanusGraph Core: Core Library For JanusGraph -->
 		<dependency>
 			<groupId>org.janusgraph</groupId>
 			<artifactId>janusgraph-core</artifactId>
@@ -47,6 +48,7 @@
 			</exclusions>
 		</dependency>
 
+		<!-- Apache TinkerPop :: Gremlin Driver -->
 		<dependency>
 			<groupId>org.apache.tinkerpop</groupId>
 			<artifactId>gremlin-driver</artifactId>

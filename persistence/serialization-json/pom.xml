@@ -17,12 +17,14 @@
 	<packaging>jar</packaging>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>commons-core</artifactId>
 		</dependency>
 
+		<!-- Fastjson is a JSON processor (JSON parser + JSON generator) written 
+			in Java -->
+		<!-- To be deleted -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
@@ -35,16 +37,21 @@
 			<version>2.8.6</version>
 		</dependency>
 
+		<!-- General data-binding functionality for Jackson: works on core streaming 
+			API -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
 
+		<!-- Add-on module to support JSR-310 (Java 8 Date & Time API) data types. -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
 
+		<!-- Add-on datatype-support module for Jackson (https://github.com/FasterXML/jackson) 
+			that handles eclipse-collections (https://www.eclipse.org/collections/) types -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-eclipse-collections</artifactId>

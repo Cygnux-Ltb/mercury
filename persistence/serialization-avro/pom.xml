@@ -51,7 +51,6 @@
 	</build>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>commons-core</artifactId>
@@ -62,8 +61,6 @@
 			<groupId>org.apache.avro</groupId>
 			<artifactId>avro</artifactId>
 			<version>1.10.0</version>
-			<!-- <exclusions> <exclusion> <groupId>org.slf4j</groupId> <artifactId>slf4j-api</artifactId> 
-				</exclusion> </exclusions> -->
 		</dependency>
 
 		<!-- Avro inter-process communication components -->

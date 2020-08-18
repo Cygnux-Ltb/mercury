@@ -19,6 +19,7 @@
 			<artifactId>commons-concurrent</artifactId>
 		</dependency>
 
+		<!-- DataStax Java Driver For Apache Cassandra(R) Core -->
 		<dependency>
 			<groupId>com.datastax.oss</groupId>
 			<artifactId>java-driver-core</artifactId>

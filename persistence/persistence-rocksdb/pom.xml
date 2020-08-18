@@ -14,7 +14,6 @@
 	<name>persistence-rocksdb</name>
 
 	<packaging>jar</packaging>
-	
 
 	<dependencies>
 		<dependency>
@@ -35,6 +34,8 @@
 			<artifactId>netty-buffer</artifactId>
 		</dependency>
 
+		<!-- Zero-allocation implementations of fast non-cryptographic hash functions 
+			for byte sequences or blocks of memory -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>zero-allocation-hashing</artifactId>
