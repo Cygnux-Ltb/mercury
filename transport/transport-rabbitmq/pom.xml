@@ -26,7 +26,8 @@
 			<artifactId>serialization-json</artifactId>
 		</dependency>
 
-		<!-- rabbitmq amqp-client -->
+		<!-- The RabbitMQ Java client library allows Java applications to interface 
+			with RabbitMQ. -->
 		<dependency>
 			<groupId>com.rabbitmq</groupId>
 			<artifactId>amqp-client</artifactId>
