@@ -1,9 +1,10 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>io.mercury</groupId>
 		<artifactId>commons</artifactId>
@@ -16,6 +17,10 @@
 	<packaging>jar</packaging>
 
 	<properties>
+		<commons-io.version>2.7</commons-io.version>
+		<commons-lang3.version>3.11</commons-lang3.version>
+		<commons-collections4.version>4.4</commons-collections4.version>
+		<guava.version>29.0-jre</guava.version>
 		<eclipse-collections.version>10.2.0</eclipse-collections.version>
 	</properties>
 
@@ -27,37 +32,37 @@
 			<version>3.0.2</version>
 		</dependency>
 
-		<!-- The Apache Commons IO library contains utility classes, stream implementations, 
+		<!-- The Apache Commons IO li contains utility classes, stream implementations, 
 			file filters, file comparators, endian transformation classes, and much more. -->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.7</version>
+			<version>${commons-io.version}</version>
 		</dependency>
 
-		<!-- Apache Commons Lang, a package of Java utility classes for the classes 
-			that are in java.lang's hierarchy, or are considered to be so standard as 
-			to justify existence in java.lang. -->
+		<!-- Apache Commons a package of Java utility classes for the classes that 
+			are in java.l hierarchy, or are considered to be so standard as to justify 
+			existence in java.lang. -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.11</version>
+			<version>${commons-lang3.version}</version>
 		</dependency>
 
-		<!-- The Apache Commons Collections package contains types that extend 
-			and augment the Java Collections Framework. -->
+		<!-- The Apache ons Collections package contains types that extend and 
+			augment the Java Collections Framework. -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-collections4</artifactId>
-			<version>4.4</version>
+			<version>${commons-collections4.version}</version>
 		</dependency>
 
-		<!-- Guava is a suite of core and expanded libraries that include utility 
-			classes, google's collections, io classes, and much much more. -->
+		<!-- Guava is a su f core and expanded libraries that include utility classes, 
+			google's collections, io classes, and much much more. -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>29.0-jre</version>
+			<version>${guava.version}</version>
 		</dependency>
 
 		<!-- ##### Eclipse Collections Library ##### -->
@@ -87,8 +92,8 @@
 		</dependency>
 
 		<!-- ####### Unit test mock tool ####### -->
-		<!-- EasyMock provides an easy way to create Mock Objects for interfaces 
-			and classes generating them on the fly -->
+		<!-- EasyMock pro an easy way to create Mock Objects for interfaces and 
+			classes generating them on the fly -->
 		<dependency>
 			<groupId>org.easymock</groupId>
 			<artifactId>easymock</artifactId>
