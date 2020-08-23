@@ -176,7 +176,7 @@ public final class BitOperator {
 	 * @param lowPos
 	 * @return
 	 */
-	public static final int mergeChar(char highPos, char lowPos) {
+	public static final int mergeCharToInt(char highPos, char lowPos) {
 		return (((int) highPos) << 16) | ((int) lowPos);
 	}
 
@@ -189,7 +189,7 @@ public final class BitOperator {
 	 * @param lowPos
 	 * @return
 	 */
-	public static final long mergeChar(char highPos, char second, char third, char lowPos) {
+	public static final long mergeCharToLong(char highPos, char second, char third, char lowPos) {
 		return (((long) highPos) << 48) | ((long) second << 32) | ((long) third << 16) | ((int) lowPos);
 	}
 
@@ -200,7 +200,7 @@ public final class BitOperator {
 	 * @param lowPos
 	 * @return
 	 */
-	public static final long mergeInt(int highPos, int lowPos) {
+	public static final long mergeIntToLong(int highPos, int lowPos) {
 		return (((long) highPos) << 32) | ((long) lowPos);
 	}
 
@@ -288,14 +288,14 @@ public final class BitOperator {
 		System.out.println(intBinaryFormat(i1));
 		System.out.println(intBinaryFormat(i2));
 
-		System.out.println((mergeInt(i1, i2)));
-		System.out.println(longBinaryFormat(mergeInt(i1, i2)));
+		System.out.println((mergeIntToLong(i1, i2)));
+		System.out.println(longBinaryFormat(mergeIntToLong(i1, i2)));
 
-		System.out.println((splitLongWithHighPos(mergeInt(i1, i2))));
-		System.out.println(intBinaryFormat(splitLongWithHighPos(mergeInt(i1, i2))));
+		System.out.println((splitLongWithHighPos(mergeIntToLong(i1, i2))));
+		System.out.println(intBinaryFormat(splitLongWithHighPos(mergeIntToLong(i1, i2))));
 
-		System.out.println((splitLongWithLowPos(mergeInt(i1, i2))));
-		System.out.println(intBinaryFormat(splitLongWithLowPos(mergeInt(i1, i2))));
+		System.out.println((splitLongWithLowPos(mergeIntToLong(i1, i2))));
+		System.out.println(intBinaryFormat(splitLongWithLowPos(mergeIntToLong(i1, i2))));
 
 		System.out.println(intBinaryFormat(1));
 		System.out.println(intBinaryFormat(~1));

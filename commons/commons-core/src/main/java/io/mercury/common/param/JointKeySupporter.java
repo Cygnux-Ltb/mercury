@@ -9,7 +9,7 @@ public final class JointKeySupporter {
 	 * long value高32位为第一个int值, 低32位为第二个int值
 	 */
 	public static long mergeJointKey(int highPos, int lowPos) {
-		return BitOperator.mergeInt(highPos, lowPos);
+		return BitOperator.mergeIntToLong(highPos, lowPos);
 	}
 
 	/**
