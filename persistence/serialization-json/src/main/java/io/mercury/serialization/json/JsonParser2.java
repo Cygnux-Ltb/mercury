@@ -23,11 +23,11 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 public final class JsonParser2 {
 
 	private static final ObjectMapper Mapper = new ObjectMapper()
-	// 添加反序列化属性
+	// TODO 添加反序列化属性
 	;
 
 	private static final TypeFactory TypeFactory = Mapper.getTypeFactory()
-	// 添加配置信息
+	// TODO 添加配置信息
 	;
 
 	/**

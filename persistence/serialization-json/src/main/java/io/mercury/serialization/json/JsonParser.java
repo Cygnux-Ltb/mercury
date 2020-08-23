@@ -18,7 +18,6 @@ import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.map.ImmutableMap;
 import org.eclipse.collections.api.map.MutableMap;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONValidator;
@@ -32,7 +31,7 @@ public final class JsonParser {
 	 * @return
 	 */
 	public static boolean isJsonValue(String json) {
-		return JSONValidator.from(json).getType() == Type.Value;
+		return json == null ? false : JSONValidator.from(json).getType() == Type.Value;
 	}
 
 	/**
@@ -41,7 +40,7 @@ public final class JsonParser {
 	 * @return
 	 */
 	public static boolean isJsonArray(String json) {
-		return JSONValidator.from(json).getType() == Type.Array;
+		return json == null ? false : JSONValidator.from(json).getType() == Type.Array;
 	}
 
 	/**
@@ -50,7 +49,7 @@ public final class JsonParser {
 	 * @return
 	 */
 	public static boolean isJsonObject(String json) {
-		return JSONValidator.from(json).getType() == Type.Object;
+		return json == null ? false : JSONValidator.from(json).getType() == Type.Object;
 	}
 
 	/**
@@ -212,7 +211,7 @@ public final class JsonParser {
 		map.put("C", "11");
 		map.put("D", null);
 		map.put("E", null);
-		System.out.println(JSON.toJSONString(map));
+		System.out.println(map);
 	}
 
 }

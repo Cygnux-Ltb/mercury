@@ -21,12 +21,11 @@ public class KryoDemo {
 		output.close();
 
 		Input input = new Input(new FileInputStream("file.bin"));
-
 		SomeClass object2 = kryo.readObject(input, SomeClass.class);
 
 		System.out.println("object2.value == " + object2.value);
-
 		input.close();
+		
 	}
 
 	static public class SomeClass {

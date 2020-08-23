@@ -40,7 +40,6 @@
 			<groupId>net.openhft</groupId>
 			<artifactId>zero-allocation-hashing</artifactId>
 		</dependency>
-
 	</dependencies>
 
 </project>
