@@ -55,15 +55,15 @@
 	</build>
 
 	<dependencies>
-
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<groupId>io.mercury</groupId>
+			<artifactId>persistence-chronicle</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>io.mercury</groupId>
-			<artifactId>persistence-chronicle</artifactId>
+			<artifactId>persistence-rocksdb</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
@@ -121,6 +121,13 @@
 			</exclusions>
 		</dependency>
 
+		<!-- Standard library for the Scala Programming Language -->
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-library</artifactId>
+			<version>2.13.3</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-testkit_2.13</artifactId>
@@ -134,13 +141,11 @@
 			</exclusions>
 		</dependency>
 
-		<!-- Standard library for the Scala Programming Language -->
 		<dependency>
-			<groupId>org.scala-lang</groupId>
-			<artifactId>scala-library</artifactId>
-			<version>2.13.3</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
 
 </project>
