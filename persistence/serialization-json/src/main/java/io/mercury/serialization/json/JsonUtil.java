@@ -31,7 +31,23 @@ public final class JsonUtil {
 	/**
 	 * 
 	 */
-	private static final Gson GsonNormal = new GsonBuilder().create();
+	private static final Gson Gson = new GsonBuilder().create();
+
+	/**
+	 * 
+	 */
+	private final static Gson GsonPrettyPrinting = new GsonBuilder().setPrettyPrinting().create();
+
+	/**
+	 * 
+	 */
+	private static final Gson GsonHasNulls = new GsonBuilder().serializeNulls().create();
+
+	/**
+	 * 
+	 */
+	private static final Gson GsonHasNullsPrettyPrinting = new GsonBuilder().serializeNulls().setPrettyPrinting()
+			.create();
 
 	/**
 	 * 
@@ -39,13 +55,8 @@ public final class JsonUtil {
 	 * @return
 	 */
 	public static final String toJson(@Nonnull Object obj) {
-		return GsonNormal.toJson(obj);
+		return Gson.toJson(obj);
 	}
-
-	/**
-	 * 
-	 */
-	private static final Gson GsonHasNulls = new GsonBuilder().serializeNulls().create();
 
 	/**
 	 * 
