@@ -1,5 +1,7 @@
 package io.mercury.persistence.rocksdb.map;
 
+import java.util.Collection;
+
 import org.rocksdb.Options;
 
 import io.mercury.common.thread.Threads;
@@ -28,8 +30,8 @@ public class RocksReversibleMap<K extends RocksReversibleKey, V extends RocksVal
 		return value;
 	}
 
-	public void scan() {
-
+	public Collection<V> scan() {
+		return null;
 	}
 
 }
