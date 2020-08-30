@@ -22,7 +22,7 @@ public class ZmqPublisher implements Publisher<byte[]>, Closeable {
 
 	private String topic;
 
-	private String publisherName;
+	private String name;
 
 	private ZmqConfigurator configurator;
 
@@ -37,7 +37,7 @@ public class ZmqPublisher implements Publisher<byte[]>, Closeable {
 		this.zSocket = zCtx.createSocket(SocketType.PUB);
 		this.zSocket.bind(configurator.host());
 		this.topic = configurator.topic();
-		this.publisherName = "ZMQ::PUB$" + configurator.host();
+		this.name = "ZMQ::PUB$" + configurator.host();
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class ZmqPublisher implements Publisher<byte[]>, Closeable {
 
 	@Override
 	public String name() {
-		return publisherName;
+		return name;
 	}
 
 	public static void main(String[] args) {

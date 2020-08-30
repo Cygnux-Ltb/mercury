@@ -20,7 +20,7 @@ public class ZmqPipeline implements Receiver, Closeable {
 	private ZContext zCtx;
 	private ZMQ.Socket zSocket;
 
-	private String receiverName;
+	private String name;
 
 	private Function<byte[], byte[]> pipeline;
 	private ZmqConfigurator configurator;
@@ -39,7 +39,7 @@ public class ZmqPipeline implements Receiver, Closeable {
 		this.zCtx = new ZContext(configurator.ioThreads());
 		this.zSocket = zCtx.createSocket(SocketType.REP);
 		this.zSocket.bind(configurator.host());
-		this.receiverName = "ZMQ::REP:" + configurator.host();
+		this.name = "ZMQ::REP:" + configurator.host();
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class ZmqPipeline implements Receiver, Closeable {
 
 	@Override
 	public String name() {
-		return receiverName;
+		return name;
 	}
 
 	public static void main(String[] args) {

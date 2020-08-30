@@ -21,7 +21,7 @@ public class ZmqSubscriber implements Subscriber, Closeable {
 	private ZContext zCtx;
 	private ZMQ.Socket zSocket;
 
-	private String subscriberName;
+	private String name;
 
 	private Consumer<byte[]> consumer;
 	private ZmqConfigurator configurator;
@@ -45,7 +45,7 @@ public class ZmqSubscriber implements Subscriber, Closeable {
 		this.zSocket.setTCPKeepAliveCount(10);
 		this.zSocket.setTCPKeepAliveIdle(15);
 		this.zSocket.setTCPKeepAliveInterval(15);
-		this.subscriberName = "ZMQ.SUB$" + configurator.host() + "::" + configurator.topic();
+		this.name = "ZMQ.SUB$" + configurator.host() + "::" + configurator.topic();
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class ZmqSubscriber implements Subscriber, Closeable {
 
 	@Override
 	public String name() {
-		return subscriberName;
+		return name;
 	}
 
 	public static void main(String[] args) {

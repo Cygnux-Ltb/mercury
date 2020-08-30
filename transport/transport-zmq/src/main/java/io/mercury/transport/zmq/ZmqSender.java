@@ -20,7 +20,7 @@ public class ZmqSender implements Sender<byte[]>, Closeable {
 	private ZContext zCtx;
 	private ZMQ.Socket zSocket;
 
-	private String senderName;
+	private String name;
 
 	private ZmqConfigurator configurator;
 
@@ -34,7 +34,7 @@ public class ZmqSender implements Sender<byte[]>, Closeable {
 		this.zCtx = new ZContext(configurator.ioThreads());
 		this.zSocket = zCtx.createSocket(SocketType.REQ);
 		this.zSocket.connect(configurator.host());
-		this.senderName = "ZMQ::REQ$" + configurator.connectionInfo();
+		this.name = "ZMQ::REQ$" + configurator.connectionInfo();
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class ZmqSender implements Sender<byte[]>, Closeable {
 
 	@Override
 	public String name() {
-		return senderName;
+		return name;
 	}
 
 	@Override
