@@ -132,7 +132,12 @@ public final class SysProperties {
 				entity -> System.out.println(entity.getKey().toString() + "|||" + entity.getValue().toString()));
 	}
 
-	// 可添加java.library.path
+	/**
+	 * 添加java.library.path
+	 * 
+	 * @param libraryPath
+	 * @throws Exception
+	 */
 	private static void addLibraryDir(String libraryPath) throws Exception {
 		Field userPathsField = ClassLoader.class.getDeclaredField("usr_paths");
 		userPathsField.setAccessible(true);

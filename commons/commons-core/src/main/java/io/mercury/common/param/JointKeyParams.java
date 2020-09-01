@@ -1,4 +1,4 @@
-package io.mercury.common.param.map;
+package io.mercury.common.param;
 
 import static io.mercury.common.datetime.DateTimeUtil.date;
 import static io.mercury.common.datetime.DateTimeUtil.datetimeOfSecond;
@@ -6,7 +6,6 @@ import static io.mercury.common.datetime.DateTimeUtil.timeOfSecond;
 import static io.mercury.common.datetime.DateTimeUtil.toLocalDate;
 import static io.mercury.common.datetime.DateTimeUtil.toLocalDateTime;
 import static io.mercury.common.datetime.DateTimeUtil.toLocalTime;
-import static io.mercury.common.param.JointKeySupporter.mergeJointKey;
 import static java.lang.Boolean.parseBoolean;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
@@ -19,13 +18,13 @@ import java.time.LocalTime;
 import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
 import org.eclipse.collections.impl.map.mutable.primitive.LongObjectHashMap;
 
-import io.mercury.common.param.JointKey;
+import io.mercury.common.util.BitOperator;
 
-public class JointKeyParamMap<K extends JointKey> {
+public class JointKeyParams<K extends JointKey> {
 
 	private final MutableLongObjectMap<String> param = new LongObjectHashMap<>();
 
-	public JointKeyParamMap<K> put(K key, boolean b) {
+	public JointKeyParams<K> put(K key, boolean b) {
 		param.put(mergeJointKey(key.key0(), key.key1()), Boolean.toString(b));
 		return this;
 	}
@@ -34,7 +33,7 @@ public class JointKeyParamMap<K extends JointKey> {
 		return parseBoolean(param.get(mergeJointKey(key.key0(), key.key1())));
 	}
 
-	public JointKeyParamMap<K> put(K key, int i) {
+	public JointKeyParams<K> put(K key, int i) {
 		param.put(mergeJointKey(key.key0(), key.key1()), Integer.toString(i));
 		return this;
 	}
@@ -43,7 +42,7 @@ public class JointKeyParamMap<K extends JointKey> {
 		return parseInt(param.get(mergeJointKey(key.key0(), key.key1())));
 	}
 
-	public JointKeyParamMap<K> put(K key, long l) {
+	public JointKeyParams<K> put(K key, long l) {
 		param.put(mergeJointKey(key.key0(), key.key1()), Long.toString(l));
 		return this;
 	}
@@ -52,7 +51,7 @@ public class JointKeyParamMap<K extends JointKey> {
 		return parseLong(param.get(mergeJointKey(key.key0(), key.key1())));
 	}
 
-	public JointKeyParamMap<K> put(K key, double d) {
+	public JointKeyParams<K> put(K key, double d) {
 		param.put(mergeJointKey(key.key0(), key.key1()), Double.toString(d));
 		return this;
 	}
@@ -61,7 +60,7 @@ public class JointKeyParamMap<K extends JointKey> {
 		return parseDouble(param.get(mergeJointKey(key.key0(), key.key1())));
 	}
 
-	public JointKeyParamMap<K> put(K key, String str) {
+	public JointKeyParams<K> put(K key, String str) {
 		param.put(mergeJointKey(key.key0(), key.key1()), str);
 		return this;
 	}
@@ -70,7 +69,7 @@ public class JointKeyParamMap<K extends JointKey> {
 		return param.get(mergeJointKey(key.key0(), key.key1()));
 	}
 
-	public JointKeyParamMap<K> put(K key, LocalDate date) {
+	public JointKeyParams<K> put(K key, LocalDate date) {
 		put(key, date(date));
 		return this;
 	}
@@ -79,7 +78,7 @@ public class JointKeyParamMap<K extends JointKey> {
 		return toLocalDate(parseInt(param.get(mergeJointKey(key.key0(), key.key1()))));
 	}
 
-	public JointKeyParamMap<K> put(K key, LocalTime time) {
+	public JointKeyParams<K> put(K key, LocalTime time) {
 		put(key, timeOfSecond(time));
 		return this;
 	}
@@ -88,7 +87,7 @@ public class JointKeyParamMap<K extends JointKey> {
 		return toLocalTime(parseInt(param.get(mergeJointKey(key.key0(), key.key1()))));
 	}
 
-	public JointKeyParamMap<K> put(K key, LocalDateTime datetime) {
+	public JointKeyParams<K> put(K key, LocalDateTime datetime) {
 		put(key, datetimeOfSecond(datetime));
 		return this;
 	}
@@ -96,5 +95,34 @@ public class JointKeyParamMap<K extends JointKey> {
 	public LocalDateTime getLocalDateTime(K key) {
 		return toLocalDateTime(parseInt(param.get(mergeJointKey(key.key0(), key.key1()))));
 	}
+
+	/**
+	 * 将两个int value合并为long value<br>
+	 * long value高32位为第一个int值, 低32位为第二个int值
+	 */
+	public static long mergeJointKey(int highPos, int lowPos) {
+		return BitOperator.mergeIntToLong(highPos, lowPos);
+	}
+
+	/**
+	 * 取出高位数值
+	 * 
+	 * @param jointKey
+	 * @return
+	 */
+	public static int getHighPos(long jointKey) {
+		return BitOperator.splitLongWithHighPos(jointKey);
+	}
+
+	/**
+	 * 取出低位数值
+	 * 
+	 * @param jointId
+	 * @return
+	 */
+	public static int getLowPos(long jointKey) {
+		return BitOperator.splitLongWithLowPos(jointKey);
+	}
+
 
 }
