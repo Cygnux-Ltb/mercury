@@ -16,6 +16,10 @@
 
 	<packaging>jar</packaging>
 
+	<properties>
+		<avro.version>1.10.0</avro.version>
+	</properties>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -30,7 +34,7 @@
 			<plugin>
 				<groupId>org.apache.avro</groupId>
 				<artifactId>avro-maven-plugin</artifactId>
-				<version>1.10.0</version>
+				<version>${avro.version}</version>
 				<executions>
 					<execution>
 						<phase>generate-sources</phase>
@@ -60,14 +64,14 @@
 		<dependency>
 			<groupId>org.apache.avro</groupId>
 			<artifactId>avro</artifactId>
-			<version>1.10.0</version>
+			<version>${avro.version}</version>
 		</dependency>
 
 		<!-- Avro inter-process communication components -->
 		<dependency>
 			<groupId>org.apache.avro</groupId>
 			<artifactId>avro-ipc</artifactId>
-			<version>1.10.0</version>
+			<version>${avro.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -84,7 +88,7 @@
 		<dependency>
 			<groupId>org.apache.avro</groupId>
 			<artifactId>avro-compiler</artifactId>
-			<version>1.10.0</version>
+			<version>${avro.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>

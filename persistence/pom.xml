@@ -163,11 +163,11 @@
 				<version>1.7.1</version>
 			</dependency>
 
-			<!-- A fast compression/decompression library -->
+			<!-- snappy-java: A fast compression/decompression library -->
 			<dependency>
 				<groupId>org.xerial.snappy</groupId>
 				<artifactId>snappy-java</artifactId>
-				<version>1.1.7.6</version>
+				<version>1.1.7.7</version>
 			</dependency>
 
 			<!-- Zero-allocation implementations of fast non-cryptographic hash functions 
@@ -175,7 +175,7 @@
 			<dependency>
 				<groupId>net.openhft</groupId>
 				<artifactId>zero-allocation-hashing</artifactId>
-				<version>0.11</version>
+				<version>0.12</version>
 			</dependency>
 
 			<!-- JNI bindings for Zstd native library that provides fast and high 
