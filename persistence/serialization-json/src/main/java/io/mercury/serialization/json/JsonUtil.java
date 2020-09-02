@@ -29,24 +29,24 @@ import com.google.gson.GsonBuilder;
 public final class JsonUtil {
 
 	/**
-	 * 
+	 * 普通JSON序列化
 	 */
 	private static final Gson Gson = new GsonBuilder().create();
 
 	/**
-	 * 
+	 * 以漂亮的格式返回JSON
 	 */
 	private final static Gson GsonPrettyPrinting = new GsonBuilder().setPrettyPrinting().create();
 
 	/**
-	 * 
+	 * JSON序列化, 包含Null值
 	 */
 	private static final Gson GsonHasNulls = new GsonBuilder().serializeNulls().create();
 
 	/**
-	 * 
+	 * 以漂亮的格式返回JSON, 包含Null值
 	 */
-	private static final Gson GsonHasNullsPrettyPrinting = new GsonBuilder().serializeNulls().setPrettyPrinting()
+	private static final Gson GsonPrettyPrintingHasNulls = new GsonBuilder().serializeNulls().setPrettyPrinting()
 			.create();
 
 	/**
@@ -63,8 +63,26 @@ public final class JsonUtil {
 	 * @param obj
 	 * @return
 	 */
+	public static final String toPrettyJson(@Nonnull Object obj) {
+		return GsonPrettyPrinting.toJson(obj);
+	}
+
+	/**
+	 * 
+	 * @param obj
+	 * @return
+	 */
 	public static final String toJsonHasNulls(@Nonnull Object obj) {
 		return GsonHasNulls.toJson(obj);
+	}
+
+	/**
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	public static final String toPrettyJsonHasNulls(@Nonnull Object obj) {
+		return GsonPrettyPrintingHasNulls.toJson(obj);
 	}
 
 	/**
@@ -183,6 +201,25 @@ public final class JsonUtil {
 
 	/**
 	 * 
+	 * @param <T>
+	 * @param json
+	 * @param type
+	 * @return
+	 * @throws JsonParseException
+	 */
+	public static final <T> MutableList<T> toMutableList(@Nonnull String json, Class<T> type)
+			throws JsonParseException {
+		try {
+			return newFastList(
+					// JSONArray实现List接口, 转换为MutableList
+					parseArray(json, type));
+		} catch (Exception e) {
+			throw new JsonParseException(json, e);
+		}
+	}
+
+	/**
+	 * 
 	 * @param json
 	 * @return
 	 * @throws JsonParseException
@@ -192,6 +229,25 @@ public final class JsonUtil {
 			return newImmutableList(
 					// JSONArray实现List接口, 转换为ImmutableList
 					parseArray(json));
+		} catch (Exception e) {
+			throw new JsonParseException(json, e);
+		}
+	}
+
+	/**
+	 * 
+	 * @param <T>
+	 * @param json
+	 * @param type
+	 * @return
+	 * @throws JsonParseException
+	 */
+	public static final <T> ImmutableList<T> toImmutableList(@Nonnull String json, Class<T> type)
+			throws JsonParseException {
+		try {
+			return newImmutableList(
+					// JSONArray实现List接口, 转换为ImmutableList
+					parseArray(json, type));
 		} catch (Exception e) {
 			throw new JsonParseException(json, e);
 		}
