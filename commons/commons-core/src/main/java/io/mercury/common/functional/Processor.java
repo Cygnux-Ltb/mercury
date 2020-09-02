@@ -1,8 +1,10 @@
 package io.mercury.common.functional;
 
+import javax.annotation.Nonnull;
+
 @FunctionalInterface
 public interface Processor<T> {
 
-	void process(T t) throws Exception;
+	void process(@Nonnull T t) throws Exception;
 
 }

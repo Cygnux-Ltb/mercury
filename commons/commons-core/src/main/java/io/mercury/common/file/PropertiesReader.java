@@ -71,6 +71,11 @@ public final class PropertiesReader {
 		return fileName;
 	}
 
+	/**
+	 * 
+	 * @param fileName
+	 * @return
+	 */
 	public static Properties getProperty(String fileName) {
 		Properties properties = PropertiesMap.get(deleteSuffix(fileName));
 		if (properties == null)
@@ -78,6 +83,12 @@ public final class PropertiesReader {
 		return properties;
 	}
 
+	/**
+	 * 
+	 * @param fileName
+	 * @param propName
+	 * @return
+	 */
 	public static String getProperty(String fileName, String propName) {
 		String mergeKey = mergePropertiesKey(fileName, propName);
 		String propValue = PropertiesItemMap.get(mergeKey);
@@ -89,6 +100,12 @@ public final class PropertiesReader {
 		return propValue;
 	}
 
+	/**
+	 * 
+	 * @param fileName
+	 * @param propName
+	 * @return
+	 */
 	public static int getIntProperty(String fileName, String propName) {
 		String propValue = getProperty(fileName, propName);
 		if (notDecimal(propValue)) {
@@ -104,6 +121,12 @@ public final class PropertiesReader {
 		}
 	}
 
+	/**
+	 * 
+	 * @param fileName
+	 * @param propName
+	 * @return
+	 */
 	public static long getLongProperty(String fileName, String propName) {
 		String propValue = getProperty(fileName, propName);
 		if (notDecimal(propValue)) {
@@ -119,6 +142,12 @@ public final class PropertiesReader {
 		}
 	}
 
+	/**
+	 * 
+	 * @param fileName
+	 * @param propName
+	 * @return
+	 */
 	public static double getDoubleProperty(String fileName, String propName) {
 		String propValue = getProperty(fileName, propName);
 		if (notDecimal(propValue)) {
