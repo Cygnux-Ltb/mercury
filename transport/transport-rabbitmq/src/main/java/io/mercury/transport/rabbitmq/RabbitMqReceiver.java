@@ -46,7 +46,7 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Receiv
 
 	// 接收消息时使用的回调函数
 	private final Consumer<T> consumer;
-
+	
 	// 接受者QueueDeclare
 	private final QueueRelationship receiveQueue;
 

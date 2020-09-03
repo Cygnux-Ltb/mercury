@@ -2,7 +2,7 @@ package io.mercury.transport.core.api;
 
 import io.mercury.transport.core.TransportModule;
 
-public interface TransportClient extends TransportModule{
+public interface TClient extends TransportModule{
 
 	void connect();
 

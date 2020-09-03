@@ -1,6 +1,6 @@
 package io.mercury.transport.netty;
 
-import io.mercury.transport.core.api.TransportClient;
+import io.mercury.transport.core.api.TClient;
 import io.mercury.transport.netty.configurator.NettyConfigurator;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelHandler;
@@ -9,7 +9,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-public class NettyClient extends NettyTransport implements TransportClient {
+public class NettyClient extends NettyTransport implements TClient {
 
 	private Bootstrap bootstrap;
 
@@ -29,8 +29,8 @@ public class NettyClient extends NettyTransport implements TransportClient {
 		this.bootstrap.group(workerGroup).channel(NioSocketChannel.class)
 				.handler(new ChannelInitializer<SocketChannel>() {
 					@Override
-					public void initChannel(SocketChannel ch) throws Exception {
-						ch.pipeline().addLast(channelHandlers);
+					public void initChannel(SocketChannel channel) throws Exception {
+						channel.pipeline().addLast(handlers);
 					}
 				}).option(ChannelOption.SO_KEEPALIVE, configurator.keepAlive())
 				.option(ChannelOption.TCP_NODELAY, configurator.tcpNoDelay());

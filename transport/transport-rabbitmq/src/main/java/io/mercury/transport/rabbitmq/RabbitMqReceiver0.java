@@ -395,6 +395,15 @@ public class RabbitMqReceiver0<T> extends BaseRabbitMqTransport implements Subsc
 		}
 	}
 
+	/**
+	 * 
+	 * @param cause
+	 * @param consumerTag
+	 * @param envelope
+	 * @param properties
+	 * @param body
+	 * @throws IOException
+	 */
 	private void dumpUnprocessableMsg(Throwable cause, String consumerTag, Envelope envelope,
 			BasicProperties properties, byte[] body) throws IOException {
 		if (hasErrMsgExchange) {
@@ -425,6 +434,12 @@ public class RabbitMqReceiver0<T> extends BaseRabbitMqTransport implements Subsc
 		return ack0(deliveryTag, 0);
 	}
 
+	/**
+	 * 
+	 * @param deliveryTag
+	 * @param retry
+	 * @return
+	 */
 	private boolean ack0(long deliveryTag, int retry) {
 		if (retry == maxAckTotal) {
 			log.error("Has been retry ack {}, Quit ack", maxAckTotal);
@@ -445,15 +460,15 @@ public class RabbitMqReceiver0<T> extends BaseRabbitMqTransport implements Subsc
 			if (isConnected()) {
 				log.debug("Last detect connection isConnected() == true, Reconnection count {}", reconnectionCount);
 				channel.basicAck(deliveryTag, multipleAck);
-				log.debug("Method channel.basicAck() finished");
+				log.debug("Call function channel.basicAck() finished");
 				return true;
 			} else {
 				log.error("Last detect connection isConnected() == false, Reconnection count {}", reconnectionCount);
-				log.error("Unable to call method channel.basicAck()");
+				log.error("Can't call function channel.basicAck()");
 				return ack0(deliveryTag, retry);
 			}
 		} catch (IOException e) {
-			log.error("Call method channel.basicAck(deliveryTag==[{}], multiple==[{}]) throw IOException -> {}",
+			log.error("Call function channel.basicAck(deliveryTag==[{}], multiple==[{}]) throw IOException -> {}",
 					deliveryTag, multipleAck, e.getMessage(), e);
 			return ack0(deliveryTag, ++retry);
 		}
@@ -476,6 +491,12 @@ public class RabbitMqReceiver0<T> extends BaseRabbitMqTransport implements Subsc
 		receive();
 	}
 
+	/**
+	 * 
+	 * @author yellow013
+	 *
+	 * @param <T>
+	 */
 	public static class AckDelegate<T> {
 
 		private RabbitMqReceiver0<T> receiver;

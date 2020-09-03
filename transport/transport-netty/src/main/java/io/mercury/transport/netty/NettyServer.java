@@ -1,6 +1,6 @@
 package io.mercury.transport.netty;
 
-import io.mercury.transport.core.api.TransportServer;
+import io.mercury.transport.core.api.TServer;
 import io.mercury.transport.netty.configurator.NettyConfigurator;
 import io.mercury.transport.netty.handler.GeneralNettyHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -14,10 +14,10 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-public class NettyServer extends NettyTransport implements TransportServer {
+public class NettyServer extends NettyTransport implements TServer {
 
 	private EventLoopGroup bossGroup;
-	private ServerBootstrap serverBootstrap;
+	private ServerBootstrap bootstrap;
 
 	/**
 	 * 
@@ -32,12 +32,12 @@ public class NettyServer extends NettyTransport implements TransportServer {
 	@Override
 	protected void init() {
 		this.bossGroup = new NioEventLoopGroup();
-		this.serverBootstrap = new ServerBootstrap();
-		this.serverBootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
+		this.bootstrap = new ServerBootstrap();
+		this.bootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
 				.childHandler(new ChannelInitializer<SocketChannel>() {
 					@Override
-					public void initChannel(SocketChannel socketChannel) throws Exception {
-						socketChannel.pipeline().addLast(channelHandlers);
+					public void initChannel(SocketChannel channel) throws Exception {
+						channel.pipeline().addLast(handlers);
 					}
 				}).option(ChannelOption.SO_BACKLOG, configurator.backlog())
 				.childOption(ChannelOption.SO_KEEPALIVE, configurator.keepAlive())
@@ -49,7 +49,7 @@ public class NettyServer extends NettyTransport implements TransportServer {
 	public void startup() {
 		try {
 			// Start server.
-			serverBootstrap.bind(configurator.host(), configurator.port()).sync()
+			bootstrap.bind(configurator.host(), configurator.port()).sync()
 					// Wait close.
 					.channel().closeFuture().sync();
 		} catch (InterruptedException e) {

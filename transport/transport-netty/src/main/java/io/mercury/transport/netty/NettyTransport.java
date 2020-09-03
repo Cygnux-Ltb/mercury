@@ -19,14 +19,16 @@ public abstract class NettyTransport {
 
 	protected final EventLoopGroup workerGroup;
 
-	protected final ChannelHandler[] channelHandlers;
+	protected final ChannelHandler[] handlers;
 
 	protected final Logger log = CommonLoggerFactory.getLogger(getClass());
 
-	public NettyTransport(String tag, NettyConfigurator configurator, ChannelHandler... channelHandlers) {
+	public NettyTransport(String tag, NettyConfigurator configurator, ChannelHandler... handlers) {
 		this.tag = tag;
-		this.configurator = Assertor.nonNull(configurator, "configurator");
-		this.channelHandlers = Assertor.requiredLength(channelHandlers, 1, "channelHandlers");
+		Assertor.nonNull(configurator, "configurator");
+		Assertor.requiredLength(handlers, 1, "handlers");
+		this.configurator = configurator;
+		this.handlers = handlers;
 		this.workerGroup = new NioEventLoopGroup(availableProcessors() * 2 - availableProcessors() / 2);
 		init();
 	}
