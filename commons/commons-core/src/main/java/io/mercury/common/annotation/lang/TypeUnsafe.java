@@ -7,4 +7,5 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ ElementType.FIELD, ElementType.METHOD, ElementType.LOCAL_VARIABLE })
 public @interface TypeUnsafe {
+
 }

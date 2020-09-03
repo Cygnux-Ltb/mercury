@@ -4,6 +4,12 @@ import java.util.Map;
 
 public final class MapUtil {
 
+	/**
+	 * 
+	 * @param mapA
+	 * @param mapB
+	 * @return
+	 */
 	public static boolean isEquals(Map<?, ?> mapA, Map<?, ?> mapB) {
 		if (mapA == null && mapB == null)
 			return true;

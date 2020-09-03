@@ -19,12 +19,17 @@ public final class ImmutableLists {
 
 	/**
 	 * 
-	 * ImmutableIntListFactory
+	 * @return ImmutableIntListFactory
 	 */
 	public static ImmutableIntListFactory getIntListFactory() {
 		return ImmutableIntListFactoryImpl.INSTANCE;
 	}
 
+	/**
+	 * 
+	 * @param values
+	 * @return ImmutableIntList
+	 */
 	public static ImmutableIntList newImmutableIntList(int... values) {
 		if (ArrayUtil.isNullOrEmpty(values))
 			return ImmutableIntListFactoryImpl.INSTANCE.empty();
@@ -33,12 +38,17 @@ public final class ImmutableLists {
 
 	/**
 	 * 
-	 * ImmutableLongListFactory
+	 * @return ImmutableLongListFactory
 	 */
 	public static ImmutableLongListFactory getLongListFactory() {
 		return ImmutableLongListFactoryImpl.INSTANCE;
 	}
 
+	/**
+	 * 
+	 * @param values
+	 * @return ImmutableLongList
+	 */
 	public static ImmutableLongList newImmutableLongList(long... values) {
 		if (ArrayUtil.isNullOrEmpty(values))
 			return ImmutableLongListFactoryImpl.INSTANCE.empty();
@@ -47,24 +57,42 @@ public final class ImmutableLists {
 
 	/**
 	 * 
-	 * ImmutableListFactory
+	 * @return ImmutableListFactory
 	 */
 	public static ImmutableListFactory getListFactory() {
 		return ImmutableListFactoryImpl.INSTANCE;
 	}
 
+	/**
+	 * 
+	 * @param <E>
+	 * @param iterable
+	 * @return ImmutableList
+	 */
 	public static <E> ImmutableList<E> newImmutableList(Iterable<E> iterable) {
 		if (iterable == null)
 			return ImmutableListFactoryImpl.INSTANCE.empty();
 		return ImmutableListFactoryImpl.INSTANCE.withAll(iterable);
 	}
 
+	/**
+	 * 
+	 * @param <E>
+	 * @param e
+	 * @return ImmutableList
+	 */
 	public static <E> ImmutableList<E> newImmutableList(E e) {
 		if (e == null)
 			return ImmutableListFactoryImpl.INSTANCE.empty();
 		return ImmutableListFactoryImpl.INSTANCE.with(e);
 	}
 
+	/**
+	 * 
+	 * @param <E>
+	 * @param values
+	 * @return ImmutableList
+	 */
 	@SafeVarargs
 	public static <E> ImmutableList<E> newImmutableList(E... values) {
 		if (ArrayUtil.isNullOrEmpty(values))

@@ -7,7 +7,6 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.ToLongFunction;
 
-import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.eclipse.collections.api.list.MutableList;
@@ -20,19 +19,20 @@ public final class LocalDateMap<V> extends TemporalMap<LocalDate, V, LocalDateMa
 		super(keyToLangFunc, nextKeyFunc, hasNextKey);
 	}
 
-	private static ToLongFunction<LocalDate> keyToLangFunc = key -> date(key);
-	private static Function<LocalDate, LocalDate> nextKeyFunc = key -> key.plusDays(1);
+	private static final BiPredicate<LocalDate, LocalDate> HasNextKey = (nextKey,
+			endPoint) -> nextKey.isBefore(endPoint) || nextKey.equals(endPoint);
 
-	private static BiPredicate<LocalDate, LocalDate> hasNextKey = (nextKey, endPoint) -> nextKey.isBefore(endPoint)
-			|| nextKey.equals(endPoint);
-
+	/**
+	 * 
+	 * @param <V>
+	 * @return
+	 */
 	public final static <V> LocalDateMap<V> newMap() {
-		return new LocalDateMap<>(keyToLangFunc, nextKeyFunc, hasNextKey);
+		return new LocalDateMap<>(key -> date(key), key -> key.plusDays(1), HasNextKey);
 	}
 
 	@Override
-	public LocalDateMap<V> put(@Nonnull LocalDate key, V value) {
-		put(keyToLangFunc.applyAsLong(key), value);
+	protected LocalDateMap<V> returnThis() {
 		return this;
 	}
 

@@ -30,7 +30,7 @@ public final class ImmutableMaps {
 
 	/**
 	 * 
-	 * ImmutableIntIntMapFactory
+	 * @return ImmutableIntIntMapFactory
 	 */
 	public static ImmutableIntIntMapFactory getIntIntMapFactory() {
 		return ImmutableIntIntMapFactoryImpl.INSTANCE;
@@ -38,7 +38,7 @@ public final class ImmutableMaps {
 
 	/**
 	 * 
-	 * ImmutableIntLongMapFactory
+	 * @return ImmutableIntLongMapFactory
 	 */
 	public static ImmutableIntLongMapFactory getIntLongMapFactory() {
 		return ImmutableIntLongMapFactoryImpl.INSTANCE;
@@ -46,7 +46,7 @@ public final class ImmutableMaps {
 
 	/**
 	 * 
-	 * ImmutableIntDoubleMapFactory
+	 * @return ImmutableIntDoubleMapFactory
 	 */
 	public static ImmutableIntDoubleMapFactory getIntDoubleMapFactory() {
 		return ImmutableIntDoubleMapFactoryImpl.INSTANCE;
@@ -54,7 +54,7 @@ public final class ImmutableMaps {
 
 	/**
 	 * 
-	 * ImmutableIntObjectMapFactory
+	 * @return ImmutableIntObjectMapFactory
 	 */
 	public static ImmutableIntObjectMapFactory getIntObjectMapFactory() {
 		return ImmutableIntObjectMapFactoryImpl.INSTANCE;
@@ -62,7 +62,7 @@ public final class ImmutableMaps {
 
 	/**
 	 * 
-	 * ImmutableLongIntMapFactory
+	 * @return ImmutableLongIntMapFactory
 	 */
 	public static ImmutableLongIntMapFactory getLongIntMapFactory() {
 		return ImmutableLongIntMapFactoryImpl.INSTANCE;
@@ -70,7 +70,7 @@ public final class ImmutableMaps {
 
 	/**
 	 * 
-	 * ImmutableLongLongMapFactory
+	 * @return ImmutableLongLongMapFactory
 	 */
 	public static ImmutableLongLongMapFactory getLongLongMapFactory() {
 		return ImmutableLongLongMapFactoryImpl.INSTANCE;
@@ -78,7 +78,7 @@ public final class ImmutableMaps {
 
 	/**
 	 * 
-	 * ImmutableLongDoubleMapFactory
+	 * @return ImmutableLongDoubleMapFactory
 	 */
 	public static ImmutableLongDoubleMapFactory getLongDoubleMapFactory() {
 		return ImmutableLongDoubleMapFactoryImpl.INSTANCE;
@@ -86,7 +86,7 @@ public final class ImmutableMaps {
 
 	/**
 	 * 
-	 * ImmutableLongObjectMapFactory
+	 * @return ImmutableLongObjectMapFactory
 	 */
 	public static ImmutableLongObjectMapFactory getLongObjectMapFactory() {
 		return ImmutableLongObjectMapFactoryImpl.INSTANCE;
@@ -94,7 +94,7 @@ public final class ImmutableMaps {
 
 	/**
 	 * 
-	 * ImmutableMapFactory
+	 * @return ImmutableMapFactory
 	 */
 	public static ImmutableMapFactory getMapFactory() {
 		return ImmutableMapFactoryImpl.INSTANCE;
@@ -106,7 +106,7 @@ public final class ImmutableMaps {
 	 * @param <V>
 	 * @param key
 	 * @param value
-	 * @return
+	 * @return ImmutableMap
 	 */
 	public static <K, V> ImmutableMap<K, V> newImmutableMap(K key, V value) {
 		return ImmutableMapFactoryImpl.INSTANCE.with(key, value);
@@ -117,7 +117,7 @@ public final class ImmutableMaps {
 	 * @param <K>
 	 * @param <V>
 	 * @param map
-	 * @return
+	 * @return ImmutableMap
 	 */
 	public static <K, V> ImmutableMap<K, V> newImmutableMap(Map<K, V> map) {
 		if (map == null || map.isEmpty())
@@ -128,7 +128,7 @@ public final class ImmutableMaps {
 	/**
 	 * @param <Map<K,  V>>
 	 * @param supplier
-	 * @return ImmutableMap<K, V>
+	 * @return ImmutableMap
 	 */
 	public static <K, V> ImmutableMap<K, V> newImmutableMap(Supplier<Map<K, V>> supplier) {
 		if (supplier == null)

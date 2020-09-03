@@ -23,100 +23,198 @@ public final class MutableLists {
 	private MutableLists() {
 	}
 
+	private static final int DEFAULT_CAPACITY = 16;
+
 	/**
-	 * primitive list
+	 **************** primitive list ****************
+	 */
+	/**
+	 * 
+	 * @return MutableByteList
 	 */
 	public static MutableByteList newByteArrayList() {
 		return new ByteArrayList();
 	}
 
+	/**
+	 * 
+	 * @param capacity
+	 * @return MutableByteList
+	 */
 	public static MutableByteList newByteArrayList(int capacity) {
-		return new ByteArrayList(capacity);
+		return new ByteArrayList(capacity > DEFAULT_CAPACITY ? capacity : DEFAULT_CAPACITY);
 	}
 
+	/**
+	 * 
+	 * @param bytes
+	 * @return MutableByteList
+	 */
 	public static MutableByteList newByteArrayListWith(byte... bytes) {
 		if (ArrayUtil.isNullOrEmpty(bytes))
 			return new ByteArrayList();
 		return new ByteArrayList(bytes);
 	}
 
+	/**
+	 * 
+	 * @return MutableCharList
+	 */
 	public static MutableCharList newCharArrayList() {
 		return new CharArrayList();
 	}
 
+	/**
+	 * 
+	 * @param capacity
+	 * @return MutableCharList
+	 */
 	public static MutableCharList newCharArrayList(int capacity) {
-		return new CharArrayList(capacity);
+		return new CharArrayList(capacity > DEFAULT_CAPACITY ? capacity : DEFAULT_CAPACITY);
 	}
 
+	/**
+	 * 
+	 * @param chars
+	 * @return MutableCharList
+	 */
 	public static MutableCharList newCharArrayList(char... chars) {
 		if (ArrayUtil.isNullOrEmpty(chars))
 			return new CharArrayList();
 		return new CharArrayList(chars);
 	}
 
+	/**
+	 * 
+	 * @return MutableIntList
+	 */
 	public static MutableIntList newIntArrayList() {
 		return new IntArrayList();
 	}
 
+	/**
+	 * 
+	 * @param capacity
+	 * @return MutableIntList
+	 */
 	public static MutableIntList newIntArrayList(int capacity) {
-		return new IntArrayList(capacity);
+		return new IntArrayList(capacity > DEFAULT_CAPACITY ? capacity : DEFAULT_CAPACITY);
 	}
 
+	/**
+	 * 
+	 * @param ints
+	 * @return MutableIntList
+	 */
 	public static MutableIntList newIntArrayListWith(int... ints) {
 		if (ArrayUtil.isNullOrEmpty(ints))
 			return newIntArrayList();
 		return new IntArrayList(ints);
 	}
 
+	/**
+	 * 
+	 * @return MutableLongList
+	 */
 	public static MutableLongList newLongArrayList() {
 		return new LongArrayList();
 	}
 
+	/**
+	 * 
+	 * @param capacity
+	 * @return MutableLongList
+	 */
 	public static MutableLongList newLongArrayList(int capacity) {
-		return new LongArrayList(capacity);
+		return new LongArrayList(capacity > DEFAULT_CAPACITY ? capacity : DEFAULT_CAPACITY);
 	}
 
+	/**
+	 * 
+	 * @param longs
+	 * @return MutableLongList
+	 */
 	public static MutableLongList newLongArrayListWith(long... longs) {
 		if (ArrayUtil.isNullOrEmpty(longs))
 			return newLongArrayList();
 		return new LongArrayList(longs);
 	}
 
+	/**
+	 * 
+	 * @return MutableDoubleList
+	 */
 	public static MutableDoubleList newDoubleArrayList() {
 		return new DoubleArrayList();
 	}
 
+	/**
+	 * 
+	 * @param capacity
+	 * @return MutableDoubleList
+	 */
 	public static MutableDoubleList newDoubleArrayList(int capacity) {
-		return new DoubleArrayList(capacity);
+		return new DoubleArrayList(capacity > DEFAULT_CAPACITY ? capacity : DEFAULT_CAPACITY);
 	}
 
+	/**
+	 * 
+	 * @param doubles
+	 * @return MutableDoubleList
+	 */
 	public static MutableDoubleList newDoubleArrayListWith(double... doubles) {
 		if (ArrayUtil.isNullOrEmpty(doubles))
 			return newDoubleArrayList();
 		return new DoubleArrayList(doubles);
 	}
 
-	private static final int DEFAULT_CAPACITY = 16;
-
 	/**
-	 * list
+	 **************** object list ****************
+	 */
+	/**
+	 * 
+	 * @param <E>
+	 * @return MutableList
 	 */
 	public static <E> MutableList<E> emptyFastList() {
 		return new FastList<>();
 	}
 
+	/**
+	 * 
+	 * @param <E>
+	 * @return MutableList
+	 */
 	public static <E> MutableList<E> newFastList() {
 		return new FastList<>();
 	}
 
+	/**
+	 * 
+	 * @param <E>
+	 * @param capacity
+	 * @return MutableList
+	 */
 	public static <E> MutableList<E> newFastList(int capacity) {
 		return new FastList<>(capacity > DEFAULT_CAPACITY ? capacity : DEFAULT_CAPACITY);
 	}
 
+	/**
+	 * 
+	 * @param <E>
+	 * @param collection
+	 * @return MutableList
+	 */
 	public static <E> MutableList<E> newFastList(Collection<E> collection) {
 		return new FastList<>(collection);
 	}
 
+	/**
+	 * 
+	 * @param <E>
+	 * @param iterator
+	 * @return MutableList
+	 */
 	public static <E> MutableList<E> newFastList(Iterator<E> iterator) {
 		if (iterator != null && iterator.hasNext()) {
 			MutableList<E> list = newFastList(DEFAULT_CAPACITY);
@@ -127,12 +225,24 @@ public final class MutableLists {
 			return newFastList();
 	}
 
+	/**
+	 * 
+	 * @param <E>
+	 * @param iterable
+	 * @return MutableList
+	 */
 	public static <E> MutableList<E> newFastList(Iterable<E> iterable) {
 		if (iterable == null)
 			return newFastList();
 		return FastList.newList(iterable);
 	}
 
+	/**
+	 * 
+	 * @param <E>
+	 * @param values
+	 * @return MutableList
+	 */
 	@SafeVarargs
 	public static <E> MutableList<E> newFastList(E... values) {
 		if (ArrayUtil.isNullOrEmpty(values))

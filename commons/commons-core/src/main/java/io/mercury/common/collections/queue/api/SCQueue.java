@@ -1,10 +1,11 @@
 package io.mercury.common.collections.queue.api;
 
+import static io.mercury.common.number.RandomNumber.randomUnsignedInt;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.functional.Processor;
-import io.mercury.common.number.RandomNumber;
 
 /**
  * @author yellow013
@@ -19,7 +20,7 @@ public abstract class SCQueue<E> implements Queue<E> {
 
 	protected AtomicBoolean isClose = new AtomicBoolean(true);
 
-	protected String queueName = "SCQueue-" + Integer.toString(RandomNumber.randomUnsignedInt());
+	protected String queueName = "SCQueue-" + Integer.toString(randomUnsignedInt());
 
 	public SCQueue(Processor<E> processor) {
 		if (processor == null)

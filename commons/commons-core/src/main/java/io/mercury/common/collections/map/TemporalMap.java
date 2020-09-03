@@ -18,7 +18,7 @@ import io.mercury.common.collections.MutableMaps;
 @NotThreadSafe
 public abstract class TemporalMap<K extends Temporal, V, T extends TemporalMap<K, V, T>> {
 
-	protected ToLongFunction<K> keyToLangFunc;
+	private ToLongFunction<K> keyFunc;
 
 	private Function<K, K> nextKeyFunc;
 
@@ -26,26 +26,30 @@ public abstract class TemporalMap<K extends Temporal, V, T extends TemporalMap<K
 
 	private MutableLongObjectMap<V> savedMap;
 
-	public TemporalMap(ToLongFunction<K> keyToLangFunc, Function<K, K> nextKeyFunc, BiPredicate<K, K> hasNextKey) {
-		this(keyToLangFunc, nextKeyFunc, hasNextKey, Capacity.L07_SIZE_128);
+	public TemporalMap(ToLongFunction<K> keyFunc, Function<K, K> nextKeyFunc, BiPredicate<K, K> hasNextKey) {
+		this(keyFunc, nextKeyFunc, hasNextKey, Capacity.L07_SIZE_128);
 	}
 
-	public TemporalMap(ToLongFunction<K> keyToLangFunc, Function<K, K> nextKeyFunc, BiPredicate<K, K> hasNextKey,
+	public TemporalMap(ToLongFunction<K> keyFunc, Function<K, K> nextKeyFunc, BiPredicate<K, K> hasNextKey,
 			Capacity capacity) {
-		this.keyToLangFunc = keyToLangFunc;
+		this.keyFunc = keyFunc;
 		this.nextKeyFunc = nextKeyFunc;
 		this.hasNextKey = hasNextKey;
 		this.savedMap = MutableMaps.newLongObjectHashMap(capacity);
 	}
 
+	abstract protected T returnThis();
+
 	/**
-	 * abstract method
 	 * 
 	 * @param key
 	 * @param value
 	 * @return
 	 */
-	abstract public T put(@Nonnull K key, V value);
+	public T put(@Nonnull K key, V value) {
+		savedMap.put(keyFunc.applyAsLong(key), value);
+		return returnThis();
+	}
 
 	/**
 	 * general get method
@@ -54,11 +58,11 @@ public abstract class TemporalMap<K extends Temporal, V, T extends TemporalMap<K
 	 * @return
 	 */
 	public V get(@Nonnull K key) {
-		return savedMap.get(keyToLangFunc.applyAsLong(key));
+		return savedMap.get(keyFunc.applyAsLong(key));
 	}
 
 	/**
-	 * general get method
+	 * range scan
 	 * 
 	 * @param startPoint
 	 * @param endPoint
@@ -83,12 +87,8 @@ public abstract class TemporalMap<K extends Temporal, V, T extends TemporalMap<K
 		return rtnList;
 	}
 
-	protected MutableLongObjectMap<V> getSavedMap() {
+	protected MutableLongObjectMap<V> savedMap() {
 		return savedMap;
-	}
-
-	protected void put(long key, V value) {
-		savedMap.put(key, value);
 	}
 
 }
