@@ -55,7 +55,7 @@ public final class JsonUtil {
 	 * @return
 	 */
 	public static final String toJson(@Nonnull Object obj) {
-		return Gson.toJson(obj);
+		return obj == null ? "null" : Gson.toJson(obj);
 	}
 
 	/**
@@ -64,7 +64,7 @@ public final class JsonUtil {
 	 * @return
 	 */
 	public static final String toPrettyJson(@Nonnull Object obj) {
-		return GsonPrettyPrinting.toJson(obj);
+		return obj == null ? "null" : GsonPrettyPrinting.toJson(obj);
 	}
 
 	/**
@@ -73,7 +73,7 @@ public final class JsonUtil {
 	 * @return
 	 */
 	public static final String toJsonHasNulls(@Nonnull Object obj) {
-		return GsonHasNulls.toJson(obj);
+		return obj == null ? "null" : GsonHasNulls.toJson(obj);
 	}
 
 	/**
@@ -82,7 +82,7 @@ public final class JsonUtil {
 	 * @return
 	 */
 	public static final String toPrettyJsonHasNulls(@Nonnull Object obj) {
-		return GsonPrettyPrintingHasNulls.toJson(obj);
+		return obj == null ? "null" : GsonPrettyPrintingHasNulls.toJson(obj);
 	}
 
 	/**
@@ -308,6 +308,8 @@ public final class JsonUtil {
 		map.put("D", null);
 		map.put("E", null);
 
+		System.out.println(toJson(null));
+		System.out.println(toJsonHasNulls(null));
 		System.out.println(toJson(map));
 		System.out.println(toJsonHasNulls(map));
 		System.out.println(JSON.toJSONString(map));
