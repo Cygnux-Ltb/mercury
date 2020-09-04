@@ -1,14 +1,5 @@
 package io.mercury.common.datetime;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-
-import javax.annotation.Nonnull;
-
 import static io.mercury.common.datetime.TimeConst.MICROS_PER_DAY;
 import static io.mercury.common.datetime.TimeConst.MICROS_PER_MILLIS;
 import static io.mercury.common.datetime.TimeConst.MICROS_PER_SECONDS;
@@ -21,7 +12,17 @@ import static io.mercury.common.datetime.TimeConst.NANOS_PER_MILLIS;
 import static io.mercury.common.datetime.TimeConst.SECONDS_PER_MINUTE;
 import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
 import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT_OFFSET;
-import static java.lang.System.currentTimeMillis;;
+import static java.lang.System.currentTimeMillis;
+
+import java.nio.charset.Charset;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+
+import javax.annotation.Nonnull;;
 
 public final class EpochTime {
 
@@ -306,8 +307,7 @@ public final class EpochTime {
 		System.out.println(micros(now, offset));
 
 		System.out.println(hour());
-		// Charset.availableCharsets().entrySet().stream().forEach(entity ->
-		// System.out.println(entity));
+		Charset.availableCharsets().entrySet().stream().forEach(entity -> System.out.println(entity));
 
 	}
 

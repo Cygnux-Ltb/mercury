@@ -14,6 +14,11 @@ import io.mercury.common.collections.MutableMaps;
 @ThreadSafe
 public abstract class BaseGroup<K, V> implements Group<K, V> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8384604279192455942L;
+
 	protected ConcurrentMutableMap<K, V> savedMap = MutableMaps.newConcurrentHashMap(Capacity.L04_SIZE_16);
 
 	@Override
