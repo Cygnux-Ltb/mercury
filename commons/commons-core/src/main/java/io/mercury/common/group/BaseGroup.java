@@ -1,5 +1,7 @@
 package io.mercury.common.group;
 
+import static io.mercury.common.collections.MutableMaps.newConcurrentHashMap;
+
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -9,7 +11,6 @@ import org.eclipse.collections.api.map.ConcurrentMutableMap;
 import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.ImmutableLists;
-import io.mercury.common.collections.MutableMaps;
 
 @ThreadSafe
 public abstract class BaseGroup<K, V> implements Group<K, V> {
@@ -19,7 +20,7 @@ public abstract class BaseGroup<K, V> implements Group<K, V> {
 	 */
 	private static final long serialVersionUID = 8384604279192455942L;
 
-	protected ConcurrentMutableMap<K, V> savedMap = MutableMaps.newConcurrentHashMap(Capacity.L04_SIZE_16);
+	protected final ConcurrentMutableMap<K, V> savedMap = newConcurrentHashMap(Capacity.L04_SIZE_16);
 
 	@Override
 	public V acquireMember(K k) {

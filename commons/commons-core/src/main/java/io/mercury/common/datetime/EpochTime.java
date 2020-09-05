@@ -292,6 +292,7 @@ public final class EpochTime {
 		long epoch = currentTimeMillis();
 		LocalDateTime now = LocalDateTime.now();
 		ZoneOffset offset = ZonedDateTime.now().getOffset();
+
 		System.out.println(offset.getId() + "-" + offset.getTotalSeconds());
 		System.out.println(epoch);
 		System.out.println();
@@ -305,8 +306,8 @@ public final class EpochTime {
 		System.out.println(micros());
 		System.out.println(micros(now));
 		System.out.println(micros(now, offset));
-
 		System.out.println(hour());
+
 		Charset.availableCharsets().entrySet().stream().forEach(entity -> System.out.println(entity));
 
 	}

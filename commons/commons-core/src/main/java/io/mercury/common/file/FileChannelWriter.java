@@ -171,9 +171,11 @@ public final class FileChannelWriter {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		long nanoTime1 = System.nanoTime();
 
 		System.out.println((nanoTime1 - nanoTime0) / 1000);
+
 	}
 
 }

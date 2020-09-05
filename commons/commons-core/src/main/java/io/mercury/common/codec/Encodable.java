@@ -13,6 +13,10 @@ import java.util.function.Supplier;
 @FunctionalInterface
 public interface Encodable<R> extends Supplier<R> {
 
+	/**
+	 * 
+	 * @return
+	 */
 	R encode();
 
 	@Override

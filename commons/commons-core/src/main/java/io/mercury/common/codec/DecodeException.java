@@ -1,5 +1,10 @@
 package io.mercury.common.codec;
 
+/**
+ * 
+ * @author yellow013
+ *
+ */
 public final class DecodeException extends RuntimeException {
 
 	/**

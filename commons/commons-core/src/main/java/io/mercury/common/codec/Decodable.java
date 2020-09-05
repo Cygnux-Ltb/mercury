@@ -11,8 +11,13 @@ import java.util.function.Function;
  * @param <R>
  */
 @FunctionalInterface
-public interface Decodable<T, R> extends Function<T, R> {
+public interface Decodable<T extends Decodable<T, R>, R> extends Function<T, R> {
 
+	/**
+	 * 
+	 * @param t
+	 * @return
+	 */
 	R decode(T t);
 
 	@Override

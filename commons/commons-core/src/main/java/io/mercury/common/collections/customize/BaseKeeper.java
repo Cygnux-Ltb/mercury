@@ -1,5 +1,7 @@
 package io.mercury.common.collections.customize;
 
+import static io.mercury.common.collections.MutableMaps.newConcurrentHashMap;
+
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
@@ -8,19 +10,18 @@ import org.eclipse.collections.api.map.ConcurrentMutableMap;
 
 import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.collections.Capacity;
-import io.mercury.common.collections.MutableMaps;
 
 @ThreadSafe
 public abstract class BaseKeeper<K, V> implements Keeper<K, V> {
 
-	protected ConcurrentMutableMap<K, V> savedMap;
+	protected final ConcurrentMutableMap<K, V> savedMap;
 
 	protected BaseKeeper() {
 		this(Capacity.L06_SIZE_64);
 	}
 
 	protected BaseKeeper(Capacity capacity) {
-		this.savedMap = MutableMaps.newConcurrentHashMap(capacity);
+		this.savedMap = newConcurrentHashMap(capacity);
 	}
 
 	@Nonnull

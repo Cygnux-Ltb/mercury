@@ -6,11 +6,11 @@ import io.mercury.common.annotation.lang.AbstractFunction;
 
 public abstract class LimitedList<L extends List<E>, E> extends LimitedContainer<E> {
 
-	private L innerList;
+	private L savedList;
 
 	public LimitedList(int capacity) {
 		super(capacity);
-		this.innerList = initList(capacity);
+		this.savedList = initList(capacity);
 	}
 
 	@AbstractFunction
@@ -18,17 +18,17 @@ public abstract class LimitedList<L extends List<E>, E> extends LimitedContainer
 
 	@Override
 	protected void setTail(int tail, E e) {
-		innerList.set(tail, e);
+		savedList.set(tail, e);
 	}
 
 	@Override
 	public E getTail() {
-		return innerList.get(getTailIndex());
+		return savedList.get(getTailIndex());
 	}
 
 	@Override
 	public E getHead() {
-		return innerList.get(getHeadIndex());
+		return savedList.get(getHeadIndex());
 	}
 
 }

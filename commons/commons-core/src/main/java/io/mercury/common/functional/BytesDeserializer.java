@@ -20,5 +20,5 @@ public interface BytesDeserializer<R> extends Function<byte[], R> {
 	default R deserialization(byte[] bytes) {
 		return apply(bytes);
 	}
-	
+
 }

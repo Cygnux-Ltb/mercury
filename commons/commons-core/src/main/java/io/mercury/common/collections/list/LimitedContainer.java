@@ -1,6 +1,6 @@
 package io.mercury.common.collections.list;
 
-abstract class LimitedContainer<E> {
+public abstract class LimitedContainer<E> {
 
 	private int head = 0;
 	private int tail = 0;
