@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.mercury</groupId>
+		<artifactId>commons</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>commons-cryption</artifactId>
+	<name>commons-cryption</name>
+
+	<properties>
+		<bouncycastle.version>1.66</bouncycastle.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- The Bouncy Castle Java APIs for CMS, PKCS, EAC, TSP, CMP, CRMF, OCSP, 
+			and certificate generation. This jar contains APIs for JDK 1.5 and up. The 
+			APIs can be used in conjunction with a JCE/JCA provider such as the one provided 
+			with the Bouncy Castle Cryptography APIs. -->
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcpkix-jdk15on</artifactId>
+			<version>${bouncycastle.version}</version>
+		</dependency>
+
+		<!-- The Bouncy Castle Crypto package is a Java implementation of cryptographic 
+			algorithms. This jar contains JCE provider and lightweight API for the Bouncy 
+			Castle Cryptography APIs for JDK 1.5 and up. Note: this package includes 
+			the NTRU encryption algorithms. -->
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-ext-jdk15on</artifactId>
+			<version>${bouncycastle.version}</version>
+		</dependency>
+
+		<!-- The Bouncy Castle Java API for handling the OpenPGP protocol. This 
+			jar contains the OpenPGP API for JDK 1.5 and up. The APIs can be used in 
+			conjunction with a JCE/JCA provider such as the one provided with the Bouncy 
+			Castle Cryptography APIs. -->
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcpg-jdk15on</artifactId>
+			<version>${bouncycastle.version}</version>
+		</dependency>
+	</dependencies>
+</project>
