@@ -13,13 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.stomp.websocket;
-
-import io.netty.util.AttributeKey;
-import io.netty.util.internal.StringUtil;
+package io.mercury.transport.netty.example.stomp.websocket;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.netty.util.AttributeKey;
+import io.netty.util.internal.StringUtil;
 
 public enum StompVersion {
 

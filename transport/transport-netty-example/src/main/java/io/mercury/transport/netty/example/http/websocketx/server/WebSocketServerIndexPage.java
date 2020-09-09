@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.http.websocketx.server;
+package io.mercury.transport.netty.example.http.websocketx.server;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

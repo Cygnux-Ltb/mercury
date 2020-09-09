@@ -13,7 +13,29 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.stomp.websocket;
+package io.mercury.transport.netty.example.stomp.websocket;
+
+import static io.netty.handler.codec.stomp.StompHeaders.ACCEPT_VERSION;
+import static io.netty.handler.codec.stomp.StompHeaders.CONTENT_LENGTH;
+import static io.netty.handler.codec.stomp.StompHeaders.CONTENT_TYPE;
+import static io.netty.handler.codec.stomp.StompHeaders.DESTINATION;
+import static io.netty.handler.codec.stomp.StompHeaders.HEART_BEAT;
+import static io.netty.handler.codec.stomp.StompHeaders.ID;
+import static io.netty.handler.codec.stomp.StompHeaders.MESSAGE;
+import static io.netty.handler.codec.stomp.StompHeaders.MESSAGE_ID;
+import static io.netty.handler.codec.stomp.StompHeaders.RECEIPT;
+import static io.netty.handler.codec.stomp.StompHeaders.RECEIPT_ID;
+import static io.netty.handler.codec.stomp.StompHeaders.SERVER;
+import static io.netty.handler.codec.stomp.StompHeaders.SUBSCRIPTION;
+import static io.netty.handler.codec.stomp.StompHeaders.VERSION;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -25,16 +47,6 @@ import io.netty.handler.codec.stomp.DefaultStompFrame;
 import io.netty.handler.codec.stomp.StompCommand;
 import io.netty.handler.codec.stomp.StompFrame;
 import io.netty.util.CharsetUtil;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
-import static io.netty.handler.codec.stomp.StompHeaders.*;
 
 @Sharable
 public class StompChatHandler extends SimpleChannelInboundHandler<StompFrame> {

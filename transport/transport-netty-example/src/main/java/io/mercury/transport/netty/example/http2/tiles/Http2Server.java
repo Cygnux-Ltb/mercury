@@ -14,9 +14,14 @@
  * under the License.
  */
 
-package io.netty.example.http2.tiles;
+package io.mercury.transport.netty.example.http2.tiles;
 
 import static io.netty.handler.codec.http2.Http2SecurityUtil.CIPHERS;
+
+import java.security.cert.CertificateException;
+
+import javax.net.ssl.SSLException;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -34,10 +39,6 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SupportedCipherSuiteFilter;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
-
-import java.security.cert.CertificateException;
-
-import javax.net.ssl.SSLException;
 
 /**
  * Demonstrates an Http2 server using Netty to display a bunch of images and

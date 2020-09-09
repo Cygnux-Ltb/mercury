@@ -14,7 +14,9 @@
  * under the License.
  */
 
-package io.netty.example.file;
+package io.mercury.transport.netty.example.file;
+
+import java.io.RandomAccessFile;
 
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -22,8 +24,6 @@ import io.netty.channel.DefaultFileRegion;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.stream.ChunkedFile;
-
-import java.io.RandomAccessFile;
 
 public class FileServerHandler extends SimpleChannelInboundHandler<String> {
 

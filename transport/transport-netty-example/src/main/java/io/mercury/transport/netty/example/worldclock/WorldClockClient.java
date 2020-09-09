@@ -13,7 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.worldclock;
+package io.mercury.transport.netty.example.worldclock;
+
+import java.util.Arrays;
+import java.util.List;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -23,9 +26,6 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Sends a list of continent/city pairs to a {@link WorldClockServer} to get the

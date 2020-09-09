@@ -43,4 +43,4 @@
  * enabled web browser</a> by navigating to
  * <a href="https://localhost:8443/">https://localhost:8443/</a>
  */
-package io.netty.example.spdy.server;
+package io.mercury.transport.netty.example.spdy.server;

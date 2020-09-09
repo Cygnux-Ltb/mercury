@@ -13,15 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.portunification;
+package io.mercury.transport.netty.example.portunification;
 
+import java.util.List;
+
+import io.mercury.transport.netty.example.factorial.BigIntegerDecoder;
+import io.mercury.transport.netty.example.factorial.FactorialServerHandler;
+import io.mercury.transport.netty.example.factorial.NumberEncoder;
+import io.mercury.transport.netty.example.http.snoop.HttpSnoopServerHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
-import io.netty.example.factorial.BigIntegerDecoder;
-import io.netty.example.factorial.FactorialServerHandler;
-import io.netty.example.factorial.NumberEncoder;
-import io.netty.example.http.snoop.HttpSnoopServerHandler;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.compression.ZlibCodecFactory;
 import io.netty.handler.codec.compression.ZlibWrapper;
@@ -30,8 +32,6 @@ import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslHandler;
-
-import java.util.List;
 
 /**
  * Manipulates the current pipeline dynamically to switch protocols or enable

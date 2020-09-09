@@ -12,16 +12,17 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.netty.example.http2;
+package io.mercury.transport.netty.example.http2;
 
 import static io.netty.util.internal.ObjectUtil.checkNotNull;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.handler.codec.http.QueryStringDecoder;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.handler.codec.http.QueryStringDecoder;
 
 /**
  * Utility methods used by the example client and server.

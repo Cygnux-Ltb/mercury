@@ -14,7 +14,7 @@
  * under the License.
  */
 
-package io.netty.example.http2.tiles;
+package io.mercury.transport.netty.example.http2.tiles;
 
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;

@@ -14,7 +14,7 @@
  * under the License.
  */
 
-package io.netty.example.http2.helloworld.server;
+package io.mercury.transport.netty.example.http2.helloworld.server;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

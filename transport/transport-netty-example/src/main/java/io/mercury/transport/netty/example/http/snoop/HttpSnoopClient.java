@@ -13,7 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.http.snoop;
+package io.mercury.transport.netty.example.http.snoop;
+
+import java.net.URI;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
@@ -32,8 +34,6 @@ import io.netty.handler.codec.http.cookie.DefaultCookie;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
-
-import java.net.URI;
 
 /**
  * A simple HTTP client that prints out the content of the HTTP response to

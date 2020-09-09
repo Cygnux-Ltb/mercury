@@ -13,7 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.stomp.websocket;
+package io.mercury.transport.netty.example.stomp.websocket;
+
+import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.CompositeByteBuf;
@@ -26,8 +28,6 @@ import io.netty.handler.codec.stomp.StompFrame;
 import io.netty.handler.codec.stomp.StompHeadersSubframe;
 import io.netty.handler.codec.stomp.StompSubframe;
 import io.netty.handler.codec.stomp.StompSubframeEncoder;
-
-import java.util.List;
 
 public class StompWebSocketFrameEncoder extends StompSubframeEncoder {
 

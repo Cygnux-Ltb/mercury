@@ -14,7 +14,7 @@
  * the License.
  */
 
-package io.netty.example.ocsp;
+package io.mercury.transport.netty.example.ocsp;
 
 import static io.netty.util.internal.ObjectUtil.checkNotNull;
 

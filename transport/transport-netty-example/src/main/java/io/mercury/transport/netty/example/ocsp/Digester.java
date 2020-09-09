@@ -14,7 +14,7 @@
  * the License.
  */
 
-package io.netty.example.ocsp;
+package io.mercury.transport.netty.example.ocsp;
 
 import java.io.OutputStream;
 

@@ -14,7 +14,9 @@
  * under the License.
  */
 
-package io.netty.example.haproxy;
+package io.mercury.transport.netty.example.haproxy;
+
+import static io.mercury.transport.netty.example.haproxy.HAProxyServer.PORT;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
@@ -27,8 +29,6 @@ import io.netty.handler.codec.haproxy.HAProxyMessage;
 import io.netty.handler.codec.haproxy.HAProxyProtocolVersion;
 import io.netty.handler.codec.haproxy.HAProxyProxiedProtocol;
 import io.netty.util.CharsetUtil;
-
-import static io.netty.example.haproxy.HAProxyServer.*;
 
 public final class HAProxyClient {
 

@@ -14,7 +14,7 @@
  * under the License.
  */
 
-package io.netty.example.haproxy;
+package io.mercury.transport.netty.example.haproxy;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.proxy;
+package io.mercury.transport.netty.example.proxy;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;

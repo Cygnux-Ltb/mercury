@@ -13,21 +13,28 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.worldclock;
+package io.mercury.transport.netty.example.worldclock;
 
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.example.worldclock.WorldClockProtocol.Continent;
-import io.netty.example.worldclock.WorldClockProtocol.DayOfWeek;
-import io.netty.example.worldclock.WorldClockProtocol.LocalTime;
-import io.netty.example.worldclock.WorldClockProtocol.LocalTimes;
-import io.netty.example.worldclock.WorldClockProtocol.Location;
-import io.netty.example.worldclock.WorldClockProtocol.Locations;
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.DAY_OF_WEEK;
+import static java.util.Calendar.HOUR_OF_DAY;
+import static java.util.Calendar.MINUTE;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.SECOND;
+import static java.util.Calendar.YEAR;
+import static java.util.Calendar.getInstance;
 
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import static java.util.Calendar.*;
+import io.mercury.transport.netty.example.worldclock.WorldClockProtocol.Continent;
+import io.mercury.transport.netty.example.worldclock.WorldClockProtocol.DayOfWeek;
+import io.mercury.transport.netty.example.worldclock.WorldClockProtocol.LocalTime;
+import io.mercury.transport.netty.example.worldclock.WorldClockProtocol.LocalTimes;
+import io.mercury.transport.netty.example.worldclock.WorldClockProtocol.Location;
+import io.mercury.transport.netty.example.worldclock.WorldClockProtocol.Locations;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 
 public class WorldClockServerHandler extends SimpleChannelInboundHandler<Locations> {
 

@@ -13,15 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.uptime;
+package io.mercury.transport.netty.example.uptime;
+
+import java.util.concurrent.TimeUnit;
 
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Keep reconnecting to the server while printing out the current uptime and

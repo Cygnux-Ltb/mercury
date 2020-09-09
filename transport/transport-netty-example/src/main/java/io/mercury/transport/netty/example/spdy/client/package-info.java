@@ -50,4 +50,4 @@
  *     ./run-example spdy-client
  * </pre>
  */
-package io.netty.example.spdy.client;
+package io.mercury.transport.netty.example.spdy.client;

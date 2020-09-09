@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.dns.udp;
+package io.mercury.transport.netty.example.dns.udp;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;

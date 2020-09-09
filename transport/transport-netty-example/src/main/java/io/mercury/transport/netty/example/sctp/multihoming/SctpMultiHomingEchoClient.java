@@ -13,8 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.sctp.multihoming;
+package io.mercury.transport.netty.example.sctp.multihoming;
 
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+
+import io.mercury.transport.netty.example.sctp.SctpEchoClientHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -23,11 +27,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.sctp.SctpChannel;
 import io.netty.channel.sctp.SctpChannelOption;
 import io.netty.channel.sctp.nio.NioSctpChannel;
-import io.netty.example.sctp.SctpEchoClientHandler;
 import io.netty.util.internal.SocketUtils;
-
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 
 /**
  * SCTP Echo Client with multi-homing support.

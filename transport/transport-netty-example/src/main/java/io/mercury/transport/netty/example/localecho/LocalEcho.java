@@ -13,7 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.localecho;
+package io.mercury.transport.netty.example.localecho;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
@@ -28,9 +31,6 @@ import io.netty.channel.local.LocalServerChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 
 public final class LocalEcho {
 

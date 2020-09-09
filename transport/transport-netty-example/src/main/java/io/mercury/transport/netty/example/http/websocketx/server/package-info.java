@@ -27,4 +27,4 @@
  * You can also test it with a web socket client. Send web socket traffic to
  * ws://localhost:8080/websocket.
  */
-package io.netty.example.http.websocketx.server;
+package io.mercury.transport.netty.example.http.websocketx.server;

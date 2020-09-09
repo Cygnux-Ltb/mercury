@@ -13,12 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.factorial;
+package io.mercury.transport.netty.example.factorial;
+
+import java.math.BigInteger;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-
-import java.math.BigInteger;
 
 /**
  * Handler for a server-side channel. This handler maintains stateful

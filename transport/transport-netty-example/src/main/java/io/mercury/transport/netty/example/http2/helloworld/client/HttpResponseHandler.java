@@ -12,7 +12,13 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.netty.example.http2.helloworld.client;
+package io.mercury.transport.netty.example.http2.helloworld.client;
+
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
@@ -23,12 +29,6 @@ import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http2.HttpConversionUtil;
 import io.netty.util.CharsetUtil;
 import io.netty.util.internal.PlatformDependent;
-
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Process {@link io.netty.handler.codec.http.FullHttpResponse} translated from

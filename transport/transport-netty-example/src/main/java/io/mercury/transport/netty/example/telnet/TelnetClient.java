@@ -13,7 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.telnet;
+package io.mercury.transport.netty.example.telnet;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -24,9 +27,6 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 
 /**
  * Simplistic telnet client.

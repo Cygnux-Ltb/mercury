@@ -12,7 +12,11 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.netty.example.http2.helloworld.client;
+package io.mercury.transport.netty.example.http2.helloworld.client;
+
+import static io.netty.handler.logging.LogLevel.INFO;
+
+import java.net.InetSocketAddress;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -37,10 +41,6 @@ import io.netty.handler.codec.http2.InboundHttp2ToHttpAdapterBuilder;
 import io.netty.handler.ssl.ApplicationProtocolNames;
 import io.netty.handler.ssl.ApplicationProtocolNegotiationHandler;
 import io.netty.handler.ssl.SslContext;
-
-import java.net.InetSocketAddress;
-
-import static io.netty.handler.logging.LogLevel.INFO;
 
 /**
  * Configures the client pipeline to support HTTP/2 frames.

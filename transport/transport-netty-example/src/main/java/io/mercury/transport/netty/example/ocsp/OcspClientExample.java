@@ -14,14 +14,13 @@
  * the License.
  */
 
-package io.netty.example.ocsp;
+package io.mercury.transport.netty.example.ocsp;
 
 import java.math.BigInteger;
 
 import javax.net.ssl.SSLSession;
 import javax.security.cert.X509Certificate;
 
-import io.netty.buffer.Unpooled;
 import org.bouncycastle.asn1.ocsp.OCSPResponseStatus;
 import org.bouncycastle.cert.ocsp.BasicOCSPResp;
 import org.bouncycastle.cert.ocsp.CertificateStatus;
@@ -29,6 +28,7 @@ import org.bouncycastle.cert.ocsp.OCSPResp;
 import org.bouncycastle.cert.ocsp.SingleResp;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;

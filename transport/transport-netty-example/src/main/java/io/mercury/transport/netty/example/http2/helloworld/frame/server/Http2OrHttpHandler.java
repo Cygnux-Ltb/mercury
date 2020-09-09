@@ -12,10 +12,10 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.netty.example.http2.helloworld.frame.server;
+package io.mercury.transport.netty.example.http2.helloworld.frame.server;
 
+import io.mercury.transport.netty.example.http2.helloworld.server.HelloWorldHttp1Handler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.example.http2.helloworld.server.HelloWorldHttp1Handler;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http2.Http2FrameCodecBuilder;

@@ -13,13 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.factorial;
+package io.mercury.transport.netty.example.factorial;
+
+import java.math.BigInteger;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-
-import java.math.BigInteger;
 
 /**
  * Encodes a {@link Number} into the binary representation prepended with a

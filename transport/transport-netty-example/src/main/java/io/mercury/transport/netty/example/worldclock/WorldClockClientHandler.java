@@ -13,16 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.worldclock;
-
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.example.worldclock.WorldClockProtocol.Continent;
-import io.netty.example.worldclock.WorldClockProtocol.LocalTime;
-import io.netty.example.worldclock.WorldClockProtocol.LocalTimes;
-import io.netty.example.worldclock.WorldClockProtocol.Location;
-import io.netty.example.worldclock.WorldClockProtocol.Locations;
+package io.mercury.transport.netty.example.worldclock;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,6 +22,15 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Pattern;
+
+import io.mercury.transport.netty.example.worldclock.WorldClockProtocol.Continent;
+import io.mercury.transport.netty.example.worldclock.WorldClockProtocol.LocalTime;
+import io.mercury.transport.netty.example.worldclock.WorldClockProtocol.LocalTimes;
+import io.mercury.transport.netty.example.worldclock.WorldClockProtocol.Location;
+import io.mercury.transport.netty.example.worldclock.WorldClockProtocol.Locations;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 
 public class WorldClockClientHandler extends SimpleChannelInboundHandler<LocalTimes> {
 

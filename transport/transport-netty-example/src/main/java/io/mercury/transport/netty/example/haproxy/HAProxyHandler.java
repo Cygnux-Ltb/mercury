@@ -14,7 +14,7 @@
  * under the License.
  */
 
-package io.netty.example.haproxy;
+package io.mercury.transport.netty.example.haproxy;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;

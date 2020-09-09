@@ -14,7 +14,10 @@
  * under the License.
  */
 
-package io.netty.example.redis;
+package io.mercury.transport.netty.example.redis;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelDuplexHandler;
@@ -29,9 +32,6 @@ import io.netty.handler.codec.redis.RedisMessage;
 import io.netty.handler.codec.redis.SimpleStringRedisMessage;
 import io.netty.util.CharsetUtil;
 import io.netty.util.ReferenceCountUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * An example Redis client handler. This handler read input from STDIN and write

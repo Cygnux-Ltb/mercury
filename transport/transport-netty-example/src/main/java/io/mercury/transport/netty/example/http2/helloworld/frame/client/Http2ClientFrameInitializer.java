@@ -12,7 +12,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.netty.example.http2.helloworld.frame.client;
+package io.mercury.transport.netty.example.http2.helloworld.frame.client;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;

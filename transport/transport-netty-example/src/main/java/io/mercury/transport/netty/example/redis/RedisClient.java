@@ -13,7 +13,10 @@
  * the License.
  */
 
-package io.netty.example.redis;
+package io.mercury.transport.netty.example.redis;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -29,9 +32,6 @@ import io.netty.handler.codec.redis.RedisBulkStringAggregator;
 import io.netty.handler.codec.redis.RedisDecoder;
 import io.netty.handler.codec.redis.RedisEncoder;
 import io.netty.util.concurrent.GenericFutureListener;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 
 /**
  * Simple Redis client that demonstrates Redis commands against a Redis server.

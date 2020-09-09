@@ -13,7 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.spdy.client;
+package io.mercury.transport.netty.example.spdy.client;
+
+import static io.netty.handler.codec.spdy.SpdyVersion.SPDY_3_1;
+import static io.netty.util.internal.logging.InternalLogLevel.INFO;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -23,9 +26,6 @@ import io.netty.handler.codec.spdy.SpdyHttpDecoder;
 import io.netty.handler.codec.spdy.SpdyHttpEncoder;
 import io.netty.handler.codec.spdy.SpdySessionHandler;
 import io.netty.handler.ssl.SslContext;
-
-import static io.netty.handler.codec.spdy.SpdyVersion.*;
-import static io.netty.util.internal.logging.InternalLogLevel.*;
 
 public class SpdyClientInitializer extends ChannelInitializer<SocketChannel> {
 

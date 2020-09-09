@@ -14,15 +14,16 @@
  * under the License.
  */
 
-package io.netty.example.http2.tiles;
+package io.mercury.transport.netty.example.http2.tiles;
 
 import static io.netty.buffer.Unpooled.unreleasableBuffer;
-import static io.netty.example.http2.Http2ExampleUtil.toByteBuf;
-import io.netty.buffer.ByteBuf;
+import static io.mercury.transport.netty.example.http2.Http2ExampleUtil.toByteBuf;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import io.netty.buffer.ByteBuf;
 
 /**
  * Caches the images to avoid reading them every time from the disk.

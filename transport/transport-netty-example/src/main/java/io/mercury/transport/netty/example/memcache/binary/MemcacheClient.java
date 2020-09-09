@@ -13,7 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.memcache.binary;
+package io.mercury.transport.netty.example.memcache.binary;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -29,9 +32,6 @@ import io.netty.handler.codec.memcache.binary.BinaryMemcacheObjectAggregator;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 
 /**
  * Simple memcache client that demonstrates get and set commands against a

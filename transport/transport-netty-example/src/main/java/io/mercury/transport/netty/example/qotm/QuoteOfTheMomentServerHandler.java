@@ -13,15 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.qotm;
+package io.mercury.transport.netty.example.qotm;
+
+import java.util.Random;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.util.CharsetUtil;
-
-import java.util.Random;
 
 public class QuoteOfTheMomentServerHandler extends SimpleChannelInboundHandler<DatagramPacket> {
 

@@ -13,15 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.factorial;
+package io.mercury.transport.netty.example.factorial;
+
+import java.math.BigInteger;
+import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.CorruptedFrameException;
-
-import java.math.BigInteger;
-import java.util.List;
 
 /**
  * Decodes the binary representation of a {@link BigInteger} prepended with a

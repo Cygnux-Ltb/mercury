@@ -12,14 +12,14 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package io.netty.example.http2.helloworld.client;
+package io.mercury.transport.netty.example.http2.helloworld.client;
+
+import java.util.concurrent.TimeUnit;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http2.Http2Settings;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Reads the first {@link Http2Settings} object and notifies a

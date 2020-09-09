@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.http.snoop;
+package io.mercury.transport.netty.example.http.snoop;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

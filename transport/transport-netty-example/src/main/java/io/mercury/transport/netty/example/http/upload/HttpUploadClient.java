@@ -13,7 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package io.netty.example.http.upload;
+package io.mercury.transport.netty.example.http.upload;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URI;
+import java.util.List;
+import java.util.Map.Entry;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -41,12 +47,6 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import io.netty.util.internal.SocketUtils;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.net.URI;
-import java.util.List;
-import java.util.Map.Entry;
 
 /**
  * This class is meant to be run against {@link HttpUploadServer}.
