@@ -1,4 +1,4 @@
-package io.common.cryption;
+package io.mercury.common.cryption;
 
 /**
  * Hello world!

@@ -52,5 +52,13 @@
 			<artifactId>bcpg-jdk15on</artifactId>
 			<version>${bouncycastle.version}</version>
 		</dependency>
+
+		<!-- The Bouncy Castle Java APIs for TLS and DTLS, including a provider 
+			for the JSSE. -->
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bctls-jdk15to18</artifactId>
+			<version>${bouncycastle.version}</version>
+		</dependency>
 	</dependencies>
 </project>
