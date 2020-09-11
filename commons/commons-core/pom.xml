@@ -21,7 +21,7 @@
 		<commons-lang3.version>3.11</commons-lang3.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
 		<guava.version>29.0-jre</guava.version>
-		<eclipse-collections.version>10.2.0</eclipse-collections.version>
+		<eclipse-collections.version>10.4.0</eclipse-collections.version>
 	</properties>
 
 	<dependencies>

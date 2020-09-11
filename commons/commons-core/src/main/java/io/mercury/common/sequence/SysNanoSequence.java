@@ -21,7 +21,7 @@ public final class SysNanoSequence {
 
 	public static void main(String[] args) {
 
-		LogConfigurator.logFileName("test-log");
+		LogConfigurator.filename("test-log");
 		Logger log = CommonLoggerFactory.getLogger(SysNanoSequence.class);
 
 		for (int i = 0; i < 20; i++) {
