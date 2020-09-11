@@ -1,13 +1,11 @@
 package io.mercury.common.cryption;
 
-/**
- * Hello world!
- *
- */
-public class App {
+import org.bouncycastle.LICENSE;
 
-	public static void main(String[] args) {
-		System.out.println("Hello World!");
+public class ShowBouncyCastleLicense {
+
+	public static void show() {
+		System.out.println(LICENSE.licenseText);
 	}
 
 }
