@@ -7,27 +7,27 @@ import io.mercury.common.log.LogConfigurator.LogLevel;
 
 public final class CommonLoggerFactory {
 
-	public static final String DefaultLogFolder = "default";
+	public static final String DefaultFolder = "default";
 
-	public static final String DefaultLogFileName = "runtime";
+	public static final String DefaultFileName = "runtime";
 
-	public static final LogLevel DefaultLogLevel = LogLevel.ERROR;
+	public static final LogLevel DefaultLevel = LogLevel.ERROR;
 
 	public static Logger getLogger(Class<?> clazz) {
 		// 配置日志存储目录, 基于${user.home}
-		String logFolder = LogConfigurator.getLogFolder();
-		if (logFolder == null || logFolder.isEmpty()) {
-			LogConfigurator.logFolder(DefaultLogFolder);
+		String folder = LogConfigurator.getFolder();
+		if (folder == null || folder.isEmpty()) {
+			LogConfigurator.folder(DefaultFolder);
 		}
 		// 配置日志文件名
-		String logFilename = LogConfigurator.getLogFileName();
-		if (logFilename == null || logFilename.isEmpty()) {
-			LogConfigurator.logFileName(DefaultLogFileName);
+		String filename = LogConfigurator.getFilename();
+		if (filename == null || filename.isEmpty()) {
+			LogConfigurator.filename(DefaultFileName);
 		}
 		// 配置日志級別
-		String logLevel = LogConfigurator.getLogLevel();
-		if (logLevel == null || logLevel.isEmpty()) {
-			LogConfigurator.logLevel(DefaultLogLevel);
+		String level = LogConfigurator.getLevel();
+		if (level == null || level.isEmpty()) {
+			LogConfigurator.level(DefaultLevel);
 		}
 		return LoggerFactory.getLogger(clazz);
 	}

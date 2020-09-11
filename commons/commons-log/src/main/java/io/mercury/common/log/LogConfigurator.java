@@ -8,27 +8,27 @@ public final class LogConfigurator {
 
 	private static final String Log4j2Level = "log4j2.level";
 
-	public static synchronized void logFolder(String logFolder) {
-		System.setProperty(Log4j2Folder, logFolder);
+	public static synchronized void folder(String folder) {
+		System.setProperty(Log4j2Folder, folder);
 	}
 
-	public static synchronized void logFileName(String logFileName) {
-		System.setProperty(Log4j2Filename, logFileName);
+	public static synchronized void filename(String filename) {
+		System.setProperty(Log4j2Filename, filename);
 	}
 
-	public static synchronized void logLevel(LogLevel logLevel) {
-		System.setProperty(Log4j2Level, logLevel.name());
+	public static synchronized void level(LogLevel level) {
+		System.setProperty(Log4j2Level, level.name());
 	}
 
-	public static synchronized String getLogFolder() {
+	public static synchronized String getFolder() {
 		return System.getProperty(Log4j2Folder);
 	}
 
-	public static synchronized String getLogFileName() {
+	public static synchronized String getFilename() {
 		return System.getProperty(Log4j2Filename);
 	}
 
-	public static synchronized String getLogLevel() {
+	public static synchronized String getLevel() {
 		return System.getProperty(Log4j2Level);
 	}
 
