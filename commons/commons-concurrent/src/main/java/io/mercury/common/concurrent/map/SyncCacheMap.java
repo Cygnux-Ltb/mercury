@@ -19,9 +19,9 @@ import org.jctools.maps.NonBlockingHashMap;
 @ThreadSafe
 public final class SyncCacheMap<K, V> {
 
-	private ConcurrentMap<K, Saved> valueMap = new NonBlockingHashMap<>();
+	private final ConcurrentMap<K, Saved> valueMap = new NonBlockingHashMap<>();
 
-	private Function<K, V> refresher;
+	private final Function<K, V> refresher;
 
 	private class Saved {
 
@@ -29,7 +29,6 @@ public final class SyncCacheMap<K, V> {
 		private volatile V value;
 
 		private Saved(boolean available, V value) {
-			super();
 			this.available = available;
 			this.value = value;
 		}

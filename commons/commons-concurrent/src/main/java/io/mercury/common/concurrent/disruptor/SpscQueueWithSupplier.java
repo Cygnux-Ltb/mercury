@@ -26,7 +26,7 @@ public class SpscQueueWithSupplier<T> extends SCQueue<T> {
 
 	private AtomicBoolean isStop = new AtomicBoolean(false);
 
-	public SpscQueueWithSupplier(Capacity bufferSize, boolean autoRun, WaitStrategyOption option, Supplier<T> supplier,
+	public SpscQueueWithSupplier(Capacity capacity, boolean autoRun, WaitStrategyOption option, Supplier<T> supplier,
 			Processor<T> processor) {
 		super(processor);
 		// if (queueSize == 0 || queueSize % 2 != 0)
@@ -36,7 +36,7 @@ public class SpscQueueWithSupplier<T> extends SCQueue<T> {
 				// 实现EventFactory的Lambda
 				() -> supplier.get(),
 				// 队列容量
-				bufferSize.size(),
+				capacity.size(),
 				// 实现ThreadFactory的Lambda
 				(Runnable runnable) -> Threads.newMaxPriorityThread(runnable,
 						"DisruptorQueue-" + super.queueName + "-WorkingThread"),

@@ -20,10 +20,10 @@ public final class ConcurrentLocalDateMap<V> extends ConcurrentTemporalMap<Local
 		super(keyToLangFunc, nextKeyFunc, hasNextKey);
 	}
 
-	private static ToLongFunction<LocalDate> keyToLangFunc = key -> date(key);
-	private static Function<LocalDate, LocalDate> nextKeyFunc = key -> key.plusDays(1);
+	private static final ToLongFunction<LocalDate> keyToLangFunc = key -> date(key);
+	private static final Function<LocalDate, LocalDate> nextKeyFunc = key -> key.plusDays(1);
 
-	private static BiPredicate<LocalDate, LocalDate> hasNextKey = (nextKey, endPoint) -> nextKey.isBefore(endPoint)
+	private static final BiPredicate<LocalDate, LocalDate> hasNextKey = (nextKey, endPoint) -> nextKey.isBefore(endPoint)
 			|| nextKey.equals(endPoint);
 
 	public final static <V> ConcurrentLocalDateMap<V> newMap() {

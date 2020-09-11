@@ -98,7 +98,7 @@ public class DistributorQueue<T> extends SCQueue<T> {
 			producer.onEvent(t);
 			return true;
 		} catch (Exception e) {
-			log.error("producer.onData(t) throw exception -> [{}]", e.getMessage(), e);
+			log.error("producer.onEvent(t) throw exception -> [{}]", e.getMessage(), e);
 			return false;
 		}
 	}

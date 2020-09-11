@@ -24,16 +24,16 @@ public final class ConcurrentLocalDateTimeMap<V> extends ConcurrentTemporalMap<L
 		super(keyToLangFunc, nextKeyFunc, hasNextKey);
 	}
 
-	private static ToLongFunction<LocalDateTime> keyToLangFuncWithHour = key -> datetimeOfHour(key);
-	private static Function<LocalDateTime, LocalDateTime> nextKeyFuncWithHour = key -> key.plusHours(1);
+	private static final ToLongFunction<LocalDateTime> keyToLangFuncWithHour = key -> datetimeOfHour(key);
+	private static final Function<LocalDateTime, LocalDateTime> nextKeyFuncWithHour = key -> key.plusHours(1);
 
-	private static ToLongFunction<LocalDateTime> keyToLangFuncWithMinute = key -> datetimeOfMinute(key);
-	private static Function<LocalDateTime, LocalDateTime> nextKeyFuncWithMinute = key -> key.plusMinutes(1);
+	private static final ToLongFunction<LocalDateTime> keyToLangFuncWithMinute = key -> datetimeOfMinute(key);
+	private static final Function<LocalDateTime, LocalDateTime> nextKeyFuncWithMinute = key -> key.plusMinutes(1);
 
-	private static ToLongFunction<LocalDateTime> keyToLangFuncWithSecond = key -> datetimeOfSecond(key);
-	private static Function<LocalDateTime, LocalDateTime> nextKeyFuncWithSecond = key -> key.plusSeconds(1);
+	private static final ToLongFunction<LocalDateTime> keyToLangFuncWithSecond = key -> datetimeOfSecond(key);
+	private static final Function<LocalDateTime, LocalDateTime> nextKeyFuncWithSecond = key -> key.plusSeconds(1);
 
-	private static BiPredicate<LocalDateTime, LocalDateTime> hasNextKey = (nextKey,
+	private static final BiPredicate<LocalDateTime, LocalDateTime> hasNextKey = (nextKey,
 			endPoint) -> nextKey.isBefore(endPoint) || nextKey.equals(endPoint);
 
 	public final static <V> ConcurrentLocalDateTimeMap<V> newMapToHour() {

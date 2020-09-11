@@ -22,17 +22,17 @@ public final class ConcurrentLocalTimeMap<V> extends ConcurrentTemporalMap<Local
 		super(keyToLangFunc, nextKeyFunc, hasNextKey);
 	}
 
-	private static ToLongFunction<LocalTime> keyToLangFuncWithHour = key -> timeOfHour(key);
-	private static Function<LocalTime, LocalTime> nextKeyFuncWithHour = key -> key.plusHours(1);
+	private static final ToLongFunction<LocalTime> keyToLangFuncWithHour = key -> timeOfHour(key);
+	private static final Function<LocalTime, LocalTime> nextKeyFuncWithHour = key -> key.plusHours(1);
 
-	private static ToLongFunction<LocalTime> keyToLangFuncWithMinute = key -> timeOfMinute(key);
-	private static Function<LocalTime, LocalTime> nextKeyFuncWithMinute = key -> key.plusMinutes(1);
+	private static final ToLongFunction<LocalTime> keyToLangFuncWithMinute = key -> timeOfMinute(key);
+	private static final Function<LocalTime, LocalTime> nextKeyFuncWithMinute = key -> key.plusMinutes(1);
 
-	private static ToLongFunction<LocalTime> keyToLangFuncWithSecond = key -> timeOfSecond(key);
-	private static Function<LocalTime, LocalTime> nextKeyFuncWithSecond = key -> key.plusSeconds(1);
+	private static final ToLongFunction<LocalTime> keyToLangFuncWithSecond = key -> timeOfSecond(key);
+	private static final Function<LocalTime, LocalTime> nextKeyFuncWithSecond = key -> key.plusSeconds(1);
 
-	private static BiPredicate<LocalTime, LocalTime> hasNextKey = (nextKey, endPoint) -> nextKey.isBefore(endPoint)
-			|| nextKey.equals(endPoint);
+	private static final BiPredicate<LocalTime, LocalTime> hasNextKey = (nextKey,
+			endPoint) -> nextKey.isBefore(endPoint) || nextKey.equals(endPoint);
 
 	public final static <V> ConcurrentLocalTimeMap<V> newMapToHour() {
 		return new ConcurrentLocalTimeMap<>(keyToLangFuncWithHour, nextKeyFuncWithHour, hasNextKey);

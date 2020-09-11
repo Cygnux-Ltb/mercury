@@ -41,9 +41,9 @@ public final class CacheList<T> {
 		if (saved == null || !saved.available) {
 			List<T> refreshed = refresher.get();
 			return refreshed == null ? Optional.empty() : set(refreshed).get();
-		} else
-			// return saved.isAvailable ? Optional.of(saved.value) : get(key);
-			return Optional.of(saved.value);
+		} else {
+			return saved.available ? Optional.of(saved.value) : get();
+		}
 	}
 
 	public CacheList<T> setUnavailable() {

@@ -11,18 +11,18 @@ import io.mercury.common.util.StringUtil;
 
 public class SpscQueueDefault<E> implements Queue<E> {
 
-	private SpscArrayQueue<E> queue;
+	private final SpscArrayQueue<E> queue;
 
-	private WaitingStrategy waitingStrategy;
+	private final WaitingStrategy strategy;
 
-	private String queueName;
+	private final String queueName;
 
-	public SpscQueueDefault(String queueName, Capacity capacity, WaitingStrategy waitingStrategy) {
+	public SpscQueueDefault(String queueName, Capacity capacity, WaitingStrategy strategy) {
 		this.queue = new SpscArrayQueue<>(Math.max(capacity.size(), 64));
 		this.queueName = StringUtil.isNullOrEmpty(queueName)
 				? SpscQueueDefault.class.getSimpleName() + "-" + Thread.currentThread().getName()
 				: queueName;
-		this.waitingStrategy = waitingStrategy == null ? WaitingStrategy.SleepWaiting : waitingStrategy;
+		this.strategy = strategy == null ? WaitingStrategy.SleepWaiting : strategy;
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class SpscQueueDefault<E> implements Queue<E> {
 	}
 
 	private void waiting() {
-		switch (waitingStrategy) {
+		switch (strategy) {
 		case SpinWaiting:
 			break;
 		case SleepWaiting:

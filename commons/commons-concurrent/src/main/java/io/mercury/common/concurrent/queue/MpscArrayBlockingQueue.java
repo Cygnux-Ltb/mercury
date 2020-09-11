@@ -24,7 +24,7 @@ public class MpscArrayBlockingQueue<E> extends SCQueue<E> {
 
 	private AtomicBoolean isClose = new AtomicBoolean(true);
 
-	private MpscArrayBlockingQueue(String queueName, int capacity, RunMode mode, long delayMillis,
+	private MpscArrayBlockingQueue(String queueName, int capacity, RunMode mode, long delay,
 			Processor<E> processor) {
 		super(processor);
 		this.innerQueue = new ArrayBlockingQueue<>(Math.max(capacity, 64));
@@ -36,7 +36,7 @@ public class MpscArrayBlockingQueue<E> extends SCQueue<E> {
 			start();
 			break;
 		case Delay:
-			Threads.sleep(delayMillis);
+			Threads.sleep(delay);
 			start();
 			break;
 		default:

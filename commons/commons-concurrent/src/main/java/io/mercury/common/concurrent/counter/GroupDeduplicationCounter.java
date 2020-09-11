@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.set;
+package io.mercury.common.concurrent.counter;
 
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -7,7 +7,6 @@ import org.eclipse.collections.api.set.ImmutableSet;
 
 import io.mercury.common.annotation.thread.LockHeld;
 import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.concurrent.counter.SyncDeRepeatCounter;
 
 /**
  * 
@@ -17,20 +16,29 @@ import io.mercury.common.concurrent.counter.SyncDeRepeatCounter;
  */
 
 @ThreadSafe
-public final class DeRepeatCounterSet<T> {
+public final class GroupDeduplicationCounter<T> {
 
-	private SyncDeRepeatCounter<T> counter = new SyncDeRepeatCounter<>();
-	private MutableIntObjectMap<SyncDeRepeatCounter<T>> groupCounterMap = MutableMaps.newIntObjectHashMap();
+	private DeduplicationCounter<T> counter = new DeduplicationCounter<>();
+	private MutableIntObjectMap<DeduplicationCounter<T>> groupCounterMap = MutableMaps.newIntObjectHashMap();
 
-	public SyncDeRepeatCounter<T> getCounter() {
+	/**
+	 * 
+	 * @return
+	 */
+	public DeduplicationCounter<T> getCounter() {
 		return counter;
 	}
 
+	/**
+	 * 
+	 * @param groupId
+	 * @return
+	 */
 	@LockHeld
-	public synchronized SyncDeRepeatCounter<T> getCounterByGroup(int groupId) {
-		SyncDeRepeatCounter<T> counter = groupCounterMap.get(groupId);
+	public synchronized DeduplicationCounter<T> getCounterByGroup(int groupId) {
+		DeduplicationCounter<T> counter = groupCounterMap.get(groupId);
 		if (counter == null) {
-			counter = new SyncDeRepeatCounter<>();
+			counter = new DeduplicationCounter<>();
 			groupCounterMap.put(groupId, counter);
 		}
 		return counter;

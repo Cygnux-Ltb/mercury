@@ -17,13 +17,13 @@ import io.mercury.common.collections.MutableLists;
 @NotThreadSafe
 public abstract class ConcurrentTemporalMap<K extends Temporal, V, T extends ConcurrentTemporalMap<K, V, T>> {
 
-	protected ToLongFunction<K> keyToLangFunc;
+	protected final ToLongFunction<K> keyToLangFunc;
 
-	private Function<K, K> nextKeyFunc;
+	private final Function<K, K> nextKeyFunc;
 
-	private BiPredicate<K, K> hasNextKey;
+	private final BiPredicate<K, K> hasNextKey;
 
-	private ConcurrentMap<Long, V> savedMap;
+	private final ConcurrentMap<Long, V> savedMap;
 
 	public ConcurrentTemporalMap(ToLongFunction<K> keyToLangFunc, Function<K, K> nextKeyFunc,
 			BiPredicate<K, K> hasNextKey) {

@@ -17,7 +17,7 @@ import io.mercury.common.collections.MutableSets;
  * @param <T>
  */
 @ThreadSafe
-public final class SyncDeRepeatCounter<T> {
+public final class DeduplicationCounter<T> {
 
 	private MutableSet<T> deRepeatSet = MutableSets.newUnifiedSet(Capacity.L06_SIZE_64);
 	private volatile int count;
@@ -25,23 +25,33 @@ public final class SyncDeRepeatCounter<T> {
 
 	// private boolean isArchived = false;
 
-	public SyncDeRepeatCounter() {
+	public DeduplicationCounter() {
 		this(0);
 	}
 
-	public SyncDeRepeatCounter(int initCount) {
+	public DeduplicationCounter(int initCount) {
 		this.initCount = initCount;
 	}
 
+	/**
+	 * 
+	 * @param t
+	 * @return
+	 */
 	@LockHeld
-	public synchronized SyncDeRepeatCounter<T> add(T t) {
+	public synchronized DeduplicationCounter<T> add(T t) {
 		if (deRepeatSet.add(t))
 			count = deRepeatSet.size();
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param t
+	 * @return
+	 */
 	@LockHeld
-	public synchronized SyncDeRepeatCounter<T> subtract(T t) {
+	public synchronized DeduplicationCounter<T> subtract(T t) {
 		if (deRepeatSet.remove(t))
 			count = deRepeatSet.size();
 		return this;
@@ -53,16 +63,24 @@ public final class SyncDeRepeatCounter<T> {
 	 * @return
 	 */
 	@LockHeld
-	public synchronized SyncDeRepeatCounter<T> clear() {
+	public synchronized DeduplicationCounter<T> clear() {
 		deRepeatSet.clear();
 		count = 0;
 		return this;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public ImmutableSet<T> getDeRepeatSet() {
 		return deRepeatSet.toImmutable();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public long count() {
 		return initCount + count;
 	}
@@ -78,7 +96,7 @@ public final class SyncDeRepeatCounter<T> {
 
 	public static void main(String[] args) {
 
-		SyncDeRepeatCounter<String> deRepeatCounter = new SyncDeRepeatCounter<String>(100);
+		DeduplicationCounter<String> deRepeatCounter = new DeduplicationCounter<String>(100);
 		System.out.println(deRepeatCounter.add("").add("fsdaf").add("dsfsad").add("").add("aaa").add("aaa").count());
 
 	}

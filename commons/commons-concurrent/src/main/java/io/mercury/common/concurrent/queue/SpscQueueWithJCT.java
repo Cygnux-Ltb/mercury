@@ -15,20 +15,20 @@ import io.mercury.common.util.StringUtil;
 
 public class SpscQueueWithJCT<E> extends SCQueue<E> {
 
+	private static final Logger log = CommonLoggerFactory.getLogger(SpscQueueWithJCT.class);
+	
 	private SpscArrayQueue<E> queue;
 
-	private static final Logger log = CommonLoggerFactory.getLogger(SpscQueueWithJCT.class);
-
-	private WaitingStrategy waitingStrategy;
+	private WaitingStrategy strategy;
 
 	private SpscQueueWithJCT(String queueName, int capacity, RunMode mode, long delayMillis,
-			WaitingStrategy waitingStrategy, Processor<E> processor) {
+			WaitingStrategy strategy, Processor<E> processor) {
 		super(processor);
 		this.queue = new SpscArrayQueue<>(Math.max(capacity, 64));
 		super.queueName = StringUtil.isNullOrEmpty(queueName)
 				? SpscQueueWithJCT.class.getSimpleName() + "-" + Thread.currentThread().getName()
 				: queueName;
-		this.waitingStrategy = waitingStrategy;
+		this.strategy = strategy;
 		switch (mode) {
 		case Auto:
 			start();
@@ -89,7 +89,7 @@ public class SpscQueueWithJCT<E> extends SCQueue<E> {
 	}
 
 	private void waiting() {
-		switch (waitingStrategy) {
+		switch (strategy) {
 		case SpinWaiting:
 			break;
 		case SleepWaiting:

@@ -1,10 +1,11 @@
 package io.mercury.common.concurrent.map;
 
 import java.time.Duration;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
-import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 import org.slf4j.Logger;
 
@@ -16,27 +17,16 @@ import io.mercury.common.log.CommonLoggerFactory;
 
 public class CacheMap<K, V> {
 
-	private LoadingCache<K, V> cache;
-	private Function<K, V> refresher;
-
-	private long maximumSize;
-	private Duration duration;
+	private final LoadingCache<K, V> cache;
 
 	private static final Logger log = CommonLoggerFactory.getLogger(CacheMap.class);
 
 	private CacheMap(CacheMapBuilder builder, Function<K, V> refresher) {
-		this.maximumSize = builder.maximumSize;
-		this.duration = builder.duration;
-		this.refresher = refresher;
-		initLoadingCache();
-	}
-
-	private void initLoadingCache() {
-		this.cache = CacheBuilder.newBuilder().maximumSize(maximumSize).expireAfterAccess(duration)
+		this.cache = CacheBuilder.newBuilder().maximumSize(builder.maximumSize).expireAfterAccess(builder.duration)
 				.build(new CacheLoader<K, V>() {
 					@Override
 					public V load(K key) throws Exception {
-						return refresher == null ? null : refresher.apply(key);
+						return refresher.apply(key);
 					}
 				});
 	}
@@ -45,13 +35,14 @@ public class CacheMap<K, V> {
 		return new CacheMapBuilder();
 	}
 
-	@CheckForNull
-	public V get(K k) {
+	@Nonnull
+	public Optional<V> get(K k) {
 		try {
-			return cache.get(k);
+			V v = cache.get(k);
+			return v != null ? Optional.of(v) : Optional.empty();
 		} catch (ExecutionException e) {
-			log.error("GuavaCacheMap.get -> [{}] : {}", k, e.getMessage(), e);
-			return null;
+			log.error("CacheMap.get -> [{}] throw {}", k, e.getMessage(), e);
+			return Optional.empty();
 		}
 	}
 
@@ -76,22 +67,9 @@ public class CacheMap<K, V> {
 			return this;
 		}
 
-		public <K, V> CacheMap<K, V> build(Function<K, V> refresher) {
+		public <K, V> CacheMap<K, V> buildWith(@Nonnull Function<K, V> refresher) {
 			return new CacheMap<>(this, refresher);
 		}
-
-		public <K, V> CacheMap<K, V> build() {
-			return new CacheMap<>(this, null);
-		}
-
-	}
-
-	/**
-	 * Test Main
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
 
 	}
 
