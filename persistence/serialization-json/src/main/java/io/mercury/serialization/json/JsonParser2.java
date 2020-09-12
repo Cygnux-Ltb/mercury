@@ -5,7 +5,6 @@ import static io.mercury.common.collections.ImmutableMaps.newImmutableMap;
 import static io.mercury.common.collections.MutableLists.newFastList;
 import static io.mercury.common.collections.MutableMaps.newUnifiedMap;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +18,8 @@ import org.eclipse.collections.api.map.MutableMap;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 public final class JsonParser2 {
 
@@ -29,6 +30,33 @@ public final class JsonParser2 {
 	private static final TypeFactory TypeFactory = Mapper.getTypeFactory()
 	// TODO 添加配置信息
 	;
+
+	/**
+	 * 
+	 * @param json
+	 * @return
+	 */
+	public static JsonElement parseJson(String json) {
+		return JsonParser.parseString(json);
+	}
+
+	/**
+	 * 
+	 * @param json
+	 * @return
+	 */
+	public static boolean isJsonArray(String json) {
+		return JsonParser.parseString(json).isJsonArray();
+	}
+
+	/**
+	 * 
+	 * @param json
+	 * @return
+	 */
+	public static boolean isJsonObject(String json) {
+		return JsonParser.parseString(json).isJsonObject();
+	}
 
 	/**
 	 * 
@@ -233,16 +261,6 @@ public final class JsonParser2 {
 		} catch (Exception e) {
 			throw new JsonParseException(json, e);
 		}
-	}
-
-	public static void main(String[] args) {
-		Map<String, String> map = new HashMap<>();
-		map.put("A", "1");
-		map.put("B", "2");
-		map.put("C", "11");
-		map.put("D", null);
-		map.put("E", null);
-		System.out.println();
 	}
 
 }

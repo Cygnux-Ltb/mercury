@@ -32,7 +32,7 @@ public class ArangoDemo {
 				toStringForReflection(arangoDB.getEngine()));
 
 		final DBCreateOptions options = new DBCreateOptions().name("test_db");
-		final String collectionName = "userdata";
+		final String collection = "userdata";
 
 		try {
 
@@ -45,7 +45,7 @@ public class ArangoDemo {
 
 			arangoDB.getDatabases().forEach(dbName -> log.info("DB Name -> {}", dbName));
 
-			handleArangoDatabase(database, collectionName);
+			handleArangoDatabase(database, collection);
 
 		} catch (ArangoDBException e) {
 			log.error("Failed to create database: " + options.getName() + "; " + e.getMessage());
