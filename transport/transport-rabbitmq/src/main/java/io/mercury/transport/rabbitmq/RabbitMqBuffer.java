@@ -138,7 +138,7 @@ public class RabbitMqBuffer<E> implements Queue<E>, Closeable {
 	}
 
 	@Override
-	public String name() {
+	public String queueName() {
 		return name;
 	}
 
