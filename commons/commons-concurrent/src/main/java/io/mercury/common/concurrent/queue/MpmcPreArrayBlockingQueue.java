@@ -87,13 +87,9 @@ public class MpmcPreArrayBlockingQueue<E> implements MCQueue<E> {
 		}
 	}
 
-	public static void main(String[] args) {
-
-	}
-
 	@Override
-	public String name() {
-		return "MpmcPreloadingArrayBlockingQueue";
+	public String queueName() {
+		return "MpmcPreArrayBlockingQueue";
 	}
 
 }

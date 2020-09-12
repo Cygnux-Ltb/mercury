@@ -45,7 +45,7 @@ public class SpscQueueDefault<E> implements Queue<E> {
 	}
 
 	@Override
-	public String name() {
+	public String queueName() {
 		return queueName;
 	}
 
@@ -54,7 +54,7 @@ public class SpscQueueDefault<E> implements Queue<E> {
 		case SpinWaiting:
 			break;
 		case SleepWaiting:
-			Threads.sleep(150);
+			Threads.sleep(20);
 			break;
 		default:
 			break;

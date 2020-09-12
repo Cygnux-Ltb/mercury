@@ -16,13 +16,13 @@ import io.mercury.common.util.StringUtil;
 public class SpscQueueWithJCT<E> extends SCQueue<E> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(SpscQueueWithJCT.class);
-	
-	private SpscArrayQueue<E> queue;
 
-	private WaitingStrategy strategy;
+	private final SpscArrayQueue<E> queue;
 
-	private SpscQueueWithJCT(String queueName, int capacity, RunMode mode, long delayMillis,
-			WaitingStrategy strategy, Processor<E> processor) {
+	private final WaitingStrategy strategy;
+
+	private SpscQueueWithJCT(String queueName, int capacity, RunMode mode, long delayMillis, WaitingStrategy strategy,
+			Processor<E> processor) {
 		super(processor);
 		this.queue = new SpscArrayQueue<>(Math.max(capacity, 64));
 		super.queueName = StringUtil.isNullOrEmpty(queueName)
@@ -129,7 +129,7 @@ public class SpscQueueWithJCT<E> extends SCQueue<E> {
 						waiting();
 				}
 			} catch (Exception e) {
-				throw new RuntimeException(e);
+				throw new QueueWorkingException(queueName + " process thread throw exception", e);
 			}
 		}, queueName + "-RuningThread");
 	}
@@ -143,7 +143,7 @@ public class SpscQueueWithJCT<E> extends SCQueue<E> {
 
 		int i = 0;
 
-		System.out.println(queue.name());
+		System.out.println(queue.queueName());
 		for (;;) {
 			queue.enqueue(++i);
 			System.out.println("enqueue ->" + i);

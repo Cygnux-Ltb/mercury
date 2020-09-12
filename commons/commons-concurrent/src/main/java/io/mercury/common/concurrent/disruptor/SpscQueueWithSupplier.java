@@ -104,8 +104,8 @@ public class SpscQueueWithSupplier<T> extends SCQueue<T> {
 	}
 
 	@Override
-	public String name() {
-		return "";
+	public String queueName() {
+		return queueName;
 	}
 
 	public static void main(String[] args) {

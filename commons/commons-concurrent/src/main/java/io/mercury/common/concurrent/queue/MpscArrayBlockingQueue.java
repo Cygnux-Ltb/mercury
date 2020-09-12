@@ -21,11 +21,9 @@ public class MpscArrayBlockingQueue<E> extends SCQueue<E> {
 	private ArrayBlockingQueue<E> innerQueue;
 
 	private AtomicBoolean isRun = new AtomicBoolean(false);
-
 	private AtomicBoolean isClose = new AtomicBoolean(true);
 
-	private MpscArrayBlockingQueue(String queueName, int capacity, RunMode mode, long delay,
-			Processor<E> processor) {
+	private MpscArrayBlockingQueue(String queueName, int capacity, RunMode mode, long delay, Processor<E> processor) {
 		super(processor);
 		this.innerQueue = new ArrayBlockingQueue<>(Math.max(capacity, 64));
 		this.queueName = StringUtil.isNullOrEmpty(queueName)
@@ -117,9 +115,9 @@ public class MpscArrayBlockingQueue<E> extends SCQueue<E> {
 			} catch (InterruptedException e) {
 				log.error("innerQueue.poll(500, TimeUnit.MILLISECONDS) throws InterruptedException!", e);
 			} catch (Exception e) {
-				throw new RuntimeException(e);
+				throw new QueueWorkingException(queueName + " process thread throw exception", e);
 			}
-		}, queueName);
+		}, queueName + "-RuningThread");
 	}
 
 	@Override
@@ -137,7 +135,7 @@ public class MpscArrayBlockingQueue<E> extends SCQueue<E> {
 
 		int i = 0;
 
-		System.out.println(queue.name());
+		System.out.println(queue.queueName());
 		for (;;) {
 			queue.enqueue(++i);
 			System.out.println("enqueue ->" + i);
