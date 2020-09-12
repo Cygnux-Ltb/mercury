@@ -12,6 +12,8 @@ public interface Charsets {
 
 	Charset UTF16 = Charset.forName("UTF-16");
 
+	Charset UTF32 = Charset.forName("UTF-32");
+
 	Charset GBK = Charset.forName("GBK");
 
 	Charset GB2312 = Charset.forName("GB2312");

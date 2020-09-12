@@ -1,15 +1,8 @@
-package io.mercury.common.codec.specific;
+package io.mercury.common.codec;
 
 import java.nio.ByteBuffer;
 
 @FunctionalInterface
-public interface BytesEncoder<T> extends Codec<T, ByteBuffer> {
+public interface EncoderOfBytes<T> extends Encoder<T, ByteBuffer> {
 
-	ByteBuffer encode(T t);
-	
-	@Override
-	default ByteBuffer codec(T t) {
-		return encode(t);
-	}
-	
 }

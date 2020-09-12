@@ -11,6 +11,7 @@ import org.eclipse.collections.api.map.primitive.MutableLongLongMap;
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.collections.MutableMaps;
+import io.mercury.common.thread.Threads;
 
 /**
  * 
@@ -104,17 +105,17 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
 
 	public static void main(String[] args) {
 
-//		LazyLoadingExpirationCounter counter = new LazyLoadingExpirationCounter(Duration.ofMillis(10000), 1024);
-//
-//		for (int i = 0; i < 20; i++) {
-//			counter.add(i, 10);
-//			ThreadUtil.sleep(500);
-//		}
-//
-//		for (int i = 0; i < 20; i++) {
-//			System.out.println(counter.getValue());
-//			ThreadUtil.sleep(2000);
-//		}
+		ExpirableCounter counter = new ExpirableCounter(Duration.ofMillis(10000), Capacity.L10_SIZE_1024);
+
+		for (int i = 0; i < 20; i++) {
+			counter.add(i, 10);
+			Threads.sleep(500);
+		}
+
+		for (int i = 0; i < 20; i++) {
+			System.out.println(counter.getValue());
+			Threads.sleep(2000);
+		}
 
 		MutableLongLongMap map = MutableMaps.newLongLongHashMap(Capacity.L10_SIZE_1024);
 		map.put(1, 10);

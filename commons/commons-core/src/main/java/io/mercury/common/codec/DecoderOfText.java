@@ -1,13 +1,6 @@
-package io.mercury.common.codec.specific;
+package io.mercury.common.codec;
 
 @FunctionalInterface
-public interface TextDecoder<R> extends Codec<CharSequence, R> {
-
-	R decode(CharSequence sequence);
-
-	@Override
-	default R codec(CharSequence t) {
-		return decode(t);
-	}
+public interface DecoderOfText<R> extends Decoder<CharSequence, R> {
 
 }

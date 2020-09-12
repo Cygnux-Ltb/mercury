@@ -17,7 +17,7 @@ public interface Queue<E> {
 		throw new UnsupportedOperationException("Interface [Queue] defined method [pollAndApply] is not implement");
 	}
 
-	String name();
+	String queueName();
 
 	public static enum WaitingStrategy {
 		SpinWaiting, SleepWaiting,

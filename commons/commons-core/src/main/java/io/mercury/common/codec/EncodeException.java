@@ -15,4 +15,8 @@ public final class EncodeException extends RuntimeException {
 		super(cause);
 	}
 
+	public EncodeException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
+
 }

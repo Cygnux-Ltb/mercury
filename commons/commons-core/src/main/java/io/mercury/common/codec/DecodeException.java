@@ -20,4 +20,8 @@ public final class DecodeException extends RuntimeException {
 		super(cause);
 	}
 
+	public DecodeException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
+
 }
