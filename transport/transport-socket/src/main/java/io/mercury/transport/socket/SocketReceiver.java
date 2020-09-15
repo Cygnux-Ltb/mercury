@@ -24,7 +24,7 @@ public class SocketReceiver implements Receiver {
 	private AtomicBoolean isReceiving = new AtomicBoolean(false);
 	private AtomicBoolean isRun = new AtomicBoolean(false);
 
-	protected Logger log = CommonLoggerFactory.getLogger(getClass());
+	protected static final Logger log = CommonLoggerFactory.getLogger(SocketReceiver.class);
 
 	/**
 	 * @param configurator
@@ -32,7 +32,6 @@ public class SocketReceiver implements Receiver {
 	 * @param serverSocket
 	 */
 	public SocketReceiver(SocketConfigurator configurator, Consumer<byte[]> callback) {
-		super();
 		if (configurator == null || callback == null)
 			throw new IllegalArgumentException("configurator or callback is null for init ");
 		this.configurator = configurator;

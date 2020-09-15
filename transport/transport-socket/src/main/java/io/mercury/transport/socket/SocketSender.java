@@ -20,10 +20,9 @@ public class SocketSender implements Sender<byte[]> {
 
 	private AtomicBoolean isRun = new AtomicBoolean(true);
 
-	protected Logger log = CommonLoggerFactory.getLogger(getClass());
+	protected static final Logger log = CommonLoggerFactory.getLogger(SocketSender.class);
 
 	public SocketSender(SocketConfigurator configurator) {
-		super();
 		if (configurator == null)
 			throw new IllegalArgumentException("configurator or callback is null for init ");
 		this.configurator = configurator;
