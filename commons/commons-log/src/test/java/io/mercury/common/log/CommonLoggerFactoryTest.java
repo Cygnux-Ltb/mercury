@@ -9,7 +9,7 @@ import io.mercury.common.log.LogConfigurator.LogLevel;
 
 public class CommonLoggerFactoryTest {
 
-	private Logger log = CommonLoggerFactory.getLogger(CommonLoggerFactory.class);
+	private static final Logger log = CommonLoggerFactory.getLogger(CommonLoggerFactory.class);
 
 	@Test
 	public void test() {

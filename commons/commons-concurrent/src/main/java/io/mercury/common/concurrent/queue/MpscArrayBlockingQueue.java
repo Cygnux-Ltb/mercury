@@ -127,20 +127,16 @@ public class MpscArrayBlockingQueue<E> extends SCQueue<E> {
 	}
 
 	public static void main(String[] args) {
-
 		MpscArrayBlockingQueue<Integer> queue = MpscArrayBlockingQueue.autoStartQueue(100, (value) -> {
 			System.out.println(value);
 			Threads.sleep(500);
 		});
-
 		int i = 0;
-
 		System.out.println(queue.queueName());
 		for (;;) {
 			queue.enqueue(++i);
 			System.out.println("enqueue ->" + i);
 		}
-
 	}
 
 }
