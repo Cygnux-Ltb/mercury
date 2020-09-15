@@ -63,7 +63,9 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 		this.fileCycle = builder.fileCycle;
 		this.fileClearCycle = builder.fileClearCycle <= 0 ? 0 : builder.fileClearCycle < 3 ? 3 : builder.fileClearCycle;
 		this.storeFileListener = builder.storeFileListener;
-		this.logger = builder.logger != null ? builder.logger : logger;
+		if (builder.logger != null) {
+			this.logger = builder.logger;
+		}
 		this.savePath = new File(rootPath + "chronicle-queue/" + folder);
 		this.queueName = folder.replaceAll("/", "");
 		this.internalQueue = buildChronicleQueue();
