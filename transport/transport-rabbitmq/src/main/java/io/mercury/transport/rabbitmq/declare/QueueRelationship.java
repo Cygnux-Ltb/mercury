@@ -17,6 +17,9 @@ import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
  */
 public final class QueueRelationship extends Relationship {
 
+	/**
+	 * 
+	 */
 	private AmqpQueue queue;
 
 	/**

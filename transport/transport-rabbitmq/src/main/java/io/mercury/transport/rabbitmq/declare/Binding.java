@@ -100,9 +100,10 @@ public final class Binding {
 
 		System.out.println(exchange0);
 		System.out.println(exchange1);
+		
 		System.out.println(exchange0 == exchange1);
 		System.out.println(exchange0.idempotent(exchange1));
-
+		
 		System.out.println(AmqpExchange.direct("ABC"));
 		System.out.println(AmqpQueue.named("ABC"));
 

@@ -11,10 +11,19 @@ public final class AmqpDeclareException extends Exception {
 	 */
 	private static final long serialVersionUID = -7352101640279556300L;
 
+	/**
+	 * 
+	 * @param cause
+	 */
 	private AmqpDeclareException(Throwable cause) {
 		super(cause);
 	}
 
+	/**
+	 * 
+	 * @param message
+	 * @param cause
+	 */
 	private AmqpDeclareException(String message, Throwable cause) {
 		super(message, cause);
 	}

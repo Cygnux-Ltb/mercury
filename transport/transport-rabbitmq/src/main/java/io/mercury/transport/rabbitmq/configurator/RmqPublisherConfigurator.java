@@ -1,5 +1,7 @@
 package io.mercury.transport.rabbitmq.configurator;
 
+import static io.mercury.common.util.Assertor.nonNull;
+
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
@@ -7,7 +9,6 @@ import javax.annotation.Nonnull;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.MessageProperties;
 
-import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringUtil;
 import io.mercury.transport.rabbitmq.declare.AmqpQueue;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
@@ -19,19 +20,33 @@ import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
  */
 public final class RmqPublisherConfigurator extends RmqConfigurator {
 
-	// 发布者ExchangeDeclare
+	/*
+	 * 发布者ExchangeDeclare
+	 */
 	private ExchangeRelationship publishExchange;
-	// 默认RoutingKey
+	/*
+	 * 默认RoutingKey
+	 */
 	private String defaultRoutingKey;
-	// 默认消息发布参数
+	/*
+	 * 默认消息发布参数
+	 */
 	private BasicProperties defaultMsgProps;
-	// 消息参数提供者
+	/*
+	 * 消息参数提供者
+	 */
 	private Supplier<BasicProperties> msgPropsSupplier;
-	// 是否进行发布确认
+	/*
+	 * 是否进行发布确认
+	 */
 	private boolean confirm;
-	// 发布确认超时时间
+	/*
+	 * 发布确认超时时间
+	 */
 	private long confirmTimeout;
-	// 发布确认重试次数
+	/*
+	 * 发布确认重试次数
+	 */
 	private int confirmRetry;
 
 	/**
@@ -89,8 +104,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	 */
 	public static Builder configuration(@Nonnull RmqConnection connection,
 			@Nonnull ExchangeRelationship publishExchange) {
-		return new Builder(Assertor.nonNull(connection, "connection"),
-				Assertor.nonNull(publishExchange, "publishExchange"));
+		return new Builder(nonNull(connection, "connection"), nonNull(publishExchange, "publishExchange"));
 	}
 
 	/**
@@ -154,7 +168,9 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 
 	public static class Builder {
 
-		// 连接配置
+		/*
+		 * 连接配置
+		 */
 		private RmqConnection connection;
 
 		private ExchangeRelationship publishExchange;
@@ -196,7 +212,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 		/**
 		 * @param defaultRoutingKey the defaultRoutingKey to set
 		 */
-		public Builder setDefaultRoutingKey(String defaultRoutingKey) {
+		public Builder setDefaultRoutingKey(@Nonnull String defaultRoutingKey) {
 			this.defaultRoutingKey = defaultRoutingKey;
 			return this;
 		}
@@ -204,7 +220,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 		/**
 		 * @param msgProperties the msgProperties to set
 		 */
-		public Builder setDefaultMsgProps(BasicProperties defaultMsgProps) {
+		public Builder setDefaultMsgProps(@Nonnull BasicProperties defaultMsgProps) {
 			this.defaultMsgProps = defaultMsgProps;
 			return this;
 		}
@@ -212,7 +228,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 		/**
 		 * @param msgPropertiesSupplier
 		 */
-		public Builder setMsgPropsSupplier(Supplier<BasicProperties> msgPropsSupplier) {
+		public Builder setMsgPropsSupplier(@Nonnull Supplier<BasicProperties> msgPropsSupplier) {
 			this.msgPropsSupplier = msgPropsSupplier;
 			return this;
 		}

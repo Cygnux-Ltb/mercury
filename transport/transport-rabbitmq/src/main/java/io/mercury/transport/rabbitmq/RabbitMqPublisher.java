@@ -106,8 +106,9 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 	private void declare() throws AmqpDeclareRuntimeException {
 		try {
 			if (publishExchange == ExchangeRelationship.Anonymous) {
-				log.warn("Publisher -> {} use anonymous exchange, Please specify [queue name] "
-						+ "as the [routing key] when publish", tag);
+				log.warn(
+						"Publisher -> {} use anonymous exchange, Please specify [queue name] as the [routing key] when publish",
+						tag);
 			} else {
 				this.publishExchange.declare(RabbitMqDeclarant.newWith(channel));
 			}

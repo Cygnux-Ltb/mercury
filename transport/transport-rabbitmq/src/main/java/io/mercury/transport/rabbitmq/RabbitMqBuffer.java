@@ -36,18 +36,50 @@ public class RabbitMqBuffer<E> implements Queue<E>, Closeable {
 
 	private final String name;
 
+	/**
+	 * 
+	 * @param <E>
+	 * @param connection
+	 * @param queueName
+	 * @param serializer
+	 * @param deserializer
+	 * @return
+	 * @throws AmqpDeclareException
+	 */
 	public static final <E> RabbitMqBuffer<E> newQueue(RmqConnection connection, String queueName,
 			Function<E, byte[]> serializer, Function<byte[], E> deserializer) throws AmqpDeclareException {
 		return new RabbitMqBuffer<>(connection, queueName, MutableLists.emptyFastList(), MutableLists.emptyFastList(),
 				serializer, deserializer);
 	}
 
+	/**
+	 * 
+	 * @param <E>
+	 * @param connection
+	 * @param queueName
+	 * @param exchangeNames
+	 * @param routingKeys
+	 * @param serializer
+	 * @param deserializer
+	 * @return
+	 * @throws AmqpDeclareException
+	 */
 	public static final <E> RabbitMqBuffer<E> newQueue(RmqConnection connection, String queueName,
 			List<String> exchangeNames, List<String> routingKeys, Function<E, byte[]> serializer,
 			Function<byte[], E> deserializer) throws AmqpDeclareException {
 		return new RabbitMqBuffer<>(connection, queueName, exchangeNames, routingKeys, serializer, deserializer);
 	}
 
+	/**
+	 * 
+	 * @param connection
+	 * @param queueName
+	 * @param exchangeNames
+	 * @param routingKeys
+	 * @param serializer
+	 * @param deserializer
+	 * @throws AmqpDeclareException
+	 */
 	private RabbitMqBuffer(RmqConnection connection, String queueName, List<String> exchangeNames,
 			List<String> routingKeys, Function<E, byte[]> serializer, Function<byte[], E> deserializer)
 			throws AmqpDeclareException {
@@ -62,6 +94,10 @@ public class RabbitMqBuffer<E> implements Queue<E>, Closeable {
 		declareQueue();
 	}
 
+	/**
+	 * 
+	 * @throws AmqpDeclareException
+	 */
 	private void declareQueue() throws AmqpDeclareException {
 		QueueRelationship queueRelationship = QueueRelationship.named(queueName).binding(
 				// 如果routingKeys为空集合, 则创建fanout交换器, 否则创建直接交换器
@@ -118,6 +154,10 @@ public class RabbitMqBuffer<E> implements Queue<E>, Closeable {
 		return basicAck(response.getEnvelope());
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	private GetResponse basicGet() {
 		try {
 			return rabbitMqChannel.internalChannel().basicGet(queueName, false);
@@ -127,6 +167,11 @@ public class RabbitMqBuffer<E> implements Queue<E>, Closeable {
 		}
 	}
 
+	/**
+	 * 
+	 * @param envelope
+	 * @return
+	 */
 	private boolean basicAck(Envelope envelope) {
 		try {
 			rabbitMqChannel.internalChannel().basicAck(envelope.getDeliveryTag(), false);

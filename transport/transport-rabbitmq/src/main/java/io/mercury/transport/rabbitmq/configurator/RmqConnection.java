@@ -1,12 +1,14 @@
 package io.mercury.transport.rabbitmq.configurator;
 
+import static io.mercury.common.util.Assertor.nonNull;
+import static io.mercury.common.util.Assertor.withinRange;
+
 import javax.annotation.Nonnull;
 import javax.net.ssl.SSLContext;
 
 import com.rabbitmq.client.ConnectionFactory;
 
 import io.mercury.common.functional.ShutdownEvent;
-import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringUtil;
 import io.mercury.transport.core.configurator.TransportConfigurator;
 
@@ -20,26 +22,45 @@ public final class RmqConnection implements TransportConfigurator {
 	private String username;
 	private String password;
 
-	// 虚拟主机
+	/**
+	 * 虚拟主机
+	 */
 	private String virtualHost;
-	// SSL
+	/*
+	 * SSL
+	 */
 	private SSLContext sslContext;
-	// 连接超时时间
+	/*
+	 * 连接超时时间
+	 */
 	private int connectionTimeout;
-	// 自动恢复连接
+	/*
+	 * 自动恢复连接
+	 */
 	private boolean automaticRecovery;
-	// 重试连接间隔
+	/*
+	 * 重试连接间隔
+	 */
 	private long recoveryInterval;
-	// 握手通信超时时间
+	/*
+	 * 握手通信超时时间
+	 */
 	private int handshakeTimeout;
-	// 关闭超时时间
+	/*
+	 * 关闭超时时间
+	 */
 	private int shutdownTimeout;
-	// 请求心跳超时时间
+	/*
+	 * 请求心跳超时时间
+	 */
 	private int requestedHeartbeat;
-	// 停机处理回调函数
+	/*
+	 * 停机处理回调函数
+	 */
 	private transient ShutdownEvent<Exception> shutdownEvent;
-
-	// 配置连接信息
+	/*
+	 * 配置连接信息
+	 */
 	private String connectionInfo;
 
 	private RmqConnection(Builder builder) {
@@ -56,10 +77,10 @@ public final class RmqConnection implements TransportConfigurator {
 		this.shutdownTimeout = builder.shutdownTimeout;
 		this.requestedHeartbeat = builder.requestedHeartbeat;
 		this.shutdownEvent = builder.shutdownEvent;
-		this.connectionInfo = buildConnectionInfo();
+		this.connectionInfo = generateConnectionInfo();
 	}
 
-	private String buildConnectionInfo() {
+	private String generateConnectionInfo() {
 		return username + "@" + host + ":" + port + (virtualHost.equals("/") ? virtualHost : "/" + virtualHost);
 	}
 
@@ -203,7 +224,7 @@ public final class RmqConnection implements TransportConfigurator {
 	 * 
 	 * @return ConnectionFactory
 	 */
-	public ConnectionFactory createConnectionFactory() {
+	public ConnectionFactory newConnectionFactory() {
 		ConnectionFactory factory = new ConnectionFactory();
 		factory.setHost(host);
 		factory.setPort(port);
@@ -225,42 +246,60 @@ public final class RmqConnection implements TransportConfigurator {
 		/**
 		 * 连接参数
 		 */
-		private String host;
-		private int port;
-		private String username;
-		private String password;
-		// 虚拟主机
+		private final String host;
+		private final int port;
+		private final String username;
+		private final String password;
+		/*
+		 * 虚拟主机
+		 */
 		private String virtualHost = "/";
-		// SSL
+		/*
+		 * SSL
+		 */
 		private SSLContext sslContext;
-		// 连接超时时间
+		/*
+		 * 连接超时时间
+		 */
 		private int connectionTimeout = 60 * 1000;
-		// 自动恢复连接
+		/*
+		 * 自动恢复连接
+		 */
 		private boolean automaticRecovery = true;
-		// 重试连接间隔
+		/*
+		 * 重试连接间隔
+		 */
 		private long recoveryInterval = 10 * 1000;
-		// 握手通信超时时间
+		/*
+		 * 握手通信超时时间
+		 */
 		private int handshakeTimeout = 10 * 1000;
-		// 关闭超时时间
+		/*
+		 * 关闭超时时间
+		 */
 		private int shutdownTimeout = 10 * 1000;
-		// 请求心跳超时时间
+		/*
+		 * 请求心跳超时时间
+		 */
 		private int requestedHeartbeat = 20;
-		// 停机处理回调函数
+		/*
+		 * 停机处理回调函数
+		 */
 		private ShutdownEvent<Exception> shutdownEvent;
 
 		private Builder(String host, int port, String username, String password) {
-			this.host = Assertor.nonNull(host, "host");
-			this.port = Assertor.withinRange(port, 4096, 65536, "port");
-			this.username = Assertor.nonNull(username, "username");
-			this.password = Assertor.nonNull(password, "password");
+			this.host = nonNull(host, "host");
+			this.port = withinRange(port, 4096, 65536, "port");
+			this.username = nonNull(username, "username");
+			this.password = nonNull(password, "password");
 		}
 
 		private Builder(String host, int port, String username, String password, String virtualHost) {
-			this.host = Assertor.nonNull(host, "host");
-			this.port = Assertor.withinRange(port, 4096, 65536, "port");
-			this.username = Assertor.nonNull(username, "username");
-			this.password = Assertor.nonNull(password, "password");
-			if (virtualHost != null && !virtualHost.equals(""))
+			this.host = nonNull(host, "host");
+			this.port = withinRange(port, 4096, 65536, "port");
+			this.username = nonNull(username, "username");
+			this.password = nonNull(password, "password");
+			if (StringUtil.nonEmpty(virtualHost))
 				this.virtualHost = virtualHost;
 		}
 

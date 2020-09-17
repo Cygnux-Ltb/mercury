@@ -13,6 +13,32 @@ public class AmqpNoConfirmException extends Exception {
 	 * @param routingKey
 	 * @param confirmRetry
 	 * @param confirmTimeout
+	 */
+	public AmqpNoConfirmException(String exchange, String routingKey, int confirmRetry, long confirmTimeout) {
+		super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
+				+ "], confirmRetry==[" + confirmRetry + "], confirmTimeout==[" + confirmTimeout + "]");
+	}
+
+	/**
+	 * 
+	 * @param exchange
+	 * @param routingKey
+	 * @param confirmRetry
+	 * @param confirmTimeout
+	 * @param throwable
+	 */
+	public AmqpNoConfirmException(String exchange, String routingKey, int confirmRetry, long confirmTimeout,
+			Throwable throwable) {
+		super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
+				+ "], confirmRetry==[" + confirmRetry + "], confirmTimeout==[" + confirmTimeout + "]", throwable);
+	}
+
+	/**
+	 * 
+	 * @param exchange
+	 * @param routingKey
+	 * @param confirmRetry
+	 * @param confirmTimeout
 	 * @param msg
 	 */
 	public AmqpNoConfirmException(String exchange, String routingKey, int confirmRetry, long confirmTimeout,
@@ -28,10 +54,14 @@ public class AmqpNoConfirmException extends Exception {
 	 * @param routingKey
 	 * @param confirmRetry
 	 * @param confirmTimeout
+	 * @param msg
+	 * @param throwable
 	 */
-	public AmqpNoConfirmException(String exchange, String routingKey, int confirmRetry, long confirmTimeout) {
+	public AmqpNoConfirmException(String exchange, String routingKey, int confirmRetry, long confirmTimeout, byte[] msg,
+			Throwable throwable) {
 		super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
-				+ "], confirmRetry==[" + confirmRetry + "], confirmTimeout==[" + confirmTimeout + "]");
+				+ "], confirmRetry==[" + confirmRetry + "], confirmTimeout==[" + confirmTimeout + "], msg==["
+				+ new String(msg) + "]", throwable);
 	}
 
 }

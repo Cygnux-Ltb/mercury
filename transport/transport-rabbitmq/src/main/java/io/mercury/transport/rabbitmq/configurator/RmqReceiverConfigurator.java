@@ -1,39 +1,58 @@
 package io.mercury.transport.rabbitmq.configurator;
 
+import static io.mercury.common.util.Assertor.nonNull;
+
 import javax.annotation.Nonnull;
 
-import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringUtil;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
 import io.mercury.transport.rabbitmq.declare.QueueRelationship;
 
 public final class RmqReceiverConfigurator extends RmqConfigurator {
 
-	// 接受者QueueDeclare
+	/*
+	 * 接受者QueueDeclare
+	 */
 	private QueueRelationship receiveQueue;
 
-	// 错误消息ExchangeDeclare
+	/*
+	 * 错误消息ExchangeDeclare
+	 */
 	private ExchangeRelationship errMsgExchange;
 
-	// 错误消息RoutingKey
+	/*
+	 * 错误消息RoutingKey
+	 */
 	private String errMsgRoutingKey;
 
-	// 错误消息QueueDeclare
+	/*
+	 * 错误消息QueueDeclare
+	 */
 	private QueueRelationship errMsgQueue;
 
-	// 自动ACK
+	/*
+	 * 是否自动ACK
+	 */
 	private boolean autoAck;
 
-	// 一次ACK多条
+	/*
+	 * 是否一次ACK多条
+	 */
 	private boolean multipleAck;
 
-	// 最大重新ACK次数
+	/*
+	 * 最大重新ACK次数
+	 */
 	private int maxAckTotal;
 
-	// 最大ACK重连次数
+	/*
+	 * 最大ACK重连次数
+	 */
 	private int maxAckReconnection;
 
-	// QOS预取
+	/*
+	 * QOS预取
+	 */
 	private int qos;
 
 	/**
@@ -60,7 +79,7 @@ public final class RmqReceiverConfigurator extends RmqConfigurator {
 	 * @return
 	 */
 	public static Builder configuration(@Nonnull RmqConnection connection, @Nonnull QueueRelationship receiveQueue) {
-		return new Builder(Assertor.nonNull(connection, "connection"), Assertor.nonNull(receiveQueue, "receiveQueue"));
+		return new Builder(nonNull(connection, "connection"), nonNull(receiveQueue, "receiveQueue"));
 	}
 
 	/**
@@ -143,6 +162,9 @@ public final class RmqReceiverConfigurator extends RmqConfigurator {
 		// 接受者QueueRelationship
 		private QueueRelationship receiveQueue;
 		// 错误消息ExchangeRelationship
+		/**
+		 * UnProcessable Message
+		 */
 		private ExchangeRelationship errMsgExchange;
 		// 错误消息RoutingKey
 		private String errMsgRoutingKey = "";

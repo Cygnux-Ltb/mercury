@@ -2,7 +2,9 @@ package io.mercury.transport.rabbitmq.configurator;
 
 public abstract class RmqConfigurator {
 
-	// 连接配置
+	/**
+	 * 连接配置信息
+	 */
 	private RmqConnection connection;
 
 	protected RmqConfigurator(RmqConnection connection) {

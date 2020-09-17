@@ -46,7 +46,7 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Receiv
 
 	// 接收消息时使用的回调函数
 	private final Consumer<T> consumer;
-	
+
 	// 接受者QueueDeclare
 	private final QueueRelationship receiveQueue;
 
@@ -150,7 +150,7 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Receiv
 	 * @param callback
 	 */
 	private RabbitMqReceiver(String tag, @Nonnull RmqReceiverConfigurator configurator,
-			Function<byte[], T> deserializer, Consumer<T> consumer) {
+			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
 		super(tag, "Receiver", configurator.connection());
 		this.receiveQueue = configurator.receiveQueue();
 		this.queueName = receiveQueue.queueName();
@@ -205,9 +205,9 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Receiv
 		this.hasErrMsgExchange = true;
 	}
 
-	private void declareErrMsgQueueName(RabbitMqDeclarant operator) {
+	private void declareErrMsgQueueName(RabbitMqDeclarant declarant) {
 		try {
-			this.errMsgQueue.declare(operator);
+			this.errMsgQueue.declare(declarant);
 		} catch (AmqpDeclareException e) {
 			log.error("ErrorMsgQueue declare throw exception -> connection configurator info : {}, error message : {}",
 					rmqConnection.fullInfo(), e.getMessage(), e);

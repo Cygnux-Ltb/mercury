@@ -23,8 +23,14 @@ public class RabbitMqBatchReceiver<T> extends BaseRabbitMqTransport implements R
 
 	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqBatchReceiver.class);
 
+	/**
+	 * 
+	 */
 	private String receiverName;
 
+	/**
+	 * 
+	 */
 	private String receiveQueue;
 
 	// 队列持久化

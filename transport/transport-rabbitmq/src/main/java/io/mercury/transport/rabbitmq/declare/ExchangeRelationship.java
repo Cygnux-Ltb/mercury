@@ -21,6 +21,9 @@ public final class ExchangeRelationship extends Relationship {
 
 	public final static ExchangeRelationship Anonymous = new ExchangeRelationship(AmqpExchange.Anonymous);
 
+	/**
+	 * 
+	 */
 	private AmqpExchange exchange;
 
 	/**

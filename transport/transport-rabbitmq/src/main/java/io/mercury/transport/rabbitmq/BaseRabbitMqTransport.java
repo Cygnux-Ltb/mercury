@@ -31,18 +31,27 @@ public abstract class BaseRabbitMqTransport implements TransportModule, Closeabl
 
 	private static final Logger log = CommonLoggerFactory.getLogger(BaseRabbitMqTransport.class);
 
-	// 连接RabbitMQ Server使用的组件
+	/*
+	 * 连接RabbitMQ Server使用的组件
+	 */
 	protected ConnectionFactory connectionFactory;
+
 	protected volatile Connection connection;
 	protected volatile Channel channel;
 
-	// 存储配置信息对象
+	/*
+	 * 存储配置信息对象
+	 */
 	protected RmqConnection rmqConnection;
 
-	// 停机事件, 在监听到ShutdownSignalException时调用
+	/*
+	 * 停机事件, 在监听到ShutdownSignalException时调用
+	 */
 	protected ShutdownEvent<Exception> shutdownEvent;
 
-	// 组件标记
+	/*
+	 * 组件标记
+	 */
 	protected final String tag;
 
 	/**
@@ -67,10 +76,13 @@ public abstract class BaseRabbitMqTransport implements TransportModule, Closeabl
 		this.shutdownEvent = rmqConnection.shutdownEvent();
 	}
 
+	/**
+	 * 
+	 */
 	protected void createConnection() {
 		log.info("Create connection started");
 		if (connectionFactory == null) {
-			connectionFactory = rmqConnection.createConnectionFactory();
+			connectionFactory = rmqConnection.newConnectionFactory();
 		}
 		try {
 			connection = connectionFactory.newConnection();
@@ -105,7 +117,7 @@ public abstract class BaseRabbitMqTransport implements TransportModule, Closeabl
 	}
 
 	protected void handleShutdownSignal(ShutdownSignalException sig) {
-		// 输出关闭信号
+		// 关闭信号
 		log.info("Shutdown listener message -> {}", sig.getMessage());
 		if (isNormalShutdown(sig)) {
 			log.info("connection id -> {}, normal shutdown", connection.getId());
@@ -156,9 +168,9 @@ public abstract class BaseRabbitMqTransport implements TransportModule, Closeabl
 				}
 			}
 		} catch (IOException e) {
-			log.error("Catch IOException...", e);
+			log.error("Catch IOException -> {}", e.getMessage(), e);
 		} catch (TimeoutException e) {
-			log.error("Catch TimeoutException...", e);
+			log.error("Catch TimeoutException -> {}", e.getMessage(), e);
 		}
 	}
 

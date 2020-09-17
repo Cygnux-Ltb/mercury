@@ -49,8 +49,10 @@ public class BatchProcessConsumer<T> extends DefaultConsumer {
 	/**
 	 * 上一次的buffer -> (bufferList) 大小
 	 */
-	private long lastSize;
-
+	private volatile long lastSize;
+	/**
+	 * 缓存计数器
+	 */
 	private LongAdder cacheSize;
 	/**
 	 * last rabbitmq message sequence
