@@ -18,6 +18,12 @@ public interface Counter<T extends Counter<T>> {
 	 */
 	T add(long tag, long delta);
 
+	/**
+	 * 
+	 * @param tag
+	 * @param delta
+	 * @return
+	 */
 	default T subtract(long tag, long delta) {
 		return add(tag, -delta);
 	}
@@ -39,18 +45,38 @@ public interface Counter<T extends Counter<T>> {
 	 */
 	T historyDeltaAdd(long tag, long delta);
 
+	/**
+	 * 
+	 * @param tag
+	 * @param delta
+	 * @return
+	 */
 	default T historyDeltaSubtract(long tag, long delta) {
 		return historyDeltaAdd(tag, -delta);
 	}
 
+	/**
+	 * 
+	 * @param tag
+	 * @return
+	 */
 	default T increment(long tag) {
 		return add(tag, 1);
 	}
 
+	/**
+	 * 
+	 * @param tag
+	 * @return
+	 */
 	default T decrement(long tag) {
 		return subtract(tag, 1);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	long getValue();
 
 }

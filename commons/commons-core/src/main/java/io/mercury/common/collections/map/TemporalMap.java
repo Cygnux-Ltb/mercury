@@ -18,13 +18,13 @@ import io.mercury.common.collections.MutableMaps;
 @NotThreadSafe
 public abstract class TemporalMap<K extends Temporal, V, T extends TemporalMap<K, V, T>> {
 
-	private ToLongFunction<K> keyFunc;
+	private final ToLongFunction<K> keyFunc;
 
-	private Function<K, K> nextKeyFunc;
+	private final Function<K, K> nextKeyFunc;
 
-	private BiPredicate<K, K> hasNextKey;
+	private final BiPredicate<K, K> hasNextKey;
 
-	private MutableLongObjectMap<V> savedMap;
+	private final MutableLongObjectMap<V> savedMap;
 
 	public TemporalMap(ToLongFunction<K> keyFunc, Function<K, K> nextKeyFunc, BiPredicate<K, K> hasNextKey) {
 		this(keyFunc, nextKeyFunc, hasNextKey, Capacity.L07_SIZE_128);

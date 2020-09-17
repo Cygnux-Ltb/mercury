@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.functional.Processor;
+import io.mercury.common.util.Assertor;
 
 /**
  * @author yellow013
@@ -23,8 +24,7 @@ public abstract class SCQueue<E> implements Queue<E> {
 	protected String queueName = "SCQueue-" + Integer.toString(randomUnsignedInt());
 
 	public SCQueue(Processor<E> processor) {
-		if (processor == null)
-			throw new IllegalArgumentException("processor is null...");
+		Assertor.nonNull(processor, "processor");
 		this.processor = processor;
 	}
 

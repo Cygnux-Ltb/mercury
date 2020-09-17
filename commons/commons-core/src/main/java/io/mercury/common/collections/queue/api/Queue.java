@@ -24,7 +24,7 @@ public interface Queue<E> {
 	}
 
 	@FunctionalInterface
-	 interface PollFunction<E> extends Predicate<E> {
+	interface PollFunction<E> extends Predicate<E> {
 
 		boolean apply(E e);
 

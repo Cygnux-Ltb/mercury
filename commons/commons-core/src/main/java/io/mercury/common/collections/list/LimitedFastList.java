@@ -7,6 +7,10 @@ import org.eclipse.collections.impl.list.mutable.FastList;
 @NotThreadSafe
 public final class LimitedFastList<E> extends LimitedList<FastList<E>, E> {
 
+	/**
+	 * 
+	 * @param capacity
+	 */
 	public LimitedFastList(int capacity) {
 		super(capacity);
 	}

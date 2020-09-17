@@ -22,8 +22,8 @@ import io.mercury.common.collections.MutableSets;
 @ThreadSafe
 public final class LongRangeMap<V> {
 
-	private MutableLongObjectMap<V> savedMap;
-	private MutableLongSet savedKey;
+	private final MutableLongObjectMap<V> savedMap;
+	private final MutableLongSet savedKey;
 
 	public LongRangeMap() {
 		this(Capacity.L06_SIZE_64);
