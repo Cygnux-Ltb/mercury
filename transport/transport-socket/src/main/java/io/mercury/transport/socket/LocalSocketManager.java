@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import io.mercury.common.util.Assertor;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
 
 public class LocalSocketManager {
@@ -23,8 +24,7 @@ public class LocalSocketManager {
 		if (ServerSocketMap.containsKey(socketName))
 			return ServerSocketMap.get(socketName);
 		else {
-			if (port <= 7000 || port >= 8000)
-				throw new RuntimeException("port error.");
+			Assertor.withinRange(port, 7000, 8000, "port");
 			SocketTransceiver transceiver = new SocketTransceiver(SocketConfigurator.builder().port(port).build(),
 					callback);
 			ServerSocketMap.put(socketName, transceiver);

@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 
 import io.mercury.common.concurrent.queue.MpscArrayBlockingQueue;
 import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.util.Assertor;
 import io.mercury.transport.core.api.Sender;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
 
@@ -23,8 +24,7 @@ public class SocketSender implements Sender<byte[]> {
 	protected static final Logger log = CommonLoggerFactory.getLogger(SocketSender.class);
 
 	public SocketSender(SocketConfigurator configurator) {
-		if (configurator == null)
-			throw new IllegalArgumentException("configurator or callback is null for init ");
+		Assertor.nonNull(configurator, "configurator");
 		this.configurator = configurator;
 		init();
 	}

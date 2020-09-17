@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
+import io.mercury.common.util.Assertor;
 import io.mercury.transport.core.api.Receiver;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
 
@@ -29,11 +30,10 @@ public class SocketReceiver implements Receiver {
 	/**
 	 * @param configurator
 	 * @param callback
-	 * @param serverSocket
 	 */
 	public SocketReceiver(SocketConfigurator configurator, Consumer<byte[]> callback) {
-		if (configurator == null || callback == null)
-			throw new IllegalArgumentException("configurator or callback is null for init ");
+		Assertor.nonNull(configurator, "configurator");
+		Assertor.nonNull(callback, "callback");
 		this.configurator = configurator;
 		this.callback = callback;
 		init();
@@ -42,9 +42,10 @@ public class SocketReceiver implements Receiver {
 	private void init() {
 		try {
 			this.socket = new Socket(configurator.host(), configurator.port());
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
+		} catch (Exception e) {
+			log.error("new Socket({}, {}) throw Exception -> {}", configurator.host(), configurator.port(),
+					e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -60,7 +61,7 @@ public class SocketReceiver implements Receiver {
 			if (socket != null)
 				socket.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("socket.close() throw IOException -> {}", e.getMessage(), e);
 		}
 		return true;
 	}
