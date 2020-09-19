@@ -8,4 +8,8 @@ public class ShowBouncyCastleLicense {
 		System.out.println(LICENSE.licenseText);
 	}
 
+	public static void main(String[] args) {
+		show();
+	}
+
 }
