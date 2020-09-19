@@ -21,6 +21,18 @@
 			<artifactId>reflectasm</artifactId>
 			<version>1.11.9</version>
 		</dependency>
+
+		<!-- Reflections - a Java runtime metadata analysis -->
+		<dependency>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>0.9.12</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.mercury</groupId>
+			<artifactId>commons-core</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>
