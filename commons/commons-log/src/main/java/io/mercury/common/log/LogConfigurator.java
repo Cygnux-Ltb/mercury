@@ -20,15 +20,15 @@ public final class LogConfigurator {
 		System.setProperty(Log4j2Level, level.name());
 	}
 
-	public static synchronized String getFolder() {
+	public static synchronized String folder() {
 		return System.getProperty(Log4j2Folder);
 	}
 
-	public static synchronized String getFilename() {
+	public static synchronized String filename() {
 		return System.getProperty(Log4j2Filename);
 	}
 
-	public static synchronized String getLevel() {
+	public static synchronized String level() {
 		return System.getProperty(Log4j2Level);
 	}
 
