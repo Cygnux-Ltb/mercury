@@ -2,6 +2,8 @@ package io.mercury.transport.rabbitmq.declare;
 
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import io.mercury.common.collections.MapUtil;
 import io.mercury.common.util.Assertor;
 import io.mercury.serialization.json.JsonUtil;
@@ -39,7 +41,7 @@ public final class AmqpExchange {
 	 * @param name
 	 * @return
 	 */
-	public static AmqpExchange fanout(String name) {
+	public static AmqpExchange fanout(@Nonnull String name) {
 		Assertor.nonEmpty(name, "name");
 		return new AmqpExchange(ExchangeType.Fanout, name);
 	}
@@ -50,7 +52,7 @@ public final class AmqpExchange {
 	 * @param name
 	 * @return
 	 */
-	public static AmqpExchange direct(String name) {
+	public static AmqpExchange direct(@Nonnull String name) {
 		Assertor.nonEmpty(name, "name");
 		return new AmqpExchange(ExchangeType.Direct, name);
 	}
@@ -61,7 +63,7 @@ public final class AmqpExchange {
 	 * @param name
 	 * @return
 	 */
-	public static AmqpExchange topic(String name) {
+	public static AmqpExchange topic(@Nonnull String name) {
 		Assertor.nonEmpty(name, "name");
 		return new AmqpExchange(ExchangeType.Topic, name);
 	}

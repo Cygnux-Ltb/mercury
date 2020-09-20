@@ -30,9 +30,12 @@ public final class Binding {
 	 * @param routingKey
 	 */
 	Binding(AmqpExchange source, AmqpExchange destExchange, String routingKey) {
-		this.source = nonNull(source, "source");
-		this.destExchange = nonNull(destExchange, "destExchange");
-		this.routingKey = nonNull(routingKey, "routingKey");
+		nonNull(source, "source");
+		nonNull(destExchange, "destExchange");
+		nonNull(routingKey, "routingKey");
+		this.source = source;
+		this.destExchange = destExchange;
+		this.routingKey = routingKey;
 		this.destType = DestType.Exchange;
 	}
 
@@ -52,9 +55,12 @@ public final class Binding {
 	 * @param routingKey
 	 */
 	Binding(AmqpExchange source, AmqpQueue destQueue, String routingKey) {
-		this.source = nonNull(source, "source");
-		this.destQueue = nonNull(destQueue, "destQueue");
-		this.routingKey = nonNull(routingKey, "routingKey");
+		nonNull(source, "source");
+		nonNull(destQueue, "destQueue");
+		nonNull(routingKey, "routingKey");
+		this.source = source;
+		this.destQueue = destQueue;
+		this.routingKey = routingKey;
 		this.destType = DestType.Queue;
 	}
 
@@ -100,10 +106,10 @@ public final class Binding {
 
 		System.out.println(exchange0);
 		System.out.println(exchange1);
-		
+
 		System.out.println(exchange0 == exchange1);
 		System.out.println(exchange0.idempotent(exchange1));
-		
+
 		System.out.println(AmqpExchange.direct("ABC"));
 		System.out.println(AmqpQueue.named("ABC"));
 

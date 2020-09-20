@@ -140,10 +140,11 @@ public final class ExchangeRelationship extends Relationship {
 	public ExchangeRelationship bindingExchange(List<AmqpExchange> exchanges, List<String> routingKeys) {
 		if (exchanges != null) {
 			exchanges.forEach(exchange -> {
-				if (CollectionUtils.isNotEmpty(routingKeys))
+				if (CollectionUtils.isNotEmpty(routingKeys)) {
 					routingKeys.forEach(routingKey -> bindings.add(new Binding(this.exchange, exchange, routingKey)));
-				else
+				} else {
 					bindings.add(new Binding(this.exchange, exchange));
+				}
 			});
 		}
 		return this;
@@ -167,10 +168,11 @@ public final class ExchangeRelationship extends Relationship {
 	public ExchangeRelationship bindingQueue(List<AmqpQueue> queues, List<String> routingKeys) {
 		if (queues != null) {
 			queues.forEach(queue -> {
-				if (CollectionUtils.isNotEmpty(routingKeys))
+				if (CollectionUtils.isNotEmpty(routingKeys)) {
 					routingKeys.forEach(routingKey -> bindings.add(new Binding(exchange, queue, routingKey)));
-				else
+				} else {
 					bindings.add(new Binding(exchange, queue));
+				}
 			});
 		}
 		return this;
