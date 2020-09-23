@@ -24,9 +24,9 @@ public abstract class NettyTransport {
 	protected final Logger log = CommonLoggerFactory.getLogger(getClass());
 
 	public NettyTransport(String tag, NettyConfigurator configurator, ChannelHandler... handlers) {
-		this.tag = tag;
 		Assertor.nonNull(configurator, "configurator");
 		Assertor.requiredLength(handlers, 1, "handlers");
+		this.tag = tag;
 		this.configurator = configurator;
 		this.handlers = handlers;
 		this.workerGroup = new NioEventLoopGroup(availableProcessors() * 2 - availableProcessors() / 2);

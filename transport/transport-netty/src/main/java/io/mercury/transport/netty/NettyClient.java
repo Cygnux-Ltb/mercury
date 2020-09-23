@@ -1,6 +1,6 @@
 package io.mercury.transport.netty;
 
-import io.mercury.transport.core.api.TClient;
+import io.mercury.transport.core.api.TransportClient;
 import io.mercury.transport.netty.configurator.NettyConfigurator;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelHandler;
@@ -9,7 +9,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-public class NettyClient extends NettyTransport implements TClient {
+public class NettyClient extends NettyTransport implements TransportClient {
 
 	private Bootstrap bootstrap;
 
@@ -42,9 +42,18 @@ public class NettyClient extends NettyTransport implements TClient {
 	public void connect() {
 		try {
 			// Start the client.
+			// Connect a Channel to the remote peer.
 			bootstrap.connect(configurator.host(), configurator.port()).sync()
 					// Wait until the connection is closed.
-					.channel().closeFuture().sync();
+					// Returns a channel where the I/O operation associated with this future takes
+					// place.
+					.channel()
+					// Returns the ChannelFuture which will be notified when this channel is closed.
+					// This method always returns the same future instance.
+					.closeFuture()
+					// Waits for this future until it is done, and rethrows the cause of the failure
+					// if this future failed.
+					.sync();
 		} catch (InterruptedException e) {
 			log.error("NettyClient method connection() -> {}", e.getMessage(), e);
 			destroy();

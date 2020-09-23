@@ -24,6 +24,10 @@ public abstract class GeneralNettyHandler extends ChannelInboundHandlerAdapter {
 		this(1024 * 8);
 	}
 
+	/**
+	 * 
+	 * @param byteBufSize
+	 */
 	public GeneralNettyHandler(int byteBufSize) {
 		this.byteBufSize = byteBufSize;
 	}

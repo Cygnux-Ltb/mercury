@@ -55,8 +55,8 @@ public class NettySender implements Sender<byte[]> {
 		writeAndFlush.addListener(new ChannelFutureListener() {
 			@Override
 			public void operationComplete(ChannelFuture future) throws Exception {
-				log.debug(SysNanoSequence.micro() + " call sender send operation complete -> data length : "
-						+ byteBuf.writerIndex());
+				log.debug("{} call sender send operation complete -> data length : {}", SysNanoSequence.micro(),
+						byteBuf.writerIndex());
 				byteBuf.clear();
 				byteBuf.release();
 			}

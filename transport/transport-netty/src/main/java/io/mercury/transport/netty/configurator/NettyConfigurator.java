@@ -17,7 +17,7 @@ public class NettyConfigurator implements TransportConfigurator {
 	private int writeByteBufSize;
 	private char separator;
 
-	private ShutdownEvent<Exception> shutdownEvent;
+	private ShutdownEvent shutdownEvent;
 
 	private final String fullInfo = "NettyConfigurator";
 	private final String connectionInfo = "";
@@ -77,7 +77,7 @@ public class NettyConfigurator implements TransportConfigurator {
 		return separator;
 	}
 
-	public ShutdownEvent<Exception> shutdownEvent() {
+	public ShutdownEvent shutdownEvent() {
 		return shutdownEvent;
 	}
 
@@ -102,7 +102,7 @@ public class NettyConfigurator implements TransportConfigurator {
 		private TimeUnit sendIntervalTimeUnit;
 		private int writeByteBufSize = 1024 * 8;
 		private char separator = ';';
-		private ShutdownEvent<Exception> shutdownEvent;
+		private ShutdownEvent shutdownEvent;
 
 		private Builder() {
 		}
@@ -148,7 +148,7 @@ public class NettyConfigurator implements TransportConfigurator {
 			return this;
 		}
 
-		public Builder shutdownEvent(ShutdownEvent<Exception> shutdownEvent) {
+		public Builder shutdownEvent(ShutdownEvent shutdownEvent) {
 			this.shutdownEvent = shutdownEvent;
 			return this;
 		}

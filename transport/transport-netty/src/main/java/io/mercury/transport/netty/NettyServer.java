@@ -1,6 +1,6 @@
 package io.mercury.transport.netty;
 
-import io.mercury.transport.core.api.TServer;
+import io.mercury.transport.core.api.TransportServer;
 import io.mercury.transport.netty.configurator.NettyConfigurator;
 import io.mercury.transport.netty.handler.GeneralNettyHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -14,7 +14,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-public class NettyServer extends NettyTransport implements TServer {
+public class NettyServer extends NettyTransport implements TransportServer {
 
 	private EventLoopGroup bossGroup;
 	private ServerBootstrap bootstrap;
