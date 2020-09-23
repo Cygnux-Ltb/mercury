@@ -72,8 +72,8 @@ public class BatchProcessConsumer<T> extends DefaultConsumer {
 	/**
 	 * constructor
 	 *
-	 * @param channel          rabbit channel
-	 * @param prefetchCount    从rmq获取prefetchCount数量的消息
+	 * @param channel          Rabbit channel
+	 * @param prefetchCount    从队列中获取prefetchCount数量的消息
 	 * @param millisSecond     自动flush的时间间隔
 	 * @param qosBatchCallBack 当达到prefetchCount值或自动flush触发此回调
 	 */
@@ -96,9 +96,11 @@ public class BatchProcessConsumer<T> extends DefaultConsumer {
 
 	public BatchProcessConsumer(Channel channel, BytesDeserializer<T> serializable, BatchHandler<T> batchHandler) {
 		super(channel);
+		Assertor.nonNull(batchHandler, "qosBatchHandler");
+		Assertor.nonNull(serializable, "deserializer");
 		this.channel = channel;
-		this.batchHandler = Assertor.nonNull(batchHandler, "qosBatchHandler");
-		this.deserializer = Assertor.nonNull(serializable, "deserializer");
+		this.batchHandler = batchHandler;
+		this.deserializer = serializable;
 		init();
 	}
 
@@ -106,10 +108,10 @@ public class BatchProcessConsumer<T> extends DefaultConsumer {
 		try {
 			channel.basicQos(prefetchCount);
 		} catch (IOException e) {
-			log.error("set prefetchCount failure", e);
+			log.error("Set prefetchCount==[{}] failure", prefetchCount, e);
 			return;
 		}
-		this.cacheSize = new LongAdder();
+		cacheSize = new LongAdder();
 		bufferList = MutableLists.newFastList();
 
 		lock = new ReentrantLock();
@@ -169,7 +171,7 @@ public class BatchProcessConsumer<T> extends DefaultConsumer {
 				}
 			}
 		} catch (IOException e) {
-			// todo do reconnect and clear cache
+			// TODO do reconnect and clear cache
 			log.error("basicAck throw IOException -> message==[{}]", e.getMessage(), e);
 		} catch (Exception e) {
 			log.error("batch process failure, deliverTag[{}]", this.lastDeliveryTag, e);
@@ -179,8 +181,8 @@ public class BatchProcessConsumer<T> extends DefaultConsumer {
 	}
 
 	/**
-	 * schedule task : 如果缓存中的数据长期没有变动,触发flush动作 1.
-	 * 当缓存队列中的值等于上一次定时任务触发的值,并且该值大于0,不等于rmq预取值,则认为该缓存数据长期没有变动,立即触发回调.
+	 * schedule task : 如果缓存中的数据长期没有变动, 触发flush动作 1. <br>
+	 * 当缓存队列中的值等于上一次定时任务触发的值, 并且该值大于0, 不等于RMQ预取值, 则认为该缓存数据长期没有变动, 立即触发回调.
 	 * <p>
 	 * 缓存值达到预取值的大小交给主线程去触发刷新.减少锁的竞争.
 	 */

@@ -1,5 +1,10 @@
 package io.mercury.transport.rabbitmq.configurator;
 
+/**
+ * 
+ * @author yellow013
+ *
+ */
 public abstract class RmqConfigurator {
 
 	/**

@@ -87,7 +87,7 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	 * @param String           -> queue name
 	 * @param DefaultParameter -> durable == true, exclusive == false, autoDelete ==
 	 *                         false<br>
-	 * @throws QueueDeclareException
+	 * @throws AmqpDeclareException
 	 */
 	public boolean declareQueueWithDefault(@Nonnull String queue) throws AmqpDeclareException {
 		return declareQueue(queue, true, false, false, null);
@@ -100,7 +100,11 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	 * @throws AmqpDeclareException
 	 */
 	public boolean declareQueue(@Nonnull AmqpQueue queue) throws AmqpDeclareException {
-		Assertor.nonNull(queue, AmqpDeclareException.with(new NullPointerException("param queue is can't null.")));
+		try {
+			Assertor.nonNull(queue, "queue");
+		} catch (Exception e) {
+			throw AmqpDeclareException.with(e);
+		}
 		return declareQueue(queue.name(), queue.durable(), queue.exclusive(), queue.autoDelete(), queue.args());
 	}
 
@@ -137,8 +141,11 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	 * @throws ExchangeDeclareException
 	 */
 	public boolean declareExchange(@Nonnull AmqpExchange exchange) throws AmqpDeclareException {
-		Assertor.nonNull(exchange,
-				AmqpDeclareException.with(new NullPointerException("param exchange is can't null.")));
+		try {
+			Assertor.nonNull(exchange, "exchange");
+		} catch (Exception e) {
+			throw AmqpDeclareException.with(e);
+		}
 		switch (exchange.type()) {
 		case Direct:
 			return declareDirectExchange(exchange.name(), exchange.durable(), exchange.autoDelete(),
@@ -315,12 +322,18 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 
 	/**
 	 * 
-	 * @param queue
+	 * @param queue: the name of the queue
 	 * @param force
 	 * @return
 	 * @throws IOException
 	 */
 	public int deleteQueue(String queue, boolean force) throws IOException {
+		/**
+		 * queue : the name of the queue. <br>
+		 * ifUnused : true if the queue should be deleted only if not in use. <br>
+		 * ifEmpty : true if the queue should be deleted only if empty.
+		 * 
+		 */
 		DeleteOk delete = channel.queueDelete(queue, !force, !force);
 		return delete.getMessageCount();
 	}
@@ -343,7 +356,6 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	}
 
 	public static void main(String[] args) {
-
 		try {
 			RabbitMqDeclarant declareOperator = newWith("127.0.0.1", 5672, "guest", "guest");
 			System.out.println(declareOperator.isConnected());

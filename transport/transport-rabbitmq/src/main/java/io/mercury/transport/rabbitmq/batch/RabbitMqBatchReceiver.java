@@ -33,11 +33,17 @@ public class RabbitMqBatchReceiver<T> extends BaseRabbitMqTransport implements R
 	 */
 	private String receiveQueue;
 
-	// 队列持久化
+	/*
+	 * 队列持久化
+	 */
 	private boolean durable = true;
-	// 连接独占此队列
+	/*
+	 * 连接独占此队列
+	 */
 	private boolean exclusive = false;
-	// channel关闭后自动删除队列
+	/*
+	 * channel关闭后自动删除队列
+	 */
 	private boolean autoDelete = false;
 
 	private BatchProcessConsumer<T> consumer;

@@ -3,6 +3,9 @@ package io.mercury.transport.rabbitmq.configurator;
 import static io.mercury.common.util.Assertor.nonNull;
 import static io.mercury.common.util.Assertor.withinRange;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.net.ssl.SSLContext;
 
@@ -10,6 +13,7 @@ import com.rabbitmq.client.ConnectionFactory;
 
 import io.mercury.common.functional.ShutdownEvent;
 import io.mercury.common.util.StringUtil;
+import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.core.configurator.TransportConfigurator;
 
 public final class RmqConnection implements TransportConfigurator {
@@ -57,7 +61,7 @@ public final class RmqConnection implements TransportConfigurator {
 	/*
 	 * 停机处理回调函数
 	 */
-	private transient ShutdownEvent<Exception> shutdownEvent;
+	private transient ShutdownEvent shutdownEvent;
 	/*
 	 * 配置连接信息
 	 */
@@ -207,7 +211,7 @@ public final class RmqConnection implements TransportConfigurator {
 	/**
 	 * @return the shutdownEvent
 	 */
-	public ShutdownEvent<Exception> shutdownEvent() {
+	public ShutdownEvent shutdownEvent() {
 		return shutdownEvent;
 	}
 
@@ -215,8 +219,12 @@ public final class RmqConnection implements TransportConfigurator {
 
 	@Override
 	public String toString() {
-		if (toStringCache == null)
-			toStringCache = StringUtil.toStringForReflection(this);
+		if (toStringCache == null) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("connection", this);
+			toStringCache = JsonWrapper.toJson(map);
+			// StringUtil.toStringForReflection(this);
+		}
 		return toStringCache;
 	}
 
@@ -285,7 +293,7 @@ public final class RmqConnection implements TransportConfigurator {
 		/*
 		 * 停机处理回调函数
 		 */
-		private ShutdownEvent<Exception> shutdownEvent;
+		private ShutdownEvent shutdownEvent;
 
 		private Builder(String host, int port, String username, String password) {
 			this.host = nonNull(host, "host");
@@ -366,7 +374,7 @@ public final class RmqConnection implements TransportConfigurator {
 		/**
 		 * @param shutdownEvent the shutdownEvent to set
 		 */
-		public Builder setShutdownEvent(ShutdownEvent<Exception> shutdownEvent) {
+		public Builder setShutdownEvent(ShutdownEvent shutdownEvent) {
 			this.shutdownEvent = shutdownEvent;
 			return this;
 		}

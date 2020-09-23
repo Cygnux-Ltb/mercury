@@ -40,10 +40,8 @@ public final class AmqpDeclareException extends Exception {
 	 */
 	public static AmqpDeclareException declareQueueError(String queue, boolean durable, boolean exclusive,
 			boolean autoDelete, Map<String, Object> args, Throwable cause) {
-		return new AmqpDeclareException(new StringBuilder(200).append("Declare queue error -> ").append("queue==[")
-				.append(queue).append("], ").append("durable==[").append(durable).append("], ").append("exclusive==[")
-				.append(exclusive).append("], ").append("autoDelete==[").append(autoDelete).append("], ")
-				.append("args==[").append(args).append("]").toString(), cause);
+		return new AmqpDeclareException("Declare queue error -> queue==[" + queue + "], durable==[" + durable
+				+ "], exclusive==[" + exclusive + "], autoDelete==[" + autoDelete + "], args==[" + args + "]", cause);
 	}
 
 	/**
@@ -60,10 +58,8 @@ public final class AmqpDeclareException extends Exception {
 	public static AmqpDeclareException declareExchangeError(String exchange, BuiltinExchangeType type, boolean durable,
 			boolean autoDelete, boolean internal, Map<String, Object> args, Throwable cause) {
 		return new AmqpDeclareException(
-				new StringBuilder(200).append("Declare exchange error -> ").append("exchange==[").append(exchange)
-						.append("], ").append("type==[").append(type).append("], ").append("durable==[").append(durable)
-						.append("], ").append("autoDelete==[").append(autoDelete).append("], ").append("internal==[")
-						.append(internal).append("], ").append("args==[").append(args).append("]").toString(),
+				"Declare exchange error -> exchange==[" + exchange + "], type==[" + type + "], durable==[" + durable
+						+ "], autoDelete==[" + autoDelete + "], internal==[" + internal + "], args==[" + args + "]",
 				cause);
 	}
 
@@ -77,9 +73,8 @@ public final class AmqpDeclareException extends Exception {
 	 */
 	public static AmqpDeclareException bindQueueError(String queue, String exchange, String routingKey,
 			Throwable cause) {
-		return new AmqpDeclareException(new StringBuilder(150).append("Bind queue error -> ").append("queue==[")
-				.append(queue).append("], ").append("exchange==[").append(exchange).append("], ")
-				.append("routingKey==[").append(routingKey).append("]").toString(), cause);
+		return new AmqpDeclareException("Bind queue error -> queue==[" + queue + "], exchange==[" + exchange
+				+ "], routingKey==[" + routingKey + "]", cause);
 	}
 
 	/**
@@ -92,10 +87,8 @@ public final class AmqpDeclareException extends Exception {
 	 */
 	public static AmqpDeclareException bindExchangeError(String destExchange, String sourceExchange, String routingKey,
 			Throwable cause) {
-		return new AmqpDeclareException(new StringBuilder(150).append("Bind exchange error -> ")
-				.append("destExchange==[").append(destExchange).append("], ").append("sourceExchange==[")
-				.append(sourceExchange).append("], ").append("routingKey==[").append(routingKey).append("]").toString(),
-				cause);
+		return new AmqpDeclareException("Bind exchange error -> destExchange==[" + destExchange + "], sourceExchange==["
+				+ sourceExchange + "], routingKey==[" + routingKey + "]", cause);
 	}
 
 	/**

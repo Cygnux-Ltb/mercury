@@ -8,6 +8,11 @@ import io.mercury.common.util.StringUtil;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
 import io.mercury.transport.rabbitmq.declare.QueueRelationship;
 
+/**
+ * 
+ * @author yellow013
+ *
+ */
 public final class RmqReceiverConfigurator extends RmqConfigurator {
 
 	/*

@@ -47,7 +47,7 @@ public abstract class BaseRabbitMqTransport implements TransportModule, Closeabl
 	/*
 	 * 停机事件, 在监听到ShutdownSignalException时调用
 	 */
-	protected ShutdownEvent<Exception> shutdownEvent;
+	protected ShutdownEvent shutdownEvent;
 
 	/*
 	 * 组件标记
