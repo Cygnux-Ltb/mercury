@@ -3,7 +3,9 @@
  *
  * DO NOT EDIT DIRECTLY
  */
-package io.mercury.actors.messages;
+package io.mercury.actors.msg;
+
+import java.util.Optional;
 
 import org.apache.avro.message.BinaryMessageDecoder;
 import org.apache.avro.message.BinaryMessageEncoder;
@@ -13,9 +15,9 @@ import org.apache.avro.specific.SpecificData;
 @org.apache.avro.specific.AvroGenerated
 public class AvroMsg extends org.apache.avro.specific.SpecificRecordBase
 		implements org.apache.avro.specific.SpecificRecord {
-	private static final long serialVersionUID = -2884863883826810699L;
+	private static final long serialVersionUID = -2335082975278536735L;
 	public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse(
-			"{\"type\":\"record\",\"name\":\"AvroMsg\",\"namespace\":\"io.mercury.actors.messages\",\"fields\":[{\"name\":\"msgType\",\"type\":\"int\"},{\"name\":\"msgContent\",\"type\":\"bytes\"}]}");
+			"{\"type\":\"record\",\"name\":\"AvroMsg\",\"namespace\":\"io.mercury.actors.msg\",\"fields\":[{\"name\":\"type\",\"type\":\"int\"},{\"name\":\"content\",\"type\":\"bytes\"}]}");
 
 	public static org.apache.avro.Schema getClassSchema() {
 		return SCHEMA$;
@@ -79,8 +81,8 @@ public class AvroMsg extends org.apache.avro.specific.SpecificRecordBase
 		return DECODER.decode(b);
 	}
 
-	private int msgType;
-	private java.nio.ByteBuffer msgContent;
+	private int type;
+	private java.nio.ByteBuffer content;
 
 	/**
 	 * Default constructor. Note that this does not initialize fields to their
@@ -93,12 +95,12 @@ public class AvroMsg extends org.apache.avro.specific.SpecificRecordBase
 	/**
 	 * All-args constructor.
 	 * 
-	 * @param msgType    The new value for msgType
-	 * @param msgContent The new value for msgContent
+	 * @param type    The new value for type
+	 * @param content The new value for content
 	 */
-	public AvroMsg(java.lang.Integer msgType, java.nio.ByteBuffer msgContent) {
-		this.msgType = msgType;
-		this.msgContent = msgContent;
+	public AvroMsg(java.lang.Integer type, java.nio.ByteBuffer content) {
+		this.type = type;
+		this.content = content;
 	}
 
 	public org.apache.avro.specific.SpecificData getSpecificData() {
@@ -113,11 +115,11 @@ public class AvroMsg extends org.apache.avro.specific.SpecificRecordBase
 	public java.lang.Object get(int field$) {
 		switch (field$) {
 		case 0:
-			return msgType;
+			return type;
 		case 1:
-			return msgContent;
+			return content;
 		default:
-			throw new org.apache.avro.AvroRuntimeException("Bad index");
+			throw new IndexOutOfBoundsException("Invalid index: " + field$);
 		}
 	}
 
@@ -125,50 +127,69 @@ public class AvroMsg extends org.apache.avro.specific.SpecificRecordBase
 	public void put(int field$, java.lang.Object value$) {
 		switch (field$) {
 		case 0:
-			msgType = (java.lang.Integer) value$;
+			type = (java.lang.Integer) value$;
 			break;
 		case 1:
-			msgContent = (java.nio.ByteBuffer) value$;
+			content = (java.nio.ByteBuffer) value$;
 			break;
 		default:
-			throw new org.apache.avro.AvroRuntimeException("Bad index");
+			throw new IndexOutOfBoundsException("Invalid index: " + field$);
 		}
 	}
 
 	/**
-	 * Gets the value of the 'msgType' field.
+	 * Gets the value of the 'type' field.
 	 * 
-	 * @return The value of the 'msgType' field.
+	 * @return The value of the 'type' field.
 	 */
-	public int getMsgType() {
-		return msgType;
+	public int getType() {
+		return type;
 	}
 
 	/**
-	 * Sets the value of the 'msgType' field.
+	 * Gets the value of the 'type' field as an Optional&lt;java.lang.Integer&gt;.
+	 * 
+	 * @return The value wrapped in an Optional&lt;java.lang.Integer&gt;.
+	 */
+	public Optional<java.lang.Integer> getOptionalType() {
+		return Optional.<java.lang.Integer>ofNullable(type);
+	}
+
+	/**
+	 * Sets the value of the 'type' field.
 	 * 
 	 * @param value the value to set.
 	 */
-	public void setMsgType(int value) {
-		this.msgType = value;
+	public void setType(int value) {
+		this.type = value;
 	}
 
 	/**
-	 * Gets the value of the 'msgContent' field.
+	 * Gets the value of the 'content' field.
 	 * 
-	 * @return The value of the 'msgContent' field.
+	 * @return The value of the 'content' field.
 	 */
-	public java.nio.ByteBuffer getMsgContent() {
-		return msgContent;
+	public java.nio.ByteBuffer getContent() {
+		return content;
 	}
 
 	/**
-	 * Sets the value of the 'msgContent' field.
+	 * Gets the value of the 'content' field as an
+	 * Optional&lt;java.nio.ByteBuffer&gt;.
+	 * 
+	 * @return The value wrapped in an Optional&lt;java.nio.ByteBuffer&gt;.
+	 */
+	public Optional<java.nio.ByteBuffer> getOptionalContent() {
+		return Optional.<java.nio.ByteBuffer>ofNullable(content);
+	}
+
+	/**
+	 * Sets the value of the 'content' field.
 	 * 
 	 * @param value the value to set.
 	 */
-	public void setMsgContent(java.nio.ByteBuffer value) {
-		this.msgContent = value;
+	public void setContent(java.nio.ByteBuffer value) {
+		this.content = value;
 	}
 
 	/**
@@ -176,8 +197,8 @@ public class AvroMsg extends org.apache.avro.specific.SpecificRecordBase
 	 * 
 	 * @return A new AvroMsg RecordBuilder
 	 */
-	public static io.mercury.actors.messages.AvroMsg.Builder newBuilder() {
-		return new io.mercury.actors.messages.AvroMsg.Builder();
+	public static io.mercury.actors.msg.AvroMsg.Builder newBuilder() {
+		return new io.mercury.actors.msg.AvroMsg.Builder();
 	}
 
 	/**
@@ -186,12 +207,11 @@ public class AvroMsg extends org.apache.avro.specific.SpecificRecordBase
 	 * @param other The existing builder to copy.
 	 * @return A new AvroMsg RecordBuilder
 	 */
-	public static io.mercury.actors.messages.AvroMsg.Builder newBuilder(
-			io.mercury.actors.messages.AvroMsg.Builder other) {
+	public static io.mercury.actors.msg.AvroMsg.Builder newBuilder(io.mercury.actors.msg.AvroMsg.Builder other) {
 		if (other == null) {
-			return new io.mercury.actors.messages.AvroMsg.Builder();
+			return new io.mercury.actors.msg.AvroMsg.Builder();
 		} else {
-			return new io.mercury.actors.messages.AvroMsg.Builder(other);
+			return new io.mercury.actors.msg.AvroMsg.Builder(other);
 		}
 	}
 
@@ -201,11 +221,11 @@ public class AvroMsg extends org.apache.avro.specific.SpecificRecordBase
 	 * @param other The existing instance to copy.
 	 * @return A new AvroMsg RecordBuilder
 	 */
-	public static io.mercury.actors.messages.AvroMsg.Builder newBuilder(io.mercury.actors.messages.AvroMsg other) {
+	public static io.mercury.actors.msg.AvroMsg.Builder newBuilder(io.mercury.actors.msg.AvroMsg other) {
 		if (other == null) {
-			return new io.mercury.actors.messages.AvroMsg.Builder();
+			return new io.mercury.actors.msg.AvroMsg.Builder();
 		} else {
-			return new io.mercury.actors.messages.AvroMsg.Builder(other);
+			return new io.mercury.actors.msg.AvroMsg.Builder(other);
 		}
 	}
 
@@ -216,8 +236,8 @@ public class AvroMsg extends org.apache.avro.specific.SpecificRecordBase
 	public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<AvroMsg>
 			implements org.apache.avro.data.RecordBuilder<AvroMsg> {
 
-		private int msgType;
-		private java.nio.ByteBuffer msgContent;
+		private int type;
+		private java.nio.ByteBuffer content;
 
 		/** Creates a new Builder */
 		private Builder() {
@@ -229,14 +249,14 @@ public class AvroMsg extends org.apache.avro.specific.SpecificRecordBase
 		 * 
 		 * @param other The existing Builder to copy.
 		 */
-		private Builder(io.mercury.actors.messages.AvroMsg.Builder other) {
+		private Builder(io.mercury.actors.msg.AvroMsg.Builder other) {
 			super(other);
-			if (isValidValue(fields()[0], other.msgType)) {
-				this.msgType = data().deepCopy(fields()[0].schema(), other.msgType);
+			if (isValidValue(fields()[0], other.type)) {
+				this.type = data().deepCopy(fields()[0].schema(), other.type);
 				fieldSetFlags()[0] = other.fieldSetFlags()[0];
 			}
-			if (isValidValue(fields()[1], other.msgContent)) {
-				this.msgContent = data().deepCopy(fields()[1].schema(), other.msgContent);
+			if (isValidValue(fields()[1], other.content)) {
+				this.content = data().deepCopy(fields()[1].schema(), other.content);
 				fieldSetFlags()[1] = other.fieldSetFlags()[1];
 			}
 		}
@@ -246,97 +266,116 @@ public class AvroMsg extends org.apache.avro.specific.SpecificRecordBase
 		 * 
 		 * @param other The existing instance to copy.
 		 */
-		private Builder(io.mercury.actors.messages.AvroMsg other) {
+		private Builder(io.mercury.actors.msg.AvroMsg other) {
 			super(SCHEMA$);
-			if (isValidValue(fields()[0], other.msgType)) {
-				this.msgType = data().deepCopy(fields()[0].schema(), other.msgType);
+			if (isValidValue(fields()[0], other.type)) {
+				this.type = data().deepCopy(fields()[0].schema(), other.type);
 				fieldSetFlags()[0] = true;
 			}
-			if (isValidValue(fields()[1], other.msgContent)) {
-				this.msgContent = data().deepCopy(fields()[1].schema(), other.msgContent);
+			if (isValidValue(fields()[1], other.content)) {
+				this.content = data().deepCopy(fields()[1].schema(), other.content);
 				fieldSetFlags()[1] = true;
 			}
 		}
 
 		/**
-		 * Gets the value of the 'msgType' field.
+		 * Gets the value of the 'type' field.
 		 * 
 		 * @return The value.
 		 */
-		public int getMsgType() {
-			return msgType;
+		public int getType() {
+			return type;
 		}
 
 		/**
-		 * Sets the value of the 'msgType' field.
+		 * Gets the value of the 'type' field as an Optional&lt;java.lang.Integer&gt;.
 		 * 
-		 * @param value The value of 'msgType'.
+		 * @return The value wrapped in an Optional&lt;java.lang.Integer&gt;.
+		 */
+		public Optional<java.lang.Integer> getOptionalType() {
+			return Optional.<java.lang.Integer>ofNullable(type);
+		}
+
+		/**
+		 * Sets the value of the 'type' field.
+		 * 
+		 * @param value The value of 'type'.
 		 * @return This builder.
 		 */
-		public io.mercury.actors.messages.AvroMsg.Builder setMsgType(int value) {
+		public io.mercury.actors.msg.AvroMsg.Builder setType(int value) {
 			validate(fields()[0], value);
-			this.msgType = value;
+			this.type = value;
 			fieldSetFlags()[0] = true;
 			return this;
 		}
 
 		/**
-		 * Checks whether the 'msgType' field has been set.
+		 * Checks whether the 'type' field has been set.
 		 * 
-		 * @return True if the 'msgType' field has been set, false otherwise.
+		 * @return True if the 'type' field has been set, false otherwise.
 		 */
-		public boolean hasMsgType() {
+		public boolean hasType() {
 			return fieldSetFlags()[0];
 		}
 
 		/**
-		 * Clears the value of the 'msgType' field.
+		 * Clears the value of the 'type' field.
 		 * 
 		 * @return This builder.
 		 */
-		public io.mercury.actors.messages.AvroMsg.Builder clearMsgType() {
+		public io.mercury.actors.msg.AvroMsg.Builder clearType() {
 			fieldSetFlags()[0] = false;
 			return this;
 		}
 
 		/**
-		 * Gets the value of the 'msgContent' field.
+		 * Gets the value of the 'content' field.
 		 * 
 		 * @return The value.
 		 */
-		public java.nio.ByteBuffer getMsgContent() {
-			return msgContent;
+		public java.nio.ByteBuffer getContent() {
+			return content;
 		}
 
 		/**
-		 * Sets the value of the 'msgContent' field.
+		 * Gets the value of the 'content' field as an
+		 * Optional&lt;java.nio.ByteBuffer&gt;.
 		 * 
-		 * @param value The value of 'msgContent'.
+		 * @return The value wrapped in an Optional&lt;java.nio.ByteBuffer&gt;.
+		 */
+		public Optional<java.nio.ByteBuffer> getOptionalContent() {
+			return Optional.<java.nio.ByteBuffer>ofNullable(content);
+		}
+
+		/**
+		 * Sets the value of the 'content' field.
+		 * 
+		 * @param value The value of 'content'.
 		 * @return This builder.
 		 */
-		public io.mercury.actors.messages.AvroMsg.Builder setMsgContent(java.nio.ByteBuffer value) {
+		public io.mercury.actors.msg.AvroMsg.Builder setContent(java.nio.ByteBuffer value) {
 			validate(fields()[1], value);
-			this.msgContent = value;
+			this.content = value;
 			fieldSetFlags()[1] = true;
 			return this;
 		}
 
 		/**
-		 * Checks whether the 'msgContent' field has been set.
+		 * Checks whether the 'content' field has been set.
 		 * 
-		 * @return True if the 'msgContent' field has been set, false otherwise.
+		 * @return True if the 'content' field has been set, false otherwise.
 		 */
-		public boolean hasMsgContent() {
+		public boolean hasContent() {
 			return fieldSetFlags()[1];
 		}
 
 		/**
-		 * Clears the value of the 'msgContent' field.
+		 * Clears the value of the 'content' field.
 		 * 
 		 * @return This builder.
 		 */
-		public io.mercury.actors.messages.AvroMsg.Builder clearMsgContent() {
-			msgContent = null;
+		public io.mercury.actors.msg.AvroMsg.Builder clearContent() {
+			content = null;
 			fieldSetFlags()[1] = false;
 			return this;
 		}
@@ -345,9 +384,8 @@ public class AvroMsg extends org.apache.avro.specific.SpecificRecordBase
 		public AvroMsg build() {
 			try {
 				AvroMsg record = new AvroMsg();
-				record.msgType = fieldSetFlags()[0] ? this.msgType : (java.lang.Integer) defaultValue(fields()[0]);
-				record.msgContent = fieldSetFlags()[1] ? this.msgContent
-						: (java.nio.ByteBuffer) defaultValue(fields()[1]);
+				record.type = fieldSetFlags()[0] ? this.type : (java.lang.Integer) defaultValue(fields()[0]);
+				record.content = fieldSetFlags()[1] ? this.content : (java.nio.ByteBuffer) defaultValue(fields()[1]);
 				return record;
 			} catch (org.apache.avro.AvroMissingFieldException e) {
 				throw e;
@@ -382,9 +420,9 @@ public class AvroMsg extends org.apache.avro.specific.SpecificRecordBase
 
 	@Override
 	public void customEncode(org.apache.avro.io.Encoder out) throws java.io.IOException {
-		out.writeInt(this.msgType);
+		out.writeInt(this.type);
 
-		out.writeBytes(this.msgContent);
+		out.writeBytes(this.content);
 
 	}
 
@@ -392,19 +430,19 @@ public class AvroMsg extends org.apache.avro.specific.SpecificRecordBase
 	public void customDecode(org.apache.avro.io.ResolvingDecoder in) throws java.io.IOException {
 		org.apache.avro.Schema.Field[] fieldOrder = in.readFieldOrderIfDiff();
 		if (fieldOrder == null) {
-			this.msgType = in.readInt();
+			this.type = in.readInt();
 
-			this.msgContent = in.readBytes(this.msgContent);
+			this.content = in.readBytes(this.content);
 
 		} else {
 			for (int i = 0; i < 2; i++) {
 				switch (fieldOrder[i].pos()) {
 				case 0:
-					this.msgType = in.readInt();
+					this.type = in.readInt();
 					break;
 
 				case 1:
-					this.msgContent = in.readBytes(this.msgContent);
+					this.content = in.readBytes(this.content);
 					break;
 
 				default:

@@ -3,7 +3,7 @@ package io.mercury.actors.reference;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import io.mercury.actors.messages.AvroMsg;
+import io.mercury.actors.msg.AvroMsg;
 
 public abstract class AvroBinaryActor extends GenericActorE1<ByteBuffer> {
 

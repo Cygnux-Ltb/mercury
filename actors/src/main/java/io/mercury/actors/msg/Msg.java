@@ -1,16 +1,16 @@
-package io.mercury.actors.messages;
+package io.mercury.actors.msg;
 
-public interface Message {
+public interface Msg {
 
 	Envelope envelope();
 
 	Content content();
 
-	public interface Envelope {
+	public static interface Envelope {
 
 	}
 
-	public interface Content {
+	public static interface Content {
 
 	}
 
