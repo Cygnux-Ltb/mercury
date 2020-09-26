@@ -1,8 +1,10 @@
 package io.mercury.transport.rabbitmq;
 
 import static io.mercury.common.util.StringUtil.bytesToStr;
+import static io.mercury.common.util.StringUtil.nonEmpty;
 
 import java.io.IOException;
+import java.time.ZonedDateTime;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -18,6 +20,7 @@ import com.rabbitmq.client.Envelope;
 
 import io.mercury.common.character.Charsets;
 import io.mercury.common.codec.DecodeException;
+import io.mercury.common.datetime.TimeZone;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.core.api.Receiver;
@@ -194,8 +197,9 @@ public class RabbitMqReceiver0<T> extends BaseRabbitMqTransport implements Subsc
 	 * @param callback
 	 */
 	private RabbitMqReceiver0(String tag, @Nonnull RmqReceiverConfigurator configurator,
-			Function<byte[], T> deserializer, Consumer<T> consumer, BiConsumer<String, Delivery> deliveryConsumer) {
-		super(tag, "Receiver", configurator.connection());
+			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer,
+			BiConsumer<String, Delivery> deliveryConsumer) {
+		super(nonEmpty(tag) ? tag : "Receiver-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT), configurator.connection());
 		this.receiveQueue = configurator.receiveQueue();
 		this.queueName = receiveQueue.queueName();
 		this.deserializer = deserializer;
@@ -235,9 +239,9 @@ public class RabbitMqReceiver0<T> extends BaseRabbitMqTransport implements Subsc
 		}
 	}
 
-	private void declareErrMsgExchange(RabbitMqDeclarant opChannel) {
+	private void declareErrMsgExchange(RabbitMqDeclarant declarant) {
 		try {
-			this.errMsgExchange.declare(opChannel);
+			this.errMsgExchange.declare(declarant);
 		} catch (AmqpDeclareException e) {
 			log.error(
 					"ErrorMsgExchange declare throw exception -> connection configurator info : {}, error message : {}",
@@ -250,9 +254,9 @@ public class RabbitMqReceiver0<T> extends BaseRabbitMqTransport implements Subsc
 		this.hasErrMsgExchange = true;
 	}
 
-	private void declareErrMsgQueueName(RabbitMqDeclarant operator) {
+	private void declareErrMsgQueueName(RabbitMqDeclarant declarant) {
 		try {
-			this.errMsgQueue.declare(operator);
+			this.errMsgQueue.declare(declarant);
 		} catch (AmqpDeclareException e) {
 			log.error("ErrorMsgQueue declare throw exception -> connection configurator info : {}, error message : {}",
 					rmqConnection.fullInfo(), e.getMessage(), e);
@@ -339,15 +343,17 @@ public class RabbitMqReceiver0<T> extends BaseRabbitMqTransport implements Subsc
 				channel.basicQos(qos);
 
 			// TODO 使用新的API
-//			channel.basicConsume(queueName, autoAck, tag, false, false, null, (consumerTag, delivery) -> {
-//				log.info("DeliverCallback receive consumerTag -> {}", consumerTag);
-//			}, consumerTag -> {
-//				log.info("CancelCallback receive consumerTag -> {}", consumerTag);
-//			}, (consumerTag, sig) -> {
-//				log.info("Consumer received ShutdownSignalException, consumerTag==[{}]", consumerTag);
-//				handleShutdownSignal(sig);
-//			});
+			channel.basicConsume(queueName, autoAck, tag, false, false, null, (consumerTag, delivery) -> {
+				log.info("DeliverCallback receive consumerTag -> {}", consumerTag);
+			}, consumerTag -> {
+				log.info("CancelCallback receive consumerTag -> {}", consumerTag);
+			}, (consumerTag, sig) -> {
+				log.info("Consumer received ShutdownSignalException, consumerTag==[{}]", consumerTag);
+				handleShutdownSignal(sig);
+			});
 
+			
+			
 			channel.basicConsume(
 					// param1: the name of the queue
 					queueName,
@@ -430,6 +436,11 @@ public class RabbitMqReceiver0<T> extends BaseRabbitMqTransport implements Subsc
 		}
 	}
 
+	/**
+	 * 
+	 * @param deliveryTag
+	 * @return
+	 */
 	private boolean ack(long deliveryTag) {
 		return ack0(deliveryTag, 0);
 	}
@@ -476,7 +487,7 @@ public class RabbitMqReceiver0<T> extends BaseRabbitMqTransport implements Subsc
 
 	@Override
 	public boolean destroy() {
-		log.info("Call method destroy() from Receiver name==[{}]", receiverName);
+		log.info("Call function destroy() from Receiver name==[{}]", receiverName);
 		return super.destroy();
 	}
 

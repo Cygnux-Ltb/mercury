@@ -1,8 +1,10 @@
 package io.mercury.transport.rabbitmq;
 
 import static io.mercury.common.util.StringUtil.bytesToStr;
+import static io.mercury.common.util.StringUtil.nonEmpty;
 
 import java.io.IOException;
+import java.time.ZonedDateTime;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -15,6 +17,7 @@ import org.slf4j.Logger;
 import com.rabbitmq.client.AMQP.BasicProperties;
 
 import io.mercury.common.character.Charsets;
+import io.mercury.common.datetime.TimeZone;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
@@ -85,7 +88,7 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 	 */
 	public RabbitMqPublisher(String tag, @Nonnull RmqPublisherConfigurator configurator, Consumer<Long> ackCallback,
 			Consumer<Long> noAckCallback) {
-		super(tag, "Publisher", configurator.connection());
+		super(nonEmpty(tag) ? tag : "Publisher-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT), configurator.connection());
 		Assertor.nonNull(configurator.publishExchange(), "exchangeRelation");
 		this.publishExchange = configurator.publishExchange();
 		this.exchangeName = publishExchange.exchangeName();

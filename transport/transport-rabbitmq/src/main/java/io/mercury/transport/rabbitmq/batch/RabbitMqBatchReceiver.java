@@ -1,12 +1,16 @@
 package io.mercury.transport.rabbitmq.batch;
 
+import static io.mercury.common.util.StringUtil.nonEmpty;
+
 import java.io.IOException;
+import java.time.ZonedDateTime;
 import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 
 import org.slf4j.Logger;
 
+import io.mercury.common.datetime.TimeZone;
 import io.mercury.common.functional.BytesDeserializer;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.transport.core.api.Receiver;
@@ -50,22 +54,24 @@ public class RabbitMqBatchReceiver<T> extends BaseRabbitMqTransport implements R
 
 	public RabbitMqBatchReceiver(String tag, @Nonnull RmqReceiverConfigurator configurator, long autoFlushInterval,
 			BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent) {
-		super(tag, "QosBatchReceiver", configurator.connection());
+		super(nonEmpty(tag) ? tag : "QosBatchReceiver-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT),
+				configurator.connection());
 		this.receiveQueue = configurator.receiveQueue().queue().name();
 		createConnection();
 		queueDeclare();
-		consumer = new BatchProcessConsumer<T>(channel, configurator.qos(), autoFlushInterval, batchHandler,
+		this.consumer = new BatchProcessConsumer<T>(channel, configurator.qos(), autoFlushInterval, batchHandler,
 				deserializer, refreshNowEvent, null);
 	}
 
 	public RabbitMqBatchReceiver(String tag, @Nonnull RmqReceiverConfigurator configurator, long autoFlushInterval,
 			BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent,
 			Predicate<T> filter) {
-		super(tag, "BatchReceiver", configurator.connection());
+		super(nonEmpty(tag) ? tag : "QosBatchReceiver-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT),
+				configurator.connection());
 		this.receiveQueue = configurator.receiveQueue().queueName();
 		createConnection();
 		queueDeclare();
-		consumer = new BatchProcessConsumer<T>(super.channel, configurator.qos(), autoFlushInterval, batchHandler,
+		this.consumer = new BatchProcessConsumer<T>(super.channel, configurator.qos(), autoFlushInterval, batchHandler,
 				deserializer, refreshNowEvent, filter);
 	}
 

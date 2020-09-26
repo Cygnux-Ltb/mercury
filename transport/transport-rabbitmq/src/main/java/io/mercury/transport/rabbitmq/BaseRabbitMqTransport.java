@@ -1,11 +1,9 @@
 package io.mercury.transport.rabbitmq;
 
 import static io.mercury.common.thread.Threads.sleep;
-import static io.mercury.common.util.StringUtil.isNullOrEmpty;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.time.ZonedDateTime;
 import java.util.concurrent.TimeoutException;
 
 import javax.annotation.Nonnull;
@@ -19,7 +17,6 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Method;
 import com.rabbitmq.client.ShutdownSignalException;
 
-import io.mercury.common.datetime.TimeZone;
 import io.mercury.common.functional.ShutdownEvent;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
@@ -69,9 +66,9 @@ public abstract class BaseRabbitMqTransport implements TransportModule, Closeabl
 	 * @param moduleType
 	 * @param rmqConnection
 	 */
-	protected BaseRabbitMqTransport(String tag, @Nonnull String moduleType, @Nonnull RmqConnection rmqConnection) {
+	protected BaseRabbitMqTransport(@Nonnull String tag,  @Nonnull RmqConnection rmqConnection) {
 		Assertor.nonNull(rmqConnection, "rmqConnection");
-		this.tag = isNullOrEmpty(tag) ? moduleType + "-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT) : tag;
+		this.tag = tag; 
 		this.rmqConnection = rmqConnection;
 		this.shutdownEvent = rmqConnection.shutdownEvent();
 	}

@@ -1,8 +1,10 @@
 package io.mercury.transport.rabbitmq;
 
 import static io.mercury.common.util.StringUtil.bytesToStr;
+import static io.mercury.common.util.StringUtil.nonEmpty;
 
 import java.io.IOException;
+import java.time.ZonedDateTime;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -16,6 +18,7 @@ import com.rabbitmq.client.Envelope;
 
 import io.mercury.common.character.Charsets;
 import io.mercury.common.codec.DecodeException;
+import io.mercury.common.datetime.TimeZone;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.core.api.Receiver;
@@ -151,7 +154,7 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Receiv
 	 */
 	private RabbitMqReceiver(String tag, @Nonnull RmqReceiverConfigurator configurator,
 			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
-		super(tag, "Receiver", configurator.connection());
+		super(nonEmpty(tag) ? tag : "Receiver-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT), configurator.connection());
 		this.receiveQueue = configurator.receiveQueue();
 		this.queueName = receiveQueue.queueName();
 		this.deserializer = deserializer;
@@ -190,9 +193,9 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Receiv
 		}
 	}
 
-	private void declareErrMsgExchange(RabbitMqDeclarant opChannel) {
+	private void declareErrMsgExchange(RabbitMqDeclarant declarant) {
 		try {
-			this.errMsgExchange.declare(opChannel);
+			this.errMsgExchange.declare(declarant);
 		} catch (AmqpDeclareException e) {
 			log.error(
 					"ErrorMsgExchange declare throw exception -> connection configurator info : {}, error message : {}",

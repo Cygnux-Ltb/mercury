@@ -1,6 +1,7 @@
 package io.mercury.transport.rabbitmq;
 
 import java.io.IOException;
+import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
@@ -10,6 +11,7 @@ import com.rabbitmq.client.AMQP.Queue.DeleteOk;
 import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
 
+import io.mercury.common.datetime.TimeZone;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 import io.mercury.transport.rabbitmq.declare.AmqpExchange;
@@ -73,7 +75,7 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	}
 
 	private RabbitMqDeclarant(RmqConnection connection) {
-		super(null, "DeclareOperator", connection);
+		super("DeclareOperator-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT), connection);
 		createConnection();
 	}
 
