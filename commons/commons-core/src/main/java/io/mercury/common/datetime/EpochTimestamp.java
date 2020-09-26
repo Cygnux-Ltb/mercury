@@ -1,20 +1,33 @@
 package io.mercury.common.datetime;
 
 import static io.mercury.common.util.StringUtil.toText;
-import static java.lang.System.currentTimeMillis;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+/**
+ * 
+ * @author yellow013
+ *
+ */
 public final class EpochTimestamp {
 
+	/**
+	 * 
+	 */
 	private long epochMillis;
+	/**
+	 * 
+	 */
 	private Instant instant;
+	/**
+	 * 
+	 */
 	private ZonedDateTime dateTime;
 
 	private EpochTimestamp() {
-		this.epochMillis = currentTimeMillis();
+		this.epochMillis = System.currentTimeMillis();
 	}
 
 	public static EpochTimestamp now() {
@@ -115,6 +128,8 @@ public final class EpochTimestamp {
 		System.out.println(now.instant().getEpochSecond() * 1000000 + now.instant().getNano() / 1000);
 		System.out.println(now.instant());
 		System.out.println(now.dateTime());
+		
+		System.out.println(now);
 
 	}
 

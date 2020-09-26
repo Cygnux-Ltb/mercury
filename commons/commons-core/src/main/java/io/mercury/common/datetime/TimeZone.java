@@ -33,6 +33,16 @@ public interface TimeZone {
 	ZoneOffset CST_OFFSET = ZonedDateTime.ofInstant(Instant.EPOCH, CST).getOffset();
 
 	/**
+	 * Taiwan Standard Time ZoneId
+	 */
+	ZoneId TST = ZoneId.of("Asia/Taipei");
+
+	/**
+	 * Taiwan Standard Time ZoneOffset
+	 */
+	ZoneOffset TST_OFFSET = ZonedDateTime.ofInstant(Instant.EPOCH, TST).getOffset();
+
+	/**
 	 * Japan Standard Time ZoneId
 	 */
 	ZoneId JST = ZoneId.of("Asia/Tokyo");
@@ -43,13 +53,13 @@ public interface TimeZone {
 	ZoneOffset JST_OFFSET = ZonedDateTime.ofInstant(Instant.EPOCH, JST).getOffset();
 
 	/**
-	 * America Chicago Time ZoneId
+	 * North America Chicago Time ZoneId
 	 */
-	ZoneId AMERICA_CHICAGO = ZoneId.of("America/Chicago");
+	ZoneId NA_CHICAGO = ZoneId.of("America/Chicago");
 
 	/**
-	 * America Chicago Time ZoneOffset
+	 * North America Chicago Time ZoneOffset
 	 */
-	ZoneOffset AMERICA_CHICAGO_OFFSET = ZonedDateTime.ofInstant(Instant.EPOCH, AMERICA_CHICAGO).getOffset();
+	ZoneOffset NA_CHICAGO_OFFSET = ZonedDateTime.ofInstant(Instant.EPOCH, NA_CHICAGO).getOffset();
 
 }

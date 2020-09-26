@@ -16,6 +16,7 @@ public class PriorityQueue<E> {
 	 * 优先集合
 	 */
 	private final MutableSortedSet<E> prioritySet = MutableSets.newTreeSortedSet();
+
 	/**
 	 * 次级集合
 	 */
