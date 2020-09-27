@@ -1,9 +1,9 @@
 package io.mercury.actors;
 
 import akka.actor.Props;
-import io.mercury.actors.reference.GenericActorE1;
+import io.mercury.actors.ref.GenericActor;
 
-public class UserActor extends GenericActorE1<User> {
+public class UserActor extends GenericActor<User> {
 //    private Object parameters;
 
 	public static Props props() {

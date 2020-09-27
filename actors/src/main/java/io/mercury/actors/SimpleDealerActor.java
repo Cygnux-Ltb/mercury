@@ -3,7 +3,7 @@ package io.mercury.actors;
 import org.eclipse.collections.api.list.MutableList;
 
 import akka.actor.ActorRef;
-import io.mercury.actors.reference.GenericActorE2;
+import io.mercury.actors.ref.GenericActorE2;
 import io.mercury.common.collections.MutableLists;
 
 public abstract class SimpleDealerActor<T> extends GenericActorE2<ActorRef, T> {
@@ -16,24 +16,24 @@ public abstract class SimpleDealerActor<T> extends GenericActorE2<ActorRef, T> {
 	}
 
 	@Override
-	protected Class<ActorRef> eventType1() {
+	protected Class<ActorRef> eventType0() {
 		return ActorRef.class;
 	}
 
 	@Override
-	protected void onEvent1(ActorRef t1) {
-		registered.add(t1);
+	protected void onEvent0(ActorRef t0) {
+		registered.add(t0);
 	}
 
 	@Override
-	protected void onEvent2(T t2) {
+	protected void onEvent1(T t1) {
 		if (registered.isEmpty())
-			handleRegisteredIsEmpty(t2);
+			handleRegisteredIsEmpty(t1);
 		else
-			registered.get(nextActorIndex()).forward(t2, getContext());
+			registered.get(nextActorIndex()).forward(t1, getContext());
 	}
 
-	private void handleRegisteredIsEmpty(T t2) {
+	private void handleRegisteredIsEmpty(T t1) {
 		// TODO
 	}
 

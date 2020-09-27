@@ -21,14 +21,14 @@ public abstract class CommonActor extends AbstractActor {
 	}
 
 	private final void handleUnknown(Object obj) {
-		log.error("Received unmatched message -> class==[{}] obj==[{}]", obj.getClass().getName(), obj);
+		log.error("Received unmatched message -> class==[{}] obj -> {}", obj.getClass().getName(), obj);
 		handleUnknown0(obj);
 	}
 
 	protected abstract void handleUnknown0(Object t);
 
 	protected void stop() {
-		log.info("Destroy Actor -> {}", self);
+		log.info("Stop actor -> {}", self);
 		getContext().stop(self);
 	}
 
