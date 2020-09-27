@@ -1,11 +1,11 @@
-package io.mercury.actors.reference;
+package io.mercury.actors.ref;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import io.mercury.actors.msg.AvroMsg;
 
-public abstract class AvroBinaryActor extends GenericActorE1<ByteBuffer> {
+public abstract class AvroBinaryActor extends GenericActor<ByteBuffer> {
 
 	@Override
 	protected Class<ByteBuffer> eventType() {
