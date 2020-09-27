@@ -6,7 +6,11 @@ import akka.actor.typed.javadsl.*;
 
 import java.util.Objects;
 
-// #greeter
+/**
+ * 
+ * @author akka official
+ *
+ */
 public class Greeter extends AbstractBehavior<Greeter.Greet> {
 
 	public static final class Greet {
@@ -21,7 +25,7 @@ public class Greeter extends AbstractBehavior<Greeter.Greet> {
 	}
 
 	public static final class Greeted {
-		
+
 		public final String whom;
 		public final ActorRef<Greet> from;
 
@@ -30,7 +34,6 @@ public class Greeter extends AbstractBehavior<Greeter.Greet> {
 			this.from = from;
 		}
 
-// #greeter
 		@Override
 		public boolean equals(Object o) {
 			if (this == o)
@@ -50,7 +53,7 @@ public class Greeter extends AbstractBehavior<Greeter.Greet> {
 		public String toString() {
 			return "Greeted{" + "whom='" + whom + '\'' + ", from=" + from + '}';
 		}
-// #greeter
+
 	}
 
 	public static Behavior<Greet> create() {
@@ -74,4 +77,3 @@ public class Greeter extends AbstractBehavior<Greeter.Greet> {
 		return this;
 	}
 }
-// #greeter

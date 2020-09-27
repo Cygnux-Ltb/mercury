@@ -4,6 +4,11 @@ import akka.actor.typed.ActorSystem;
 
 import java.io.IOException;
 
+/**
+ * 
+ * @author Akka official
+ *
+ */
 public class AkkaQuickstart {
 
 	public static void main(String[] args) {

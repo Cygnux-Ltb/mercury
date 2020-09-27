@@ -4,6 +4,11 @@ import akka.actor.typed.ActorRef;
 import akka.actor.typed.Behavior;
 import akka.actor.typed.javadsl.*;
 
+/**
+ * 
+ * @author Akka official
+ *
+ */
 public class GreeterMain extends AbstractBehavior<GreeterMain.SayHello> {
 
 	public static class SayHello {
@@ -39,5 +44,5 @@ public class GreeterMain extends AbstractBehavior<GreeterMain.SayHello> {
 		// #create-actors
 		return this;
 	}
-	
+
 }
