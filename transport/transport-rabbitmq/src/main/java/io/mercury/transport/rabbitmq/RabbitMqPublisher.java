@@ -6,7 +6,6 @@ import static io.mercury.common.util.StringUtil.nonEmpty;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.concurrent.TimeoutException;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
@@ -32,7 +31,7 @@ import io.mercury.transport.rabbitmq.exception.AmqpDeclareRuntimeException;
 import io.mercury.transport.rabbitmq.exception.AmqpNoConfirmException;
 
 @ThreadSafe
-public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publisher<byte[]>, Sender<byte[]> {
+public class RabbitMqPublisher extends AbstractRabbitMqTransport implements Publisher<byte[]>, Sender<byte[]> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqPublisher.class);
 
@@ -56,28 +55,14 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 
 	private final String publisherName;
 
-	@SuppressWarnings("unused")
-	private Consumer<Long> ackCallback;
-
-	@SuppressWarnings("unused")
-	private Consumer<Long> noAckCallback;
-
 	/**
 	 * 
 	 * @param configurator
 	 */
 	public RabbitMqPublisher(@Nonnull RmqPublisherConfigurator configurator) {
-		this(null, configurator, null, null);
+		this(null, configurator);
 	}
 
-	/**
-	 * 
-	 * @param tag
-	 * @param configurator
-	 */
-	public RabbitMqPublisher(String tag, @Nonnull RmqPublisherConfigurator configurator) {
-		this(tag, configurator, null, null);
-	}
 
 	/**
 	 * 
@@ -86,8 +71,7 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 	 * @param ackCallback
 	 * @param noAckCallback
 	 */
-	public RabbitMqPublisher(String tag, @Nonnull RmqPublisherConfigurator configurator, Consumer<Long> ackCallback,
-			Consumer<Long> noAckCallback) {
+	public RabbitMqPublisher(String tag, @Nonnull RmqPublisherConfigurator configurator) {
 		super(nonEmpty(tag) ? tag : "Publisher-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT), configurator.connection());
 		Assertor.nonNull(configurator.publishExchange(), "exchangeRelation");
 		this.publishExchange = configurator.publishExchange();
@@ -98,8 +82,6 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 		this.confirm = configurator.confirm();
 		this.confirmTimeout = configurator.confirmTimeout();
 		this.confirmRetry = configurator.confirmRetry();
-		this.ackCallback = ackCallback;
-		this.noAckCallback = noAckCallback;
 		this.hasPropsSupplier = msgPropsSupplier != null;
 		this.publisherName = "publisher::" + rmqConnection.fullInfo() + "$" + exchangeName;
 		createConnection();
@@ -113,7 +95,7 @@ public class RabbitMqPublisher extends BaseRabbitMqTransport implements Publishe
 						"Publisher -> {} use anonymous exchange, Please specify [queue name] as the [routing key] when publish",
 						tag);
 			} else {
-				this.publishExchange.declare(RabbitMqDeclarant.newWith(channel));
+				this.publishExchange.declare(RabbitMqDeclareOperator.newWith(channel));
 			}
 		} catch (AmqpDeclareException e) {
 			// 在定义Exchange和进行绑定时抛出任何异常都需要终止程序

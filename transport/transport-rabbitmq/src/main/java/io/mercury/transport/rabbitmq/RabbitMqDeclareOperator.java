@@ -18,7 +18,7 @@ import io.mercury.transport.rabbitmq.declare.AmqpExchange;
 import io.mercury.transport.rabbitmq.declare.AmqpQueue;
 import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
 
-public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
+public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 
 	/**
 	 * Create OperationalChannel of host, port, username and password
@@ -31,7 +31,7 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqDeclarant newWith(String host, int port, String username, String password) {
+	public static RabbitMqDeclareOperator newWith(String host, int port, String username, String password) {
 		return newWith(RmqConnection.configuration(host, port, username, password).build());
 	}
 
@@ -47,7 +47,7 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqDeclarant newWith(String host, int port, String username, String password,
+	public static RabbitMqDeclareOperator newWith(String host, int port, String username, String password,
 			String virtualHost) {
 		return newWith(RmqConnection.configuration(host, port, username, password, virtualHost).build());
 	}
@@ -60,8 +60,8 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqDeclarant newWith(RmqConnection connection) {
-		return new RabbitMqDeclarant(connection);
+	public static RabbitMqDeclareOperator newWith(RmqConnection connection) {
+		return new RabbitMqDeclareOperator(connection);
 	}
 
 	/**
@@ -70,17 +70,17 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	 * @param channel
 	 * @return
 	 */
-	public static RabbitMqDeclarant newWith(Channel channel) {
-		return new RabbitMqDeclarant(channel);
+	public static RabbitMqDeclareOperator newWith(Channel channel) {
+		return new RabbitMqDeclareOperator(channel);
 	}
 
-	private RabbitMqDeclarant(RmqConnection connection) {
+	private RabbitMqDeclareOperator(RmqConnection connection) {
 		super("DeclareOperator-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT), connection);
 		createConnection();
 	}
 
-	private RabbitMqDeclarant(Channel channel) {
-		super("channel-" + channel.getChannelNumber());
+	private RabbitMqDeclareOperator(Channel channel) {
+		super("DeclareOperator-With-Channel-" + channel.getChannelNumber());
 		this.channel = channel;
 	}
 
@@ -239,17 +239,35 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	}
 
 	private boolean declareExchange(String exchange, BuiltinExchangeType type, boolean durable, boolean autoDelete,
-			boolean internal, Map<String, Object> args) throws AmqpDeclareException {
+			boolean internal, Map<String, Object> arg) throws AmqpDeclareException {
 		try {
 			Assertor.nonEmpty(exchange, "exchange");
 		} catch (Exception e) {
 			throw AmqpDeclareException.with(e);
 		}
 		try {
-			channel.exchangeDeclare(exchange, type, durable, autoDelete, internal, args);
+			/**
+			 * exchange : the name of the exchange.
+			 * 
+			 * type : the exchange type.
+			 * 
+			 * durable : true if we are declaring a durable exchange (the exchange will
+			 * survive a server restart)
+			 * 
+			 * autoDelete : true if the server should delete the exchange when it is no
+			 * longer in use.
+			 * 
+			 * internal : true if the exchange is internal, i.e. can't be directly published
+			 * to by a client.
+			 * 
+			 * arguments : other properties (construction arguments) for the exchange.
+			 * 
+			 */
+			channel.exchangeDeclare(exchange, type, durable, autoDelete, internal, arg);
 			return true;
 		} catch (IOException e) {
-			throw AmqpDeclareException.declareExchangeError(exchange, type, durable, autoDelete, internal, args, e);
+			throw AmqpDeclareException.declareExchangeError(exchange, type, durable, autoDelete, internal, arg,
+					e);
 		}
 	}
 
@@ -280,6 +298,14 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 			throw AmqpDeclareException.with(e);
 		}
 		try {
+			/**
+			 * queue : the name of the queue.
+			 * 
+			 * exchange : the name of the exchange.
+			 * 
+			 * routingKey : the routing key to use for the binding.
+			 * 
+			 */
 			channel.queueBind(queue, exchange, routingKey == null ? "" : routingKey);
 			return true;
 		} catch (IOException e) {
@@ -315,6 +341,16 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 			throw AmqpDeclareException.with(e);
 		}
 		try {
+			/**
+			 * destination : the name of the exchange to which messages flow across the
+			 * binding.
+			 * 
+			 * source : the name of the exchange from which messages flow across the
+			 * binding.
+			 * 
+			 * routingKey : the routing key to use for the binding.
+			 * 
+			 */
 			channel.exchangeBind(destExchange, sourceExchange, routingKey == null ? "" : routingKey);
 			return true;
 		} catch (IOException e) {
@@ -331,8 +367,10 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	 */
 	public int deleteQueue(String queue, boolean force) throws IOException {
 		/**
-		 * queue : the name of the queue. <br>
-		 * ifUnused : true if the queue should be deleted only if not in use. <br>
+		 * queue : the name of the queue.
+		 * 
+		 * ifUnused : true if the queue should be deleted only if not in use.
+		 * 
 		 * ifEmpty : true if the queue should be deleted only if empty.
 		 * 
 		 */
@@ -348,6 +386,12 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 	 * @throws IOException
 	 */
 	public boolean deleteExchange(String exchange, boolean force) throws IOException {
+		/**
+		 * exchange : the name of the exchange.
+		 * 
+		 * ifUnused : true to indicate that the exchange is only to be deleted if it is
+		 * unused.
+		 */
 		channel.exchangeDelete(exchange, !force);
 		return true;
 	}
@@ -359,15 +403,15 @@ public final class RabbitMqDeclarant extends BaseRabbitMqTransport {
 
 	public static void main(String[] args) {
 		try {
-			RabbitMqDeclarant declareOperator = newWith("127.0.0.1", 5672, "guest", "guest");
-			System.out.println(declareOperator.isConnected());
+			RabbitMqDeclareOperator operator = newWith("127.0.0.1", 5672, "guest", "guest");
+			System.out.println(operator.isConnected());
 			try {
-				declareOperator.declareFanoutExchange("MarketData", true, false, false, null);
+				operator.declareFanoutExchange("MarketData", true, false, false, null);
 			} catch (AmqpDeclareException e) {
 				e.printStackTrace();
 			}
-			declareOperator.close();
-			System.out.println(declareOperator.isConnected());
+			operator.close();
+			System.out.println(operator.isConnected());
 		} catch (Exception e) {
 
 		}

@@ -9,7 +9,7 @@ import com.rabbitmq.client.Channel;
 import io.mercury.common.datetime.TimeZone;
 import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 
-public final class RabbitMqChannel extends BaseRabbitMqTransport {
+public final class RabbitMqChannel extends AbstractRabbitMqTransport {
 
 	/**
 	 * Create GeneralChannel of host, port, username and password

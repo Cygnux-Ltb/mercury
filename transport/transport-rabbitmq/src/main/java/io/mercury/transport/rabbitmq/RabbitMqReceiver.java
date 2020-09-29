@@ -40,7 +40,7 @@ import io.mercury.transport.rabbitmq.exception.AmqpMsgHandleException;
  *         [已完成]改造升级, 使用共同的构建者建立Exchange, RoutingKey, Queue的绑定关系
  *
  */
-public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Receiver, Subscriber, Runnable {
+public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Receiver, Subscriber, Runnable {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqReceiver.class);
 
@@ -173,9 +173,9 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Receiv
 	}
 
 	private void declare() {
-		RabbitMqDeclarant declarant = RabbitMqDeclarant.newWith(channel);
+		RabbitMqDeclareOperator operator = RabbitMqDeclareOperator.newWith(channel);
 		try {
-			this.receiveQueue.declare(declarant);
+			this.receiveQueue.declare(operator);
 		} catch (AmqpDeclareException e) {
 			log.error("Queue declare throw exception -> connection configurator info : {}, error message : {}",
 					rmqConnection.fullInfo(), e.getMessage(), e);
@@ -185,17 +185,17 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Receiv
 		}
 		if (errMsgExchange != null && errMsgQueue != null) {
 			errMsgExchange.bindingQueue(errMsgQueue.queue());
-			declareErrMsgExchange(declarant);
+			declareErrMsgExchange(operator);
 		} else if (errMsgExchange != null) {
-			declareErrMsgExchange(declarant);
+			declareErrMsgExchange(operator);
 		} else if (errMsgQueue != null) {
-			declareErrMsgQueueName(declarant);
+			declareErrMsgQueueName(operator);
 		}
 	}
 
-	private void declareErrMsgExchange(RabbitMqDeclarant declarant) {
+	private void declareErrMsgExchange(RabbitMqDeclareOperator operator) {
 		try {
-			this.errMsgExchange.declare(declarant);
+			this.errMsgExchange.declare(operator);
 		} catch (AmqpDeclareException e) {
 			log.error(
 					"ErrorMsgExchange declare throw exception -> connection configurator info : {}, error message : {}",
@@ -208,9 +208,9 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Receiv
 		this.hasErrMsgExchange = true;
 	}
 
-	private void declareErrMsgQueueName(RabbitMqDeclarant declarant) {
+	private void declareErrMsgQueueName(RabbitMqDeclareOperator operator) {
 		try {
-			this.errMsgQueue.declare(declarant);
+			this.errMsgQueue.declare(operator);
 		} catch (AmqpDeclareException e) {
 			log.error("ErrorMsgQueue declare throw exception -> connection configurator info : {}, error message : {}",
 					rmqConnection.fullInfo(), e.getMessage(), e);
@@ -292,7 +292,6 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Receiv
 		Assertor.nonNull(deserializer, "deserializer");
 		Assertor.nonNull(consumer, "consumer");
 		try {
-
 			if (!autoAck)
 				channel.basicQos(qos);
 
@@ -367,12 +366,12 @@ public class RabbitMqReceiver<T> extends BaseRabbitMqTransport implements Receiv
 		if (hasErrMsgExchange) {
 			// Sent message to error dump exchange.
 			log.error("Exception handling -> Sent to ErrMsgExchange [{}]", errMsgExchangeName);
-			channel.basicPublish(errMsgExchangeName, errMsgRoutingKey, null, body);
+			channel.basicPublish(errMsgExchangeName, errMsgRoutingKey, properties, body);
 			log.error("Exception handling -> Sent to ErrMsgExchange [{}] finished", errMsgExchangeName);
 		} else if (hasErrMsgQueue) {
 			// Sent message to error dump queue.
 			log.error("Exception handling -> Sent to ErrMsgQueue [{}]", errMsgQueueName);
-			channel.basicPublish("", errMsgQueueName, null, body);
+			channel.basicPublish("", errMsgQueueName, properties, body);
 			log.error("Exception handling -> Sent to ErrMsgQueue finished");
 		} else {
 			// Reject message and close connection.

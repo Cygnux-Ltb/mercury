@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
@@ -15,6 +16,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 
 import com.rabbitmq.client.AMQP.BasicProperties;
+import com.rabbitmq.client.ConfirmCallback;
 
 import io.mercury.common.character.Charsets;
 import io.mercury.common.datetime.TimeZone;
@@ -39,9 +41,9 @@ import io.mercury.transport.rabbitmq.exception.AmqpNoConfirmException;
  *
  */
 @ThreadSafe
-public class RabbitMqPublisher0 extends BaseRabbitMqTransport implements Publisher<byte[]>, Sender<byte[]> {
+public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport implements Publisher<T>, Sender<T> {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqPublisher0.class);
+	private static final Logger log = CommonLoggerFactory.getLogger(AdvancedRabbitMqPublisher.class);
 
 	// 发布消息使用的[ExchangeDeclare]
 	private final ExchangeRelationship publishExchange;
@@ -63,38 +65,32 @@ public class RabbitMqPublisher0 extends BaseRabbitMqTransport implements Publish
 
 	private final String publisherName;
 
-	@SuppressWarnings("unused")
-	private Consumer<Long> ackCallback;
-
-	@SuppressWarnings("unused")
-	private Consumer<Long> noAckCallback;
+	/**
+	 * 接收消息使用的反序列化器
+	 */
+	private final Function<T, byte[]> serializer;
 
 	/**
-	 * 
-	 * @param configurator
+	 * ACK成功回调
 	 */
-	public RabbitMqPublisher0(@Nonnull RmqPublisherConfigurator configurator) {
-		this(null, configurator, null, null);
-	}
+	private final AckCallback ackCallback;
+
+	/**
+	 * ACK未成功回调
+	 */
+	private final NoAckCallback noAckCallback;
 
 	/**
 	 * 
 	 * @param tag
 	 * @param configurator
-	 */
-	public RabbitMqPublisher0(String tag, @Nonnull RmqPublisherConfigurator configurator) {
-		this(tag, configurator, null, null);
-	}
-
-	/**
-	 * 
-	 * @param tag
-	 * @param configurator
+	 * @param serializer
 	 * @param ackCallback
 	 * @param noAckCallback
 	 */
-	public RabbitMqPublisher0(String tag, @Nonnull RmqPublisherConfigurator configurator, Consumer<Long> ackCallback,
-			Consumer<Long> noAckCallback) {
+	private AdvancedRabbitMqPublisher(String tag, @Nonnull RmqPublisherConfigurator configurator,
+			@Nonnull Function<T, byte[]> serializer, @Nonnull AckCallback ackCallback,
+			@Nonnull NoAckCallback noAckCallback) {
 		super(nonEmpty(tag) ? tag : "Publisher-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT), configurator.connection());
 		Assertor.nonNull(configurator.publishExchange(), "exchangeRelation");
 		this.publishExchange = configurator.publishExchange();
@@ -105,12 +101,23 @@ public class RabbitMqPublisher0 extends BaseRabbitMqTransport implements Publish
 		this.confirm = configurator.confirm();
 		this.confirmTimeout = configurator.confirmTimeout();
 		this.confirmRetry = configurator.confirmRetry();
+		this.serializer = serializer;
 		this.ackCallback = ackCallback;
 		this.noAckCallback = noAckCallback;
 		this.hasPropsSupplier = msgPropsSupplier != null;
 		this.publisherName = "publisher::" + rmqConnection.fullInfo() + "$" + exchangeName;
 		createConnection();
 		declare();
+		// 如果设置为需要应答确认, 则添加Ack & NoAck回调
+		if (confirm) {
+			channel.addConfirmListener(ackCallback, noAckCallback);
+			try {
+				// Enables publisher acknowledgements on this channel.
+				channel.confirmSelect();
+			} catch (IOException ioe) {
+				log.error("Enables publisher acknowledgements", ioe);
+			}
+		}
 	}
 
 	private void declare() throws AmqpDeclareRuntimeException {
@@ -119,7 +126,7 @@ public class RabbitMqPublisher0 extends BaseRabbitMqTransport implements Publish
 				log.warn("Publisher -> {} use anonymous exchange, Please specify [queue name] "
 						+ "as the [routing key] when publish", tag);
 			} else {
-				this.publishExchange.declare(RabbitMqDeclarant.newWith(channel));
+				this.publishExchange.declare(RabbitMqDeclareOperator.newWith(channel));
 			}
 		} catch (AmqpDeclareException e) {
 			// 在定义Exchange和进行绑定时抛出任何异常都需要终止程序
@@ -132,17 +139,17 @@ public class RabbitMqPublisher0 extends BaseRabbitMqTransport implements Publish
 	}
 
 	@Override
-	public void send(@Nonnull byte[] msg) throws PublishFailedException {
+	public void send(@Nonnull T msg) throws PublishFailedException {
 		publish(msg);
 	}
 
 	@Override
-	public void publish(@Nonnull byte[] msg) throws PublishFailedException {
+	public void publish(@Nonnull T msg) throws PublishFailedException {
 		publish(defaultRoutingKey, msg, defaultMsgProps);
 	}
 
 	@Override
-	public void publish(@Nonnull String target, @Nonnull byte[] msg) throws PublishFailedException {
+	public void publish(@Nonnull String target, @Nonnull T msg) throws PublishFailedException {
 		publish(target, msg, hasPropsSupplier ? msgPropsSupplier.get() : defaultMsgProps);
 	}
 
@@ -153,7 +160,7 @@ public class RabbitMqPublisher0 extends BaseRabbitMqTransport implements Publish
 	 * @param props
 	 * @throws PublishFailedException
 	 */
-	public void publish(@Nonnull String target, @Nonnull byte[] msg, @Nonnull BasicProperties props)
+	public void publish(@Nonnull String target, @Nonnull T msg, @Nonnull BasicProperties props)
 			throws PublishFailedException {
 		// 记录重试次数
 		int retry = 0;
@@ -168,21 +175,21 @@ public class RabbitMqPublisher0 extends BaseRabbitMqTransport implements Publish
 			try {
 				confirmPublish(target, msg, props);
 			} catch (IOException e) {
-				log.error("Method publish isConfirm==[true] throw IOException -> {}, msg==[{}]", e.getMessage(),
-						bytesToStr(msg), e);
+				log.error("Method publish isConfirm==[true] throw IOException -> {}, msg==[{}]", e.getMessage(), (msg),
+						e);
 				destroy();
 				throw new PublishFailedException(e);
 			} catch (AmqpNoConfirmException e) {
 				log.error("Method publish isConfirm==[true] throw NoConfirmException -> {}, msg==[{}]", e.getMessage(),
-						bytesToStr(msg), e);
+						(msg), e);
 				throw new PublishFailedException(e);
 			}
 		} else {
 			try {
 				basicPublish(target, msg, props);
 			} catch (IOException e) {
-				log.error("Method publish isConfirm==[false] throw IOException -> {}, msg==[{}]", e.getMessage(),
-						bytesToStr(msg), e);
+				log.error("Method publish isConfirm==[false] throw IOException -> {}, msg==[{}]", e.getMessage(), (msg),
+						e);
 				destroy();
 				throw new PublishFailedException(e);
 			}
@@ -197,7 +204,7 @@ public class RabbitMqPublisher0 extends BaseRabbitMqTransport implements Publish
 	 * @throws IOException
 	 * @throws AmqpNoConfirmException
 	 */
-	private void confirmPublish(String routingKey, byte[] msg, BasicProperties props)
+	private void confirmPublish(String routingKey, T msg, BasicProperties props)
 			throws IOException, AmqpNoConfirmException {
 		confirmPublish0(routingKey, msg, props, 0);
 	}
@@ -212,10 +219,10 @@ public class RabbitMqPublisher0 extends BaseRabbitMqTransport implements Publish
 	 * @throws IOException
 	 * @throws AmqpNoConfirmException
 	 */
-	private void confirmPublish0(String routingKey, byte[] msg, BasicProperties props, int retry)
+	private void confirmPublish0(String routingKey, T msg, BasicProperties props, int retry)
 			throws IOException, AmqpNoConfirmException {
 		try {
-			channel.confirmSelect();
+			//TODO 启用发布确认
 			basicPublish(routingKey, msg, props);
 			if (channel.waitForConfirms(confirmTimeout))
 				return;
@@ -243,23 +250,28 @@ public class RabbitMqPublisher0 extends BaseRabbitMqTransport implements Publish
 	 * @param props
 	 * @throws IOException
 	 */
-	private void basicPublish(String routingKey, byte[] msg, BasicProperties props) throws IOException {
+	private void basicPublish(String routingKey, T msg, BasicProperties props) throws IOException {
 		try {
-			channel.basicPublish(
-					// param1: the exchange to publish the message to
-					exchangeName,
-					// param2: the routing key
-					routingKey,
-					// param3: other properties for the message - routing headers etc
-					props,
-					// param4: the message body
-					msg);
-		} catch (IOException e) {
-			StringBuilder sb = new StringBuilder(240);
+			byte[] bytes = serializer.apply(msg);
+			if (bytes != null) {
+				channel.basicPublish(
+						// param1: the exchange to publish the message to
+						exchangeName,
+						// param2: the routing key
+						routingKey,
+						// param3: other properties for the message - routing headers etc
+						props,
+						// param4: the message body
+						bytes);
+			}
+		} catch (IOException ioe) {
+			StringBuilder sb = new StringBuilder(500);
 			props.appendPropertyDebugStringTo(sb);
-			log.error("Method channel.basicPublish(exchange==[{}], routingKey==[{}], properties==[{}], msg==[...]) "
-					+ "throw IOException -> {}", exchangeName, routingKey, sb.toString(), e.getMessage(), e);
-			throw e;
+			log.error(
+					"Method channel.basicPublish(exchange==[{}], routingKey==[{}], properties==[{}], msg==[...]) "
+							+ "throw IOException -> {}",
+					exchangeName, routingKey, sb.toString(), ioe.getMessage(), ioe);
+			throw ioe;
 		}
 	}
 
@@ -279,13 +291,23 @@ public class RabbitMqPublisher0 extends BaseRabbitMqTransport implements Publish
 
 	}
 
+	@FunctionalInterface
+	public static interface AckCallback extends ConfirmCallback {
+
+	}
+
+	@FunctionalInterface
+	public static interface NoAckCallback extends ConfirmCallback {
+
+	}
+
 	public static void main(String[] args) {
 
 		RmqConnection connection = RmqConnection.configuration("127.0.0.1", 5672, "guest", "guest").build();
 
 		ExchangeRelationship fanoutExchange = ExchangeRelationship.fanout("fanout-test");
 
-		try (RabbitMqPublisher0 publisher = new RabbitMqPublisher0(
+		try (AdvancedRabbitMqPublisher publisher = new AdvancedRabbitMqPublisher(
 				RmqPublisherConfigurator.configuration(connection, fanoutExchange).build())) {
 			Threads.startNewThread(() -> {
 				int count = 0;
