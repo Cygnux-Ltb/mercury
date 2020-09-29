@@ -14,7 +14,7 @@ import io.mercury.common.datetime.TimeZone;
 import io.mercury.common.functional.BytesDeserializer;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.transport.core.api.Receiver;
-import io.mercury.transport.rabbitmq.BaseRabbitMqTransport;
+import io.mercury.transport.rabbitmq.AbstractRabbitMqTransport;
 import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfigurator;
 
 /**
@@ -23,7 +23,7 @@ import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfigurator;
  *         处理批量数据, 手动ACK
  * 
  */
-public class RabbitMqBatchReceiver<T> extends BaseRabbitMqTransport implements Receiver, Runnable {
+public class RabbitMqBatchReceiver<T> extends AbstractRabbitMqTransport implements Receiver, Runnable {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqBatchReceiver.class);
 

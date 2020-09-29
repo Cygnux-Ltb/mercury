@@ -8,7 +8,7 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import io.mercury.common.collections.MutableLists;
 import io.mercury.serialization.json.JsonUtil;
-import io.mercury.transport.rabbitmq.RabbitMqDeclarant;
+import io.mercury.transport.rabbitmq.RabbitMqDeclareOperator;
 import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
 
 /**
@@ -22,7 +22,7 @@ public final class ExchangeRelationship extends Relationship {
 	public final static ExchangeRelationship Anonymous = new ExchangeRelationship(AmqpExchange.Anonymous);
 
 	/**
-	 * 
+	 * exchange
 	 */
 	private AmqpExchange exchange;
 
@@ -67,9 +67,9 @@ public final class ExchangeRelationship extends Relationship {
 	}
 
 	@Override
-	protected void declare0(RabbitMqDeclarant declarant) {
+	protected void declare0(RabbitMqDeclareOperator operator) {
 		try {
-			declarant.declareExchange(exchange);
+			operator.declareExchange(exchange);
 		} catch (AmqpDeclareException e) {
 			log.error("Declare Exchange failure -> {}", exchange);
 			throw new RuntimeException(e);

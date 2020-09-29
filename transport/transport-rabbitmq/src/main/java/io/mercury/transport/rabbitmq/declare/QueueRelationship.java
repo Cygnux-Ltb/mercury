@@ -6,7 +6,7 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import io.mercury.common.collections.MutableLists;
 import io.mercury.serialization.json.JsonUtil;
-import io.mercury.transport.rabbitmq.RabbitMqDeclarant;
+import io.mercury.transport.rabbitmq.RabbitMqDeclareOperator;
 import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
 
 /**
@@ -18,17 +18,17 @@ import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
 public final class QueueRelationship extends Relationship {
 
 	/**
-	 * 
+	 * queue
 	 */
 	private AmqpQueue queue;
 
 	/**
 	 * 
-	 * @param queueName
+	 * @param name
 	 * @return
 	 */
-	public static QueueRelationship named(String queueName) {
-		return new QueueRelationship(AmqpQueue.named(queueName));
+	public static QueueRelationship named(String name) {
+		return new QueueRelationship(AmqpQueue.named(name));
 	}
 
 	/**
@@ -45,9 +45,9 @@ public final class QueueRelationship extends Relationship {
 	}
 
 	@Override
-	protected void declare0(RabbitMqDeclarant declarant) {
+	protected void declare0(RabbitMqDeclareOperator operator) {
 		try {
-			declarant.declareQueue(queue);
+			operator.declareQueue(queue);
 		} catch (AmqpDeclareException e) {
 			log.error("Declare Queue failure -> {}", queue);
 			throw new RuntimeException(e);
