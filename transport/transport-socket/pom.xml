@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-network</artifactId>
-			<version>2.20.2</version>
+			<version>2.20.40</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -48,19 +48,19 @@
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-threads</artifactId>
-			<version>2.20.7</version>
+			<version>2.20.43</version>
 		</dependency>
 
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-bytes</artifactId>
-			<version>2.20.7</version>
+			<version>2.20.43</version>
 		</dependency>
 
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-core</artifactId>
-			<version>2.20.10</version>
+			<version>2.20.42</version>
 		</dependency>
 
 		<dependency>
