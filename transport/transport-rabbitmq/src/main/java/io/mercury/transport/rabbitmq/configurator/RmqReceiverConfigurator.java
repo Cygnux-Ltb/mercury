@@ -4,7 +4,7 @@ import static io.mercury.common.util.Assertor.nonNull;
 
 import javax.annotation.Nonnull;
 
-import io.mercury.common.util.StringUtil;
+import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
 import io.mercury.transport.rabbitmq.declare.QueueRelationship;
 
@@ -157,7 +157,7 @@ public final class RmqReceiverConfigurator extends RmqConfigurator {
 	@Override
 	public String toString() {
 		if (toStringCache == null)
-			toStringCache = StringUtil.toStringForReflection(this);
+			toStringCache = JsonWrapper.toJson(this);
 		return toStringCache;
 	}
 
