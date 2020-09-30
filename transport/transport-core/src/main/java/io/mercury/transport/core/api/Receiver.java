@@ -1,6 +1,5 @@
 package io.mercury.transport.core.api;
 
-import io.mercury.transport.core.TransportModule;
 import io.mercury.transport.core.exception.ConnectionBreakException;
 import io.mercury.transport.core.exception.ReceiverStartException;
 

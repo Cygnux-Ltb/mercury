@@ -18,4 +18,5 @@ public final class ConnectionBreakException extends RuntimeException {
 	public ConnectionBreakException(String message, Throwable cause) {
 		super(message, cause);
 	}
+
 }
