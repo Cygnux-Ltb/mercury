@@ -62,6 +62,11 @@ public final class RmqReceiverConfigurator extends RmqConfigurator {
 
 	/**
 	 * 
+	 */
+	private boolean exclusive;
+
+	/**
+	 * 
 	 * @param builder
 	 */
 	private RmqReceiverConfigurator(Builder builder) {
@@ -75,6 +80,7 @@ public final class RmqReceiverConfigurator extends RmqConfigurator {
 		this.maxAckTotal = builder.maxAckTotal;
 		this.maxAckReconnection = builder.maxAckReconnection;
 		this.qos = builder.qos;
+		this.exclusive = builder.exclusive;
 	}
 
 	/**
@@ -152,6 +158,14 @@ public final class RmqReceiverConfigurator extends RmqConfigurator {
 		return qos;
 	}
 
+	/**
+	 * 
+	 * @return the exclusive
+	 */
+	public boolean exclusive() {
+		return exclusive;
+	}
+
 	private transient String toStringCache;
 
 	@Override
@@ -185,6 +199,8 @@ public final class RmqReceiverConfigurator extends RmqConfigurator {
 		private int maxAckReconnection = 8;
 		// QOS预取
 		private int qos = 256;
+		// 接收者是否独占队列
+		private boolean exclusive = false;
 
 		private Builder(RmqConnection connection, QueueRelationship receiveQueue) {
 			this.connection = connection;
@@ -254,6 +270,16 @@ public final class RmqReceiverConfigurator extends RmqConfigurator {
 		 */
 		public Builder setQos(int qos) {
 			this.qos = qos;
+			return this;
+		}
+
+		/**
+		 * 
+		 * @param exclusive
+		 * @return
+		 */
+		public Builder setExclusive(boolean exclusive) {
+			this.exclusive = exclusive;
 			return this;
 		}
 
