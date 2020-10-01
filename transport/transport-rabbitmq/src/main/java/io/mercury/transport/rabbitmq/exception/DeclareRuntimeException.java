@@ -1,6 +1,6 @@
 package io.mercury.transport.rabbitmq.exception;
 
-public final class AmqpDeclareRuntimeException extends RuntimeException {
+public final class DeclareRuntimeException extends RuntimeException {
 
 	/**
 	 * 
@@ -11,7 +11,7 @@ public final class AmqpDeclareRuntimeException extends RuntimeException {
 	 * 
 	 * @param declareException
 	 */
-	public AmqpDeclareRuntimeException(AmqpDeclareException declareException) {
+	public DeclareRuntimeException(DeclareException declareException) {
 		super(declareException);
 	}
 

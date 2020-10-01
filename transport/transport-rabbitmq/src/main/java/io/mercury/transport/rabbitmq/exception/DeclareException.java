@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.rabbitmq.client.BuiltinExchangeType;
 
-public final class AmqpDeclareException extends Exception {
+public final class DeclareException extends Exception {
 
 	/**
 	 * 
@@ -15,7 +15,7 @@ public final class AmqpDeclareException extends Exception {
 	 * 
 	 * @param cause
 	 */
-	private AmqpDeclareException(Throwable cause) {
+	private DeclareException(Throwable cause) {
 		super(cause);
 	}
 
@@ -24,7 +24,7 @@ public final class AmqpDeclareException extends Exception {
 	 * @param message
 	 * @param cause
 	 */
-	private AmqpDeclareException(String message, Throwable cause) {
+	private DeclareException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
@@ -38,9 +38,9 @@ public final class AmqpDeclareException extends Exception {
 	 * @param cause
 	 * @return
 	 */
-	public static AmqpDeclareException declareQueueError(String queue, boolean durable, boolean exclusive,
+	public static DeclareException declareQueueError(String queue, boolean durable, boolean exclusive,
 			boolean autoDelete, Map<String, Object> args, Throwable cause) {
-		return new AmqpDeclareException("Declare queue error -> queue==[" + queue + "], durable==[" + durable
+		return new DeclareException("Declare queue error -> queue==[" + queue + "], durable==[" + durable
 				+ "], exclusive==[" + exclusive + "], autoDelete==[" + autoDelete + "], args==[" + args + "]", cause);
 	}
 
@@ -55,9 +55,9 @@ public final class AmqpDeclareException extends Exception {
 	 * @param cause
 	 * @return
 	 */
-	public static AmqpDeclareException declareExchangeError(String exchange, BuiltinExchangeType type, boolean durable,
+	public static DeclareException declareExchangeError(String exchange, BuiltinExchangeType type, boolean durable,
 			boolean autoDelete, boolean internal, Map<String, Object> args, Throwable cause) {
-		return new AmqpDeclareException(
+		return new DeclareException(
 				"Declare exchange error -> exchange==[" + exchange + "], type==[" + type + "], durable==[" + durable
 						+ "], autoDelete==[" + autoDelete + "], internal==[" + internal + "], args==[" + args + "]",
 				cause);
@@ -71,9 +71,9 @@ public final class AmqpDeclareException extends Exception {
 	 * @param cause
 	 * @return
 	 */
-	public static AmqpDeclareException bindQueueError(String queue, String exchange, String routingKey,
+	public static DeclareException bindQueueError(String queue, String exchange, String routingKey,
 			Throwable cause) {
-		return new AmqpDeclareException("Bind queue error -> queue==[" + queue + "], exchange==[" + exchange
+		return new DeclareException("Bind queue error -> queue==[" + queue + "], exchange==[" + exchange
 				+ "], routingKey==[" + routingKey + "]", cause);
 	}
 
@@ -85,9 +85,9 @@ public final class AmqpDeclareException extends Exception {
 	 * @param cause
 	 * @return
 	 */
-	public static AmqpDeclareException bindExchangeError(String destExchange, String sourceExchange, String routingKey,
+	public static DeclareException bindExchangeError(String destExchange, String sourceExchange, String routingKey,
 			Throwable cause) {
-		return new AmqpDeclareException("Bind exchange error -> destExchange==[" + destExchange + "], sourceExchange==["
+		return new DeclareException("Bind exchange error -> destExchange==[" + destExchange + "], sourceExchange==["
 				+ sourceExchange + "], routingKey==[" + routingKey + "]", cause);
 	}
 
@@ -96,8 +96,8 @@ public final class AmqpDeclareException extends Exception {
 	 * @param cause
 	 * @return
 	 */
-	public static AmqpDeclareException with(Throwable cause) {
-		return new AmqpDeclareException(cause);
+	public static DeclareException with(Throwable cause) {
+		return new DeclareException(cause);
 	}
 
 }

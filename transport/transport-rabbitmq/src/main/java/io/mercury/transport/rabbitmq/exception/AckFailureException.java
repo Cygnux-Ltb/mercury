@@ -1,6 +1,6 @@
 package io.mercury.transport.rabbitmq.exception;
 
-public class AmqpAckFailureException extends Exception {
+public class AckFailureException extends Exception {
 
 	/**
 	 *
@@ -14,7 +14,7 @@ public class AmqpAckFailureException extends Exception {
 	 * @param confirmRetry
 	 * @param confirmTimeout
 	 */
-	public AmqpAckFailureException(String exchange, String routingKey, int confirmRetry, long confirmTimeout) {
+	public AckFailureException(String exchange, String routingKey, int confirmRetry, long confirmTimeout) {
 		super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
 				+ "], confirmRetry==[" + confirmRetry + "], confirmTimeout==[" + confirmTimeout + "]");
 	}
@@ -27,7 +27,7 @@ public class AmqpAckFailureException extends Exception {
 	 * @param confirmTimeout
 	 * @param throwable
 	 */
-	public AmqpAckFailureException(String exchange, String routingKey, int confirmRetry, long confirmTimeout,
+	public AckFailureException(String exchange, String routingKey, int confirmRetry, long confirmTimeout,
 			Throwable throwable) {
 		super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
 				+ "], confirmRetry==[" + confirmRetry + "], confirmTimeout==[" + confirmTimeout + "]", throwable);
@@ -41,7 +41,7 @@ public class AmqpAckFailureException extends Exception {
 	 * @param confirmTimeout
 	 * @param msg
 	 */
-	public AmqpAckFailureException(String exchange, String routingKey, int confirmRetry, long confirmTimeout,
+	public AckFailureException(String exchange, String routingKey, int confirmRetry, long confirmTimeout,
 			byte[] msg) {
 		super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
 				+ "], confirmRetry==[" + confirmRetry + "], confirmTimeout==[" + confirmTimeout + "], msg==["
@@ -57,7 +57,7 @@ public class AmqpAckFailureException extends Exception {
 	 * @param msg
 	 * @param throwable
 	 */
-	public AmqpAckFailureException(String exchange, String routingKey, int confirmRetry, long confirmTimeout, byte[] msg,
+	public AckFailureException(String exchange, String routingKey, int confirmRetry, long confirmTimeout, byte[] msg,
 			Throwable throwable) {
 		super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
 				+ "], confirmRetry==[" + confirmRetry + "], confirmTimeout==[" + confirmTimeout + "], msg==["

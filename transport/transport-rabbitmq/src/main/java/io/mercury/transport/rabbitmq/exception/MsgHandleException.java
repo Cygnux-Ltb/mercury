@@ -1,6 +1,6 @@
 package io.mercury.transport.rabbitmq.exception;
 
-public class AmqpMsgHandleException extends RuntimeException {
+public class MsgHandleException extends RuntimeException {
 
 	/**
 	 * 
@@ -12,7 +12,7 @@ public class AmqpMsgHandleException extends RuntimeException {
 	 * @param message
 	 * @param throwable
 	 */
-	public AmqpMsgHandleException(String message, Throwable throwable) {
+	public MsgHandleException(String message, Throwable throwable) {
 		super(message, throwable);
 	}
 
