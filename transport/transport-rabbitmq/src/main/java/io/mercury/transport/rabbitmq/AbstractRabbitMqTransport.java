@@ -21,7 +21,7 @@ import io.mercury.common.functional.ShutdownEvent;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringUtil;
-import io.mercury.transport.core.TransportModule;
+import io.mercury.transport.core.api.TransportModule;
 import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 
 public abstract class AbstractRabbitMqTransport implements TransportModule, Closeable {

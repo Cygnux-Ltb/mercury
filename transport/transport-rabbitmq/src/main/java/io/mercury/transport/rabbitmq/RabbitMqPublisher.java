@@ -26,9 +26,9 @@ import io.mercury.transport.core.exception.PublishFailedException;
 import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 import io.mercury.transport.rabbitmq.configurator.RmqPublisherConfigurator;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
-import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
-import io.mercury.transport.rabbitmq.exception.AmqpDeclareRuntimeException;
-import io.mercury.transport.rabbitmq.exception.AmqpNoConfirmException;
+import io.mercury.transport.rabbitmq.exception.DeclareException;
+import io.mercury.transport.rabbitmq.exception.DeclareRuntimeException;
+import io.mercury.transport.rabbitmq.exception.NoAckException;
 
 @ThreadSafe
 public class RabbitMqPublisher extends AbstractRabbitMqTransport implements Publisher<byte[]>, Sender<byte[]> {
@@ -63,7 +63,6 @@ public class RabbitMqPublisher extends AbstractRabbitMqTransport implements Publ
 		this(null, configurator);
 	}
 
-
 	/**
 	 * 
 	 * @param tag
@@ -83,12 +82,12 @@ public class RabbitMqPublisher extends AbstractRabbitMqTransport implements Publ
 		this.confirmTimeout = configurator.confirmTimeout();
 		this.confirmRetry = configurator.confirmRetry();
 		this.hasPropsSupplier = msgPropsSupplier != null;
-		this.publisherName = "publisher::" + rmqConnection.fullInfo() + "$" + exchangeName;
+		this.publisherName = "publisher::" + rmqConnection.connectionInfo() + "$" + exchangeName;
 		createConnection();
 		declare();
 	}
 
-	private void declare() throws AmqpDeclareRuntimeException {
+	private void declare() throws DeclareRuntimeException {
 		try {
 			if (publishExchange == ExchangeRelationship.Anonymous) {
 				log.warn(
@@ -97,12 +96,12 @@ public class RabbitMqPublisher extends AbstractRabbitMqTransport implements Publ
 			} else {
 				this.publishExchange.declare(RabbitMqDeclareOperator.newWith(channel));
 			}
-		} catch (AmqpDeclareException e) {
+		} catch (DeclareException e) {
 			// 在定义Exchange和进行绑定时抛出任何异常都需要终止程序
 			log.error("Exchange declare throw exception -> connection configurator info : {}, " + "error message : {}",
 					rmqConnection.fullInfo(), e.getMessage(), e);
 			destroy();
-			throw new AmqpDeclareRuntimeException(e);
+			throw new DeclareRuntimeException(e);
 		}
 
 	}
@@ -148,7 +147,7 @@ public class RabbitMqPublisher extends AbstractRabbitMqTransport implements Publ
 						bytesToStr(msg), e);
 				destroy();
 				throw new PublishFailedException(e);
-			} catch (AmqpNoConfirmException e) {
+			} catch (NoAckException e) {
 				log.error("Method publish isConfirm==[true] throw NoConfirmException -> {}, msg==[{}]", e.getMessage(),
 						bytesToStr(msg), e);
 				throw new PublishFailedException(e);
@@ -171,10 +170,10 @@ public class RabbitMqPublisher extends AbstractRabbitMqTransport implements Publ
 	 * @param msg
 	 * @param props
 	 * @throws IOException
-	 * @throws AmqpNoConfirmException
+	 * @throws NoAckException
 	 */
 	private void confirmPublish(String routingKey, byte[] msg, BasicProperties props)
-			throws IOException, AmqpNoConfirmException {
+			throws IOException, NoAckException {
 		confirmPublish0(routingKey, msg, props, 0);
 	}
 
@@ -186,10 +185,10 @@ public class RabbitMqPublisher extends AbstractRabbitMqTransport implements Publ
 	 * @param props
 	 * @param retry
 	 * @throws IOException
-	 * @throws AmqpNoConfirmException
+	 * @throws NoAckException
 	 */
 	private void confirmPublish0(String routingKey, byte[] msg, BasicProperties props, int retry)
-			throws IOException, AmqpNoConfirmException {
+			throws IOException, NoAckException {
 		try {
 			channel.confirmSelect();
 			basicPublish(routingKey, msg, props);
@@ -197,7 +196,7 @@ public class RabbitMqPublisher extends AbstractRabbitMqTransport implements Publ
 				return;
 			log.error("Call method channel.waitForConfirms(confirmTimeout==[{}]) retry==[{}]", confirmTimeout, retry);
 			if (++retry == confirmRetry)
-				throw new AmqpNoConfirmException(exchangeName, routingKey, retry, confirmTimeout);
+				throw new NoAckException(exchangeName, routingKey, retry, confirmTimeout);
 			confirmPublish0(routingKey, msg, props, retry);
 		} catch (IOException e) {
 			log.error("Method channel.confirmSelect() throw IOException from publisherName -> {}, routingKey -> {}",

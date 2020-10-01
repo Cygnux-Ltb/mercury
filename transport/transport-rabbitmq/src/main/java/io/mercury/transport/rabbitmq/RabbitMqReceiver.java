@@ -29,9 +29,9 @@ import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfigurator;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
 import io.mercury.transport.rabbitmq.declare.QueueRelationship;
-import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
-import io.mercury.transport.rabbitmq.exception.AmqpDeclareRuntimeException;
-import io.mercury.transport.rabbitmq.exception.AmqpMsgHandleException;
+import io.mercury.transport.rabbitmq.exception.DeclareException;
+import io.mercury.transport.rabbitmq.exception.DeclareRuntimeException;
+import io.mercury.transport.rabbitmq.exception.MsgHandleException;
 
 /**
  * 
@@ -167,7 +167,7 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 		this.maxAckTotal = configurator.maxAckTotal();
 		this.maxAckReconnection = configurator.maxAckReconnection();
 		this.qos = configurator.qos();
-		this.receiverName = "receiver::" + rmqConnection.fullInfo() + "$" + queueName;
+		this.receiverName = "receiver::" + rmqConnection.connectionInfo() + "$" + queueName;
 		createConnection();
 		declare();
 	}
@@ -176,12 +176,12 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 		RabbitMqDeclareOperator operator = RabbitMqDeclareOperator.newWith(channel);
 		try {
 			this.receiveQueue.declare(operator);
-		} catch (AmqpDeclareException e) {
+		} catch (DeclareException e) {
 			log.error("Queue declare throw exception -> connection configurator info : {}, error message : {}",
 					rmqConnection.fullInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			destroy();
-			throw new AmqpDeclareRuntimeException(e);
+			throw new DeclareRuntimeException(e);
 		}
 		if (errMsgExchange != null && errMsgQueue != null) {
 			errMsgExchange.bindingQueue(errMsgQueue.queue());
@@ -196,13 +196,13 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 	private void declareErrMsgExchange(RabbitMqDeclareOperator operator) {
 		try {
 			this.errMsgExchange.declare(operator);
-		} catch (AmqpDeclareException e) {
+		} catch (DeclareException e) {
 			log.error(
 					"ErrorMsgExchange declare throw exception -> connection configurator info : {}, error message : {}",
 					rmqConnection.fullInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			destroy();
-			throw new AmqpDeclareRuntimeException(e);
+			throw new DeclareRuntimeException(e);
 		}
 		this.errMsgExchangeName = errMsgExchange.exchangeName();
 		this.hasErrMsgExchange = true;
@@ -211,12 +211,12 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 	private void declareErrMsgQueueName(RabbitMqDeclareOperator operator) {
 		try {
 			this.errMsgQueue.declare(operator);
-		} catch (AmqpDeclareException e) {
+		} catch (DeclareException e) {
 			log.error("ErrorMsgQueue declare throw exception -> connection configurator info : {}, error message : {}",
 					rmqConnection.fullInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			destroy();
-			throw new AmqpDeclareRuntimeException(e);
+			throw new DeclareRuntimeException(e);
 		}
 		this.errMsgQueueName = errMsgQueue.queueName();
 		this.hasErrMsgQueue = true;
@@ -232,79 +232,22 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 		receive();
 	}
 
-	/**
-	 * channel.basicConsume(queue, callback) <br>
-	 * <br>
-	 * channel.basicConsume(queue, autoAck, callback)<br>
-	 * <br>
-	 * channel.basicConsume(queue, deliverCallback, cancelCallback)<br>
-	 * <br>
-	 * channel.basicConsume(queue, deliverCallback, shutdownSignalCallback)<br>
-	 * <br>
-	 * channel.basicConsume(queue, autoAck, deliverCallback, cancelCallback)<br>
-	 * <br>
-	 * channel.basicConsume(queue, autoAck, deliverCallback,
-	 * shutdownSignalCallback)<br>
-	 * <br>
-	 * channel.basicConsume(queue, autoAck, arguments, callback)<br>
-	 * <br>
-	 * channel.basicConsume(queue, autoAck, consumerTag, callback)<br>
-	 * <br>
-	 * channel.basicConsume(queue, deliverCallback, cancelCallback,
-	 * shutdownSignalCallback)<br>
-	 * <br>
-	 * channel.basicConsume(queue, autoAck, deliverCallback, cancelCallback,
-	 * shutdownSignalCallback)<br>
-	 * <br>
-	 * channel.basicConsume(queue, autoAck, arguments, deliverCallback,
-	 * cancelCallback)<br>
-	 * <br>
-	 * channel.basicConsume(queue, autoAck, arguments, deliverCallback,
-	 * shutdownSignalCallback)<br>
-	 * <br>
-	 * channel.basicConsume(queue, autoAck, consumerTag, deliverCallback,
-	 * cancelCallback)<br>
-	 * <br>
-	 * channel.basicConsume(queue, autoAck, consumerTag, deliverCallback,
-	 * shutdownSignalCallback)<br>
-	 * <br>
-	 * channel.basicConsume(queue, autoAck, arguments, deliverCallback,
-	 * cancelCallback, shutdownSignalCallback)<br>
-	 * <br>
-	 * channel.basicConsume(queue, autoAck, consumerTag, deliverCallback,
-	 * cancelCallback, shutdownSignalCallback)<br>
-	 * <br>
-	 * channel.basicConsume(queue, autoAck, consumerTag, noLocal, exclusive,
-	 * arguments, callback)<br>
-	 * <br>
-	 * channel.basicConsume(queue, autoAck, consumerTag, noLocal, exclusive,
-	 * arguments, deliverCallback, cancelCallback)<br>
-	 * <br>
-	 * channel.basicConsume(queue, autoAck, consumerTag, noLocal, exclusive,
-	 * arguments, deliverCallback, shutdownSignalCallback)<br>
-	 * <br>
-	 * channel.basicConsume(queue, autoAck, consumerTag, noLocal, exclusive,
-	 * arguments, deliverCallback, cancelCallback, shutdownSignalCallback)<br>
-	 * 
-	 */
 	@Override
 	public void receive() throws ReceiverStartException {
 		Assertor.nonNull(deserializer, "deserializer");
 		Assertor.nonNull(consumer, "consumer");
-		try {
-			if (!autoAck)
+		// # Set QOS parameter start *****
+		if (!autoAck) {
+			try {
 				channel.basicQos(qos);
-
-			// TODO 使用新的API
-//			channel.basicConsume(queueName, autoAck, tag, false, false, null, (consumerTag, delivery) -> {
-//				log.info("DeliverCallback receive consumerTag -> {}", consumerTag);
-//			}, consumerTag -> {
-//				log.info("CancelCallback receive consumerTag -> {}", consumerTag);
-//			}, (consumerTag, sig) -> {
-//				log.info("Consumer received ShutdownSignalException, consumerTag==[{}]", consumerTag);
-//				handleShutdownSignal(sig);
-//			});
-
+			} catch (IOException e) {
+				log.error("Function basicQos() qos==[{}] throw IOException message -> {}", qos, e.getMessage(), e);
+				throw new ReceiverStartException(e.getMessage(), e);
+			}
+		}
+		// # Set QOS parameter end *****
+		// # Set Consume start *****
+		try {
 			channel.basicConsume(
 					// param1: the name of the queue
 					queueName,
@@ -347,9 +290,10 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 						}
 					});
 		} catch (IOException e) {
-			log.error("Method basicConsume() IOException message -> {}", e.getMessage(), e);
+			log.error("Function basicConsume() IOException message -> {}", e.getMessage(), e);
 			throw new ReceiverStartException(e.getMessage(), e);
 		}
+		// # Set Consume end *****
 	}
 
 	/**
@@ -380,7 +324,7 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 			log.error("Exception handling -> Reject Msg finished");
 			destroy();
 			log.error("RabbitMqReceiver: [{}] already closed", receiverName);
-			throw new AmqpMsgHandleException(
+			throw new MsgHandleException(
 					"The message could not handle, and could not delivered to the error dump address."
 							+ "\n The connection was closed.",
 					cause);

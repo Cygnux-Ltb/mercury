@@ -19,7 +19,7 @@ import io.mercury.serialization.json.JsonUtil;
 import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 import io.mercury.transport.rabbitmq.declare.AmqpExchange;
 import io.mercury.transport.rabbitmq.declare.QueueRelationship;
-import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
+import io.mercury.transport.rabbitmq.exception.DeclareException;
 
 public class RabbitMqBuffer<E> implements Queue<E>, Closeable {
 
@@ -44,10 +44,10 @@ public class RabbitMqBuffer<E> implements Queue<E>, Closeable {
 	 * @param serializer
 	 * @param deserializer
 	 * @return
-	 * @throws AmqpDeclareException
+	 * @throws DeclareException
 	 */
 	public static final <E> RabbitMqBuffer<E> newQueue(RmqConnection connection, String queueName,
-			Function<E, byte[]> serializer, Function<byte[], E> deserializer) throws AmqpDeclareException {
+			Function<E, byte[]> serializer, Function<byte[], E> deserializer) throws DeclareException {
 		return new RabbitMqBuffer<>(connection, queueName, MutableLists.emptyFastList(), MutableLists.emptyFastList(),
 				serializer, deserializer);
 	}
@@ -62,11 +62,11 @@ public class RabbitMqBuffer<E> implements Queue<E>, Closeable {
 	 * @param serializer
 	 * @param deserializer
 	 * @return
-	 * @throws AmqpDeclareException
+	 * @throws DeclareException
 	 */
 	public static final <E> RabbitMqBuffer<E> newQueue(RmqConnection connection, String queueName,
 			List<String> exchangeNames, List<String> routingKeys, Function<E, byte[]> serializer,
-			Function<byte[], E> deserializer) throws AmqpDeclareException {
+			Function<byte[], E> deserializer) throws DeclareException {
 		return new RabbitMqBuffer<>(connection, queueName, exchangeNames, routingKeys, serializer, deserializer);
 	}
 
@@ -78,11 +78,11 @@ public class RabbitMqBuffer<E> implements Queue<E>, Closeable {
 	 * @param routingKeys
 	 * @param serializer
 	 * @param deserializer
-	 * @throws AmqpDeclareException
+	 * @throws DeclareException
 	 */
 	private RabbitMqBuffer(RmqConnection connection, String queueName, List<String> exchangeNames,
 			List<String> routingKeys, Function<E, byte[]> serializer, Function<byte[], E> deserializer)
-			throws AmqpDeclareException {
+			throws DeclareException {
 		this.connection = connection;
 		this.queueName = queueName;
 		this.exchangeNames = exchangeNames;
@@ -96,9 +96,9 @@ public class RabbitMqBuffer<E> implements Queue<E>, Closeable {
 
 	/**
 	 * 
-	 * @throws AmqpDeclareException
+	 * @throws DeclareException
 	 */
-	private void declareQueue() throws AmqpDeclareException {
+	private void declareQueue() throws DeclareException {
 		QueueRelationship queueRelationship = QueueRelationship.named(queueName).binding(
 				// 如果routingKeys为空集合, 则创建fanout交换器, 否则创建直接交换器
 				exchangeNames.stream().map(exchangeName -> routingKeys.isEmpty() ? AmqpExchange.fanout(exchangeName)
@@ -204,7 +204,7 @@ public class RabbitMqBuffer<E> implements Queue<E>, Closeable {
 				System.out.println(str);
 				return true;
 			});
-		} catch (AmqpDeclareException e) {
+		} catch (DeclareException e) {
 			e.printStackTrace();
 		}
 

@@ -16,7 +16,7 @@ import io.mercury.common.util.Assertor;
 import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 import io.mercury.transport.rabbitmq.declare.AmqpExchange;
 import io.mercury.transport.rabbitmq.declare.AmqpQueue;
-import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
+import io.mercury.transport.rabbitmq.exception.DeclareException;
 
 public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 
@@ -89,9 +89,9 @@ public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 	 * @param String           -> queue name
 	 * @param DefaultParameter -> durable == true, exclusive == false, autoDelete ==
 	 *                         false<br>
-	 * @throws AmqpDeclareException
+	 * @throws DeclareException
 	 */
-	public boolean declareQueueWithDefault(@Nonnull String queue) throws AmqpDeclareException {
+	public boolean declareQueueWithDefault(@Nonnull String queue) throws DeclareException {
 		return declareQueue(queue, true, false, false, null);
 	}
 
@@ -99,13 +99,13 @@ public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 	 * 
 	 * @param queue
 	 * @return
-	 * @throws AmqpDeclareException
+	 * @throws DeclareException
 	 */
-	public boolean declareQueue(@Nonnull AmqpQueue queue) throws AmqpDeclareException {
+	public boolean declareQueue(@Nonnull AmqpQueue queue) throws DeclareException {
 		try {
 			Assertor.nonNull(queue, "queue");
 		} catch (Exception e) {
-			throw AmqpDeclareException.with(e);
+			throw DeclareException.with(e);
 		}
 		return declareQueue(queue.name(), queue.durable(), queue.exclusive(), queue.autoDelete(), queue.args());
 	}
@@ -117,20 +117,20 @@ public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 	 * @param exclusive
 	 * @param autoDelete
 	 * @return
-	 * @throws AmqpDeclareException
+	 * @throws DeclareException
 	 */
 	public boolean declareQueue(@Nonnull String queue, boolean durable, boolean exclusive, boolean autoDelete,
-			Map<String, Object> args) throws AmqpDeclareException {
+			Map<String, Object> args) throws DeclareException {
 		try {
 			Assertor.nonEmpty(queue, "queue");
 		} catch (Exception e) {
-			throw AmqpDeclareException.with(e);
+			throw DeclareException.with(e);
 		}
 		try {
 			channel.queueDeclare(queue, durable, exclusive, autoDelete, args);
 			return true;
 		} catch (Exception e) {
-			throw AmqpDeclareException.declareQueueError(queue, durable, exclusive, autoDelete, args, e);
+			throw DeclareException.declareQueueError(queue, durable, exclusive, autoDelete, args, e);
 		}
 	}
 
@@ -142,11 +142,11 @@ public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 	 * @return
 	 * @throws ExchangeDeclareException
 	 */
-	public boolean declareExchange(@Nonnull AmqpExchange exchange) throws AmqpDeclareException {
+	public boolean declareExchange(@Nonnull AmqpExchange exchange) throws DeclareException {
 		try {
 			Assertor.nonNull(exchange, "exchange");
 		} catch (Exception e) {
-			throw AmqpDeclareException.with(e);
+			throw DeclareException.with(e);
 		}
 		switch (exchange.type()) {
 		case Direct:
@@ -167,9 +167,9 @@ public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 	 * 
 	 * @param exchange
 	 * @return
-	 * @throws AmqpDeclareException
+	 * @throws DeclareException
 	 */
-	public boolean declareDefaultDirectExchange(@Nonnull String exchange) throws AmqpDeclareException {
+	public boolean declareDefaultDirectExchange(@Nonnull String exchange) throws DeclareException {
 		return declareDirectExchange(exchange, true, false, false, null);
 	}
 
@@ -181,10 +181,10 @@ public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 	 * @param internal
 	 * @param args
 	 * @return
-	 * @throws AmqpDeclareException
+	 * @throws DeclareException
 	 */
 	public boolean declareDirectExchange(@Nonnull String exchange, boolean durable, boolean autoDelete,
-			boolean internal, Map<String, Object> args) throws AmqpDeclareException {
+			boolean internal, Map<String, Object> args) throws DeclareException {
 		return declareExchange(exchange, BuiltinExchangeType.DIRECT, durable, autoDelete, internal, args);
 	}
 
@@ -192,9 +192,9 @@ public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 	 * 
 	 * @param exchange
 	 * @return
-	 * @throws AmqpDeclareException
+	 * @throws DeclareException
 	 */
-	public boolean declareDefaultFanoutExchange(@Nonnull String exchange) throws AmqpDeclareException {
+	public boolean declareDefaultFanoutExchange(@Nonnull String exchange) throws DeclareException {
 		return declareFanoutExchange(exchange, true, false, false, null);
 	}
 
@@ -206,10 +206,10 @@ public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 	 * @param internal
 	 * @param args
 	 * @return
-	 * @throws AmqpDeclareException
+	 * @throws DeclareException
 	 */
 	public boolean declareFanoutExchange(@Nonnull String exchange, boolean durable, boolean autoDelete,
-			boolean internal, Map<String, Object> args) throws AmqpDeclareException {
+			boolean internal, Map<String, Object> args) throws DeclareException {
 		return declareExchange(exchange, BuiltinExchangeType.FANOUT, durable, autoDelete, internal, args);
 	}
 
@@ -217,9 +217,9 @@ public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 	 * 
 	 * @param exchange
 	 * @return
-	 * @throws AmqpDeclareException
+	 * @throws DeclareException
 	 */
-	public boolean declareDefaultTopicExchange(@Nonnull String exchange) throws AmqpDeclareException {
+	public boolean declareDefaultTopicExchange(@Nonnull String exchange) throws DeclareException {
 		return declareTopicExchange(exchange, true, false, false, null);
 	}
 
@@ -231,19 +231,19 @@ public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 	 * @param internal
 	 * @param args
 	 * @return
-	 * @throws AmqpDeclareException
+	 * @throws DeclareException
 	 */
 	public boolean declareTopicExchange(@Nonnull String exchange, boolean durable, boolean autoDelete, boolean internal,
-			Map<String, Object> args) throws AmqpDeclareException {
+			Map<String, Object> args) throws DeclareException {
 		return declareExchange(exchange, BuiltinExchangeType.TOPIC, durable, autoDelete, internal, args);
 	}
 
 	private boolean declareExchange(String exchange, BuiltinExchangeType type, boolean durable, boolean autoDelete,
-			boolean internal, Map<String, Object> arg) throws AmqpDeclareException {
+			boolean internal, Map<String, Object> arg) throws DeclareException {
 		try {
 			Assertor.nonEmpty(exchange, "exchange");
 		} catch (Exception e) {
-			throw AmqpDeclareException.with(e);
+			throw DeclareException.with(e);
 		}
 		try {
 			/**
@@ -266,7 +266,7 @@ public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 			channel.exchangeDeclare(exchange, type, durable, autoDelete, internal, arg);
 			return true;
 		} catch (IOException e) {
-			throw AmqpDeclareException.declareExchangeError(exchange, type, durable, autoDelete, internal, arg,
+			throw DeclareException.declareExchangeError(exchange, type, durable, autoDelete, internal, arg,
 					e);
 		}
 	}
@@ -276,9 +276,9 @@ public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 	 * @param queue
 	 * @param exchange
 	 * @return
-	 * @throws AmqpDeclareException
+	 * @throws DeclareException
 	 */
-	public boolean bindQueue(String queue, String exchange) throws AmqpDeclareException {
+	public boolean bindQueue(String queue, String exchange) throws DeclareException {
 		return bindQueue(queue, exchange, "");
 	}
 
@@ -288,14 +288,14 @@ public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 	 * @param exchange
 	 * @param routingKey
 	 * @return
-	 * @throws AmqpDeclareException
+	 * @throws DeclareException
 	 */
-	public boolean bindQueue(String queue, String exchange, String routingKey) throws AmqpDeclareException {
+	public boolean bindQueue(String queue, String exchange, String routingKey) throws DeclareException {
 		try {
 			Assertor.nonEmpty(queue, "queue");
 			Assertor.nonEmpty(exchange, "exchange");
 		} catch (Exception e) {
-			throw AmqpDeclareException.with(e);
+			throw DeclareException.with(e);
 		}
 		try {
 			/**
@@ -309,7 +309,7 @@ public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 			channel.queueBind(queue, exchange, routingKey == null ? "" : routingKey);
 			return true;
 		} catch (IOException e) {
-			throw AmqpDeclareException.bindQueueError(queue, exchange, routingKey, e);
+			throw DeclareException.bindQueueError(queue, exchange, routingKey, e);
 		}
 	}
 
@@ -318,9 +318,9 @@ public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 	 * @param destExchange
 	 * @param sourceExchange
 	 * @return
-	 * @throws AmqpDeclareException
+	 * @throws DeclareException
 	 */
-	public boolean bindExchange(String destExchange, String sourceExchange) throws AmqpDeclareException {
+	public boolean bindExchange(String destExchange, String sourceExchange) throws DeclareException {
 		return bindExchange(destExchange, sourceExchange, "");
 	}
 
@@ -330,15 +330,15 @@ public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 	 * @param sourceExchange
 	 * @param routingKey
 	 * @return
-	 * @throws AmqpDeclareException
+	 * @throws DeclareException
 	 */
 	public boolean bindExchange(String destExchange, String sourceExchange, String routingKey)
-			throws AmqpDeclareException {
+			throws DeclareException {
 		try {
 			Assertor.nonEmpty(destExchange, "destExchange");
 			Assertor.nonEmpty(sourceExchange, "sourceExchange");
 		} catch (Exception e) {
-			throw AmqpDeclareException.with(e);
+			throw DeclareException.with(e);
 		}
 		try {
 			/**
@@ -354,7 +354,7 @@ public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 			channel.exchangeBind(destExchange, sourceExchange, routingKey == null ? "" : routingKey);
 			return true;
 		} catch (IOException e) {
-			throw AmqpDeclareException.bindExchangeError(destExchange, sourceExchange, routingKey, e);
+			throw DeclareException.bindExchangeError(destExchange, sourceExchange, routingKey, e);
 		}
 	}
 
@@ -407,7 +407,7 @@ public final class RabbitMqDeclareOperator extends AbstractRabbitMqTransport {
 			System.out.println(operator.isConnected());
 			try {
 				operator.declareFanoutExchange("MarketData", true, false, false, null);
-			} catch (AmqpDeclareException e) {
+			} catch (DeclareException e) {
 				e.printStackTrace();
 			}
 			operator.close();
