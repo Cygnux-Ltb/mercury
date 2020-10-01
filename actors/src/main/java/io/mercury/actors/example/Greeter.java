@@ -8,7 +8,7 @@ import java.util.Objects;
 
 /**
  * 
- * @author akka official
+ * @author Akka official
  *
  */
 public class Greeter extends AbstractBehavior<Greeter.Greet> {
