@@ -9,7 +9,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.serialization.json.JsonUtil;
 import io.mercury.transport.rabbitmq.RabbitMqDeclareOperator;
-import io.mercury.transport.rabbitmq.exception.AmqpDeclareException;
+import io.mercury.transport.rabbitmq.exception.DeclareException;
 
 /**
  * 定义Exchange和其他实体绑定关系
@@ -62,6 +62,10 @@ public final class ExchangeRelationship extends Relationship {
 		return new ExchangeRelationship(exchange);
 	}
 
+	/**
+	 * 
+	 * @param exchange
+	 */
 	private ExchangeRelationship(AmqpExchange exchange) {
 		this.exchange = exchange;
 	}
@@ -70,7 +74,7 @@ public final class ExchangeRelationship extends Relationship {
 	protected void declare0(RabbitMqDeclareOperator operator) {
 		try {
 			operator.declareExchange(exchange);
-		} catch (AmqpDeclareException e) {
+		} catch (DeclareException e) {
 			log.error("Declare Exchange failure -> {}", exchange);
 			throw new RuntimeException(e);
 		}
