@@ -1,12 +1,13 @@
 package io.mercury.transport.rabbitmq;
 
+import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
+
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.concurrent.TimeoutException;
 
 import com.rabbitmq.client.Channel;
 
-import io.mercury.common.datetime.TimeZone;
 import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 
 public final class RabbitMqChannel extends AbstractRabbitMqTransport {
@@ -64,11 +65,20 @@ public final class RabbitMqChannel extends AbstractRabbitMqTransport {
 		return new RabbitMqChannel(channel);
 	}
 
+	/**
+	 * 
+	 * @param tag
+	 * @param connection
+	 */
 	private RabbitMqChannel(String tag, RmqConnection connection) {
-		super("GeneralChannel-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT), connection);
+		super("GeneralChannel-" + ZonedDateTime.now(SYS_DEFAULT), connection);
 		createConnection();
 	}
 
+	/**
+	 * 
+	 * @param channel
+	 */
 	private RabbitMqChannel(Channel channel) {
 		super("channel-" + channel.getChannelNumber());
 		this.channel = channel;
