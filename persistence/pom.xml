@@ -28,6 +28,7 @@
 		<module>serialization-avro</module>
 		<module>serialization-json</module>
 		<module>serialization-kryo</module>
+		<module>serialization-protobuf</module>
 	</modules>
 
 	<properties>
