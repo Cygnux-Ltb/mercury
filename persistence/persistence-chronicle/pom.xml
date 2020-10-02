@@ -30,25 +30,25 @@
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-core</artifactId>
-			<version>2.19.73</version>
+			<version>2.20.65</version>
 		</dependency>
 		<!-- ######## chronicle-wire ######## -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-wire</artifactId>
-			<version>2.19.76</version>
+			<version>2.20.63</version>
 		</dependency>
 		<!-- ######## chronicle-bytes ######## -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-bytes</artifactId>
-			<version>2.19.72</version>
+			<version>2.20.64</version>
 		</dependency>
 		<!-- ######## chronicle-threads ######## -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-threads</artifactId>
-			<version>2.19.73</version>
+			<version>2.20.61</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -73,13 +73,13 @@
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-values</artifactId>
-			<version>2.19.42</version>
+			<version>2.20.60</version>
 		</dependency>
 		<!-- ######## chronicle-algorithms ######## -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-algorithms</artifactId>
-			<version>2.19.42</version>
+			<version>2.20.40</version>
 		</dependency>
 		<!-- chronicle common component end -->
 
@@ -89,7 +89,7 @@
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-queue</artifactId>
-			<version>5.19.76</version>
+			<version>5.20.61</version>
 		</dependency>
 
 
@@ -98,7 +98,7 @@
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-map</artifactId>
-			<version>3.19.42</version>
+			<version>3.20.60</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.intellij</groupId>
@@ -113,10 +113,8 @@
 					<groupId>net.java.dev.jna</groupId>
 					<artifactId>jna-platform</artifactId>
 				</exclusion>
-				<exclusion>
-					<groupId>net.openhft</groupId>
-					<artifactId>chronicle-wire</artifactId>
-				</exclusion>
+				<!-- <exclusion> <groupId>net.openhft</groupId> <artifactId>chronicle-wire</artifactId> 
+					</exclusion> -->
 				<!-- <exclusion> <groupId>org.codehaus.jettison</groupId> <artifactId>jettison</artifactId> 
 					</exclusion> -->
 				<!-- <exclusion> <groupId>org.ops4j.pax.url</groupId> <artifactId>pax-url-aether</artifactId> 

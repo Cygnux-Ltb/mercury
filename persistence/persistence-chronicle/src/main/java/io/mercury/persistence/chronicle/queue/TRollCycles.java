@@ -172,4 +172,10 @@ public enum TRollCycles implements RollCycle {
 
 	}
 
+	@Override
+	public int lengthInMillis() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
