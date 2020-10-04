@@ -12,11 +12,11 @@ import io.netty.channel.ChannelHandlerContext;
 
 public class NettySender implements Sender<byte[]> {
 
+	private static final Logger log = CommonLoggerFactory.getLogger(NettySender.class);
+	
 	private ChannelHandlerContext context;
 
 	// private ByteBuf byteBuf;
-
-	private static final Logger log = CommonLoggerFactory.getLogger(NettySender.class);
 
 	public NettySender(ChannelHandlerContext context) {
 		this.context = context;

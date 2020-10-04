@@ -27,6 +27,11 @@
 			<artifactId>netty-all</artifactId>
 			<version>${netty.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>io.mercury</groupId>
+			<artifactId>serialization-json</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>

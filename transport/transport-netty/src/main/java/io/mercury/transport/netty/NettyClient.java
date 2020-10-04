@@ -1,5 +1,8 @@
 package io.mercury.transport.netty;
 
+import org.slf4j.Logger;
+
+import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.transport.core.api.TransportClient;
 import io.mercury.transport.netty.configurator.NettyConfigurator;
 import io.netty.bootstrap.Bootstrap;
@@ -10,6 +13,8 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 public class NettyClient extends NettyTransport implements TransportClient {
+
+	private static final Logger log = CommonLoggerFactory.getLogger(NettySender.class);
 
 	private Bootstrap bootstrap;
 
@@ -34,7 +39,7 @@ public class NettyClient extends NettyTransport implements TransportClient {
 					}
 				}).option(ChannelOption.SO_KEEPALIVE, configurator.keepAlive())
 				.option(ChannelOption.TCP_NODELAY, configurator.tcpNoDelay());
-		log.info(tag + ": Init-BootStrap.connect -> " + configurator.port());
+		log.info("{} : Init-BootStrap.connect -> {}", tag, configurator.connectionInfo());
 
 	}
 

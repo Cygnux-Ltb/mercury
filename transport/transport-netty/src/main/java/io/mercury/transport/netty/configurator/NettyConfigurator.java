@@ -3,24 +3,30 @@ package io.mercury.transport.netty.configurator;
 import java.util.concurrent.TimeUnit;
 
 import io.mercury.common.functional.ShutdownEvent;
+import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.core.configurator.TransportConfigurator;
 
 public class NettyConfigurator implements TransportConfigurator {
 
-	private String host;
-	private int port;
-	private int backlog;
-	private boolean keepAlive;
-	private boolean tcpNoDelay;
-	private long sendInterval;
-	private TimeUnit sendIntervalTimeUnit;
-	private int writeByteBufSize;
-	private char separator;
+	private final String host;
+	private final int port;
+	private final int backlog;
+	private final boolean keepAlive;
+	private final boolean tcpNoDelay;
+	private final long sendInterval;
+	private final TimeUnit sendIntervalTimeUnit;
+	private final int writeByteBufSize;
+	private final char separator;
 
-	private ShutdownEvent shutdownEvent;
+	/**
+	 * 
+	 */
+	private final ShutdownEvent shutdownEvent;
 
-	private final String fullInfo = "NettyConfigurator";
-	private final String connectionInfo = "";
+	/**
+	 * 
+	 */
+	private final String connectionInfo;
 
 	private NettyConfigurator(Builder builder) {
 		this.host = builder.host;
@@ -33,6 +39,7 @@ public class NettyConfigurator implements TransportConfigurator {
 		this.writeByteBufSize = builder.writeByteBufSize;
 		this.separator = builder.separator;
 		this.shutdownEvent = builder.shutdownEvent;
+		this.connectionInfo = host + ":" + port;
 	}
 
 	public static Builder builder() {
@@ -83,12 +90,21 @@ public class NettyConfigurator implements TransportConfigurator {
 
 	@Override
 	public String fullInfo() {
-		return fullInfo;
+		return this.toString();
 	}
 
 	@Override
 	public String connectionInfo() {
 		return connectionInfo;
+	}
+
+	private transient String toStringCache;
+
+	@Override
+	public String toString() {
+		if (toStringCache == null)
+			this.toStringCache = JsonWrapper.toJson(this);
+		return toStringCache;
 	}
 
 	public static class Builder {

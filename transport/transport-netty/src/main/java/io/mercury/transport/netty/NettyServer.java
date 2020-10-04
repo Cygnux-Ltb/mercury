@@ -1,5 +1,8 @@
 package io.mercury.transport.netty;
 
+import org.slf4j.Logger;
+
+import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.transport.core.api.TransportServer;
 import io.mercury.transport.netty.configurator.NettyConfigurator;
 import io.mercury.transport.netty.handler.GeneralNettyHandler;
@@ -15,6 +18,8 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class NettyServer extends NettyTransport implements TransportServer {
+
+	private static final Logger log = CommonLoggerFactory.getLogger(NettyServer.class);
 
 	private EventLoopGroup bossGroup;
 	private ServerBootstrap bootstrap;
@@ -42,16 +47,23 @@ public class NettyServer extends NettyTransport implements TransportServer {
 				}).option(ChannelOption.SO_BACKLOG, configurator.backlog())
 				.childOption(ChannelOption.SO_KEEPALIVE, configurator.keepAlive())
 				.childOption(ChannelOption.TCP_NODELAY, configurator.tcpNoDelay());
-		log.info(tag + " : Init-ServerBootStrap.bind -> " + configurator.port());
+		log.info("{} : Init-ServerBootStrap.bind -> {}", tag, configurator.connectionInfo());
 	}
 
 	@Override
 	public void startup() {
 		try {
-			// Start server.
+			// Create a new Channel and bind it.
 			bootstrap.bind(configurator.host(), configurator.port()).sync()
-					// Wait close.
-					.channel().closeFuture().sync();
+					// Returns a channel where the I/O operation associated with this future takes
+					// place.
+					.channel()
+					// Returns the ChannelFuture which will be notified when this channel is closed.
+					// This method always returns the same future instance.
+					.closeFuture()
+					// Waits for this future until it is done, and rethrows the cause of the failure
+					// if this future failed.
+					.sync();
 		} catch (InterruptedException e) {
 			log.error("NettyServer method startup() -> {}", e.getMessage(), e);
 			destroy();

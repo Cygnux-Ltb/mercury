@@ -2,10 +2,7 @@ package io.mercury.transport.netty;
 
 import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
 
-import org.slf4j.Logger;
-
 import io.mercury.common.annotation.lang.AbstractFunction;
-import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.netty.configurator.NettyConfigurator;
 import io.netty.channel.ChannelHandler;
@@ -17,13 +14,10 @@ public abstract class NettyTransport {
 	protected String tag;
 	protected NettyConfigurator configurator;
 
+	protected final ChannelHandler[] handlers;
 	protected final EventLoopGroup workerGroup;
 
-	protected final ChannelHandler[] handlers;
-
-	protected final Logger log = CommonLoggerFactory.getLogger(getClass());
-
-	public NettyTransport(String tag, NettyConfigurator configurator, ChannelHandler... handlers) {
+	protected NettyTransport(String tag, NettyConfigurator configurator, ChannelHandler... handlers) {
 		Assertor.nonNull(configurator, "configurator");
 		Assertor.requiredLength(handlers, 1, "handlers");
 		this.tag = tag;
