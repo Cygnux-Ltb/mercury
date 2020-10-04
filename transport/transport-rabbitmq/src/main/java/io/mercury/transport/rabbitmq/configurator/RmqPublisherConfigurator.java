@@ -67,7 +67,10 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	/**
 	 * Use Anonymous Exchange
 	 * 
-	 * @param connection
+	 * @param host
+	 * @param port
+	 * @param username
+	 * @param password
 	 * @return
 	 */
 	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
@@ -78,7 +81,11 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	/**
 	 * Use Anonymous Exchange
 	 * 
-	 * @param connection
+	 * @param host
+	 * @param port
+	 * @param username
+	 * @param password
+	 * @param virtualHost
 	 * @return
 	 */
 	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
@@ -97,6 +104,40 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	}
 
 	/**
+	 * Use Specified Exchange
+	 * 
+	 * @param host
+	 * @param port
+	 * @param username
+	 * @param password
+	 * @param publishExchange
+	 * @return
+	 * 
+	 */
+	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
+			@Nonnull String password, @Nonnull ExchangeRelationship publishExchange) {
+		return configuration(RmqConnection.configuration(host, port, username, password).build(), publishExchange);
+	}
+
+	/**
+	 * Use Specified Exchange
+	 * 
+	 * @param host
+	 * @param port
+	 * @param username
+	 * @param password
+	 * @param virtualHost
+	 * @param publishExchange
+	 * @return
+	 */
+	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
+			@Nonnull String password, String virtualHost, @Nonnull ExchangeRelationship publishExchange) {
+		return configuration(RmqConnection.configuration(host, port, username, password, virtualHost).build(),
+				publishExchange);
+	}
+
+	/**
+	 * Use Specified Exchange
 	 * 
 	 * @param connection
 	 * @param exchangeRelation
