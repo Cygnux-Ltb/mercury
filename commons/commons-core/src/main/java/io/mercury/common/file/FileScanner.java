@@ -9,9 +9,9 @@ import org.eclipse.collections.api.set.MutableSet;
 
 import io.mercury.common.collections.MutableSets;
 
-public final class FileLoader {
+public final class FileScanner {
 
-	private FileLoader() {
+	private FileScanner() {
 	}
 
 	/**

@@ -44,6 +44,10 @@ public final class ShutdownHooks {
 		return thread;
 	}
 
+	/**
+	 * 
+	 * @param closeable
+	 */
 	public static void closeResourcesWhenShutdown(Closeable closeable) {
 		addShutdownHookTask(() -> {
 			try {

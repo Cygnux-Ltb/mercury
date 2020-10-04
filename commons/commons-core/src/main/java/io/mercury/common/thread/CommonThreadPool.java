@@ -98,7 +98,7 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
 	}
 
 	public final static class ThreadPoolBuilder {
-		
+
 		private int corePoolSize = CurrentRuntime.availableProcessors();
 		private int maximumPoolSize = CurrentRuntime.availableProcessors() * 4;
 		private long keepAliveTime = 60;
@@ -157,15 +157,18 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
 
 		public ThreadPoolExecutor build(String threadPoolName) {
 			threadPoolName = isNullOrEmpty(threadPoolName) ? "CommonThreadPool-" + randomInt() : threadPoolName;
-			if (threadFactory != null && rejectedHandler != null)
+			if (threadFactory != null && rejectedHandler != null) {
 				return new CommonThreadPool(threadPoolName, this, threadFactory, rejectedHandler, beforeHandler,
 						afterHandler);
-			if (threadFactory != null && rejectedHandler == null)
+			}
+			if (threadFactory != null && rejectedHandler == null) {
 				return new CommonThreadPool(threadPoolName, this, threadFactory, beforeHandler, afterHandler);
-			if (threadFactory == null && rejectedHandler != null)
+			}
+			if (threadFactory == null && rejectedHandler != null) {
 				return new CommonThreadPool(threadPoolName, this, rejectedHandler, beforeHandler, afterHandler);
-			else
+			} else {
 				return new CommonThreadPool(threadPoolName, this, beforeHandler, afterHandler);
+			}
 		}
 
 	}

@@ -13,7 +13,7 @@ import io.mercury.common.character.Charsets;
 public final class StringUtil {
 
 	public static interface StringConst {
-		String NULL_STR = "null";
+		String NULL = "null";
 		String EMPTY = "";
 	}
 
@@ -22,7 +22,7 @@ public final class StringUtil {
 
 	@Nonnull
 	public static final String toString(@Nullable Object obj) {
-		return obj == null ? StringConst.NULL_STR : obj.toString();
+		return obj == null ? StringConst.NULL : obj.toString();
 	}
 
 	@Nonnull
@@ -72,7 +72,7 @@ public final class StringUtil {
 	 */
 	@Nonnull
 	public static final String toStringForReflection(Object obj) {
-		return obj == null ? StringConst.NULL_STR
+		return obj == null ? StringConst.NULL
 				: ToStringBuilder.reflectionToString(obj, ToStringStyle.SHORT_PREFIX_STYLE, false);
 	}
 
@@ -85,7 +85,7 @@ public final class StringUtil {
 	 */
 	@Nonnull
 	public static final String toStringForJson(Object obj) {
-		return obj == null ? StringConst.NULL_STR
+		return obj == null ? StringConst.NULL
 				: ToStringBuilder.reflectionToString(obj, ToStringStyle.JSON_STYLE, false);
 	}
 

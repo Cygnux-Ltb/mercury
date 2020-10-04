@@ -28,7 +28,7 @@ public final class PropertiesReader {
 	private static final String FILE_SUFFIX = ".properties";
 
 	static {
-		MutableSet<File> allPropFile = FileLoader.depthFirst(
+		MutableSet<File> allPropFile = FileScanner.depthFirst(
 				new File(PropertiesReader.class.getResource("/").getPath()),
 				file -> file.getName().endsWith(FILE_SUFFIX));
 		try {

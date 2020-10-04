@@ -22,11 +22,24 @@ public final class ScheduleTaskExecutor {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(ScheduleTaskExecutor.class);
 
+	/**
+	 * 
+	 * @param firstTime
+	 * @param runnable
+	 * @return
+	 */
 	public static Timer startDelayTask(LocalDateTime firstTime, Runnable runnable) {
 		return startDelayTask(Duration.between(LocalDateTime.now(), firstTime).toMillis(), TimeUnit.MILLISECONDS,
 				runnable);
 	}
 
+	/**
+	 * 
+	 * @param delay
+	 * @param unit
+	 * @param runnable
+	 * @return
+	 */
 	public static Timer startDelayTask(long delay, TimeUnit unit, Runnable runnable) {
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -42,11 +55,27 @@ public final class ScheduleTaskExecutor {
 		return timer;
 	}
 
+	/**
+	 * 
+	 * @param firstTime
+	 * @param period
+	 * @param unit
+	 * @param runnable
+	 * @return
+	 */
 	public static Timer startCycleTask(LocalDateTime firstTime, long period, TimeUnit unit, Runnable runnable) {
 		return startCycleTask(Duration.between(LocalDateTime.now(), firstTime).toMillis(), unit.toMillis(period),
 				TimeUnit.MILLISECONDS, runnable);
 	}
 
+	/**
+	 * 
+	 * @param delay
+	 * @param period
+	 * @param unit
+	 * @param runnable
+	 * @return
+	 */
 	public static Timer startCycleTask(long delay, long period, TimeUnit unit, Runnable runnable) {
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -62,12 +91,28 @@ public final class ScheduleTaskExecutor {
 		return timer;
 	}
 
+	/**
+	 * 
+	 * @param firstTime
+	 * @param period
+	 * @param unit
+	 * @param runnable
+	 * @return
+	 */
 	public static Timer startFixedRateCycleTask(LocalDateTime firstTime, long period, TimeUnit unit,
 			Runnable runnable) {
 		return startFixedRateCycleTask(Duration.between(LocalDateTime.now(), firstTime).toMillis(),
 				unit.toMillis(period), TimeUnit.MILLISECONDS, runnable);
 	}
 
+	/**
+	 * 
+	 * @param delay
+	 * @param period
+	 * @param unit
+	 * @param runnable
+	 * @return
+	 */
 	public static Timer startFixedRateCycleTask(long delay, long period, TimeUnit unit, Runnable runnable) {
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate((new TimerTask() {
@@ -86,7 +131,7 @@ public final class ScheduleTaskExecutor {
 	/**
 	 * SingleThreadExecutor
 	 */
-	private static ScheduledExecutorService InnerSingleThreadExecutor = Executors
+	private static final ScheduledExecutorService SingleThreadExecutor = Executors
 			.newSingleThreadScheduledExecutor(runnable -> new Thread(runnable, "SingleThreadScheduledExecutor"));
 
 	/**
@@ -110,7 +155,7 @@ public final class ScheduleTaskExecutor {
 	 * @param runnable
 	 */
 	public static void singleThreadSchedule(long delay, TimeUnit timeUnit, Runnable command) {
-		InnerSingleThreadExecutor.schedule(command, delay, timeUnit);
+		SingleThreadExecutor.schedule(command, delay, timeUnit);
 	}
 
 	/**
@@ -151,7 +196,7 @@ public final class ScheduleTaskExecutor {
 	 */
 	public static void singleThreadScheduleWithFixedDelay(long initialDelay, long delay, TimeUnit unit,
 			Runnable command) {
-		InnerSingleThreadExecutor.scheduleWithFixedDelay(command, initialDelay, delay, unit);
+		SingleThreadExecutor.scheduleWithFixedDelay(command, initialDelay, delay, unit);
 	}
 
 	/**
@@ -194,13 +239,13 @@ public final class ScheduleTaskExecutor {
 	 */
 	public static void singleThreadScheduleAtFixedRate(long initialDelay, long period, TimeUnit unit,
 			Runnable command) {
-		InnerSingleThreadExecutor.scheduleAtFixedRate(command, initialDelay, period, unit);
+		SingleThreadExecutor.scheduleAtFixedRate(command, initialDelay, period, unit);
 	}
 
 	/**
 	 * MultipleThreadExecutor 线程数为: 核心数量 + 核心数量 * 1/2
 	 */
-	private static ScheduledExecutorService InnerMultipleThreadExecutor = Executors.newScheduledThreadPool(
+	private static final ScheduledExecutorService MultipleThreadExecutor = Executors.newScheduledThreadPool(
 			CurrentRuntime.availableProcessors() + CurrentRuntime.availableProcessors() / 2,
 			runnable -> new Thread(runnable, "MultipleThreadScheduledExecutor"));
 
@@ -225,7 +270,7 @@ public final class ScheduleTaskExecutor {
 	 * @param runnable
 	 */
 	public static void multipleThreadSchedule(long delay, TimeUnit unit, Runnable command) {
-		InnerMultipleThreadExecutor.schedule(command, delay, unit);
+		MultipleThreadExecutor.schedule(command, delay, unit);
 	}
 
 	/**
@@ -265,7 +310,7 @@ public final class ScheduleTaskExecutor {
 	 * @param runnable
 	 */
 	public static void multipleThreadScheduleWithFixedDelay(long delay, long period, TimeUnit unit, Runnable command) {
-		InnerMultipleThreadExecutor.scheduleWithFixedDelay(command, delay, period, unit);
+		MultipleThreadExecutor.scheduleWithFixedDelay(command, delay, period, unit);
 	}
 
 	/**
@@ -307,7 +352,7 @@ public final class ScheduleTaskExecutor {
 	 * @param runnable
 	 */
 	public static void multipleThreadScheduleAtFixedRate(long delay, long period, TimeUnit unit, Runnable command) {
-		InnerMultipleThreadExecutor.scheduleAtFixedRate(command, delay, period, unit);
+		MultipleThreadExecutor.scheduleAtFixedRate(command, delay, period, unit);
 	}
 
 	public static void main(String[] args) {
