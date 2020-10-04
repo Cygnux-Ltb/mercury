@@ -63,10 +63,11 @@ public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAcc
 			throw new IllegalStateException("Unable to append data, Chronicle queue is closed");
 		}
 		try {
-			if (t != null)
+			if (t != null) {
 				append0(t);
-			else
-				logger.warn("appenderName -> {} received null object, Not written to queue.");
+			} else {
+				logger.warn("appenderName -> {} : received null object, Not written to the queue.", appenderName);
+			}
 		} catch (Exception e) {
 			throw new ChronicleWriteException(e.getMessage(), e);
 		}

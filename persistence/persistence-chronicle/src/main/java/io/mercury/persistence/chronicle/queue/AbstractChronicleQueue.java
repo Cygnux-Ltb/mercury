@@ -228,7 +228,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 		return queueName + "-reader-" + randomUnsignedInt();
 	}
 
-	private static final String EMPTY_CONSUMER_MSG = "Reader consumer is an empty implementation";
+	private static final String EMPTY_CONSUMER_MSG = "Reader consumer is an empty implementation.";
 
 	/**
 	 * 
