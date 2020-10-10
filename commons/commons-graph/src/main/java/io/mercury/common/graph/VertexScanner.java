@@ -7,9 +7,9 @@ import org.jgrapht.traverse.DepthFirstIterator;
 
 import io.mercury.common.collections.MutableSets;
 
-public final class SearchChildVertex {
+public final class VertexScanner {
 
-	private SearchChildVertex() {
+	private VertexScanner() {
 	}
 
 	/**
