@@ -112,6 +112,47 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 
 	/**
 	 * 
+	 * @param <T>
+	 * @param configurator
+	 * @param serializer
+	 * @return
+	 */
+	public final static <T> AdvancedRabbitMqPublisher<T> create(@Nonnull RmqPublisherConfigurator configurator,
+			@Nonnull Function<T, byte[]> serializer) {
+		return new AdvancedRabbitMqPublisher<>(null, configurator, serializer, null, null);
+	}
+
+	/**
+	 * 
+	 * @param <T>
+	 * @param tag
+	 * @param configurator
+	 * @param serializer
+	 * @return
+	 */
+	public final static <T> AdvancedRabbitMqPublisher<T> create(String tag,
+			@Nonnull RmqPublisherConfigurator configurator, @Nonnull Function<T, byte[]> serializer) {
+		return new AdvancedRabbitMqPublisher<>(tag, configurator, serializer, null, null);
+	}
+
+	/**
+	 * 
+	 * @param <T>
+	 * @param tag
+	 * @param configurator
+	 * @param serializer
+	 * @param ackCallback
+	 * @param noAckCallback
+	 * @return
+	 */
+	public final static <T> AdvancedRabbitMqPublisher<T> create(String tag,
+			@Nonnull RmqPublisherConfigurator configurator, @Nonnull Function<T, byte[]> serializer,
+			@Nonnull AckCallback ackCallback, @Nonnull NoAckCallback noAckCallback) {
+		return new AdvancedRabbitMqPublisher<>(tag, configurator, serializer, ackCallback, noAckCallback);
+	}
+
+	/**
+	 * 
 	 * @param configurator
 	 * @return
 	 */
@@ -207,47 +248,6 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 
 	/**
 	 * 
-	 * @param <T>
-	 * @param configurator
-	 * @param serializer
-	 * @return
-	 */
-	public final static <T> AdvancedRabbitMqPublisher<T> create(@Nonnull RmqPublisherConfigurator configurator,
-			@Nonnull Function<T, byte[]> serializer) {
-		return new AdvancedRabbitMqPublisher<>(null, configurator, serializer, null, null);
-	}
-
-	/**
-	 * 
-	 * @param <T>
-	 * @param tag
-	 * @param configurator
-	 * @param serializer
-	 * @return
-	 */
-	public final static <T> AdvancedRabbitMqPublisher<T> create(String tag,
-			@Nonnull RmqPublisherConfigurator configurator, @Nonnull Function<T, byte[]> serializer) {
-		return new AdvancedRabbitMqPublisher<>(tag, configurator, serializer, null, null);
-	}
-
-	/**
-	 * 
-	 * @param <T>
-	 * @param tag
-	 * @param configurator
-	 * @param serializer
-	 * @param ackCallback
-	 * @param noAckCallback
-	 * @return
-	 */
-	public final static <T> AdvancedRabbitMqPublisher<T> create(String tag,
-			@Nonnull RmqPublisherConfigurator configurator, @Nonnull Function<T, byte[]> serializer,
-			@Nonnull AckCallback ackCallback, @Nonnull NoAckCallback noAckCallback) {
-		return new AdvancedRabbitMqPublisher<>(tag, configurator, serializer, ackCallback, noAckCallback);
-	}
-
-	/**
-	 * 
 	 * @param tag           标签
 	 * @param configurator  配置器
 	 * @param serializer    序列化器
@@ -272,7 +272,7 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 		this.hasPropsSupplier = msgPropsSupplier != null;
 		this.publisherName = "publisher::[" + rmqConnection.connectionInfo() + "$" + exchangeName + "]";
 		createConnection();
-		declare();
+		declareExchange();
 		/*
 		 * 如果设置为需要应答确认, 则进行相关设置
 		 */
@@ -307,14 +307,20 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 				 */
 				channel.confirmSelect();
 			} catch (IOException ioe) {
-				log.error("Enables publisher acknowledgements failure, publisherName==[{}]", publisherName, ioe);
+				log.error("Enables publisher acknowledgements failure, publisherName -> {}, connectionInfo -> {}",
+						publisherName, rmqConnection.connectionInfo(), ioe);
 				throw new InitializeFailureException(
-						"Enables publisher acknowledgements failure. From publisher -> " + publisherName, ioe);
+						"Enables publisher acknowledgements failure, From publisher -> {}" + publisherName, ioe);
 			}
 		}
 	}
 
-	private void declare() throws DeclareRuntimeException {
+	/**
+	 * 定义相关队列组件
+	 * 
+	 * @throws DeclareRuntimeException
+	 */
+	private void declareExchange() throws DeclareRuntimeException {
 		try {
 			if (publishExchange == ExchangeRelationship.Anonymous) {
 				log.warn("Publisher -> {} use anonymous exchange, Please specify [queue name] "

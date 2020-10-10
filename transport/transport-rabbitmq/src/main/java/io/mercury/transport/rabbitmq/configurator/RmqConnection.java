@@ -19,53 +19,74 @@ import io.mercury.transport.core.configurator.TransportConfigurator;
 public final class RmqConnection implements TransportConfigurator {
 
 	/**
-	 * 连接参数
+	 * 连接地址
 	 */
-	private String host;
-	private int port;
-	private String username;
-	private String password;
+	private final String host;
+
+	/**
+	 * 端口号
+	 */
+	private final int port;
+
+	/**
+	 * 用户名
+	 */
+	private final String username;
+
+	/**
+	 * 密码
+	 */
+	private final String password;
 
 	/**
 	 * 虚拟主机
 	 */
-	private String virtualHost;
+	private final String virtualHost;
+
 	/*
 	 * SSL
 	 */
-	private SSLContext sslContext;
+	private final SSLContext sslContext;
+
 	/*
 	 * 连接超时时间
 	 */
-	private int connectionTimeout;
+	private final int connectionTimeout;
+
 	/*
 	 * 自动恢复连接
 	 */
-	private boolean automaticRecovery;
+	private final boolean automaticRecovery;
+
 	/*
 	 * 重试连接间隔
 	 */
-	private long recoveryInterval;
+	private final long recoveryInterval;
+
 	/*
 	 * 握手通信超时时间
 	 */
-	private int handshakeTimeout;
+	private final int handshakeTimeout;
+
 	/*
 	 * 关闭超时时间
 	 */
-	private int shutdownTimeout;
+	private final int shutdownTimeout;
+
 	/*
 	 * 请求心跳超时时间
 	 */
-	private int requestedHeartbeat;
+	private final int requestedHeartbeat;
+
 	/*
 	 * 停机处理回调函数
 	 */
-	private transient ShutdownEvent shutdownEvent;
+	private final transient ShutdownEvent shutdownEvent;
+
 	/*
 	 * 配置连接信息
 	 */
-	private String connectionInfo;
+	private final String connectionInfo;
 
 	private RmqConnection(Builder builder) {
 		this.host = builder.host;
@@ -81,11 +102,8 @@ public final class RmqConnection implements TransportConfigurator {
 		this.shutdownTimeout = builder.shutdownTimeout;
 		this.requestedHeartbeat = builder.requestedHeartbeat;
 		this.shutdownEvent = builder.shutdownEvent;
-		this.connectionInfo = generateConnectionInfo();
-	}
-
-	private String generateConnectionInfo() {
-		return username + "@" + host + ":" + port + (virtualHost.equals("/") ? virtualHost : "/" + virtualHost);
+		this.connectionInfo = username + "@" + host + ":" + port
+				+ (virtualHost.equals("/") ? virtualHost : "/" + virtualHost);
 	}
 
 	/**
@@ -113,14 +131,6 @@ public final class RmqConnection implements TransportConfigurator {
 	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
 			@Nonnull String password, String virtualHost) {
 		return new Builder(host, port, username, password, virtualHost);
-	}
-
-	/**
-	 * 
-	 */
-	@Override
-	public String fullInfo() {
-		return toString();
 	}
 
 	@Override
@@ -213,6 +223,14 @@ public final class RmqConnection implements TransportConfigurator {
 	 */
 	public ShutdownEvent shutdownEvent() {
 		return shutdownEvent;
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public String fullInfo() {
+		return toString();
 	}
 
 	private transient String toStringCache;

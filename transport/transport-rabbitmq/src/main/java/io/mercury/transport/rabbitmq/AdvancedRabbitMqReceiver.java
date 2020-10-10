@@ -15,7 +15,6 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 
 import com.rabbitmq.client.AMQP.BasicProperties;
-import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Delivery;
 import com.rabbitmq.client.Envelope;
 
@@ -153,10 +152,15 @@ public class AdvancedRabbitMqReceiver<T> extends AbstractRabbitMqTransport imple
 		this.deliveryConsumer = deliveryConsumer;
 		this.receiverName = "receiver::[" + rmqConnection.connectionInfo() + "$" + queueName + "]";
 		createConnection();
-		declare();
+		declareQueue();
 	}
 
-	private void declare() {
+	/**
+	 * 定义相关队列组件
+	 * 
+	 * @throws DeclareRuntimeException
+	 */
+	private void declareQueue() throws DeclareRuntimeException {
 		RabbitMqDeclareOperator operator = RabbitMqDeclareOperator.newWith(channel);
 		try {
 			this.receiveQueue.declare(operator);
@@ -220,6 +224,7 @@ public class AdvancedRabbitMqReceiver<T> extends AbstractRabbitMqTransport imple
 	public void receive() throws ReceiverStartException {
 		Assertor.nonNull(deserializer, "deserializer");
 		Assertor.nonNull(consumer, "consumer");
+
 		// # Set QOS parameter start *****
 		if (!autoAck) {
 			try {
@@ -233,7 +238,6 @@ public class AdvancedRabbitMqReceiver<T> extends AbstractRabbitMqTransport imple
 
 		// # Set Consume start *****
 		try {
-			// TODO 使用新的API
 			channel.basicConsume(
 					/**
 					 * queue : the name of the queue
@@ -268,7 +272,7 @@ public class AdvancedRabbitMqReceiver<T> extends AbstractRabbitMqTransport imple
 					/**
 					 * deliverCallback : callback when a message is delivered.
 					 */
-					(String consumerTag, Delivery delivery) -> {
+					(consumerTag, delivery) -> {
 
 						Envelope envelope = delivery.getEnvelope();
 
@@ -320,47 +324,6 @@ public class AdvancedRabbitMqReceiver<T> extends AbstractRabbitMqTransport imple
 						handleShutdownSignal(sig);
 					});
 
-			channel.basicConsume(
-					// param1: the name of the queue
-					queueName,
-					// param2: true if the server should consider messages acknowledged once
-					// delivered; false if the server should expect explicit acknowledgement
-					autoAck,
-					// param3: a client-generated consumer tag to establish context
-					tag,
-					// param4: an interface to the consumer object
-					new DefaultConsumer(channel) {
-						@Override
-						public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties,
-								byte[] body) throws IOException {
-							try {
-								log.debug("Message handle start");
-								log.debug(
-										"Callback handleDelivery, consumerTag==[{}], deliveryTag==[{}] body.length==[{}]",
-										consumerTag, envelope.getDeliveryTag(), body.length);
-								T apply = null;
-								try {
-									apply = deserializer.apply(body);
-								} catch (Exception e) {
-									throw new DecodeException(e);
-								}
-								consumer.accept(apply);
-								log.debug("Callback handleDelivery() end");
-							} catch (Exception e) {
-								log.error("Consumer accept msg==[{}] throw Exception -> {}", bytesToStr(body),
-										e.getMessage(), e);
-								dumpUnprocessableMsg(e, consumerTag, envelope, properties, body);
-							}
-							if (!autoAck) {
-								if (ack(envelope.getDeliveryTag())) {
-									log.debug("Message handle and ack finished");
-								} else {
-									log.info("Ack failure envelope.getDeliveryTag()==[{}], Reject message");
-									channel.basicReject(envelope.getDeliveryTag(), true);
-								}
-							}
-						}
-					});
 		} catch (IOException e) {
 			log.error("Function basicConsume() throw IOException message -> {}", e.getMessage(), e);
 			throw new ReceiverStartException(e.getMessage(), e);
