@@ -30,10 +30,18 @@ public final class MutableParams<K extends ParamKey> {
 		this(() -> null);
 	}
 
+	/**
+	 * 
+	 * @param initializer
+	 */
 	public MutableParams(@Nonnull Supplier<Map<K, ?>> initializer) {
 		this(initializer.get());
 	}
 
+	/**
+	 * 
+	 * @param initMap
+	 */
 	public MutableParams(Map<K, ?> initMap) {
 		if (initMap != null) {
 			initMap.forEach((K key, Object value) -> {
@@ -66,6 +74,11 @@ public final class MutableParams<K extends ParamKey> {
 		}
 	}
 
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 */
 	public boolean getBoolean(K key) {
 		if (key.type() != ParamType.BOOLEAN)
 			throw new IllegalArgumentException(

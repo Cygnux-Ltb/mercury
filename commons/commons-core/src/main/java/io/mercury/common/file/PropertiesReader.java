@@ -19,10 +19,14 @@ public final class PropertiesReader {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(PropertiesReader.class);
 
-	// fileName-propertyName -> value
+	/*
+	 * fileName-propertyName -> value
+	 */
 	private static final MutableMap<String, String> PropertiesItemMap = MutableMaps.newUnifiedMap();
 
-	// fileName -> properties
+	/*
+	 * fileName -> properties
+	 */
 	private static final MutableMap<String, Properties> PropertiesMap = MutableMaps.newUnifiedMap();
 
 	private static final String FILE_SUFFIX = ".properties";

@@ -203,6 +203,24 @@ public final class Assertor {
 	 * @throws NullPointerException
 	 * @throws IllegalArgumentException
 	 */
+	public static boolean[] requiredLength(boolean[] array, int requiredLength, String arrayName)
+			throws NullPointerException, IllegalArgumentException {
+		if (array == null)
+			throw new NullPointerException(arrayName + " can not be null");
+		if (array.length < requiredLength)
+			throw new IllegalArgumentException(arrayName + " length must be greater than " + requiredLength);
+		return array;
+	}
+
+	/**
+	 * 
+	 * @param array
+	 * @param requiredLength
+	 * @param arrayName
+	 * @return
+	 * @throws NullPointerException
+	 * @throws IllegalArgumentException
+	 */
 	public static byte[] requiredLength(byte[] array, int requiredLength, String arrayName)
 			throws NullPointerException, IllegalArgumentException {
 		if (array == null)
@@ -258,6 +276,43 @@ public final class Assertor {
 	 * @throws IllegalArgumentException
 	 */
 	public static long[] requiredLength(long[] array, int requiredLength, String arrayName)
+			throws NullPointerException, IllegalArgumentException {
+		if (array == null)
+			throw new NullPointerException(arrayName + " can not be null");
+		if (array.length < requiredLength)
+			throw new IllegalArgumentException(arrayName + " length must be greater than " + requiredLength);
+		return array;
+	}
+
+	/**
+	 * 
+	 * @param <T>
+	 * @param array
+	 * @param requiredLength
+	 * @param arrayName
+	 * @return
+	 * @throws NullPointerException
+	 * @throws IllegalArgumentException
+	 */
+	public static float[] requiredLength(float[] array, int requiredLength, String arrayName)
+			throws NullPointerException, IllegalArgumentException {
+		if (array == null)
+			throw new NullPointerException(arrayName + " can not be null");
+		if (array.length < requiredLength)
+			throw new IllegalArgumentException(arrayName + " length must be greater than " + requiredLength);
+		return array;
+	}
+
+	/**
+	 * 
+	 * @param array
+	 * @param requiredLength
+	 * @param arrayName
+	 * @return
+	 * @throws NullPointerException
+	 * @throws IllegalArgumentException
+	 */
+	public static double[] requiredLength(double[] array, int requiredLength, String arrayName)
 			throws NullPointerException, IllegalArgumentException {
 		if (array == null)
 			throw new NullPointerException(arrayName + " can not be null");

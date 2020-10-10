@@ -37,6 +37,19 @@ public final class StringUtil {
 		}
 		return builder.append(']').toString();
 	}
+	
+	@Nonnull
+	public static final String toString(@Nullable String... strs) {
+		if (strs == null)
+			return StringConst.EMPTY;
+		StringBuilder builder = new StringBuilder(strs.length * 16).append('[');
+		for (int i = 0, j = strs.length - 1; i < strs.length; i++) {
+			builder.append(toString(strs[i]));
+			if (i < j)
+				builder.append(',');
+		}
+		return builder.append(']').toString();
+	}
 
 	@Nonnull
 	public static final String toString(@Nonnull byte b) {

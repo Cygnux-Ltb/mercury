@@ -121,10 +121,11 @@ public final class ImmutableParams<K extends ParamKey> {
 	}
 
 	public void printParam(Logger log) {
-		if (log == null)
+		if (log == null) {
 			savedParams.forEachKeyValue((key, value) -> out.println("key -> " + key.keyName() + ", value -> " + value));
-		else
+		} else {
 			savedParams.forEachKeyValue((key, value) -> log.info("key -> {}, value -> {}", key.keyName(), value));
+		}
 	}
 
 }

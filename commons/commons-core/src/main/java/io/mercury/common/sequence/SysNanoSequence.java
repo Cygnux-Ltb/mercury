@@ -7,14 +7,26 @@ import io.mercury.common.log.LogConfigurator;
 
 public final class SysNanoSequence {
 
+	/**
+	 * 
+	 * @return
+	 */
 	public static long milli() {
 		return System.nanoTime() / 1000_000;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public static long micro() {
 		return System.nanoTime() / 1000;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public static long nano() {
 		return System.nanoTime();
 	}
