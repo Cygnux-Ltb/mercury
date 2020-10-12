@@ -38,6 +38,11 @@ public final class EpochTimestamp {
 		this.instant = Instant.ofEpochMilli(epochMillis);
 	}
 
+	/**
+	 * 
+	 * @param zoneId
+	 * @return
+	 */
 	public ZonedDateTime updateDateTimeOf(ZoneId zoneId) {
 		if (instant == null)
 			newInstant();
@@ -45,16 +50,28 @@ public final class EpochTimestamp {
 		return dateTime;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public long epochMillis() {
 		return epochMillis;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public Instant instant() {
 		if (instant == null)
 			newInstant();
 		return instant;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public ZonedDateTime dateTime() {
 		if (dateTime == null)
 			return updateDateTimeOf(TimeZone.SYS_DEFAULT);
@@ -128,7 +145,7 @@ public final class EpochTimestamp {
 		System.out.println(now.instant().getEpochSecond() * 1000000 + now.instant().getNano() / 1000);
 		System.out.println(now.instant());
 		System.out.println(now.dateTime());
-		
+
 		System.out.println(now);
 
 	}
