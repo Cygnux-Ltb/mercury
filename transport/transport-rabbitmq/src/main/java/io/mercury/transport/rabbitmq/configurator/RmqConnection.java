@@ -18,71 +18,58 @@ import io.mercury.transport.core.configurator.TransportConfigurator;
 
 public final class RmqConnection implements TransportConfigurator {
 
-	/**
+	/*
 	 * 连接地址
 	 */
 	private final String host;
-
-	/**
+	/*
 	 * 端口号
 	 */
 	private final int port;
-
-	/**
+	/*
 	 * 用户名
 	 */
 	private final String username;
-
-	/**
+	/*
 	 * 密码
 	 */
 	private final String password;
-
-	/**
+	/*
 	 * 虚拟主机
 	 */
 	private final String virtualHost;
-
 	/*
 	 * SSL
 	 */
 	private final SSLContext sslContext;
-
 	/*
 	 * 连接超时时间
 	 */
 	private final int connectionTimeout;
-
 	/*
 	 * 自动恢复连接
 	 */
 	private final boolean automaticRecovery;
-
 	/*
 	 * 重试连接间隔
 	 */
 	private final long recoveryInterval;
-
 	/*
 	 * 握手通信超时时间
 	 */
 	private final int handshakeTimeout;
-
 	/*
 	 * 关闭超时时间
 	 */
 	private final int shutdownTimeout;
-
 	/*
 	 * 请求心跳超时时间
 	 */
 	private final int requestedHeartbeat;
-
 	/*
 	 * 停机处理回调函数
 	 */
 	private final transient ShutdownEvent shutdownEvent;
-
 	/*
 	 * 配置连接信息
 	 */

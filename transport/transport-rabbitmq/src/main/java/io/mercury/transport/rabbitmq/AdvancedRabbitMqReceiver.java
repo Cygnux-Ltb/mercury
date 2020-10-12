@@ -6,16 +6,17 @@ import static io.mercury.common.util.StringUtil.nonEmpty;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 
 import com.rabbitmq.client.AMQP.BasicProperties;
-import com.rabbitmq.client.Delivery;
+import com.rabbitmq.client.CancelCallback;
+import com.rabbitmq.client.ConsumerShutdownSignalCallback;
 import com.rabbitmq.client.Envelope;
 
 import io.mercury.common.codec.DecodeException;
@@ -55,7 +56,7 @@ public class AdvancedRabbitMqReceiver<T> extends AbstractRabbitMqTransport imple
 	/*
 	 * 接受消费全部消息内容, 包括[consumerTag, 信封, 消息体, 参数]
 	 */
-	private final BiConsumer<String, Delivery> deliveryConsumer;
+	private final SelfAckConsumer<T> selfAckConsumer;
 	/*
 	 * 接受者QueueDeclare
 	 */
@@ -124,18 +125,26 @@ public class AdvancedRabbitMqReceiver<T> extends AbstractRabbitMqTransport imple
 	 * Consume arguments, default null
 	 */
 	private final Map<String, Object> args = null;
+	/*
+	 * 应答代理, 用于在外部回调中控制ACK过程
+	 */
+	private AckDelegate ackDelegate;
 
 	/**
 	 * 
 	 * @param tag
 	 * @param configurator
 	 * @param deserializer
-	 * @param callback
+	 * @param consumer
+	 * @param selfAckConsumer
 	 */
 	private AdvancedRabbitMqReceiver(String tag, @Nonnull RmqReceiverConfigurator configurator,
-			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer,
-			BiConsumer<String, Delivery> deliveryConsumer) {
+			@Nonnull Function<byte[], T> deserializer, @Nullable Consumer<T> consumer,
+			@Nullable SelfAckConsumer<T> selfAckConsumer) {
 		super(nonEmpty(tag) ? tag : "Receiver-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT), configurator.connection());
+		if (consumer == null && selfAckConsumer == null) {
+			throw new NullPointerException("[Consumer] and [SelfAckConsumer] cannot all be null");
+		}
 		this.receiveQueue = configurator.receiveQueue();
 		this.queueName = receiveQueue.queueName();
 		this.deserializer = deserializer;
@@ -149,10 +158,15 @@ public class AdvancedRabbitMqReceiver<T> extends AbstractRabbitMqTransport imple
 		this.qos = configurator.qos();
 		this.exclusive = configurator.exclusive();
 		this.consumer = consumer;
-		this.deliveryConsumer = deliveryConsumer;
+		this.selfAckConsumer = selfAckConsumer;
 		this.receiverName = "receiver::[" + rmqConnection.connectionInfo() + "$" + queueName + "]";
 		createConnection();
 		declareQueue();
+		createAckDelegate();
+	}
+
+	private void createAckDelegate() {
+		this.ackDelegate = new AckDelegate(this);
 	}
 
 	/**
@@ -220,115 +234,179 @@ public class AdvancedRabbitMqReceiver<T> extends AbstractRabbitMqTransport imple
 		receive();
 	}
 
+	private final CancelCallback cancelCallback = consumerTag -> {
+		log.info("CancelCallback receive consumerTag==[{}]", consumerTag);
+	};
+
+	private final ConsumerShutdownSignalCallback shutdownSignalCallback = (consumerTag, sig) -> {
+		log.info("Consumer received ShutdownSignalException, consumerTag==[{}]", consumerTag);
+		handleShutdownSignal(sig);
+	};
+
 	@Override
 	public void receive() throws ReceiverStartException {
 		Assertor.nonNull(deserializer, "deserializer");
-		Assertor.nonNull(consumer, "consumer");
+		
+		// 检测Consumer或SelfAckConsumer, 必须有一个不为null
+		if (consumer == null && selfAckConsumer == null) {
+			throw new NullPointerException("[Consumer] or [SelfAckConsumer] cannot be all null");
+		}
 
-		// # Set QOS parameter start *****
+		// 如果[autoAck]为[false], 设置QOS数值
 		if (!autoAck) {
+			// # Set QOS parameter start *****
 			try {
 				channel.basicQos(qos);
 			} catch (IOException e) {
 				log.error("Function basicQos() qos==[{}] throw IOException message -> {}", qos, e.getMessage(), e);
 				throw new ReceiverStartException(e.getMessage(), e);
 			}
+			// # Set QOS parameter end *****
 		}
-		// # Set QOS parameter end *****
 
-		// # Set Consume start *****
-		try {
-			channel.basicConsume(
-					/**
-					 * queue : the name of the queue
-					 */
-					queueName,
-					/**
-					 * autoAck : <br>
-					 * true if the server should consider messages acknowledged once delivered; <br>
-					 * false if the server should expect explicit acknowledgements
-					 */
-					autoAck,
-					/**
-					 * consumerTag : <br>
-					 * consumerTag a client-generated consumer tag to establish context
-					 */
-					tag,
-					/**
-					 * noLocal : <br>
-					 * true if the server should not deliver to this consumer messages published on
-					 * this channel's connection. <br>
-					 * Note! that the RabbitMQ server does not support this flag.
-					 */
-					false,
-					/**
-					 * exclusive : true if this is an exclusive consumer.
-					 */
-					exclusive,
-					/**
-					 * arguments : a set of arguments for the consume.
-					 */
-					args,
-					/**
-					 * deliverCallback : callback when a message is delivered.
-					 */
-					(consumerTag, delivery) -> {
-
-						Envelope envelope = delivery.getEnvelope();
-
-						BasicProperties properties = delivery.getProperties();
-
-						byte[] body = delivery.getBody();
-
-						try {
-							log.debug("Message handle start");
-							log.debug("Callback handleDelivery, consumerTag==[{}], deliveryTag==[{}] body.length==[{}]",
-									consumerTag, envelope.getDeliveryTag(), body.length);
-							T apply = null;
+		// 如果[selfAckConsumer]不为null, 设置selfAckConsumer
+		if (selfAckConsumer != null) {
+			// # Set SelfAckConsumer start *****
+			try {
+				channel.basicConsume(
+						// queue : the name of the queue
+						queueName,
+						// autoAck :
+						// true if the server should consider messages acknowledged once delivered;
+						// false if the server should expect explicit acknowledgements
+						autoAck,
+						// consumerTag :
+						// consumerTag a client-generated consumer tag to establish context
+						tag,
+						// noLocal :
+						// true if the server should not deliver to this consumer messages published on
+						// this channel's connection.
+						// Note! that the RabbitMQ server does not support this flag.
+						false,
+						// exclusive : true if this is an exclusive consumer.
+						exclusive,
+						// arguments : a set of arguments for the consume.
+						args,
+						// deliverCallback : callback when a message is delivered.
+						(consumerTag, delivery) -> {
+							// 消息处理开始
+							Envelope envelope = delivery.getEnvelope();
+							BasicProperties properties = delivery.getProperties();
+							byte[] body = delivery.getBody();
 							try {
-								apply = deserializer.apply(body);
+								log.debug("Message [{}] handle start", envelope.getDeliveryTag());
+								log.debug(
+										"Callback handleDelivery, consumerTag==[{}], deliveryTag==[{}] body.length==[{}]",
+										consumerTag, envelope.getDeliveryTag(), body.length);
+								T t = null;
+								try {
+									t = deserializer.apply(body);
+								} catch (Exception e) {
+									throw new DecodeException(e);
+								}
+								selfAckConsumer.handleMessage(
+										// 传入ACK委托者
+										ackDelegate,
+										// 传入消费者标识
+										consumerTag,
+										// 包装Message对象
+										new Message<>(envelope, properties, t));
 							} catch (Exception e) {
-								throw new DecodeException(e);
+								log.error("SelfAckConsumer accept msg==[{}] throw Exception -> {}", bytesToStr(body),
+										e.getMessage(), e);
+								dumpUnprocessableMsg(e, consumerTag, envelope, properties, body);
 							}
-							consumer.accept(apply);
-							log.debug("Callback handleDelivery() end");
-						} catch (Exception e) {
-							log.error("Consumer accept msg==[{}] throw Exception -> {}", bytesToStr(body),
-									e.getMessage(), e);
-							dumpUnprocessableMsg(e, consumerTag, envelope, properties, body);
-						}
-						if (!autoAck) {
-							if (ack(envelope.getDeliveryTag())) {
-								log.debug("Message handle and ack finished");
-							} else {
-								log.info("Ack failure envelope.getDeliveryTag()==[{}], Reject message");
-								channel.basicReject(envelope.getDeliveryTag(), true);
+							if (!autoAck) {
+								if (ack(envelope.getDeliveryTag())) {
+									log.debug("Message handle and ack finished");
+								} else {
+									log.info("Ack failure envelope.getDeliveryTag()==[{}], Reject message");
+									channel.basicReject(envelope.getDeliveryTag(), true);
+								}
 							}
-						}
-
-						log.info("DeliverCallback receive consumerTag -> {}", consumerTag);
-
-						deliveryConsumer.accept(consumerTag, delivery);
-					},
-					/**
-					 * cancelCallback : callback when the consumer is cancelled.
-					 */
-					consumerTag -> {
-						log.info("CancelCallback receive consumerTag -> {}", consumerTag);
-					},
-					/**
-					 * shutdownSignalCallback : callback when the channel/connection is shut down.
-					 */
-					(consumerTag, sig) -> {
-						log.info("Consumer received ShutdownSignalException, consumerTag==[{}]", consumerTag);
-						handleShutdownSignal(sig);
-					});
-
-		} catch (IOException e) {
-			log.error("Function basicConsume() throw IOException message -> {}", e.getMessage(), e);
-			throw new ReceiverStartException(e.getMessage(), e);
+							// 消息处理结束
+							log.debug("Message [{}] handle end", envelope.getDeliveryTag());
+						},
+						// cancelCallback : callback when the consumer is cancelled.
+						cancelCallback,
+						// shutdownSignalCallback : callback when the channel/connection is shut down.
+						shutdownSignalCallback);
+			} catch (IOException e) {
+				log.error("Function basicConsume() with SelfAckConsumer throw IOException message -> {}",
+						e.getMessage(), e);
+				throw new ReceiverStartException(e.getMessage(), e);
+			}
+			return;
+			// # Set SelfAckConsumer end *****
 		}
-		// # Set Consume end *****
+
+		if (consumer != null) {
+			// # Set Consume start *****
+			try {
+				channel.basicConsume(
+						// queue : the name of the queue
+						queueName,
+						// autoAck :
+						// true if the server should consider messages acknowledged once delivered;
+						// false if the server should expect explicit acknowledgements
+						autoAck,
+						// consumerTag :
+						// consumerTag a client-generated consumer tag to establish context
+						tag,
+						// noLocal :
+						// true if the server should not deliver to this consumer messages published on
+						// this channel's connection.
+						// Note! that the RabbitMQ server does not support this flag.
+						false,
+						// exclusive : true if this is an exclusive consumer.
+						exclusive,
+						// arguments : a set of arguments for the consume.
+						args,
+						// deliverCallback : callback when a message is delivered.
+						(consumerTag, delivery) -> {
+							// 消息处理开始
+							Envelope envelope = delivery.getEnvelope();
+							byte[] body = delivery.getBody();
+							try {
+								log.debug("Message [{}] handle start", envelope.getDeliveryTag());
+								log.debug(
+										"Callback handleDelivery, consumerTag==[{}], deliveryTag==[{}] body.length==[{}]",
+										consumerTag, envelope.getDeliveryTag(), body.length);
+								T t = null;
+								try {
+									t = deserializer.apply(body);
+								} catch (Exception e) {
+									throw new DecodeException(e);
+								}
+								consumer.accept(t);
+							} catch (Exception e) {
+								log.error("Consumer accept msg==[{}] throw Exception -> {}", bytesToStr(body),
+										e.getMessage(), e);
+								dumpUnprocessableMsg(e, consumerTag, envelope, delivery.getProperties(), body);
+							}
+							if (!autoAck) {
+								if (ack(envelope.getDeliveryTag())) {
+									log.debug("Message handle and ack finished");
+								} else {
+									log.info("Ack failure envelope.getDeliveryTag()==[{}], Reject message");
+									channel.basicReject(envelope.getDeliveryTag(), true);
+								}
+							}
+							log.debug("Message [{}] handle end", envelope.getDeliveryTag());
+							// 消息处理结束
+						},
+						// cancelCallback : callback when the consumer is cancelled.
+						cancelCallback,
+						// shutdownSignalCallback : callback when the channel/connection is shut down.
+						shutdownSignalCallback);
+			} catch (IOException e) {
+				log.error("Function basicConsume() with Consumer throw IOException message -> {}", e.getMessage(), e);
+				throw new ReceiverStartException(e.getMessage(), e);
+			}
+			// # Set Consume end *****
+			return;
+		}
+
 	}
 
 	/**
@@ -438,51 +516,49 @@ public class AdvancedRabbitMqReceiver<T> extends AbstractRabbitMqTransport imple
 	 *
 	 * @param <T>
 	 */
-	public static class AckDelegate<T> {
+	public static class AckDelegate {
 
-		private AdvancedRabbitMqReceiver<T> receiver;
+		private AdvancedRabbitMqReceiver<?> receiver;
 
-		private AckDelegate(AdvancedRabbitMqReceiver<T> receiver) {
+		private AckDelegate(AdvancedRabbitMqReceiver<?> receiver) {
 			this.receiver = receiver;
 		}
 
-		private boolean ack(long deliveryTag) {
-			return ack0(deliveryTag, 0);
+		public boolean ack(long deliveryTag) {
+			return receiver.ack(deliveryTag);
 		}
 
-		private boolean ack0(long deliveryTag, int retry) {
-			if (retry == receiver.maxAckTotal) {
-				log.error("Has been retry ack {}, Quit ack", receiver.maxAckTotal);
-				return false;
-			}
-			log.debug("Has been retry ack {}, Do next ack", retry);
-			try {
-				int reconnectionCount = 0;
-				while (!receiver.isConnected()) {
-					reconnectionCount++;
-					log.debug("Detect connection isConnected() == false, Reconnection count {}", reconnectionCount);
-					receiver.closeAndReconnection();
-					if (reconnectionCount > receiver.maxAckReconnection) {
-						log.debug("Reconnection count -> {}, Quit current ack", reconnectionCount);
-						break;
-					}
-				}
-				if (receiver.isConnected()) {
-					log.debug("Last detect connection isConnected() == true, Reconnection count {}", reconnectionCount);
-					receiver.channel.basicAck(deliveryTag, receiver.multipleAck);
-					log.debug("Method channel.basicAck() finished");
-					return true;
-				} else {
-					log.error("Last detect connection isConnected() == false, Reconnection count {}",
-							reconnectionCount);
-					log.error("Unable to call method channel.basicAck()");
-					return ack0(deliveryTag, retry);
-				}
-			} catch (IOException e) {
-				log.error("Call method channel.basicAck(deliveryTag==[{}], multiple==[{}]) throw IOException -> {}",
-						deliveryTag, receiver.multipleAck, e.getMessage(), e);
-				return ack0(deliveryTag, ++retry);
-			}
+	}
+
+	@FunctionalInterface
+	public static interface SelfAckConsumer<T> {
+
+		void handleMessage(final AckDelegate ackDelegate, final String consumerTag, Message<T> msg);
+
+	}
+
+	public static class Message<T> {
+
+		private Envelope envelope;
+		private BasicProperties properties;
+		private T body;
+
+		private Message(Envelope envelope, BasicProperties properties, T body) {
+			this.envelope = envelope;
+			this.properties = properties;
+			this.body = body;
+		}
+
+		public Envelope getEnvelope() {
+			return envelope;
+		}
+
+		public BasicProperties getProperties() {
+			return properties;
+		}
+
+		public T getBody() {
+			return body;
 		}
 
 	}

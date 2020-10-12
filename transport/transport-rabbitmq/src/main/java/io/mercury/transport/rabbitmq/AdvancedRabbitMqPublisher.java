@@ -54,47 +54,38 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 	 * 发布消息使用的[Exchange]
 	 */
 	private final String exchangeName;
-
 	/*
 	 * 发布消息使用的默认[RoutingKey]
 	 */
 	private final String defaultRoutingKey;
-
 	/*
 	 * 发布消息使用的默认[MessageProperties]
 	 */
 	private final BasicProperties defaultMsgProps;
-
 	/*
 	 * [MessageProperties]的提供者
 	 */
 	private final Supplier<BasicProperties> msgPropsSupplier;
-
 	/*
 	 * 是否有[MessageProperties]的提供者
 	 */
 	private final boolean hasPropsSupplier;
-
 	/*
 	 * 是否执行发布确认
 	 */
 	private final boolean confirm;
-
 	/*
 	 * 发布确认超时毫秒数
 	 */
 	private final long confirmTimeout;
-
 	/*
 	 * 发布确认重试次数
 	 */
 	private final int confirmRetry;
-
 	/*
 	 * 发布者名称
 	 */
 	private final String publisherName;
-
 	/**
 	 * 接收消息使用的反序列化器
 	 */
@@ -281,9 +272,7 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 			 * 添加Ack & NoAck回调
 			 */
 			channel.addConfirmListener(
-					/*
-					 * Ack Callback
-					 */
+					// ACK Callback
 					(deliveryTag, multiple) -> {
 						if (hasAckCallback) {
 							ackCallback.handle(deliveryTag, multiple);
@@ -291,9 +280,7 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 							log.warn("Undefined AckCallback function. Publisher -> {}", publisherName);
 						}
 					},
-					/*
-					 * NoAck Callback
-					 */
+					// NoAck Callback
 					(deliveryTag, multiple) -> {
 						if (hasNoAckCallback) {
 							ackCallback.handle(deliveryTag, multiple);
@@ -302,9 +289,7 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 						}
 					});
 			try {
-				/*
-				 * Enables publisher acknowledgements on this channel.
-				 */
+				// Enables publisher acknowledgements on this channel.
 				channel.confirmSelect();
 			} catch (IOException ioe) {
 				log.error("Enables publisher acknowledgements failure, publisherName -> {}, connectionInfo -> {}",
@@ -424,11 +409,13 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 		try {
 			basicPublish(routingKey, msg, props);
 			// 启用发布确认
-			if (channel.waitForConfirms(confirmTimeout))
+			if (channel.waitForConfirms(confirmTimeout)) {
 				return;
+			}
 			log.error("Call method channel.waitForConfirms(confirmTimeout==[{}]) retry==[{}]", confirmTimeout, retry);
-			if (++retry == confirmRetry)
+			if (++retry == confirmRetry) {
 				throw new MsgConfirmFailureException(exchangeName, routingKey, retry, confirmTimeout);
+			}
 			confirmPublish0(routingKey, msg, props, retry);
 		} catch (IOException e) {
 			log.error("Function basicPublish() throw IOException from publisherName -> {}, routingKey -> {}",
@@ -452,24 +439,25 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 	 */
 	private void basicPublish(String routingKey, T msg, BasicProperties props) throws IOException {
 		try {
+			// TODO 添加序列化异常处理
 			byte[] bytes = serializer.apply(msg);
 			if (bytes != null) {
 				channel.basicPublish(
-						// param1: the exchange to publish the message to
+						// exchange: the exchange to publish the message to
 						exchangeName,
-						// param2: the routing key
+						// routingKey: the routing key
 						routingKey,
-						// param3: other properties for the message - routing headers etc
+						// props: other properties for the message - routing headers etc
 						props,
-						// param4: the message body
+						// body: the message body
 						bytes);
 			}
 		} catch (IOException ioe) {
-			StringBuilder sb = new StringBuilder(500);
-			props.appendPropertyDebugStringTo(sb);
+			StringBuilder properties = new StringBuilder(500);
+			props.appendPropertyDebugStringTo(properties);
 			log.error(
 					"Function channel.basicPublish() throw IOException, exchange==[{}], routingKey==[{}], properties==[{}] -> {}",
-					exchangeName, routingKey, sb.toString(), ioe.getMessage(), ioe);
+					exchangeName, routingKey, properties, ioe.getMessage(), ioe);
 			throw ioe;
 		}
 	}
