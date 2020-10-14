@@ -37,7 +37,7 @@ public final class StringUtil {
 		}
 		return builder.append(']').toString();
 	}
-	
+
 	@Nonnull
 	public static final String toString(@Nullable String... strs) {
 		if (strs == null)
@@ -77,7 +77,9 @@ public final class StringUtil {
 	}
 
 	/**
-	 * Use ToStringBuilder.reflectionToString(obj, ToStringStyle.SHORT_PREFIX_STYLE)
+	 * Use : <br>
+	 * org.apache.commons.lang3.builder.ToStringBuilder <br>
+	 * .reflectionToString(object, ToStringStyle.SHORT_PREFIX_STYLE, false)
 	 * 
 	 * @param obj
 	 * @return String
@@ -90,7 +92,9 @@ public final class StringUtil {
 	}
 
 	/**
-	 * Use ToStringBuilder.reflectionToString(obj, ToStringStyle.JSON_STYLE)
+	 * Use : <br>
+	 * org.apache.commons.lang3.builder.ToStringBuilder <br>
+	 * .reflectionToString(object, ToStringStyle.JSON_STYLE, false)
 	 * 
 	 * @param obj
 	 * @return String
