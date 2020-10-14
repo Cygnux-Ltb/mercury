@@ -10,33 +10,26 @@ import io.mercury.serialization.json.JsonUtil;
 
 public final class AmqpExchange {
 
-	/*
-	 * 交换器名称
-	 */
+	// 交换器名称
 	private String name;
-	/*
-	 * 交换器类型
-	 */
+
+	// 交换器类型
 	private ExchangeType type;
-	/*
-	 * 是否持久化
-	 */
+
+	// 是否持久化
 	private boolean durable = true;
-	/*
-	 * 没有使用时自动删除
-	 */
+
+	// 没有使用时自动删除
 	private boolean autoDelete = false;
-	/*
-	 * 是否为内部Exchange
-	 */
+
+	// 是否为内部Exchange
 	private boolean internal = false;
-	/*
-	 * 交换器参数
-	 */
-	private Map<String, Object> args;
+
+	// 交换器参数
+	private Map<String, Object> args = null;
 
 	/**
-	 * 定义 [fanout] 交换器
+	 * 定义<b> [FANOUT] </b>交换器
 	 * 
 	 * @param name
 	 * @return
@@ -47,7 +40,7 @@ public final class AmqpExchange {
 	}
 
 	/**
-	 * 定义 [direct] 交换器
+	 * 定义<b> [DIRECT] </b>交换器
 	 * 
 	 * @param name
 	 * @return
@@ -58,7 +51,7 @@ public final class AmqpExchange {
 	}
 
 	/**
-	 * 定义 [topic] 交换器
+	 * 定义<b> [TOPIC] </b>交换器
 	 * 
 	 * @param name
 	 * @return
@@ -69,7 +62,7 @@ public final class AmqpExchange {
 	}
 
 	/**
-	 * The Anonymous Exchange
+	 * The <b> Anonymous </b> Exchange
 	 */
 	public static final AmqpExchange Anonymous = new AmqpExchange(ExchangeType.Anonymous, "");
 

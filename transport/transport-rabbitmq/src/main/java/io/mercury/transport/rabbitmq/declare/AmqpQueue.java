@@ -8,26 +8,20 @@ import io.mercury.serialization.json.JsonUtil;
 
 public final class AmqpQueue {
 
-	/*
-	 * 队列名称
-	 */
+	// 队列名称
 	private String name;
-	/*
-	 * 是否持久化
-	 */
+	
+	// 是否持久化
 	private boolean durable = true;
-	/*
-	 * 连接独占此队列
-	 */
+	
+	// 连接独占此队列
 	private boolean exclusive = false;
-	/*
-	 * channel关闭后自动删除队列
-	 */
+	
+	// channel关闭后自动删除队列
 	private boolean autoDelete = false;
-	/*
-	 * 队列参数
-	 */
-	private Map<String, Object> args;
+	
+	// 队列参数
+	private Map<String, Object> args = null;
 
 	/**
 	 * 定义队列
