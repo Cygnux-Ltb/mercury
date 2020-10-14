@@ -1,13 +1,14 @@
 package io.mercury.transport.rabbitmq.configurator;
 
+import static com.rabbitmq.client.MessageProperties.PERSISTENT_BASIC;
 import static io.mercury.common.util.Assertor.nonNull;
+import static io.mercury.transport.rabbitmq.configurator.PublishConfirmOptions.defaultOption;
 
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 
 import com.rabbitmq.client.AMQP.BasicProperties;
-import com.rabbitmq.client.MessageProperties;
 
 import io.mercury.common.util.StringUtil;
 import io.mercury.transport.rabbitmq.declare.AmqpQueue;
@@ -20,34 +21,20 @@ import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
  */
 public final class RmqPublisherConfigurator extends RmqConfigurator {
 
-	/*
-	 * 发布者ExchangeDeclare
-	 */
+	// 发布者ExchangeDeclare
 	private ExchangeRelationship publishExchange;
-	/*
-	 * 默认RoutingKey
-	 */
+
+	// 消息发布RoutingKey
 	private String defaultRoutingKey;
-	/*
-	 * 默认消息发布参数
-	 */
+
+	// 消息发布参数
 	private BasicProperties defaultMsgProps;
-	/*
-	 * 消息参数提供者
-	 */
+
+	// 消息参数提供者
 	private Supplier<BasicProperties> msgPropsSupplier;
-	/*
-	 * 是否进行发布确认
-	 */
-	private boolean confirm;
-	/*
-	 * 发布确认超时时间
-	 */
-	private long confirmTimeout;
-	/*
-	 * 发布确认重试次数
-	 */
-	private int confirmRetry;
+
+	// 发布确认选项
+	private PublishConfirmOptions confirmOptions;
 
 	/**
 	 * 
@@ -59,9 +46,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 		this.defaultRoutingKey = builder.defaultRoutingKey;
 		this.defaultMsgProps = builder.defaultMsgProps;
 		this.msgPropsSupplier = builder.msgPropsSupplier;
-		this.confirm = builder.confirm;
-		this.confirmTimeout = builder.confirmTimeout;
-		this.confirmRetry = builder.confirmRetry;
+		this.confirmOptions = builder.confirmOptions;
 	}
 
 	/**
@@ -178,24 +163,32 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	}
 
 	/**
+	 * 
+	 * @return the confirmOptions
+	 */
+	public PublishConfirmOptions confirmOptions() {
+		return confirmOptions;
+	}
+
+	/**
 	 * @return the isConfirm
 	 */
 	public boolean confirm() {
-		return confirm;
+		return confirmOptions.isConfirm();
 	}
 
 	/**
 	 * @return the confirmTimeout
 	 */
 	public long confirmTimeout() {
-		return confirmTimeout;
+		return confirmOptions.getConfirmTimeout();
 	}
 
 	/**
 	 * @return the confirmRetry
 	 */
 	public int confirmRetry() {
-		return confirmRetry;
+		return confirmOptions.getConfirmRetry();
 	}
 
 	private transient String toStringCache;
@@ -209,20 +202,18 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 
 	public static class Builder {
 
-		/*
-		 * 连接配置
-		 */
+		// 连接配置
 		private RmqConnection connection;
-
+		// 消息发布Exchange和相关绑定
 		private ExchangeRelationship publishExchange;
-
+		// 消息发布RoutingKey, 默认为空字符串
 		private String defaultRoutingKey = "";
-		private BasicProperties defaultMsgProps = MessageProperties.PERSISTENT_BASIC;
+		// 默认消息发布参数
+		private BasicProperties defaultMsgProps = PERSISTENT_BASIC;
+		// 默认消息发布参数提供者
 		private Supplier<BasicProperties> msgPropsSupplier = null;
-
-		private boolean confirm = false;
-		private long confirmTimeout = 5000;
-		private int confirmRetry = 3;
+		// 发布确认选项
+		private PublishConfirmOptions confirmOptions = defaultOption();
 
 		/**
 		 * 
@@ -278,7 +269,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 		 * @param isConfirm the isConfirm to set
 		 */
 		public Builder setConfirm(boolean confirm) {
-			this.confirm = confirm;
+			this.confirmOptions.setConfirm(confirm);
 			return this;
 		}
 
@@ -286,7 +277,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 		 * @param confirmTimeout the confirmTimeout to set
 		 */
 		public Builder setConfirmTimeout(long confirmTimeout) {
-			this.confirmTimeout = confirmTimeout;
+			this.confirmOptions.setConfirmTimeout(confirmTimeout);
 			return this;
 		}
 
@@ -294,7 +285,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 		 * @param confirmRetry the confirmRetry to set
 		 */
 		public Builder setConfirmRetry(int confirmRetry) {
-			this.confirmRetry = confirmRetry;
+			this.confirmOptions.setConfirmRetry(confirmRetry);
 			return this;
 		}
 

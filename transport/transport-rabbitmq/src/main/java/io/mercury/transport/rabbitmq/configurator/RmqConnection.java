@@ -18,61 +18,46 @@ import io.mercury.transport.core.configurator.TransportConfigurator;
 
 public final class RmqConnection implements TransportConfigurator {
 
-	/*
-	 * 连接地址
-	 */
+	// 连接地址
 	private final String host;
-	/*
-	 * 端口号
-	 */
+
+	// 端口号
 	private final int port;
-	/*
-	 * 用户名
-	 */
+
+	// 用户名
 	private final String username;
-	/*
-	 * 密码
-	 */
+
+	// 密码
 	private final String password;
-	/*
-	 * 虚拟主机
-	 */
+
+	// 虚拟主机
 	private final String virtualHost;
-	/*
-	 * SSL
-	 */
+
+	// SSL上下文
 	private final SSLContext sslContext;
-	/*
-	 * 连接超时时间
-	 */
+
+	// 连接超时时间
 	private final int connectionTimeout;
-	/*
-	 * 自动恢复连接
-	 */
+
+	// 自动恢复连接
 	private final boolean automaticRecovery;
-	/*
-	 * 重试连接间隔
-	 */
+
+	// 重试连接间隔
 	private final long recoveryInterval;
-	/*
-	 * 握手通信超时时间
-	 */
+
+	// 握手通信超时时间
 	private final int handshakeTimeout;
-	/*
-	 * 关闭超时时间
-	 */
+
+	// 关闭超时时间
 	private final int shutdownTimeout;
-	/*
-	 * 请求心跳超时时间
-	 */
+
+	// 请求心跳超时时间
 	private final int requestedHeartbeat;
-	/*
-	 * 停机处理回调函数
-	 */
+
+	// 停机处理回调函数
 	private final transient ShutdownEvent shutdownEvent;
-	/*
-	 * 配置连接信息
-	 */
+
+	// 配置连接信息
 	private final String connectionInfo;
 
 	private RmqConnection(Builder builder) {
@@ -256,48 +241,32 @@ public final class RmqConnection implements TransportConfigurator {
 	}
 
 	public static class Builder {
-		/**
-		 * 连接参数
-		 */
+
+		// 连接地址
 		private final String host;
+		// 端口号
 		private final int port;
+		// 用户名
 		private final String username;
+		// 密码
 		private final String password;
-		/*
-		 * 虚拟主机
-		 */
+		// 虚拟主机
 		private String virtualHost = "/";
-		/*
-		 * SSL
-		 */
+		// SSL上下文
 		private SSLContext sslContext;
-		/*
-		 * 连接超时时间
-		 */
+		// 连接超时时间
 		private int connectionTimeout = 60 * 1000;
-		/*
-		 * 自动恢复连接
-		 */
+		// 自动恢复连接
 		private boolean automaticRecovery = true;
-		/*
-		 * 重试连接间隔
-		 */
+		// 重试连接间隔(毫秒)
 		private long recoveryInterval = 10 * 1000;
-		/*
-		 * 握手通信超时时间
-		 */
+		// 握手通信超时时间(毫秒)
 		private int handshakeTimeout = 10 * 1000;
-		/*
-		 * 关闭超时时间
-		 */
+		// 关闭超时时间(毫秒)
 		private int shutdownTimeout = 10 * 1000;
-		/*
-		 * 请求心跳超时时间
-		 */
+		// 请求心跳超时时间(秒)
 		private int requestedHeartbeat = 20;
-		/*
-		 * 停机处理回调函数
-		 */
+		// 停机处理回调函数
 		private ShutdownEvent shutdownEvent;
 
 		private Builder(String host, int port, String username, String password) {
@@ -312,7 +281,7 @@ public final class RmqConnection implements TransportConfigurator {
 			this.port = withinRange(port, 4096, 65536, "port");
 			this.username = nonNull(username, "username");
 			this.password = nonNull(password, "password");
-			if (StringUtil.nonEmpty(virtualHost))
+			if (StringUtil.nonEmpty(virtualHost) && virtualHost.equals("/"))
 				this.virtualHost = virtualHost;
 		}
 

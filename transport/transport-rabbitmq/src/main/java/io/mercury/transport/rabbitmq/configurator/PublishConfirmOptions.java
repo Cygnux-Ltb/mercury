@@ -2,17 +2,13 @@ package io.mercury.transport.rabbitmq.configurator;
 
 public final class PublishConfirmOptions {
 
-	/*
-	 * 是否执行发布确认, 默认false
-	 */
+	// 是否执行发布确认, 默认false
 	private boolean confirm = false;
-	/*
-	 * 发布确认超时毫秒数, 默认5000毫秒
-	 */
+
+	// 发布确认超时毫秒数, 默认5000毫秒
 	private long confirmTimeout = 5000;
-	/*
-	 * 发布确认重试次数, 默认3次
-	 */
+
+	// 发布确认重试次数, 默认3次
 	private int confirmRetry = 3;
 
 	/**
