@@ -16,7 +16,7 @@ import io.mercury.common.collections.MutableMaps;
  */
 
 @ThreadSafe
-public final class GroupDeduplicationCounter<T> {
+public final class DeduplicationCounterGroup<T> {
 
 	private DeduplicationCounter<T> counter = new DeduplicationCounter<>();
 	private MutableIntObjectMap<DeduplicationCounter<T>> groupCounterMap = MutableMaps.newIntObjectHashMap();
