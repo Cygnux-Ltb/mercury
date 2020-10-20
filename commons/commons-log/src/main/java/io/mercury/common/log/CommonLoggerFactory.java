@@ -1,5 +1,8 @@
 package io.mercury.common.log;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,11 +12,12 @@ public final class CommonLoggerFactory {
 
 	public static final String DefaultFolder = "default";
 
-	public static final String DefaultFileName = "runtime";
+	public static final String DefaultFileName = "runtime-"
+			+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
 
 	public static final LogLevel DefaultLevel = LogLevel.ERROR;
 
-	public static final Logger getLogger(Class<?> clazz) {
+	public static final synchronized Logger getLogger(Class<?> clazz) {
 		// 配置日志存储目录, 基于${user.home}
 		String folder = LogConfigurator.folder();
 		if (folder == null || folder.isEmpty())
@@ -30,7 +34,7 @@ public final class CommonLoggerFactory {
 	}
 
 	public static void main(String[] args) {
-
+		System.out.println(DefaultFileName);
 	}
 
 }

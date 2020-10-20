@@ -4,7 +4,7 @@
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
 		<groupId>io.mercury</groupId>
 		<artifactId>commons</artifactId>
@@ -94,7 +94,15 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- The Apache Log4j Implementation -->
+		<!-- The Apache Log4j 2.x API -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4j2.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- The Apache Log4j 2.x Implementation -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
