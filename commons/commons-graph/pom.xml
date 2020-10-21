@@ -27,6 +27,12 @@
 			<groupId>org.jgrapht</groupId>
 			<artifactId>jgrapht-core</artifactId>
 			<version>1.4.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.jheaps</groupId>
+					<artifactId>jheaps</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- A free, production-ready, efficient Java library containing a collection 
@@ -36,7 +42,7 @@
 			<artifactId>jheaps</artifactId>
 			<version>0.14</version>
 		</dependency>
-		
+
 	</dependencies>
 
 </project>
