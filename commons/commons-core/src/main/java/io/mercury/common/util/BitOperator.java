@@ -204,6 +204,9 @@ public final class BitOperator {
 		return (((long) highPos) << 32) | ((long) lowPos);
 	}
 
+	/*
+	 * 高位掩码
+	 */
 	public static final long LongHighPosMask = 0xFFFF_FFFF_0000_0000L;
 
 	/**
@@ -215,6 +218,9 @@ public final class BitOperator {
 		return (int) ((l & LongHighPosMask) >> 32);
 	}
 
+	/*
+	 * 低位掩码
+	 */
 	public static final long LongLowPosMask = 0x0000_0000_FFFF_FFFFL;
 
 	/**
