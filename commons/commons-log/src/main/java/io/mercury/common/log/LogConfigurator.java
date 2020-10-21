@@ -16,7 +16,7 @@ public final class LogConfigurator {
 		System.setProperty(Log4j2Filename, filename);
 	}
 
-	public static synchronized void level(LogLevel level) {
+	public static synchronized void logLevel(LogLevel level) {
 		System.setProperty(Log4j2Level, level.name());
 	}
 

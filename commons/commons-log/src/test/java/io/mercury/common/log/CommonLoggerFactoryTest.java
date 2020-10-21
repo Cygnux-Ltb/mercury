@@ -16,7 +16,7 @@ public class CommonLoggerFactoryTest {
 
 		System.out.println(System.getProperty("user.home"));
 		LogConfigurator.filename("new");
-		LogConfigurator.level(LogLevel.ERROR);
+		LogConfigurator.logLevel(LogLevel.ERROR);
 
 		log.error("this is error");
 		log.warn("this is warn");

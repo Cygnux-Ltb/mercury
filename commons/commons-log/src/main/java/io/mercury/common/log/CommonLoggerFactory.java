@@ -29,7 +29,7 @@ public final class CommonLoggerFactory {
 		// 配置日志級別
 		String level = LogConfigurator.level();
 		if (level == null || level.isEmpty())
-			LogConfigurator.level(DefaultLevel);
+			LogConfigurator.logLevel(DefaultLevel);
 		return LoggerFactory.getLogger(clazz);
 	}
 
