@@ -17,22 +17,22 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<commons-io.version>2.7</commons-io.version>
+		<commons-io.version>2.8.0</commons-io.version>
 		<commons-lang3.version>3.11</commons-lang3.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
-		<guava.version>29.0-jre</guava.version>
+		<guava.version>30.0-jre</guava.version>
 		<eclipse-collections.version>10.4.0</eclipse-collections.version>
 	</properties>
 
 	<dependencies>
-		<!-- JSR305 Annotations for Findbugs -->
+		<!-- JSR305 Annotations for Findbugs. -->
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>
 			<artifactId>jsr305</artifactId>
 			<version>3.0.2</version>
 		</dependency>
 
-		<!-- The Apache Commons IO li contains utility classes, stream implementations, 
+		<!-- The Apache Commons IO library contains utility classes, stream implementations, 
 			file filters, file comparators, endian transformation classes, and much more. -->
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -57,8 +57,8 @@
 			<version>${commons-collections4.version}</version>
 		</dependency>
 
-		<!-- Guava is a su f core and expanded libraries that include utility classes, 
-			google's collections, io classes, and much much more. -->
+		<!-- Guava is a suite of core and expanded libraries that include utility 
+			classes, google's collections, io classes, and much much more. -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -93,7 +93,7 @@
 
 		<!-- ####### Unit test mock tool ####### -->
 		<!-- EasyMock pro an easy way to create Mock Objects for interfaces and 
-			classes generating them on the fly -->
+			classes generating them on the fly. -->
 		<dependency>
 			<groupId>org.easymock</groupId>
 			<artifactId>easymock</artifactId>
