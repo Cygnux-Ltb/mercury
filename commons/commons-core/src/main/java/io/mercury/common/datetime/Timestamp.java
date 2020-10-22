@@ -11,31 +11,60 @@ import java.time.ZonedDateTime;
  * @author yellow013
  *
  */
-public final class EpochTimestamp {
+public final class Timestamp {
 
 	/**
-	 * 
+	 * Epoch Milliseconds
 	 */
-	private long epochMillis;
+	private final long epochMillis;
+
 	/**
-	 * 
+	 * java.time.Instant
 	 */
 	private Instant instant;
+
+	/**
+	 * java.time.ZonedDateTime
+	 */
+	private ZonedDateTime zonedDateTime;
+
+	private Timestamp(long epochMillis) {
+		this.epochMillis = epochMillis;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static Timestamp newWithNow() {
+		return new Timestamp(System.currentTimeMillis());
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static Timestamp newWithEpochMillis(long epochMillis) {
+		return new Timestamp(epochMillis);
+	}
+
 	/**
 	 * 
 	 */
-	private ZonedDateTime dateTime;
-
-	private EpochTimestamp() {
-		this.epochMillis = System.currentTimeMillis();
-	}
-
-	public static EpochTimestamp now() {
-		return new EpochTimestamp();
-	}
-
-	private void newInstant() {
+	private void newInstantOfEpochMilli() {
 		this.instant = Instant.ofEpochMilli(epochMillis);
+	}
+
+	/**
+	 * 
+	 * @param zoneId
+	 * @return
+	 */
+	public ZonedDateTime updateDateTimeOf() {
+		if (instant == null)
+			newInstantOfEpochMilli();
+		this.zonedDateTime = ZonedDateTime.ofInstant(instant, TimeZone.SYS_DEFAULT);
+		return zonedDateTime;
 	}
 
 	/**
@@ -45,16 +74,16 @@ public final class EpochTimestamp {
 	 */
 	public ZonedDateTime updateDateTimeOf(ZoneId zoneId) {
 		if (instant == null)
-			newInstant();
-		this.dateTime = ZonedDateTime.ofInstant(instant, zoneId);
-		return dateTime;
+			newInstantOfEpochMilli();
+		this.zonedDateTime = ZonedDateTime.ofInstant(instant, zoneId);
+		return zonedDateTime;
 	}
 
 	/**
 	 * 
 	 * @return
 	 */
-	public long epochMillis() {
+	public long getEpochMillis() {
 		return epochMillis;
 	}
 
@@ -62,9 +91,9 @@ public final class EpochTimestamp {
 	 * 
 	 * @return
 	 */
-	public Instant instant() {
+	public Instant getInstant() {
 		if (instant == null)
-			newInstant();
+			newInstantOfEpochMilli();
 		return instant;
 	}
 
@@ -72,15 +101,15 @@ public final class EpochTimestamp {
 	 * 
 	 * @return
 	 */
-	public ZonedDateTime dateTime() {
-		if (dateTime == null)
+	public ZonedDateTime getZonedDateTime() {
+		if (zonedDateTime == null)
 			return updateDateTimeOf(TimeZone.SYS_DEFAULT);
-		return dateTime;
+		return zonedDateTime;
 	}
 
 	private static final String str0 = "{\"epochMillis\" : ";
 	private static final String str1 = ", \"instant\" : ";
-	private static final String str2 = ", \"dateTime\" : ";
+	private static final String str2 = ", \"zonedDateTime\" : ";
 	private static final String str3 = "}";
 
 	@Override
@@ -92,9 +121,9 @@ public final class EpochTimestamp {
 			builder.append(str1);
 			builder.append(toText(instant));
 		}
-		if (dateTime != null) {
+		if (zonedDateTime != null) {
 			builder.append(str2);
-			builder.append(toText(dateTime));
+			builder.append(toText(zonedDateTime));
 		}
 		builder.append(str3);
 		return builder.toString();
@@ -102,14 +131,14 @@ public final class EpochTimestamp {
 
 	public static void main(String[] args) {
 
-		EpochTimestamp timestamp = EpochTimestamp.now();
-		timestamp.instant();
-		timestamp.dateTime();
+		Timestamp timestamp = Timestamp.newWithNow();
+		timestamp.getInstant();
+		timestamp.getZonedDateTime();
 		System.out.println(timestamp);
 
 		for (int i = 0; i < 100000; i++) {
 			EpochTime.millis();
-			EpochTimestamp.now();
+			Timestamp.newWithNow();
 			Instant.now();
 			i++;
 			i--;
@@ -126,7 +155,7 @@ public final class EpochTimestamp {
 		}
 
 		long l1_0 = System.nanoTime();
-		EpochTimestamp.now();
+		Timestamp.newWithNow();
 		long l1_1 = System.nanoTime();
 
 		long l2_0 = System.nanoTime();
@@ -139,12 +168,12 @@ public final class EpochTimestamp {
 		System.out.println(l1);
 		System.out.println(l2);
 
-		EpochTimestamp now = EpochTimestamp.now();
+		Timestamp now = Timestamp.newWithNow();
 
-		System.out.println(now.epochMillis());
-		System.out.println(now.instant().getEpochSecond() * 1000000 + now.instant().getNano() / 1000);
-		System.out.println(now.instant());
-		System.out.println(now.dateTime());
+		System.out.println(now.getEpochMillis());
+		System.out.println(now.getInstant().getEpochSecond() * 1000000 + now.getInstant().getNano() / 1000);
+		System.out.println(now.getInstant());
+		System.out.println(now.getZonedDateTime());
 
 		System.out.println(now);
 
