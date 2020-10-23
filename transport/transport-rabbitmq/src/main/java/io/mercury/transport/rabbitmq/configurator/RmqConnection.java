@@ -281,7 +281,7 @@ public final class RmqConnection implements TransportConfigurator {
 			this.port = withinRange(port, 4096, 65536, "port");
 			this.username = nonNull(username, "username");
 			this.password = nonNull(password, "password");
-			if (StringUtil.nonEmpty(virtualHost) && virtualHost.equals("/"))
+			if (StringUtil.nonEmpty(virtualHost) && !virtualHost.equals("/"))
 				this.virtualHost = virtualHost;
 		}
 
