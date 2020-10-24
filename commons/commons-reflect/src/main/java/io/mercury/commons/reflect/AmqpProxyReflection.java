@@ -59,6 +59,11 @@ public final class AmqpProxyReflection {
 			throw new IllegalArgumentException("method [" + method + "] return type is not void");
 	}
 
+	/**
+	 * 
+	 * @param proxyeedClass
+	 * @return
+	 */
 	public ImmutableSet<Method> getImplMethods(Class<?> proxyeedClass) {
 		if (isInit.get())
 			return implTypes.get(proxyeedClass);
