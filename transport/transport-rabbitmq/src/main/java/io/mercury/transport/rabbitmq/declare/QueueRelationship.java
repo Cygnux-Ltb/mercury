@@ -122,10 +122,11 @@ public final class QueueRelationship extends Relationship {
 	public QueueRelationship binding(List<AmqpExchange> exchanges, List<String> routingKeys) {
 		if (exchanges != null) {
 			exchanges.forEach(exchange -> {
-				if (CollectionUtils.isNotEmpty(routingKeys))
+				if (CollectionUtils.isNotEmpty(routingKeys)) {
 					routingKeys.forEach(routingKey -> bindings.add(new Binding(exchange, queue, routingKey)));
-				else
+				} else {
 					bindings.add(new Binding(exchange, queue));
+				}
 			});
 		}
 		return this;
@@ -137,7 +138,8 @@ public final class QueueRelationship extends Relationship {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(QueueRelationship.named("TEST"));
+		System.out.println(
+				QueueRelationship.named("TEST").binding(AmqpExchange.fanout("T0")).binding(AmqpExchange.fanout("T1")));
 	}
 
 }

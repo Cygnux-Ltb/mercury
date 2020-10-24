@@ -241,7 +241,6 @@ public final class RmqConnection implements TransportConfigurator {
 	}
 
 	public static class Builder {
-
 		// 连接地址
 		private final String host;
 		// 端口号
@@ -270,17 +269,18 @@ public final class RmqConnection implements TransportConfigurator {
 		private ShutdownEvent shutdownEvent;
 
 		private Builder(String host, int port, String username, String password) {
-			this.host = nonNull(host, "host");
-			this.port = withinRange(port, 4096, 65536, "port");
-			this.username = nonNull(username, "username");
-			this.password = nonNull(password, "password");
+			this(host, port, username, password, "/");
 		}
 
 		private Builder(String host, int port, String username, String password, String virtualHost) {
-			this.host = nonNull(host, "host");
-			this.port = withinRange(port, 4096, 65536, "port");
-			this.username = nonNull(username, "username");
-			this.password = nonNull(password, "password");
+			nonNull(host, "host");
+			withinRange(port, 4096, 65536, "port");
+			nonNull(username, "username");
+			nonNull(password, "password");
+			this.host = host;
+			this.port = port;
+			this.username = username;
+			this.password = password;
 			if (StringUtil.nonEmpty(virtualHost) && !virtualHost.equals("/"))
 				this.virtualHost = virtualHost;
 		}

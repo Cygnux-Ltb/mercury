@@ -55,7 +55,9 @@ public final class RmqReceiverConfigurator extends RmqConfigurator {
 	 * @return
 	 */
 	public static Builder configuration(@Nonnull RmqConnection connection, @Nonnull QueueRelationship receiveQueue) {
-		return new Builder(nonNull(connection, "connection"), nonNull(receiveQueue, "receiveQueue"));
+		nonNull(connection, "connection");
+		nonNull(receiveQueue, "receiveQueue");
+		return new Builder(connection, receiveQueue);
 	}
 
 	/**
@@ -96,6 +98,10 @@ public final class RmqReceiverConfigurator extends RmqConfigurator {
 		return exclusive;
 	}
 
+	/**
+	 * 
+	 * @return the ackOptions
+	 */
 	public ReceiveAckOptions ackOptions() {
 		return ackOptions;
 	}
@@ -145,6 +151,7 @@ public final class RmqReceiverConfigurator extends RmqConfigurator {
 	}
 
 	public static class Builder {
+
 		// 连接配置
 		private RmqConnection connection;
 		// 接受者QueueRelationship

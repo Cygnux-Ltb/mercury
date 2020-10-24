@@ -29,14 +29,13 @@ public final class PublishConfirmOptions {
 		return new PublishConfirmOptions(confirm, confirmTimeout, confirmRetry);
 	}
 
+	private PublishConfirmOptions() {
+	}
+
 	private PublishConfirmOptions(boolean confirm, long confirmTimeout, int confirmRetry) {
-		super();
 		this.confirm = confirm;
 		this.confirmTimeout = confirmTimeout;
 		this.confirmRetry = confirmRetry;
-	}
-
-	private PublishConfirmOptions() {
 	}
 
 	public boolean isConfirm() {
