@@ -37,6 +37,7 @@
 					<compilerArgument>-parameters</compilerArgument>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
+					<compilerArguments>-Xlint:unchecked</compilerArguments>
 				</configuration>
 			</plugin>
 			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-source-plugin</artifactId> 
