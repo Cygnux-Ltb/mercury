@@ -29,6 +29,8 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
+					<compilerArgument>-parameters</compilerArgument>
+					<compilerArguments>-Xlint:unchecked</compilerArguments>
 				</configuration>
 			</plugin>
 			<plugin>

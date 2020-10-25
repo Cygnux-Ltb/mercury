@@ -43,9 +43,10 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
 				<configuration>
-					<compilerArgument>-parameters</compilerArgument>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
+					<compilerArgument>-parameters</compilerArgument>
+					<compilerArguments>-Xlint:unchecked</compilerArguments>
 				</configuration>
 			</plugin>
 		</plugins>
