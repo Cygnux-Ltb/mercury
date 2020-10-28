@@ -1,11 +1,19 @@
-# mercury
+## mercury
 
 Basic Library Collection
 
-https://github.com/yellow013/actors.git
+Commons library:
 
-https://github.com/yellow013/commons.git
+提供通用基础包
 
-https://github.com/yellow013/persistence.git
+Persistence & Serialization library
 
-https://github.com/yellow013/transport.git
+提供持久化和序列化与反序列化组件
+
+Transport library
+
+提供通讯组件
+
+
+
+
