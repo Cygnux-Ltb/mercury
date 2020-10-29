@@ -1,4 +1,4 @@
-## mercury
+## Mercury
 
 Basic Library Collection
 
