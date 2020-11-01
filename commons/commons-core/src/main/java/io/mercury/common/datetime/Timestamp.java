@@ -3,15 +3,18 @@ package io.mercury.common.datetime;
 import static io.mercury.common.util.StringUtil.toText;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+
+import io.mercury.common.util.Assertor;
 
 /**
  * 
  * @author yellow013
  *
  */
-public final class Timestamp {
+public final class Timestamp implements Comparable<Timestamp> {
 
 	/**
 	 * Epoch Milliseconds
@@ -28,6 +31,10 @@ public final class Timestamp {
 	 */
 	private ZonedDateTime zonedDateTime;
 
+	/**
+	 * 
+	 * @param epochMillis
+	 */
 	private Timestamp(long epochMillis) {
 		this.epochMillis = epochMillis;
 	}
@@ -42,6 +49,7 @@ public final class Timestamp {
 
 	/**
 	 * 
+	 * @param epochMillis
 	 * @return
 	 */
 	public static Timestamp newWithEpochMillis(long epochMillis) {
@@ -50,33 +58,38 @@ public final class Timestamp {
 
 	/**
 	 * 
+	 * @param localDateTime
+	 * @return
 	 */
-	private void newInstantOfEpochMilli() {
-		this.instant = Instant.ofEpochMilli(epochMillis);
+	public static Timestamp newWithDateTime(LocalDateTime localDateTime) {
+		Assertor.nonNull(localDateTime, "localDateTime");
+		return newWithZonedDateTime(
+				ZonedDateTime.ofLocal(localDateTime, TimeZone.SYS_DEFAULT, TimeZone.SYS_DEFAULT_OFFSET));
 	}
 
 	/**
 	 * 
+	 * @param localDateTime
 	 * @param zoneId
 	 * @return
 	 */
-	public ZonedDateTime updateDateTimeOf() {
-		if (instant == null)
-			newInstantOfEpochMilli();
-		this.zonedDateTime = ZonedDateTime.ofInstant(instant, TimeZone.SYS_DEFAULT);
-		return zonedDateTime;
+	public static Timestamp newWithDateTime(LocalDateTime localDateTime, ZoneId zoneId) {
+		Assertor.nonNull(localDateTime, "localDateTime");
+		Assertor.nonNull(zoneId, "zoneId");
+		return newWithZonedDateTime(ZonedDateTime.of(localDateTime, zoneId));
 	}
 
 	/**
 	 * 
-	 * @param zoneId
 	 * @return
 	 */
-	public ZonedDateTime updateDateTimeOf(ZoneId zoneId) {
-		if (instant == null)
-			newInstantOfEpochMilli();
-		this.zonedDateTime = ZonedDateTime.ofInstant(instant, zoneId);
-		return zonedDateTime;
+	public static Timestamp newWithZonedDateTime(ZonedDateTime zonedDateTime) {
+		Assertor.nonNull(zonedDateTime, "zonedDateTime");
+		final Instant instant = zonedDateTime.toInstant();
+		Timestamp timestamp = new Timestamp(instant.toEpochMilli());
+		timestamp.instant = instant;
+		timestamp.zonedDateTime = zonedDateTime;
+		return timestamp;
 	}
 
 	/**
@@ -88,13 +101,33 @@ public final class Timestamp {
 	}
 
 	/**
+	 * 根据Epoch毫秒数生成Instant
+	 */
+	private void newInstantOfEpochMillis() {
+		this.instant = Instant.ofEpochMilli(epochMillis);
+	}
+
+	/**
 	 * 
 	 * @return
 	 */
 	public Instant getInstant() {
 		if (instant == null)
-			newInstantOfEpochMilli();
+			newInstantOfEpochMillis();
 		return instant;
+	}
+
+	/**
+	 * 根据指定时区更新并获取时间
+	 * 
+	 * @param zoneId
+	 * @return
+	 */
+	public ZonedDateTime updateAndGetDateTimeOf(ZoneId zoneId) {
+		if (instant == null)
+			newInstantOfEpochMillis();
+		this.zonedDateTime = ZonedDateTime.ofInstant(instant, zoneId);
+		return zonedDateTime;
 	}
 
 	/**
@@ -103,10 +136,18 @@ public final class Timestamp {
 	 */
 	public ZonedDateTime getZonedDateTime() {
 		if (zonedDateTime == null)
-			return updateDateTimeOf(TimeZone.SYS_DEFAULT);
+			return updateAndGetDateTimeOf(TimeZone.SYS_DEFAULT);
 		return zonedDateTime;
 	}
 
+	@Override
+	public int compareTo(Timestamp o) {
+		return epochMillis < o.epochMillis ? -1 : epochMillis > o.epochMillis ? 1 : 0;
+	}
+
+	/**
+	 * To String constant
+	 */
 	private static final String str0 = "{\"epochMillis\" : ";
 	private static final String str1 = ", \"instant\" : ";
 	private static final String str2 = ", \"zonedDateTime\" : ";
@@ -174,8 +215,11 @@ public final class Timestamp {
 		System.out.println(now.getInstant().getEpochSecond() * 1000000 + now.getInstant().getNano() / 1000);
 		System.out.println(now.getInstant());
 		System.out.println(now.getZonedDateTime());
-
 		System.out.println(now);
+
+		System.out.println(Timestamp.newWithNow());
+		System.out.println(Timestamp.newWithEpochMillis(47237547328L).updateAndGetDateTimeOf(TimeZone.UTC));
+		System.out.println(Timestamp.newWithDateTime(LocalDateTime.now(), TimeZone.CST));
 
 	}
 

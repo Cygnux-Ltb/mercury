@@ -8,5 +8,4 @@ import java.lang.annotation.Target;
 @Target({ ElementType.METHOD, ElementType.LOCAL_VARIABLE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SpinWaiting {
-
 }
