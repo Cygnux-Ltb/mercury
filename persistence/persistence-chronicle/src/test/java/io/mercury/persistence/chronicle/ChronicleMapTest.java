@@ -19,7 +19,7 @@ public class ChronicleMapTest {
 	public void test0() {
 
 		ChronicleMapConfigurator<String, byte[]> options = ChronicleMapConfigurator
-				.builder(String.class, byte[].class, SysProperties.USER_HOME, "test")
+				.newBuilder(String.class, byte[].class, SysProperties.USER_HOME, "test")
 				.entriesOfPow2(Capacity.L16_SIZE_65536).averageKey(new String(new byte[32])).averageValue(new byte[128])
 				.build();
 

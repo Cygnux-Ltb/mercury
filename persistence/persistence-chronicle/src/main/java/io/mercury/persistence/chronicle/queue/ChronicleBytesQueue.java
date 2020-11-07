@@ -8,7 +8,7 @@ import javax.annotation.concurrent.Immutable;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.number.RandomNumber;
+import io.mercury.common.number.Randoms;
 import io.mercury.common.thread.Threads;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleReader.ReaderParam;
 
@@ -96,7 +96,7 @@ public class ChronicleBytesQueue
 			ByteBuffer buffer = ByteBuffer.allocate(512);
 			for (;;) {
 				try {
-					writer.append(buffer.put(String.valueOf(RandomNumber.randomLong()).getBytes()));
+					writer.append(buffer.put(String.valueOf(Randoms.randomLong()).getBytes()));
 					buffer.clear();
 					Threads.sleep(100);
 				} catch (Exception e) {

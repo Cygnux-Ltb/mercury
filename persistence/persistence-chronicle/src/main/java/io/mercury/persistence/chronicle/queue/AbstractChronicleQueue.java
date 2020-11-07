@@ -1,7 +1,7 @@
 package io.mercury.persistence.chronicle.queue;
 
 import static io.mercury.common.datetime.DateTimeUtil.datetimeOfSecond;
-import static io.mercury.common.number.RandomNumber.randomUnsignedInt;
+import static io.mercury.common.number.Randoms.threadSafeRandomUnsignedInt;
 
 import java.io.File;
 import java.lang.Thread.State;
@@ -225,7 +225,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	}
 
 	private String generateReaderName() {
-		return queueName + "-reader-" + randomUnsignedInt();
+		return queueName + "-reader-" + threadSafeRandomUnsignedInt();
 	}
 
 	private static final String EMPTY_CONSUMER_MSG = "Reader consumer is an empty implementation.";
@@ -310,7 +310,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	 * @return
 	 */
 	private String generateAppenderName() {
-		return queueName + "-appender-" + randomUnsignedInt();
+		return queueName + "-appender-" + threadSafeRandomUnsignedInt();
 	}
 
 	/**

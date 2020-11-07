@@ -58,6 +58,10 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 		this.fullInfo = buildFullInfo();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	private String buildFullInfo() {
 		return "[SaveTo->" + savePath.getAbsolutePath() + "]:[Key==" + keyClass.getSimpleName() + ",Value=="
 				+ valueClass.getSimpleName() + "]";
@@ -65,7 +69,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 
 	private static final String FixedFolder = "chronicle-map/";
 
-	public static <K, V> Builder<K, V> builder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass)
+	public static <K, V> Builder<K, V> newBuilder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass)
 			throws NullPointerException {
 		Assertor.nonNull(keyClass, "keyClass");
 		Assertor.nonNull(valueClass, "valueClass");
@@ -73,7 +77,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 				"auto-create-" + DateTimeUtil.datetimeOfSecond());
 	}
 
-	public static <K, V> Builder<K, V> builder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass,
+	public static <K, V> Builder<K, V> newBuilder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass,
 			@Nonnull String folder) throws NullPointerException {
 		Assertor.nonNull(keyClass, "keyClass");
 		Assertor.nonNull(valueClass, "valueClass");
@@ -81,7 +85,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 		return new Builder<>(keyClass, valueClass, SysProperties.JAVA_IO_TMPDIR, folder);
 	}
 
-	public static <K, V> Builder<K, V> builder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass,
+	public static <K, V> Builder<K, V> newBuilder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass,
 			@Nonnull String rootPath, @Nonnull String folder) throws NullPointerException {
 		Assertor.nonNull(keyClass, "keyClass");
 		Assertor.nonNull(valueClass, "valueClass");

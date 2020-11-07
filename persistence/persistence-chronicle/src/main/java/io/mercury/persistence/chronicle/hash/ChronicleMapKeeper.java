@@ -36,39 +36,42 @@ public class ChronicleMapKeeper<K, V> extends BaseKeeper<String, ChronicleMap<K,
 
 	@Override
 	protected ChronicleMap<K, V> createWithKey(String filename) throws ChronicleIOException {
-		ChronicleMapBuilder<K, V> mapBuilder = ChronicleMapBuilder
+		// 构建器
+		ChronicleMapBuilder<K, V> builder = ChronicleMapBuilder
 				.of(configurator.keyClass(), configurator.valueClass()).putReturnsNull(configurator.putReturnsNull())
-				.removeReturnsNull(configurator.removeReturnsNull()).entries(configurator.entries());
+				.removeReturnsNull(configurator.removeReturnsNull()).name(configurator.fullInfo())
+				.entries(configurator.entries());
 		// 设置块大小
 		if (configurator.actualChunkSize() > 0)
-			mapBuilder.actualChunkSize(configurator.actualChunkSize());
+			builder.actualChunkSize(configurator.actualChunkSize());
 		// 基于Key值设置平均长度
 		if (configurator.averageKey() != null)
-			mapBuilder.averageKey(configurator.averageKey());
+			builder.averageKey(configurator.averageKey());
 		// 基于Value值设置平均长度
 		if (configurator.averageValue() != null)
-			mapBuilder.averageValue(configurator.averageValue());
+			builder.averageValue(configurator.averageValue());
 		// 持久化选项
 		if (configurator.persistent()) {
-			File persistedFile = new File(configurator.savePath(), filename);
+			File persistentFile = new File(configurator.savePath(), filename);
 			try {
-				if (!persistedFile.exists()) {
-					File parentFile = persistedFile.getParentFile();
-					if (!parentFile.exists())
-						parentFile.mkdirs();
-					return mapBuilder.createPersistedTo(persistedFile);
+				if (!persistentFile.exists()) {
+					// 创建文件目录
+					File folder = persistentFile.getParentFile();
+					if (!folder.exists())
+						folder.mkdirs();
+					return builder.createPersistedTo(persistentFile);
 				} else {
 					// Is recover data
 					if (configurator.recover())
-						return mapBuilder.createOrRecoverPersistedTo(persistedFile);
+						return builder.createOrRecoverPersistedTo(persistentFile);
 					else
-						return mapBuilder.createPersistedTo(persistedFile);
+						return builder.createPersistedTo(persistentFile);
 				}
 			} catch (IOException e) {
 				throw new ChronicleIOException(e);
 			}
 		} else
-			return mapBuilder.create();
+			return builder.create();
 	}
 
 	@Override
