@@ -12,6 +12,13 @@ import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.ImmutableLists;
 
+/**
+ * 
+ * @author yellow013
+ *
+ * @param <K>
+ * @param <V>
+ */
 @ThreadSafe
 public abstract class BaseGroup<K, V> implements Group<K, V> {
 

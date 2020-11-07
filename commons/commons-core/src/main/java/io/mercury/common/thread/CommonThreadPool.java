@@ -1,6 +1,5 @@
 package io.mercury.common.thread;
 
-import static io.mercury.common.number.RandomNumber.randomInt;
 import static io.mercury.common.util.StringUtil.isNullOrEmpty;
 
 import java.util.concurrent.BlockingQueue;
@@ -14,6 +13,7 @@ import java.util.function.BiConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.mercury.common.number.Randoms;
 import io.mercury.common.sys.CurrentRuntime;
 
 public final class CommonThreadPool extends ThreadPoolExecutor {
@@ -156,7 +156,8 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
 		}
 
 		public ThreadPoolExecutor build(String threadPoolName) {
-			threadPoolName = isNullOrEmpty(threadPoolName) ? "CommonThreadPool-" + randomInt() : threadPoolName;
+			threadPoolName = isNullOrEmpty(threadPoolName) ? "CommonThreadPool-" + Randoms.threadSafeRandomUnsignedInt()
+					: threadPoolName;
 			if (threadFactory != null && rejectedHandler != null) {
 				return new CommonThreadPool(threadPoolName, this, threadFactory, rejectedHandler, beforeHandler,
 						afterHandler);
