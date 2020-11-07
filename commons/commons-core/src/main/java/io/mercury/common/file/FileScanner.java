@@ -47,13 +47,13 @@ public final class FileScanner {
 		File[] listFiles = path.listFiles();
 		if (listFiles != null && listFiles.length != 0) {
 			for (File file : listFiles) {
-				if (file.isDirectory()) {
+				if (file.isDirectory())
 					// 如果文件是一个目录, 递归执行
 					depthFirst0(files, file, fileFilter);
-				} else if (fileFilter.test(file)) {
+				else if (fileFilter.test(file))
 					// 如果文件符合过滤器断言, 则加入Set
 					files.add(file);
-				} else
+				else
 					// 否则忽略此文件
 					continue;
 			}

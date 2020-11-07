@@ -63,10 +63,21 @@ public final class PropertiesReader {
 		}
 	}
 
+	/**
+	 * 
+	 * @param fileName
+	 * @param propName
+	 * @return
+	 */
 	private static String mergePropertiesKey(String fileName, String propName) {
 		return new StringBuilder(24).append(deleteSuffix(fileName)).append("-").append(propName).toString();
 	}
 
+	/**
+	 * 
+	 * @param fileName
+	 * @return
+	 */
 	private static String deleteSuffix(String fileName) {
 		if (fileName == null)
 			return "";
@@ -168,7 +179,6 @@ public final class PropertiesReader {
 	}
 
 	public static void main(String[] args) {
-
 		File file = new File("");
 		System.out.println(file.getPath());
 		System.out.println(file.getAbsolutePath());
