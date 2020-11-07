@@ -31,16 +31,16 @@ public class AbstractBlockingQueue {
 
 	private static final long READ_LOCATION_OFFSET;
 	private static final long WRITE_LOCATION_OFFSET;
-	private static final Unsafe unsafe;
+	private static final Unsafe Unsafe;
 
 	static {
 		try {
 			final Field field = Unsafe.class.getDeclaredField("theUnsafe");
 			field.setAccessible(true);
-			unsafe = (Unsafe) field.get(null);
-			READ_LOCATION_OFFSET = unsafe
+			Unsafe = (Unsafe) field.get(null);
+			READ_LOCATION_OFFSET = Unsafe
 					.objectFieldOffset(AbstractBlockingQueue.class.getDeclaredField("readLocation"));
-			WRITE_LOCATION_OFFSET = unsafe
+			WRITE_LOCATION_OFFSET = Unsafe
 					.objectFieldOffset(AbstractBlockingQueue.class.getDeclaredField("writeLocation"));
 		} catch (Exception e) {
 			throw new AssertionError(e);
@@ -92,7 +92,7 @@ public class AbstractBlockingQueue {
 		// to have a memory barrier as we will be doing that in the line below
 
 		// write back the next write location
-		unsafe.putOrderedInt(this, WRITE_LOCATION_OFFSET, nextWriteLocation);
+		Unsafe.putOrderedInt(this, WRITE_LOCATION_OFFSET, nextWriteLocation);
 	}
 
 	protected void setReadLocation(int nextReadLocation) {
@@ -104,7 +104,7 @@ public class AbstractBlockingQueue {
 
 		// the write memory barrier will occur here, as we are storing the
 		// nextReadLocation
-		unsafe.putOrderedInt(this, READ_LOCATION_OFFSET, nextReadLocation);
+		Unsafe.putOrderedInt(this, READ_LOCATION_OFFSET, nextReadLocation);
 	}
 
 	/**
