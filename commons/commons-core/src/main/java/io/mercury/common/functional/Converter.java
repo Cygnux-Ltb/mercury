@@ -4,6 +4,13 @@ import java.util.function.BiFunction;
 
 import javax.annotation.Nonnull;
 
+/**
+ * 
+ * @author yellow013
+ *
+ * @param <F>
+ * @param <T>
+ */
 @FunctionalInterface
 public interface Converter<F, T> extends BiFunction<F, T, T> {
 

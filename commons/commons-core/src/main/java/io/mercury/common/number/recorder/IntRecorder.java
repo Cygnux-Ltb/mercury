@@ -1,5 +1,7 @@
 package io.mercury.common.number.recorder;
 
+import javax.annotation.concurrent.NotThreadSafe;
+
 import org.eclipse.collections.api.map.primitive.MutableIntIntMap;
 import org.eclipse.collections.api.set.primitive.MutableIntSet;
 
@@ -7,6 +9,7 @@ import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.MutableMaps;
 import io.mercury.common.collections.MutableSets;
 
+@NotThreadSafe
 public final class IntRecorder {
 
 	private MutableIntIntMap intCounter;

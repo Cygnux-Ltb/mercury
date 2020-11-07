@@ -2,6 +2,12 @@ package io.mercury.common.functional;
 
 import javax.annotation.Nonnull;
 
+/**
+ * 
+ * @author yellow013
+ *
+ * @param <T>
+ */
 @FunctionalInterface
 public interface Processor<T> {
 

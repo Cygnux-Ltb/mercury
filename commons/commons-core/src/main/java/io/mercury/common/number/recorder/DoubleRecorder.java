@@ -1,5 +1,7 @@
 package io.mercury.common.number.recorder;
 
+import javax.annotation.concurrent.NotThreadSafe;
+
 import org.eclipse.collections.api.map.primitive.MutableDoubleIntMap;
 import org.eclipse.collections.api.set.primitive.MutableDoubleSet;
 
@@ -15,6 +17,8 @@ import io.mercury.common.collections.MutableSets;
  * @author yellow013
  * 
  */
+
+@NotThreadSafe
 public final class DoubleRecorder {
 
 	private MutableDoubleIntMap doubleCounter;
