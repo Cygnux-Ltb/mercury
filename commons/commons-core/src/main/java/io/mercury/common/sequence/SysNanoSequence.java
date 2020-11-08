@@ -1,10 +1,13 @@
 package io.mercury.common.sequence;
 
+import javax.annotation.concurrent.ThreadSafe;
+
 import org.slf4j.Logger;
 
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.log.LogConfigurator;
 
+@ThreadSafe
 public final class SysNanoSequence {
 
 	/**

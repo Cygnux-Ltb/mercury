@@ -1,4 +1,4 @@
-package io.mercury.common.collections.customize;
+package io.mercury.common.collections.keeper;
 
 import static io.mercury.common.collections.MutableMaps.newConcurrentHashMap;
 
@@ -11,16 +11,23 @@ import org.eclipse.collections.api.map.ConcurrentMutableMap;
 import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.collections.Capacity;
 
+/**
+ * 
+ * @author yellow013
+ *
+ * @param <K>
+ * @param <V>
+ */
 @ThreadSafe
-public abstract class BaseKeeper<K, V> implements Keeper<K, V> {
+public abstract class KeeperBaseImpl<K, V> implements Keeper<K, V> {
 
 	protected final ConcurrentMutableMap<K, V> savedMap;
 
-	protected BaseKeeper() {
+	protected KeeperBaseImpl() {
 		this(Capacity.L06_SIZE_64);
 	}
 
-	protected BaseKeeper(Capacity capacity) {
+	protected KeeperBaseImpl(Capacity capacity) {
 		this.savedMap = newConcurrentHashMap(capacity);
 	}
 

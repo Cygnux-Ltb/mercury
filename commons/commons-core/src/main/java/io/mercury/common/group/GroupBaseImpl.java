@@ -20,7 +20,7 @@ import io.mercury.common.collections.ImmutableLists;
  * @param <V>
  */
 @ThreadSafe
-public abstract class BaseGroup<K, V> implements Group<K, V> {
+public abstract class GroupBaseImpl<K, V> implements Group<K, V> {
 
 	/**
 	 * 
