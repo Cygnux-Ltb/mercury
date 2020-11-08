@@ -6,14 +6,14 @@ import java.io.IOException;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
-import io.mercury.common.collections.customize.BaseKeeper;
+import io.mercury.common.collections.keeper.KeeperBaseImpl;
 import io.mercury.common.util.Assertor;
 import io.mercury.persistence.chronicle.exception.ChronicleIOException;
 import net.openhft.chronicle.set.ChronicleSet;
 import net.openhft.chronicle.set.ChronicleSetBuilder;
 
 @ThreadSafe
-public class ChronicleSetKeeper<K> extends BaseKeeper<String, ChronicleSet<K>> {
+public class ChronicleSetKeeper<K> extends KeeperBaseImpl<String, ChronicleSet<K>> {
 
 	private ChronicleSetConfigurator<K> configurator;
 

@@ -8,14 +8,14 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
-import io.mercury.common.collections.customize.BaseKeeper;
+import io.mercury.common.collections.keeper.KeeperBaseImpl;
 import io.mercury.common.util.Assertor;
 import io.mercury.persistence.chronicle.exception.ChronicleIOException;
 import net.openhft.chronicle.map.ChronicleMap;
 import net.openhft.chronicle.map.ChronicleMapBuilder;
 
 @ThreadSafe
-public class ChronicleMapKeeper<K, V> extends BaseKeeper<String, ChronicleMap<K, V>> implements Closeable {
+public class ChronicleMapKeeper<K, V> extends KeeperBaseImpl<String, ChronicleMap<K, V>> implements Closeable {
 
 	private ChronicleMapConfigurator<K, V> configurator;
 
@@ -37,10 +37,9 @@ public class ChronicleMapKeeper<K, V> extends BaseKeeper<String, ChronicleMap<K,
 	@Override
 	protected ChronicleMap<K, V> createWithKey(String filename) throws ChronicleIOException {
 		// 构建器
-		ChronicleMapBuilder<K, V> builder = ChronicleMapBuilder
-				.of(configurator.keyClass(), configurator.valueClass()).putReturnsNull(configurator.putReturnsNull())
-				.removeReturnsNull(configurator.removeReturnsNull()).name(configurator.fullInfo())
-				.entries(configurator.entries());
+		ChronicleMapBuilder<K, V> builder = ChronicleMapBuilder.of(configurator.keyClass(), configurator.valueClass())
+				.putReturnsNull(configurator.putReturnsNull()).removeReturnsNull(configurator.removeReturnsNull())
+				.name(configurator.fullInfo()).entries(configurator.entries());
 		// 设置块大小
 		if (configurator.actualChunkSize() > 0)
 			builder.actualChunkSize(configurator.actualChunkSize());
