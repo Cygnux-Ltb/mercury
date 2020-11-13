@@ -13,18 +13,16 @@ import org.eclipse.collections.api.map.primitive.MutableIntBooleanMap;
 import org.eclipse.collections.api.map.primitive.MutableIntDoubleMap;
 import org.eclipse.collections.api.map.primitive.MutableIntIntMap;
 import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
-import org.eclipse.collections.impl.map.mutable.primitive.IntBooleanHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.IntDoubleHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.IntIntHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
 
-public final class MutableParams<K extends ParamKey> {
+import io.mercury.common.collections.MutableMaps;
 
-	private MutableIntBooleanMap booleanParams = new IntBooleanHashMap();
-	private MutableIntIntMap intParams = new IntIntHashMap();
-	private MutableIntDoubleMap doubleParams = new IntDoubleHashMap();
-	private MutableIntObjectMap<String> stringParams = new IntObjectHashMap<>();
-	private MutableIntObjectMap<Temporal> temporalParams = new IntObjectHashMap<>();
+public final class MutableParams<K extends ParamKey> implements Params<K> {
+
+	private MutableIntBooleanMap booleanParams = MutableMaps.newIntBooleanHashMap();
+	private MutableIntIntMap intParams = MutableMaps.newIntIntHashMap();
+	private MutableIntDoubleMap doubleParams = MutableMaps.newIntDoubleHashMap();
+	private MutableIntObjectMap<String> stringParams = MutableMaps.newIntObjectHashMap();
+	private MutableIntObjectMap<Temporal> temporalParams = MutableMaps.newIntObjectHashMap();
 
 	public MutableParams() {
 		this(() -> null);
@@ -68,7 +66,7 @@ public final class MutableParams<K extends ParamKey> {
 					putParam(key, (LocalTime) value);
 					break;
 				default:
-					throw new IllegalArgumentException("param name -> " + key.keyName() + " illegal argument");
+					throw new IllegalArgumentException("param name -> " + key.paramName() + " illegal argument");
 				}
 			});
 		}
@@ -79,6 +77,7 @@ public final class MutableParams<K extends ParamKey> {
 	 * @param key
 	 * @return
 	 */
+	@Override
 	public boolean getBoolean(K key) {
 		if (key.type() != ParamType.BOOLEAN)
 			throw new IllegalArgumentException(
@@ -91,6 +90,7 @@ public final class MutableParams<K extends ParamKey> {
 	 * @param key
 	 * @return
 	 */
+	@Override
 	public int getInt(K key) {
 		if (key.type() != ParamType.INT)
 			throw new IllegalArgumentException("Key -> " + key + " paramType is not INT, paramType()==" + key.type());
@@ -102,6 +102,7 @@ public final class MutableParams<K extends ParamKey> {
 	 * @param key
 	 * @return
 	 */
+	@Override
 	public double getDouble(K key) {
 		if (key.type() != ParamType.DOUBLE)
 			throw new IllegalArgumentException(
@@ -114,6 +115,7 @@ public final class MutableParams<K extends ParamKey> {
 	 * @param key
 	 * @return
 	 */
+	@Override
 	public String getString(K key) {
 		if (key.type() != ParamType.STRING)
 			throw new IllegalArgumentException(

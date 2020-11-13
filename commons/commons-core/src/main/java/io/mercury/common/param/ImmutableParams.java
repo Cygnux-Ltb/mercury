@@ -16,9 +16,9 @@ import org.slf4j.Logger;
 
 import io.mercury.common.collections.MutableMaps;
 
-public final class ImmutableParams<K extends ParamKey> {
+public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 
-	private final ImmutableMap<K, String> savedParams;
+	private final ImmutableMap<K, String> params;
 
 	/**
 	 * 根据传入的Key获取Map中的相应字段
@@ -28,16 +28,17 @@ public final class ImmutableParams<K extends ParamKey> {
 	 * @throws NullPointerException
 	 * @throws IllegalArgumentException
 	 */
-	public ImmutableParams(@Nonnull K[] keys, @Nonnull Map<?, ?> map)
+	@SafeVarargs
+	public ImmutableParams(@Nonnull Map<?, ?> map, @Nonnull K... keys)
 			throws NullPointerException, IllegalArgumentException {
 		requiredLength(keys, 1, "keys");
 		nonEmpty(map, "map");
-		MutableMap<K, String> tempMap = MutableMaps.newUnifiedMap();
+		MutableMap<K, String> mutableMap = MutableMaps.newUnifiedMap();
 		for (K key : keys) {
-			if (map.containsKey(key.keyName()))
-				tempMap.put(key, map.get(key.keyName()).toString());
+			if (map.containsKey(key.paramName()))
+				mutableMap.put(key, map.get(key.paramName()).toString());
 		}
-		this.savedParams = tempMap.toImmutable();
+		this.params = mutableMap.toImmutable();
 	}
 
 	/**
@@ -48,16 +49,17 @@ public final class ImmutableParams<K extends ParamKey> {
 	 * @throws NullPointerException
 	 * @throws IllegalArgumentException
 	 */
-	public ImmutableParams(@Nonnull K[] keys, @Nonnull Properties prop)
+	@SafeVarargs
+	public ImmutableParams(@Nonnull Properties prop, @Nonnull K... keys)
 			throws NullPointerException, IllegalArgumentException {
 		requiredLength(keys, 1, "keys");
 		nonNull(prop, "prop");
-		MutableMap<K, String> tempMap = MutableMaps.newUnifiedMap();
+		MutableMap<K, String> mutableMap = MutableMaps.newUnifiedMap();
 		for (K key : keys) {
-			if (prop.containsKey(key.keyName()))
-				tempMap.put(key, prop.get(key.keyName()).toString());
+			if (prop.containsKey(key.paramName()))
+				mutableMap.put(key, prop.get(key.paramName()).toString());
 		}
-		this.savedParams = tempMap.toImmutable();
+		this.params = mutableMap.toImmutable();
 	}
 
 	/**
@@ -67,10 +69,11 @@ public final class ImmutableParams<K extends ParamKey> {
 	 * @throws IllegalArgumentException
 	 * @throws NullPointerException
 	 */
+	@Override
 	public boolean getBoolean(K key) throws IllegalArgumentException, NullPointerException {
 		if (key.type() != ParamType.BOOLEAN)
-			throw new IllegalArgumentException("Key -> " + key + " ParamType is not BOOLEAN. paramType==" + key.type());
-		return Boolean.parseBoolean(nonNull(savedParams.get(key), key.keyName()));
+			throw new IllegalArgumentException("Key -> " + key + " ParamType is not BOOLEAN, paramType==" + key.type());
+		return Boolean.parseBoolean(nonNull(params.get(key), key.paramName()));
 	}
 
 	/**
@@ -81,10 +84,11 @@ public final class ImmutableParams<K extends ParamKey> {
 	 * @throws NullPointerException
 	 * @throws NumberFormatException
 	 */
+	@Override
 	public int getInt(K key) throws IllegalArgumentException, NullPointerException, NumberFormatException {
 		if (key.type() != ParamType.INT)
 			throw new IllegalArgumentException("Key -> " + key + " ParamType is not [INT]. paramType==" + key.type());
-		return Integer.parseInt(nonNull(savedParams.get(key), key.keyName()));
+		return Integer.parseInt(nonNull(params.get(key), key.paramName()));
 	}
 
 	/**
@@ -95,11 +99,12 @@ public final class ImmutableParams<K extends ParamKey> {
 	 * @throws NullPointerException
 	 * @throws NumberFormatException
 	 */
+	@Override
 	public double getDouble(K key) throws IllegalArgumentException, NullPointerException, NumberFormatException {
 		if (key.type() != ParamType.DOUBLE)
 			throw new IllegalArgumentException(
 					"Key -> " + key + " ParamType is not [DOUBLE], paramType==" + key.type());
-		return Double.parseDouble(nonNull(savedParams.get(key), key.keyName()));
+		return Double.parseDouble(nonNull(params.get(key), key.paramName()));
 	}
 
 	/**
@@ -109,22 +114,25 @@ public final class ImmutableParams<K extends ParamKey> {
 	 * @throws IllegalArgumentException
 	 * @throws NullPointerException
 	 */
+	@Override
 	public String getString(K key) throws IllegalArgumentException, NullPointerException {
 		if (key.type() != ParamType.STRING)
 			throw new IllegalArgumentException(
 					"Key -> " + key + " ParamType is not [STRING], paramType==" + key.type());
-		return nonNull(savedParams.get(key), key.keyName());
+		return nonNull(params.get(key), key.paramName());
 	}
 
-	public void printParam() {
-		printParam(null);
+	public void printParams() {
+		printParams(null);
 	}
 
-	public void printParam(Logger log) {
+	public void printParams(Logger log) {
 		if (log == null) {
-			savedParams.forEachKeyValue((key, value) -> out.println("key -> " + key.keyName() + ", value -> " + value));
+			params.forEachKeyValue((key, value) -> out
+					.println("Param id==" + key.id() + ", paramName -> " + key.paramName() + ", value -> " + value));
 		} else {
-			savedParams.forEachKeyValue((key, value) -> log.info("key -> {}, value -> {}", key.keyName(), value));
+			params.forEachKeyValue((key, value) -> log.info("Param id=={}, paramName -> {}, value -> {}", key.id(),
+					key.paramName(), value));
 		}
 	}
 

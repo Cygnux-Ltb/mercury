@@ -8,65 +8,65 @@ public final class ArrayUtil {
 
 	/**
 	 * 
-	 * @param array
+	 * @param booleans
 	 * @return
 	 */
-	public static boolean isNullOrEmpty(boolean[] array) {
-		return array == null ? true : array.length == 0 ? true : false;
+	public static boolean isNullOrEmpty(boolean[] booleans) {
+		return booleans == null ? true : booleans.length == 0 ? true : false;
 	}
 
 	/**
 	 * 
-	 * @param array
+	 * @param bytes
 	 * @return
 	 */
-	public static boolean isNullOrEmpty(byte[] array) {
-		return array == null ? true : array.length == 0 ? true : false;
+	public static boolean isNullOrEmpty(byte[] bytes) {
+		return bytes == null ? true : bytes.length == 0 ? true : false;
 	}
 
 	/**
 	 * 
-	 * @param array
+	 * @param chars
 	 * @return
 	 */
-	public static boolean isNullOrEmpty(char[] array) {
-		return array == null ? true : array.length == 0 ? true : false;
+	public static boolean isNullOrEmpty(char[] chars) {
+		return chars == null ? true : chars.length == 0 ? true : false;
 	}
 
 	/**
 	 * 
-	 * @param array
+	 * @param ints
 	 * @return
 	 */
-	public static boolean isNullOrEmpty(int[] array) {
-		return array == null ? true : array.length == 0 ? true : false;
+	public static boolean isNullOrEmpty(int[] ints) {
+		return ints == null ? true : ints.length == 0 ? true : false;
 	}
 
 	/**
 	 * 
-	 * @param array
+	 * @param longs
 	 * @return
 	 */
-	public static boolean isNullOrEmpty(long[] array) {
-		return array == null ? true : array.length == 0 ? true : false;
+	public static boolean isNullOrEmpty(long[] longs) {
+		return longs == null ? true : longs.length == 0 ? true : false;
 	}
 
 	/**
 	 * 
-	 * @param array
+	 * @param floats
 	 * @return
 	 */
-	public static boolean isNullOrEmpty(float[] array) {
-		return array == null ? true : array.length == 0 ? true : false;
+	public static boolean isNullOrEmpty(float[] floats) {
+		return floats == null ? true : floats.length == 0 ? true : false;
 	}
 
 	/**
 	 * 
-	 * @param array
+	 * @param doubles
 	 * @return
 	 */
-	public static boolean isNullOrEmpty(double[] array) {
-		return array == null ? true : array.length == 0 ? true : false;
+	public static boolean isNullOrEmpty(double[] doubles) {
+		return doubles == null ? true : doubles.length == 0 ? true : false;
 	}
 
 	/**
