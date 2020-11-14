@@ -24,6 +24,7 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 
 @RunWith(Parameterized.class)
 public class SequencerTest {
+
 	private static final int BUFFER_SIZE = 16;
 	private final ExecutorService executor = Executors.newSingleThreadExecutor(DaemonThreadFactory.INSTANCE);
 
@@ -88,16 +89,13 @@ public class SequencerTest {
 		final long expectedFullSequence = Sequencer.INITIAL_CURSOR_VALUE + sequencer.getBufferSize();
 		assertThat(sequencer.getCursor(), is(expectedFullSequence));
 
-		executor.submit(new Runnable() {
-			@Override
-			public void run() {
-				waitingLatch.countDown();
+		executor.submit(() -> {
+			waitingLatch.countDown();
 
-				long next = sequencer.next();
-				sequencer.publish(next);
+			long next = sequencer.next();
+			sequencer.publish(next);
 
-				doneLatch.countDown();
-			}
+			doneLatch.countDown();
 		});
 
 		waitingLatch.await();

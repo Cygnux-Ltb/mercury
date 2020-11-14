@@ -24,6 +24,7 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DelayedEventHandler implements EventHandler<TestEvent>, LifecycleAware {
+	
 	private final AtomicBoolean readyToProcessEvent = new AtomicBoolean(false);
 	private volatile boolean stopped = false;
 	private final CyclicBarrier barrier;

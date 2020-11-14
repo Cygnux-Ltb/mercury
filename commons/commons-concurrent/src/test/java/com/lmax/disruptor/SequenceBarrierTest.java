@@ -29,6 +29,7 @@ import com.lmax.disruptor.support.StubEvent;
 import com.lmax.disruptor.util.Util;
 
 public final class SequenceBarrierTest {
+
 	private final RingBuffer<StubEvent> ringBuffer = createMultiProducer(StubEvent.EVENT_FACTORY, 64);
 
 	public SequenceBarrierTest() {
@@ -53,6 +54,7 @@ public final class SequenceBarrierTest {
 
 	@Test
 	public void shouldWaitForWorkCompleteWhereAllWorkersAreBlockedOnRingBuffer() throws Exception {
+
 		long expectedNumberMessages = 10;
 		fillRingBuffer(expectedNumberMessages);
 
@@ -64,16 +66,14 @@ public final class SequenceBarrierTest {
 
 		final SequenceBarrier sequenceBarrier = ringBuffer.newBarrier(Util.getSequencesFor(workers));
 
-		Runnable runnable = new Runnable() {
-			public void run() {
-				long sequence = ringBuffer.next();
-				StubEvent event = ringBuffer.get(sequence);
-				event.setValue((int) sequence);
-				ringBuffer.publish(sequence);
+		Runnable runnable = () -> {
+			long sequence = ringBuffer.next();
+			StubEvent event = ringBuffer.get(sequence);
+			event.setValue((int) sequence);
+			ringBuffer.publish(sequence);
 
-				for (DummyEventProcessor stubWorker : workers) {
-					stubWorker.setSequence(sequence);
-				}
+			for (DummyEventProcessor stubWorker : workers) {
+				stubWorker.setSequence(sequence);
 			}
 		};
 
@@ -97,15 +97,13 @@ public final class SequenceBarrierTest {
 		final SequenceBarrier sequenceBarrier = ringBuffer.newBarrier(sequence1, sequence2, sequence3);
 
 		final boolean[] alerted = { false };
-		Thread t = new Thread(new Runnable() {
-			public void run() {
-				try {
-					sequenceBarrier.waitFor(expectedNumberMessages - 1);
-				} catch (AlertException e) {
-					alerted[0] = true;
-				} catch (Exception e) {
-					// don't care
-				}
+		Thread t = new Thread(() -> {
+			try {
+				sequenceBarrier.waitFor(expectedNumberMessages - 1);
+			} catch (AlertException e) {
+				alerted[0] = true;
+			} catch (Exception e) {
+				// don't care
 			}
 		});
 
@@ -130,11 +128,9 @@ public final class SequenceBarrierTest {
 
 		final SequenceBarrier sequenceBarrier = ringBuffer.newBarrier(Util.getSequencesFor(eventProcessors));
 
-		Runnable runnable = new Runnable() {
-			public void run() {
-				for (DummyEventProcessor stubWorker : eventProcessors) {
-					stubWorker.setSequence(stubWorker.getSequence().get() + 1L);
-				}
+		Runnable runnable = () -> {
+			for (DummyEventProcessor stubWorker : eventProcessors) {
+				stubWorker.setSequence(stubWorker.getSequence().get() + 1L);
 			}
 		};
 

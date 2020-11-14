@@ -27,12 +27,7 @@ public class MultiProducerWithTranslator {
 		@SuppressWarnings("unused")
 		String string;
 
-		private static final EventFactory<ObjectBox> FACTORY = new EventFactory<ObjectBox>() {
-			@Override
-			public ObjectBox newInstance() {
-				return new ObjectBox();
-			}
-		};
+		private static final EventFactory<ObjectBox> FACTORY = ObjectBox::new;
 
 		public void setMessage(IMessage arg0) {
 			message = arg0;

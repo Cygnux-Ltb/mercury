@@ -8,6 +8,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 final class RingBufferEventMatcher extends TypeSafeMatcher<RingBuffer<Object[]>> {
+	
 	private final Matcher<?>[] expectedValueMatchers;
 
 	private RingBufferEventMatcher(final Matcher<?>[] expectedValueMatchers) {

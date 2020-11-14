@@ -25,4 +25,5 @@ public class YieldingWaitStrategyTest {
 	public void shouldWaitForValue() throws Exception {
 		assertWaitForWithDelayOf(50, new YieldingWaitStrategy());
 	}
+	
 }

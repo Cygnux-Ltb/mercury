@@ -14,6 +14,7 @@ public class WaitForProcessing {
 	}
 
 	public static void main(String[] args) throws InterruptedException {
+		
 		final Disruptor<LongEvent> disruptor = new Disruptor<>(LongEvent.FACTORY, 1024, DaemonThreadFactory.INSTANCE);
 
 		Consumer firstConsumer = new Consumer();

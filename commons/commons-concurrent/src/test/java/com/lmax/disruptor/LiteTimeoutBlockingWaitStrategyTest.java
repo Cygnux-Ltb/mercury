@@ -12,6 +12,7 @@ import com.lmax.disruptor.support.DummySequenceBarrier;
 public class LiteTimeoutBlockingWaitStrategyTest {
 	@Test
 	public void shouldTimeoutWaitFor() throws Exception {
+		
 		final SequenceBarrier sequenceBarrier = new DummySequenceBarrier();
 
 		long theTimeout = 500;

@@ -2,7 +2,7 @@ package io.mercury.transport.zmq.configurator;
 
 import io.mercury.transport.core.configurator.TransportConfigurator;
 
-public class ZmqConfigurator implements TransportConfigurator {
+public final class ZmqConfigurator implements TransportConfigurator {
 
 	private String host;
 	private int port;

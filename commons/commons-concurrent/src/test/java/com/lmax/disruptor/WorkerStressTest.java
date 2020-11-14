@@ -18,6 +18,7 @@ import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 
 public class WorkerStressTest {
+
 	private final ExecutorService executor = Executors.newCachedThreadPool();
 
 	@Test
@@ -140,11 +141,9 @@ public class WorkerStressTest {
 		@SuppressWarnings("unused")
 		public String s;
 
-		public static final EventFactory<TestEvent> FACTORY = new EventFactory<WorkerStressTest.TestEvent>() {
-			@Override
-			public TestEvent newInstance() {
-				return new TestEvent();
-			}
+		public static final EventFactory<TestEvent> FACTORY = () -> {
+			return new TestEvent();
 		};
+		
 	}
 }

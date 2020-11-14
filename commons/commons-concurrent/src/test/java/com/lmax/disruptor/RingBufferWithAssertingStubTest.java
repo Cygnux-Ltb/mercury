@@ -44,6 +44,7 @@ public class RingBufferWithAssertingStubTest {
 	}
 
 	private static final class AssertingSequencer implements Sequencer {
+		
 		private final int size;
 		private long lastBatchSize = -1;
 		private long lastValue = -1;

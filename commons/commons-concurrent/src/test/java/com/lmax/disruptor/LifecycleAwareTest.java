@@ -26,6 +26,7 @@ import org.junit.Test;
 import com.lmax.disruptor.support.StubEvent;
 
 public final class LifecycleAwareTest {
+	
 	private final CountDownLatch startLatch = new CountDownLatch(1);
 	private final CountDownLatch shutdownLatch = new CountDownLatch(1);
 

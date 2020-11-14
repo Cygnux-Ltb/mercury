@@ -13,6 +13,7 @@ public class NamedEventHandler<T> implements EventHandler<T>, LifecycleAware {
 
 	@Override
 	public void onEvent(final T event, final long sequence, final boolean endOfBatch) throws Exception {
+
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import io.mercury.common.functional.ShutdownEvent;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.core.configurator.TransportConfigurator;
 
-public class NettyConfigurator implements TransportConfigurator {
+public final class NettyConfigurator implements TransportConfigurator {
 
 	private final String host;
 	private final int port;

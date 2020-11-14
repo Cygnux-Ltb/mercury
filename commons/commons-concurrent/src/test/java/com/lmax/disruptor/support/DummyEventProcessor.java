@@ -7,6 +7,7 @@ import com.lmax.disruptor.SingleProducerSequencer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DummyEventProcessor implements EventProcessor {
+	
 	private final Sequence sequence;
 	private final AtomicBoolean running = new AtomicBoolean(false);
 
@@ -43,4 +44,5 @@ public class DummyEventProcessor implements EventProcessor {
 			throw new IllegalStateException("Already running");
 		}
 	}
+	
 }

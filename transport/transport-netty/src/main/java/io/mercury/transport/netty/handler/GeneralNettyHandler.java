@@ -4,8 +4,6 @@ import org.slf4j.Logger;
 
 import io.mercury.common.log.CommonLoggerFactory;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -59,12 +57,9 @@ public abstract class GeneralNettyHandler extends ChannelInboundHandlerAdapter {
 	protected void sendBytes(ChannelHandlerContext ctx, byte[] bytes) {
 		ByteBuf byteBuf = ctx.alloc().buffer(bytes.length);
 		byteBuf.writeBytes(bytes);
-		ctx.writeAndFlush(byteBuf.retain()).addListener(new ChannelFutureListener() {
-			@Override
-			public void operationComplete(ChannelFuture future) throws Exception {
-				byteBuf.clear();
-				byteBuf.release();
-			}
+		ctx.writeAndFlush(byteBuf.retain()).addListener(future -> {
+			byteBuf.clear();
+			byteBuf.release();
 		});
 	}
 

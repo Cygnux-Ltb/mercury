@@ -6,6 +6,7 @@ import static io.mercury.common.util.Assertor.withinRange;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.net.ssl.SSLContext;
 
@@ -101,7 +102,7 @@ public final class RmqConnection implements TransportConfigurator {
 	 * @return
 	 */
 	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
-			@Nonnull String password, String virtualHost) {
+			@Nonnull String password, @CheckForNull String virtualHost) {
 		return new Builder(host, port, username, password, virtualHost);
 	}
 

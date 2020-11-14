@@ -19,6 +19,7 @@ import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.support.TestEvent;
 
 public class EvilEqualsEventHandler implements EventHandler<TestEvent> {
+	
 	@Override
 	public void onEvent(final TestEvent entry, final long sequence, boolean endOfBatch) throws Exception {
 	}

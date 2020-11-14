@@ -25,6 +25,7 @@ import org.junit.Test;
 import com.lmax.disruptor.support.StubEvent;
 
 public class SequenceReportingCallbackTest {
+	
 	private final CountDownLatch callbackLatch = new CountDownLatch(1);
 	private final CountDownLatch onEndOfBatchLatch = new CountDownLatch(1);
 
@@ -72,4 +73,5 @@ public class SequenceReportingCallbackTest {
 			}
 		}
 	}
+	
 }

@@ -6,8 +6,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 
 public class SingleProducerSequencerTest {
+	
 	@Test
 	public void shouldNotUpdateCursorDuringHasAvailableCapacity() throws Exception {
+		
 		SingleProducerSequencer sequencer = new SingleProducerSequencer(16, new BusySpinWaitStrategy());
 
 		for (int i = 0; i < 32; i++) {

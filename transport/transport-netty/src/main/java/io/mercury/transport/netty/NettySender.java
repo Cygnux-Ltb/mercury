@@ -7,13 +7,12 @@ import io.mercury.common.sequence.SysNanoSequence;
 import io.mercury.transport.core.api.Sender;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 
 public class NettySender implements Sender<byte[]> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(NettySender.class);
-	
+
 	private ChannelHandlerContext context;
 
 	// private ByteBuf byteBuf;
@@ -52,14 +51,12 @@ public class NettySender implements Sender<byte[]> {
 		ByteBuf byteBuf = context.alloc().buffer(msg.length);
 		byteBuf.writeBytes(msg);
 		ChannelFuture writeAndFlush = context.writeAndFlush(byteBuf.retain());
-		writeAndFlush.addListener(new ChannelFutureListener() {
-			@Override
-			public void operationComplete(ChannelFuture future) throws Exception {
-				log.debug("{} call sender send operation complete -> data length : {}", SysNanoSequence.micro(),
-						byteBuf.writerIndex());
-				byteBuf.clear();
-				byteBuf.release();
-			}
+		writeAndFlush.addListener(future -> {
+			log.debug("{} call sender send operation complete -> data length : {}", SysNanoSequence.micro(),
+					byteBuf.writerIndex());
+			byteBuf.clear();
+			byteBuf.release();
+
 		});
 	}
 

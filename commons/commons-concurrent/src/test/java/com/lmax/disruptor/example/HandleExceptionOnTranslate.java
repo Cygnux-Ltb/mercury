@@ -22,6 +22,7 @@ public class HandleExceptionOnTranslate {
 	}
 
 	public static void main(String[] args) throws InterruptedException {
+		
 		Disruptor<LongEvent> disruptor = new Disruptor<LongEvent>(LongEvent.FACTORY, 1024,
 				DaemonThreadFactory.INSTANCE);
 

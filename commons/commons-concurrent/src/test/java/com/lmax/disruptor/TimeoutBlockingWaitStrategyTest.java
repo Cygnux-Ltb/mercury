@@ -10,6 +10,7 @@ import org.junit.Test;
 import com.lmax.disruptor.support.DummySequenceBarrier;
 
 public class TimeoutBlockingWaitStrategyTest {
+	
 	@Test
 	public void shouldTimeoutWaitFor() throws Exception {
 		final SequenceBarrier sequenceBarrier = new DummySequenceBarrier();
@@ -33,4 +34,5 @@ public class TimeoutBlockingWaitStrategyTest {
 
 		assertTrue(timeWaiting >= theTimeout);
 	}
+	
 }

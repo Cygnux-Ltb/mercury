@@ -24,6 +24,7 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.SequenceBarrier;
 
 public final class TestWaiter implements Callable<List<StubEvent>> {
+	
 	private final long toWaitForSequence;
 	private final long initialSequence;
 	private final CyclicBarrier cyclicBarrier;
@@ -41,6 +42,7 @@ public final class TestWaiter implements Callable<List<StubEvent>> {
 
 	@Override
 	public List<StubEvent> call() throws Exception {
+		
 		cyclicBarrier.await();
 		sequenceBarrier.waitFor(toWaitForSequence);
 
@@ -50,5 +52,6 @@ public final class TestWaiter implements Callable<List<StubEvent>> {
 		}
 
 		return messages;
+		
 	}
 }

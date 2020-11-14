@@ -6,6 +6,7 @@ import com.lmax.disruptor.support.TestEvent;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TestWorkHandler implements WorkHandler<TestEvent> {
+	
 	private final AtomicBoolean readyToProcessEvent = new AtomicBoolean(false);
 	private volatile boolean stopped = false;
 
@@ -28,4 +29,5 @@ public class TestWorkHandler implements WorkHandler<TestEvent> {
 			Thread.yield();
 		}
 	}
+	
 }

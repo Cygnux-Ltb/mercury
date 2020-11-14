@@ -23,9 +23,6 @@ public final class TestEvent {
 		return "Test Event";
 	}
 
-	public static final EventFactory<TestEvent> EVENT_FACTORY = new EventFactory<TestEvent>() {
-		public TestEvent newInstance() {
-			return new TestEvent();
-		}
-	};
+	public static final EventFactory<TestEvent> EVENT_FACTORY = TestEvent::new;
+
 }

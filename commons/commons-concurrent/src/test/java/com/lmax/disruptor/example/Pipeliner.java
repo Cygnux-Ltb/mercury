@@ -45,6 +45,7 @@ public class Pipeliner {
 	}
 
 	private static class JoiningHandler implements EventHandler<PipelinerEvent> {
+
 		private long lastEvent = -1;
 
 		@Override
@@ -52,22 +53,17 @@ public class Pipeliner {
 			if (event.input != lastEvent + 1 || event.result == null) {
 				System.out.println("Error: " + event);
 			}
-
 			lastEvent = event.input;
 			event.result = null;
 		}
 	}
 
 	private static class PipelinerEvent {
-		long input;
-		Object result;
 
-		private static final EventFactory<PipelinerEvent> FACTORY = new EventFactory<PipelinerEvent>() {
-			@Override
-			public PipelinerEvent newInstance() {
-				return new PipelinerEvent();
-			}
-		};
+		private long input;
+		private Object result;
+
+		private static final EventFactory<PipelinerEvent> FACTORY = PipelinerEvent::new;
 
 		@Override
 		public String toString() {

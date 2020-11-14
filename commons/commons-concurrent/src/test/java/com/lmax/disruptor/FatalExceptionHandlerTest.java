@@ -23,6 +23,7 @@ import com.lmax.disruptor.support.TestEvent;
 public final class FatalExceptionHandlerTest {
 	@Test
 	public void shouldHandleFatalException() {
+		
 		final Exception causeException = new Exception();
 		final TestEvent event = new TestEvent();
 

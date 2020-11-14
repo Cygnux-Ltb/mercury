@@ -9,6 +9,7 @@ import com.lmax.disruptor.RingBuffer;
  * to achieve Disruptor's batching. this speeds up the polling feature
  */
 public class PullWithBatchedPoller {
+	
 	public static void main(String[] args) throws Exception {
 		int batchSize = 40;
 		RingBuffer<BatchedPoller.DataEvent<Object>> ringBuffer = RingBuffer
@@ -23,6 +24,7 @@ public class PullWithBatchedPoller {
 			// Process value.
 		}
 	}
+	
 }
 
 class BatchedPoller<T> {

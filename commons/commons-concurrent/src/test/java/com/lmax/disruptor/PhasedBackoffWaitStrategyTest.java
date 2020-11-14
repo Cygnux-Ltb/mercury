@@ -44,4 +44,5 @@ public class PhasedBackoffWaitStrategyTest {
 		assertWaitForWithDelayOf(10, PhasedBackoffWaitStrategy.withLock(1, 1, MILLISECONDS));
 		assertWaitForWithDelayOf(10, PhasedBackoffWaitStrategy.withSleep(1, 1, MILLISECONDS));
 	}
+	
 }

@@ -172,15 +172,14 @@ public final class BatchEventProcessorTest {
 
 	@Test
 	public void shouldAlwaysHalt() throws InterruptedException {
+
 		WaitStrategy waitStrategy = new BusySpinWaitStrategy();
 		final SingleProducerSequencer sequencer = new SingleProducerSequencer(8, waitStrategy);
 		final ProcessingSequenceBarrier barrier = new ProcessingSequenceBarrier(sequencer, waitStrategy,
 				new Sequence(-1), new Sequence[0]);
-		DataProvider<Object> dp = new DataProvider<Object>() {
-			@Override
-			public Object get(long sequence) {
-				return null;
-			}
+
+		DataProvider<Object> dp = (long sequence) -> {
+			return null;
 		};
 
 		final LatchLifeCycleHandler h1 = new LatchLifeCycleHandler();
@@ -218,6 +217,7 @@ public final class BatchEventProcessorTest {
 	}
 
 	private static class LatchLifeCycleHandler implements EventHandler<Object>, LifecycleAware {
+
 		private final CountDownLatch startLatch = new CountDownLatch(1);
 		private final CountDownLatch stopLatch = new CountDownLatch(1);
 

@@ -45,4 +45,5 @@ public class StubPublisher implements Runnable {
 	public void halt() {
 		running = false;
 	}
+	
 }

@@ -35,6 +35,7 @@ import com.lmax.disruptor.support.DummySequenceBarrier;
 import com.lmax.disruptor.support.TestEvent;
 
 public class ConsumerRepositoryTest {
+	
 	private ConsumerRepository<TestEvent> consumerRepository;
 	private EventProcessor eventProcessor1;
 	private EventProcessor eventProcessor2;
@@ -62,7 +63,6 @@ public class ConsumerRepositoryTest {
 	@Test
 	public void shouldGetBarrierByHandler() throws Exception {
 		consumerRepository.add(eventProcessor1, handler1, barrier1);
-
 		assertThat(consumerRepository.getBarrierFor(handler1), sameInstance(barrier1));
 	}
 
@@ -75,7 +75,6 @@ public class ConsumerRepositoryTest {
 	public void shouldGetLastEventProcessorsInChain() throws Exception {
 		consumerRepository.add(eventProcessor1, handler1, barrier1);
 		consumerRepository.add(eventProcessor2, handler2, barrier2);
-
 		consumerRepository.unMarkEventProcessorsAsEndOfChain(eventProcessor2.getSequence());
 
 		final Sequence[] lastEventProcessorsInChain = consumerRepository.getLastSequenceInChain(true);
@@ -86,7 +85,6 @@ public class ConsumerRepositoryTest {
 	@Test
 	public void shouldRetrieveEventProcessorForHandler() throws Exception {
 		consumerRepository.add(eventProcessor1, handler1, barrier1);
-
 		assertThat(consumerRepository.getEventProcessorFor(handler1), sameInstance(eventProcessor1));
 	}
 

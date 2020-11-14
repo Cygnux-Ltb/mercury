@@ -41,6 +41,7 @@ import com.lmax.disruptor.support.TestWaiter;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 
 public class RingBufferTest {
+	
 	private final ExecutorService executor = Executors.newSingleThreadExecutor(DaemonThreadFactory.INSTANCE);
 	private final RingBuffer<StubEvent> ringBuffer = RingBuffer.createMultiProducer(StubEvent.EVENT_FACTORY, 32);
 	private final SequenceBarrier sequenceBarrier = ringBuffer.newBarrier();
@@ -247,6 +248,7 @@ public class RingBufferTest {
 	@SuppressWarnings("unchecked")
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldNotPublishEventsIfBatchIsLargerThanRingBuffer() throws Exception {
+		
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		final EventTranslator<Object[]> eventTranslator = new NoArgEventTranslator();
 		final EventTranslator<Object[]>[] translators = new EventTranslator[] { eventTranslator, eventTranslator,
@@ -262,6 +264,7 @@ public class RingBufferTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldPublishEventsWithBatchSizeOfOne() throws Exception {
+		
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		final EventTranslator<Object[]> eventTranslator = new NoArgEventTranslator();
 		final EventTranslator<Object[]>[] translators = new EventTranslator[] { eventTranslator, eventTranslator,
@@ -277,6 +280,7 @@ public class RingBufferTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldPublishEventsWithinBatch() throws Exception {
+		
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		final EventTranslator<Object[]> eventTranslator = new NoArgEventTranslator();
 		final EventTranslator<Object[]>[] translators = new EventTranslator[] { eventTranslator, eventTranslator,

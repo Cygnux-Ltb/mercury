@@ -5,6 +5,7 @@ import com.lmax.disruptor.SequenceReportingEventHandler;
 import com.lmax.disruptor.support.LongEvent;
 
 public class EarlyReleaseHandler implements SequenceReportingEventHandler<LongEvent> {
+	
 	private Sequence sequenceCallback;
 	private int batchRemaining = 20;
 
@@ -15,6 +16,7 @@ public class EarlyReleaseHandler implements SequenceReportingEventHandler<LongEv
 
 	@Override
 	public void onEvent(LongEvent event, long sequence, boolean endOfBatch) throws Exception {
+		
 		processEvent(event);
 
 		boolean logicalChunkOfWorkComplete = isLogicalChunkOfWorkComplete();
@@ -23,6 +25,7 @@ public class EarlyReleaseHandler implements SequenceReportingEventHandler<LongEv
 		}
 
 		batchRemaining = logicalChunkOfWorkComplete || endOfBatch ? 20 : batchRemaining;
+		
 	}
 
 	private boolean isLogicalChunkOfWorkComplete() {

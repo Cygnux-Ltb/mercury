@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class StubThreadFactory implements ThreadFactory {
+	
 	private final DaemonThreadFactory threadFactory = DaemonThreadFactory.INSTANCE;
 	private final Collection<Thread> threads = new CopyOnWriteArrayList<Thread>();
 	private final AtomicBoolean ignoreExecutions = new AtomicBoolean(false);
@@ -73,4 +74,5 @@ public final class StubThreadFactory implements ThreadFactory {
 		public void run() {
 		}
 	}
+	
 }

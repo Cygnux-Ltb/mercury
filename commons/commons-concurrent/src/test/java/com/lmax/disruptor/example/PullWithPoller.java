@@ -46,6 +46,7 @@ public class PullWithPoller {
 	}
 
 	private static Object getNextValue(EventPoller<DataEvent<Object>> poller) throws Exception {
+		
 		final Object[] out = new Object[1];
 
 		poller.poll(new EventPoller.Handler<DataEvent<Object>>() {

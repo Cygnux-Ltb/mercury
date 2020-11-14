@@ -1,5 +1,7 @@
 package io.mercury.transport.rabbitmq.configurator;
 
+import javax.annotation.Nonnull;
+
 /**
  * 
  * @author yellow013
@@ -12,7 +14,7 @@ public abstract class RmqConfigurator {
 	 */
 	private RmqConnection connection;
 
-	protected RmqConfigurator(RmqConnection connection) {
+	protected RmqConfigurator(@Nonnull RmqConnection connection) {
 		this.connection = connection;
 	}
 

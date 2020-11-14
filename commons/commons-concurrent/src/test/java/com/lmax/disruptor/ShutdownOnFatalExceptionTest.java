@@ -82,4 +82,5 @@ public class ShutdownOnFatalExceptionTest {
 			return new byte[eventSize];
 		}
 	}
+	
 }

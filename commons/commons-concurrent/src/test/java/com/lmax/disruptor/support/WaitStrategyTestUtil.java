@@ -32,6 +32,7 @@ public class WaitStrategyTestUtil {
 
 	public static void assertWaitForWithDelayOf(long sleepTimeMillis, WaitStrategy waitStrategy)
 			throws InterruptedException, BrokenBarrierException, AlertException, TimeoutException {
+		
 		SequenceUpdater sequenceUpdater = new SequenceUpdater(sleepTimeMillis, waitStrategy);
 		EXECUTOR.execute(sequenceUpdater);
 		sequenceUpdater.waitForStartup();
@@ -39,5 +40,6 @@ public class WaitStrategyTestUtil {
 		long sequence = waitStrategy.waitFor(0, cursor, sequenceUpdater.sequence, new DummySequenceBarrier());
 
 		assertThat(sequence, is(0L));
+		
 	}
 }

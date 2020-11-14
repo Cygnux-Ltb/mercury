@@ -25,6 +25,7 @@ import org.junit.Test;
 import com.lmax.disruptor.support.TestEvent;
 
 public final class SequenceGroupTest {
+	
 	@Test
 	public void shouldReturnMaxSequenceWhenEmptyGroup() {
 		final SequenceGroup sequenceGroup = new SequenceGroup();
@@ -135,4 +136,5 @@ public final class SequenceGroupTest {
 		sequenceGroup.addWhileRunning(ringBuffer, sequenceThree);
 		assertThat(sequenceThree.get(), is(10L));
 	}
+	
 }

@@ -4,6 +4,7 @@ import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.LifecycleAware;
 
 public class DummyEventHandler<T> implements EventHandler<T>, LifecycleAware {
+	
 	public int startCalls = 0;
 	public int shutdownCalls = 0;
 	public T lastEvent;
@@ -24,4 +25,5 @@ public class DummyEventHandler<T> implements EventHandler<T>, LifecycleAware {
 		lastEvent = event;
 		lastSequence = sequence;
 	}
+	
 }

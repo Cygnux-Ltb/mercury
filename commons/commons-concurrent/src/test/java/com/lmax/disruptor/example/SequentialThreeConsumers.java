@@ -15,13 +15,13 @@ public class SequentialThreeConsumers {
 		private Object d;
 	}
 
-	private static EventFactory<MyEvent> factory = () -> new MyEvent();
+	private static final EventFactory<MyEvent> factory = MyEvent::new;
 
-	private static EventHandler<MyEvent> handler1 = (event, sequence, endOfBatch) -> event.b = event.a;
+	private static final EventHandler<MyEvent> handler1 = (event, sequence, endOfBatch) -> event.b = event.a;
 
-	private static EventHandler<MyEvent> handler2 = (event, sequence, endOfBatch) -> event.c = event.b;
+	private static final EventHandler<MyEvent> handler2 = (event, sequence, endOfBatch) -> event.c = event.b;
 
-	private static EventHandler<MyEvent> handler3 = (event, sequence, endOfBatch) -> event.d = event.c;
+	private static final EventHandler<MyEvent> handler3 = (event, sequence, endOfBatch) -> event.d = event.c;
 
 	public static void main(String[] args) {
 

@@ -25,6 +25,7 @@ public class MultiProducerSequencerTest {
 
 	@Test
 	public void shouldOnlyAllowMessagesToBeAvailableIfSpecificallyPublished() throws Exception {
+		
 		publisher.publish(3);
 		publisher.publish(5);
 

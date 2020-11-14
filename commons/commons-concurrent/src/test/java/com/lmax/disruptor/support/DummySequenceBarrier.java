@@ -19,6 +19,7 @@ import com.lmax.disruptor.AlertException;
 import com.lmax.disruptor.SequenceBarrier;
 
 public class DummySequenceBarrier implements SequenceBarrier {
+	
 	@Override
 	public long waitFor(long sequence) throws AlertException, InterruptedException {
 		return 0;
@@ -45,4 +46,5 @@ public class DummySequenceBarrier implements SequenceBarrier {
 	@Override
 	public void checkAlert() throws AlertException {
 	}
+	
 }

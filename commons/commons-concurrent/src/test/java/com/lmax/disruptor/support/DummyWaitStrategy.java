@@ -3,6 +3,7 @@ package com.lmax.disruptor.support;
 import com.lmax.disruptor.*;
 
 public class DummyWaitStrategy implements WaitStrategy {
+	
 	public int signalAllWhenBlockingCalls = 0;
 
 	@Override

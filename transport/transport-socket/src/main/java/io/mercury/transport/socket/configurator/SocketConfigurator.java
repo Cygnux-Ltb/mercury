@@ -2,7 +2,7 @@ package io.mercury.transport.socket.configurator;
 
 import io.mercury.transport.core.configurator.TransportConfigurator;
 
-public class SocketConfigurator implements TransportConfigurator {
+public final class SocketConfigurator implements TransportConfigurator {
 
 	private String host;
 	private int port;

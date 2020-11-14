@@ -22,6 +22,7 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 class SequenceUpdater implements Runnable {
+	
 	public final Sequence sequence = new Sequence();
 	private final CyclicBarrier barrier = new CyclicBarrier(2);
 	private final long sleepTime;
