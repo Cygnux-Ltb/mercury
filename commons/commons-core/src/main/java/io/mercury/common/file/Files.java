@@ -7,19 +7,17 @@ import java.io.File;
 
 import javax.annotation.Nonnull;
 
-public enum Files {
-
-	;
+public final class Files {
 
 	/**
 	 * 
 	 * @param path
 	 * @return
 	 */
-	public static File mkdirsInTmp(@Nonnull File path) {
+	public static final File mkdirInTmp(@Nonnull File path) {
 		if (path == null)
 			return new File(JAVA_IO_TMPDIR);
-		return mkdirsInTmp(path.getPath());
+		return mkdirInTmp(path.getPath());
 	}
 
 	/**
@@ -27,7 +25,7 @@ public enum Files {
 	 * @param path
 	 * @return
 	 */
-	public static File mkdirsInTmp(@Nonnull String path) {
+	public static final File mkdirInTmp(@Nonnull String path) {
 		if (path == null)
 			return new File(JAVA_IO_TMPDIR);
 		File file = new File(JAVA_IO_TMPDIR, path);
@@ -40,10 +38,10 @@ public enum Files {
 	 * @param path
 	 * @return
 	 */
-	public static File mkdirsInHome(@Nonnull File path) {
+	public static final File mkdirInHome(@Nonnull File path) {
 		if (path == null)
 			return new File(USER_HOME);
-		return mkdirsInHome(path.getPath());
+		return mkdirInHome(path.getPath());
 	}
 
 	/**
@@ -51,7 +49,7 @@ public enum Files {
 	 * @param path
 	 * @return
 	 */
-	public static File mkdirsInHome(@Nonnull String path) {
+	public static final File mkdirInHome(@Nonnull String path) {
 		if (path == null)
 			return new File(USER_HOME);
 		File file = new File(USER_HOME, path);
@@ -61,7 +59,7 @@ public enum Files {
 
 	public static void main(String[] args) {
 
-		System.out.println(Files.mkdirsInHome("aaaa"));
+		System.out.println(Files.mkdirInHome("aaaa"));
 
 	}
 
