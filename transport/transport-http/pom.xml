@@ -19,7 +19,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>io.mercury</groupId>
-			<artifactId>transport-core</artifactId>
+			<artifactId>transport-api</artifactId>
 		</dependency>
 
 		<dependency>

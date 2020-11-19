@@ -11,9 +11,9 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>transport-core</artifactId>
-	<name>transport-core</name>
-	
+	<artifactId>transport-api</artifactId>
+	<name>transport-api</name>
+
 	<packaging>jar</packaging>
 
 	<dependencies>
