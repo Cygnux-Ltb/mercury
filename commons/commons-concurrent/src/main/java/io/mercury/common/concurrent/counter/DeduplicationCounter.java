@@ -23,7 +23,7 @@ public final class DeduplicationCounter<T extends Comparable<T>> {
 	private volatile int count;
 	private final int initCount;
 
-	// private boolean isArchived = false;
+	private volatile boolean isArchived = false;
 
 	public DeduplicationCounter() {
 		this(0);
@@ -67,6 +67,10 @@ public final class DeduplicationCounter<T extends Comparable<T>> {
 		deRepeatSet.clear();
 		count = 0;
 		return this;
+	}
+
+	public boolean isArchived() {
+		return isArchived;
 	}
 
 	/**

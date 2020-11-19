@@ -1,12 +1,17 @@
 package io.mercury.common.serialization;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 @FunctionalInterface
 public interface Deserializer<I, O> {
 
-	default O deserialization(I source) {
+	@Nonnull
+	default O deserialization(@Nonnull I source) {
 		return deserialization(null, source);
 	}
 
-	O deserialization(O reuse, I source);
+	@Nonnull
+	O deserialization(@Nullable O reuse, @Nonnull I source);
 
 }

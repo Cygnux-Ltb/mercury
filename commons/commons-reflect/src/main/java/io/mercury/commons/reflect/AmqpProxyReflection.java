@@ -19,7 +19,7 @@ import io.mercury.common.collections.ImmutableSets;
 /**
  * 加载 AmqpProxy 反射信息
  * 
- * @author tars
+ * @author yellow013
  *
  */
 public final class AmqpProxyReflection {

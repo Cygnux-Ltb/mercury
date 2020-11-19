@@ -1,8 +1,11 @@
 package io.mercury.common.serialization;
 
+import javax.annotation.Nonnull;
+
 @FunctionalInterface
 public interface Serializer<I, O> {
 
-	O serialization(I source);
+	@Nonnull
+	O serialization(@Nonnull I source);
 
 }

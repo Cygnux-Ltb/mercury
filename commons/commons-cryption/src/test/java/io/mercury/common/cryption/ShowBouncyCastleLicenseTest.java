@@ -6,7 +6,7 @@ public class ShowBouncyCastleLicenseTest {
 
 	@Test
 	public void test() {
-		ShowBouncyCastleLicense.main(null);
+		BouncyCastleLicense.showLicense();
 	}
 
 }
