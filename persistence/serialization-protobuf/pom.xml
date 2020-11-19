@@ -13,6 +13,10 @@
 	<artifactId>serialization-protobuf</artifactId>
 	<name>serialization-protobuf</name>
 
+	<properties>
+		<protobuf.version>3.14.0</protobuf.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>io.mercury</groupId>
@@ -24,14 +28,14 @@
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
-			<version>3.13.0</version>
+			<version>${protobuf.version}</version>
 		</dependency>
 
 		<!-- Utilities for Protocol Buffers -->
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java-util</artifactId>
-			<version>3.13.0</version>
+			<version>${protobuf.version}</version>
 		</dependency>
 
 		<dependency>

@@ -33,7 +33,7 @@
 
 	<properties>
 		<jackson.version>2.11.3</jackson.version>
-		<netty.version>4.1.53.Final</netty.version>
+		<netty.version>4.1.54.Final</netty.version>
 	</properties>
 
 	<build>
