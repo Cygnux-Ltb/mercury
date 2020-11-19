@@ -9,8 +9,8 @@ package io.mercury.common.number;
  */
 public final class AdvDouble {
 
-	private long integer;
-	private long decimal;
+	private final long integer;
+	private final long decimal;
 
 	public final static AdvDouble newDouble() {
 		return new AdvDouble(0, 0);

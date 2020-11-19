@@ -4,16 +4,34 @@ import static java.lang.StrictMath.IEEEremainder;
 
 public final class DoubleArithmetic {
 
+	/**
+	 * 
+	 */
 	private final static long PRECISION_8_MULTIPLIER = 10_000_000_000L;
 
+	/**
+	 * 
+	 */
 	private final static double PRECISION_8_DIVISOR = 1_000_000_000D;
 
+	/**
+	 * 
+	 */
 	private final static long PRECISION_4_MULTIPLIER = 1_000_000L;
 
+	/**
+	 * 
+	 */
 	private final static double PRECISION_4_DIVISOR = 100_000D;
 
+	/**
+	 * 
+	 */
 	private final static long CORRECTION_FACTOR = 1L;
 
+	/**
+	 * 
+	 */
 	private final static long CORRECTION_DIVISOR = 10L;
 
 	/**

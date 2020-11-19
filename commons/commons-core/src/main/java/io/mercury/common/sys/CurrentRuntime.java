@@ -23,7 +23,7 @@ public final class CurrentRuntime {
 
 	/**
 	 * Returns the amount of free memory in the Java Virtual Machine. Calling the
-	 * <code>gc</code> method may result in increasing the value returned by
+	 * <code>GC</code> method may result in increasing the value returned by
 	 * <code>freeMemory.</code>
 	 *
 	 * @return an approximation to the total amount of memory currently available

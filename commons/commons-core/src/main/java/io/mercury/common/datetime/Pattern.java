@@ -6,8 +6,8 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * 
- * All letters 'A' to 'Z' and 'a' to 'z' are reserved as pattern letters. The
- * following pattern letters are defined:
+ * All letters 'A' to 'Z' and 'a' to 'z' are reserved as pattern letters. <br>
+ * The following pattern letters are defined:
  * 
  * <pre>
 Symbol  Meaning                     Presentation      Examples

@@ -67,7 +67,6 @@ public final class NetworkProperties {
 					InetAddress inetAddress = inetAddresses.nextElement();
 					System.out.println(inetAddress instanceof Inet4Address);
 					System.out.println(inetAddress instanceof Inet6Address);
-
 					System.out.println(inetAddress.getHostAddress());
 				}
 			}

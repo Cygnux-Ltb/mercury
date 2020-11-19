@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 
 public final class TimePoint implements Comparable<TimePoint> {
 
-	private int date;
-	private int time;
-	private int nano;
+	private final int date;
+	private final int time;
+	private final int nano;
 
 	public TimePoint(int date, int time, int nano) {
 		this.date = date;
