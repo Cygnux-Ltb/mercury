@@ -23,12 +23,12 @@ public abstract class LimitedList<L extends List<E>, E> extends LimitedContainer
 
 	@Override
 	public E getTail() {
-		return savedList.get(getTailIndex());
+		return savedList.get(tailIndex());
 	}
 
 	@Override
 	public E getHead() {
-		return savedList.get(getHeadIndex());
+		return savedList.get(headIndex());
 	}
 
 }

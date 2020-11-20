@@ -25,24 +25,45 @@ public class FixedLengthRecorder {
 		this.priceList = MutableLists.newLongArrayList(capacity);
 	}
 
+	/**
+	 * 
+	 * @param cycle
+	 * @return
+	 */
 	public static FixedLengthRecorder newRecorder(int cycle) {
 		return new FixedLengthRecorder(cycle);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isEmpty() {
 		return isEmpty;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isFull() {
 		return isFull;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public long tail() {
 		if (isEmpty)
 			return 0L;
 		return priceList.get(tail);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public long head() {
 		if (isEmpty)
 			return 0L;
@@ -51,39 +72,76 @@ public class FixedLengthRecorder {
 		return priceList.get(tail - count + 1);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public long sum() {
 		return priceList.sum();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public long max() {
 		return priceList.max();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public long min() {
 		return priceList.min();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public long average() {
 		return (long) priceList.average();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public long median() {
 		return (long) priceList.median();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public ImmutableLongList toImmutable() {
 		return priceList.toImmutable();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int count() {
 		return count;
 	}
 
+	/**
+	 * 
+	 * @param value
+	 * @return
+	 */
 	public FixedLengthRecorder addTail(long value) {
 		updateTail(value);
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param value
+	 */
 	private void updateTail(long value) {
 		updateTailIndex();
 		updateCount();
@@ -93,11 +151,17 @@ public class FixedLengthRecorder {
 			priceList.add(value);
 	}
 
+	/**
+	 * 
+	 */
 	private void updateTailIndex() {
 		if (++tail == capacity)
 			tail = 0;
 	}
 
+	/**
+	 * 
+	 */
 	private void updateCount() {
 		if (!isFull) {
 			if (count == capacity) {

@@ -18,10 +18,19 @@ import io.mercury.common.collections.MutableMaps;
 @NotThreadSafe
 public abstract class TemporalMap<K extends Temporal, V, T extends TemporalMap<K, V, T>> {
 
+	/**
+	 * 获取Key
+	 */
 	private final ToLongFunction<K> keyFunc;
 
+	/**
+	 * 获取下一个Key
+	 */
 	private final Function<K, K> nextKeyFunc;
 
+	/**
+	 * Scan判断是否有下一个Key
+	 */
 	private final BiPredicate<K, K> hasNextKey;
 
 	private final MutableLongObjectMap<V> savedMap;

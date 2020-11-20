@@ -20,12 +20,12 @@ public final class LimitedArray<E> extends LimitedContainer<E> {
 
 	@Override
 	public E getTail() {
-		return array[getTailIndex()];
+		return array[tailIndex()];
 	}
 
 	@Override
 	public E getHead() {
-		return array[getHeadIndex()];
+		return array[headIndex()];
 	}
 
 }

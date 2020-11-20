@@ -12,15 +12,15 @@ public abstract class LimitedContainer<E> {
 		this.capacity = capacity;
 	}
 
-	protected int getHeadIndex() {
+	protected int headIndex() {
 		return head;
 	}
 
-	protected int getTailIndex() {
+	protected int tailIndex() {
 		return tail;
 	}
 
-	public int getCount() {
+	public int count() {
 		return count;
 	}
 
