@@ -26,6 +26,10 @@ public class BouncyCastleLicense {
 		}
 	}
 
+	/**
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		System.out.println(LICENSE.licenseText);
 	}
