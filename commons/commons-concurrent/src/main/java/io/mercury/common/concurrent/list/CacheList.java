@@ -19,7 +19,6 @@ public final class CacheList<T> {
 		private volatile List<T> value;
 
 		private Saved(boolean available, List<T> value) {
-			super();
 			this.available = available;
 			this.value = value;
 		}

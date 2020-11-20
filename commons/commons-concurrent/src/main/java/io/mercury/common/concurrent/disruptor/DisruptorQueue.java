@@ -22,9 +22,9 @@ import io.mercury.common.thread.Threads;
  *
  * @param <T>
  */
-public class DistributorQueue<T> extends SCQueue<T> {
+public class DisruptorQueue<T> extends SCQueue<T> {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(DistributorQueue.class);
+	private static final Logger log = CommonLoggerFactory.getLogger(DisruptorQueue.class);
 
 	private Disruptor<LoadContainer<T>> disruptor;
 
@@ -32,15 +32,15 @@ public class DistributorQueue<T> extends SCQueue<T> {
 
 	private AtomicBoolean isStop = new AtomicBoolean(false);
 
-	public DistributorQueue(String queueName, Capacity bufferSize, Processor<T> processor) {
+	public DisruptorQueue(String queueName, Capacity bufferSize, Processor<T> processor) {
 		this(queueName, bufferSize, false, processor);
 	}
 
-	public DistributorQueue(String queueName, Capacity bufferSize, boolean autoRun, Processor<T> processor) {
+	public DisruptorQueue(String queueName, Capacity bufferSize, boolean autoRun, Processor<T> processor) {
 		this(queueName, bufferSize, autoRun, processor, WaitStrategyOption.BusySpin);
 	}
 
-	public DistributorQueue(String queueName, Capacity bufferSize, boolean autoRun, Processor<T> processor,
+	public DisruptorQueue(String queueName, Capacity bufferSize, boolean autoRun, Processor<T> processor,
 			WaitStrategyOption option) {
 		super(processor);
 		if (queueName != null)
@@ -119,7 +119,7 @@ public class DistributorQueue<T> extends SCQueue<T> {
 
 	public static void main(String[] args) {
 
-		DistributorQueue<Integer> queue = new DistributorQueue<>("Test-Queue", Capacity.L06_SIZE_64, true,
+		DisruptorQueue<Integer> queue = new DisruptorQueue<>("Test-Queue", Capacity.L06_SIZE_64, true,
 				(integer) -> System.out.println(integer));
 
 		Threads.startNewThread(() -> {
