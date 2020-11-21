@@ -14,17 +14,20 @@ import io.mercury.common.util.Assertor;
  */
 public abstract class SCQueue<E> implements Queue<E> {
 
-	protected Processor<E> processor;
+	/**
+	 * Processor Function
+	 */
+	protected final Processor<E> processor;
 
 	/**
 	 * Running flag
 	 */
-	protected AtomicBoolean isRun = new AtomicBoolean(false);
+	protected final AtomicBoolean isRunning = new AtomicBoolean(false);
 
 	/**
 	 * Close flag
 	 */
-	protected AtomicBoolean isClose = new AtomicBoolean(true);
+	protected final AtomicBoolean isClose = new AtomicBoolean(true);
 
 	protected String queueName = "SCQueue-" + Integer.toString(Randoms.threadSafeRandomUnsignedInt());
 
@@ -41,7 +44,7 @@ public abstract class SCQueue<E> implements Queue<E> {
 	}
 
 	public void stop() {
-		this.isRun.set(false);
+		this.isRunning.set(false);
 		this.isClose.set(true);
 	}
 

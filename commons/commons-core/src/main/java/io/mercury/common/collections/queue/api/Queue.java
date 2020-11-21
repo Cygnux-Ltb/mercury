@@ -20,7 +20,7 @@ public interface Queue<E> {
 	String queueName();
 
 	public static enum WaitingStrategy {
-		SpinWaiting, SleepWaiting,
+		SpinWaiting, SleepWaiting, Blocking
 	}
 
 	@FunctionalInterface
