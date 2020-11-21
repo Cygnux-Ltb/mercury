@@ -27,7 +27,7 @@ import java.util.concurrent.TimeoutException;
  */
 
 @SuppressWarnings("restriction")
-public class AbstractBlockingQueue {
+public abstract class AbstractBlockingQueue {
 
 	private static final long READ_LOCATION_OFFSET;
 	private static final long WRITE_LOCATION_OFFSET;

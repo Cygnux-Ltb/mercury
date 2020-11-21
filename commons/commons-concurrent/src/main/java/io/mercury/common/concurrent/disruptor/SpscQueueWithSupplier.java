@@ -31,7 +31,6 @@ public class SpscQueueWithSupplier<T> extends SCQueue<T> {
 		super(processor);
 		// if (queueSize == 0 || queueSize % 2 != 0)
 		// throw new IllegalArgumentException("queueSize set error...");
-		this.processor = processor;
 		this.disruptor = new Disruptor<>(
 				// 实现EventFactory的Lambda
 				() -> supplier.get(),

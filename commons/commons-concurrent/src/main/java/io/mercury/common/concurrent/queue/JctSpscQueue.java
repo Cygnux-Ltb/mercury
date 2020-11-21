@@ -8,25 +8,26 @@ import org.slf4j.Logger;
 import io.mercury.common.annotation.thread.SpinWaiting;
 import io.mercury.common.collections.queue.RunMode;
 import io.mercury.common.collections.queue.api.SCQueue;
+import io.mercury.common.concurrent.disruptor.SpscQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringUtil;
 
-public class SpscQueueWithJCT<E> extends SCQueue<E> {
+public class JctSpscQueue<E> extends SCQueue<E> {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(SpscQueueWithJCT.class);
+	private static final Logger log = CommonLoggerFactory.getLogger(SpscQueue.class);
 
-	private final SpscArrayQueue<E> queue;
+	private final SpscArrayQueue<E> innerQueue;
 
 	private final WaitingStrategy strategy;
 
-	private SpscQueueWithJCT(String queueName, int capacity, RunMode mode, long delayMillis, WaitingStrategy strategy,
+	private JctSpscQueue(String queueName, int capacity, RunMode mode, long delayMillis, WaitingStrategy strategy,
 			Processor<E> processor) {
 		super(processor);
-		this.queue = new SpscArrayQueue<>(Math.max(capacity, 64));
+		this.innerQueue = new SpscArrayQueue<>(Math.max(capacity, 16));
 		super.queueName = StringUtil.isNullOrEmpty(queueName)
-				? SpscQueueWithJCT.class.getSimpleName() + "-" + Thread.currentThread().getName()
+				? this.getClass().getSimpleName() + "-" + Threads.currentThreadName()
 				: queueName;
 		this.strategy = strategy;
 		switch (mode) {
@@ -34,8 +35,10 @@ public class SpscQueueWithJCT<E> extends SCQueue<E> {
 			start();
 			break;
 		case Delay:
-			Threads.sleep(delayMillis);
-			start();
+			Threads.startNewThread(() -> {
+				Threads.sleep(delayMillis);
+				start();
+			});
 			break;
 		case Manual:
 			log.info("SpscQueueWithJCT :: Run mode is [Manual], wating start...");
@@ -43,48 +46,47 @@ public class SpscQueueWithJCT<E> extends SCQueue<E> {
 		}
 	}
 
-	public static <E> SpscQueueWithJCT<E> autoStartQueue(WaitingStrategy waitingStrategy, Processor<E> processor) {
-		return new SpscQueueWithJCT<>(null, 64, RunMode.Auto, 0L, waitingStrategy, processor);
+	public static <E> JctSpscQueue<E> autoStartQueue(WaitingStrategy waitingStrategy, Processor<E> processor) {
+		return new JctSpscQueue<>(null, 8, RunMode.Auto, 0L, waitingStrategy, processor);
 	}
 
-	public static <E> SpscQueueWithJCT<E> autoStartQueue(int capacity, WaitingStrategy waitingStrategy,
+	public static <E> JctSpscQueue<E> autoStartQueue(int capacity, WaitingStrategy waitingStrategy,
 			Processor<E> processor) {
-		return new SpscQueueWithJCT<>(null, capacity, RunMode.Auto, 0L, waitingStrategy, processor);
+		return new JctSpscQueue<>(null, capacity, RunMode.Auto, 0L, waitingStrategy, processor);
 	}
 
-	public static <E> SpscQueueWithJCT<E> autoStartQueue(String queueName, int capacity,
-			WaitingStrategy waitingStrategy, Processor<E> processor) {
-		return new SpscQueueWithJCT<>(queueName, capacity, RunMode.Auto, 0L, waitingStrategy, processor);
-	}
-
-	public static <E> SpscQueueWithJCT<E> manualStartQueue(WaitingStrategy waitingStrategy, Processor<E> processor) {
-		return new SpscQueueWithJCT<>(null, 64, RunMode.Manual, 0L, waitingStrategy, processor);
-	}
-
-	public static <E> SpscQueueWithJCT<E> manualStartQueue(int capacity, WaitingStrategy waitingStrategy,
+	public static <E> JctSpscQueue<E> autoStartQueue(String queueName, int capacity, WaitingStrategy waitingStrategy,
 			Processor<E> processor) {
-		return new SpscQueueWithJCT<>(null, capacity, RunMode.Manual, 0L, waitingStrategy, processor);
+		return new JctSpscQueue<>(queueName, capacity, RunMode.Auto, 0L, waitingStrategy, processor);
 	}
 
-	public static <E> SpscQueueWithJCT<E> manualStartQueue(String queueName, int capacity,
-			WaitingStrategy waitingStrategy, Processor<E> processor) {
-		return new SpscQueueWithJCT<>(queueName, capacity, RunMode.Manual, 0L, waitingStrategy, processor);
+	public static <E> JctSpscQueue<E> manualStartQueue(WaitingStrategy waitingStrategy, Processor<E> processor) {
+		return new JctSpscQueue<>(null, 8, RunMode.Manual, 0L, waitingStrategy, processor);
 	}
 
-	public static <E> SpscQueueWithJCT<E> delayStartQueue(long delay, TimeUnit timeUnit,
-			WaitingStrategy waitingStrategy, Processor<E> processor) {
-		return new SpscQueueWithJCT<>(null, 64, RunMode.Delay, timeUnit.toMillis(delay), waitingStrategy, processor);
+	public static <E> JctSpscQueue<E> manualStartQueue(int capacity, WaitingStrategy waitingStrategy,
+			Processor<E> processor) {
+		return new JctSpscQueue<>(null, capacity, RunMode.Manual, 0L, waitingStrategy, processor);
 	}
 
-	public static <E> SpscQueueWithJCT<E> delayStartQueue(int capacity, long delay, TimeUnit timeUnit,
-			WaitingStrategy waitingStrategy, Processor<E> processor) {
-		return new SpscQueueWithJCT<>(null, capacity, RunMode.Delay, timeUnit.toMillis(delay), waitingStrategy,
-				processor);
+	public static <E> JctSpscQueue<E> manualStartQueue(String queueName, int capacity, WaitingStrategy waitingStrategy,
+			Processor<E> processor) {
+		return new JctSpscQueue<>(queueName, capacity, RunMode.Manual, 0L, waitingStrategy, processor);
 	}
 
-	public static <E> SpscQueueWithJCT<E> delayStartQueue(String queueName, int capacity, long delay, TimeUnit timeUnit,
+	public static <E> JctSpscQueue<E> delayStartQueue(long delay, TimeUnit timeUnit, WaitingStrategy waitingStrategy,
+			Processor<E> processor) {
+		return new JctSpscQueue<>(null, 8, RunMode.Delay, timeUnit.toMillis(delay), waitingStrategy, processor);
+	}
+
+	public static <E> JctSpscQueue<E> delayStartQueue(int capacity, long delay, TimeUnit timeUnit,
 			WaitingStrategy waitingStrategy, Processor<E> processor) {
-		return new SpscQueueWithJCT<>(queueName, capacity, RunMode.Delay, timeUnit.toMillis(delay), waitingStrategy,
+		return new JctSpscQueue<>(null, capacity, RunMode.Delay, timeUnit.toMillis(delay), waitingStrategy, processor);
+	}
+
+	public static <E> JctSpscQueue<E> delayStartQueue(String queueName, int capacity, long delay, TimeUnit timeUnit,
+			WaitingStrategy waitingStrategy, Processor<E> processor) {
+		return new JctSpscQueue<>(queueName, capacity, RunMode.Delay, timeUnit.toMillis(delay), waitingStrategy,
 				processor);
 	}
 
@@ -104,25 +106,27 @@ public class SpscQueueWithJCT<E> extends SCQueue<E> {
 	@SpinWaiting
 	public boolean enqueue(E e) {
 		if (!isClose.get()) {
-			log.error("SpscQueueWithJCT :: Call enqueue(e) failure, This queue is closed.");
+			log.error("JctSpscQueue -> {}, enqueue failure, This queue is closed", queueName);
 			return false;
 		}
-		while (!queue.offer(e))
+		if (e == null)
+			log.error("JctSpscQueue -> {}, enqueue element is null", queueName);
+		while (!innerQueue.offer(e))
 			waiting();
 		return true;
 	}
 
 	@Override
 	public void startProcessThread() {
-		if (!isRun.compareAndSet(false, true)) {
-			log.error("SpscQueueWithJCT :: Error call, This queue is started.");
+		if (!isRunning.compareAndSet(false, true)) {
+			log.error("JctSpscQueue -> {}, Error call, This queue is started", queueName);
 			return;
 		}
 		Threads.startNewMaxPriorityThread(() -> {
 			try {
-				while (isRun.get() || !queue.isEmpty()) {
+				while (isRunning.get() || !innerQueue.isEmpty()) {
 					@SpinWaiting
-					E e = queue.poll();
+					E e = innerQueue.poll();
 					if (e != null)
 						processor.process(e);
 					else
@@ -131,12 +135,12 @@ public class SpscQueueWithJCT<E> extends SCQueue<E> {
 			} catch (Exception e) {
 				throw new QueueWorkingException(queueName + " process thread throw exception", e);
 			}
-		}, queueName + "-RuningThread");
+		}, queueName + "-ProcessThread");
 	}
 
 	public static void main(String[] args) {
 
-		SpscQueueWithJCT<Integer> queue = SpscQueueWithJCT.autoStartQueue(6, WaitingStrategy.SleepWaiting, (value) -> {
+		JctSpscQueue<Integer> queue = JctSpscQueue.autoStartQueue(6, WaitingStrategy.SleepWaiting, (value) -> {
 			System.out.println(value);
 			Threads.sleep(500);
 		});
@@ -147,8 +151,8 @@ public class SpscQueueWithJCT<E> extends SCQueue<E> {
 		for (;;) {
 			queue.enqueue(++i);
 			System.out.println("enqueue ->" + i);
-			System.out.println("size -> " + queue.queue.size());
-			System.out.println("capacity -> " + queue.queue.capacity());
+			System.out.println("size -> " + queue.innerQueue.size());
+			System.out.println("capacity -> " + queue.innerQueue.capacity());
 		}
 
 	}

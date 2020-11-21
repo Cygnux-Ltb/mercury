@@ -20,7 +20,7 @@ public class SpscQueueDefault<E> implements Queue<E> {
 	public SpscQueueDefault(String queueName, Capacity capacity, WaitingStrategy strategy) {
 		this.queue = new SpscArrayQueue<>(Math.max(capacity.size(), 64));
 		this.queueName = StringUtil.isNullOrEmpty(queueName)
-				? SpscQueueDefault.class.getSimpleName() + "-" + Thread.currentThread().getName()
+				? this.getClass().getSimpleName() + "-" + Threads.currentThreadName()
 				: queueName;
 		this.strategy = strategy == null ? WaitingStrategy.SleepWaiting : strategy;
 	}

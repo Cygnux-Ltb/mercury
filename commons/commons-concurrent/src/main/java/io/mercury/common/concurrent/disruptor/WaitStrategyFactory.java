@@ -28,12 +28,12 @@ final class WaitStrategyFactory {
 			return new TimeoutBlockingWaitStrategy(5, TimeUnit.MICROSECONDS);
 		case LiteTimeoutBlocking:
 			return new LiteTimeoutBlockingWaitStrategy(5, TimeUnit.MICROSECONDS);
-		case PhasedBackoff:
-			throw new UnsupportedOperationException("PhasedBackoffWaitStrategy does not support.");
 		case Sleeping:
 			return new SleepingWaitStrategy();
 		case Yielding:
 			return new YieldingWaitStrategy();
+		case PhasedBackoff:
+			throw new UnsupportedOperationException("PhasedBackoffWaitStrategy does not support.");
 		default:
 			throw new RuntimeException("option -> (" + option + ") does not support.");
 		}

@@ -10,7 +10,7 @@ import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.MutableMaps;
 import io.mercury.common.collections.queue.api.SCQueue;
-import io.mercury.common.concurrent.queue.MpscArrayBlockingQueue;
+import io.mercury.common.concurrent.queue.JctMpscQueue;
 import io.mercury.common.util.StringUtil;
 
 /**
@@ -68,9 +68,9 @@ public final class AsyncCacheMap<K, V> {
 
 	public AsyncCacheMap(String cacheName) {
 		this.cacheName = StringUtil.isNullOrEmpty(cacheName) ? "AsyncCacheMap-" + hashCode() : cacheName;
-		this.execQueue = MpscArrayBlockingQueue.autoStartQueue(this.cacheName + "-execQueue", 64,
+		this.execQueue = JctMpscQueue.autoStartQueue(this.cacheName + "-execQueue", 64,
 				event -> asyncExec(event));
-		this.queryQueue = MpscArrayBlockingQueue.autoStartQueue(this.cacheName + "-execQueue", 64,
+		this.queryQueue = JctMpscQueue.autoStartQueue(this.cacheName + "-execQueue", 64,
 				result -> consumerMap.remove(result.nanoTime).accept(result.value));
 	}
 
