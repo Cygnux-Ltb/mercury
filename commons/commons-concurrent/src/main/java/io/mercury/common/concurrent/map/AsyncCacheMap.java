@@ -9,8 +9,8 @@ import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
 
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.collections.queue.api.SCQueue;
 import io.mercury.common.concurrent.queue.JctMpscQueue;
+import io.mercury.common.concurrent.queue.api.ScQueue;
 import io.mercury.common.util.StringUtil;
 
 /**
@@ -30,9 +30,9 @@ public final class AsyncCacheMap<K, V> {
 
 	private final String cacheName;
 
-	private final SCQueue<ExecEvent> execQueue;
+	private final ScQueue<ExecEvent> execQueue;
 
-	private final SCQueue<QueryResult> queryQueue;
+	private final ScQueue<QueryResult> queryQueue;
 
 	// private ExecutorService executor = Executors.newSingleThreadExecutor();
 

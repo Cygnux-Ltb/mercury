@@ -6,22 +6,18 @@ import org.jctools.queues.MpscArrayQueue;
 import org.slf4j.Logger;
 
 import io.mercury.common.annotation.thread.SpinWaiting;
-import io.mercury.common.collections.queue.RunMode;
-import io.mercury.common.collections.queue.api.SCQueue;
+import io.mercury.common.concurrent.queue.base.JctScQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringUtil;
 
-public class JctMpscQueue<E> extends SCQueue<E> {
+public class JctMpscQueue<E> extends JctScQueue<MpscArrayQueue<E>, E> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(JctMpscQueue.class);
 
-	private final MpscArrayQueue<E> innerQueue;
-
-	private JctMpscQueue(String queueName, int capacity, RunMode mode, long delayMillis, Processor<E> processor) {
-		super(processor);
-		this.innerQueue = new MpscArrayQueue<>(Math.max(capacity, 16));
+	private JctMpscQueue(String queueName, int capacity, StartMode mode, long delayMillis, Processor<E> processor) {
+		super(processor, Math.max(capacity, 16));
 		this.queueName = StringUtil.isNullOrEmpty(queueName)
 				? this.getClass().getSimpleName() + "-" + Threads.currentThreadName()
 				: queueName;
@@ -42,41 +38,46 @@ public class JctMpscQueue<E> extends SCQueue<E> {
 	}
 
 	public static <E> JctMpscQueue<E> autoStartQueue(Processor<E> processor) {
-		return new JctMpscQueue<>(null, 64, RunMode.Auto, 0L, processor);
+		return new JctMpscQueue<>(null, 64, StartMode.Auto, 0L, processor);
 	}
 
 	public static <E> JctMpscQueue<E> autoStartQueue(int capacity, Processor<E> processor) {
-		return new JctMpscQueue<>(null, capacity, RunMode.Auto, 0L, processor);
+		return new JctMpscQueue<>(null, capacity, StartMode.Auto, 0L, processor);
 	}
 
 	public static <E> JctMpscQueue<E> autoStartQueue(String queueName, int capacity, Processor<E> processor) {
-		return new JctMpscQueue<>(queueName, capacity, RunMode.Auto, 0L, processor);
+		return new JctMpscQueue<>(queueName, capacity, StartMode.Auto, 0L, processor);
 	}
 
 	public static <E> JctMpscQueue<E> manualStartQueue(Processor<E> processor) {
-		return new JctMpscQueue<>(null, 64, RunMode.Manual, 0L, processor);
+		return new JctMpscQueue<>(null, 64, StartMode.Manual, 0L, processor);
 	}
 
 	public static <E> JctMpscQueue<E> manualStartQueue(int capacity, Processor<E> processor) {
-		return new JctMpscQueue<>(null, capacity, RunMode.Manual, 0L, processor);
+		return new JctMpscQueue<>(null, capacity, StartMode.Manual, 0L, processor);
 	}
 
 	public static <E> JctMpscQueue<E> manualStartQueue(String queueName, int capacity, Processor<E> processor) {
-		return new JctMpscQueue<>(queueName, capacity, RunMode.Manual, 0L, processor);
+		return new JctMpscQueue<>(queueName, capacity, StartMode.Manual, 0L, processor);
 	}
 
 	public static <E> JctMpscQueue<E> delayStartQueue(long delay, TimeUnit timeUnit, Processor<E> processor) {
-		return new JctMpscQueue<>(null, 64, RunMode.Delay, timeUnit.toMillis(delay), processor);
+		return new JctMpscQueue<>(null, 64, StartMode.Delay, timeUnit.toMillis(delay), processor);
 	}
 
 	public static <E> JctMpscQueue<E> delayStartQueue(int capacity, long delay, TimeUnit timeUnit,
 			Processor<E> processor) {
-		return new JctMpscQueue<>(null, capacity, RunMode.Delay, timeUnit.toMillis(delay), processor);
+		return new JctMpscQueue<>(null, capacity, StartMode.Delay, timeUnit.toMillis(delay), processor);
 	}
 
 	public static <E> JctMpscQueue<E> delayStartQueue(String queueName, int capacity, long delay, TimeUnit timeUnit,
 			Processor<E> processor) {
-		return new JctMpscQueue<>(queueName, capacity, RunMode.Delay, timeUnit.toMillis(delay), processor);
+		return new JctMpscQueue<>(queueName, capacity, StartMode.Delay, timeUnit.toMillis(delay), processor);
+	}
+
+	@Override
+	protected MpscArrayQueue<E> createQueue(int capacity) {
+		return new MpscArrayQueue<>(capacity);
 	}
 
 	@Override

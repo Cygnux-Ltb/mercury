@@ -1,8 +1,8 @@
-package io.mercury.common.collections.queue.api;
+package io.mercury.common.concurrent.queue.api;
 
 import javax.annotation.CheckForNull;
 
-public interface MCQueue<E> extends Queue<E> {
+public interface McQueue<E> extends Queue<E> {
 
 	@CheckForNull
 	E dequeue();

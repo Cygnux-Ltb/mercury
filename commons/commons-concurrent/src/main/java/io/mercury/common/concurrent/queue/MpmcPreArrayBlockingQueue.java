@@ -9,12 +9,13 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 
 import io.mercury.common.annotation.thread.LockHeld;
-import io.mercury.common.collections.queue.api.MCQueue;
 import io.mercury.common.collections.queue.base.LoadContainer;
+import io.mercury.common.concurrent.queue.api.McQueue;
 import io.mercury.common.log.CommonLoggerFactory;
 
 @ThreadSafe
-public class MpmcPreArrayBlockingQueue<E> implements MCQueue<E> {
+@Deprecated
+public class MpmcPreArrayBlockingQueue<E> implements McQueue<E> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(MpmcPreArrayBlockingQueue.class);
 

@@ -1,4 +1,4 @@
-package io.mercury.common.collections.queue.api;
+package io.mercury.common.concurrent.queue.api;
 
 import java.util.function.Predicate;
 

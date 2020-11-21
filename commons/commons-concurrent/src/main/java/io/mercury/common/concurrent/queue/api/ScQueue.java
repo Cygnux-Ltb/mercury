@@ -1,4 +1,4 @@
-package io.mercury.common.collections.queue.api;
+package io.mercury.common.concurrent.queue.api;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -12,7 +12,7 @@ import io.mercury.common.util.Assertor;
  *
  * @param <T> Single Consumer Queue
  */
-public abstract class SCQueue<E> implements Queue<E> {
+public abstract class ScQueue<E> implements Queue<E> {
 
 	/**
 	 * Processor Function
@@ -29,9 +29,12 @@ public abstract class SCQueue<E> implements Queue<E> {
 	 */
 	protected final AtomicBoolean isClose = new AtomicBoolean(true);
 
+	/**
+	 * 
+	 */
 	protected String queueName = "SCQueue-" + Integer.toString(Randoms.threadSafeRandomUnsignedInt());
 
-	public SCQueue(Processor<E> processor) {
+	protected ScQueue(Processor<E> processor) {
 		Assertor.nonNull(processor, "processor");
 		this.processor = processor;
 	}
@@ -51,6 +54,12 @@ public abstract class SCQueue<E> implements Queue<E> {
 	@Override
 	public String queueName() {
 		return queueName;
+	}
+
+	public static enum StartMode {
+
+		Auto, Manual, Delay
+
 	}
 
 }

@@ -5,7 +5,7 @@ import org.jctools.queues.SpscArrayQueue;
 import io.mercury.common.annotation.thread.OnlySingleThreadCall;
 import io.mercury.common.annotation.thread.SpinWaiting;
 import io.mercury.common.collections.Capacity;
-import io.mercury.common.collections.queue.api.Queue;
+import io.mercury.common.concurrent.queue.api.Queue;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringUtil;
 
