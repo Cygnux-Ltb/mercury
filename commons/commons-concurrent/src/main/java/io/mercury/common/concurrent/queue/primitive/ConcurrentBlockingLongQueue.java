@@ -3,7 +3,7 @@ package io.mercury.common.concurrent.queue.primitive;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import io.mercury.common.concurrent.queue.AbstractBlockingQueue;
+import io.mercury.common.concurrent.queue.base.BaseConcurrentBlockingQueue;
 
 /**
  * A low latency, lock free, primitive bounded blocking queue backed by an
@@ -152,7 +152,7 @@ import io.mercury.common.concurrent.queue.AbstractBlockingQueue;
  * @author Rob Austin
  * @since 1.1
  */
-public class ConcurrentBlockingLongQueue extends AbstractBlockingQueue {
+public class ConcurrentBlockingLongQueue extends BaseConcurrentBlockingQueue {
 
 	// intentionally not volatile, as we are carefully ensuring that the memory
 	// barriers are controlled below by other objects

@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.queue;
+package io.mercury.common.concurrent.queue.base;
 
 import sun.misc.Unsafe;
 
@@ -27,7 +27,7 @@ import java.util.concurrent.TimeoutException;
  */
 
 @SuppressWarnings("restriction")
-public abstract class AbstractBlockingQueue {
+public abstract class BaseConcurrentBlockingQueue {
 
 	private static final long READ_LOCATION_OFFSET;
 	private static final long WRITE_LOCATION_OFFSET;
@@ -39,9 +39,9 @@ public abstract class AbstractBlockingQueue {
 			field.setAccessible(true);
 			Unsafe = (Unsafe) field.get(null);
 			READ_LOCATION_OFFSET = Unsafe
-					.objectFieldOffset(AbstractBlockingQueue.class.getDeclaredField("readLocation"));
+					.objectFieldOffset(BaseConcurrentBlockingQueue.class.getDeclaredField("readLocation"));
 			WRITE_LOCATION_OFFSET = Unsafe
-					.objectFieldOffset(AbstractBlockingQueue.class.getDeclaredField("writeLocation"));
+					.objectFieldOffset(BaseConcurrentBlockingQueue.class.getDeclaredField("writeLocation"));
 		} catch (Exception e) {
 			throw new AssertionError(e);
 		}
@@ -67,7 +67,7 @@ public abstract class AbstractBlockingQueue {
 	/**
 	 * @param capacity Creates an BlockingQueue with the given (fixed) capacity
 	 */
-	public AbstractBlockingQueue(int capacity) {
+	public BaseConcurrentBlockingQueue(int capacity) {
 		if (capacity == 0)
 			throw new IllegalArgumentException();
 		this.capacity = capacity + 1;
@@ -76,7 +76,7 @@ public abstract class AbstractBlockingQueue {
 	/**
 	 * Creates an BlockingQueue with the default capacity of 1024
 	 */
-	public AbstractBlockingQueue() {
+	public BaseConcurrentBlockingQueue() {
 		this.capacity = 1024;
 	}
 

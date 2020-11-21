@@ -8,6 +8,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import io.mercury.common.concurrent.queue.base.BaseConcurrentBlockingQueue;
+
 /**
  * A low latency, lock free, Object bounded blocking queue backed by an
  * Object[]. Unlike the other classes in this package thi class implements
@@ -153,7 +155,7 @@ import java.util.concurrent.TimeoutException;
  * @author Rob Austin
  * @since 1.1
  */
-public class ConcurrentBlockingObjectQueue<E> extends AbstractBlockingQueue implements BlockingQueue<E> {
+public class ConcurrentBlockingQueue<E> extends BaseConcurrentBlockingQueue implements BlockingQueue<E> {
 
 	// intentionally not volatile, as we are carefully ensuring that the memory
 	// barriers are controlled below by other objects
@@ -163,22 +165,22 @@ public class ConcurrentBlockingObjectQueue<E> extends AbstractBlockingQueue impl
 	/**
 	 * Creates an BlockingQueue with the default capacity of 1024
 	 */
-	public ConcurrentBlockingObjectQueue() {
+	public ConcurrentBlockingQueue() {
 
 	}
 
 	/**
 	 * @param capacity Creates an BlockingQueue with the given (fixed) capacity
 	 */
-	public ConcurrentBlockingObjectQueue(int capacity) {
+	public ConcurrentBlockingQueue(int capacity) {
 		super(capacity);
 	}
 
-	public ConcurrentBlockingObjectQueue(int capacity, boolean b) {
+	public ConcurrentBlockingQueue(int capacity, boolean b) {
 		super(capacity);
 	}
 
-	public ConcurrentBlockingObjectQueue(int capacity, boolean b, Collection<Integer> elements) {
+	public ConcurrentBlockingQueue(int capacity, boolean b, Collection<Integer> elements) {
 		super(capacity);
 	}
 

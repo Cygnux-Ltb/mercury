@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.queue;
+package io.mercury.common.concurrent.queue.base;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
