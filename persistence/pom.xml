@@ -22,6 +22,7 @@
 		<module>library-h2</module>
 		<module>library-janusgraph</module>
 		<module>library-redis</module>
+		<module>library-sqlite</module>
 		<module>persistence-chronicle</module>
 		<module>persistence-kyotocabinet</module>
 		<module>persistence-rocksdb</module>
