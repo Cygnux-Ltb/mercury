@@ -17,13 +17,13 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>persistence-arangodb</module>
-		<module>persistence-cassandra</module>
+		<module>library-arangodb</module>
+		<module>library-cassandra</module>
+		<module>library-h2</module>
+		<module>library-janusgraph</module>
+		<module>library-redis</module>
 		<module>persistence-chronicle</module>
-		<module>persistence-h2</module>
-		<module>persistence-janusgraph</module>
 		<module>persistence-kyotocabinet</module>
-		<module>persistence-redis</module>
 		<module>persistence-rocksdb</module>
 		<module>serialization-avro</module>
 		<module>serialization-json</module>

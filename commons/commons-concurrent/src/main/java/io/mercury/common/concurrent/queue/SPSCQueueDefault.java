@@ -9,7 +9,7 @@ import io.mercury.common.concurrent.queue.api.Queue;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringUtil;
 
-public class SpscQueueDefault<E> implements Queue<E> {
+public class SPSCQueueDefault<E> implements Queue<E> {
 
 	private final SpscArrayQueue<E> queue;
 
@@ -17,7 +17,7 @@ public class SpscQueueDefault<E> implements Queue<E> {
 
 	private final String queueName;
 
-	public SpscQueueDefault(String queueName, Capacity capacity, WaitingStrategy strategy) {
+	public SPSCQueueDefault(String queueName, Capacity capacity, WaitingStrategy strategy) {
 		this.queue = new SpscArrayQueue<>(Math.max(capacity.size(), 64));
 		this.queueName = StringUtil.isNullOrEmpty(queueName)
 				? this.getClass().getSimpleName() + "-" + Threads.currentThreadName()

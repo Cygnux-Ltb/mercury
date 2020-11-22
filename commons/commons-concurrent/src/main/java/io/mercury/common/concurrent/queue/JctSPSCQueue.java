@@ -7,26 +7,26 @@ import org.slf4j.Logger;
 
 import io.mercury.common.annotation.thread.SpinWaiting;
 import io.mercury.common.concurrent.disruptor.SpscQueue;
-import io.mercury.common.concurrent.queue.base.JctScQueue;
+import io.mercury.common.concurrent.queue.base.JctSCQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringUtil;
 
-public class JctSpscQueue<E> extends JctScQueue<SpscArrayQueue<E>, E> {
+public class JctSPSCQueue<E> extends JctSCQueue<SpscArrayQueue<E>, E> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(SpscQueue.class);
 
 	private final WaitingStrategy strategy;
 
-	private JctSpscQueue(String queueName, int capacity, StartMode mode, long delayMillis, WaitingStrategy strategy,
-			Processor<E> processor) {
+	private JctSPSCQueue(String queueName, int capacity, StartMode startMode, long delayMillis,
+			WaitingStrategy strategy, Processor<E> processor) {
 		super(processor, Math.max(capacity, 16));
 		super.queueName = StringUtil.isNullOrEmpty(queueName)
 				? this.getClass().getSimpleName() + "-" + Threads.currentThreadName()
 				: queueName;
 		this.strategy = strategy;
-		switch (mode) {
+		switch (startMode) {
 		case Auto:
 			start();
 			break;
@@ -37,52 +37,53 @@ public class JctSpscQueue<E> extends JctScQueue<SpscArrayQueue<E>, E> {
 			});
 			break;
 		case Manual:
-			log.info("JctSpscQueue :: Run mode is [Manual], wating start...");
+			log.info("JctSPSCQueue :: Start mode is [Manual], wating start...");
 			break;
 		}
 	}
 
-	public static <E> JctSpscQueue<E> autoStartQueue(WaitingStrategy waitingStrategy, Processor<E> processor) {
-		return new JctSpscQueue<>(null, 8, StartMode.Auto, 0L, waitingStrategy, processor);
+	public static <E> JctSPSCQueue<E> autoStartQueue(WaitingStrategy waitingStrategy, Processor<E> processor) {
+		return new JctSPSCQueue<>(null, 8, StartMode.Auto, 0L, waitingStrategy, processor);
 	}
 
-	public static <E> JctSpscQueue<E> autoStartQueue(int capacity, WaitingStrategy waitingStrategy,
+	public static <E> JctSPSCQueue<E> autoStartQueue(int capacity, WaitingStrategy waitingStrategy,
 			Processor<E> processor) {
-		return new JctSpscQueue<>(null, capacity, StartMode.Auto, 0L, waitingStrategy, processor);
+		return new JctSPSCQueue<>(null, capacity, StartMode.Auto, 0L, waitingStrategy, processor);
 	}
 
-	public static <E> JctSpscQueue<E> autoStartQueue(String queueName, int capacity, WaitingStrategy waitingStrategy,
+	public static <E> JctSPSCQueue<E> autoStartQueue(String queueName, int capacity, WaitingStrategy waitingStrategy,
 			Processor<E> processor) {
-		return new JctSpscQueue<>(queueName, capacity, StartMode.Auto, 0L, waitingStrategy, processor);
+		return new JctSPSCQueue<>(queueName, capacity, StartMode.Auto, 0L, waitingStrategy, processor);
 	}
 
-	public static <E> JctSpscQueue<E> manualStartQueue(WaitingStrategy waitingStrategy, Processor<E> processor) {
-		return new JctSpscQueue<>(null, 8, StartMode.Manual, 0L, waitingStrategy, processor);
+	public static <E> JctSPSCQueue<E> manualStartQueue(WaitingStrategy waitingStrategy, Processor<E> processor) {
+		return new JctSPSCQueue<>(null, 8, StartMode.Manual, 0L, waitingStrategy, processor);
 	}
 
-	public static <E> JctSpscQueue<E> manualStartQueue(int capacity, WaitingStrategy waitingStrategy,
+	public static <E> JctSPSCQueue<E> manualStartQueue(int capacity, WaitingStrategy waitingStrategy,
 			Processor<E> processor) {
-		return new JctSpscQueue<>(null, capacity, StartMode.Manual, 0L, waitingStrategy, processor);
+		return new JctSPSCQueue<>(null, capacity, StartMode.Manual, 0L, waitingStrategy, processor);
 	}
 
-	public static <E> JctSpscQueue<E> manualStartQueue(String queueName, int capacity, WaitingStrategy waitingStrategy,
+	public static <E> JctSPSCQueue<E> manualStartQueue(String queueName, int capacity, WaitingStrategy waitingStrategy,
 			Processor<E> processor) {
-		return new JctSpscQueue<>(queueName, capacity, StartMode.Manual, 0L, waitingStrategy, processor);
+		return new JctSPSCQueue<>(queueName, capacity, StartMode.Manual, 0L, waitingStrategy, processor);
 	}
 
-	public static <E> JctSpscQueue<E> delayStartQueue(long delay, TimeUnit timeUnit, WaitingStrategy waitingStrategy,
+	public static <E> JctSPSCQueue<E> delayStartQueue(long delay, TimeUnit timeUnit, WaitingStrategy waitingStrategy,
 			Processor<E> processor) {
-		return new JctSpscQueue<>(null, 8, StartMode.Delay, timeUnit.toMillis(delay), waitingStrategy, processor);
+		return new JctSPSCQueue<>(null, 8, StartMode.Delay, timeUnit.toMillis(delay), waitingStrategy, processor);
 	}
 
-	public static <E> JctSpscQueue<E> delayStartQueue(int capacity, long delay, TimeUnit timeUnit,
+	public static <E> JctSPSCQueue<E> delayStartQueue(int capacity, long delay, TimeUnit timeUnit,
 			WaitingStrategy waitingStrategy, Processor<E> processor) {
-		return new JctSpscQueue<>(null, capacity, StartMode.Delay, timeUnit.toMillis(delay), waitingStrategy, processor);
+		return new JctSPSCQueue<>(null, capacity, StartMode.Delay, timeUnit.toMillis(delay), waitingStrategy,
+				processor);
 	}
 
-	public static <E> JctSpscQueue<E> delayStartQueue(String queueName, int capacity, long delay, TimeUnit timeUnit,
+	public static <E> JctSPSCQueue<E> delayStartQueue(String queueName, int capacity, long delay, TimeUnit timeUnit,
 			WaitingStrategy waitingStrategy, Processor<E> processor) {
-		return new JctSpscQueue<>(queueName, capacity, StartMode.Delay, timeUnit.toMillis(delay), waitingStrategy,
+		return new JctSPSCQueue<>(queueName, capacity, StartMode.Delay, timeUnit.toMillis(delay), waitingStrategy,
 				processor);
 	}
 
@@ -141,7 +142,7 @@ public class JctSpscQueue<E> extends JctScQueue<SpscArrayQueue<E>, E> {
 
 	public static void main(String[] args) {
 
-		JctSpscQueue<Integer> queue = JctSpscQueue.autoStartQueue(6, WaitingStrategy.SleepWaiting, (value) -> {
+		JctSPSCQueue<Integer> queue = JctSPSCQueue.autoStartQueue(6, WaitingStrategy.SleepWaiting, (value) -> {
 			System.out.println(value);
 			Threads.sleep(500);
 		});

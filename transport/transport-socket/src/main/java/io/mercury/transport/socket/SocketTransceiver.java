@@ -12,7 +12,7 @@ import org.apache.commons.io.IOUtils;
 
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.concurrent.disruptor.SpscQueue;
-import io.mercury.common.concurrent.queue.api.ScQueue;
+import io.mercury.common.concurrent.queue.api.SCQueue;
 import io.mercury.common.thread.Threads;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
 
@@ -133,7 +133,7 @@ public class SocketTransceiver extends BaseTransceiver<String> {
 	}
 
 	@Override
-	protected ScQueue<String> initSendQueue() {
+	protected SCQueue<String> initSendQueue() {
 		return new SpscQueue<>("", Capacity.L07_SIZE_128, true, (msg) -> {
 			processSendQueue(msg);
 		});

@@ -10,8 +10,10 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>persistence-janusgraph</artifactId>
-	<name>persistence-janusgraph</name>
+	<artifactId>library-janusgraph</artifactId>
+	<name>library-janusgraph</name>
+	
+	<packaging>jar</packaging>
 
 	<dependencies>
 		<dependency>

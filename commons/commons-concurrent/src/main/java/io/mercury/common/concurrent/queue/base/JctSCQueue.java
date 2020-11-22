@@ -1,7 +1,7 @@
 package io.mercury.common.concurrent.queue.base;
 
 import io.mercury.common.annotation.lang.AbstractFunction;
-import io.mercury.common.concurrent.queue.api.ScQueue;
+import io.mercury.common.concurrent.queue.api.SCQueue;
 import io.mercury.common.functional.Processor;
 
 /**
@@ -9,11 +9,11 @@ import io.mercury.common.functional.Processor;
  *
  * @param <T> Single Consumer Queue
  */
-public abstract class JctScQueue<Q extends java.util.Queue<E>, E> extends ScQueue<E> {
+public abstract class JctSCQueue<Q extends java.util.Queue<E>, E> extends SCQueue<E> {
 
 	protected final Q innerQueue;
 
-	protected JctScQueue(Processor<E> processor, int capacity) {
+	protected JctSCQueue(Processor<E> processor, int capacity) {
 		super(processor);
 		this.innerQueue = createQueue(capacity);
 	}

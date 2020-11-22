@@ -10,8 +10,10 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>persistence-cassandra</artifactId>
-	<name>persistence-cassandra</name>
+	<artifactId>library-cassandra</artifactId>
+	<name>library-cassandra</name>
+
+	<packaging>jar</packaging>
 
 	<dependencies>
 		<dependency>

@@ -10,8 +10,8 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>persistence-arangodb</artifactId>
-	<name>persistence-arangodb</name>
+	<artifactId>library-arangodb</artifactId>
+	<name>library-arangodb</name>
 
 	<packaging>jar</packaging>
 

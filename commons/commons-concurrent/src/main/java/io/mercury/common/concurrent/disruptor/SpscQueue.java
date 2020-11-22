@@ -11,7 +11,7 @@ import com.lmax.disruptor.dsl.ProducerType;
 
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.queue.base.LoadContainer;
-import io.mercury.common.concurrent.queue.api.ScQueue;
+import io.mercury.common.concurrent.queue.api.SCQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
@@ -22,7 +22,7 @@ import io.mercury.common.thread.Threads;
  *
  * @param <T>
  */
-public class SpscQueue<T> extends ScQueue<T> {
+public class SpscQueue<T> extends SCQueue<T> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(SpscQueue.class);
 
