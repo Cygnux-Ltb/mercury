@@ -1,6 +1,6 @@
-## Mercury
+# Mercury
 
-Basic Library Collection
+### Basic Library Collection
 
 Actor library:
 
