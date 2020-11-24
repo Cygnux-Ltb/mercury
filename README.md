@@ -2,6 +2,10 @@
 
 Basic Library Collection
 
+Actor library:
+
+提供Actor基础与依赖包
+
 Commons library:
 
 提供通用基础包
