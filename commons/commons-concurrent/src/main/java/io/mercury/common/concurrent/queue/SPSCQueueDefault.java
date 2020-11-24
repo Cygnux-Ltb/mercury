@@ -54,7 +54,7 @@ public class SPSCQueueDefault<E> implements Queue<E> {
 		case SpinWaiting:
 			break;
 		case SleepWaiting:
-			Threads.sleep(20);
+			Threads.sleep(10);
 			break;
 		default:
 			break;

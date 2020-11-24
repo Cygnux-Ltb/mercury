@@ -12,7 +12,7 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringUtil;
 
-public class JctMPSCQueue<E> extends JctSCQueue<MpscArrayQueue<E>, E> {
+public final class JctMPSCQueue<E> extends JctSCQueue<MpscArrayQueue<E>, E> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(JctMPSCQueue.class);
 
@@ -101,7 +101,7 @@ public class JctMPSCQueue<E> extends JctSCQueue<MpscArrayQueue<E>, E> {
 			log.error("JctMpscQueue -> {}, Error call, This queue is started", queueName);
 			return;
 		}
-		Threads.startNewThread(() -> {
+		Threads.startNewThread(queueName + "-ProcessThread", () -> {
 			try {
 				while (isRunning.get() || !innerQueue.isEmpty()) {
 					@SpinWaiting
@@ -112,7 +112,7 @@ public class JctMPSCQueue<E> extends JctSCQueue<MpscArrayQueue<E>, E> {
 			} catch (Exception e) {
 				throw new QueueWorkingException(queueName + " process thread throw exception", e);
 			}
-		}, queueName + "-ProcessThread");
+		});
 	}
 
 	@Override

@@ -13,7 +13,7 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringUtil;
 
-public class JctSPSCQueue<E> extends JctSCQueue<SpscArrayQueue<E>, E> {
+public final class JctSPSCQueue<E> extends JctSCQueue<SpscArrayQueue<E>, E> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(SpscQueue.class);
 
@@ -97,7 +97,7 @@ public class JctSPSCQueue<E> extends JctSCQueue<SpscArrayQueue<E>, E> {
 		case SpinWaiting:
 			break;
 		case SleepWaiting:
-			Threads.sleep(20);
+			Threads.sleepIgnoreInterrupts(10);
 			break;
 		default:
 			break;
@@ -124,7 +124,7 @@ public class JctSPSCQueue<E> extends JctSCQueue<SpscArrayQueue<E>, E> {
 			log.error("JctSpscQueue -> {}, Error call, This queue is started", queueName);
 			return;
 		}
-		Threads.startNewMaxPriorityThread(() -> {
+		Threads.startNewMaxPriorityThread(queueName + "-ProcessThread", () -> {
 			try {
 				while (isRunning.get() || !innerQueue.isEmpty()) {
 					@SpinWaiting
@@ -137,7 +137,7 @@ public class JctSPSCQueue<E> extends JctSCQueue<SpscArrayQueue<E>, E> {
 			} catch (Exception e) {
 				throw new QueueWorkingException(queueName + " process thread throw exception", e);
 			}
-		}, queueName + "-ProcessThread");
+		});
 	}
 
 	public static void main(String[] args) {

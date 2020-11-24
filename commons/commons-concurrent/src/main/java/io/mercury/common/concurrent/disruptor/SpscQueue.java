@@ -53,8 +53,8 @@ public class SpscQueue<T> extends SCQueue<T> {
 				// 队列容量
 				bufferSize.size(),
 				// 实现ThreadFactory的Lambda
-				(Runnable runnable) -> Threads.newMaxPriorityThread(runnable,
-						"Disruptor-" + super.queueName + "-WorkingThread"),
+				(Runnable runnable) -> Threads.newMaxPriorityThread("Disruptor-" + super.queueName + "-WorkingThread",
+						runnable),
 				// DaemonThreadFactory.INSTANCE,
 				// 生产者策略, 使用单生产者
 				ProducerType.SINGLE,

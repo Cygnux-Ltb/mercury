@@ -3,6 +3,8 @@ package io.mercury.common.thread;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Nonnull;
+
 import org.slf4j.Logger;
 
 import io.mercury.common.log.CommonLoggerFactory;
@@ -37,7 +39,7 @@ public final class Threads {
 	 * @param threadName
 	 * @return
 	 */
-	public static final Thread newThread(Runnable runnable, String threadName) {
+	public static final Thread newThread(String threadName, Runnable runnable) {
 		return new Thread(runnable, threadName);
 	}
 
@@ -47,7 +49,7 @@ public final class Threads {
 	 * @return
 	 */
 	public static final Thread newMaxPriorityThread(Runnable runnable) {
-		return setThreadPriority(newThread(runnable), Thread.MAX_PRIORITY);
+		return setThreadPriority(new Thread(runnable), Thread.MAX_PRIORITY);
 	}
 
 	/**
@@ -56,8 +58,8 @@ public final class Threads {
 	 * @param threadName
 	 * @return
 	 */
-	public static final Thread newMaxPriorityThread(Runnable runnable, String threadName) {
-		return setThreadPriority(newThread(runnable, threadName), Thread.MAX_PRIORITY);
+	public static final Thread newMaxPriorityThread(String threadName, Runnable runnable) {
+		return setThreadPriority(new Thread(runnable, threadName), Thread.MAX_PRIORITY);
 	}
 
 	/**
@@ -66,7 +68,7 @@ public final class Threads {
 	 * @return
 	 */
 	public static final Thread newMinPriorityThread(Runnable runnable) {
-		return setThreadPriority(newThread(runnable), Thread.MIN_PRIORITY);
+		return setThreadPriority(new Thread(runnable), Thread.MIN_PRIORITY);
 	}
 
 	/**
@@ -75,8 +77,8 @@ public final class Threads {
 	 * @param threadName
 	 * @return
 	 */
-	public static final Thread newMinPriorityThread(Runnable runnable, String threadName) {
-		return setThreadPriority(newThread(runnable, threadName), Thread.MIN_PRIORITY);
+	public static final Thread newMinPriorityThread(String threadName, Runnable runnable) {
+		return setThreadPriority(new Thread(runnable, threadName), Thread.MIN_PRIORITY);
 	}
 
 	/**
@@ -105,8 +107,8 @@ public final class Threads {
 	 * @param threadName
 	 * @return
 	 */
-	public static final Thread startNewThread(Runnable runnable, String threadName) {
-		return startThread(newThread(runnable, threadName));
+	public static final Thread startNewThread(String threadName, Runnable runnable) {
+		return startThread(new Thread(runnable, threadName));
 	}
 
 	/**
@@ -124,8 +126,8 @@ public final class Threads {
 	 * @param threadName
 	 * @return
 	 */
-	public static final Thread startNewMaxPriorityThread(Runnable runnable, String threadName) {
-		return startThread(newMaxPriorityThread(runnable, threadName));
+	public static final Thread startNewMaxPriorityThread(String threadName, Runnable runnable) {
+		return startThread(newMaxPriorityThread(threadName, runnable));
 	}
 
 	/**
@@ -143,8 +145,8 @@ public final class Threads {
 	 * @param threadName
 	 * @return
 	 */
-	public static final Thread startNewMinPriorityThread(Runnable runnable, String threadName) {
-		return startThread(newMinPriorityThread(runnable, threadName));
+	public static final Thread startNewMinPriorityThread(String threadName, Runnable runnable) {
+		return startThread(newMinPriorityThread(threadName, runnable));
 	}
 
 	/**
@@ -165,7 +167,8 @@ public final class Threads {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
-			// ignore exception
+			log.error("Threads::sleepIgnoreInterrupts(millis==[{}]) throw InterruptedException -> {}", millis,
+					e.getMessage(), e);
 		}
 	}
 
@@ -178,7 +181,22 @@ public final class Threads {
 		try {
 			Thread.sleep(millis, nanos);
 		} catch (InterruptedException e) {
-			// ignore exception
+			log.error("Threads::sleepIgnoreInterrupts(millis==[{}]) throw InterruptedException -> {}", millis,
+					e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * 
+	 * @param timeUnit
+	 * @param time
+	 */
+	public static final void sleepIgnoreInterrupts(@Nonnull TimeUnit timeUnit, long time) {
+		try {
+			timeUnit.sleep(time);
+		} catch (InterruptedException e) {
+			log.error("Threads::sleep(time==[{}], timeUnit==[{}]) throw InterruptedException -> {}", time, timeUnit,
+					e.getMessage(), e);
 		}
 	}
 
@@ -191,7 +209,7 @@ public final class Threads {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
-			log.error("ThreadUtil#sleep(millis==[{}]) throw InterruptedException -> {}", millis, e.getMessage(), e);
+			log.error("Threads::sleep(millis==[{}]) throw InterruptedException -> {}", millis, e.getMessage(), e);
 			throw new RuntimeInterruptedException(e);
 		}
 	}
@@ -206,7 +224,7 @@ public final class Threads {
 		try {
 			Thread.sleep(millis, nanos);
 		} catch (InterruptedException e) {
-			log.error("ThreadUtil#sleep(millis==[{}], nanos==[{}]) throw InterruptedException -> {}", millis, nanos,
+			log.error("Threads::sleep(millis==[{}], nanos==[{}]) throw InterruptedException -> {}", millis, nanos,
 					e.getMessage(), e);
 			throw new RuntimeInterruptedException(e);
 		}
@@ -218,11 +236,11 @@ public final class Threads {
 	 * @param time
 	 * @throws RuntimeInterruptedException
 	 */
-	public static final void sleep(TimeUnit timeUnit, long time) throws RuntimeInterruptedException {
+	public static final void sleep(@Nonnull TimeUnit timeUnit, long time) throws RuntimeInterruptedException {
 		try {
 			timeUnit.sleep(time);
 		} catch (InterruptedException e) {
-			log.error("ThreadUtil#sleep(time==[{}], timeUnit==[{}]) throw InterruptedException -> {}", time, timeUnit,
+			log.error("Threads::sleep(time==[{}], timeUnit==[{}]) throw InterruptedException -> {}", time, timeUnit,
 					e.getMessage(), e);
 			throw new RuntimeInterruptedException(e);
 		}
@@ -260,7 +278,7 @@ public final class Threads {
 	public static void main(String[] args) {
 
 		System.out.println(currentThreadName());
-		startNewThread(() -> System.out.println(currentThreadName()), "Test0");
+		startNewThread("Test0", () -> System.out.println(currentThreadName()));
 		sleep(2000);
 	}
 
