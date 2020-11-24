@@ -1,29 +1,26 @@
 package io.mercury.persistence.chronicle.queue;
 
-import static io.mercury.common.datetime.TimeConst.SECONDS_PER_DAY;
-import static io.mercury.common.datetime.TimeConst.SECONDS_PER_HOUR;
-import static io.mercury.common.datetime.TimeConst.SECONDS_PER_MINUTE;
-
 import java.time.Instant;
 
+import io.mercury.common.datetime.TimeConst;
 import net.openhft.chronicle.queue.RollCycle;
 import net.openhft.chronicle.queue.RollCycles;
 
 public enum FileCycle {
 
-	MINUTELY(SECONDS_PER_MINUTE, RollCycles.MINUTELY, "64 million entries per minute"),
+	MINUTELY(TimeConst.SECONDS_PER_MINUTE, RollCycles.MINUTELY, "64 million entries per minute"),
 
-	HOURLY(SECONDS_PER_HOUR, RollCycles.HOURLY, "256 million entries per hour"),
+	HOURLY(TimeConst.SECONDS_PER_HOUR, RollCycles.HOURLY, "256 million entries per hour"),
 
-	HOURLY_LARGE(SECONDS_PER_HOUR, RollCycles.LARGE_HOURLY, "2 billion entries per hour"),
+	HOURLY_LARGE(TimeConst.SECONDS_PER_HOUR, RollCycles.LARGE_HOURLY, "2 billion entries per hour"),
 
-	DAILY_SMALL(SECONDS_PER_DAY, RollCycles.SMALL_DAILY, "512 million entries per day"),
+	DAILY_SMALL(TimeConst.SECONDS_PER_DAY, RollCycles.SMALL_DAILY, "512 million entries per day"),
 
-	DAILY(SECONDS_PER_DAY, RollCycles.DAILY, "4 billion entries per day"),
+	DAILY(TimeConst.SECONDS_PER_DAY, RollCycles.DAILY, "4 billion entries per day"),
 
-	DAILY_LARGE(SECONDS_PER_DAY, RollCycles.LARGE_DAILY, "128 billion entries per day"),
+	DAILY_LARGE(TimeConst.SECONDS_PER_DAY, RollCycles.LARGE_DAILY, "128 billion entries per day"),
 
-	DAILY_XLARGE(SECONDS_PER_DAY, RollCycles.XLARGE_DAILY, "4 trillion entries per day, indexing every 256th entry"),
+	DAILY_XLARGE(TimeConst.SECONDS_PER_DAY, RollCycles.XLARGE_DAILY, "4 trillion entries per day, indexing every 256th entry"),
 
 	;
 
@@ -49,6 +46,7 @@ public enum FileCycle {
 	}
 
 	public String getDesc() {
+		
 		return desc;
 	}
 
@@ -66,6 +64,7 @@ public enum FileCycle {
 	}
 
 	public static void main(String[] args) {
+
 		System.out.println(FileCycle.MINUTELY.toIndex(System.currentTimeMillis() / 1000));
 		System.out.println(Integer.MAX_VALUE);
 		System.out.println(Instant.now().getEpochSecond() / 60);

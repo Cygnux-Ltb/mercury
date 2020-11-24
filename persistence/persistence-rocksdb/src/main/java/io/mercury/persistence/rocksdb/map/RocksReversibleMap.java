@@ -14,7 +14,7 @@ public class RocksReversibleMap<K extends RocksReversibleKey, V extends RocksVal
 
 		Options options = new Options();
 
-		Runtime.getRuntime().addShutdownHook(Threads.newThread(() -> options.close(), "RocksContainerCloseThread"));
+		Runtime.getRuntime().addShutdownHook(Threads.newThread("RocksContainerCloseThread", () -> options.close()));
 
 	}
 

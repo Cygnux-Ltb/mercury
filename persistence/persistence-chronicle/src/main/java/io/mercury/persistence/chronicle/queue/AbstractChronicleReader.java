@@ -149,7 +149,7 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 	 * @return Thread
 	 */
 	public Thread runningOnNewThread(String threadName) {
-		return startNewThread(this, threadName);
+		return startNewThread(threadName, this);
 	}
 
 	/**
@@ -222,7 +222,7 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 		if (exitRunnable != null) {
 			if (readerParam.asyncExit) {
 				// 异步执行退出函数
-				startNewThread(exitRunnable, readerName + "-exit");
+				startNewThread(readerName + "-exit", exitRunnable);
 			} else {
 				// 同步执行退出函数
 				exitRunnable.run();

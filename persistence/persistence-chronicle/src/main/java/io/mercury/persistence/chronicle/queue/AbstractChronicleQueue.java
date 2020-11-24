@@ -117,7 +117,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 			// 周期文件清理间隔
 			long delay = fileCycle.getSeconds() * fileClearCycle;
 			// 创建文件清理线程
-			this.fileClearThread = Threads.startNewThread(() -> {
+			this.fileClearThread = Threads.startNewThread(queueName + "-FileClearThread", () -> {
 				do {
 					try {
 						Threads.sleep(TimeUnit.SECONDS, delay);
@@ -130,7 +130,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 						fileClearTask();
 					}
 				} while (isClearRunning.get());
-			}, queueName + "-FileClear");
+			});
 			// singleThreadScheduleWithFixedDelay(delay, delay, TimeUnit.SECONDS,
 			// this::runFileClearTask);
 			logger.info("Build clear thread is finished");
