@@ -2,8 +2,8 @@ package io.mercury.common.cryption;
 
 import javax.annotation.Nonnull;
 
-import org.bouncycastle.LICENSE;
 import org.slf4j.Logger;
+import org.bouncycastle.LICENSE;
 
 public class BouncyCastleLicense {
 

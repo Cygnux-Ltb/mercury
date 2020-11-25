@@ -15,7 +15,6 @@
 	<name>commons-log</name>
 
 	<properties>
-		<slf4j.version>1.7.30</slf4j.version>
 		<log4j2.version>2.14.0</log4j2.version>
 	</properties>
 
