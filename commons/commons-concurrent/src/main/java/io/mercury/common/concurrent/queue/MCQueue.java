@@ -1,19 +1,18 @@
 package io.mercury.common.concurrent.queue;
 
 import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 public interface MCQueue<E> extends Queue<E> {
 
 	@CheckForNull
 	E dequeue();
 
-	@Override
 	default E poll() {
 		return dequeue();
 	}
 
-	@Override
-	default boolean pollAndApply(PollFunction<E> function) {
+	default boolean pollAndApply(@Nonnull PollFunction<E> function) {
 		return function.apply(dequeue());
 	}
 

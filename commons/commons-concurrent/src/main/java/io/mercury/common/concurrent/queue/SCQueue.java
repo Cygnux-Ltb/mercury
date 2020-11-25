@@ -10,7 +10,7 @@ import io.mercury.common.util.Assertor;
 /**
  * @author yellow013
  *
- * @param <T> Single Consumer Queue
+ * @param <T> Single Consumer Queue base implements
  */
 public abstract class SCQueue<E> implements Queue<E> {
 

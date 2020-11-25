@@ -22,6 +22,7 @@
 		<module>commons-cryption</module>
 		<module>commons-graph</module>
 		<module>commons-jmh</module>
+		<module>commons-jmx</module>
 		<module>commons-log</module>
 		<module>commons-reflect</module>
 	</modules>
