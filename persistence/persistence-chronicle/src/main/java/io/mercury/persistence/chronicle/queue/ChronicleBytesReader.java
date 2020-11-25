@@ -1,8 +1,5 @@
 package io.mercury.persistence.chronicle.queue;
 
-import static net.openhft.chronicle.bytes.Bytes.elasticByteBuffer;
-import static net.openhft.chronicle.bytes.Bytes.elasticHeapByteBuffer;
-
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
@@ -21,10 +18,10 @@ public final class ChronicleBytesReader extends AbstractChronicleReader<ByteBuff
 	private final int bufferSize;
 	private final boolean useDirectMemory;
 
-	ChronicleBytesReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam readerParam,
+	ChronicleBytesReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param,
 			Logger logger, int bufferSize, boolean useDirectMemory, ExcerptTailer excerptTailer,
 			Consumer<ByteBuffer> consumer) {
-		super(allocateSeq, readerName, fileCycle, readerParam, logger, excerptTailer, consumer);
+		super(allocateSeq, readerName, fileCycle, param, logger, excerptTailer, consumer);
 		this.bufferSize = bufferSize;
 		this.useDirectMemory = useDirectMemory;
 	}
@@ -34,10 +31,10 @@ public final class ChronicleBytesReader extends AbstractChronicleReader<ByteBuff
 		Bytes<ByteBuffer> bytes;
 		if (useDirectMemory)
 			// use direct memory
-			bytes = elasticByteBuffer(bufferSize);
+			bytes = Bytes.elasticByteBuffer(bufferSize);
 		else
 			// use heap memory
-			bytes = elasticHeapByteBuffer(bufferSize);
+			bytes = Bytes.elasticHeapByteBuffer(bufferSize);
 		excerptTailer.readBytes(bytes);
 		if (bytes.isEmpty())
 			return null;

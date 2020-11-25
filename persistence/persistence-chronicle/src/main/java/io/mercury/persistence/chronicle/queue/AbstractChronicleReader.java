@@ -33,7 +33,7 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 	private final String readerName;
 	private final FileCycle fileCycle;
 
-	protected ReaderParam readerParam;
+	protected final ReaderParam param;
 
 	protected final Logger logger;
 	protected final ExcerptTailer excerptTailer;
@@ -45,17 +45,17 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 	 * @param allocateSeq
 	 * @param readerName
 	 * @param fileCycle
-	 * @param readerParam
+	 * @param param
 	 * @param logger
 	 * @param excerptTailer
 	 * @param consumer
 	 */
-	protected AbstractChronicleReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam readerParam,
+	protected AbstractChronicleReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param,
 			Logger logger, ExcerptTailer excerptTailer, Consumer<T> consumer) {
 		super(allocateSeq);
 		this.readerName = readerName;
 		this.fileCycle = fileCycle;
-		this.readerParam = readerParam;
+		this.param = param;
 		this.logger = logger;
 		this.excerptTailer = excerptTailer;
 		this.consumer = consumer;
@@ -87,10 +87,16 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 		return excerptTailer.moveToIndex(fileCycle.toIndex(epochSecond));
 	}
 
+	/**
+	 * 
+	 */
 	public void toStart() {
 		excerptTailer.toStart();
 	}
 
+	/**
+	 * 
+	 */
 	public void toEnd() {
 		excerptTailer.toEnd();
 	}
@@ -180,13 +186,13 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 
 	@Override
 	public void run() {
-		boolean readFailLogging = readerParam.readFailLogging;
-		boolean readFailCrash = readerParam.readFailCrash;
-		boolean waitingData = readerParam.waitingData;
-		TimeUnit readIntervalUnit = readerParam.readIntervalUnit;
-		long readIntervalTime = readerParam.readIntervalTime;
-		if (readerParam.delayReadTime > 0)
-			sleep(readerParam.delayReadUnit, readerParam.delayReadTime);
+		final boolean readFailLogging = param.readFailLogging;
+		final boolean readFailCrash = param.readFailCrash;
+		final boolean waitingData = param.waitingData;
+		final TimeUnit readIntervalUnit = param.readIntervalUnit;
+		final long readIntervalTime = param.readIntervalTime;
+		if (param.delayReadTime > 0)
+			sleep(param.delayReadUnit, param.delayReadTime);
 		for (;;) {
 			if (isClose) {
 				logger.info("ChronicleReader is cloesd, execute exit()");
@@ -218,9 +224,9 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 	}
 
 	private void exit() {
-		Runnable exitRunnable = readerParam.exitRunnable;
+		final Runnable exitRunnable = param.exitRunnable;
 		if (exitRunnable != null) {
-			if (readerParam.asyncExit) {
+			if (param.asyncExit) {
 				// 异步执行退出函数
 				startNewThread(readerName + "-exit", exitRunnable);
 			} else {

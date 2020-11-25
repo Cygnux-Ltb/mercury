@@ -1,7 +1,7 @@
 package io.mercury.persistence.chronicle.queue;
 
 import static io.mercury.common.datetime.DateTimeUtil.datetimeOfSecond;
-import static io.mercury.common.number.Randoms.threadSafeRandomUnsignedInt;
+import static io.mercury.common.number.ThreadSafeRandoms.randomUnsignedInt;
 
 import java.io.File;
 import java.lang.Thread.State;
@@ -225,7 +225,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	}
 
 	private String generateReaderName() {
-		return queueName + "-reader-" + threadSafeRandomUnsignedInt();
+		return queueName + "-reader-" + randomUnsignedInt();
 	}
 
 	private static final String EMPTY_CONSUMER_MSG = "Reader consumer is an empty implementation.";
@@ -262,32 +262,31 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 
 	/**
 	 * 
-	 * @param readerParam
+	 * @param param
 	 * @param dataConsumer
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public R createReader(@Nonnull ReaderParam readerParam, @Nonnull Consumer<T> dataConsumer)
-			throws IllegalStateException {
-		return createReader(generateReaderName(), readerParam, dataConsumer);
+	public R createReader(@Nonnull ReaderParam param, @Nonnull Consumer<T> dataConsumer) throws IllegalStateException {
+		return createReader(generateReaderName(), param, dataConsumer);
 	}
 
 	/**
 	 * 
 	 * @param readerName
-	 * @param readerParam
+	 * @param param
 	 * @param dataConsumer
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public R createReader(@Nonnull String readerName, @Nonnull ReaderParam readerParam,
-			@Nonnull Consumer<T> dataConsumer) throws IllegalStateException {
+	public R createReader(@Nonnull String readerName, @Nonnull ReaderParam param, @Nonnull Consumer<T> dataConsumer)
+			throws IllegalStateException {
 		if (isClosed())
 			throw new IllegalStateException("Cannot be create reader, Chronicle queue is closed");
 		Assertor.nonNull(readerName, "readerName");
-		Assertor.nonNull(readerParam, "readerParam");
+		Assertor.nonNull(param, "param");
 		Assertor.nonNull(dataConsumer, "dataConsumer");
-		R reader = createReader(readerName, readerParam, logger, dataConsumer);
+		R reader = createReader(readerName, param, logger, dataConsumer);
 		addAccessor(reader);
 		return reader;
 	}
@@ -295,22 +294,22 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	/**
 	 * 
 	 * @param readerName
-	 * @param readerParam
-	 * @param logger
+	 * @param param
+	 * @param log
 	 * @param consumer
 	 * @return
 	 * @throws IllegalStateException
 	 */
 	@AbstractFunction
-	protected abstract R createReader(@Nonnull String readerName, @Nonnull ReaderParam readerParam,
-			@Nonnull Logger logger, @Nonnull Consumer<T> consumer) throws IllegalStateException;
+	protected abstract R createReader(@Nonnull String readerName, @Nonnull ReaderParam param, @Nonnull Logger log,
+			@Nonnull Consumer<T> consumer) throws IllegalStateException;
 
 	/**
 	 * 
 	 * @return
 	 */
 	private String generateAppenderName() {
-		return queueName + "-appender-" + threadSafeRandomUnsignedInt();
+		return queueName + "-appender-" + randomUnsignedInt();
 	}
 
 	/**

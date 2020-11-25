@@ -22,7 +22,7 @@ public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAcc
 	protected final Logger logger;
 	protected final ExcerptAppender excerptAppender;
 
-	private Supplier<T> dataSupplier;
+	private final Supplier<T> dataSupplier;
 
 	protected AbstractChronicleAppender(long allocateSeq, String appenderName, Logger logger,
 			ExcerptAppender excerptAppender, Supplier<T> dataSupplier) {
