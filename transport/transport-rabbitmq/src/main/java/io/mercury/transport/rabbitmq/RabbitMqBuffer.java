@@ -13,7 +13,7 @@ import com.rabbitmq.client.GetResponse;
 
 import io.mercury.common.character.Charsets;
 import io.mercury.common.collections.MutableLists;
-import io.mercury.common.concurrent.queue.api.Queue;
+import io.mercury.common.concurrent.queue.Queue;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.serialization.json.JsonUtil;
 import io.mercury.transport.rabbitmq.configurator.RmqConnection;

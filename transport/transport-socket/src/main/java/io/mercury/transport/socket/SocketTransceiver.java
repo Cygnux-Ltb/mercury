@@ -12,7 +12,7 @@ import org.apache.commons.io.IOUtils;
 
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.concurrent.disruptor.SpscQueue;
-import io.mercury.common.concurrent.queue.api.SCQueue;
+import io.mercury.common.concurrent.queue.SCQueue;
 import io.mercury.common.thread.Threads;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
 
