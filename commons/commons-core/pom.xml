@@ -25,11 +25,10 @@
 	</properties>
 
 	<dependencies>
-		<!-- JSR305 Annotations for Findbugs. -->
+		<!-- JSR305 Annotations for Find bugs -->
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>
 			<artifactId>jsr305</artifactId>
-			<version>3.0.2</version>
 		</dependency>
 
 		<!-- The Apache Commons IO library contains utility classes, stream implementations, 
