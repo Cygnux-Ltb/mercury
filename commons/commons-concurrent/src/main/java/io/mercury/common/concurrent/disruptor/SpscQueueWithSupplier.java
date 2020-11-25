@@ -11,7 +11,7 @@ import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 
 import io.mercury.common.collections.Capacity;
-import io.mercury.common.concurrent.queue.api.SCQueue;
+import io.mercury.common.concurrent.queue.SCQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
