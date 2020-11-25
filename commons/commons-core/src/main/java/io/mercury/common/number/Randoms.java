@@ -1,20 +1,20 @@
 package io.mercury.common.number;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
-public enum Randoms {
+import javax.annotation.concurrent.NotThreadSafe;
 
-	;
+@NotThreadSafe
+public final class Randoms {
 
-	private static final Random RANDOM = new Random();
+	private static final Random STATIC_RANDOM = new Random();
 
 	/**
 	 * @NotThreadSafe
 	 * @return int
 	 */
 	public static int randomInt() {
-		return RANDOM.nextInt();
+		return STATIC_RANDOM.nextInt();
 	}
 
 	/**
@@ -23,7 +23,7 @@ public enum Randoms {
 	 */
 
 	public static int randomUnsignedInt() {
-		return Math.abs(RANDOM.nextInt());
+		return Math.abs(STATIC_RANDOM.nextInt());
 	}
 
 	/**
@@ -31,7 +31,7 @@ public enum Randoms {
 	 * @return long
 	 */
 	public static long randomLong() {
-		return RANDOM.nextLong();
+		return STATIC_RANDOM.nextLong();
 	}
 
 	/**
@@ -39,7 +39,7 @@ public enum Randoms {
 	 * @return unsigned long
 	 */
 	public static long randomUnsignedLong() {
-		return Math.abs(RANDOM.nextLong());
+		return Math.abs(STATIC_RANDOM.nextLong());
 	}
 
 	/**
@@ -47,7 +47,7 @@ public enum Randoms {
 	 * @return double
 	 */
 	public static double randomDouble() {
-		return RANDOM.nextDouble();
+		return STATIC_RANDOM.nextDouble();
 	}
 
 	/**
@@ -55,55 +55,9 @@ public enum Randoms {
 	 * @return unsigned double
 	 */
 	public static double randomUnsignedDouble() {
-		return Math.abs(RANDOM.nextDouble());
+		return Math.abs(STATIC_RANDOM.nextDouble());
 	}
 
-	/**
-	 * @ThreadSafe
-	 * @return int
-	 */
-	public static int threadSafeRandomInt() {
-		return ThreadLocalRandom.current().nextInt();
-	}
 
-	/**
-	 * @ThreadSafe
-	 * @return unsigned int
-	 */
-	public static int threadSafeRandomUnsignedInt() {
-		return Math.abs(ThreadLocalRandom.current().nextInt());
-	}
-
-	/**
-	 * @ThreadSafe
-	 * @return long
-	 */
-	public static long threadSafeRandomLong() {
-		return ThreadLocalRandom.current().nextLong();
-	}
-
-	/**
-	 * @ThreadSafe
-	 * @return unsigned long
-	 */
-	public static long threadSafeRandomUnsignedLong() {
-		return Math.abs(ThreadLocalRandom.current().nextLong());
-	}
-
-	/**
-	 * @ThreadSafe
-	 * @return double
-	 */
-	public static double threadSafeRandomDouble() {
-		return ThreadLocalRandom.current().nextDouble();
-	}
-
-	/**
-	 * @ThreadSafe
-	 * @return unsigned double
-	 */
-	public static double threadSafeRandomUnsignedDouble() {
-		return Math.abs(ThreadLocalRandom.current().nextDouble());
-	}
 
 }

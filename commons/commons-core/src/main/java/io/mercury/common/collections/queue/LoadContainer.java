@@ -1,4 +1,4 @@
-package io.mercury.common.collections.queue.base;
+package io.mercury.common.collections.queue;
 
 /**
  * 

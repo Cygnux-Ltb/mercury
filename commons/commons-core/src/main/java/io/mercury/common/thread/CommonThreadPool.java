@@ -13,7 +13,7 @@ import java.util.function.BiConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.mercury.common.number.Randoms;
+import io.mercury.common.number.ThreadSafeRandoms;
 import io.mercury.common.sys.CurrentRuntime;
 
 public final class CommonThreadPool extends ThreadPoolExecutor {
@@ -156,7 +156,7 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
 		}
 
 		public ThreadPoolExecutor build(String threadPoolName) {
-			threadPoolName = isNullOrEmpty(threadPoolName) ? "CommonThreadPool-" + Randoms.threadSafeRandomUnsignedInt()
+			threadPoolName = isNullOrEmpty(threadPoolName) ? "CommonThreadPool-" + ThreadSafeRandoms.randomUnsignedInt()
 					: threadPoolName;
 			if (threadFactory != null && rejectedHandler != null) {
 				return new CommonThreadPool(threadPoolName, this, threadFactory, rejectedHandler, beforeHandler,

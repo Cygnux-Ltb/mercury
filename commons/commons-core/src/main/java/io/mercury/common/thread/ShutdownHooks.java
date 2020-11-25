@@ -7,7 +7,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import org.eclipse.collections.api.list.MutableList;
 
 import io.mercury.common.collections.MutableLists;
-import io.mercury.common.number.Randoms;
+import io.mercury.common.number.ThreadSafeRandoms;
 
 public final class ShutdownHooks {
 
@@ -35,7 +35,7 @@ public final class ShutdownHooks {
 	}
 
 	public static Thread addShutdownHookThread(Runnable runnable) {
-		return addShutdownHookThread("ShutdownHooksSubThread-" + Randoms.threadSafeRandomUnsignedInt(), runnable);
+		return addShutdownHookThread("ShutdownHooksSubThread-" + ThreadSafeRandoms.randomUnsignedInt(), runnable);
 	}
 
 	public static Thread addShutdownHookThread(String threadName, Runnable runnable) {
