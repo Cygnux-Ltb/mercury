@@ -9,8 +9,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 
 import io.mercury.common.annotation.thread.LockHeld;
-import io.mercury.common.collections.queue.base.LoadContainer;
-import io.mercury.common.concurrent.queue.api.MCQueue;
+import io.mercury.common.collections.queue.LoadContainer;
 import io.mercury.common.log.CommonLoggerFactory;
 
 @ThreadSafe

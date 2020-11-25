@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.queue;
+package io.mercury.common.concurrent.queue.jct;
 
 import java.util.concurrent.TimeUnit;
 
@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 
 import io.mercury.common.annotation.thread.SpinWaiting;
 import io.mercury.common.concurrent.disruptor.SpscQueue;
+import io.mercury.common.concurrent.queue.QueueWorkingException;
 import io.mercury.common.concurrent.queue.base.JctSCQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
@@ -22,8 +23,7 @@ public final class JctSPSCQueue<E> extends JctSCQueue<SpscArrayQueue<E>, E> {
 	private JctSPSCQueue(String queueName, int capacity, StartMode startMode, long delayMillis,
 			WaitingStrategy strategy, Processor<E> processor) {
 		super(processor, Math.max(capacity, 16));
-		super.queueName = StringUtil.isNullOrEmpty(queueName)
-				? this.getClass().getSimpleName() + "-" + Threads.currentThreadName()
+		super.queueName = StringUtil.isNullOrEmpty(queueName) ? "JctSPSCQueue-" + Threads.currentThreadName()
 				: queueName;
 		this.strategy = strategy;
 		switch (startMode) {
@@ -107,13 +107,13 @@ public final class JctSPSCQueue<E> extends JctSCQueue<SpscArrayQueue<E>, E> {
 	@Override
 	@SpinWaiting
 	public boolean enqueue(E e) {
-		if (!isClose.get()) {
+		if (!isClosed.get()) {
 			log.error("JctSpscQueue -> {}, enqueue failure, This queue is closed", queueName);
 			return false;
 		}
 		if (e == null)
 			log.error("JctSpscQueue -> {}, enqueue element is null", queueName);
-		while (!innerQueue.offer(e))
+		while (!queue.offer(e))
 			waiting();
 		return true;
 	}
@@ -126,9 +126,9 @@ public final class JctSPSCQueue<E> extends JctSCQueue<SpscArrayQueue<E>, E> {
 		}
 		Threads.startNewMaxPriorityThread(queueName + "-ProcessThread", () -> {
 			try {
-				while (isRunning.get() || !innerQueue.isEmpty()) {
+				while (isRunning.get() || !queue.isEmpty()) {
 					@SpinWaiting
-					E e = innerQueue.poll();
+					E e = queue.poll();
 					if (e != null)
 						processor.process(e);
 					else
@@ -142,19 +142,19 @@ public final class JctSPSCQueue<E> extends JctSCQueue<SpscArrayQueue<E>, E> {
 
 	public static void main(String[] args) {
 
-		JctSPSCQueue<Integer> queue = JctSPSCQueue.autoStartQueue(6, WaitingStrategy.SleepWaiting, (value) -> {
+		JctSPSCQueue<Integer> spscQueue = JctSPSCQueue.autoStartQueue(6, WaitingStrategy.SleepWaiting, (value) -> {
 			System.out.println(value);
 			Threads.sleep(500);
 		});
 
 		int i = 0;
 
-		System.out.println(queue.queueName());
+		System.out.println(spscQueue.queueName());
 		for (;;) {
-			queue.enqueue(++i);
+			spscQueue.enqueue(++i);
 			System.out.println("enqueue ->" + i);
-			System.out.println("size -> " + queue.innerQueue.size());
-			System.out.println("capacity -> " + queue.innerQueue.capacity());
+			System.out.println("size -> " + spscQueue.queue.size());
+			System.out.println("capacity -> " + spscQueue.queue.capacity());
 		}
 
 	}

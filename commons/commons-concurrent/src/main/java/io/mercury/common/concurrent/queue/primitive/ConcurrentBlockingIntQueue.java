@@ -151,7 +151,7 @@ import io.mercury.common.concurrent.queue.base.BaseConcurrentBlockingQueue;
  * @author Rob Austin
  * @since 1.1
  */
-public class ConcurrentBlockingIntQueue extends BaseConcurrentBlockingQueue {
+public final class ConcurrentBlockingIntQueue extends BaseConcurrentBlockingQueue {
 
 	// intentionally not volatile, as we are carefully ensuring that the memory
 	// barriers are controlled below by other objects

@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.queue.api;
+package io.mercury.common.concurrent.queue;
 
 import java.util.function.Predicate;
 
@@ -24,7 +24,7 @@ public interface Queue<E> {
 	}
 
 	@FunctionalInterface
-	interface PollFunction<E> extends Predicate<E> {
+	public static interface PollFunction<E> extends Predicate<E> {
 
 		boolean apply(E e);
 

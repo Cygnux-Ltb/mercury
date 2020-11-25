@@ -155,7 +155,7 @@ import io.mercury.common.concurrent.queue.base.BaseConcurrentBlockingQueue;
  * @author Rob Austin
  * @since 1.1
  */
-public class ConcurrentBlockingQueue<E> extends BaseConcurrentBlockingQueue implements BlockingQueue<E> {
+public final class ConcurrentBlockingQueue<E> extends BaseConcurrentBlockingQueue implements BlockingQueue<E> {
 
 	// intentionally not volatile, as we are carefully ensuring that the memory
 	// barriers are controlled below by other objects

@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.queue;
+package io.mercury.common.concurrent.queue.jct;
 
 import java.util.concurrent.TimeUnit;
 
@@ -6,6 +6,7 @@ import org.jctools.queues.MpscArrayQueue;
 import org.slf4j.Logger;
 
 import io.mercury.common.annotation.thread.SpinWaiting;
+import io.mercury.common.concurrent.queue.QueueWorkingException;
 import io.mercury.common.concurrent.queue.base.JctSCQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
@@ -19,8 +20,7 @@ public final class JctMPSCQueue<E> extends JctSCQueue<MpscArrayQueue<E>, E> {
 	private JctMPSCQueue(String queueName, int capacity, StartMode startMode, long delayMillis,
 			Processor<E> processor) {
 		super(processor, Math.max(capacity, 16));
-		this.queueName = StringUtil.isNullOrEmpty(queueName)
-				? this.getClass().getSimpleName() + "-" + Threads.currentThreadName()
+		this.queueName = StringUtil.isNullOrEmpty(queueName) ? "JctMPSCQueue-" + Threads.currentThreadName()
 				: queueName;
 		switch (startMode) {
 		case Auto:
@@ -84,13 +84,13 @@ public final class JctMPSCQueue<E> extends JctSCQueue<MpscArrayQueue<E>, E> {
 	@Override
 	@SpinWaiting
 	public boolean enqueue(E e) {
-		if (!isClose.get()) {
+		if (!isClosed.get()) {
 			log.error("JctMpscQueue -> {}, enqueue failure, This queue is closed", queueName);
 			return false;
 		}
 		if (e == null)
 			log.error("JctMpscQueue -> {}, enqueue element is null", queueName);
-		while (!innerQueue.offer(e))
+		while (!queue.offer(e))
 			;
 		return true;
 	}
@@ -98,14 +98,14 @@ public final class JctMPSCQueue<E> extends JctSCQueue<MpscArrayQueue<E>, E> {
 	@Override
 	public void startProcessThread() {
 		if (!isRunning.compareAndSet(false, true)) {
-			log.error("JctMpscQueue -> {}, Error call, This queue is started", queueName);
+			log.error("JctMPSCQueue -> {}, Error call, This queue is started", queueName);
 			return;
 		}
 		Threads.startNewThread(queueName + "-ProcessThread", () -> {
 			try {
-				while (isRunning.get() || !innerQueue.isEmpty()) {
+				while (isRunning.get() || !queue.isEmpty()) {
 					@SpinWaiting
-					E e = innerQueue.poll();
+					E e = queue.poll();
 					if (e != null)
 						processor.process(e);
 				}
@@ -113,12 +113,6 @@ public final class JctMPSCQueue<E> extends JctSCQueue<MpscArrayQueue<E>, E> {
 				throw new QueueWorkingException(queueName + " process thread throw exception", e);
 			}
 		});
-	}
-
-	@Override
-	public void stop() {
-		this.isRunning.set(false);
-		this.isClose.set(true);
 	}
 
 	public static void main(String[] args) {

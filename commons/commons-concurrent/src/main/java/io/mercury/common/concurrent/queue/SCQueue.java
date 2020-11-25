@@ -1,10 +1,10 @@
-package io.mercury.common.concurrent.queue.api;
+package io.mercury.common.concurrent.queue;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.functional.Processor;
-import io.mercury.common.number.Randoms;
+import io.mercury.common.number.ThreadSafeRandoms;
 import io.mercury.common.util.Assertor;
 
 /**
@@ -27,12 +27,12 @@ public abstract class SCQueue<E> implements Queue<E> {
 	/**
 	 * Close flag
 	 */
-	protected final AtomicBoolean isClose = new AtomicBoolean(true);
+	protected final AtomicBoolean isClosed = new AtomicBoolean(true);
 
 	/**
 	 * 
 	 */
-	protected String queueName = "SCQueue-" + Integer.toString(Randoms.threadSafeRandomUnsignedInt());
+	protected String queueName = "SCQueue-" + Integer.toString(ThreadSafeRandoms.randomUnsignedInt());
 
 	protected SCQueue(Processor<E> processor) {
 		Assertor.nonNull(processor, "processor");
@@ -48,7 +48,7 @@ public abstract class SCQueue<E> implements Queue<E> {
 
 	public void stop() {
 		this.isRunning.set(false);
-		this.isClose.set(true);
+		this.isClosed.set(true);
 	}
 
 	@Override

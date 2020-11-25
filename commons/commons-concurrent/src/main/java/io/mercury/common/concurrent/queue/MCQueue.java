@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.queue.api;
+package io.mercury.common.concurrent.queue;
 
 import javax.annotation.CheckForNull;
 
