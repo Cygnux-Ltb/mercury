@@ -9,8 +9,8 @@ import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
 
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.concurrent.queue.JctMPSCQueue;
-import io.mercury.common.concurrent.queue.api.SCQueue;
+import io.mercury.common.concurrent.queue.SCQueue;
+import io.mercury.common.concurrent.queue.jct.JctMPSCQueue;
 import io.mercury.common.util.StringUtil;
 
 /**
