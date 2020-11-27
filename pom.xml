@@ -18,6 +18,7 @@
 	<modules>
 		<module>actors</module>
 		<module>commons</module>
+		<module>libraries</module>
 		<module>persistence</module>
 		<module>transport</module>
 	</modules>
