@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.mercury</groupId>
+		<artifactId>mercury</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>libraries</artifactId>
+	<name>libraries</name>
+
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>library-arangodb</module>
+		<module>library-cassandra</module>
+		<module>library-derby</module>
+		<module>library-h2</module>
+		<module>library-hsqldb</module>
+		<module>library-janusgraph</module>
+		<module>library-redis</module>
+		<module>library-sqlite</module>
+	</modules>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.mercury</groupId>
+				<artifactId>commons-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<!-- Java(TM) Persistence API -->
+			<dependency>
+				<groupId>javax.persistence</groupId>
+				<artifactId>javax.persistence-api</artifactId>
+				<version>2.2</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+
+</project>
