@@ -17,16 +17,11 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>library-arangodb</module>
-		<module>library-cassandra</module>
-		<module>library-h2</module>
-		<module>library-janusgraph</module>
-		<module>library-redis</module>
-		<module>library-sqlite</module>
 		<module>persistence-chronicle</module>
 		<module>persistence-kyotocabinet</module>
 		<module>persistence-rocksdb</module>
 		<module>serialization-avro</module>
+		<module>serialization-flatbuffers</module>
 		<module>serialization-json</module>
 		<module>serialization-kryo</module>
 		<module>serialization-protobuf</module>
@@ -71,13 +66,6 @@
 				<groupId>io.mercury</groupId>
 				<artifactId>commons-concurrent</artifactId>
 				<version>${project.version}</version>
-			</dependency>
-
-			<!-- Java(TM) Persistence API -->
-			<dependency>
-				<groupId>javax.persistence</groupId>
-				<artifactId>javax.persistence-api</artifactId>
-				<version>2.2</version>
 			</dependency>
 
 			<!-- A set of annotations used for code inspection support and code documentation -->

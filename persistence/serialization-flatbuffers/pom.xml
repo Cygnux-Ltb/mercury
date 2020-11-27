@@ -4,27 +4,28 @@
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-
 	<parent>
 		<groupId>io.mercury</groupId>
 		<artifactId>persistence</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>persistence-kyotocabinet</artifactId>
-	<name>persistence-kyotocabinet</name>
+	<artifactId>serialization-flatbuffers</artifactId>
+	<name>serialization-flatbuffers</name>
 
 	<dependencies>
 		<dependency>
-			<groupId>io.mercury</groupId>
-			<artifactId>commons-concurrent</artifactId>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
 		</dependency>
 
-		<!-- Java binding of Kyoto Cabinet. -->
+		<!-- Memory Efficient Serialization Library -->
 		<dependency>
-			<groupId>com.fallabs</groupId>
-			<artifactId>kyotocabinet-java</artifactId>
-			<version>1.24</version>
+			<groupId>com.google.flatbuffers</groupId>
+			<artifactId>flatbuffers-java</artifactId>
+			<version>1.12.0</version>
 		</dependency>
+
 	</dependencies>
 </project>
