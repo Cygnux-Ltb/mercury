@@ -90,6 +90,12 @@
 			<artifactId>commons-log</artifactId>
 		</dependency>
 
+		<!-- <dependency>
+			<groupId>org.codehaus.plexus</groupId>
+			<artifactId>plexus-utils</artifactId>
+			<version>3.3.0</version>
+		</dependency> -->
+
 		<!-- ####### Unit test mock tool ####### -->
 		<!-- EasyMock pro an easy way to create Mock Objects for interfaces and 
 			classes generating them on the fly. -->
