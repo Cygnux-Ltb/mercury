@@ -31,11 +31,20 @@ public final class CacheList<T> {
 		this.refresher = refresher;
 	}
 
+	/**
+	 * 
+	 * @param value
+	 * @return
+	 */
 	private CacheList<T> set(List<T> value) {
 		this.saved = new Saved(true, value);
 		return this;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public Optional<List<T>> get() {
 		if (saved == null || !saved.available) {
 			List<T> refreshed = refresher.get();
@@ -45,6 +54,10 @@ public final class CacheList<T> {
 		}
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public CacheList<T> setUnavailable() {
 		saved.available = false;
 		return this;
