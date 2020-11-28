@@ -20,6 +20,7 @@ import io.mercury.common.collections.MutableSets;
 public final class DeduplicationCounter<T extends Comparable<T>> {
 
 	private MutableSet<T> deRepeatSet = MutableSets.newUnifiedSet(Capacity.L06_SIZE_64);
+
 	private volatile int count;
 	private final int initCount;
 
@@ -69,6 +70,10 @@ public final class DeduplicationCounter<T extends Comparable<T>> {
 		return this;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isArchived() {
 		return isArchived;
 	}
