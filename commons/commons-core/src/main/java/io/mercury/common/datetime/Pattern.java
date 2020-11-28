@@ -1,5 +1,19 @@
 package io.mercury.common.datetime;
 
+import static io.mercury.common.datetime.Pattern.DatePattern.YYYYMMDD;
+import static io.mercury.common.datetime.Pattern.DatePattern.YYYY_MM_DD;
+import static io.mercury.common.datetime.Pattern.PatternSymbol.BLANK;
+import static io.mercury.common.datetime.Pattern.PatternSymbol.LINE;
+import static io.mercury.common.datetime.Pattern.PatternSymbol.TIME;
+import static io.mercury.common.datetime.Pattern.TimePattern.HH;
+import static io.mercury.common.datetime.Pattern.TimePattern.HHMM;
+import static io.mercury.common.datetime.Pattern.TimePattern.HHMMSS;
+import static io.mercury.common.datetime.Pattern.TimePattern.HHMMSSSSS;
+import static io.mercury.common.datetime.Pattern.TimePattern.HHMMSSSSSSSS;
+import static io.mercury.common.datetime.Pattern.TimePattern.HH_MM_SS;
+import static io.mercury.common.datetime.Pattern.TimePattern.HH_MM_SS_SSS;
+import static io.mercury.common.datetime.Pattern.TimePattern.HH_MM_SS_SSSSSS;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
@@ -59,7 +73,7 @@ p       pad next                    pad modifier      1
  * </pre>
  * 
  */
-public abstract class Pattern {
+public class Pattern {
 
 	private final String pattern;
 	private final DateTimeFormatter formatter;
@@ -223,27 +237,26 @@ public abstract class Pattern {
 		/**
 		 * Example: 2018031413
 		 */
-		public final static DateTimePattern YYYYMMDDHH = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + TimePattern.HH.getPattern());
+		public final static DateTimePattern YYYYMMDDHH = new DateTimePattern(YYYYMMDD.getPattern() + HH.getPattern());
 
 		/**
 		 * Example: 201803141314
 		 */
 		public final static DateTimePattern YYYYMMDDHHMM = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + TimePattern.HHMM.getPattern());
+				YYYYMMDD.getPattern() + HHMM.getPattern());
 
 		/**
 		 * Example: 20180314131423
 		 */
 
 		public final static DateTimePattern YYYYMMDDHHMMSS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + TimePattern.HHMMSS.getPattern());
+				YYYYMMDD.getPattern() + HHMMSS.getPattern());
 
 		/**
 		 * Example: 20180314131423678
 		 */
 		public final static DateTimePattern YYYYMMDDHHMMSSSSS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + TimePattern.HHMMSSSSS.getPattern());
+				YYYYMMDD.getPattern() + HHMMSSSSS.getPattern());
 
 		/**
 		 * =============================================================================================
@@ -253,55 +266,55 @@ public abstract class Pattern {
 		 * Example: 20180314 131423
 		 */
 		public final static DateTimePattern YYYYMMDD_B_HHMMSS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + PatternSymbol.BLANK + TimePattern.HHMMSS.getPattern());
+				YYYYMMDD.getPattern() + BLANK + HHMMSS.getPattern());
 
 		/**
 		 * Example: 20180314 131423678
 		 */
 		public final static DateTimePattern YYYYMMDD_B_HHMMSSSSS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + PatternSymbol.BLANK + TimePattern.HHMMSSSSS.getPattern());
+				YYYYMMDD.getPattern() + BLANK + HHMMSSSSS.getPattern());
 
 		/**
 		 * Example: 20180314 131423678789
 		 */
 		public final static DateTimePattern YYYYMMDD_B_HHMMSSSSSSSS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + PatternSymbol.BLANK + TimePattern.HHMMSSSSSSSS.getPattern());
+				YYYYMMDD.getPattern() + BLANK + HHMMSSSSSSSS.getPattern());
 
 		/**
 		 * Example: 20180314-131423
 		 */
 		public final static DateTimePattern YYYYMMDD_L_HHMMSS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + PatternSymbol.LINE + TimePattern.HHMMSS.getPattern());
+				YYYYMMDD.getPattern() + LINE + HHMMSS.getPattern());
 
 		/**
 		 * Example: 20180314-131423678
 		 */
 		public final static DateTimePattern YYYYMMDD_L_HHMMSSSSS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + PatternSymbol.LINE + TimePattern.HHMMSSSSS.getPattern());
+				YYYYMMDD.getPattern() + LINE + HHMMSSSSS.getPattern());
 
 		/**
 		 * Example: 20180314-131423678789
 		 */
 		public final static DateTimePattern YYYYMMDD_L_HHMMSSSSSSSS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + PatternSymbol.LINE + TimePattern.HHMMSSSSSSSS.getPattern());
+				YYYYMMDD.getPattern() + LINE + HHMMSSSSSSSS.getPattern());
 
 		/**
 		 * Example: 20180314T131423
 		 */
 		public final static DateTimePattern YYYYMMDD_T_HHMMSS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + PatternSymbol.TIME + TimePattern.HHMMSS.getPattern());
+				YYYYMMDD.getPattern() + TIME + HHMMSS.getPattern());
 
 		/**
 		 * Example: 20180314T131423678
 		 */
 		public final static DateTimePattern YYYYMMDD_T_HHMMSSSSS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + PatternSymbol.TIME + TimePattern.HHMMSSSSS.getPattern());
+				YYYYMMDD.getPattern() + TIME + HHMMSSSSS.getPattern());
 
 		/**
 		 * Example: 20180314T131423678789
 		 */
 		public final static DateTimePattern YYYYMMDD_T_HHMMSSSSSSSS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + PatternSymbol.TIME + TimePattern.HHMMSSSSSSSS.getPattern());
+				YYYYMMDD.getPattern() + TIME + HHMMSSSSSSSS.getPattern());
 
 		/**
 		 * =============================================================================================
@@ -311,55 +324,55 @@ public abstract class Pattern {
 		 * Example: 20180314 13:14:23
 		 */
 		public final static DateTimePattern YYYYMMDD_B_HH_MM_SS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + PatternSymbol.BLANK + TimePattern.HH_MM_SS.getPattern());
+				YYYYMMDD.getPattern() + BLANK + HH_MM_SS.getPattern());
 
 		/**
 		 * Example: 20180314 13:14:23.678
 		 */
 		public final static DateTimePattern YYYYMMDD_B_HH_MM_SS_SSS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + PatternSymbol.BLANK + TimePattern.HH_MM_SS_SSS.getPattern());
+				YYYYMMDD.getPattern() + BLANK + HH_MM_SS_SSS.getPattern());
 
 		/**
 		 * Example: 20180314T13:14:23.678789
 		 */
 		public final static DateTimePattern YYYYMMDD_B_HH_MM_SS_SSSSSS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + PatternSymbol.BLANK + TimePattern.HH_MM_SS_SSSSSS.getPattern());
+				YYYYMMDD.getPattern() + BLANK + HH_MM_SS_SSSSSS.getPattern());
 
 		/**
 		 * Example: 20180314-13:14:23
 		 */
 		public final static DateTimePattern YYYYMMDD_L_HH_MM_SS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + PatternSymbol.LINE + TimePattern.HH_MM_SS.getPattern());
+				YYYYMMDD.getPattern() + LINE + HH_MM_SS.getPattern());
 
 		/**
 		 * Example: 20180314-13:14:23.678
 		 */
 		public final static DateTimePattern YYYYMMDD_L_HH_MM_SS_SSS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + PatternSymbol.LINE + TimePattern.HH_MM_SS_SSS.getPattern());
+				YYYYMMDD.getPattern() + LINE + HH_MM_SS_SSS.getPattern());
 
 		/**
 		 * Example: 20180314-13:14:23.678789
 		 */
 		public final static DateTimePattern YYYYMMDD_L_HH_MM_SS_SSSSSS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + PatternSymbol.LINE + TimePattern.HH_MM_SS_SSSSSS.getPattern());
+				YYYYMMDD.getPattern() + LINE + HH_MM_SS_SSSSSS.getPattern());
 
 		/**
 		 * Example: 20180314T13:14:23
 		 */
 		public final static DateTimePattern YYYYMMDD_T_HH_MM_SS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + PatternSymbol.TIME + TimePattern.HH_MM_SS.getPattern());
+				YYYYMMDD.getPattern() + TIME + HH_MM_SS.getPattern());
 
 		/**
 		 * Example: 20180314T13:14:23.678
 		 */
 		public final static DateTimePattern YYYYMMDD_T_HH_MM_SS_SSS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + PatternSymbol.TIME + TimePattern.HH_MM_SS_SSS.getPattern());
+				YYYYMMDD.getPattern() + TIME + HH_MM_SS_SSS.getPattern());
 
 		/**
 		 * Example: 20180314T13:14:23.567
 		 */
 		public final static DateTimePattern YYYYMMDD_T_HH_MM_SS_SSSSSS = new DateTimePattern(
-				DatePattern.YYYYMMDD.getPattern() + PatternSymbol.TIME + TimePattern.HH_MM_SS_SSSSSS.getPattern());
+				YYYYMMDD.getPattern() + TIME + HH_MM_SS_SSSSSS.getPattern());
 
 		/**
 		 * =============================================================================================
@@ -369,37 +382,37 @@ public abstract class Pattern {
 		 * Example: 2018-03-14 131423
 		 */
 		public final static DateTimePattern YYYY_MM_DD_B_HHMMSS = new DateTimePattern(
-				DatePattern.YYYY_MM_DD.getPattern() + PatternSymbol.BLANK + TimePattern.HHMMSS.getPattern());
+				YYYY_MM_DD.getPattern() + BLANK + HHMMSS.getPattern());
 
 		/**
 		 * Example: 2018-03-14 131423678
 		 */
 		public final static DateTimePattern YYYY_MM_DD_B_HHMMSSSSS = new DateTimePattern(
-				DatePattern.YYYY_MM_DD.getPattern() + PatternSymbol.BLANK + TimePattern.HHMMSSSSS.getPattern());
+				YYYY_MM_DD.getPattern() + BLANK + HHMMSSSSS.getPattern());
 
 		/**
 		 * Example: 2018-03-14 131423678789
 		 */
 		public final static DateTimePattern YYYY_MM_DD_B_HHMMSSSSSSSS = new DateTimePattern(
-				DatePattern.YYYY_MM_DD.getPattern() + PatternSymbol.BLANK + TimePattern.HHMMSSSSSSSS.getPattern());
+				YYYY_MM_DD.getPattern() + BLANK + HHMMSSSSSSSS.getPattern());
 
 		/**
 		 * Example: 2018-03-14T131423
 		 */
 		public final static DateTimePattern YYYY_MM_DD_T_HHMMSS = new DateTimePattern(
-				DatePattern.YYYY_MM_DD.getPattern() + PatternSymbol.TIME + TimePattern.HHMMSS.getPattern());
+				YYYY_MM_DD.getPattern() + TIME + HHMMSS.getPattern());
 
 		/**
 		 * Example: 2018-03-14T131423678
 		 */
 		public final static DateTimePattern YYYY_MM_DD_T_HHMMSSSSS = new DateTimePattern(
-				DatePattern.YYYY_MM_DD.getPattern() + PatternSymbol.TIME + TimePattern.HHMMSSSSS.getPattern());
+				YYYY_MM_DD.getPattern() + TIME + HHMMSSSSS.getPattern());
 
 		/**
 		 * Example: 2018-03-14T131423678789
 		 */
 		public final static DateTimePattern YYYY_MM_DD_T_HHMMSSSSSSSS = new DateTimePattern(
-				DatePattern.YYYY_MM_DD.getPattern() + PatternSymbol.TIME + TimePattern.HHMMSSSSSSSS.getPattern());
+				YYYY_MM_DD.getPattern() + TIME + HHMMSSSSSSSS.getPattern());
 
 		/**
 		 * =============================================================================================
@@ -409,37 +422,37 @@ public abstract class Pattern {
 		 * Example: 2018-03-14 13:14:23
 		 */
 		public final static DateTimePattern YYYY_MM_DD_B_HH_MM_SS = new DateTimePattern(
-				DatePattern.YYYY_MM_DD.getPattern() + PatternSymbol.BLANK + TimePattern.HH_MM_SS.getPattern());
+				YYYY_MM_DD.getPattern() + BLANK + HH_MM_SS.getPattern());
 
 		/**
 		 * Example: 2018-03-14 13:14:23.678
 		 */
 		public final static DateTimePattern YYYY_MM_DD_B_HH_MM_SS_SSS = new DateTimePattern(
-				DatePattern.YYYY_MM_DD.getPattern() + PatternSymbol.BLANK + TimePattern.HH_MM_SS_SSS.getPattern());
+				YYYY_MM_DD.getPattern() + BLANK + HH_MM_SS_SSS.getPattern());
 
 		/**
 		 * Example: 2018-03-14 13:14:23.678789
 		 */
 		public final static DateTimePattern YYYY_MM_DD_B_HH_MM_SS_SSSSSS = new DateTimePattern(
-				DatePattern.YYYY_MM_DD.getPattern() + PatternSymbol.BLANK + TimePattern.HH_MM_SS_SSSSSS.getPattern());
+				YYYY_MM_DD.getPattern() + BLANK + HH_MM_SS_SSSSSS.getPattern());
 
 		/**
 		 * Example: 2018-03-14T13:14:23
 		 */
 		public final static DateTimePattern YYYY_MM_DD_T_HH_MM_SS = new DateTimePattern(
-				DatePattern.YYYY_MM_DD.getPattern() + PatternSymbol.TIME + TimePattern.HH_MM_SS.getPattern());
+				YYYY_MM_DD.getPattern() + TIME + HH_MM_SS.getPattern());
 
 		/**
 		 * Example: 2018-03-14T13:14:23.678
 		 */
 		public final static DateTimePattern YYYY_MM_DD_T_HH_MM_SS_SSS = new DateTimePattern(
-				DatePattern.YYYY_MM_DD.getPattern() + PatternSymbol.TIME + TimePattern.HH_MM_SS_SSS.getPattern());
+				YYYY_MM_DD.getPattern() + TIME + HH_MM_SS_SSS.getPattern());
 
 		/**
 		 * Example: 2018-03-14T13:14:23.678789
 		 */
 		public final static DateTimePattern YYYY_MM_DD_T_HH_MM_SS_SSSSSS = new DateTimePattern(
-				DatePattern.YYYY_MM_DD.getPattern() + PatternSymbol.TIME + TimePattern.HH_MM_SS_SSSSSS.getPattern());
+				YYYY_MM_DD.getPattern() + TIME + HH_MM_SS_SSSSSS.getPattern());
 
 		private DateTimePattern(String pattern) {
 			super(pattern);

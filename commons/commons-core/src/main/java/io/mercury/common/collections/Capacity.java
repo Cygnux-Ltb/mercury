@@ -196,6 +196,9 @@ public enum Capacity {
 
 		System.out.println(1 << 30);
 		System.out.println(BitOperator.intBinaryFormat(1 << 30));
+		System.out.println(1 << 31);
+		System.out.println(BitOperator.intBinaryFormat(1 << 31));
+		
 		System.out.println(BitOperator.intBinaryFormat(Integer.MIN_VALUE << 65));
 
 		System.out.println(Capacity.L09_SIZE_512.quarter());

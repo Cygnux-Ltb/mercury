@@ -6,17 +6,17 @@ public final class MapUtil {
 
 	/**
 	 * 
-	 * @param mapA
-	 * @param mapB
+	 * @param map0
+	 * @param map1
 	 * @return
 	 */
-	public static boolean isEquals(Map<?, ?> mapA, Map<?, ?> mapB) {
-		if (mapA == null && mapB == null)
+	public static boolean isEquals(Map<?, ?> map0, Map<?, ?> map1) {
+		if (map0 == null && map1 == null)
 			return true;
-		else if ((mapA != null && mapB == null) || (mapB != null && mapA == null))
+		else if ((map0 != null && map1 == null) || (map1 != null && map0 == null))
 			return false;
 		else
-			return mapA.equals(mapB);
+			return map0.equals(map1);
 	}
 
 }

@@ -9,6 +9,9 @@ import javax.annotation.Nonnull;
 
 public final class Files {
 
+	private Files() {
+	}
+
 	/**
 	 * 
 	 * @param path
