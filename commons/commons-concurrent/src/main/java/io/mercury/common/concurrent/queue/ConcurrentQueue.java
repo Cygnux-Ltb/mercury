@@ -1,40 +1,38 @@
 package io.mercury.common.concurrent.queue;
 
-import org.jctools.queues.SpscArrayQueue;
+import org.jctools.queues.MpmcArrayQueue;
 
-import io.mercury.common.annotation.thread.OnlySingleThreadCall;
 import io.mercury.common.annotation.thread.SpinWaiting;
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringUtil;
 
-public class SPSCQueueDefault<E> implements Queue<E> {
+public class ConcurrentQueue<E> implements MCQueue<E> {
 
-	private final SpscArrayQueue<E> queue;
+	private final MpmcArrayQueue<E> queue;
 
 	private final WaitingStrategy strategy;
 
 	private final String queueName;
 
-	public SPSCQueueDefault(String queueName, Capacity capacity, WaitingStrategy strategy) {
-		this.queue = new SpscArrayQueue<>(Math.max(capacity.size(), 64));
-		this.queueName = StringUtil.isNullOrEmpty(queueName)
-				? this.getClass().getSimpleName() + "-" + Threads.currentThreadName()
+	public ConcurrentQueue(String queueName, Capacity capacity, WaitingStrategy strategy) {
+		this.queue = new MpmcArrayQueue<>(Math.max(capacity.size(), 64));
+		this.queueName = StringUtil.isNullOrEmpty(queueName) 
+				? "ConcurrentQueue-" + Threads.currentThreadName()
 				: queueName;
 		this.strategy = strategy == null ? WaitingStrategy.SleepWaiting : strategy;
 	}
 
 	@Override
 	@SpinWaiting
-	@OnlySingleThreadCall
 	public boolean enqueue(E e) {
 		while (!queue.offer(e))
 			waiting();
 		return true;
 	}
 
-	@OnlySingleThreadCall
-	public E poll() {
+	@Override
+	public E dequeue() {
 		do {
 			E e = queue.poll();
 			if (e != null)
