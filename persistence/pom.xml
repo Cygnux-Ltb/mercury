@@ -25,6 +25,7 @@
 		<module>serialization-json</module>
 		<module>serialization-kryo</module>
 		<module>serialization-protobuf</module>
+		<module>serialization-protostuff</module>
 	</modules>
 
 	<properties>

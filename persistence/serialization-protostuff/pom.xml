@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.mercury</groupId>
+		<artifactId>persistence</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	
+	<artifactId>serialization-protostuff</artifactId>
+	<name>serialization-protostuff</name>
+	
+	<dependencies>
+		<!-- protobuf serialization for mutable messages -->
+		<dependency>
+			<groupId>io.protostuff</groupId>
+			<artifactId>protostuff-core</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+
+		<!-- protobuf serialization for pre-existing objects -->
+		<dependency>
+			<groupId>io.protostuff</groupId>
+			<artifactId>protostuff-runtime</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
