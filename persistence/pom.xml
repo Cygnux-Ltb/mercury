@@ -20,12 +20,6 @@
 		<module>persistence-chronicle</module>
 		<module>persistence-kyotocabinet</module>
 		<module>persistence-rocksdb</module>
-		<module>serialization-avro</module>
-		<module>serialization-flatbuffers</module>
-		<module>serialization-json</module>
-		<module>serialization-kryo</module>
-		<module>serialization-protobuf</module>
-		<module>serialization-protostuff</module>
 	</modules>
 
 	<properties>
@@ -74,45 +68,6 @@
 				<groupId>org.jetbrains</groupId>
 				<artifactId>annotations</artifactId>
 				<version>19.0.0</version>
-			</dependency>
-
-			<!-- Core annotations used for value types, used by Jackson data binding 
-				package. -->
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-annotations</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-
-			<!-- Core Jackson processing abstractions (aka Streaming API), implementation 
-				for JSON -->
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-core</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-
-			<!-- General data-binding functionality for Jackson: works on core streaming 
-				API -->
-			<dependency>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-databind</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-
-			<!-- Add-on module to support JSR-310 (Java 8 Date & Time API) data types. -->
-			<dependency>
-				<groupId>com.fasterxml.jackson.datatype</groupId>
-				<artifactId>jackson-datatype-jsr310</artifactId>
-				<version>${jackson.version}</version>
-			</dependency>
-
-			<!-- Add-on datatype-support module for Jackson (https://github.com/FasterXML/jackson) 
-				that handles eclipse-collections (https://www.eclipse.org/collections/) types -->
-			<dependency>
-				<groupId>com.fasterxml.jackson.datatype</groupId>
-				<artifactId>jackson-datatype-eclipse-collections</artifactId>
-				<version>${jackson.version}</version>
 			</dependency>
 
 			<!-- Netty/Buffer -->
