@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- This is persistence pom.xml -->
+	<parent>
+		<groupId>io.mercury</groupId>
+		<artifactId>mercury</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>serialization</artifactId>
+	<name>serialization</name>
+
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>serialization-avro</module>
+		<module>serialization-flatbuffers</module>
+		<module>serialization-json</module>
+		<module>serialization-kryo</module>
+		<module>serialization-protobuf</module>
+		<module>serialization-protostuff</module>
+	</modules>
+
+	<properties>
+		<jackson.version>2.11.3</jackson.version>
+		<netty.version>4.1.54.Final</netty.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<compilerArgument>-parameters</compilerArgument>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.mercury</groupId>
+				<artifactId>commons-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.mercury</groupId>
+				<artifactId>commons-concurrent</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<!-- Core annotations used for value types, used by Jackson data binding 
+				package. -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+
+			<!-- Core Jackson processing abstractions (aka Streaming API), implementation 
+				for JSON -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+
+			<!-- General data-binding functionality for Jackson: works on core streaming 
+				API -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+
+			<!-- Add-on module to support JSR-310 (Java 8 Date & Time API) data types. -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.datatype</groupId>
+				<artifactId>jackson-datatype-jsr310</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+
+			<!-- Add-on datatype-support module for Jackson (https://github.com/FasterXML/jackson) 
+				that handles eclipse-collections (https://www.eclipse.org/collections/) types -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.datatype</groupId>
+				<artifactId>jackson-datatype-eclipse-collections</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+
+			<!-- Netty/Buffer -->
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-buffer</artifactId>
+				<version>${netty.version}</version>
+			</dependency>
+
+			<!-- Netty/Codec -->
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-codec</artifactId>
+				<version>${netty.version}</version>
+			</dependency>
+
+			<!-- Netty/Handler -->
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-handler</artifactId>
+				<version>${netty.version}</version>
+			</dependency>
+
+			<!-- Apache Commons Compress software defines an API for working with 
+				compression and archive formats. These include: bzip2, gzip, pack200, lzma, 
+				xz, Snappy, traditional Unix Compress, DEFLATE, DEFLATE64, LZ4, Brotli, Zstandard 
+				and ar, cpio, jar, tar, zip, dump, 7z, arj. -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-compress</artifactId>
+				<version>1.20</version>
+			</dependency>
+
+			<!-- Java ports and bindings of the LZ4 compression algorithm and the 
+				xxHash hashing algorithm -->
+			<dependency>
+				<groupId>org.lz4</groupId>
+				<artifactId>lz4-java</artifactId>
+				<version>1.7.1</version>
+			</dependency>
+
+			<!-- snappy-java: A fast compression/decompression library -->
+			<dependency>
+				<groupId>org.xerial.snappy</groupId>
+				<artifactId>snappy-java</artifactId>
+				<version>1.1.8.1</version>
+			</dependency>
+
+			<!-- Zero-allocation implementations of fast non-cryptographic hash functions 
+				for byte sequences or blocks of memory -->
+			<dependency>
+				<groupId>net.openhft</groupId>
+				<artifactId>zero-allocation-hashing</artifactId>
+				<version>0.12</version>
+			</dependency>
+
+			<!-- JNI bindings for Zstd native library that provides fast and high 
+				compression lossless algorithm for Java and all JVM languages -->
+			<dependency>
+				<groupId>com.github.luben</groupId>
+				<artifactId>zstd-jni</artifactId>
+				<version>1.4.5-12</version>
+			</dependency>
+
+			<!-- Date and time library to replace JDK date handling -->
+			<dependency>
+				<groupId>joda-time</groupId>
+				<artifactId>joda-time</artifactId>
+				<version>2.10.8</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+
+</project>
