@@ -10,13 +10,14 @@ import org.slf4j.Logger;
 
 import io.mercury.common.annotation.thread.LockHeld;
 import io.mercury.common.collections.queue.LoadContainer;
+import io.mercury.common.concurrent.queue.base.McQueue;
 import io.mercury.common.log.CommonLoggerFactory;
 
 @ThreadSafe
 @Deprecated
-public class MPMCPreArrayBlockingQueue<E> implements MCQueue<E> {
+public class MpmcPreArrayBlockingQueue<E> implements McQueue<E> {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(MPMCPreArrayBlockingQueue.class);
+	private static final Logger log = CommonLoggerFactory.getLogger(MpmcPreArrayBlockingQueue.class);
 
 	private LoadContainer<E>[] containers;
 
@@ -32,7 +33,7 @@ public class MPMCPreArrayBlockingQueue<E> implements MCQueue<E> {
 	private Condition notFull;
 
 	@SuppressWarnings("unchecked")
-	public MPMCPreArrayBlockingQueue(int size) {
+	public MpmcPreArrayBlockingQueue(int size) {
 		if (size <= 0) {
 			throw new IllegalArgumentException("size is too big.");
 		}
@@ -90,6 +91,12 @@ public class MPMCPreArrayBlockingQueue<E> implements MCQueue<E> {
 	@Override
 	public String queueName() {
 		return "MpmcPreArrayBlockingQueue";
+	}
+
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

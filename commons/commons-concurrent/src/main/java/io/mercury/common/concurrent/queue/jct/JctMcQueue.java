@@ -1,8 +1,8 @@
-package io.mercury.common.concurrent.queue.base;
+package io.mercury.common.concurrent.queue.jct;
 
-import io.mercury.common.concurrent.queue.MCQueue;
+import io.mercury.common.concurrent.queue.base.McQueue;
 
-public abstract class JctMCQueue<E> implements MCQueue<E> {
+public abstract class JctMcQueue<E> implements McQueue<E> {
 	
 	
 

@@ -4,10 +4,11 @@ import org.jctools.queues.MpmcArrayQueue;
 
 import io.mercury.common.annotation.thread.SpinWaiting;
 import io.mercury.common.collections.Capacity;
+import io.mercury.common.concurrent.queue.base.McQueue;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringUtil;
 
-public class ConcurrentQueue<E> implements MCQueue<E> {
+public class ConcurrentQueue<E> implements McQueue<E> {
 
 	private final MpmcArrayQueue<E> queue;
 
@@ -17,8 +18,7 @@ public class ConcurrentQueue<E> implements MCQueue<E> {
 
 	public ConcurrentQueue(String queueName, Capacity capacity, WaitingStrategy strategy) {
 		this.queue = new MpmcArrayQueue<>(Math.max(capacity.size(), 64));
-		this.queueName = StringUtil.isNullOrEmpty(queueName) 
-				? "ConcurrentQueue-" + Threads.currentThreadName()
+		this.queueName = StringUtil.isNullOrEmpty(queueName) ? "ConcurrentQueue-" + Threads.currentThreadName()
 				: queueName;
 		this.strategy = strategy == null ? WaitingStrategy.SleepWaiting : strategy;
 	}
@@ -56,6 +56,11 @@ public class ConcurrentQueue<E> implements MCQueue<E> {
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return queue.isEmpty();
 	}
 
 }

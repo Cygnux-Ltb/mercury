@@ -1,14 +1,14 @@
-package io.mercury.common.concurrent.queue.jct;
+package io.mercury.common.concurrent.queue.jct.impl;
 
 import org.jctools.queues.MpmcArrayQueue;
 
-import io.mercury.common.concurrent.queue.MCQueue;
+import io.mercury.common.concurrent.queue.base.McQueue;
 
-public final class JctMPMCQueue<E> implements MCQueue<E> {
+public final class JctMpmcQueue<E> implements McQueue<E> {
 
 	private final MpmcArrayQueue<E> queue;
 
-	public JctMPMCQueue(int capacity) {
+	public JctMpmcQueue(int capacity) {
 		this.queue = new MpmcArrayQueue<>(capacity);
 	}
 
@@ -19,14 +19,17 @@ public final class JctMPMCQueue<E> implements MCQueue<E> {
 
 	@Override
 	public String queueName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public E dequeue() {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return queue.isEmpty();
 	}
 
 }

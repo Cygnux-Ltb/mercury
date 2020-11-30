@@ -1,9 +1,13 @@
-package io.mercury.common.concurrent.queue;
+package io.mercury.common.concurrent.queue.base;
+
+import java.util.function.Predicate;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public interface MCQueue<E> extends Queue<E> {
+import io.mercury.common.concurrent.queue.Queue;
+
+public interface McQueue<E> extends Queue<E> {
 
 	@CheckForNull
 	E dequeue();
@@ -14,6 +18,18 @@ public interface MCQueue<E> extends Queue<E> {
 
 	default boolean pollAndApply(@Nonnull PollFunction<E> function) {
 		return function.apply(dequeue());
+	}
+
+	@FunctionalInterface
+	public static interface PollFunction<E> extends Predicate<E> {
+
+		boolean apply(E e);
+
+		@Override
+		default boolean test(E e) {
+			return apply(e);
+		}
+
 	}
 
 }

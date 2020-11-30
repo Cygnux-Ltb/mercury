@@ -1,8 +1,9 @@
-package io.mercury.common.concurrent.queue;
+package io.mercury.common.concurrent.queue.base;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.mercury.common.annotation.lang.AbstractFunction;
+import io.mercury.common.concurrent.queue.Queue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.number.ThreadSafeRandoms;
 import io.mercury.common.util.Assertor;
@@ -12,7 +13,7 @@ import io.mercury.common.util.Assertor;
  *
  * @param <T> Single Consumer Queue base implements
  */
-public abstract class SCQueue<E> implements Queue<E> {
+public abstract class ScQueue<E> implements Queue<E> {
 
 	/**
 	 * Processor Function
@@ -34,7 +35,7 @@ public abstract class SCQueue<E> implements Queue<E> {
 	 */
 	protected String queueName = "SCQueue-" + Integer.toString(ThreadSafeRandoms.randomUnsignedInt());
 
-	protected SCQueue(Processor<E> processor) {
+	protected ScQueue(Processor<E> processor) {
 		Assertor.nonNull(processor, "processor");
 		this.processor = processor;
 	}
@@ -54,12 +55,6 @@ public abstract class SCQueue<E> implements Queue<E> {
 	@Override
 	public String queueName() {
 		return queueName;
-	}
-
-	public static enum StartMode {
-
-		Auto, Manual, Delay
-
 	}
 
 }
