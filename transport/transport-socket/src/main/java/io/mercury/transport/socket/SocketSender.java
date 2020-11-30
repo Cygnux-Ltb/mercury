@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.concurrent.queue.jct.JctMPSCQueue;
+import io.mercury.common.concurrent.queue.jct.JctScQueue;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.core.api.Sender;
@@ -81,8 +81,8 @@ public class SocketSender implements Sender<byte[]> {
 		}
 	}
 
-	private JctMPSCQueue<byte[]> innerQueue = JctMPSCQueue.autoStartQueue(1024,
-			bytes -> processSendQueue(bytes));
+	private JctScQueue<byte[]> innerQueue = JctScQueue.mpsc(name() + "-InnerQueue").capacity(512)
+			.buildWithProcessor(bytes -> processSendQueue(bytes));
 
 	public static void main(String[] args) {
 		SocketConfigurator configurator = SocketConfigurator.builder().host("192.168.1.138").port(7901).build();
