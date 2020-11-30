@@ -20,6 +20,7 @@
 		<module>commons</module>
 		<module>libraries</module>
 		<module>persistence</module>
+		<module>serialization</module>
 		<module>transport</module>
 	</modules>
 
