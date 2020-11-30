@@ -13,7 +13,7 @@ import com.rabbitmq.client.GetResponse;
 
 import io.mercury.common.character.Charsets;
 import io.mercury.common.collections.MutableLists;
-import io.mercury.common.concurrent.queue.MCQueue;
+import io.mercury.common.concurrent.queue.base.McQueue;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.serialization.json.JsonUtil;
 import io.mercury.transport.rabbitmq.configurator.RmqConnection;
@@ -21,7 +21,7 @@ import io.mercury.transport.rabbitmq.declare.AmqpExchange;
 import io.mercury.transport.rabbitmq.declare.QueueRelationship;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 
-public class RabbitMqBuffer<E> implements MCQueue<E>, Closeable {
+public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqBuffer.class);
 
@@ -126,7 +126,7 @@ public class RabbitMqBuffer<E> implements MCQueue<E>, Closeable {
 			return false;
 		}
 	}
-	
+
 	@Override
 	public E dequeue() {
 		GetResponse response = basicGet();
@@ -210,6 +210,9 @@ public class RabbitMqBuffer<E> implements MCQueue<E>, Closeable {
 
 	}
 
-
+	@Override
+	public boolean isEmpty() {
+		return false;
+	}
 
 }
