@@ -14,10 +14,10 @@
 	<name>serialization-flatbuffers</name>
 
 	<dependencies>
+
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
+			<groupId>io.mercury</groupId>
+			<artifactId>commons-core</artifactId>
 		</dependency>
 
 		<!-- Memory Efficient Serialization Library -->

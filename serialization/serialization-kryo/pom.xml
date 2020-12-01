@@ -19,16 +19,12 @@
 		<dependency>
 			<groupId>com.esotericsoftware</groupId>
 			<artifactId>kryo</artifactId>
-			<version>5.0.0</version>
+			<version>5.0.1</version>
 			<exclusions>
-				<exclusion>
-					<groupId>com.esotericsoftware</groupId>
-					<artifactId>reflectasm</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.objenesis</groupId>
-					<artifactId>objenesis</artifactId>
-				</exclusion>
+				<!-- <exclusion> <groupId>com.esotericsoftware</groupId> <artifactId>reflectasm</artifactId> 
+					</exclusion> -->
+				<!-- <exclusion> <groupId>org.objenesis</groupId> <artifactId>objenesis</artifactId> 
+					</exclusion> -->
 			</exclusions>
 		</dependency>
 
