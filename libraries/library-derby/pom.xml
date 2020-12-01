@@ -14,10 +14,10 @@
 	<name>library-derby</name>
 
 	<dependencies>
+		<!-- Java(TM) Persistence API -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
+			<groupId>javax.persistence</groupId>
+			<artifactId>javax.persistence-api</artifactId>
 		</dependency>
 
 		<!-- Contains the core Apache Derby database engine, which also includes 
