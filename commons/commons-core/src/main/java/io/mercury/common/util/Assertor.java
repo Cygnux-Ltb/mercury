@@ -73,7 +73,7 @@ public final class Assertor {
 	 * @return
 	 * @throws IllegalArgumentException
 	 */
-	public static int withinRange(int i, int min, int max, String objName) throws IllegalArgumentException {
+	public static int atWithinRange(int i, int min, int max, String objName) throws IllegalArgumentException {
 		if (i >= min && i <= max)
 			return i;
 		throw new IllegalArgumentException(objName + " must in the range of [" + min + "] to [" + max + "]");
@@ -88,7 +88,7 @@ public final class Assertor {
 	 * @return
 	 * @throws IllegalArgumentException
 	 */
-	public static long withinRange(long l, long min, long max, String objName) throws IllegalArgumentException {
+	public static long atWithinRange(long l, long min, long max, String objName) throws IllegalArgumentException {
 		if (l >= min && l <= max)
 			return l;
 		throw new IllegalArgumentException(objName + " must in the range of [" + min + "] to [" + max + "]");
