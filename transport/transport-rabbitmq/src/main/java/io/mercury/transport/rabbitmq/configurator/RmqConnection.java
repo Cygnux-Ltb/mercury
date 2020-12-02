@@ -1,8 +1,5 @@
 package io.mercury.transport.rabbitmq.configurator;
 
-import static io.mercury.common.util.Assertor.nonNull;
-import static io.mercury.common.util.Assertor.withinRange;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +10,7 @@ import javax.net.ssl.SSLContext;
 import com.rabbitmq.client.ConnectionFactory;
 
 import io.mercury.common.functional.ShutdownEvent;
+import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringUtil;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.core.configurator.TransportConfigurator;
@@ -274,10 +272,10 @@ public final class RmqConnection implements TransportConfigurator {
 		}
 
 		private Builder(String host, int port, String username, String password, String virtualHost) {
-			nonNull(host, "host");
-			withinRange(port, 4096, 65536, "port");
-			nonNull(username, "username");
-			nonNull(password, "password");
+			Assertor.nonNull(host, "host");
+			Assertor.atWithinRange(port, 4096, 65536, "port");
+			Assertor.nonNull(username, "username");
+			Assertor.nonNull(password, "password");
 			this.host = host;
 			this.port = port;
 			this.username = username;
