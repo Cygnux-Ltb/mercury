@@ -16,13 +16,12 @@ import io.mercury.common.concurrent.queue.base.ScQueue;
 import io.mercury.common.thread.Threads;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
 
-public class SocketTransceiver extends BaseTransceiver<String> {
+public final class SocketTransceiver extends BaseTransceiver<String> {
 
 	private SocketConfigurator configurator;
 	private Consumer<byte[]> callback;
 
 	private Socket socket;
-
 	private Writer writer;
 
 	private AtomicBoolean isReceiving = new AtomicBoolean(false);

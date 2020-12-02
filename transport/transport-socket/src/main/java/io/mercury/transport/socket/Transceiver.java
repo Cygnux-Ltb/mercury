@@ -5,7 +5,7 @@ import io.mercury.transport.core.api.Sender;
 
 public interface Transceiver<T> extends Receiver {
 
-	Sender<T> getInnerSender();
+	Sender<T> getSender();
 
 	void startSend();
 

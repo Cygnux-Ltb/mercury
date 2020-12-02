@@ -13,7 +13,7 @@ import io.mercury.common.util.Assertor;
 import io.mercury.transport.core.api.Sender;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
 
-public class SocketSender implements Sender<byte[]> {
+public final class SocketSender implements Sender<byte[]> {
 
 	private SocketConfigurator configurator;
 
@@ -33,8 +33,8 @@ public class SocketSender implements Sender<byte[]> {
 		try {
 			this.socket = new Socket(configurator.host(), configurator.port());
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e.getMessage());
+			log.error("Throw IOException -> {}", e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 	}
 

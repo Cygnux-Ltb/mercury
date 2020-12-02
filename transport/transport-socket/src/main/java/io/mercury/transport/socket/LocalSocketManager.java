@@ -24,7 +24,7 @@ public class LocalSocketManager {
 		if (ServerSocketMap.containsKey(socketName))
 			return ServerSocketMap.get(socketName);
 		else {
-			Assertor.withinRange(port, 7000, 8000, "port");
+			Assertor.atWithinRange(port, 7000, 8000, "port");
 			SocketTransceiver transceiver = new SocketTransceiver(SocketConfigurator.builder().port(port).build(),
 					callback);
 			ServerSocketMap.put(socketName, transceiver);

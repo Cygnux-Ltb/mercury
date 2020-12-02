@@ -6,13 +6,13 @@ import io.mercury.transport.core.api.Sender;
 
 public abstract class BaseTransceiver<T> implements Transceiver<T> {
 
-	private Sender<T> innerSender;
+	private Sender<T> sender;
 
 	private ScQueue<T> queue;
 
 	protected BaseTransceiver() {
 		this.queue = initSendQueue();
-		this.innerSender = new InnerSender(queue);
+		this.sender = new InnerSender(queue);
 	}
 
 	private class InnerSender implements Sender<T> {
@@ -30,27 +30,24 @@ public abstract class BaseTransceiver<T> implements Transceiver<T> {
 
 		@Override
 		public String name() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public boolean isConnected() {
-			// TODO Auto-generated method stub
 			return false;
 		}
 
 		@Override
 		public boolean destroy() {
-			// TODO Auto-generated method stub
 			return false;
 		}
 
 	}
 
 	@Override
-	public Sender<T> getInnerSender() {
-		return innerSender;
+	public Sender<T> getSender() {
+		return sender;
 	}
 
 	@Override

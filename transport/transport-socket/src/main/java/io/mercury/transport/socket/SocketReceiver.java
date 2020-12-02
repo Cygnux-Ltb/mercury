@@ -133,7 +133,6 @@ public class SocketReceiver implements Receiver {
 
 	@Override
 	public void reconnect() {
-		// TODO Auto-generated method stub
 
 	}
 
