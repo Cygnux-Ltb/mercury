@@ -18,10 +18,10 @@ import io.mercury.actors.sample.supervision.FlakyExpressionCalculator.Result;
 // evaluate them. Since the calculation is dangerous (at least for the sake
 // of this example) it is delegated to a worker actor of type
 // FlakyExpressionCalculator.
-class ArithmeticService extends AbstractLoggingActor {
+public class ArithmeticService extends AbstractLoggingActor {
 
 	// Map of workers to the original actors requesting the calculation
-	Map<ActorRef, ActorRef> pendingWorkers = new HashMap<>();
+	private Map<ActorRef, ActorRef> pendingWorkers = new HashMap<>();
 
 	private SupervisorStrategy strategy = new OneForOneStrategy(false,
 			DeciderBuilder.match(FlakinessException.class, e -> {

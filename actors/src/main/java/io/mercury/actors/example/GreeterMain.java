@@ -2,7 +2,12 @@ package io.mercury.actors.example;
 
 import akka.actor.typed.ActorRef;
 import akka.actor.typed.Behavior;
-import akka.actor.typed.javadsl.*;
+import akka.actor.typed.javadsl.AbstractBehavior;
+import akka.actor.typed.javadsl.ActorContext;
+import akka.actor.typed.javadsl.Behaviors;
+import akka.actor.typed.javadsl.Receive;
+import io.mercury.actors.example.msg.Greet;
+import io.mercury.actors.example.msg.Greeted;
 
 /**
  * 
@@ -53,7 +58,7 @@ public class GreeterMain extends AbstractBehavior<GreeterMain.SayHello> {
 		}
 	}
 
-	private final ActorRef<Greeter.Greet> greeter;
+	private final ActorRef<Greet> greeter;
 
 	public static Behavior<SayHello> create() {
 		return Behaviors.setup(GreeterMain::new);
@@ -73,8 +78,8 @@ public class GreeterMain extends AbstractBehavior<GreeterMain.SayHello> {
 
 	private Behavior<SayHello> onSayHello(SayHello command) {
 		// #create-actors
-		ActorRef<Greeter.Greeted> replyTo = getContext().spawn(GreeterBot.create(3), command.name);
-		greeter.tell(new Greeter.Greet(command.name, replyTo));
+		ActorRef<Greeted> replyTo = getContext().spawn(GreeterBot.create(3), command.name);
+		greeter.tell(new Greet(command.name, replyTo));
 		// #create-actors
 		return this;
 	}

@@ -13,6 +13,7 @@ public interface Expression {
 	// the addition in (3 * 2) + (6 * 6) has the left side (3 * 2) and the right
 	// side (6 * 6).
 	public static abstract class AbstractExpression implements Expression {
+
 		private final Expression left;
 		private final Expression right;
 		private final String operator;

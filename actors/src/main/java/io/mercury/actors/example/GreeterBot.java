@@ -5,16 +5,17 @@ import akka.actor.typed.javadsl.AbstractBehavior;
 import akka.actor.typed.javadsl.ActorContext;
 import akka.actor.typed.javadsl.Behaviors;
 import akka.actor.typed.javadsl.Receive;
-import io.mercury.actors.example.Greeter.Greeted;
+import io.mercury.actors.example.msg.Greet;
+import io.mercury.actors.example.msg.Greeted;
 
 /**
  * 
  * @author Akka official
  *
  */
-public class GreeterBot extends AbstractBehavior<Greeter.Greeted> {
+public class GreeterBot extends AbstractBehavior<Greeted> {
 
-	public static Behavior<Greeter.Greeted> create(int max) {
+	public static Behavior<Greeted> create(int max) {
 		return Behaviors.setup(context -> new GreeterBot(context, max));
 	}
 
@@ -28,16 +29,16 @@ public class GreeterBot extends AbstractBehavior<Greeter.Greeted> {
 
 	@Override
 	public Receive<Greeted> createReceive() {
-		return newReceiveBuilder().onMessage(Greeter.Greeted.class, this::onGreeted).build();
+		return newReceiveBuilder().onMessage(Greeted.class, this::onGreeted).build();
 	}
 
-	private Behavior<Greeted> onGreeted(Greeter.Greeted message) {
+	private Behavior<Greeted> onGreeted(Greeted message) {
 		greetingCounter++;
-		getContext().getLog().info("Greeting {} for {}", greetingCounter, message.whom);
+		getContext().getLog().info("Greeting {} for {}", greetingCounter, message.getWhom());
 		if (greetingCounter == max) {
 			return Behaviors.stopped();
 		} else {
-			message.from.tell(new Greeter.Greet(message.whom, getContext().getSelf()));
+			message.getFrom().tell(new Greet(message.getWhom(), getContext().getSelf()));
 			return this;
 		}
 	}

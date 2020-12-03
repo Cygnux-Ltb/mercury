@@ -1,60 +1,19 @@
 package io.mercury.actors.example;
 
-import akka.actor.typed.ActorRef;
 import akka.actor.typed.Behavior;
-import akka.actor.typed.javadsl.*;
-
-import java.util.Objects;
+import akka.actor.typed.javadsl.AbstractBehavior;
+import akka.actor.typed.javadsl.ActorContext;
+import akka.actor.typed.javadsl.Behaviors;
+import akka.actor.typed.javadsl.Receive;
+import io.mercury.actors.example.msg.Greet;
+import io.mercury.actors.example.msg.Greeted;
 
 /**
  * 
  * @author Akka official
  *
  */
-public class Greeter extends AbstractBehavior<Greeter.Greet> {
-
-	public static final class Greet {
-
-		public final String whom;
-		public final ActorRef<Greeted> replyTo;
-
-		public Greet(String whom, ActorRef<Greeted> replyTo) {
-			this.whom = whom;
-			this.replyTo = replyTo;
-		}
-	}
-
-	public static final class Greeted {
-
-		public final String whom;
-		public final ActorRef<Greet> from;
-
-		public Greeted(String whom, ActorRef<Greet> from) {
-			this.whom = whom;
-			this.from = from;
-		}
-
-		@Override
-		public boolean equals(Object o) {
-			if (this == o)
-				return true;
-			if (o == null || getClass() != o.getClass())
-				return false;
-			Greeted greeted = (Greeted) o;
-			return Objects.equals(whom, greeted.whom) && Objects.equals(from, greeted.from);
-		}
-
-		@Override
-		public int hashCode() {
-			return Objects.hash(whom, from);
-		}
-
-		@Override
-		public String toString() {
-			return "Greeted{" + "whom='" + whom + '\'' + ", from=" + from + '}';
-		}
-
-	}
+public class Greeter extends AbstractBehavior<Greet> {
 
 	public static Behavior<Greet> create() {
 		return Behaviors.setup(Greeter::new);
@@ -70,9 +29,9 @@ public class Greeter extends AbstractBehavior<Greeter.Greet> {
 	}
 
 	private Behavior<Greet> onGreet(Greet command) {
-		getContext().getLog().info("Hello {}!", command.whom);
+		getContext().getLog().info("Hello {}!", command.getWhom());
 		// #greeter-send-message
-		command.replyTo.tell(new Greeted(command.whom, getContext().getSelf()));
+		command.getReplyTo().tell(new Greeted(command.getWhom(), getContext().getSelf()));
 		// #greeter-send-message
 		return this;
 	}
