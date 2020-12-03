@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import javax.annotation.CheckForNull;
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -65,15 +65,15 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 		return excerptTailer;
 	}
 
-	public boolean moveTo(LocalDate date) {
+	public boolean moveTo(@Nonnull LocalDate date) {
 		return moveTo(date.toEpochDay() * TimeConst.SECONDS_PER_DAY);
 	}
 
-	public boolean moveTo(LocalDateTime dateTime, ZoneId zoneId) {
+	public boolean moveTo(@Nonnull LocalDateTime dateTime, @Nonnull ZoneId zoneId) {
 		return moveTo(ZonedDateTime.of(dateTime, zoneId));
 	}
 
-	public boolean moveTo(ZonedDateTime dateTime) {
+	public boolean moveTo(@Nonnull ZonedDateTime dateTime) {
 		return moveTo(dateTime.toEpochSecond());
 	}
 
@@ -189,6 +189,7 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 		final boolean readFailLogging = param.readFailLogging;
 		final boolean readFailCrash = param.readFailCrash;
 		final boolean waitingData = param.waitingData;
+		final boolean spinWaiting = param.spinWaiting;
 		final TimeUnit readIntervalUnit = param.readIntervalUnit;
 		final long readIntervalTime = param.readIntervalTime;
 		if (param.delayReadTime > 0)
@@ -211,7 +212,10 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 			if (next == null) {
 				// 等待新数据
 				if (waitingData) {
-					sleep(readIntervalUnit, readIntervalTime);
+					// 非自旋等待
+					if (!spinWaiting) {
+						sleep(readIntervalUnit, readIntervalTime);
+					}
 				} else {
 					// 数据读取完毕, 退出线程
 					exit();
@@ -258,6 +262,8 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 		private long delayReadTime;
 		// 是否等待数据写入
 		private boolean waitingData;
+		// 是否自旋等待
+		private boolean spinWaiting;
 		// 是否以异步方式退出
 		private boolean asyncExit;
 		// 退出函数
@@ -271,6 +277,7 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 			this.delayReadUnit = builder.delayReadUnit;
 			this.delayReadTime = builder.delayReadTime;
 			this.waitingData = builder.waitingData;
+			this.spinWaiting = builder.spinWaiting;
 			this.asyncExit = builder.asyncExit;
 			this.exitRunnable = builder.exitRunnable;
 		}
@@ -288,12 +295,13 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 			private boolean readFailCrash = false;
 			private boolean readFailLogging = true;
 			private boolean waitingData = true;
+			private boolean spinWaiting = false;
 
 			// 缺省读取间隔
 			private TimeUnit readIntervalUnit = TimeUnit.MILLISECONDS;
-			private long readIntervalTime = 100;
+			private long readIntervalTime = 10;
 
-			// 缺省延迟时间
+			// 缺省开始读取延迟时间
 			private TimeUnit delayReadUnit = TimeUnit.MILLISECONDS;
 			private long delayReadTime = 0;
 
@@ -301,39 +309,94 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 			private boolean asyncExit = false;
 			private Runnable exitRunnable;
 
+			/**
+			 * 设置读取失败崩溃
+			 * 
+			 * @param readFailCrash
+			 * @return
+			 */
 			public Builder readFailCrash(boolean readFailCrash) {
 				this.readFailCrash = readFailCrash;
 				return this;
 			}
 
+			/**
+			 * 设置读取失败记录
+			 * 
+			 * @param readFailLogging
+			 * @return
+			 */
 			public Builder readFailLogging(boolean readFailLogging) {
 				this.readFailLogging = readFailLogging;
 				return this;
 			}
 
+			/**
+			 * 设置是否等待新数据
+			 * 
+			 * @param waitingData
+			 * @return
+			 */
 			public Builder waitingData(boolean waitingData) {
 				this.waitingData = waitingData;
 				return this;
 			}
 
-			public Builder readInterval(TimeUnit timeUnit, long time) {
+			/**
+			 * 设置是否自旋等待新数据
+			 * 
+			 * @param spinWaiting
+			 * @return
+			 */
+			public Builder spinWaiting(boolean spinWaiting) {
+				this.spinWaiting = spinWaiting;
+				return this;
+			}
+
+			/**
+			 * 设置读取等待间隔
+			 * 
+			 * @param timeUnit
+			 * @param time
+			 * @return
+			 */
+			public Builder readInterval(@Nonnull TimeUnit timeUnit, long time) {
 				this.readIntervalUnit = nonNull(timeUnit, "timeUnit");
 				this.readIntervalTime = greaterThan(time, 0, "time");
 				return this;
 			}
 
-			public Builder delayRead(TimeUnit timeUnit, long time) {
+			/**
+			 * 设置开始读取延迟时间
+			 * 
+			 * @param timeUnit
+			 * @param time
+			 * @return
+			 */
+			public Builder delayRead(@Nonnull TimeUnit timeUnit, long time) {
 				this.delayReadUnit = nonNull(timeUnit, "timeUnit");
 				this.delayReadTime = greaterThan(time, 0, "time");
 				return this;
 			}
 
+			/**
+			 * 设置是否异步推出
+			 * 
+			 * @param asyncExit
+			 * @return
+			 */
 			public Builder asyncExit(boolean asyncExit) {
 				this.asyncExit = asyncExit;
 				return this;
 			}
 
-			public Builder exitRunnable(@Nullable Runnable exitRunnable) {
+			/**
+			 * 退出读取任务执行线程
+			 * 
+			 * @param exitRunnable
+			 * @return
+			 */
+			public Builder exitRunnable(@Nonnull Runnable exitRunnable) {
 				this.exitRunnable = nonNull(exitRunnable, "exitRunnable");
 				return this;
 			}

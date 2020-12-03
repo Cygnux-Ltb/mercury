@@ -27,18 +27,22 @@
 
 		<!-- chronicle common component start -->
 		<!-- ######## chronicle-core ######## -->
+		<!-- Low level access to native memory, JVM and OS. -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-core</artifactId>
 			<version>2.20.120</version>
 		</dependency>
 		<!-- ######## chronicle-wire ######## -->
+		<!-- A Java Serialization Library that supports multiple formats -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-wire</artifactId>
 			<version>2.20.109</version>
 		</dependency>
 		<!-- ######## chronicle-bytes ######## -->
+		<!-- Chronicle Bytes has a similar purpose to Java NIO's ByteBuffer with 
+			many extensions -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-bytes</artifactId>
@@ -84,8 +88,9 @@
 		<!-- chronicle common component end -->
 
 
-		<!-- ################################################################ -->
-		<!-- chronicle-queue Java library for persisted low latency messaging -->
+		<!-- ######################################################### -->
+		<!-- chronicle-queue Java library for persisted low latency messaging, 
+			Microsecond messaging that stores everything to disk -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-queue</artifactId>

@@ -413,11 +413,21 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 		private String folder = "auto-create-" + datetimeOfSecond() + "/";
 		private boolean readOnly = false;
 		private long epoch = 0L;
-		private FileCycle fileCycle = FileCycle.DAILY_SMALL;
+		private FileCycle fileCycle = FileCycle.SMALL_DAILY;
 		private ObjIntConsumer<File> storeFileListener;
 		private int fileClearCycle = 0;
 
 		private Logger logger;
+
+		public B saveToUserHome() {
+			rootPath(SysProperties.USER_HOME);
+			return self();
+		}
+
+		public B saveToTmpDir() {
+			rootPath(SysProperties.JAVA_IO_TMPDIR);
+			return self();
+		}
 
 		public B rootPath(@Nonnull String rootPath) {
 			this.rootPath = StringUtil.fixPath(rootPath);
