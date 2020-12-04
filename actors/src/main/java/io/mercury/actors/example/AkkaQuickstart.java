@@ -1,8 +1,9 @@
 package io.mercury.actors.example;
 
-import akka.actor.typed.ActorSystem;
-
 import java.io.IOException;
+
+import akka.actor.typed.ActorSystem;
+import io.mercury.actors.example.msg.SayHello;
 
 /**
  * 
@@ -14,11 +15,11 @@ public class AkkaQuickstart {
 	public static void main(String[] args) {
 
 		// #actor-system
-		final ActorSystem<GreeterMain.SayHello> greeterMain = ActorSystem.create(GreeterMain.create(), "helloakka");
+		final ActorSystem<SayHello> greeterMain = ActorSystem.create(GreeterMain.create(), "helloakka");
 		// #actor-system
 
 		// #main-send-messages
-		greeterMain.tell(new GreeterMain.SayHello("Charles"));
+		greeterMain.tell(new SayHello("Charles"));
 		// #main-send-messages
 
 		try {
