@@ -36,6 +36,14 @@
 			<version>3.4.2</version>
 		</dependency>
 
+		<!-- Conversant Disruptor - very high throughput Java BlockingQueue -->
+		<dependency>
+			<groupId>com.conversantmedia</groupId>
+			<artifactId>disruptor</artifactId>
+			<version>1.2.19</version>
+		</dependency>
+
+
 	</dependencies>
 
 </project>
