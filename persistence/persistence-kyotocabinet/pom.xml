@@ -31,6 +31,5 @@
 			<groupId>io.netty</groupId>
 			<artifactId>netty-buffer</artifactId>
 		</dependency>
-		
 	</dependencies>
 </project>
