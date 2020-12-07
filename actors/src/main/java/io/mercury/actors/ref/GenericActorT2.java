@@ -2,19 +2,19 @@ package io.mercury.actors.ref;
 
 import io.mercury.actors.base.CommonActor;
 
-public abstract class GenericActorE2<T0, T1> extends CommonActor {
+public abstract class GenericActorT2<T0, T1> extends CommonActor {
 
 	private Class<T0> type0;
 	private Class<T1> type1;
 
-	protected GenericActorE2() {
+	protected GenericActorT2() {
 		this.type0 = eventType0();
 		this.type1 = eventType1();
 	}
 
 	@Override
 	public final Receive createReceive() {
-		return commonReceiveBuilder()
+		return baseReceiveBuilder()
 				// match type0
 				.match(type0, this::onEvent0)
 				// match type1
