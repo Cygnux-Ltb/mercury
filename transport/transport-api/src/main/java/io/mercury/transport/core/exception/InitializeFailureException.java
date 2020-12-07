@@ -1,6 +1,6 @@
 package io.mercury.transport.core.exception;
 
-public class InitializeFailureException extends RuntimeException {
+public final class InitializeFailureException extends RuntimeException {
 
 	/**
 	 * 

@@ -1,6 +1,6 @@
 package io.mercury.transport.core.exception;
 
-public class ReceiverStartException extends RuntimeException {
+public final class ReceiverStartException extends RuntimeException {
 
 	/**
 	 * 

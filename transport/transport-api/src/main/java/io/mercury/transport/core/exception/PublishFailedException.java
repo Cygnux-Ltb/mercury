@@ -1,6 +1,6 @@
 package io.mercury.transport.core.exception;
 
-public class PublishFailedException extends RuntimeException {
+public final class PublishFailedException extends RuntimeException {
 
 	/**
 	 * 
