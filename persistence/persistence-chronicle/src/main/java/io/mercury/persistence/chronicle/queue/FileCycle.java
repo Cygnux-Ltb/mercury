@@ -101,14 +101,26 @@ public enum FileCycle {
 		this.desc = desc;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getSeconds() {
 		return seconds;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public RollCycle getRollCycle() {
 		return rollCycle;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public String getDesc() {
 		return desc;
 	}
@@ -132,7 +144,7 @@ public enum FileCycle {
 		System.out.println(Integer.MAX_VALUE);
 		System.out.println(Instant.now().getEpochSecond() / 60);
 
-		System.out.println(RollCycles.DAILY);
+		System.out.println(RollCycles.DAILY.lengthInMillis());
 
 	}
 
