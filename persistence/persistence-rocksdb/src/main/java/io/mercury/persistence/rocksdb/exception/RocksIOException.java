@@ -9,8 +9,8 @@ public class RocksIOException extends IOException {
 	 */
 	private static final long serialVersionUID = -4712312419639419833L;
 
-	public RocksIOException() {
-
+	public RocksIOException(String message, IOException exception) {
+		super(message, exception);
 	}
 
 }
