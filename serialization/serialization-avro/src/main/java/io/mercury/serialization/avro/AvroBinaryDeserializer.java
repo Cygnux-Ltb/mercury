@@ -35,7 +35,7 @@ public final class AvroBinaryDeserializer<T extends SpecificRecord> implements B
 	}
 
 	@Override
-	public T deserialization(T reuse, ByteBuffer source) {
+	public T deserialization(ByteBuffer source, T reuse) {
 		try {
 			return reader.read(reuse, initDecoder(source));
 		} catch (IOException e) {

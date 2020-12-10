@@ -38,9 +38,9 @@ public final class AvroTextDeserializer<T extends SpecificRecord> implements Tex
 	}
 
 	@Override
-	public T deserialization(T reuse, String str) {
+	public T deserialization(String source, T reuse) {
 		try {
-			decoder.configure(str);
+			decoder.configure(source);
 			return datumReader.read(reuse, decoder);
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
