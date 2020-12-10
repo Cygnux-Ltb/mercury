@@ -8,6 +8,8 @@ public interface Msg {
 
 	public static interface Envelope {
 
+		int type();
+
 	}
 
 	public static interface Content {

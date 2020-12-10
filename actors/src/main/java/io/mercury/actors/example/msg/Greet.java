@@ -2,6 +2,11 @@ package io.mercury.actors.example.msg;
 
 import akka.actor.typed.ActorRef;
 
+/**
+ * 
+ * @author Akka official
+ *
+ */
 public final class Greet {
 
 	private final String whom;

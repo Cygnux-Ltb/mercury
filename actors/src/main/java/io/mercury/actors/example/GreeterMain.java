@@ -51,9 +51,8 @@ import io.mercury.actors.example.msg.SayHello;
  */
 public class GreeterMain extends AbstractBehavior<SayHello> {
 
-
-
 	private final ActorRef<Greet> greeter;
+	
 
 	public static Behavior<SayHello> create() {
 		return Behaviors.setup(GreeterMain::new);

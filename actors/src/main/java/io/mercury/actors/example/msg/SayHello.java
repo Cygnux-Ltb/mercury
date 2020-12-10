@@ -1,5 +1,10 @@
 package io.mercury.actors.example.msg;
 
+/**
+ * 
+ * @author Akka official
+ *
+ */
 public final class SayHello {
 
 	private final String name;

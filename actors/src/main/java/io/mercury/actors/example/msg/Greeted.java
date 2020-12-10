@@ -4,6 +4,11 @@ import java.util.Objects;
 
 import akka.actor.typed.ActorRef;
 
+/**
+ * 
+ * @author Akka official
+ *
+ */
 public final class Greeted {
 
 	private final String whom;
