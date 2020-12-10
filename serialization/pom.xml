@@ -23,6 +23,7 @@
 		<module>serialization-kryo</module>
 		<module>serialization-protobuf</module>
 		<module>serialization-protostuff</module>
+		<module>serialization-wire</module>
 	</modules>
 
 	<properties>
