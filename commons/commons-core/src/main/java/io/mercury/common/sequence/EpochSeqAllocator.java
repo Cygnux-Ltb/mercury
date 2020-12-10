@@ -3,7 +3,6 @@ package io.mercury.common.sequence;
 import static io.mercury.common.thread.Threads.sleep;
 import static io.mercury.common.util.BitOperator.intBinaryFormat;
 import static io.mercury.common.util.BitOperator.longBinaryFormat;
-import static io.mercury.common.util.BitOperator.shortBinaryFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -26,7 +25,7 @@ import io.mercury.common.datetime.EpochTime;
  *
  */
 @ThreadSafe
-public final class SeqAllocator {
+public final class EpochSeqAllocator {
 
 	public static final long allocate() {
 		long seq = allocate0();
@@ -37,54 +36,64 @@ public final class SeqAllocator {
 		return seq;
 	}
 
+	/**
+	 * 
+	 */
 	private static volatile long lastEpochMillis;
 
+	/**
+	 * 
+	 */
 	private static volatile int incr;
 
 	/**
 	 * Unsigned Short max value
 	 */
-	private static final int incrLimit = 0xffff;
+	private static final int incrLimit = 0x7fff;
 
-	public synchronized static final long allocate0() {
+	/**
+	 * 
+	 * @return
+	 */
+	private synchronized static final long allocate0() {
 		long epochMillis = EpochTime.millis();
 		if (lastEpochMillis != epochMillis) {
 			lastEpochMillis = epochMillis;
 			incr = 0;
 		}
-		if (++incr > incrLimit)
+		if (++incr > incrLimit) {
 			return -1L;
-		return (lastEpochMillis << 15) | incr;
+		}
+		return (lastEpochMillis << 16) | incr;
 	}
 
 	public static void main(String[] args) {
 
+		MutableLongSet longSet = MutableSets.newLongHashSet(Capacity.L21_SIZE_2097152);
 		long t0 = System.nanoTime();
-
-		MutableLongSet set = MutableSets.newLongHashSet(Capacity.L21_SIZE_2097152);
-
 		for (int i = 0; i < 1000000; i++) {
-			set.add(SeqAllocator.allocate());
+			longSet.add(EpochSeqAllocator.allocate());
 		}
-		System.out.println(set.size());
 		long t1 = System.nanoTime();
+		long tx = (t1 - t0) / 1000000;
+		System.out.println(longSet.size() + " count time ms -> " + tx);
 
-		System.out.println((t1 - t0) / 1000000);
-
+		//set.each(System.out::println);
+		
 		long epochMillis = EpochTime.millis();
-
-		long lmEpochMillis = epochMillis << 16;
-
+		System.out.println("epoch millis binary: ");
 		System.out.println(longBinaryFormat(epochMillis));
+		long lmEpochMillis = epochMillis << 16;
+		System.out.println("epoch millis << 16 binary: ");
 		System.out.println(longBinaryFormat(lmEpochMillis));
+
 		System.out.println(longBinaryFormat(100L));
-		System.out.println(longBinaryFormat(lmEpochMillis | 100L));
+		System.out.println(longBinaryFormat(lmEpochMillis | 0x7fff));
 
 		System.out.println(intBinaryFormat(10));
 		System.out.println(intBinaryFormat(1));
 		System.out.println(intBinaryFormat(10 | 1));
 		System.out.println(intBinaryFormat(0x7fff));
-		System.out.println(shortBinaryFormat(Short.MAX_VALUE));
 		System.out.println(10 & 1);
 
 		ZonedDateTime dateTime = ZonedDateTime.of(LocalDate.of(2020, 1, 1), LocalTime.MIN, ZoneOffset.UTC);

@@ -4,14 +4,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 @FunctionalInterface
-public interface Deserializer<I, O> {
+public interface Deserializer<T, R> {
 
 	@Nonnull
-	default O deserialization(@Nonnull I source) {
-		return deserialization(null, source);
+	default R deserialization(@Nonnull T source) {
+		return deserialization(source, null);
 	}
 
 	@Nonnull
-	O deserialization(@Nullable O reuse, @Nonnull I source);
+	R deserialization(@Nonnull T source, @Nullable R reuse);
 
 }
