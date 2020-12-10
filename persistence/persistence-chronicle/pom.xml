@@ -16,7 +16,12 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<jna.version>5.6.0</jna.version>
+		<chronicle-core.version>2.20.123</chronicle-core.version>
+		<chronicle-bytes.version>2.20.106</chronicle-bytes.version>
+		<chronicle-threads.version>2.20.104</chronicle-threads.version>
+		<chronicle-wire.version>2.20.111</chronicle-wire.version>
+		<chronicle-queue.version>5.20.117</chronicle-queue.version>
+		<chronicle-map.version>3.20.83</chronicle-map.version>
 	</properties>
 
 	<dependencies>
@@ -25,67 +30,62 @@
 			<artifactId>commons-concurrent</artifactId>
 		</dependency>
 
-		<!-- chronicle common component start -->
-		<!-- ######## chronicle-core ######## -->
+		<!-- ####### chronicle-core ####### -->
 		<!-- Low level access to native memory, JVM and OS. -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-core</artifactId>
-			<version>2.20.120</version>
+			<version>${chronicle-core.version}</version>
 		</dependency>
-		<!-- ######## chronicle-wire ######## -->
-		<!-- A Java Serialization Library that supports multiple formats -->
-		<dependency>
-			<groupId>net.openhft</groupId>
-			<artifactId>chronicle-wire</artifactId>
-			<version>2.20.109</version>
-		</dependency>
-		<!-- ######## chronicle-bytes ######## -->
-		<!-- Chronicle Bytes has a similar purpose to Java NIO's ByteBuffer with 
-			many extensions -->
+		
+		<!-- ####### chronicle-bytes ####### -->
+		<!-- Chronicle Bytes contains all the low level memory access wrappers.It 
+			is built on Chronicle Core’s direct memory and OS system call access. Chronicle 
+			Bytes has a similar purpose to Java NIO’s ByteBuffer with some extensions. -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-bytes</artifactId>
-			<version>2.20.105</version>
+			<version>${chronicle-bytes.version}</version>
 		</dependency>
-		<!-- ######## chronicle-threads ######## -->
+		
+		<!-- ####### chronicle-threads ####### -->
+		<!-- This library provide a high performance thread pool. This thread pool 
+			is design to share blocking, monitoring and busy waiting threads. Busy waiting 
+			tasks can be prioritised for HIGH, MEDIUM, DAEMON (low priority) as well 
+			as TIMER (fixed rate events) tasks in a single thread without creating garbage. -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-threads</artifactId>
-			<version>2.20.104</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jetbrains</groupId>
-					<artifactId>annotations</artifactId>
-				</exclusion>
-				<!-- exclusion jna-platform version 4.2.1 and import latest version jna-platform -->
-				<exclusion>
-					<groupId>net.java.dev.jna</groupId>
-					<artifactId>jna</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>net.java.dev.jna</groupId>
-					<artifactId>jna-platform</artifactId>
-				</exclusion>
-			</exclusions>
+			<version>${chronicle-threads.version}</version>
 		</dependency>
-		<!-- ######## chronicle-values ######## -->
+		
+		<!-- ####### chronicle-wire ####### -->
+		<!-- A Java serialization Library that supports multiple formats. -->
+		<dependency>
+			<groupId>net.openhft</groupId>
+			<artifactId>chronicle-wire</artifactId>
+			<version>${chronicle-wire.version}</version>
+		</dependency>
+		
+		<!-- ####### chronicle-values ####### -->
+		<!-- Generation of constantly-sized flyweight accessors to Chronicle Bytes 
+			and simple bean-style on-heap implementations from interfaces. Interfaces, 
+			that could be processed by Chronicle-Values generation, are called value 
+			interfaces. -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-values</artifactId>
 			<version>2.20.80</version>
 		</dependency>
-		<!-- ######## chronicle-algorithms ######## -->
+		
+		<!-- ####### chronicle-algorithms ####### -->
+		<!-- Zero allocation, efficient algorithms for 1)hashing, 2)bit set operations, 
+			3)access the raw bytes of an data type, 4)off heap locking -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-algorithms</artifactId>
 			<version>2.20.80</version>
 		</dependency>
-		<!-- chronicle common component end -->
 
 
 		<!-- ######################################################### -->
@@ -94,85 +94,37 @@
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-queue</artifactId>
-			<version>5.20.114</version>
+			<version>${chronicle-queue.version}</version>
 		</dependency>
 
 
 		<!-- ######################################################### -->
-		<!-- chronicle-map off-heap and high performance map framework -->
+		<!-- chronicle-map off-heap and high performance map framework, Replicate 
+			your Key Value Store across your network, with consistency, persistence and 
+			performance. -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-map</artifactId>
-			<version>3.20.83</version>
+			<version>${chronicle-map.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.intellij</groupId>
 					<artifactId>annotations</artifactId>
 				</exclusion>
-				<!-- exclusion jna-platform version 5.5 and import latest version jna-platform -->
-				<exclusion>
-					<groupId>net.java.dev.jna</groupId>
-					<artifactId>jna</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>net.java.dev.jna</groupId>
-					<artifactId>jna-platform</artifactId>
-				</exclusion>
-				<!-- <exclusion> <groupId>net.openhft</groupId> <artifactId>chronicle-wire</artifactId> 
-					</exclusion> -->
-				<!-- <exclusion> <groupId>org.codehaus.jettison</groupId> <artifactId>jettison</artifactId> 
-					</exclusion> -->
-				<!-- <exclusion> <groupId>org.ops4j.pax.url</groupId> <artifactId>pax-url-aether</artifactId> 
-					</exclusion> -->
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>jcl-over-slf4j</artifactId>
 				</exclusion>
-				<!-- <exclusion> <groupId>com.thoughtworks.xstream</groupId> <artifactId>xstream</artifactId> 
-					</exclusion> -->
 				<!-- java 11 use this exclusion -->
 				<!-- <exclusion> <groupId>com.sun.java</groupId> <artifactId>tools</artifactId> 
 					</exclusion> -->
 			</exclusions>
 		</dependency>
 
-
-		<!-- ######################################## -->
-		<!-- These are: chronicle-map base dependency -->
-		<!-- A StAX implementation for JSON -->
-		<!-- <dependency> <groupId>org.codehaus.jettison</groupId> <artifactId>jettison</artifactId> 
-			<version>1.4.1</version> </dependency> -->
-
-
-		<!-- OPS4J Pax Url - mvn: protocol handler -->
-		<!-- <dependency> <groupId>org.ops4j.pax.url</groupId> <artifactId>pax-url-aether</artifactId> 
-			<version>2.6.2</version> <exclusions> <exclusion> <groupId>org.slf4j</groupId> 
-			<artifactId>slf4j-api</artifactId> </exclusion> <exclusion> <groupId>org.slf4j</groupId> 
-			<artifactId>jcl-over-slf4j</artifactId> </exclusion> </exclusions> </dependency> -->
-
-
-		<!-- XStream Core : XML Processing -->
-		<!-- <dependency> <groupId>com.thoughtworks.xstream</groupId> <artifactId>xstream</artifactId> 
-			<version>1.4.12</version> </dependency> -->
-
-
 		<!-- A set of annotations used for code inspection support and code documentation. -->
 		<dependency>
 			<groupId>org.jetbrains</groupId>
 			<artifactId>annotations</artifactId>
-		</dependency>
-
-
-		<!-- Java Native Access Platform -->
-		<dependency>
-			<groupId>net.java.dev.jna</groupId>
-			<artifactId>jna</artifactId>
-			<version>${jna.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.java.dev.jna</groupId>
-			<artifactId>jna-platform</artifactId>
-			<version>${jna.version}</version>
 		</dependency>
 
 	</dependencies>
