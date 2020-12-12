@@ -17,11 +17,13 @@
 
 	<properties>
 		<chronicle-core.version>2.20.123</chronicle-core.version>
-		<chronicle-bytes.version>2.20.106</chronicle-bytes.version>
-		<chronicle-threads.version>2.20.104</chronicle-threads.version>
-		<chronicle-wire.version>2.20.111</chronicle-wire.version>
-		<chronicle-queue.version>5.20.117</chronicle-queue.version>
-		<chronicle-map.version>3.20.83</chronicle-map.version>
+		<chronicle-bytes.version>2.20.109</chronicle-bytes.version>
+		<chronicle-threads.version>2.20.110</chronicle-threads.version>
+		<chronicle-wire.version>2.20.114</chronicle-wire.version>
+		<chronicle-values.version>2.20.80</chronicle-values.version>
+		<chronicle-algorithms.version>2.20.80</chronicle-algorithms.version>
+		<chronicle-queue.version>5.20.120</chronicle-queue.version>
+		<chronicle-map.version>3.20.84</chronicle-map.version>
 	</properties>
 
 	<dependencies>
@@ -75,7 +77,7 @@
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-values</artifactId>
-			<version>2.20.80</version>
+			<version>${chronicle-values.version}</version>
 		</dependency>
 		
 		<!-- ####### chronicle-algorithms ####### -->
@@ -84,7 +86,7 @@
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-algorithms</artifactId>
-			<version>2.20.80</version>
+			<version>${chronicle-algorithms.version}</version>
 		</dependency>
 
 
