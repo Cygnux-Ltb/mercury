@@ -3,6 +3,8 @@ package io.mercury.serialization.wire;
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
 
+import io.mercury.common.log.LogConfigurator;
+import io.mercury.common.log.LogConfigurator.LogLevel;
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.wire.BinaryWire;
 import net.openhft.chronicle.wire.RawWire;
@@ -18,6 +20,10 @@ import net.openhft.chronicle.wire.WireType;
  */
 public class SimpleExample {
 
+	static {
+		LogConfigurator.logLevel(LogLevel.ERROR);
+	}
+	
 	public static void main(String[] args) {
 
 		/**
@@ -37,8 +43,7 @@ public class SimpleExample {
 
 		Wire textWire = new TextWire(textBytes);
 		// or
-		WireType wireType = WireType.TEXT;
-		Wire wireB = wireType.apply(textBytes);
+		Wire textWire1 = WireType.TEXT.apply(textBytes);
 		// or
 		Bytes<ByteBuffer> binaryBytes = Bytes.elasticByteBuffer();
 		Wire binaryWire = new BinaryWire(binaryBytes);
@@ -49,9 +54,12 @@ public class SimpleExample {
 		/**
 		 * So now you can write to the wire with a simple document.
 		 */
-		textWire.write(() -> "message").text("Hello World").write(() -> "number").int64(1234567890L).write(() -> "code")
-				.asEnum(TimeUnit.SECONDS).write(() -> "price").float64(10.50);
+		textWire.write(() -> "message").text("Hello World")
+				.write(() -> "number").int64(1234567890L)
+				.write(() -> "code").asEnum(TimeUnit.SECONDS)
+				.write(() -> "price").float64(10.50);
 		System.out.println(textBytes);
+		System.out.println(textWire1);
 
 //		prints
 //
@@ -65,8 +73,10 @@ public class SimpleExample {
 		 */
 
 		// the same code as for text wire
-		binaryWire.write(() -> "message").text("Hello World").write(() -> "number").int64(1234567890L)
-				.write(() -> "code").asEnum(TimeUnit.SECONDS).write(() -> "price").float64(10.50);
+		binaryWire.write(() -> "message").text("Hello World")
+				.write(() -> "number").int64(1234567890L)
+				.write(() -> "code").asEnum(TimeUnit.SECONDS)
+				.write(() -> "price").float64(10.50);
 		System.out.println(binaryBytes.toHexString());
 
 		// to obtain the underlying ByteBuffer to write to a Channel
@@ -88,8 +98,10 @@ public class SimpleExample {
 		 */
 
 		// the same code as for text wire
-		rawWire.write(() -> "message").text("Hello World").write(() -> "number").int64(1234567890L).write(() -> "code")
-				.asEnum(TimeUnit.SECONDS).write(() -> "price").float64(10.50);
+		rawWire.write(() -> "message").text("Hello World")
+				.write(() -> "number").int64(1234567890L)
+				.write(() -> "code").asEnum(TimeUnit.SECONDS)
+				.write(() -> "price").float64(10.50);
 		System.out.println(rawBytes.toHexString());
 
 //		prints in RawWire

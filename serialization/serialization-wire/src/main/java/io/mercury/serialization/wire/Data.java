@@ -36,16 +36,18 @@ public final class Data implements Marshallable {
 
 	@Override
 	public void readMarshallable(@NotNull WireIn wire) throws IllegalStateException {
-		wire.read(() -> Field1).text(this, (obj, s) -> this.message = s).read(() -> Field2)
-				.int64(this, (obj, i) -> this.number = i).read(() -> Field3)
-				.asEnum(TimeUnit.class, e -> this.timeUnit = e).read(() -> Field4)
-				.float64(this, (obj, d) -> this.price = d);
+		wire.read(() -> Field1).text(this, (obj, s) -> this.message = s)
+			.read(() -> Field2).int64(this, (obj, i) -> this.number = i)
+			.read(() -> Field3).asEnum(TimeUnit.class, e -> this.timeUnit = e)
+			.read(() -> Field4).float64(this, (obj, d) -> this.price = d);
 	}
 
 	@Override
 	public void writeMarshallable(WireOut wire) {
-		wire.write(() -> Field1).text(message).write(() -> Field2).int64(number).write(() -> Field3).asEnum(timeUnit)
-				.write(() -> Field4).float64(price);
+		wire.write(() -> Field1).text(message)
+			.write(() -> Field2).int64(number)
+			.write(() -> Field3).asEnum(timeUnit)
+			.write(() -> Field4).float64(price);
 	}
 
 	@Override

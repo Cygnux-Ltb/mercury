@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
 
+import io.mercury.common.log.LogConfigurator;
+import io.mercury.common.log.LogConfigurator.LogLevel;
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.core.pool.ClassAliasPool;
 import net.openhft.chronicle.wire.BinaryWire;
@@ -19,6 +21,10 @@ import net.openhft.chronicle.wire.Wires;
  *
  */
 public class Test5 {
+	
+	static {
+		LogConfigurator.logLevel(LogLevel.ERROR);
+	}
 
 	public static void main(String[] args) {
 

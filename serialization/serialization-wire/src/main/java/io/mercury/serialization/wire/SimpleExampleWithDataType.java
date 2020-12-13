@@ -3,6 +3,8 @@ package io.mercury.serialization.wire;
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
 
+import io.mercury.common.log.LogConfigurator;
+import io.mercury.common.log.LogConfigurator.LogLevel;
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.wire.BinaryWire;
 import net.openhft.chronicle.wire.TextWire;
@@ -15,6 +17,10 @@ import net.openhft.chronicle.wire.Wire;
  *
  */
 public class SimpleExampleWithDataType {
+
+	static {
+		LogConfigurator.logLevel(LogLevel.ERROR);
+	}
 
 	public static void main(String[] args) {
 
@@ -44,8 +50,9 @@ public class SimpleExampleWithDataType {
 //		code: NANOSECONDS
 //		price: 10.5
 //
-//		Data{message='Hello World', number=1234567890, timeUnit=NANOSECONDS, price=10.5}
+//		{"message":"Hello World","number":1234567890,"timeUnit":"NANOSECONDS","price":10.5}
 
+		System.out.println("============================================================================");
 		/**
 		 * To write in binary instead
 		 */
@@ -67,7 +74,7 @@ public class SimpleExampleWithDataType {
 //		00000020 C8 74 69 6D 65 55 6E 69  74 EB 4E 41 4E 4F 53 45 ·timeUni t·NANOSE
 //		00000030 43 4F 4E 44 53 C5 70 72  69 63 65 90 00 00 28 41 CONDS·pr ice···(A
 //
-//		Data{message='Hello World', number=1234567890, timeUnit=NANOSECONDS, price=10.5}
+//		{"message":"Hello World","number":1234567890,"timeUnit":"NANOSECONDS","price":10.5}
 
 	}
 
