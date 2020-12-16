@@ -6,8 +6,6 @@ import static io.mercury.common.number.ThreadSafeRandoms.randomUnsignedInt;
 import java.io.File;
 import java.lang.Thread.State;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -17,8 +15,10 @@ import java.util.function.Supplier;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import org.eclipse.collections.api.map.ConcurrentMutableMap;
 import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
 import org.slf4j.Logger;
 
@@ -75,10 +75,20 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	}
 
 	private SingleChronicleQueue buildChronicleQueue() {
-		if (!savePath.exists())
+		if (!savePath.exists()) {
+			// 创建存储路径
 			savePath.mkdirs();
+		}
 		SingleChronicleQueueBuilder builder = SingleChronicleQueueBuilder.single(savePath)
-				.rollCycle(fileCycle.getRollCycle()).readOnly(readOnly).storeFileListener(this::storeFileHandle);
+				// 文件滚动周期
+				.rollCycle(fileCycle.getRollCycle())
+				// 是否只读
+				.readOnly(readOnly)
+				// 设置时区
+				// .rollTimeZone(rollTimeZone)
+				// 文件存储回调
+				.storeFileListener(this::storeFileHandle);
+
 		if (epoch > 0L)
 			builder.epoch(epoch);
 		// TODO 待解决CPU缓存行填充问题
@@ -104,16 +114,19 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	// 最后文件周期
 	private AtomicInteger lastCycle;
 	// 周期文件存储Map
-	private ConcurrentMap<Integer, String> cycleFileMap;
+	private ConcurrentMutableMap<Integer, String> cycleFileMap;
 	// 周期文件清理线程
 	private Thread fileClearThread;
 	// 周期文件清理线程运行状态
 	private AtomicBoolean isClearRunning = new AtomicBoolean(true);
 
+	/**
+	 * 创建文件清理线程
+	 */
 	private void createFileClearThread() {
 		if (fileClearCycle > 0) {
 			this.lastCycle = new AtomicInteger();
-			this.cycleFileMap = new ConcurrentHashMap<>();
+			this.cycleFileMap = MutableMaps.newConcurrentHashMap();
 			// 周期文件清理间隔
 			long delay = fileCycle.getSeconds() * fileClearCycle;
 			// 创建文件清理线程
@@ -140,13 +153,13 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	private void fileClearTask() {
 		int last = lastCycle.get();
 		// 计算需要删除的基准线
-		int delBaseline = last - fileClearCycle;
-		logger.info("Execute clear schedule : lastCycle==[{}], delBaseline==[{}]", last, delBaseline);
+		int deleteBaseline = last - fileClearCycle;
+		logger.info("Execute clear schedule : lastCycle==[{}], deleteBaseline==[{}]", last, deleteBaseline);
 		// 获取全部存储文件的Key
 		Set<Integer> keySet = cycleFileMap.keySet();
 		for (int saveCycle : keySet) {
 			// 小于基准线的文件被删除
-			if (saveCycle < delBaseline) {
+			if (saveCycle < deleteBaseline) {
 				String fileAbsolutePath = cycleFileMap.get(saveCycle);
 				logger.info("Delete cycle file : cycle==[{}], fileAbsolutePath==[{}]", saveCycle, fileAbsolutePath);
 				File file = new File(fileAbsolutePath);
@@ -154,8 +167,9 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 					// 删除文件
 					if (file.delete()) {
 						cycleFileMap.remove(saveCycle);
+						logger.info("File : [{}] successfully deleted", file.getAbsolutePath());
 					} else {
-						logger.warn("File : [{}] delete failure!!!", fileAbsolutePath);
+						logger.warn("File : [{}] delete failure", fileAbsolutePath);
 					}
 				} else {
 					logger.error("File not exists, Please check the ChronicleQueue save path : [{}]",
@@ -165,6 +179,11 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 		}
 	}
 
+	/**
+	 * 
+	 * @param cycle
+	 * @param file
+	 */
 	private void storeFileHandle(int cycle, File file) {
 		logger.info("Released file : cycle==[{}], file==[{}]", cycle, file.getAbsolutePath());
 		if (storeFileListener != null) {
@@ -208,8 +227,9 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 
 	@Override
 	public void close() {
-		if (isClosed())
+		if (isClosed()) {
 			return;
+		}
 		// 关闭外部访问器
 		closeAllAccessor();
 		// 关闭队列
@@ -281,8 +301,9 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	 */
 	public R createReader(@Nonnull String readerName, @Nonnull ReaderParam param, @Nonnull Consumer<T> dataConsumer)
 			throws IllegalStateException {
-		if (isClosed())
+		if (isClosed()) {
 			throw new IllegalStateException("Cannot be create reader, Chronicle queue is closed");
+		}
 		Assertor.nonNull(readerName, "readerName");
 		Assertor.nonNull(param, "param");
 		Assertor.nonNull(dataConsumer, "dataConsumer");
@@ -436,6 +457,15 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 
 		public B folder(@Nonnull String folder) {
 			this.folder = StringUtil.fixPath(folder);
+			return self();
+		}
+
+		public B topic(@Nonnull String topic) {
+			return topic(topic, "");
+		}
+
+		public B topic(@Nonnull String topic, @Nullable String... subtopics) {
+			this.folder = StringUtil.fixPath(topic);
 			return self();
 		}
 

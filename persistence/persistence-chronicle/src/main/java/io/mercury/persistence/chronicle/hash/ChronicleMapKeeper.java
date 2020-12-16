@@ -37,12 +37,26 @@ public class ChronicleMapKeeper<K, V> extends KeeperBaseImpl<String, ChronicleMa
 	@Override
 	protected ChronicleMap<K, V> createWithKey(String filename) throws ChronicleIOException {
 		// 构建器
-		ChronicleMapBuilder<K, V> builder = ChronicleMapBuilder.of(configurator.keyClass(), configurator.valueClass())
-				.putReturnsNull(configurator.putReturnsNull()).removeReturnsNull(configurator.removeReturnsNull())
-				.name(configurator.fullInfo()).entries(configurator.entries());
+		ChronicleMapBuilder<K, V> builder = ChronicleMapBuilder
+				// 设置KeyClass, ValueClass
+				.of(configurator.keyClass(), configurator.valueClass())
+				// 设置put函数是否返回null
+				.putReturnsNull(configurator.putReturnsNull())
+				// 设置remove函数是否返回null
+				.removeReturnsNull(configurator.removeReturnsNull())
+				// 设置名称
+				.name(configurator.fullInfo())
+				// 设置条目总数
+				.entries(configurator.entries());
 		// 设置块大小
 		if (configurator.actualChunkSize() > 0)
 			builder.actualChunkSize(configurator.actualChunkSize());
+		
+		// 设置关闭操作
+		// builder.setPreShutdownAction(null);
+		// 设置条目数校验
+		//builder.checksumEntries(false);
+		
 		// 基于Key值设置平均长度
 		if (configurator.averageKey() != null)
 			builder.averageKey(configurator.averageKey());

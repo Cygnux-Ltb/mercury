@@ -186,14 +186,14 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 
 	@Override
 	public void run() {
-		final boolean readFailLogging = param.readFailLogging;
-		final boolean readFailCrash = param.readFailCrash;
-		final boolean waitingData = param.waitingData;
-		final boolean spinWaiting = param.spinWaiting;
-		final TimeUnit readIntervalUnit = param.readIntervalUnit;
-		final long readIntervalTime = param.readIntervalTime;
+		final boolean readFailLogging = param.isReadFailLogging();
+		final boolean readFailCrash = param.isReadFailCrash();
+		final boolean waitingData = param.isWaitingData();
+		final boolean spinWaiting = param.isSpinWaiting();
+		final TimeUnit readIntervalUnit = param.getReadIntervalUnit();
+		final long readIntervalTime = param.getReadIntervalTime();
 		if (param.delayReadTime > 0)
-			sleep(param.delayReadUnit, param.delayReadTime);
+			sleep(param.getDelayReadUnit(), param.getDelayReadTime());
 		for (;;) {
 			if (isClose) {
 				logger.info("ChronicleReader is cloesd, execute exit()");
@@ -243,31 +243,31 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 
 	@Override
 	protected void close0() {
-
+		// TODO NONE
 	}
 
 	public static final class ReaderParam {
 
 		// 是否读取失败后关闭线程
-		private boolean readFailCrash;
+		private final boolean readFailCrash;
 		// 是否读取失败后记录日志
-		private boolean readFailLogging;
+		private final boolean readFailLogging;
 		// 读取间隔时间单位
-		private TimeUnit readIntervalUnit;
+		private final TimeUnit readIntervalUnit;
 		// 读取时间
-		private long readIntervalTime;
+		private final long readIntervalTime;
 		// 延迟读取时间单位
-		private TimeUnit delayReadUnit;
+		private final TimeUnit delayReadUnit;
 		// 延迟读取时间
-		private long delayReadTime;
+		private final long delayReadTime;
 		// 是否等待数据写入
-		private boolean waitingData;
+		private final boolean waitingData;
 		// 是否自旋等待
-		private boolean spinWaiting;
+		private final boolean spinWaiting;
 		// 是否以异步方式退出
-		private boolean asyncExit;
+		private final boolean asyncExit;
 		// 退出函数
-		private Runnable exitRunnable;
+		private final Runnable exitRunnable;
 
 		private ReaderParam(Builder builder) {
 			this.readFailCrash = builder.readFailCrash;
@@ -290,22 +290,66 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 			return new Builder().build();
 		}
 
+		public boolean isReadFailCrash() {
+			return readFailCrash;
+		}
+
+		public boolean isReadFailLogging() {
+			return readFailLogging;
+		}
+
+		public TimeUnit getReadIntervalUnit() {
+			return readIntervalUnit;
+		}
+
+		public long getReadIntervalTime() {
+			return readIntervalTime;
+		}
+
+		public TimeUnit getDelayReadUnit() {
+			return delayReadUnit;
+		}
+
+		public long getDelayReadTime() {
+			return delayReadTime;
+		}
+
+		public boolean isWaitingData() {
+			return waitingData;
+		}
+
+		public boolean isSpinWaiting() {
+			return spinWaiting;
+		}
+
+		public boolean isAsyncExit() {
+			return asyncExit;
+		}
+
+		public Runnable getExitRunnable() {
+			return exitRunnable;
+		}
+
 		public static class Builder {
 
+			// 读取失败崩溃
 			private boolean readFailCrash = false;
+			// 读取失败打印Log
 			private boolean readFailLogging = true;
+			// 是否等待新数据
 			private boolean waitingData = true;
+			// 是否自旋等待
 			private boolean spinWaiting = false;
 
-			// 缺省读取间隔
+			// 读取间隔
 			private TimeUnit readIntervalUnit = TimeUnit.MILLISECONDS;
 			private long readIntervalTime = 10;
 
-			// 缺省开始读取延迟时间
+			// 开始读取延迟时间
 			private TimeUnit delayReadUnit = TimeUnit.MILLISECONDS;
 			private long delayReadTime = 0;
 
-			// 缺省退出方式
+			// 退出方式
 			private boolean asyncExit = false;
 			private Runnable exitRunnable;
 
@@ -401,6 +445,10 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 				return this;
 			}
 
+			/**
+			 * 
+			 * @return
+			 */
 			public ReaderParam build() {
 				return new ReaderParam(this);
 			}

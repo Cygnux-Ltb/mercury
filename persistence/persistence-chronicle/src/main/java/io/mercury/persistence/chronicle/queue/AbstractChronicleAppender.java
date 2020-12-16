@@ -9,6 +9,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import org.slf4j.Logger;
 
 import io.mercury.common.annotation.lang.AbstractFunction;
+import io.mercury.common.serialization.Serializer;
 import io.mercury.persistence.chronicle.exception.ChronicleWriteException;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleQueue.CloseableChronicleAccessor;
 import net.openhft.chronicle.queue.ExcerptAppender;
@@ -49,9 +50,6 @@ public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAcc
 		return appenderName;
 	}
 
-	@AbstractFunction
-	protected abstract void append0(@Nonnull T t);
-
 	/**
 	 * 
 	 * @param t
@@ -72,6 +70,21 @@ public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAcc
 			throw new ChronicleWriteException(e.getMessage(), e);
 		}
 	}
+
+	/**
+	 * 
+	 * @param obj
+	 * @param serializer
+	 * @throws IllegalStateException
+	 * @throws ChronicleWriteException
+	 */
+	public void append(@Nonnull Object obj, Serializer<Object, T> serializer)
+			throws IllegalStateException, ChronicleWriteException {
+		append(serializer.serialization(obj));
+	}
+
+	@AbstractFunction
+	protected abstract void append0(@Nonnull T t);
 
 	@Override
 	public void run() {

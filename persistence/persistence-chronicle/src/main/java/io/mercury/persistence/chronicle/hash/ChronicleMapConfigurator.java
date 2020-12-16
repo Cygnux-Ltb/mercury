@@ -183,51 +183,97 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 			this.folder = fixPath(folder);
 		}
 
+		/**
+		 * 
+		 * @param averageKey
+		 * @return
+		 */
 		public Builder<K, V> averageKey(K averageKey) {
 			this.averageKey = averageKey;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param averageValue
+		 * @return
+		 */
 		public Builder<K, V> averageValue(V averageValue) {
 			this.averageValue = averageValue;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @return
+		 */
 		public Builder<K, V> enablePutReturnsNull() {
 			this.putReturnsNull = true;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @return
+		 */
 		public Builder<K, V> enableRemoveReturnsNull() {
 			this.removeReturnsNull = true;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @return
+		 */
 		public Builder<K, V> enableRecover() {
 			this.recover = true;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param persistent
+		 * @return
+		 */
 		public Builder<K, V> persistent(boolean persistent) {
 			this.persistent = persistent;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param actualChunkSize
+		 * @return
+		 */
 		public Builder<K, V> actualChunkSize(int actualChunkSize) {
 			this.actualChunkSize = actualChunkSize;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param entries
+		 * @return
+		 */
 		public Builder<K, V> entries(long entries) {
 			this.entries = entries;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param capacity
+		 * @return
+		 */
 		public Builder<K, V> entriesOfPow2(Capacity capacity) {
 			this.entries = capacity.size();
 			return this;
 		}
 
+		/**
+		 * 
+		 * @return
+		 */
 		public ChronicleMapConfigurator<K, V> build() {
 			return new ChronicleMapConfigurator<>(this);
 		}
