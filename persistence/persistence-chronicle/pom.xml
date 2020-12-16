@@ -16,13 +16,13 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<chronicle-core.version>2.20.123</chronicle-core.version>
-		<chronicle-bytes.version>2.20.109</chronicle-bytes.version>
+		<chronicle-core.version>2.20.124</chronicle-core.version>
+		<chronicle-bytes.version>2.20.110</chronicle-bytes.version>
 		<chronicle-threads.version>2.20.110</chronicle-threads.version>
-		<chronicle-wire.version>2.20.114</chronicle-wire.version>
+		<chronicle-wire.version>2.20.115</chronicle-wire.version>
 		<chronicle-values.version>2.20.80</chronicle-values.version>
 		<chronicle-algorithms.version>2.20.80</chronicle-algorithms.version>
-		<chronicle-queue.version>5.20.120</chronicle-queue.version>
+		<chronicle-queue.version>5.20.121</chronicle-queue.version>
 		<chronicle-map.version>3.20.84</chronicle-map.version>
 	</properties>
 
@@ -32,6 +32,12 @@
 			<artifactId>commons-concurrent</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>io.mercury</groupId>
+			<artifactId>serialization-avro</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<!-- ####### chronicle-core ####### -->
 		<!-- Low level access to native memory, JVM and OS. -->
 		<dependency>
@@ -39,7 +45,7 @@
 			<artifactId>chronicle-core</artifactId>
 			<version>${chronicle-core.version}</version>
 		</dependency>
-		
+
 		<!-- ####### chronicle-bytes ####### -->
 		<!-- Chronicle Bytes contains all the low level memory access wrappers.It 
 			is built on Chronicle Core’s direct memory and OS system call access. Chronicle 
@@ -49,7 +55,7 @@
 			<artifactId>chronicle-bytes</artifactId>
 			<version>${chronicle-bytes.version}</version>
 		</dependency>
-		
+
 		<!-- ####### chronicle-threads ####### -->
 		<!-- This library provide a high performance thread pool. This thread pool 
 			is design to share blocking, monitoring and busy waiting threads. Busy waiting 
@@ -60,7 +66,7 @@
 			<artifactId>chronicle-threads</artifactId>
 			<version>${chronicle-threads.version}</version>
 		</dependency>
-		
+
 		<!-- ####### chronicle-wire ####### -->
 		<!-- A Java serialization Library that supports multiple formats. -->
 		<dependency>
@@ -68,7 +74,7 @@
 			<artifactId>chronicle-wire</artifactId>
 			<version>${chronicle-wire.version}</version>
 		</dependency>
-		
+
 		<!-- ####### chronicle-values ####### -->
 		<!-- Generation of constantly-sized flyweight accessors to Chronicle Bytes 
 			and simple bean-style on-heap implementations from interfaces. Interfaces, 
@@ -79,7 +85,7 @@
 			<artifactId>chronicle-values</artifactId>
 			<version>${chronicle-values.version}</version>
 		</dependency>
-		
+
 		<!-- ####### chronicle-algorithms ####### -->
 		<!-- Zero allocation, efficient algorithms for 1)hashing, 2)bit set operations, 
 			3)access the raw bytes of an data type, 4)off heap locking -->
@@ -127,6 +133,13 @@
 		<dependency>
 			<groupId>org.jetbrains</groupId>
 			<artifactId>annotations</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>net.openhft</groupId>
+			<artifactId>jlbh</artifactId>
+			<version>1.19.41</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
