@@ -75,7 +75,7 @@
 		</dependency>
 
 		<!-- Avro inter-process communication components -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.apache.avro</groupId>
 			<artifactId>avro-ipc</artifactId>
 			<version>${avro.version}</version>
@@ -93,7 +93,7 @@
 					<artifactId>jackson-databind</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
+		</dependency> -->
 
 		<!-- Compilers for Avro IDL and Avro Specific Java API -->
 		<dependency>
