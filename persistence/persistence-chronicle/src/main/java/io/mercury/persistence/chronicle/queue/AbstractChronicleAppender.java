@@ -91,7 +91,7 @@ public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAcc
 		if (dataSupplier != null) {
 			for (;;) {
 				if (isClose) {
-					logger.info("Chronicle queue is closed, Thread exit");
+					logger.info("Chronicle queue is closed, {} Thread exit", appenderName);
 					break;
 				} else {
 					T t = dataSupplier.get();

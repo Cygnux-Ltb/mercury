@@ -19,7 +19,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import org.eclipse.collections.api.map.ConcurrentMutableMap;
-import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
 import org.slf4j.Logger;
 
 import io.mercury.common.annotation.lang.AbstractFunction;
@@ -394,9 +393,10 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 			@CheckForNull Supplier<T> dataProducer) throws IllegalStateException;
 
 	/**
-	 * 
+	 * 已分配的访问器
 	 */
-	private MutableLongObjectMap<CloseableChronicleAccessor> allocatedAccessor = MutableMaps.newLongObjectHashMap();
+	private ConcurrentMutableMap<Long, CloseableChronicleAccessor> allocatedAccessor = MutableMaps
+			.newConcurrentHashMap();
 
 	/**
 	 * 添加访问器
@@ -404,20 +404,16 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	 * @param accessor
 	 */
 	private void addAccessor(CloseableChronicleAccessor accessor) {
-		synchronized (allocatedAccessor) {
-			allocatedAccessor.put(accessor.allocateSeq, accessor);
-		}
+		allocatedAccessor.put(accessor.allocateSeq, accessor);
 	}
 
 	/**
 	 * 关闭全部访问器
 	 */
 	private void closeAllAccessor() {
-		synchronized (allocatedAccessor) {
-			for (CloseableChronicleAccessor accessor : allocatedAccessor.values()) {
-				if (!accessor.isClosed())
-					accessor.close();
-			}
+		for (CloseableChronicleAccessor accessor : allocatedAccessor.values()) {
+			if (!accessor.isClosed())
+				accessor.close();
 		}
 	}
 

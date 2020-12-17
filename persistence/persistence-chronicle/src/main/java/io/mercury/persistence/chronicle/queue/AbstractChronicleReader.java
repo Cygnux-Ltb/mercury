@@ -88,14 +88,14 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 	}
 
 	/**
-	 * 
+	 * 移动到开头
 	 */
 	public void toStart() {
 		excerptTailer.toStart();
 	}
 
 	/**
-	 * 
+	 * 移动到结尾
 	 */
 	public void toEnd() {
 		excerptTailer.toEnd();
