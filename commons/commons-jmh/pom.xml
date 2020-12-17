@@ -4,7 +4,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="http://maven.apache.org/POM/4.0.0">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
 		<groupId>io.mercury</groupId>
 		<artifactId>commons</artifactId>
@@ -17,7 +17,7 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<jmh.version>1.26</jmh.version>
+		<jmh.version>1.27</jmh.version>
 	</properties>
 
 	<dependencies>
@@ -60,6 +60,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.jetbrains</groupId>
 			<artifactId>annotations</artifactId>
