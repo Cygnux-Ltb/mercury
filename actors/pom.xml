@@ -89,6 +89,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-remote_2.13</artifactId>
@@ -100,11 +101,13 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-slf4j_2.13</artifactId>
 			<version>${akka.version}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-actor-typed_2.13</artifactId>
@@ -123,12 +126,6 @@
 			<artifactId>akka-testkit_2.13</artifactId>
 			<version>${akka.version}</version>
 			<scope>test</scope>
-		<!-- 	<exclusions>
-				<exclusion>
-					<groupId>org.scala-lang</groupId>
-					<artifactId>scala-library</artifactId>
-				</exclusion>
-			</exclusions> -->
 		</dependency>
 
 		<dependency>
