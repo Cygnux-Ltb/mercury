@@ -24,6 +24,10 @@ public class ChronicleMapKeeper<K, V> extends KeeperBaseImpl<String, ChronicleMa
 		this.configurator = configurator;
 	}
 
+	public ChronicleMapConfigurator<K, V> getConfigurator() {
+		return configurator;
+	}
+
 	private final Object lock = new Object();
 
 	@Override
@@ -51,12 +55,12 @@ public class ChronicleMapKeeper<K, V> extends KeeperBaseImpl<String, ChronicleMa
 		// 设置块大小
 		if (configurator.actualChunkSize() > 0)
 			builder.actualChunkSize(configurator.actualChunkSize());
-		
+
 		// 设置关闭操作
 		// builder.setPreShutdownAction(null);
 		// 设置条目数校验
-		//builder.checksumEntries(false);
-		
+		// builder.checksumEntries(false);
+
 		// 基于Key值设置平均长度
 		if (configurator.averageKey() != null)
 			builder.averageKey(configurator.averageKey());

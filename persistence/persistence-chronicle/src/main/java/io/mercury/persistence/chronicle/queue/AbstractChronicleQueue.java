@@ -110,6 +110,9 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 		logger.info("ChronicleQueue [{}] shutdown hook finished", queueName);
 	}
 
+	/**
+	 ******************************** 文件清理程序 START ********************************
+	 */
 	// 最后文件周期
 	private AtomicInteger lastCycle;
 	// 周期文件存储Map
@@ -149,6 +152,9 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 		}
 	}
 
+	/**
+	 * 文件清理任务
+	 */
 	private void fileClearTask() {
 		int last = lastCycle.get();
 		// 计算需要删除的基准线
@@ -177,6 +183,10 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 			}
 		}
 	}
+
+	/**
+	 ******************************** 文件清理程序 END ********************************
+	 */
 
 	/**
 	 * 

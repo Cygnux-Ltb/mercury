@@ -55,16 +55,8 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 		this.rootPath = builder.rootPath;
 		this.folder = builder.folder;
 		this.savePath = new File(rootPath + FixedFolder + folder);
-		this.fullInfo = buildFullInfo();
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	private String buildFullInfo() {
-		return "[SaveTo->" + savePath.getAbsolutePath() + "]:[Key==" + keyClass.getSimpleName() + ",Value=="
-				+ valueClass.getSimpleName() + "]";
+		this.fullInfo = "[SaveTo->" + savePath.getAbsolutePath() + "]:[KeyType==" + keyClass.getSimpleName()
+				+ ",ValueType==" + valueClass.getSimpleName() + "]";
 	}
 
 	private static final String FixedFolder = "chronicle-map/";
@@ -155,6 +147,11 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 
 	public File savePath() {
 		return savePath;
+	}
+
+	@Override
+	public String toString() {
+		return fullInfo;
 	}
 
 	public static class Builder<K, V> {
