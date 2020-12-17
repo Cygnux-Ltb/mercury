@@ -19,7 +19,7 @@ import io.mercury.common.datetime.EpochTime;
 
 /**
  * 
- * Use Snow flake ID
+ * Use Epoch Time ID
  * 
  * @author yellow013
  *
@@ -37,19 +37,19 @@ public final class EpochSeqAllocator {
 	}
 
 	/**
-	 * 
+	 * 最后使用的Epoch毫秒
 	 */
 	private static volatile long lastEpochMillis;
 
 	/**
-	 * 
+	 * 自增位
 	 */
 	private static volatile int incr;
 
 	/**
 	 * Unsigned Short max value
 	 */
-	private static final int incrLimit = 0x7fff;
+	private static final int incrLimit = Short.MAX_VALUE;
 
 	/**
 	 * 
@@ -64,7 +64,7 @@ public final class EpochSeqAllocator {
 		if (++incr > incrLimit) {
 			return -1L;
 		}
-		return (lastEpochMillis << 16) | incr;
+		return (lastEpochMillis << Short.SIZE) | incr;
 	}
 
 	public static void main(String[] args) {
@@ -78,8 +78,8 @@ public final class EpochSeqAllocator {
 		long tx = (t1 - t0) / 1000000;
 		System.out.println(longSet.size() + " count time ms -> " + tx);
 
-		//set.each(System.out::println);
-		
+		// set.each(System.out::println);
+
 		long epochMillis = EpochTime.millis();
 		System.out.println("epoch millis binary: ");
 		System.out.println(longBinaryFormat(epochMillis));
