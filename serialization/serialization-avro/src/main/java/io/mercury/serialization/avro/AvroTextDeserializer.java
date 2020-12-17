@@ -13,7 +13,7 @@ import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
 
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.TextDeserializer;
+import io.mercury.common.serialization.specific.TextDeserializer;
 
 @NotThreadSafe
 public final class AvroTextDeserializer<T extends SpecificRecord> implements TextDeserializer<T> {

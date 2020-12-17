@@ -14,10 +14,10 @@ import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
 
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.BinarySerializer;
+import io.mercury.common.serialization.specific.ByteBufferSerializer;
 
 @NotThreadSafe
-public final class AvroBinarySerializer<T extends SpecificRecord> implements BinarySerializer<T> {
+public final class AvroBinarySerializer<T extends SpecificRecord> implements ByteBufferSerializer<T> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(AvroBinarySerializer.class);
 

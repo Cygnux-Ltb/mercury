@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.apache.avro.io.BinaryDecoder;
@@ -19,10 +21,10 @@ import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
 
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.BinaryDeserializer;
+import io.mercury.common.serialization.specific.ByteBufferDeserializer;
 
 @NotThreadSafe
-public final class AvroBinaryDeserializer<T extends SpecificRecord> implements BinaryDeserializer<T> {
+public final class AvroBinaryDeserializer<T extends SpecificRecord> implements ByteBufferDeserializer<T> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(AvroBinaryDeserializer.class);
 
@@ -35,7 +37,7 @@ public final class AvroBinaryDeserializer<T extends SpecificRecord> implements B
 	}
 
 	@Override
-	public T deserialization(ByteBuffer source, T reuse) {
+	public T deserialization(@Nonnull ByteBuffer source, @Nullable T reuse) {
 		try {
 			return reader.read(reuse, initDecoder(source));
 		} catch (IOException e) {
