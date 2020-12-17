@@ -220,8 +220,8 @@ public final class JsonParser2 {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final <K, V> Map<K, V> toMap(@Nonnull String json, Class<K> keyClass, Class<V> valueClass)
-			throws JsonParseException {
+	public static final <K, V> Map<K, V> toMap(@Nonnull String json, @Nonnull Class<K> keyClass,
+			@Nonnull Class<V> valueClass) throws JsonParseException {
 		try {
 			return Mapper.readValue(json, TypeFactory.constructMapLikeType(Map.class, keyClass, valueClass));
 		} catch (Exception e) {

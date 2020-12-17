@@ -14,18 +14,16 @@
 	<name>serialization-kryo</name>
 
 	<dependencies>
+		<dependency>
+			<groupId>io.mercury</groupId>
+			<artifactId>commons-core</artifactId>
+		</dependency>
 
 		<!-- Fast, efficient Java serialization. This is the main Kryo artifact. -->
 		<dependency>
 			<groupId>com.esotericsoftware</groupId>
 			<artifactId>kryo</artifactId>
-			<version>5.0.1</version>
-			<exclusions>
-				<!-- <exclusion> <groupId>com.esotericsoftware</groupId> <artifactId>reflectasm</artifactId> 
-					</exclusion> -->
-				<!-- <exclusion> <groupId>org.objenesis</groupId> <artifactId>objenesis</artifactId> 
-					</exclusion> -->
-			</exclusions>
+			<version>5.0.3</version>
 		</dependency>
 
 		<!-- A library for instantiating Java objects -->

@@ -14,19 +14,18 @@
 	<name>serialization-wire</name>
 
 	<dependencies>
-	
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>commons-core</artifactId>
 		</dependency>
-	
+
 		<!-- A Java Serialization Library that supports multiple formats -->
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-wire</artifactId>
-			<version>2.20.114</version>
+			<version>2.20.115</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>serialization-json</artifactId>
