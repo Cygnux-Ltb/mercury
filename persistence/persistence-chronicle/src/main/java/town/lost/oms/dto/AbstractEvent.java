@@ -8,13 +8,16 @@ import net.openhft.chronicle.bytes.BytesIn;
 import net.openhft.chronicle.bytes.BytesOut;
 import net.openhft.chronicle.wire.*;
 
-public class AbstractEvent<E extends AbstractEvent<E>> extends SelfDescribingMarshallable {
+public abstract class AbstractEvent<E extends AbstractEvent<E>> extends SelfDescribingMarshallable {
+
 	// used to control the benchmark
 	public static final boolean BYTES_IN_BINARY = Boolean.getBoolean("byteInBinary");
 
 	// used to control the benchmark
 	public static final boolean PREGENERATED_MARSHALLABLE = Boolean.getBoolean("pregeneratedMarshallable");
+
 	private static final int MASHALLABLE_VERSION = 1;
+
 	@LongConversion(Base85LongConverter.class)
 	private long sender;
 	@LongConversion(Base85LongConverter.class)
@@ -34,7 +37,7 @@ public class AbstractEvent<E extends AbstractEvent<E>> extends SelfDescribingMar
 
 	public E sender(long sender) {
 		this.sender = sender;
-		return (E) this;
+		return self();
 	}
 
 	public long target() {
@@ -43,7 +46,7 @@ public class AbstractEvent<E extends AbstractEvent<E>> extends SelfDescribingMar
 
 	public E target(long target) {
 		this.target = target;
-		return (E) this;
+		return self();
 	}
 
 	public long sendingTime() {
@@ -52,11 +55,13 @@ public class AbstractEvent<E extends AbstractEvent<E>> extends SelfDescribingMar
 
 	public E sendingTime(long sendingTime) {
 		this.sendingTime = sendingTime;
-		return (E) this;
+		return self();
 	}
 
+	protected abstract E self();
+
 	@Override
-	public void writeMarshallable(BytesOut out) {
+	public void writeMarshallable(@SuppressWarnings("rawtypes") BytesOut out) {
 		if (PREGENERATED_MARSHALLABLE) {
 			out.writeStopBit(MASHALLABLE_VERSION);
 			out.writeLong(sender);
@@ -68,7 +73,7 @@ public class AbstractEvent<E extends AbstractEvent<E>> extends SelfDescribingMar
 	}
 
 	@Override
-	public void readMarshallable(BytesIn in) {
+	public void readMarshallable(@SuppressWarnings("rawtypes") BytesIn in) {
 		if (PREGENERATED_MARSHALLABLE) {
 			int version = (int) in.readStopBit();
 			if (version == MASHALLABLE_VERSION) {
