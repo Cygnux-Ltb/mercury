@@ -4,29 +4,31 @@ import net.openhft.chronicle.wire.LongConversion;
 import net.openhft.chronicle.wire.MicroTimestampLongConverter;
 import net.openhft.chronicle.wire.SelfDescribingMarshallable;
 
-public class AbstractEvent<E extends AbstractEvent<E>> extends SelfDescribingMarshallable {
-    private String eventSource;
+public abstract class AbstractEvent<E extends AbstractEvent<E>> extends SelfDescribingMarshallable {
 
-    @LongConversion(MicroTimestampLongConverter.class)
-    private long eventTimeStamp;
+	private String eventSource;
 
-    public String eventSource() {
-        return eventSource;
-    }
+	@LongConversion(MicroTimestampLongConverter.class)
+	private long eventTimeStamp;
 
-    @SuppressWarnings("unchecked")
+	public String eventSource() {
+		return eventSource;
+	}
+
 	public E eventSource(String eventSource) {
-        this.eventSource = eventSource;
-        return (E) this;
-    }
+		this.eventSource = eventSource;
+		return self();
+	}
 
-    public long eventTimeStamp() {
-        return eventTimeStamp;
-    }
+	public long eventTimeStamp() {
+		return eventTimeStamp;
+	}
 
-    @SuppressWarnings("unchecked")
 	public E eventTimeStamp(long eventTimeStamp) {
-        this.eventTimeStamp = eventTimeStamp;
-        return (E) this;
-    }
+		this.eventTimeStamp = eventTimeStamp;
+		return self();
+	}
+
+	protected abstract E self();
+
 }

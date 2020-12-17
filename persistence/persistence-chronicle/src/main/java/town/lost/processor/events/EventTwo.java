@@ -1,34 +1,39 @@
 package town.lost.processor.events;
 
 public class EventTwo extends AbstractEvent<EventTwo> {
-    String symbol;
-    double price;
-    double quantiity;
+	String symbol;
+	double price;
+	double quantiity;
 
-    public String symbol() {
-        return symbol;
-    }
+	public String symbol() {
+		return symbol;
+	}
 
-    public EventTwo symbol(String symbol) {
-        this.symbol = symbol;
-        return this;
-    }
+	public EventTwo symbol(String symbol) {
+		this.symbol = symbol;
+		return this;
+	}
 
-    public double price() {
-        return price;
-    }
+	public double price() {
+		return price;
+	}
 
-    public EventTwo price(double price) {
-        this.price = price;
-        return this;
-    }
+	public EventTwo price(double price) {
+		this.price = price;
+		return this;
+	}
 
-    public double quantiity() {
-        return quantiity;
-    }
+	public double quantiity() {
+		return quantiity;
+	}
 
-    public EventTwo quantiity(double quantiity) {
-        this.quantiity = quantiity;
-        return this;
-    }
+	public EventTwo quantiity(double quantiity) {
+		this.quantiity = quantiity;
+		return this;
+	}
+
+	@Override
+	protected EventTwo self() {
+		return this;
+	}
 }

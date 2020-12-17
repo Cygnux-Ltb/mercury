@@ -6,16 +6,17 @@ import java.util.stream.IntStream;
 import net.openhft.chronicle.core.Jvm;
 import net.openhft.chronicle.wire.MethodWriterInvocationHandlerSupplier;
 
+@SuppressWarnings("deprecation")
 public class EventWithHistoryMethodWriter
 		implements town.lost.processor.events.EventWithHistory, net.openhft.chronicle.core.io.Closeable {
 
 	private static final int maxArgs = 1;
-	private final MethodWriterInvocationHandlerSupplier handler;
+	private final MethodWriterInvocationHandlerSupplier<?> handler;
 	private final Method[] methods = new Method[4];
 	private final ThreadLocal<Object[][]> argsTL = ThreadLocal
 			.withInitial(() -> IntStream.range(0, maxArgs + 1).mapToObj(Object[]::new).toArray(Object[][]::new));
 
-	public EventWithHistoryMethodWriter(MethodWriterInvocationHandlerSupplier handler) {
+	public EventWithHistoryMethodWriter(MethodWriterInvocationHandlerSupplier<?> handler) {
 		this.handler = handler;
 
 		// public town.lost.processor.events.EventWithHistory
@@ -77,7 +78,6 @@ public class EventWithHistoryMethodWriter
 
 	@Override
 	public boolean isClosed() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

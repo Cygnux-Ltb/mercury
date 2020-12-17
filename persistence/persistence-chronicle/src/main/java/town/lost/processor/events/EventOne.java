@@ -1,6 +1,7 @@
 package town.lost.processor.events;
 
 public class EventOne extends AbstractEvent<EventOne> {
+	
     String text;
 
     public String text() {
@@ -11,4 +12,10 @@ public class EventOne extends AbstractEvent<EventOne> {
         this.text = text;
         return this;
     }
+    
+    @Override
+    protected EventOne self() {
+    	return this;
+    }
+    
 }
