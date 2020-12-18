@@ -18,6 +18,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 
 	private final Class<K> keyClass;
 	private final Class<V> valueClass;
+
 	private final K averageKey;
 	private final V averageValue;
 
@@ -61,6 +62,15 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 
 	private static final String FixedFolder = "chronicle-map/";
 
+	/**
+	 * 
+	 * @param <K>
+	 * @param <V>
+	 * @param keyClass
+	 * @param valueClass
+	 * @return
+	 * @throws NullPointerException
+	 */
 	public static <K, V> Builder<K, V> newBuilder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass)
 			throws NullPointerException {
 		Assertor.nonNull(keyClass, "keyClass");
@@ -69,6 +79,16 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 				"auto-create-" + DateTimeUtil.datetimeOfSecond());
 	}
 
+	/**
+	 * 
+	 * @param <K>
+	 * @param <V>
+	 * @param keyClass
+	 * @param valueClass
+	 * @param folder
+	 * @return
+	 * @throws NullPointerException
+	 */
 	public static <K, V> Builder<K, V> newBuilder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass,
 			@Nonnull String folder) throws NullPointerException {
 		Assertor.nonNull(keyClass, "keyClass");
@@ -77,6 +97,17 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 		return new Builder<>(keyClass, valueClass, SysProperties.JAVA_IO_TMPDIR, folder);
 	}
 
+	/**
+	 * 
+	 * @param <K>
+	 * @param <V>
+	 * @param keyClass
+	 * @param valueClass
+	 * @param rootPath
+	 * @param folder
+	 * @return
+	 * @throws NullPointerException
+	 */
 	public static <K, V> Builder<K, V> newBuilder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass,
 			@Nonnull String rootPath, @Nonnull String folder) throws NullPointerException {
 		Assertor.nonNull(keyClass, "keyClass");
@@ -86,6 +117,14 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 		return new Builder<>(keyClass, valueClass, rootPath, folder);
 	}
 
+	/**
+	 * 
+	 * @param <K>
+	 * @param <V>
+	 * @param original
+	 * @return
+	 * @throws NullPointerException
+	 */
 	public static <K, V> Builder<K, V> reset(@Nonnull ChronicleMapConfigurator<K, V> original)
 			throws NullPointerException {
 		Assertor.nonNull(original, "original");
@@ -147,11 +186,6 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 
 	public File savePath() {
 		return savePath;
-	}
-
-	@Override
-	public String toString() {
-		return fullInfo;
 	}
 
 	public static class Builder<K, V> {
@@ -274,6 +308,15 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 		public ChronicleMapConfigurator<K, V> build() {
 			return new ChronicleMapConfigurator<>(this);
 		}
+	}
+
+	public static void main(String[] args) {
+
+		ChronicleMapConfigurator<String, Long> build = ChronicleMapConfigurator
+				.newBuilder(String.class, Long.class, SysProperties.USER_HOME, "/user").build();
+
+		System.out.println(build.fullInfo());
+
 	}
 
 }

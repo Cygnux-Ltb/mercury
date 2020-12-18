@@ -9,7 +9,6 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import io.mercury.common.datetime.EpochTime;
 import io.mercury.persistence.chronicle.exception.ChronicleIOException;
-import net.openhft.chronicle.core.values.LongValue;
 import net.openhft.chronicle.map.ChronicleMap;
 import net.openhft.chronicle.map.ChronicleMapBuilder;
 
@@ -19,10 +18,13 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 	private final Duration expiration;
 
 	private final ChronicleMap<String, Long> lastUsedLog;
+	
+	private final File savePath;
 
 	public ChronicleMapKeeperOfLRU(@Nonnull ChronicleMapConfigurator<K, V> configurator, Duration expiration) {
 		super(configurator);
 		this.expiration = expiration;
+		this.savePath = configurator.savePath();
 		// 构建器
 		ChronicleMapBuilder<String, Long> builder = ChronicleMapBuilder
 				// 设置KeyClass, ValueClass

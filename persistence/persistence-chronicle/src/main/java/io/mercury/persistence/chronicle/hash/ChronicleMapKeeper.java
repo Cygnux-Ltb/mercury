@@ -30,10 +30,16 @@ public class ChronicleMapKeeper<K, V> extends KeeperBaseImpl<String, ChronicleMa
 
 	private final Object lock = new Object();
 
+	private volatile boolean isClosed = false;
+
 	@Override
 	public ChronicleMap<K, V> acquire(String filename) throws ChronicleIOException {
 		Assertor.nonEmpty(filename, "filename");
 		synchronized (lock) {
+			if (isClosed) {
+				throw new IllegalStateException(
+						"ChronicleMapKeeper configurator of -> {" + configurator.fullInfo() + "} is closed");
+			}
 			return super.acquire(filename);
 		}
 	}
@@ -94,13 +100,13 @@ public class ChronicleMapKeeper<K, V> extends KeeperBaseImpl<String, ChronicleMa
 	@Override
 	public void close() throws IOException {
 		synchronized (lock) {
-			Set<String> keySet = savedMap.keySet();
+			Set<String> keySet = keeperMap.keySet();
 			for (String key : keySet) {
-				ChronicleMap<K, V> map = savedMap.get(key);
+				ChronicleMap<K, V> map = keeperMap.get(key);
 				if (map.isOpen()) {
 					map.close();
 				}
-				savedMap.remove(key);
+				keeperMap.remove(key);
 			}
 		}
 	}
