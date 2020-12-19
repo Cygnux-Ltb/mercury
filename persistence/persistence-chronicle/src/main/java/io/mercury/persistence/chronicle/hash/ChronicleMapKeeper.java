@@ -30,7 +30,8 @@ public class ChronicleMapKeeper<K, V> extends KeeperBaseImpl<String, ChronicleMa
 
 	private final Object lock = new Object();
 
-	private volatile boolean isClosed = false;
+	// 关闭状态
+	protected volatile boolean isClosed = false;
 
 	@Override
 	public ChronicleMap<K, V> acquire(String filename) throws ChronicleIOException {
@@ -108,6 +109,7 @@ public class ChronicleMapKeeper<K, V> extends KeeperBaseImpl<String, ChronicleMa
 				}
 				keeperMap.remove(key);
 			}
+			this.isClosed = true;
 		}
 	}
 
