@@ -1,5 +1,7 @@
 package io.mercury.persistence.chronicle.exception;
 
+import io.mercury.common.character.Separator;
+
 public final class ChronicleIOException extends RuntimeException {
 
 	/**
@@ -12,7 +14,13 @@ public final class ChronicleIOException extends RuntimeException {
 	}
 
 	public ChronicleIOException(String message, Throwable throwable) {
-		super(message, throwable);
+		super(message + Separator.LINE_SEPARATOR + "because : " + throwable.getMessage(), throwable);
+	}
+
+	public static void main(String[] args) {
+
+		System.out.println("111 \n 111");
+
 	}
 
 }
