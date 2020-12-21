@@ -17,10 +17,13 @@ import net.openhft.chronicle.map.ChronicleMapBuilder;
 @ThreadSafe
 public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 
+	// 过期毫秒数
 	private final long expireMillis;
 
+	// 最后使用记录
 	private final ChronicleMap<String, Long> lastUsedLog;
 
+	// 存储路径
 	private final File savePath;
 
 	// 最小过期时间为两小时
@@ -29,8 +32,7 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 	public ChronicleMapKeeperOfLRU(@Nonnull ChronicleMapConfigurator<K, V> configurator, Duration expire) {
 		super(configurator);
 		long millis = expire.toMillis();
-		this.expireMillis = 60 * 1000;
-		// millis < minExpireMillis ? minExpireMillis : millis;
+		this.expireMillis = millis < minExpireMillis ? minExpireMillis : millis;
 		this.savePath = configurator.savePath();
 		// LRU记录构建器
 		ChronicleMapBuilder<String, Long> builder = ChronicleMapBuilder

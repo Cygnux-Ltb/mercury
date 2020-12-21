@@ -203,7 +203,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 		private boolean recover = false;
 		private boolean persistent = true;
 
-		private long entries = Capacity.L16_SIZE_65536.size();
+		private long entries = 65536;
 		private int actualChunkSize;
 
 		private Builder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass, @Nonnull String rootPath,
@@ -296,7 +296,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 		 * @param capacity
 		 * @return
 		 */
-		public Builder<K, V> entriesOfPow2(Capacity capacity) {
+		public Builder<K, V> entries(Capacity capacity) {
 			this.entries = capacity.size();
 			return this;
 		}
