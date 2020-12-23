@@ -196,7 +196,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	@Override
 	public String toString() {
 		if (toStringCache == null)
-			toStringCache = StringUtil.toStringForReflection(this);
+			toStringCache = StringUtil.toStringWithReflection(this);
 		return toStringCache;
 	}
 
