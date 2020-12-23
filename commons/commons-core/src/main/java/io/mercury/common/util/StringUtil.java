@@ -20,11 +20,21 @@ public final class StringUtil {
 	private StringUtil() {
 	}
 
+	/**
+	 * 
+	 * @param obj
+	 * @return
+	 */
 	@Nonnull
 	public static final String toString(@Nullable Object obj) {
 		return obj == null ? StringConst.NULL : obj.toString();
 	}
 
+	/**
+	 * 
+	 * @param objs
+	 * @return
+	 */
 	@Nonnull
 	public static final String toString(@Nullable Object... objs) {
 		if (objs == null)
@@ -38,6 +48,11 @@ public final class StringUtil {
 		return builder.append(']').toString();
 	}
 
+	/**
+	 * 
+	 * @param strs
+	 * @return
+	 */
 	@Nonnull
 	public static final String toString(@Nullable String... strs) {
 		if (strs == null)
@@ -51,26 +66,51 @@ public final class StringUtil {
 		return builder.append(']').toString();
 	}
 
+	/**
+	 * 
+	 * @param b
+	 * @return
+	 */
 	@Nonnull
 	public static final String toString(@Nonnull byte b) {
 		return toString(new byte[] { b });
 	}
 
+	/**
+	 * 
+	 * @param bytes
+	 * @return
+	 */
 	@Nonnull
 	public static final String toString(@Nonnull byte[] bytes) {
 		return new String(bytes);
 	}
 
+	/**
+	 * 
+	 * @param c
+	 * @return
+	 */
 	@Nonnull
 	public static final String toString(@Nonnull char c) {
 		return toString(new char[] { c });
 	}
 
+	/**
+	 * 
+	 * @param chars
+	 * @return
+	 */
 	@Nonnull
 	public static final String toString(@Nonnull char[] chars) {
 		return new String(chars);
 	}
 
+	/**
+	 * 
+	 * @param obj
+	 * @return
+	 */
 	@Nonnull
 	public static final String toText(Object obj) {
 		return "\"" + toString(obj) + "\"";
@@ -86,7 +126,7 @@ public final class StringUtil {
 	 * 
 	 */
 	@Nonnull
-	public static final String toStringForReflection(Object obj) {
+	public static final String toStringWithReflection(Object obj) {
 		return obj == null ? StringConst.NULL
 				: ToStringBuilder.reflectionToString(obj, ToStringStyle.SHORT_PREFIX_STYLE, false);
 	}
@@ -101,7 +141,7 @@ public final class StringUtil {
 	 * 
 	 */
 	@Nonnull
-	public static final String toStringForJson(Object obj) {
+	public static final String toStringWithJson(Object obj) {
 		return obj == null ? StringConst.NULL
 				: ToStringBuilder.reflectionToString(obj, ToStringStyle.JSON_STYLE, false);
 	}
@@ -229,7 +269,6 @@ public final class StringUtil {
 			}
 			return true;
 		}
-
 	}
 
 	/**
@@ -248,7 +287,8 @@ public final class StringUtil {
 	 * @param str
 	 * @return
 	 */
-	public static final String delNonNumeric(String str) {
+	@Nonnull
+	public static final String removeNonDigits(String str) {
 		if (isNullOrEmpty(str))
 			return StringConst.EMPTY;
 		StringBuilder builder = new StringBuilder(str.length());
@@ -266,51 +306,113 @@ public final class StringUtil {
 	 * @param str
 	 * @return
 	 */
-	public static final String delSplitChar(String str) {
+	public static final String removeSplitChar(String str) {
 		return isNullOrEmpty(str) ? StringConst.EMPTY
 				: str.replace(".", "").replace("-", "").replace("_", "").replace("/", "").replace("\\", "");
 	}
 
+	/**
+	 * 
+	 * @param gbkStr
+	 * @return
+	 */
 	public static final String conversionGbkToUtf8(String gbkStr) {
 		return conversionTo(gbkStr, Charsets.GBK, Charsets.UTF8);
 	}
 
+	/**
+	 * 
+	 * @param utf8Str
+	 * @return
+	 */
 	public static final String conversionUtf8ToGbk(String utf8Str) {
 		return conversionTo(utf8Str, Charsets.UTF8, Charsets.GBK);
 	}
 
+	/**
+	 * 
+	 * @param gbkStr
+	 * @return
+	 */
 	public static final String conversionGb2312ToUtf8(String gbkStr) {
 		return conversionTo(gbkStr, Charsets.GB2312, Charsets.UTF8);
 	}
 
+	/**
+	 * 
+	 * @param utf8Str
+	 * @return
+	 */
 	public static final String conversionUtf8ToGb2312(String utf8Str) {
 		return conversionTo(utf8Str, Charsets.UTF8, Charsets.GB2312);
 	}
 
-	public static final String conversionToUtf8(String sourceStr, Charset sourceCoding) {
-		return conversionTo(sourceStr, sourceCoding, Charsets.UTF8);
+	/**
+	 * 
+	 * @param sourceStr
+	 * @param sourceCharset
+	 * @return
+	 */
+	public static final String conversionToUtf8(String sourceStr, Charset sourceCharset) {
+		return conversionTo(sourceStr, sourceCharset, Charsets.UTF8);
 	}
 
-	public static final String conversionTo(String sourceStr, Charset sourceCoding, Charset targetCoding) {
-		return sourceStr == null ? sourceStr : new String(sourceStr.getBytes(sourceCoding), targetCoding);
+	/**
+	 * 
+	 * @param sourceStr
+	 * @param sourceCharset
+	 * @param targetCharset
+	 * @return
+	 */
+	public static final String conversionTo(String sourceStr, Charset sourceCharset, Charset targetCharset) {
+		return sourceStr == null ? sourceStr : new String(sourceStr.getBytes(sourceCharset), targetCharset);
 	}
 
+	/**
+	 * 
+	 * @param bytes
+	 * @return
+	 */
 	public static final String bytesToStr(byte[] bytes) {
 		return bytesToStr(bytes, Charsets.UTF8);
 	}
 
+	/**
+	 * 
+	 * @param bytes
+	 * @param charset
+	 * @return
+	 */
 	public static final String bytesToStr(byte[] bytes, Charset charset) {
 		return new String(bytes, charset);
 	}
 
+	/**
+	 * 是否为路径
+	 * 
+	 * @param path
+	 * @return
+	 */
 	public static final boolean isPath(String path) {
 		return isNullOrEmpty(path) ? false : path.endsWith("/") || path.endsWith("\\");
 	}
 
+	/**
+	 * 是否为路径
+	 * 
+	 * @param path
+	 * @return
+	 */
 	public static final boolean notPath(String path) {
 		return !isPath(path);
 	}
 
+	/**
+	 * 修补路径
+	 * 
+	 * @param path
+	 * @return
+	 */
 	public static final String fixPath(String path) {
 		return isNullOrEmpty(path) ? "/" : path.endsWith("/") || path.endsWith("\\") ? path : path + "/";
 	}
@@ -393,7 +495,7 @@ public final class StringUtil {
 		System.out.println(concatenateStr('%', "A", "BB", "", null));
 		System.out.println(concatenateStr(null, null));
 
-		System.out.println(delNonNumeric("fn909aje125f13de3132fde31dew"));
+		System.out.println(removeNonDigits("fn909aje125f13de3132fde31dew"));
 
 	}
 
