@@ -24,7 +24,7 @@
 
 	<properties>
 		<jackson.version>2.11.3</jackson.version>
-		<netty.version>4.1.55.Final</netty.version>
+		<netty.version>4.1.56.Final</netty.version>
 	</properties>
 
 	<build>
@@ -130,7 +130,7 @@
 			<dependency>
 				<groupId>com.github.luben</groupId>
 				<artifactId>zstd-jni</artifactId>
-				<version>1.4.5-12</version>
+				<version>1.4.8-1</version>
 			</dependency>
 
 			<!-- Date and time library to replace JDK date handling -->
