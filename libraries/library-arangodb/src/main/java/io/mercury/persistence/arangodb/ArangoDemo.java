@@ -1,6 +1,6 @@
 package io.mercury.persistence.arangodb;
 
-import static io.mercury.common.util.StringUtil.toStringForReflection;
+import static io.mercury.common.util.StringUtil.toStringWithReflection;
 
 import org.slf4j.Logger;
 
@@ -28,8 +28,8 @@ public class ArangoDemo {
 		final ArangoDB arangoDB = new ArangoDB.Builder().host("127.0.0.1", 8529).user("root").password("root")
 				.useProtocol(Protocol.VST).build();
 
-		log.info("ArangoDB Info: Version -> {}, Engine -> {}", toStringForReflection(arangoDB.getVersion()),
-				toStringForReflection(arangoDB.getEngine()));
+		log.info("ArangoDB Info: Version -> {}, Engine -> {}", toStringWithReflection(arangoDB.getVersion()),
+				toStringWithReflection(arangoDB.getEngine()));
 
 		final DBCreateOptions options = new DBCreateOptions().name("test_db");
 		final String collection = "userdata";

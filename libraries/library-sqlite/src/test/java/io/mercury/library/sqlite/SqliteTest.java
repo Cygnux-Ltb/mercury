@@ -19,7 +19,7 @@ public class SqliteTest {
 	private Statement statement;
 
 	/**
-	 * 连接到一个现有的数据库。如果数据库不存在， 那么它就会被创建，最后将返回一个数据库对象。
+	 * 连接到一个现有的数据库, 如果数据库不存在, 那么它就会被创建, 最后将返回一个数据库对象.
 	 */
 	@Before
 	public void before() {
