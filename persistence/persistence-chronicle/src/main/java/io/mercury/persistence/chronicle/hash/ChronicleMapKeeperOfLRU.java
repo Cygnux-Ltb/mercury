@@ -30,6 +30,11 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 	private final long minExpireMillis = 2 * 60 * 60 * 1000;
 
 	public ChronicleMapKeeperOfLRU(@Nonnull ChronicleMapConfigurator<K, V> configurator, Duration expire) {
+		this(configurator, expire, 65536);
+	}
+
+	public ChronicleMapKeeperOfLRU(@Nonnull ChronicleMapConfigurator<K, V> configurator, Duration expire,
+			int fileTotal) {
 		super(configurator);
 		long millis = expire.toMillis();
 		this.expireMillis = millis < minExpireMillis ? minExpireMillis : millis;
@@ -47,7 +52,7 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 				// 设置LRU名称
 				.name(configurator.fullInfo() + "-last-used-log")
 				// 设置LRU记录条目总数
-				.entries(65536);
+				.entries(fileTotal);
 		File persistentFile = new File(configurator.savePath(), ".last-used-log");
 		try {
 			if (!persistentFile.exists()) {
