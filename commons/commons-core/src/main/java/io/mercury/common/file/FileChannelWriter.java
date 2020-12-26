@@ -83,8 +83,8 @@ public final class FileChannelWriter {
 	 * @throws NullPointerException
 	 * @throws IOException
 	 */
-	public static final <T> File write(List<T> data, @Nonnull ByteArraySerializer<T> serializer,
-			@Nonnull File target, int capacity, boolean append) throws NullPointerException, IOException {
+	public static final <T> File write(List<T> data, @Nonnull ByteArraySerializer<T> serializer, @Nonnull File target,
+			int capacity, boolean append) throws NullPointerException, IOException {
 		if (target == null)
 			throw new NullPointerException("target file must not be null.");
 		if (capacity <= 0)
