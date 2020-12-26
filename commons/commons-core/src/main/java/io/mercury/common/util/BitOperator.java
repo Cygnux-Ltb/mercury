@@ -2,6 +2,8 @@ package io.mercury.common.util;
 
 import static java.lang.Integer.toBinaryString;
 
+import java.nio.ByteBuffer;
+
 import javax.annotation.Nonnull;
 
 public final class BitOperator {
@@ -176,12 +178,23 @@ public final class BitOperator {
 	 * @param lowPos
 	 * @return
 	 */
-	public static final int mergeCharToInt(char highPos, char lowPos) {
+	public static final int merge(char highPos, char lowPos) {
 		return (((int) highPos) << 16) | ((int) lowPos);
 	}
 
 	/**
-	 * 四个[char]合并为[long]
+	 * 两个<b> [char] </b>合并为<b> [int] </b>
+	 * 
+	 * @param highPos
+	 * @param lowPos
+	 * @return
+	 */
+	public static final int merge(short highPos, short lowPos) {
+		return (((int) highPos) << 16) | ((int) lowPos);
+	}
+
+	/**
+	 * 四个<b> [char] </b>合并为<b> [long] </b>
 	 * 
 	 * @param highPos
 	 * @param second
@@ -189,18 +202,31 @@ public final class BitOperator {
 	 * @param lowPos
 	 * @return
 	 */
-	public static final long mergeCharToLong(char highPos, char second, char third, char lowPos) {
+	public static final long merge(char highPos, char second, char third, char lowPos) {
 		return (((long) highPos) << 48) | ((long) second << 32) | ((long) third << 16) | ((int) lowPos);
 	}
 
 	/**
-	 * 两个[int]合并为[long]
+	 * 四个<b> [short] </b>合并为<b> [long] </b>
+	 * 
+	 * @param highPos
+	 * @param second
+	 * @param third
+	 * @param lowPos
+	 * @return
+	 */
+	public static final long merge(short highPos, short second, short third, short lowPos) {
+		return (((long) highPos) << 48) | ((long) second << 32) | ((long) third << 16) | ((int) lowPos);
+	}
+
+	/**
+	 * 两个<b> [int] </b>合并为<b> [long] </b>
 	 * 
 	 * @param highPos
 	 * @param lowPos
 	 * @return
 	 */
-	public static final long mergeIntToLong(int highPos, int lowPos) {
+	public static final long merge(int highPos, int lowPos) {
 		return (((long) highPos) << 32) | ((long) lowPos);
 	}
 
@@ -214,7 +240,7 @@ public final class BitOperator {
 	 * @param l
 	 * @return
 	 */
-	public static final int splitLongWithHighPos(long l) {
+	public static final int getLongHighPos(long l) {
 		return (int) ((l & LongHighPosMask) >> 32);
 	}
 
@@ -228,11 +254,12 @@ public final class BitOperator {
 	 * @param l
 	 * @return
 	 */
-	public static final int splitLongWithLowPos(long l) {
+	public static final int getLongLowPos(long l) {
 		return (int) (l & LongLowPosMask);
 	}
 
 	/**
+	 * 奇数
 	 * 
 	 * @param i
 	 * @return
@@ -242,6 +269,7 @@ public final class BitOperator {
 	}
 
 	/**
+	 * 偶数
 	 * 
 	 * @param i
 	 * @return
@@ -251,6 +279,7 @@ public final class BitOperator {
 	}
 
 	/**
+	 * 奇数
 	 * 
 	 * @param l
 	 * @return
@@ -260,6 +289,7 @@ public final class BitOperator {
 	}
 
 	/**
+	 * 偶数
 	 * 
 	 * @param l
 	 * @return
@@ -286,6 +316,26 @@ public final class BitOperator {
 		return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
 	}
 
+	/**
+	 * 
+	 * @param buffer
+	 */
+	@SuppressWarnings({ "restriction" })
+	public static boolean cleanDirectMemory(final ByteBuffer buffer) throws RuntimeException {
+		if (buffer.isDirect()) {
+			if (buffer instanceof sun.nio.ch.DirectBuffer) {
+				try {
+					((sun.nio.ch.DirectBuffer) buffer).cleaner().clean();
+				} catch (Exception e) {
+					throw new RuntimeException("call '((sun.nio.ch.DirectBuffer) buffer).cleaner().clean()' exception",
+							e);
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static void main(String[] args) {
 
 		int i1 = 1002;
@@ -294,14 +344,14 @@ public final class BitOperator {
 		System.out.println(intBinaryFormat(i1));
 		System.out.println(intBinaryFormat(i2));
 
-		System.out.println((mergeIntToLong(i1, i2)));
-		System.out.println(longBinaryFormat(mergeIntToLong(i1, i2)));
+		System.out.println(merge(i1, i2));
+		System.out.println(longBinaryFormat(merge(i1, i2)));
 
-		System.out.println((splitLongWithHighPos(mergeIntToLong(i1, i2))));
-		System.out.println(intBinaryFormat(splitLongWithHighPos(mergeIntToLong(i1, i2))));
+		System.out.println(getLongHighPos(merge(i1, i2)));
+		System.out.println(intBinaryFormat(getLongHighPos(merge(i1, i2))));
 
-		System.out.println((splitLongWithLowPos(mergeIntToLong(i1, i2))));
-		System.out.println(intBinaryFormat(splitLongWithLowPos(mergeIntToLong(i1, i2))));
+		System.out.println(getLongLowPos(merge(i1, i2)));
+		System.out.println(intBinaryFormat(getLongLowPos(merge(i1, i2))));
 
 		System.out.println(intBinaryFormat(1));
 		System.out.println(intBinaryFormat(~1));

@@ -189,7 +189,7 @@ public class JointKeyParams<K extends JointKey> {
 	 * long value高32位为第一个int值, 低32位为第二个int值
 	 */
 	public static long mergeJointKey(int highPos, int lowPos) {
-		return BitOperator.mergeIntToLong(highPos, lowPos);
+		return BitOperator.merge(highPos, lowPos);
 	}
 
 	/**
@@ -199,7 +199,7 @@ public class JointKeyParams<K extends JointKey> {
 	 * @return
 	 */
 	public static int getHighPos(long jointKey) {
-		return BitOperator.splitLongWithHighPos(jointKey);
+		return BitOperator.getLongHighPos(jointKey);
 	}
 
 	/**
@@ -209,7 +209,7 @@ public class JointKeyParams<K extends JointKey> {
 	 * @return
 	 */
 	public static int getLowPos(long jointKey) {
-		return BitOperator.splitLongWithLowPos(jointKey);
+		return BitOperator.getLongLowPos(jointKey);
 	}
 
 }
