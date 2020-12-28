@@ -3,7 +3,6 @@ package io.mercury.transport.rabbitmq;
 import static io.mercury.common.util.StringUtil.nonEmpty;
 
 import java.io.IOException;
-import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.ScheduledExecutorService;
@@ -27,7 +26,7 @@ import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 
 import io.mercury.common.collections.MutableLists;
-import io.mercury.common.datetime.TimeZone;
+import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.functional.BytesDeserializer;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
@@ -44,34 +43,26 @@ public class RabbitMqBatchReceiver<T> extends AbstractRabbitMqTransport implemen
 
 	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqBatchReceiver.class);
 
-	/**
-	 * 
-	 */
+	// 接收者名称
 	private String receiverName;
 
-	/**
-	 * 
-	 */
+	// 队列名称
 	private String receiveQueue;
 
-	/*
-	 * 队列持久化
-	 */
+	// 队列持久化
 	private boolean durable = true;
-	/*
-	 * 连接独占此队列
-	 */
+
+	// 连接独占此队列
 	private boolean exclusive = false;
-	/*
-	 * channel关闭后自动删除队列
-	 */
+
+	// channel关闭后自动删除队列
 	private boolean autoDelete = false;
 
 	private BatchProcessConsumer<T> consumer;
 
 	public RabbitMqBatchReceiver(String tag, @Nonnull RmqReceiverConfigurator configurator, long autoFlushInterval,
 			BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent) {
-		super(nonEmpty(tag) ? tag : "QosBatchReceiver-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT),
+		super(nonEmpty(tag) ? tag : "batch-receiver-" + DateTimeUtil.datetimeOfMillisecond(),
 				configurator.connection());
 		this.receiveQueue = configurator.receiveQueue().queue().name();
 		createConnection();
@@ -83,7 +74,7 @@ public class RabbitMqBatchReceiver<T> extends AbstractRabbitMqTransport implemen
 	public RabbitMqBatchReceiver(String tag, @Nonnull RmqReceiverConfigurator configurator, long autoFlushInterval,
 			BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent,
 			Predicate<T> filter) {
-		super(nonEmpty(tag) ? tag : "QosBatchReceiver-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT),
+		super(nonEmpty(tag) ? tag : "batch-receiver-" + DateTimeUtil.datetimeOfMillisecond(),
 				configurator.connection());
 		this.receiveQueue = configurator.receiveQueue().queueName();
 		createConnection();

@@ -6,7 +6,7 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import io.mercury.common.collections.MutableLists;
 import io.mercury.serialization.json.JsonUtil;
-import io.mercury.transport.rabbitmq.RabbitMqDeclareOperator;
+import io.mercury.transport.rabbitmq.RabbitMqDeclarator;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 
 /**
@@ -49,7 +49,7 @@ public final class QueueRelationship extends Relationship {
 	}
 
 	@Override
-	protected void declare0(RabbitMqDeclareOperator operator) {
+	protected void declare0(RabbitMqDeclarator operator) {
 		try {
 			operator.declareQueue(queue);
 		} catch (DeclareException e) {

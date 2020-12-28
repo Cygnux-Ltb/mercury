@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.transport.rabbitmq.RabbitMqDeclareOperator;
+import io.mercury.transport.rabbitmq.RabbitMqDeclarator;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 
 public abstract class Relationship {
@@ -20,7 +20,7 @@ public abstract class Relationship {
 	 * @param operator
 	 * @throws DeclareException
 	 */
-	public void declare(RabbitMqDeclareOperator operator) throws DeclareException {
+	public void declare(RabbitMqDeclarator operator) throws DeclareException {
 		declare0(operator);
 		for (Binding binding : bindings) {
 			declareBinding(operator, binding);
@@ -33,7 +33,7 @@ public abstract class Relationship {
 	 * @param binding
 	 * @throws DeclareException
 	 */
-	private void declareBinding(RabbitMqDeclareOperator operator, Binding binding) throws DeclareException {
+	private void declareBinding(RabbitMqDeclarator operator, Binding binding) throws DeclareException {
 		AmqpExchange source = binding.source();
 		try {
 			operator.declareExchange(source);
@@ -81,6 +81,6 @@ public abstract class Relationship {
 	}
 
 	@AbstractFunction
-	protected abstract void declare0(RabbitMqDeclareOperator operator);
+	protected abstract void declare0(RabbitMqDeclarator operator);
 
 }

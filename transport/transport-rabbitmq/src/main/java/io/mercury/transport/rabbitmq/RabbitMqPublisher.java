@@ -4,7 +4,6 @@ import static io.mercury.common.util.StringUtil.bytesToStr;
 import static io.mercury.common.util.StringUtil.nonEmpty;
 
 import java.io.IOException;
-import java.time.ZonedDateTime;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
@@ -16,7 +15,7 @@ import org.slf4j.Logger;
 import com.rabbitmq.client.AMQP.BasicProperties;
 
 import io.mercury.common.character.Charsets;
-import io.mercury.common.datetime.TimeZone;
+import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
@@ -71,7 +70,7 @@ public class RabbitMqPublisher extends AbstractRabbitMqTransport implements Publ
 	 * @param noAckCallback
 	 */
 	public RabbitMqPublisher(String tag, @Nonnull RmqPublisherConfigurator configurator) {
-		super(nonEmpty(tag) ? tag : "Publisher-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT), configurator.connection());
+		super(nonEmpty(tag) ? tag : "publisher-" + DateTimeUtil.datetimeOfMillisecond(), configurator.connection());
 		Assertor.nonNull(configurator.publishExchange(), "exchangeRelation");
 		this.publishExchange = configurator.publishExchange();
 		this.exchangeName = publishExchange.exchangeName();
@@ -94,7 +93,7 @@ public class RabbitMqPublisher extends AbstractRabbitMqTransport implements Publ
 						"Publisher -> {} use anonymous exchange, Please specify [queue name] as the [routing key] when publish",
 						tag);
 			} else {
-				this.publishExchange.declare(RabbitMqDeclareOperator.newWith(channel));
+				this.publishExchange.declare(RabbitMqDeclarator.newWith(channel));
 			}
 		} catch (DeclareException e) {
 			// 在定义Exchange和进行绑定时抛出任何异常都需要终止程序

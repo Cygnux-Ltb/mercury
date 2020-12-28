@@ -28,27 +28,18 @@ public abstract class AbstractRabbitMqTransport implements TransportModule, Clos
 
 	private static final Logger log = CommonLoggerFactory.getLogger(AbstractRabbitMqTransport.class);
 
-	/*
-	 * 连接RabbitMQ Server使用的组件
-	 */
+	// 连接RabbitMQ Server使用的组件
 	protected ConnectionFactory connectionFactory;
-
 	protected volatile Connection connection;
 	protected volatile Channel channel;
 
-	/*
-	 * 存储配置信息对象
-	 */
+	// 存储配置信息对象
 	protected RmqConnection rmqConnection;
 
-	/*
-	 * 停机事件, 在监听到ShutdownSignalException时调用
-	 */
+	// 停机事件, 在监听到ShutdownSignalException时调用
 	protected ShutdownEvent shutdownEvent;
 
-	/*
-	 * 组件标记
-	 */
+	// 组件标签
 	protected final String tag;
 
 	/**
@@ -84,18 +75,17 @@ public abstract class AbstractRabbitMqTransport implements TransportModule, Clos
 		try {
 			connection = connectionFactory.newConnection();
 			connection.setId(tag + "$[" + System.currentTimeMillis() + "]");
-			log.info("Call function -> [connectionFactory.newConnection()] finished, tag -> {}, connection id -> {}",
-					tag, connection.getId());
+			log.info("Function -> [connectionFactory.newConnection()] finished, tag -> {}, connection id -> {}", tag,
+					connection.getId());
 			connection.addShutdownListener(this::handleShutdownSignal);
 			channel = connection.createChannel();
-			log.info(
-					"Call function -> [connection.createChannel()] finished, connection id -> {}, channel number -> {}",
+			log.info("Function -> [connection.createChannel()] finished, connection id -> {}, channel number -> {}",
 					connection.getId(), channel.getChannelNumber());
 			log.info("Create connection finished");
 		} catch (IOException e) {
-			log.error("Method createConnection() throw IOException -> {}", e.getMessage(), e);
+			log.error("Function createConnection() throw IOException -> {}", e.getMessage(), e);
 		} catch (TimeoutException e) {
-			log.error("Method createConnection() throw TimeoutException -> {}", e.getMessage(), e);
+			log.error("Function createConnection() throw TimeoutException -> {}", e.getMessage(), e);
 		}
 	}
 
@@ -105,7 +95,7 @@ public abstract class AbstractRabbitMqTransport implements TransportModule, Clos
 	}
 
 	protected boolean closeAndReconnection() {
-		log.info("Call method closeAndReconnection()");
+		log.info("Function closeAndReconnection()");
 		closeConnection();
 		sleep(rmqConnection.recoveryInterval() / 2);
 		createConnection();
@@ -141,7 +131,7 @@ public abstract class AbstractRabbitMqTransport implements TransportModule, Clos
 	}
 
 	protected void closeConnection() {
-		log.info("Call method closeConnection()");
+		log.info("Function -> closeConnection() ");
 		try {
 			if (channel != null && channel.isOpen()) {
 				try {
@@ -173,7 +163,7 @@ public abstract class AbstractRabbitMqTransport implements TransportModule, Clos
 
 	@Override
 	public boolean destroy() {
-		log.info("Call method destroy() from AbstractRabbitMqTransport tag==[{}]", tag);
+		log.info("Function -> destroy() from AbstractRabbitMqTransport tag==[{}]", tag);
 		closeConnection();
 		return true;
 	}

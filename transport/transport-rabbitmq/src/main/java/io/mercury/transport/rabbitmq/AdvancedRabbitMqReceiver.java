@@ -2,7 +2,6 @@ package io.mercury.transport.rabbitmq;
 
 import static io.mercury.common.util.StringUtil.bytesToStr;
 import static io.mercury.common.util.StringUtil.nonEmpty;
-import static java.time.ZonedDateTime.now;
 
 import java.io.IOException;
 import java.util.Map;
@@ -20,7 +19,7 @@ import com.rabbitmq.client.ConsumerShutdownSignalCallback;
 import com.rabbitmq.client.Envelope;
 
 import io.mercury.common.codec.DecodeException;
-import io.mercury.common.datetime.TimeZone;
+import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.core.api.Receiver;
@@ -208,7 +207,7 @@ public class AdvancedRabbitMqReceiver<T> extends AbstractRabbitMqTransport imple
 	private AdvancedRabbitMqReceiver(String tag, @Nonnull RmqReceiverConfigurator configurator,
 			@Nonnull Function<byte[], T> deserializer, @Nullable Consumer<T> consumer,
 			@Nullable SelfAckConsumer<T> selfAckConsumer) {
-		super(nonEmpty(tag) ? tag : "Receiver-" + now(TimeZone.SYS_DEFAULT), configurator.connection());
+		super(nonEmpty(tag) ? tag : "receiver-" + DateTimeUtil.datetimeOfMillisecond(), configurator.connection());
 		if (consumer == null && selfAckConsumer == null) {
 			throw new NullPointerException("[Consumer] and [SelfAckConsumer] cannot all be null");
 		}
@@ -247,7 +246,7 @@ public class AdvancedRabbitMqReceiver<T> extends AbstractRabbitMqTransport imple
 	 * @throws DeclareRuntimeException
 	 */
 	private void declareQueue() throws DeclareRuntimeException {
-		RabbitMqDeclareOperator operator = RabbitMqDeclareOperator.newWith(channel);
+		RabbitMqDeclarator operator = RabbitMqDeclarator.newWith(channel);
 		try {
 			this.receiveQueue.declare(operator);
 		} catch (DeclareException e) {
@@ -267,7 +266,7 @@ public class AdvancedRabbitMqReceiver<T> extends AbstractRabbitMqTransport imple
 		}
 	}
 
-	private void declareErrMsgExchange(RabbitMqDeclareOperator operator) {
+	private void declareErrMsgExchange(RabbitMqDeclarator operator) {
 		try {
 			this.errMsgExchange.declare(operator);
 		} catch (DeclareException e) {
@@ -282,7 +281,7 @@ public class AdvancedRabbitMqReceiver<T> extends AbstractRabbitMqTransport imple
 		this.hasErrMsgExchange = true;
 	}
 
-	private void declareErrMsgQueueName(RabbitMqDeclareOperator operator) {
+	private void declareErrMsgQueueName(RabbitMqDeclarator operator) {
 		try {
 			this.errMsgQueue.declare(operator);
 		} catch (DeclareException e) {

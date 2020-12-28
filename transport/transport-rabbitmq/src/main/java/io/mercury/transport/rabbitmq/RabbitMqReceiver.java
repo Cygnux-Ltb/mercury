@@ -4,7 +4,6 @@ import static io.mercury.common.util.StringUtil.bytesToStr;
 import static io.mercury.common.util.StringUtil.nonEmpty;
 
 import java.io.IOException;
-import java.time.ZonedDateTime;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -18,7 +17,7 @@ import com.rabbitmq.client.Envelope;
 
 import io.mercury.common.character.Charsets;
 import io.mercury.common.codec.DecodeException;
-import io.mercury.common.datetime.TimeZone;
+import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.core.api.Receiver;
@@ -154,7 +153,7 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 	 */
 	private RabbitMqReceiver(String tag, @Nonnull RmqReceiverConfigurator configurator,
 			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
-		super(nonEmpty(tag) ? tag : "Receiver-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT), configurator.connection());
+		super(nonEmpty(tag) ? tag : "receiver-" + DateTimeUtil.datetimeOfMillisecond(), configurator.connection());
 		this.receiveQueue = configurator.receiveQueue();
 		this.queueName = receiveQueue.queueName();
 		this.deserializer = deserializer;
@@ -173,7 +172,7 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 	}
 
 	private void declare() {
-		RabbitMqDeclareOperator operator = RabbitMqDeclareOperator.newWith(channel);
+		RabbitMqDeclarator operator = RabbitMqDeclarator.newWith(channel);
 		try {
 			this.receiveQueue.declare(operator);
 		} catch (DeclareException e) {
@@ -193,7 +192,7 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 		}
 	}
 
-	private void declareErrMsgExchange(RabbitMqDeclareOperator operator) {
+	private void declareErrMsgExchange(RabbitMqDeclarator operator) {
 		try {
 			this.errMsgExchange.declare(operator);
 		} catch (DeclareException e) {
@@ -208,7 +207,7 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 		this.hasErrMsgExchange = true;
 	}
 
-	private void declareErrMsgQueueName(RabbitMqDeclareOperator operator) {
+	private void declareErrMsgQueueName(RabbitMqDeclarator operator) {
 		try {
 			this.errMsgQueue.declare(operator);
 		} catch (DeclareException e) {

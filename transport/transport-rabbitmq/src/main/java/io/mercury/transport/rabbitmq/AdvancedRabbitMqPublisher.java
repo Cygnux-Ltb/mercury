@@ -4,7 +4,6 @@ import static io.mercury.common.util.StringUtil.nonEmpty;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.time.ZonedDateTime;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -18,7 +17,7 @@ import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.ConfirmCallback;
 
 import io.mercury.common.character.Charsets;
-import io.mercury.common.datetime.TimeZone;
+import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
@@ -46,59 +45,43 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 
 	private static final Logger log = CommonLoggerFactory.getLogger(AdvancedRabbitMqPublisher.class);
 
-	/*
-	 * 发布消息使用的[ExchangeDeclare]
-	 */
+	// 发布消息使用的[ExchangeDeclare]
 	private final ExchangeRelationship publishExchange;
-	/*
-	 * 发布消息使用的[Exchange]
-	 */
+
+	// 发布消息使用的[Exchange]
 	private final String exchangeName;
-	/*
-	 * 发布消息使用的默认[RoutingKey]
-	 */
+
+	// 发布消息使用的默认[RoutingKey]
 	private final String defaultRoutingKey;
-	/*
-	 * 发布消息使用的默认[MessageProperties]
-	 */
+
+	// 发布消息使用的默认[MessageProperties]
 	private final BasicProperties defaultMsgProps;
-	/*
-	 * [MessageProperties]的提供者
-	 */
+
+	// [MessageProperties]的提供者
 	private final Supplier<BasicProperties> msgPropsSupplier;
-	/*
-	 * 是否有[MessageProperties]的提供者
-	 */
+
+	// 是否有[MessageProperties]的提供者
 	private final boolean hasPropsSupplier;
-	/*
-	 * 是否执行发布确认
-	 */
+
+	// 是否执行发布确认
 	private final boolean confirm;
-	/*
-	 * 发布确认超时毫秒数
-	 */
+
+	// 发布确认超时毫秒数
 	private final long confirmTimeout;
-	/*
-	 * 发布确认重试次数
-	 */
+
+	// 发布确认重试次数
 	private final int confirmRetry;
-	/*
-	 * 发布者名称
-	 */
+
+	// 发布者名称
 	private final String publisherName;
-	/**
-	 * 接收消息使用的反序列化器
-	 */
+
+	// 发布消息使用的序列化器
 	private final Function<T, byte[]> serializer;
 
-	/**
-	 * 是否存在ACK成功回调
-	 */
+	// 是否存在ACK成功回调
 	private final boolean hasAckCallback;
 
-	/**
-	 * 是否存在ACK未成功回调
-	 */
+	// 是否存在ACK未成功回调
 	private final boolean hasNoAckCallback;
 
 	/**
@@ -247,7 +230,7 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 	 */
 	private AdvancedRabbitMqPublisher(String tag, @Nonnull RmqPublisherConfigurator configurator,
 			@Nonnull Function<T, byte[]> serializer, AckCallback ackCallback, NoAckCallback noAckCallback) {
-		super(nonEmpty(tag) ? tag : "Publisher-" + ZonedDateTime.now(TimeZone.SYS_DEFAULT), configurator.connection());
+		super(nonEmpty(tag) ? tag : "publisher-" + DateTimeUtil.datetimeOfMillisecond(), configurator.connection());
 		Assertor.nonNull(configurator.publishExchange(), "exchangeRelation");
 		this.publishExchange = configurator.publishExchange();
 		this.exchangeName = publishExchange.exchangeName();
@@ -311,7 +294,7 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 				log.warn("Publisher -> {} use anonymous exchange, Please specify [queue name] "
 						+ "as the [routing key] when publish", tag);
 			} else {
-				this.publishExchange.declare(RabbitMqDeclareOperator.newWith(channel));
+				this.publishExchange.declare(RabbitMqDeclarator.newWith(channel));
 			}
 		} catch (DeclareException e) {
 			// 在定义Exchange和进行绑定时抛出任何异常都需要终止程序
