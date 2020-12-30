@@ -24,6 +24,8 @@ package io.mercury.common.file.filefilter;
 import java.io.File;
 import java.io.FileFilter;
 
+import javax.annotation.Nonnull;
+
 // my imports
 
 /**
@@ -35,29 +37,24 @@ import java.io.FileFilter;
  */
 public class FileNameStartsWithFilter implements FileFilter {
 
-	private boolean caseSensitive;
-	private String string0;
+	private final String startsWithStr;
+	private final boolean ignoreCase;
 
-	public FileNameStartsWithFilter(String string0) {
-		this(string0, false);
+	public FileNameStartsWithFilter(String startsWithStr) {
+		this(startsWithStr, false);
 	}
 
-	public FileNameStartsWithFilter(String string0, boolean caseSensitive) throws IllegalArgumentException {
-		this.caseSensitive = caseSensitive;
-		this.string0 = string0;
+	public FileNameStartsWithFilter(String startsWithStr, boolean ignoreCase) {
+		this.startsWithStr = startsWithStr;
+		this.ignoreCase = ignoreCase;
 	}
 
-	/**
-	 * Accepts a File if its filename startsWith a specific string.
-	 * 
-	 * @param file The file to match
-	 * @return True if the File startsWith the specific string, otherwise false
-	 */
-	public boolean accept(File file) {
-		if (caseSensitive) {
-			return file.getName().startsWith(string0);
+	@Override
+	public boolean accept(@Nonnull File file) {
+		if (ignoreCase) {
+			return file.getName().toLowerCase().startsWith(startsWithStr.toLowerCase());
 		} else {
-			return file.getName().toLowerCase().startsWith(string0.toLowerCase());
+			return file.getName().startsWith(startsWithStr);
 		}
 	}
 }

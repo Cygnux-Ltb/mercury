@@ -1,6 +1,5 @@
 package io.mercury.common.file.filefilter;
 
-
 /*
  * #%L
  * ch-commons-util
@@ -31,99 +30,82 @@ import io.mercury.common.file.FileUtil;
  * Accepts a file based on its file extension against a list of one or more
  * acceptable file extensions.
  * 
- * @author joelauer (twitter: @jjlauer or <a href="http://twitter.com/jjlauer" target=window>http://twitter.com/jjlauer</a>)
+ * @author joelauer (twitter: @jjlauer or
+ *         <a href="http://twitter.com/jjlauer" target=
+ *         window>http://twitter.com/jjlauer</a>)
  */
 public class FileExtensionFilter implements FileFilter {
 
-    private boolean caseSensitive;
-    private String[] extensions;
+	private final boolean ignoreCase;
+	private String[] extensions;
 
-    /**
-     * Creates a new instance of a <code>FileExtensionMatcher</code> that will
-     * perform a case insensitive match to this file extension.
-     * @param extension The file extension to match against a File
-     * @throws IllegalArgumentException Thrown if the file extension is not
-     *      formatted correctly such as containing a period.
-     */
-    public FileExtensionFilter(String extension) throws IllegalArgumentException {
-        this(extension, false);
-    }
+	/**
+	 * Creates a new instance of a <code>FileExtensionMatcher</code> that will
+	 * perform a case insensitive match to this file extension.
+	 * 
+	 * @param extension The file extension to match against a File
+	 * @throws IllegalArgumentException Thrown if the file extension is not
+	 *                                  formatted correctly such as containing a
+	 *                                  period.
+	 */
+	public FileExtensionFilter(String... extensions) throws IllegalArgumentException {
+		this(true, extensions);
+	}
 
-    /**
-     * Creates a new instance of a <code>FileExtensionMatcher</code> that will
-     * perform a case insensitive match to this array of file extensions.
-     * @param extension The array of file extensions to match against a File
-     * @throws IllegalArgumentException Thrown if the file extension is not
-     *      formatted correctly such as containing a period.
-     */
-    public FileExtensionFilter(String[] extensions) throws IllegalArgumentException {
-        this(extensions, false);
-    }
+	/**
+	 * Creates a new instance of a <code>FileExtensionMatcher</code> that will
+	 * perform a match to this array of file extensions.
+	 * 
+	 * @param extension     The array of file extensions to match against a File
+	 * @param caseSensitive If true the extension must match the case of the
+	 *                      provided extension, otherwise a case insensitive match
+	 *                      will occur.
+	 * @throws IllegalArgumentException Thrown if the file extension is not
+	 *                                  formatted correctly such as containing a
+	 *                                  period.
+	 */
+	public FileExtensionFilter(boolean ignoreCase, String... extensions) throws IllegalArgumentException {
+		// check each extension
+		for (String ext : extensions) {
+			if (!FileUtil.isValidFileExtension(ext)) {
+				throw new IllegalArgumentException("Invalid file extension '" + ext + "' cannot be matched");
+			}
+		}
+		this.ignoreCase = ignoreCase;
+		this.extensions = extensions;
+	}
 
-    /**
-     * Creates a new instance of a <code>FileExtensionMatcher</code> that will
-     * perform a match to this file extension.
-     * @param extension The file extension to match against a File
-     * @param caseSensitive If true the extension must match the case of the
-     *      provided extension, otherwise a case insensitive match will occur.
-     * @throws IllegalArgumentException Thrown if the file extension is not
-     *      formatted correctly such as containing a period.
-     */
-    public FileExtensionFilter(String extension, boolean caseSensitive) throws IllegalArgumentException {
-        this(new String[] { extension }, caseSensitive);
-    }
+	/**
+	 * Accepts a File by its file extension.
+	 * 
+	 * @param file The file to match
+	 * @return True if the File matches this the array of acceptable file
+	 *         extensions.
+	 */
+	@Override
+	public boolean accept(File file) {
+		// extract this file's extension
+		String fileExt = FileUtil.parseFileExtension(file.getName());
 
-    /**
-     * Creates a new instance of a <code>FileExtensionMatcher</code> that will
-     * perform a match to this array of file extensions.
-     * @param extension The array of file extensions to match against a File
-     * @param caseSensitive If true the extension must match the case of the
-     *      provided extension, otherwise a case insensitive match will occur.
-     * @throws IllegalArgumentException Thrown if the file extension is not
-     *      formatted correctly such as containing a period.
-     */
-    public FileExtensionFilter(String[] extensions, boolean caseSensitive) throws IllegalArgumentException {
-        // check each extension
-        for (String ext : extensions) {
-            if (!FileUtil.isValidFileExtension(ext)) {
-                throw new IllegalArgumentException("Invalid file extension '" + ext + "' cannot be matched");
-            }
-        }
-        this.caseSensitive = caseSensitive;
-        this.extensions = extensions;
-    }
+		// a file extension might not have existed
+		if (fileExt == null) {
+			// if no file extension extracted, this definitely is not a match
+			return false;
+		}
 
-    /**
-     * Accepts a File by its file extension.
-     * @param file The file to match
-     * @return True if the File matches this the array of acceptable file
-     *      extensions.
-     */
-    public boolean accept(File file) {
-        // extract this file's extension
-        String fileExt = FileUtil.parseFileExtension(file.getName());
+		// does it match our list of acceptable file extensions?
+		for (String extension : extensions) {
+			if (ignoreCase) {
+				if (fileExt.equalsIgnoreCase(extension))
+					return true;
+			} else {
+				if (fileExt.equals(extension))
+					return true;
+			}
+		}
 
-        // a file extension might not have existed
-        if (fileExt == null) {
-            // if no file extension extracted, this definitely is not a match
-            return false;
-        }
-
-        // does it match our list of acceptable file extensions?
-        for (String extension : extensions) {
-            if (caseSensitive) {
-                if (fileExt.equals(extension)) {
-                    return true;
-                }
-            } else {
-                if (fileExt.equalsIgnoreCase(extension)) {
-                    return true;
-                }
-            }
-        }
-        
-        // if we got here, then no match was found
-        return false;
-    }
+		// if we got here, then no match was found
+		return false;
+	}
 
 }

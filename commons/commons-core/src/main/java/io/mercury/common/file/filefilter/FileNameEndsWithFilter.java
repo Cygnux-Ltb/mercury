@@ -1,61 +1,31 @@
 package io.mercury.common.file.filefilter;
 
-/*
- * #%L
- * ch-commons-util
- * %%
- * Copyright (C) 2012 Cloudhopper by Twitter
- * %%
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * #L%
- */
-
-// java imports
 import java.io.File;
 import java.io.FileFilter;
 
-// my imports
+import javax.annotation.Nonnull;
 
-/**
- * Accepts a file based on whether its filename endsWith a specific string.
- * 
- * @author joelauer (twitter: @jjlauer or <a href="http://twitter.com/jjlauer" target=window>http://twitter.com/jjlauer</a>)
- */
 public class FileNameEndsWithFilter implements FileFilter {
 
-    private boolean caseSensitive;
-    private String string0;
+	private final String endsWithStr;
+	private final boolean ignoreCase;
 
-    public FileNameEndsWithFilter(String string0) {
-        this(string0, false);
-    }
+	public FileNameEndsWithFilter(@Nonnull String endsWithStr) {
+		this(endsWithStr, true);
+	}
 
-    public FileNameEndsWithFilter(String string0, boolean caseSensitive) throws IllegalArgumentException {
-        this.caseSensitive = caseSensitive;
-        this.string0 = string0;
-    }
+	public FileNameEndsWithFilter(@Nonnull String endsWithStr, boolean ignoreCase) throws IllegalArgumentException {
+		this.endsWithStr = endsWithStr;
+		this.ignoreCase = ignoreCase;
+	}
 
-    /**
-     * Accepts a File if its filename endsWith a specific string.
-     * @param file The file to match
-     * @return True if the File endsWith the specific string, otherwise false
-     */
-    public boolean accept(File file) {
-        if (caseSensitive) {
-            return file.getName().endsWith(string0);
-        } else {
-            return file.getName().toLowerCase().endsWith(string0.toLowerCase());
-        }
-    }
+	@Override
+	public boolean accept(@Nonnull File file) {
+		if (ignoreCase) {
+			return file.getName().toLowerCase().endsWith(endsWithStr.toLowerCase());
+		} else {
+			return file.getName().endsWith(endsWithStr);
+		}
+	}
 
 }

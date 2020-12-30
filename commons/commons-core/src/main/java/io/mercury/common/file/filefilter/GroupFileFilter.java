@@ -3,16 +3,21 @@ package io.mercury.common.file.filefilter;
 import java.io.File;
 import java.io.FileFilter;
 
-public final class CompositeFileFilter implements FileFilter {
+import javax.annotation.Nonnull;
+
+import io.mercury.common.util.Assertor;
+
+public final class GroupFileFilter implements FileFilter {
 
 	private final FileFilter[] filters;
 
-	public CompositeFileFilter(FileFilter... filters) {
+	public GroupFileFilter(@Nonnull FileFilter... filters) {
+		Assertor.requiredLength(filters, 1, "filters");
 		this.filters = filters;
 	}
 
 	@Override
-	public boolean accept(File file) {
+	public boolean accept(@Nonnull File file) {
 		// loop thru every filter
 		for (FileFilter filter : filters) {
 			if (!filter.accept(file)) {
