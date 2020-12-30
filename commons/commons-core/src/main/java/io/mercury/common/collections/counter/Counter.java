@@ -34,7 +34,7 @@ public interface Counter<T extends Counter<T>> {
 	 * @param tag
 	 * @return
 	 */
-	T remove(long tag);
+	T deltaRemove(long tag);
 
 	/**
 	 * 在历史delta上添加新的delta
@@ -43,7 +43,7 @@ public interface Counter<T extends Counter<T>> {
 	 * @param delta
 	 * @return
 	 */
-	T historyDeltaAdd(long tag, long delta);
+	T deltaAdd(long tag, long delta);
 
 	/**
 	 * 
@@ -51,8 +51,8 @@ public interface Counter<T extends Counter<T>> {
 	 * @param delta
 	 * @return
 	 */
-	default T historyDeltaSubtract(long tag, long delta) {
-		return historyDeltaAdd(tag, -delta);
+	default T deltaSubtract(long tag, long delta) {
+		return deltaAdd(tag, -delta);
 	}
 
 	/**

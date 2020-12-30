@@ -1,5 +1,8 @@
 package io.mercury.common.collections.counter;
 
+import static io.mercury.common.collections.MutableLists.newLongArrayList;
+import static io.mercury.common.collections.MutableMaps.newLongLongHashMap;
+
 import java.time.Duration;
 
 import javax.annotation.concurrent.NotThreadSafe;
@@ -9,16 +12,18 @@ import org.eclipse.collections.api.list.primitive.MutableLongList;
 import org.eclipse.collections.api.map.primitive.MutableLongLongMap;
 
 import io.mercury.common.collections.Capacity;
-import io.mercury.common.collections.MutableLists;
 import io.mercury.common.collections.MutableMaps;
 import io.mercury.common.thread.Threads;
 
 /**
  * 
- * 具备过期特性的累加计数器, 可以清除某个特定delta, 是计算单位时间窗口的閥值时较为有效的结构<br>
- * 累加值失效有两种情况, 调用removeHistoryDelta对value进行修正, 或在过期后自动失效<br>
+ * 具备过期特性的累加计数器, 可以清除某个特定delta<br>
+ * 用于计算单位时间窗口的閥值, 最初设计用于限制单位时间的订单总量<br>
+ * 累加值失效有两种情况, 调用remove对value进行修正, 或在过期后自动失效<br>
  * 采用惰性求值, 只在获取值的时候排除已过期的值<br>
  * 未进行堆外缓存, 仅在当前JVM进程内有效, JVM重启后, 计数器归零
+ * 
+ * TODO 增加强一致性, 使用自旋锁
  * 
  * @author yellow013
  *
@@ -28,22 +33,32 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
 
 	private long value = 0L;
 
-	// TODO 增加强一致性 使用自旋锁
-	// private AtomicBoolean spin;
+	// 记录时间和Tag
+	private final MutableLongLongMap timeToTag;
+	// 记录Tag和Delta
+	private final MutableLongLongMap tagToDelta;
+	// 存储Tag的记录时间
+	private final MutableLongList effectiveTimes;
 
-	private MutableLongLongMap timeToTag;
-	private MutableLongLongMap tagToDelta;
-	private MutableLongList effectiveTimes;
+	// 有效时间的纳秒数
+	private final long expireNanos;
 
-	private long expireNanos;
+	public ExpirableCounter(Duration expireTime) {
+		this(expireTime, Capacity.L12_SIZE_4096);
+	}
 
 	public ExpirableCounter(Duration expireTime, Capacity capacity) {
 		this.expireNanos = expireTime.toNanos();
-		this.timeToTag = MutableMaps.newLongLongHashMap(capacity);
-		this.tagToDelta = MutableMaps.newLongLongHashMap(capacity);
-		this.effectiveTimes = MutableLists.newLongArrayList(capacity.size());
+		this.timeToTag = newLongLongHashMap(capacity);
+		this.tagToDelta = newLongLongHashMap(capacity);
+		this.effectiveTimes = newLongArrayList(capacity.size());
 	}
 
+	/**
+	 * 更新计算值
+	 * 
+	 * @param delta
+	 */
 	private void updateValue(long delta) {
 		value += delta;
 	}
@@ -62,13 +77,13 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
 
 	@Override
 	public long getValue() {
-		long baselineTime = System.nanoTime() - expireNanos;
-		MutableLongIterator effectiveTimeIterator = effectiveTimes.longIterator();
-		while (effectiveTimeIterator.hasNext()) {
-			long time = effectiveTimeIterator.next();
-			if (time < baselineTime) {
+		final long baseline = System.nanoTime() - expireNanos;
+		final MutableLongIterator iterator = effectiveTimes.longIterator();
+		while (iterator.hasNext()) {
+			long time = iterator.next();
+			if (time < baseline) {
 				clear(time);
-				effectiveTimeIterator.remove();
+				iterator.remove();
 			} else
 				break;
 		}
@@ -83,8 +98,11 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
 		tagToDelta.remove(tag);
 	}
 
+	/**
+	 * 
+	 */
 	@Override
-	public ExpirableCounter remove(long tag) {
+	public ExpirableCounter deltaRemove(long tag) {
 		long delta = tagToDelta.get(tag);
 		if (delta == 0)
 			return this;
@@ -93,13 +111,16 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
 		return this;
 	}
 
+	/**
+	 * 
+	 */
 	@Override
-	public ExpirableCounter historyDeltaAdd(long tag, long delta) {
+	public ExpirableCounter deltaAdd(long tag, long delta) {
 		long savedDelta = tagToDelta.get(tag);
 		if (savedDelta == 0)
 			return this;
-		tagToDelta.put(tag, savedDelta - delta);
-		value -= delta;
+		tagToDelta.put(tag, savedDelta + delta);
+		value += delta;
 		return this;
 	}
 

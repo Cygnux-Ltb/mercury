@@ -21,24 +21,24 @@ import io.mercury.common.collections.Capacity;
 @ThreadSafe
 public abstract class KeeperBaseImpl<K, V> implements Keeper<K, V> {
 
-	protected final ConcurrentMutableMap<K, V> keeperMap;
+	protected final ConcurrentMutableMap<K, V> savedMap;
 
 	protected KeeperBaseImpl() {
 		this(Capacity.L06_SIZE_64);
 	}
 
 	protected KeeperBaseImpl(Capacity capacity) {
-		this.keeperMap = newConcurrentHashMap(capacity);
+		this.savedMap = newConcurrentHashMap(capacity);
 	}
 
 	@Nonnull
 	public V acquire(@Nonnull K k) {
-		return keeperMap.getIfAbsentPutWithKey(k, this::createWithKey);
+		return savedMap.getIfAbsentPutWithKey(k, this::createWithKey);
 	}
 
 	@CheckForNull
 	public V get(@Nonnull K k) {
-		return keeperMap.get(k);
+		return savedMap.get(k);
 	}
 
 	@AbstractFunction
