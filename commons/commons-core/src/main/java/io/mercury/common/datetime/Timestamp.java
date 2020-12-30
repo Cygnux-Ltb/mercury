@@ -1,6 +1,7 @@
 package io.mercury.common.datetime;
 
 import static io.mercury.common.util.StringUtil.toText;
+import static java.lang.System.currentTimeMillis;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -16,19 +17,13 @@ import io.mercury.common.util.Assertor;
  */
 public final class Timestamp implements Comparable<Timestamp> {
 
-	/**
-	 * Epoch Milliseconds
-	 */
+	// Epoch Milliseconds
 	private final long epochMillis;
 
-	/**
-	 * java.time.Instant
-	 */
+	// java.time.Instant
 	private Instant instant;
 
-	/**
-	 * java.time.ZonedDateTime
-	 */
+	// java.time.ZonedDateTime
 	private ZonedDateTime zonedDateTime;
 
 	/**
@@ -44,7 +39,7 @@ public final class Timestamp implements Comparable<Timestamp> {
 	 * @return
 	 */
 	public static Timestamp newWithNow() {
-		return new Timestamp(System.currentTimeMillis());
+		return new Timestamp(currentTimeMillis());
 	}
 
 	/**
@@ -123,7 +118,7 @@ public final class Timestamp implements Comparable<Timestamp> {
 	 * @param zoneId
 	 * @return
 	 */
-	public ZonedDateTime updateAndGetDateTimeOf(ZoneId zoneId) {
+	public ZonedDateTime resetAndGetDateTimeOf(ZoneId zoneId) {
 		if (instant == null)
 			newInstantOfEpochMillis();
 		this.zonedDateTime = ZonedDateTime.ofInstant(instant, zoneId);
@@ -136,7 +131,7 @@ public final class Timestamp implements Comparable<Timestamp> {
 	 */
 	public ZonedDateTime getZonedDateTime() {
 		if (zonedDateTime == null)
-			return updateAndGetDateTimeOf(TimeZone.SYS_DEFAULT);
+			return resetAndGetDateTimeOf(TimeZone.SYS_DEFAULT);
 		return zonedDateTime;
 	}
 
@@ -218,7 +213,7 @@ public final class Timestamp implements Comparable<Timestamp> {
 		System.out.println(now);
 
 		System.out.println(Timestamp.newWithNow());
-		System.out.println(Timestamp.newWithEpochMillis(47237547328L).updateAndGetDateTimeOf(TimeZone.UTC));
+		System.out.println(Timestamp.newWithEpochMillis(47237547328L).resetAndGetDateTimeOf(TimeZone.UTC));
 		System.out.println(Timestamp.newWithDateTime(LocalDateTime.now(), TimeZone.CST));
 
 	}

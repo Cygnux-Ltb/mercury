@@ -9,6 +9,7 @@ import static io.mercury.common.datetime.TimeConst.MILLIS_PER_MINUTE;
 import static io.mercury.common.datetime.TimeConst.MILLIS_PER_SECONDS;
 import static io.mercury.common.datetime.TimeConst.NANOS_PER_MICROS;
 import static io.mercury.common.datetime.TimeConst.NANOS_PER_MILLIS;
+import static io.mercury.common.datetime.TimeConst.SECONDS_PER_HOUR;
 import static io.mercury.common.datetime.TimeConst.SECONDS_PER_MINUTE;
 import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
 import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT_OFFSET;
@@ -75,7 +76,7 @@ public final class EpochTime {
 	 * @return
 	 */
 	public static final long hour(@Nonnull LocalDateTime datetime) {
-		return datetime.toEpochSecond(SYS_DEFAULT_OFFSET) / TimeConst.SECONDS_PER_HOUR;
+		return datetime.toEpochSecond(SYS_DEFAULT_OFFSET) / SECONDS_PER_HOUR;
 	}
 
 	/**
@@ -85,7 +86,7 @@ public final class EpochTime {
 	 * @return
 	 */
 	public static final long hour(@Nonnull LocalDateTime datetime, @Nonnull ZoneOffset offset) {
-		return datetime.toEpochSecond(offset) / TimeConst.SECONDS_PER_HOUR;
+		return datetime.toEpochSecond(offset) / SECONDS_PER_HOUR;
 	}
 
 	/**
@@ -94,7 +95,7 @@ public final class EpochTime {
 	 * @return
 	 */
 	public static final long hour(@Nonnull ZonedDateTime dateTime) {
-		return dateTime.toEpochSecond() / TimeConst.SECONDS_PER_HOUR;
+		return dateTime.toEpochSecond() / SECONDS_PER_HOUR;
 	}
 
 	/**

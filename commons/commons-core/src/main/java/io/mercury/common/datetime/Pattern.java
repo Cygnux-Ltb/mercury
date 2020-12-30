@@ -2,9 +2,9 @@ package io.mercury.common.datetime;
 
 import static io.mercury.common.datetime.Pattern.DatePattern.YYYYMMDD;
 import static io.mercury.common.datetime.Pattern.DatePattern.YYYY_MM_DD;
-import static io.mercury.common.datetime.Pattern.PatternSymbol.BLANK;
-import static io.mercury.common.datetime.Pattern.PatternSymbol.LINE;
-import static io.mercury.common.datetime.Pattern.PatternSymbol.TIME;
+import static io.mercury.common.datetime.Pattern.PatternSeparator.BLANK;
+import static io.mercury.common.datetime.Pattern.PatternSeparator.LINE;
+import static io.mercury.common.datetime.Pattern.PatternSeparator.TIME;
 import static io.mercury.common.datetime.Pattern.TimePattern.HH;
 import static io.mercury.common.datetime.Pattern.TimePattern.HHMM;
 import static io.mercury.common.datetime.Pattern.TimePattern.HHMMSS;
@@ -73,19 +73,19 @@ p       pad next                    pad modifier      1
  * </pre>
  * 
  */
-public class Pattern {
+public abstract class Pattern {
 
 	private final String pattern;
 	private final DateTimeFormatter formatter;
 
-	private Pattern(String pattern) {
+	protected Pattern(String pattern) {
 		this.pattern = pattern;
 		this.formatter = DateTimeFormatter.ofPattern(pattern);
 	}
 
 	/**
 	 * 
-	 * @return String
+	 * @return the string pattern
 	 */
 	public String getPattern() {
 		return pattern;
@@ -93,7 +93,7 @@ public class Pattern {
 
 	/**
 	 * 
-	 * @return DateTimeFormatter
+	 * @return the DateTimeFormatter instance
 	 */
 	public DateTimeFormatter getFormatter() {
 		return formatter;
@@ -101,7 +101,7 @@ public class Pattern {
 
 	/**
 	 * 
-	 * @return new DateTimeFormatter
+	 * @return the new java.time.format.DateTimeFormatter
 	 */
 	public DateTimeFormatter newDateTimeFormatter() {
 		return DateTimeFormatter.ofPattern(pattern);
@@ -109,7 +109,7 @@ public class Pattern {
 
 	/**
 	 * 
-	 * @return new DateFormat
+	 * @return the new java.text.SimpleDateFormat.SimpleDateFormat
 	 */
 	public DateFormat newSimpleDateFormat() {
 		return new SimpleDateFormat(pattern);
@@ -161,6 +161,10 @@ public class Pattern {
 		 */
 		public final static DatePattern YYYY_MM_DD = new DatePattern("yyyy-MM-dd");
 
+		/**
+		 * 
+		 * @param pattern
+		 */
 		private DatePattern(String pattern) {
 			super(pattern);
 		}
@@ -220,6 +224,10 @@ public class Pattern {
 		 */
 		public final static TimePattern HH_MM_SS_SSSSSS = new TimePattern("HH:mm:ss.SSSSSS");
 
+		/**
+		 * 
+		 * @param pattern
+		 */
 		private TimePattern(String pattern) {
 			super(pattern);
 		}
@@ -248,7 +256,6 @@ public class Pattern {
 		/**
 		 * Example: 20180314131423
 		 */
-
 		public final static DateTimePattern YYYYMMDDHHMMSS = new DateTimePattern(
 				YYYYMMDD.getPattern() + HHMMSS.getPattern());
 
@@ -454,13 +461,17 @@ public class Pattern {
 		public final static DateTimePattern YYYY_MM_DD_T_HH_MM_SS_SSSSSS = new DateTimePattern(
 				YYYY_MM_DD.getPattern() + TIME + HH_MM_SS_SSSSSS.getPattern());
 
+		/**
+		 * 
+		 * @param pattern
+		 */
 		private DateTimePattern(String pattern) {
 			super(pattern);
 		}
 
 	}
 
-	public interface PatternSymbol {
+	public interface PatternSeparator {
 
 		String LINE = "-";
 		String BLANK = " ";
