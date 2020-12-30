@@ -58,8 +58,7 @@ public final class Timestamp implements Comparable<Timestamp> {
 	 */
 	public static Timestamp newWithDateTime(LocalDateTime localDateTime) {
 		Assertor.nonNull(localDateTime, "localDateTime");
-		return newWithZonedDateTime(
-				ZonedDateTime.ofLocal(localDateTime, TimeZone.SYS_DEFAULT, TimeZone.SYS_DEFAULT_OFFSET));
+		return newWithZonedDateTime(ZonedDateTime.of(localDateTime, TimeZone.SYS_DEFAULT));
 	}
 
 	/**

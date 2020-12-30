@@ -12,14 +12,10 @@ import io.mercury.common.collections.MutableSets;
 @NotThreadSafe
 public class PriorityQueue<E> {
 
-	/**
-	 * 优先集合
-	 */
+	// 优先集合
 	private final MutableSortedSet<E> prioritySet = MutableSets.newTreeSortedSet();
 
-	/**
-	 * 次级集合
-	 */
+	// 次级集合
 	private final MutableSortedSet<E> secondarySet = MutableSets.newTreeSortedSet();
 
 	/**

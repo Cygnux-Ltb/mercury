@@ -21,7 +21,8 @@ public final class TimePoint implements Comparable<TimePoint> {
 	 */
 	public static TimePoint now() {
 		LocalDateTime now = LocalDateTime.now();
-		return of(DateTimeUtil.date(now.toLocalDate()), DateTimeUtil.timeOfSecond(now.toLocalTime()), now.getNano());
+		return new TimePoint(DateTimeUtil.date(now.toLocalDate()), DateTimeUtil.timeOfSecond(now.toLocalTime()),
+				now.getNano());
 	}
 
 	/**

@@ -59,7 +59,6 @@ import org.slf4j.LoggerFactory;
  */
 public class Window<K, R, P> {
 
-	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(Window.class);
 
 	private final int maxSize;
@@ -147,6 +146,7 @@ public class Window<K, R, P> {
 			this.monitor = null;
 			this.monitorHandle = null;
 		}
+		logger.debug("window created");
 	}
 
 	/**
