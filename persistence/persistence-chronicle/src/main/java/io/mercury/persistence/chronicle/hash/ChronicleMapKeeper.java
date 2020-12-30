@@ -101,13 +101,13 @@ public class ChronicleMapKeeper<K, V> extends KeeperBaseImpl<String, ChronicleMa
 	@Override
 	public void close() throws IOException {
 		synchronized (lock) {
-			Set<String> keySet = keeperMap.keySet();
+			Set<String> keySet = savedMap.keySet();
 			for (String key : keySet) {
-				ChronicleMap<K, V> map = keeperMap.get(key);
+				ChronicleMap<K, V> map = savedMap.get(key);
 				if (map.isOpen()) {
 					map.close();
 				}
-				keeperMap.remove(key);
+				savedMap.remove(key);
 			}
 			this.isClosed = true;
 		}
