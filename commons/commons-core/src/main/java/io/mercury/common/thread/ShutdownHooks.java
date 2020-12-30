@@ -11,7 +11,7 @@ import io.mercury.common.number.ThreadSafeRandoms;
 
 public final class ShutdownHooks {
 
-	private MutableList<Runnable> runnables = MutableLists.newFastList(64);
+	private final MutableList<Runnable> runnables = MutableLists.newFastList(64);
 
 	private static final ShutdownHooks INSTANCE = new ShutdownHooks();
 
