@@ -1,7 +1,7 @@
 package io.mercury.common.file;
 
 import java.io.File;
-import java.util.function.Predicate;
+import java.io.FileFilter;
 
 import javax.annotation.Nonnull;
 
@@ -33,24 +33,24 @@ public final class FileScanner {
 	 * @return
 	 */
 	@Nonnull
-	public static final MutableSet<File> depthFirst(@Nonnull File path, Predicate<File> fileFilter) {
-		if (fileFilter == null)
-			fileFilter = any -> true;
+	public static final MutableSet<File> depthFirst(@Nonnull File path, FileFilter filter) {
+		if (filter == null)
+			filter = any -> true;
 		MutableSet<File> files = MutableSets.newUnifiedSet();
-		depthFirst0(files, path, fileFilter);
+		depthFirst0(files, path, filter);
 		return files;
 	}
 
-	private static final void depthFirst0(MutableSet<File> files, File path, Predicate<File> fileFilter) {
-		if (path == null || fileFilter == null)
+	private static final void depthFirst0(MutableSet<File> files, File path, FileFilter filter) {
+		if (path == null || filter == null)
 			return;
 		File[] listFiles = path.listFiles();
 		if (listFiles != null && listFiles.length != 0) {
 			for (File file : listFiles) {
 				if (file.isDirectory())
 					// 如果文件是一个目录, 递归执行
-					depthFirst0(files, file, fileFilter);
-				else if (fileFilter.test(file))
+					depthFirst0(files, file, filter);
+				else if (filter.accept(file))
 					// 如果文件符合过滤器断言, 则加入Set
 					files.add(file);
 				else
