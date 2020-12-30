@@ -1,11 +1,11 @@
 package io.netty.study.slidingwindow.server;
 
 import com.alibaba.fastjson.JSON;
-import com.cloudhopper.commons.util.windowing.DuplicateKeyException;
-import com.cloudhopper.commons.util.windowing.OfferTimeoutException;
-import com.cloudhopper.commons.util.windowing.Window;
-import com.cloudhopper.commons.util.windowing.WindowFuture;
 
+import io.mercury.common.collections.window.DuplicateKeyException;
+import io.mercury.common.collections.window.OfferTimeoutException;
+import io.mercury.common.collections.window.Window;
+import io.mercury.common.collections.window.WindowFuture;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -131,7 +131,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 	/*
 	 * 滑动窗口响应请求
 	 */
-	@SuppressWarnings("unchecked")
 	public Message handlerRequest(Message request, ChannelHandlerContext ctx) {
 		// 入滑动窗口超时、滑动窗口内超时、客户端调用超时 毫秒
 		int windowWaitOffset = 30000;

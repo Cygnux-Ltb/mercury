@@ -45,11 +45,12 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<dependency>
+		<!-- Common Java utility classes used across Cloudhopper-based projects -->
+		<!-- <dependency>
 			<groupId>com.cloudhopper</groupId>
 			<artifactId>ch-commons-util</artifactId>
 			<version>6.0.4</version>
-		</dependency>
+		</dependency> -->
 	</dependencies>
 
 </project>
