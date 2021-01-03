@@ -3,6 +3,7 @@ package io.mercury.common.collections;
 import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
 import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
 
+import io.mercury.common.util.BitFormatter;
 import io.mercury.common.util.BitOperator;
 
 public enum Capacity {
@@ -195,11 +196,11 @@ public enum Capacity {
 	public static void main(String[] args) {
 
 		System.out.println(1 << 30);
-		System.out.println(BitOperator.intBinaryFormat(1 << 30));
+		System.out.println(BitFormatter.intBinaryFormat(1 << 30));
 		System.out.println(1 << 31);
-		System.out.println(BitOperator.intBinaryFormat(1 << 31));
+		System.out.println(BitFormatter.intBinaryFormat(1 << 31));
 		
-		System.out.println(BitOperator.intBinaryFormat(Integer.MIN_VALUE << 65));
+		System.out.println(BitFormatter.intBinaryFormat(Integer.MIN_VALUE << 65));
 
 		System.out.println(Capacity.L09_SIZE_512.quarter());
 
