@@ -1,8 +1,8 @@
 package io.mercury.common.sequence;
 
 import static io.mercury.common.thread.Threads.sleep;
-import static io.mercury.common.util.BitOperator.intBinaryFormat;
-import static io.mercury.common.util.BitOperator.longBinaryFormat;
+import static io.mercury.common.util.BitFormatter.intBinaryFormat;
+import static io.mercury.common.util.BitFormatter.longBinaryFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,6 +16,7 @@ import org.eclipse.collections.api.set.primitive.MutableLongSet;
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.MutableSets;
 import io.mercury.common.datetime.EpochTime;
+import io.mercury.common.util.BitFormatter;
 
 /**
  * 
@@ -36,20 +37,14 @@ public final class EpochSeqAllocator {
 		return seq;
 	}
 
-	/**
-	 * 最后使用的Epoch毫秒
-	 */
+	// 最后使用的Epoch毫秒
 	private static volatile long lastEpochMillis;
 
-	/**
-	 * 自增位
-	 */
+	// 自增位
 	private static volatile int incr;
 
-	/**
-	 * Unsigned Short max value
-	 */
-	private static final int incrLimit = Short.MAX_VALUE;
+	// 自增位最大限制
+	private static final int incrLimit = 0xffff;
 
 	/**
 	 * 
@@ -105,6 +100,9 @@ public final class EpochSeqAllocator {
 		System.out.println(longBinaryFormat(diff));
 
 		System.out.println((1L << 39) / (1000L * 60 * 60 * 24 * 365));
+		
+		System.out.println(BitFormatter.intBinary(0xffff) );
+		System.out.println(BitFormatter.intBinary(Short.MAX_VALUE) );
 
 	}
 

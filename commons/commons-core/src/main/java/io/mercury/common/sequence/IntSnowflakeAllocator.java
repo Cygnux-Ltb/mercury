@@ -3,9 +3,7 @@ package io.mercury.common.sequence;
 import static io.mercury.common.util.BitFormatter.longBinaryFormat;
 import static java.lang.System.currentTimeMillis;
 
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -23,7 +21,7 @@ import io.mercury.common.datetime.TimeZone;
  *
  * @author yellow013
  */
-public final class LongSnowflakeAllocator {
+public final class IntSnowflakeAllocator {
 
 	/**
 	 * 
@@ -38,17 +36,17 @@ public final class LongSnowflakeAllocator {
 			this.baselineEpoch = baselineEpoch;
 		}
 
-		public LongSnowflakeAllocator bulid() {
-			return new LongSnowflakeAllocator(this);
+		public IntSnowflakeAllocator bulid() {
+			return new IntSnowflakeAllocator(this);
 		}
 
 	}
 
-	public static LongSnowflakeAllocator newAllocator(LocalDate baselineEpoch) {
+	public static IntSnowflakeAllocator newAllocator(LocalDate baselineEpoch) {
 		return new Bulider(baselineEpoch).bulid();
 	}
 
-	private LongSnowflakeAllocator(Bulider bulider) {
+	private IntSnowflakeAllocator(Bulider bulider) {
 		this.baselineEpoch = ZonedDateTime.of(bulider.baselineEpoch, LocalTime.MIN, ZoneOffset.UTC).toEpochSecond();
 	}
 
@@ -140,12 +138,6 @@ public final class LongSnowflakeAllocator {
 		return timestamp;
 	}
 
-	/**
-	 * 时钟回退抛出此异常
-	 * 
-	 * @author yellow013
-	 *
-	 */
 	public static class ClockBackwardException extends RuntimeException {
 
 		/**
@@ -156,7 +148,7 @@ public final class LongSnowflakeAllocator {
 		private final long backwardMillis;
 
 		private ClockBackwardException(long backwardMillis) {
-			super(String.format("The clock moved backwards, Refusing to generate seq for %d millis", backwardMillis));
+			super(String.format("The clock moved backwards, Refusing to generate id for %d millis", backwardMillis));
 			this.backwardMillis = backwardMillis;
 		}
 
@@ -169,13 +161,9 @@ public final class LongSnowflakeAllocator {
 	public static void main(String[] args) {
 
 		long l = 0b00000000_00000000_00000000_00000000_00000000_00000000_11111111_11111111L;
-		long l0 = 0b00000000_00000000_00000000_01111111_11111111_11111111_11111111_11111111L;
-		long l1 = 0b00000000_00000000_00000000_00000000_00000000_00000000_00000000_11111111L;
+		long l0 = 0b00000000_00000000_00000000_00000000_11111111_11111111_11111111_11111111L;
 
 		ZonedDateTime baseline = ZonedDateTime.of(LocalDate.of(2020, 1, 1), LocalTime.MIN, TimeZone.UTC);
-
-		long years = Duration.between(LocalDateTime.of(LocalDate.of(2020, 1, 1), LocalTime.MIN),
-				LocalDateTime.of(LocalDate.of(2021, 1, 1), LocalTime.MIN)).toMillis();
 
 		System.out.println(Byte.SIZE);
 
@@ -184,9 +172,10 @@ public final class LongSnowflakeAllocator {
 		System.out.println(l);
 		System.out.println(longBinaryFormat(l0));
 		System.out.println(l0);
-		System.out.println(l1);
-		System.out.println(years);
-		System.out.println(l0 / years);
+		System.out.println(longBinaryFormat(Long.MAX_VALUE));
+
+		System.out.println(3600 * 24 * 365L);
+		System.out.println(l0 / (1000 * 3600 * 24 * 365L));
 
 	}
 
