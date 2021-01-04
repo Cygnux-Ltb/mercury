@@ -100,9 +100,9 @@ public final class EpochSeqAllocator {
 		System.out.println(longBinaryFormat(diff));
 
 		System.out.println((1L << 39) / (1000L * 60 * 60 * 24 * 365));
-		
-		System.out.println(BitFormatter.intBinary(0xffff) );
-		System.out.println(BitFormatter.intBinary(Short.MAX_VALUE) );
+
+		System.out.println(BitFormatter.intBinary(0xffff));
+		System.out.println(BitFormatter.intBinary(Short.MAX_VALUE));
 
 	}
 
