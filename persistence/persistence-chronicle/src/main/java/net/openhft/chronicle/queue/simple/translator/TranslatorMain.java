@@ -8,20 +8,23 @@ import net.openhft.chronicle.bytes.MethodReader;
  * Created by catherine on 26/07/2016.
  */
 public class TranslatorMain {
-    public static void main(String[] args) throws InterruptedException {
-        String pathfr = "queue-fr";
-        SingleChronicleQueue queuefr = SingleChronicleQueueBuilder.binary(pathfr).build();
-        MessageConsumer messageConsumer = queuefr.acquireAppender().methodWriter(MessageConsumer.class);
 
-        MessageConsumer simpleTranslator = new SimpleTranslator(messageConsumer);
+	public static void main(String[] args) throws InterruptedException {
+		String pathfr = "queue-fr";
+		SingleChronicleQueue queuefr = SingleChronicleQueueBuilder.binary(pathfr).build();
+		MessageConsumer messageConsumer = queuefr.acquireAppender().methodWriter(MessageConsumer.class);
 
-        String path_en = "queue-en";
-        SingleChronicleQueue queue_en = SingleChronicleQueueBuilder.binary(path_en).build();
-        MethodReader methodReader = queue_en.createTailer().methodReader(simpleTranslator);
+		MessageConsumer simpleTranslator = new SimpleTranslator(messageConsumer);
 
-        while (true) {
-            if (!methodReader.readOne())
-                Thread.sleep(10);
-        }
-    }
+		String path_en = "queue-en";
+		SingleChronicleQueue queue_en = SingleChronicleQueueBuilder.binary(path_en).build();
+		MethodReader methodReader = queue_en.createTailer().methodReader(simpleTranslator);
+
+		while (true) {
+			if (!methodReader.readOne()) {
+				Thread.sleep(10);
+			}
+		}
+	}
+
 }

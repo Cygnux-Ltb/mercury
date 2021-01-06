@@ -10,7 +10,9 @@ import java.util.Scanner;
  * Created by catherine on 17/07/2016.
  */
 public class InputMain {
+
 	public static void main(String[] args) {
+
 		String path = "queue";
 		SingleChronicleQueue queue = SingleChronicleQueueBuilder.binary(path).build();
 		ExcerptAppender appender = queue.acquireAppender();
@@ -18,11 +20,13 @@ public class InputMain {
 			while (true) {
 				System.out.println("type something");
 				String line = read.nextLine();
-				if (line.isEmpty())
+				if (line.isEmpty()) {
 					break;
+				}
 				appender.writeText(line);
 			}
 			System.out.println("... bye.");
 		}
+
 	}
 }

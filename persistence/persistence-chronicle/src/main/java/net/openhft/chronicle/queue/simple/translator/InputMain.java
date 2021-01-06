@@ -9,6 +9,7 @@ import java.util.Scanner;
  * Created by catherine on 26/07/2016.
  */
 public class InputMain {
+
 	public static void main(String[] args) {
 		String path_en = "queue-en";
 		SingleChronicleQueue queue_en = SingleChronicleQueueBuilder.binary(path_en).build();
@@ -24,4 +25,5 @@ public class InputMain {
 			System.out.println("... bye.");
 		}
 	}
+
 }

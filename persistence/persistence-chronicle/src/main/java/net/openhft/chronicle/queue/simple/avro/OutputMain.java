@@ -9,23 +9,23 @@ import org.apache.avro.generic.GenericRecord;
 import java.io.IOException;
 
 public class OutputMain {
-    public static void main(String[] args) throws IOException {
-        AvroHelper avro = new AvroHelper();
 
-        String path = "queue";
-        SingleChronicleQueue queue = SingleChronicleQueueBuilder.binary(path).build();
-        ExcerptTailer tailer = queue.createTailer();
+	public static void main(String[] args) throws IOException {
+		AvroHelper avro = new AvroHelper();
 
-        while (true) {
-            try (DocumentContext dc = tailer.readingDocument()) {
-                if (dc.wire() == null)
-                    break;
+		String path = "avro-queue";
+		SingleChronicleQueue queue = SingleChronicleQueueBuilder.binary(path).build();
+		ExcerptTailer tailer = queue.createTailer();
 
-                GenericRecord user = avro.readFromIS(dc.wire().bytes().inputStream());
-                System.out.println("Read: " + user);
-            }
-        }
-
-        System.out.println("All done");
-    }
+		while (true) {
+			try (DocumentContext dc = tailer.readingDocument()) {
+				if (dc.wire() == null) {
+					break;
+				}
+				GenericRecord user = avro.readFromIS(dc.wire().bytes().inputStream());
+				System.out.println("Read: " + user);
+			}
+		}
+		System.out.println("All done");
+	}
 }

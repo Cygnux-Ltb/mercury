@@ -4,6 +4,7 @@ package net.openhft.chronicle.queue.simple.translator;
  * Created by catherine on 26/07/2016.
  */
 public class SimpleTranslator implements MessageConsumer {
+	
     private MessageConsumer out;
 
     public SimpleTranslator(MessageConsumer out) {
@@ -28,4 +29,5 @@ public class SimpleTranslator implements MessageConsumer {
         System.out.println("... to: " + text);
         out.onMessage(text);
     }
+    
 }
