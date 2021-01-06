@@ -3,6 +3,7 @@ package io.mercury.common.sequence;
 import static io.mercury.common.thread.Threads.sleep;
 import static io.mercury.common.util.BitFormatter.intBinaryFormat;
 import static io.mercury.common.util.BitFormatter.longBinaryFormat;
+import static java.lang.System.currentTimeMillis;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -41,25 +42,29 @@ public final class EpochSeqAllocator {
 	private static volatile long lastEpochMillis;
 
 	// 自增位
-	private static volatile int incr;
+	private static volatile long incr;
 
 	// 自增位最大限制
-	private static final int incrLimit = 0xffff;
+	private static final long incrLimit = 0xffff;
 
 	/**
 	 * 
 	 * @return
 	 */
 	private synchronized static final long allocate0() {
-		long epochMillis = EpochTime.millis();
-		if (lastEpochMillis != epochMillis) {
-			lastEpochMillis = epochMillis;
+		long currentEpochMillis = currentTimeMillis();
+		if (lastEpochMillis != currentEpochMillis) {
+			lastEpochMillis = currentEpochMillis;
 			incr = 0;
 		}
 		if (++incr > incrLimit) {
 			return -1L;
 		}
 		return (lastEpochMillis << Short.SIZE) | incr;
+	}
+
+	public static final long parseEpoch(long seq) {
+		return seq >>> Short.SIZE;
 	}
 
 	public static void main(String[] args) {
@@ -103,6 +108,11 @@ public final class EpochSeqAllocator {
 
 		System.out.println(BitFormatter.intBinary(0xffff));
 		System.out.println(BitFormatter.intBinary(Short.MAX_VALUE));
+
+		long allocate = EpochSeqAllocator.allocate();
+		System.out.println(allocate);
+		System.out.println(BitFormatter.longBinaryFormat(allocate));
+		System.out.println(BitFormatter.longBinaryFormat(EpochSeqAllocator.parseEpoch(allocate)));
 
 	}
 

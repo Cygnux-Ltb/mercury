@@ -4,11 +4,13 @@ import static io.mercury.common.util.BitFormatter.longBinaryFormat;
 import static java.lang.System.currentTimeMillis;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
 import io.mercury.common.datetime.TimeZone;
+import io.mercury.common.util.HexUtil;
 
 /**
  * 
@@ -30,10 +32,10 @@ public final class IntSnowflakeAllocator {
 	 */
 	public static class Bulider {
 
-		private final LocalDate baselineEpoch;
+		private final ZonedDateTime baselineTime;
 
-		private Bulider(LocalDate baselineEpoch) {
-			this.baselineEpoch = baselineEpoch;
+		private Bulider(ZonedDateTime baselineTime) {
+			this.baselineTime = baselineTime;
 		}
 
 		public IntSnowflakeAllocator bulid() {
@@ -42,12 +44,20 @@ public final class IntSnowflakeAllocator {
 
 	}
 
-	public static IntSnowflakeAllocator newAllocator(LocalDate baselineEpoch) {
-		return new Bulider(baselineEpoch).bulid();
+	public static IntSnowflakeAllocator newAllocator(LocalDate baselineTime) {
+		return newAllocator(LocalDateTime.of(baselineTime, LocalTime.MIN));
+	}
+
+	public static IntSnowflakeAllocator newAllocator(LocalDateTime baselineTime) {
+		return newAllocator(ZonedDateTime.of(baselineTime, ZoneOffset.UTC));
+	}
+
+	public static IntSnowflakeAllocator newAllocator(ZonedDateTime baselineTime) {
+		return new Bulider(baselineTime).bulid();
 	}
 
 	private IntSnowflakeAllocator(Bulider bulider) {
-		this.baselineEpoch = ZonedDateTime.of(bulider.baselineEpoch, LocalTime.MIN, ZoneOffset.UTC).toEpochSecond();
+		this.baselineEpoch = bulider.baselineTime.toEpochSecond();
 	}
 
 	// 开始时间截 (使用自己业务系统指定的时间)
@@ -62,7 +72,7 @@ public final class IntSnowflakeAllocator {
 	// 机器ID所占的位数
 	private final long workerIdBits = 10L;
 
-	// 支持的最大机器ID，结果是31 (这个移位算法可以很快的计算出几位二进制数所能表示的最大十进制数)
+	// 支持的最大机器ID, 结果是31 (这个移位算法可以很快的计算出几位二进制数所能表示的最大十进制数)
 	@SuppressWarnings("unused")
 	private final long maxWorkerId = -1L ^ (-1L << workerIdBits);
 
@@ -75,7 +85,7 @@ public final class IntSnowflakeAllocator {
 	// 时间截向左移22位(10+12)
 	private final long timestampLeftShift = sequenceBits + workerIdBits;
 
-	// 生成序列的掩码，这里为4095 (0xfff == 4095 == 0b111111111111)
+	// 生成序列的掩码, 这里为4095 (0xfff == 4095 == 0b111111111111)
 	private final long sequenceMask = -1L ^ (-1L << sequenceBits);
 
 	// 工作机器ID(0~1024)
@@ -94,23 +104,23 @@ public final class IntSnowflakeAllocator {
 	 * @return SnowflakeId
 	 */
 	public synchronized long nextSeq() throws ClockBackwardException {
-		long timestamp = System.currentTimeMillis();
+		long timestamp = currentTimeMillis();
 
-		// 如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过这个时候应当抛出异常
+		// 如果当前时间小于上一次ID生成的时间戳, 说明系统时钟回退过这个时候应当抛出异常
 		if (timestamp < lastTimestamp) {
 			throw new ClockBackwardException(lastTimestamp - timestamp);
 		}
 
-		// 如果是同一时间生成的，则进行毫秒内序列
+		// 如果是同一时间生成的, 则进行毫秒内序列
 		if (lastTimestamp == timestamp) {
 			sequence = (sequence + 1) & sequenceMask;
 			// 毫秒内序列溢出
 			if (sequence == 0) {
-				// 阻塞到下一个毫秒,获得新的时间戳
+				// 阻塞到下一个毫秒, 获得新的时间戳
 				timestamp = tilNextMillis(lastTimestamp);
 			}
 		}
-		// 时间戳改变，毫秒内序列重置
+		// 时间戳改变, 毫秒内序列重置
 		else {
 			sequence = 0L;
 		}
@@ -119,49 +129,37 @@ public final class IntSnowflakeAllocator {
 		lastTimestamp = timestamp;
 
 		// 移位并通过或运算拼到一起组成64位的ID
-		return ((timestamp - twepoch) << timestampLeftShift) // 时间戳左移至高位
-				| (workerId << workerIdShift) // 所有者ID左移至中间位
-				| sequence; // 自增位
+		return
+		// 时间戳左移至高位
+		((timestamp - twepoch) << timestampLeftShift)
+				// 所有者ID左移至中间位
+				| (workerId << workerIdShift)
+				// 自增位
+				| sequence;
 	}
 
 	/**
-	 * 阻塞到下一个毫秒，直到获得新的时间戳
+	 * 阻塞到下一个毫秒, 直到获得新的时间戳
 	 * 
 	 * @param lastTimestamp 上次生成ID的时间截
 	 * @return 当前时间戳
 	 */
-	protected long tilNextMillis(long lastTimestamp) {
-		long timestamp = currentTimeMillis();
-		while (timestamp <= lastTimestamp) {
+	protected long tilNextMillis(final long lastTimestamp) {
+		long timestamp;
+		do {
 			timestamp = currentTimeMillis();
-		}
+		} while (timestamp <= lastTimestamp);
 		return timestamp;
-	}
-
-	public static class ClockBackwardException extends RuntimeException {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = -5012855755917563428L;
-
-		private final long backwardMillis;
-
-		private ClockBackwardException(long backwardMillis) {
-			super(String.format("The clock moved backwards, Refusing to generate id for %d millis", backwardMillis));
-			this.backwardMillis = backwardMillis;
-		}
-
-		public long getBackwardMillis() {
-			return backwardMillis;
-		}
-
 	}
 
 	public static void main(String[] args) {
 
-		long l = 0b00000000_00000000_00000000_00000000_00000000_00000000_11111111_11111111L;
 		long l0 = 0b00000000_00000000_00000000_00000000_11111111_11111111_11111111_11111111L;
+		System.out.println(longBinaryFormat(l0));
+
+		long l = -1 >>> (Long.SIZE - (Byte.SIZE * 3 + 2));
+		System.out.println(HexUtil.toHexString(-1L));
+		System.out.println(l + " -> " + longBinaryFormat(l));
 
 		ZonedDateTime baseline = ZonedDateTime.of(LocalDate.of(2020, 1, 1), LocalTime.MIN, TimeZone.UTC);
 

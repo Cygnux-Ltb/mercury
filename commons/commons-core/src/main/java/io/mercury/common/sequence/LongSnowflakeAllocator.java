@@ -16,10 +16,10 @@ import io.mercury.common.datetime.TimeZone;
  * 
  * 
  * 
- * 通过将63位正整数long类型拆分为三部分实现唯一序列 <br>
+ * 通过将31位正整数int类型拆分为三部分实现唯一序列 <br>
  * 时间戳 | 所有者(可以是某个业务或者分布式系统上的机器) | 自增序列<br>
- * <b>0b_01111111 11111111 11111111 11111111 11111111 11111111 11111111
- * 11111111</b>
+ * 0b_01111111 11111111 11111111 11111111<br>
+ * 可用的部分只有31位
  *
  * @author yellow013
  */
@@ -32,9 +32,9 @@ public final class LongSnowflakeAllocator {
 	 */
 	public static class Bulider {
 
-		private final LocalDate baselineEpoch;
+		private final LocalDateTime baselineEpoch;
 
-		private Bulider(LocalDate baselineEpoch) {
+		private Bulider(LocalDateTime baselineEpoch) {
 			this.baselineEpoch = baselineEpoch;
 		}
 
@@ -44,12 +44,12 @@ public final class LongSnowflakeAllocator {
 
 	}
 
-	public static LongSnowflakeAllocator newAllocator(LocalDate baselineEpoch) {
+	public static LongSnowflakeAllocator newAllocator(LocalDateTime baselineEpoch) {
 		return new Bulider(baselineEpoch).bulid();
 	}
 
 	private LongSnowflakeAllocator(Bulider bulider) {
-		this.baselineEpoch = ZonedDateTime.of(bulider.baselineEpoch, LocalTime.MIN, ZoneOffset.UTC).toEpochSecond();
+		this.baselineEpoch = ZonedDateTime.of(bulider.baselineEpoch, ZoneOffset.UTC).toEpochSecond();
 	}
 
 	// 开始时间截 (使用自己业务系统指定的时间)
@@ -140,31 +140,6 @@ public final class LongSnowflakeAllocator {
 		return timestamp;
 	}
 
-	/**
-	 * 时钟回退抛出此异常
-	 * 
-	 * @author yellow013
-	 *
-	 */
-	public static class ClockBackwardException extends RuntimeException {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = -5012855755917563428L;
-
-		private final long backwardMillis;
-
-		private ClockBackwardException(long backwardMillis) {
-			super(String.format("The clock moved backwards, Refusing to generate seq for %d millis", backwardMillis));
-			this.backwardMillis = backwardMillis;
-		}
-
-		public long getBackwardMillis() {
-			return backwardMillis;
-		}
-
-	}
 
 	public static void main(String[] args) {
 
