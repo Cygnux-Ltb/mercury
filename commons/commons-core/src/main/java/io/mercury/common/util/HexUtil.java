@@ -119,7 +119,7 @@ public class HexUtil {
 	 *               or length combination is invalid, this method will throw an
 	 *               IllegalArgumentException.
 	 */
-	static public void appendHexString(StringBuilder buffer, byte[] bytes, int offset, int length) {
+	public static void appendHexString(StringBuilder buffer, byte[] bytes, int offset, int length) {
 		assertNotNull(buffer);
 		if (bytes == null) {
 			return; // do nothing (a noop)
@@ -141,7 +141,7 @@ public class HexUtil {
 	 * 
 	 * @param value The byte value that will be converted to a hexidecimal String.
 	 */
-	static public String toHexString(byte value) {
+	public static String toHexString(byte value) {
 		StringBuilder buffer = new StringBuilder(2);
 		appendHexString(buffer, value);
 		return buffer.toString();
@@ -157,7 +157,7 @@ public class HexUtil {
 	 *               NullPointerException.
 	 * @param value  The byte value that will be converted to a hexidecimal String.
 	 */
-	static public void appendHexString(StringBuilder buffer, byte value) {
+	public static void appendHexString(StringBuilder buffer, byte value) {
 		assertNotNull(buffer);
 		int nibble = (value & 0xF0) >>> 4;
 		buffer.append(HEX_TABLE[nibble]);
@@ -172,7 +172,7 @@ public class HexUtil {
 	 * 
 	 * @param value The short value that will be converted to a hexidecimal String.
 	 */
-	static public String toHexString(short value) {
+	public static String toHexString(short value) {
 		StringBuilder buffer = new StringBuilder(4);
 		appendHexString(buffer, value);
 		return buffer.toString();
@@ -188,7 +188,7 @@ public class HexUtil {
 	 *               NullPointerException.
 	 * @param value  The short value that will be converted to a hexidecimal String.
 	 */
-	static public void appendHexString(StringBuilder buffer, short value) {
+	public static void appendHexString(StringBuilder buffer, short value) {
 		assertNotNull(buffer);
 		int nibble = (value & 0xF000) >>> 12;
 		buffer.append(HEX_TABLE[nibble]);
@@ -207,7 +207,7 @@ public class HexUtil {
 	 * 
 	 * @param value The int value that will be converted to a hexidecimal String.
 	 */
-	static public String toHexString(int value) {
+	public static String toHexString(int value) {
 		StringBuilder buffer = new StringBuilder(8);
 		appendHexString(buffer, value);
 		return buffer.toString();
@@ -223,7 +223,7 @@ public class HexUtil {
 	 *               NullPointerException.
 	 * @param value  The int value that will be converted to a hexidecimal String.
 	 */
-	static public void appendHexString(StringBuilder buffer, int value) {
+	public static void appendHexString(StringBuilder buffer, int value) {
 		assertNotNull(buffer);
 		int nibble = (value & 0xF0000000) >>> 28;
 		buffer.append(HEX_TABLE[nibble]);
@@ -251,7 +251,7 @@ public class HexUtil {
 	 * 
 	 * @param value The long value that will be converted to a hexidecimal String.
 	 */
-	static public String toHexString(long value) {
+	public static String toHexString(long value) {
 		StringBuilder buffer = new StringBuilder(16);
 		appendHexString(buffer, value);
 		return buffer.toString();
@@ -268,18 +268,18 @@ public class HexUtil {
 	 *               NullPointerException.
 	 * @param value  The long value that will be converted to a hexidecimal String.
 	 */
-	static public void appendHexString(StringBuilder buffer, long value) {
+	public static void appendHexString(StringBuilder buffer, long value) {
 		appendHexString(buffer, (int) ((value & 0xFFFFFFFF00000000L) >>> 32));
 		appendHexString(buffer, (int) (value & 0x00000000FFFFFFFFL));
 	}
 
-	static private void assertNotNull(StringBuilder buffer) {
+	private static void assertNotNull(StringBuilder buffer) {
 		if (buffer == null) {
 			throw new NullPointerException("The buffer cannot be null");
 		}
 	}
 
-	static private void assertOffsetLengthValid(int offset, int length, int arrayLength) {
+	private static void assertOffsetLengthValid(int offset, int length, int arrayLength) {
 		if (offset < 0) {
 			throw new IllegalArgumentException("The array offset was negative");
 		}
@@ -300,7 +300,7 @@ public class HexUtil {
 	 * @throws IllegalArgumentException Thrown if a character that does not
 	 *                                  represent a hexidecimal character is used.
 	 */
-	static public int hexCharToIntValue(char c) {
+	public static int hexCharToIntValue(char c) {
 		if (c == '0') {
 			return 0;
 		} else if (c == '1') {
