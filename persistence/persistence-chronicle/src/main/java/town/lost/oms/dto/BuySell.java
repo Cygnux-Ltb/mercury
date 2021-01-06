@@ -5,6 +5,7 @@
 package town.lost.oms.dto;
 
 public enum BuySell {
+	
     buy(+1), sell(-1);
 
     public final int direction;
@@ -12,4 +13,5 @@ public enum BuySell {
     BuySell(int direction) {
         this.direction = direction;
     }
+    
 }
