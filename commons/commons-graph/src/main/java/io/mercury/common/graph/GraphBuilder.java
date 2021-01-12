@@ -12,10 +12,27 @@ public final class GraphBuilder {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(GraphBuilder.class);
 
+	/**
+	 * 
+	 * @param <V>
+	 * @param <E>
+	 * @param vertexClass
+	 * @param edgeClass
+	 * @return
+	 */
 	public static <V, E extends Edge> Graph<V, E> directed(Class<V> vertexClass, Class<E> edgeClass) {
 		return directed(vertexClass, edgeClass, defaultOptions);
 	}
 
+	/**
+	 * 
+	 * @param <V>
+	 * @param <E>
+	 * @param vertexClass
+	 * @param edgeClass
+	 * @param options
+	 * @return
+	 */
 	public static <V, E extends Edge> Graph<V, E> directed(Class<V> vertexClass, Class<E> edgeClass,
 			GraphOptions options) {
 		GraphTypeBuilder<V, E> builder = GraphTypeBuilder.directed().vertexClass(vertexClass).edgeClass(edgeClass)
@@ -25,18 +42,48 @@ public final class GraphBuilder {
 		return builder.buildGraph();
 	}
 
+	/**
+	 * 
+	 * @param <V>
+	 * @param vertexClass
+	 * @return
+	 */
 	public static <V> Graph<V, Edge> directed(Class<V> vertexClass) {
 		return directed(vertexClass, defaultOptions);
 	}
 
+	/**
+	 * 
+	 * @param <V>
+	 * @param vertexClass
+	 * @param options
+	 * @return
+	 */
 	public static <V> Graph<V, Edge> directed(Class<V> vertexClass, GraphOptions options) {
 		return directed(vertexClass, Edge::new, options);
 	}
 
+	/**
+	 * 
+	 * @param <V>
+	 * @param <E>
+	 * @param vertexClass
+	 * @param edgeSupplier
+	 * @return
+	 */
 	public static <V, E extends Edge> Graph<V, E> directed(Class<V> vertexClass, Supplier<E> edgeSupplier) {
 		return directed(vertexClass, edgeSupplier, defaultOptions);
 	}
 
+	/**
+	 * 
+	 * @param <V>
+	 * @param <E>
+	 * @param vertexClass
+	 * @param edgeSupplier
+	 * @param options
+	 * @return
+	 */
 	public static <V, E extends Edge> Graph<V, E> directed(Class<V> vertexClass, Supplier<E> edgeSupplier,
 			GraphOptions options) {
 		GraphTypeBuilder<V, E> builder = GraphTypeBuilder.directed().vertexClass(vertexClass).edgeSupplier(edgeSupplier)
@@ -78,20 +125,21 @@ public final class GraphBuilder {
 			return weighted;
 		}
 
-		public GraphOptions setAllowingMultipleEdges(boolean allowingMultipleEdges) {
-			this.allowingMultipleEdges = allowingMultipleEdges;
+		public GraphOptions allowingMultipleEdges() {
+			this.allowingMultipleEdges = true;
 			return this;
 		}
 
-		public GraphOptions setAllowingSelfLoops(boolean allowingSelfLoops) {
-			this.allowingSelfLoops = allowingSelfLoops;
+		public GraphOptions allowingSelfLoops() {
+			this.allowingSelfLoops = true;
 			return this;
 		}
 
-		public GraphOptions setWeighted(boolean weighted) {
-			this.weighted = weighted;
+		public GraphOptions enableWeighted() {
+			this.weighted = true;
 			return this;
 		}
+
 	}
 
 }
