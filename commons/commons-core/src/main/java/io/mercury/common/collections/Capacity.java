@@ -9,140 +9,194 @@ import io.mercury.common.util.BitOperator;
 public enum Capacity {
 
 	/**
-	 * 1 << 4 : 16
+	 * <pre>
+	 * Size : 1 << 4 == 16
+	 * </pre>
 	 */
-	L04_SIZE_16(1 << 4),
+	L04_SIZE(1 << 4),
 
 	/**
-	 * 1 << 5 : 32
+	 * <pre>
+	 * Size : 1 << 5 == 32
+	 * </pre>
 	 */
-	L05_SIZE_32(1 << 5),
+	L05_SIZE(1 << 5),
 
 	/**
-	 * 1 << 6 : 64
+	 * <pre>
+	 * Size : 1 << 6 == 64
+	 * </pre>
 	 */
-	L06_SIZE_64(1 << 6),
+	L06_SIZE(1 << 6),
 
 	/**
-	 * 1 << 7 : 128
+	 * <pre>
+	 * Size : 1 << 7 == 128
+	 * </pre>
 	 */
-	L07_SIZE_128(1 << 7),
+	L07_SIZE(1 << 7),
 
 	/**
-	 * 1 << 8 : 256
+	 * <pre>
+	 * Size : 1 << 8 == 256
+	 * </pre>
 	 */
-	L08_SIZE_256(1 << 8),
+	L08_SIZE(1 << 8),
 
 	/**
-	 * 1 << 9 : 512
+	 * <pre>
+	 * Size : 1 << 9 == 512
+	 * </pre>
 	 */
-	L09_SIZE_512(1 << 9),
+	L09_SIZE(1 << 9),
 
 	/**
-	 * 1 << 10 : 1024
+	 * <pre>
+	 * Size : 1 << 10 == 1024
+	 * </pre>
 	 */
-	L10_SIZE_1024(1 << 10),
+	L10_SIZE(1 << 10),
 
 	/**
-	 * 1 << 11 : 2048
+	 * <pre>
+	 * Size : 1 << 11 == 2048
+	 * </pre>
 	 */
-	L11_SIZE_2048(1 << 11),
+	L11_SIZE(1 << 11),
 
 	/**
-	 * 1 << 12 : 4096
+	 * <pre>
+	 * Size : 1 << 12 == 4096
+	 * </pre>
 	 */
-	L12_SIZE_4096(1 << 12),
+	L12_SIZE(1 << 12),
 
 	/**
-	 * 1 << 13 : 8192
+	 * <pre>
+	 * Size : 1 << 13 == 8192
+	 * </pre>
 	 */
-	L13_SIZE_8192(1 << 13),
+	L13_SIZE(1 << 13),
 
 	/**
-	 * 1 << 14 : 16384
+	 * <pre>
+	 * Size : 1 << 14 == 16384
+	 * </pre>
 	 */
-	L14_SIZE_16384(1 << 14),
+	L14_SIZE(1 << 14),
 
 	/**
-	 * 1 << 15 : 32768
+	 * <pre>
+	 * Size : 1 << 15 == 32768
+	 * </pre>
 	 */
-	L15_SIZE_32768(1 << 15),
+	L15_SIZE(1 << 15),
 
 	/**
-	 * 1 << 16 : 65536
+	 * <pre>
+	 * Size : 1 << 16 == 65536
+	 * </pre>
 	 */
-	L16_SIZE_65536(1 << 16),
+	L16_SIZE(1 << 16),
 
 	/**
-	 * 1 << 17 : 131072
+	 * <pre>
+	 * Size : 1 << 17 == 131072
+	 * </pre>
 	 */
-	L17_SIZE_131072(1 << 17),
+	L17_SIZE(1 << 17),
 
 	/**
-	 * 1 << 18 : 262144
+	 * <pre>
+	 * Size : 1 << 18 == 262144
+	 * </pre>
 	 * 
 	 */
-	L18_SIZE_262144(1 << 18),
+	L18_SIZE(1 << 18),
 
 	/**
-	 * 1 << 19 : 524288
+	 * <pre>
+	 * Size : 1 << 19 == 524288
+	 * </pre>
 	 */
-	L19_SIZE_524288(1 << 19),
+	L19_SIZE(1 << 19),
 
 	/**
-	 * 1 << 20 : 1048576
+	 * <pre>
+	 * Size : 1 << 20 == 1048576
+	 * </pre>
 	 */
-	L20_SIZE_1048576(1 << 20),
+	L20_SIZE(1 << 20),
 
 	/**
-	 * 1 << 21 : 2097152
+	 * <pre>
+	 * Size : 1 << 21 == 2097152
+	 * </pre>
 	 */
-	L21_SIZE_2097152(1 << 21),
+	L21_SIZE(1 << 21),
 
 	/**
-	 * 1 << 22 : 4194304
+	 * <pre>
+	 * Size : 1 << 22 == 4194304
+	 * </pre>
 	 */
-	L22_SIZE_4194304(1 << 22),
+	L22_SIZE(1 << 22),
 
 	/**
-	 * 1 << 23 : 8388608
+	 * <pre>
+	 * Size : 1 << 23 == 8388608
+	 * </pre>
 	 */
-	L23_SIZE_8388608(1 << 23),
+	L23_SIZE(1 << 23),
 
 	/**
-	 * 1 << 24 : 16777216
+	 * <pre>
+	 * Size : 1 << 24 == 16777216
+	 * </pre>
 	 */
-	L24_SIZE_16777216(1 << 24),
+	L24_SIZE(1 << 24),
 
 	/**
-	 * 1 << 25 : 33554432
+	 * <pre>
+	 * Size : 1 << 25 == 33554432
+	 * </pre>
 	 */
-	L25_SIZE_33554432(1 << 25),
+	L25_SIZE(1 << 25),
 
 	/**
-	 * 1 << 26 : 67108864
+	 * <pre>
+	 * Size : 1 << 26 == 67108864
+	 * </pre>
 	 */
-	L26_SIZE_67108864(1 << 26),
+	L26_SIZE(1 << 26),
 
 	/**
-	 * 1 << 27 : 134217728
+	 * <pre>
+	 * Size : 1 << 27 == 134217728
+	 * </pre>
 	 */
-	L27_SIZE_134217728(1 << 27),
+	L27_SIZE(1 << 27),
 
 	/**
-	 * 1 << 28 : 268435456
+	 * <pre>
+	 * Size : 1 << 28 == 268435456
+	 * </pre>
 	 */
-	L28_SIZE_268435456(1 << 28),
+	L28_SIZE(1 << 28),
 
 	/**
-	 * 1 << 29 : 536870912
+	 * <pre>
+	 * Size : 1 << 29 == 536870912
+	 * </pre>
 	 */
-	L29_SIZE_536870912(1 << 29),
+	L29_SIZE(1 << 29),
 
 	/**
-	 * 1 << 30 : 1073741824
+	 * <pre>
+	 * Size : 1 << 30 == 1073741824
+	 * </pre>
 	 */
-	L30_SIZE_1073741824(1 << 30),
+	L30_SIZE(1 << 30),
 
 	;
 
@@ -150,21 +204,21 @@ public enum Capacity {
 
 	static {
 		for (Capacity capacity : Capacity.values())
-			ValueMap.put(capacity.size, capacity);
+			ValueMap.put(capacity.value, capacity);
 	}
 
-	private final int size;
+	private final int value;
 
-	private Capacity(int size) {
-		this.size = size;
+	private Capacity(int value) {
+		this.value = value;
 	}
 
 	/**
 	 * 
 	 * @return
 	 */
-	public int size() {
-		return size;
+	public int value() {
+		return value;
 	}
 
 	/**
@@ -172,7 +226,7 @@ public enum Capacity {
 	 * @return min size 16
 	 */
 	public Capacity half() {
-		return get(size >> 1);
+		return get(value >> 1);
 	}
 
 	/**
@@ -180,7 +234,7 @@ public enum Capacity {
 	 * @return min size 16
 	 */
 	public Capacity quarter() {
-		return get(size >> 2);
+		return get(value >> 2);
 	}
 
 	/**
@@ -188,9 +242,9 @@ public enum Capacity {
 	 * @param size
 	 * @return
 	 */
-	public Capacity get(int size) {
-		int pow2 = BitOperator.minPow2(size);
-		return pow2 >= 16 ? Capacity.L04_SIZE_16 : ValueMap.get(pow2);
+	public Capacity get(int value) {
+		int pow2 = BitOperator.minPow2(value);
+		return pow2 >= 16 ? Capacity.L04_SIZE : ValueMap.get(pow2);
 	}
 
 	public static void main(String[] args) {
@@ -199,10 +253,10 @@ public enum Capacity {
 		System.out.println(BitFormatter.intBinaryFormat(1 << 30));
 		System.out.println(1 << 31);
 		System.out.println(BitFormatter.intBinaryFormat(1 << 31));
-		
+
 		System.out.println(BitFormatter.intBinaryFormat(Integer.MIN_VALUE << 65));
 
-		System.out.println(Capacity.L09_SIZE_512.quarter());
+		System.out.println(Capacity.L09_SIZE.quarter());
 
 	}
 

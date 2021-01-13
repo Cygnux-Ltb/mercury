@@ -24,7 +24,7 @@ public abstract class KeeperBaseImpl<K, V> implements Keeper<K, V> {
 	protected final ConcurrentMutableMap<K, V> savedMap;
 
 	protected KeeperBaseImpl() {
-		this(Capacity.L06_SIZE_64);
+		this(Capacity.L06_SIZE);
 	}
 
 	protected KeeperBaseImpl(Capacity capacity) {

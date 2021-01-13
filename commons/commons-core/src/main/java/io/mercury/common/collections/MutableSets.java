@@ -24,44 +24,92 @@ public final class MutableSets {
 	}
 
 	/**
-	 * primitive set
+	 * primitive int set
+	 * 
+	 * @return
 	 */
 	public static MutableIntSet newIntHashSet() {
 		return new IntHashSet();
 	}
 
+	/**
+	 * primitive int set
+	 * 
+	 * @param capacity
+	 * @return
+	 */
 	public static MutableIntSet newIntHashSet(Capacity capacity) {
-		return new IntHashSet(capacity.size());
+		return new IntHashSet(capacity.value());
 	}
 
+	/**
+	 * primitive int set
+	 * 
+	 * @param values
+	 * @return
+	 */
 	public static MutableIntSet newIntHashSetWith(int... values) {
 		if (ArrayUtil.isNullOrEmpty(values))
 			return newIntHashSet();
 		return new IntHashSet(values);
 	}
 
+	/**
+	 * primitive long set
+	 * 
+	 * @return
+	 */
 	public static MutableLongSet newLongHashSet() {
 		return new LongHashSet();
 	}
 
+	/**
+	 * primitive long set
+	 * 
+	 * @param capacity
+	 * @return
+	 */
 	public static MutableLongSet newLongHashSet(Capacity capacity) {
-		return new LongHashSet(capacity.size());
+		return new LongHashSet(capacity.value());
 	}
 
+	/**
+	 * primitive long set
+	 * 
+	 * @param values
+	 * @return
+	 */
 	public static MutableLongSet newLongHashSetWith(long... values) {
 		if (ArrayUtil.isNullOrEmpty(values))
 			return newLongHashSet();
 		return new LongHashSet(values);
 	}
 
+	/**
+	 * primitive double set
+	 * 
+	 * @return
+	 */
 	public static MutableDoubleSet newDoubleHashSet() {
 		return new DoubleHashSet();
 	}
 
+	/**
+	 * primitive double set
+	 * 
+	 * @param capacity
+	 * @return
+	 */
 	public static MutableDoubleSet newDoubleHashSet(Capacity capacity) {
-		return new DoubleHashSet(capacity.size());
+		return new DoubleHashSet(capacity.value());
 	}
 
+	/**
+	 * primitive double set
+	 * 
+	 * @param values
+	 * @return
+	 */
 	public static MutableDoubleSet newDoubleHashSetWith(double... values) {
 		if (ArrayUtil.isNullOrEmpty(values))
 			return newDoubleHashSet();
@@ -69,12 +117,22 @@ public final class MutableSets {
 	}
 
 	/**
-	 * set
+	 * object set
+	 * 
+	 * @param <E>
+	 * @return
 	 */
 	public static <E> MutableSet<E> newUnifiedSet() {
 		return new UnifiedSet<>();
 	}
 
+	/**
+	 * object set
+	 * 
+	 * @param <E>
+	 * @param values
+	 * @return
+	 */
 	@SafeVarargs
 	public static <E> MutableSet<E> newUnifiedSet(E... values) {
 		UnifiedSet<E> unifiedSet = new UnifiedSet<>();
@@ -85,10 +143,24 @@ public final class MutableSets {
 		return unifiedSet;
 	}
 
+	/**
+	 * object set
+	 * 
+	 * @param <E>
+	 * @param capacity
+	 * @return
+	 */
 	public static <E> MutableSet<E> newUnifiedSet(Capacity capacity) {
-		return new UnifiedSet<>(capacity.size());
+		return new UnifiedSet<>(capacity.value());
 	}
 
+	/**
+	 * set
+	 * 
+	 * @param <E>
+	 * @param iterator
+	 * @return
+	 */
 	public static <E> MutableSet<E> newUnifiedSet(Iterator<E> iterator) {
 		MutableSet<E> mutableSet = newUnifiedSet();
 		if (iterator != null && iterator.hasNext())
@@ -97,26 +169,70 @@ public final class MutableSets {
 		return mutableSet;
 	}
 
+	/**
+	 * set
+	 * 
+	 * @param <E>
+	 * @param collection
+	 * @return
+	 */
 	public static <E> MutableSet<E> newUnifiedSet(Collection<E> collection) {
 		if (collection == null || collection.isEmpty())
 			return newUnifiedSet();
 		return new UnifiedSet<>(collection);
 	}
 
+	/**
+	 * sorted set
+	 * 
+	 * @param <E>
+	 * @return
+	 */
 	public static <E> MutableSortedSet<E> newTreeSortedSet() {
 		return new TreeSortedSet<>();
 	}
 
+	/**
+	 * sorted set
+	 * 
+	 * @param <E>
+	 * @param comparator
+	 * @return
+	 */
+	public static <E> MutableSortedSet<E> newTreeSortedSet(Comparator<E> comparator) {
+		if (comparator == null)
+			return newTreeSortedSet();
+		return new TreeSortedSet<>(comparator);
+	}
+
+	/**
+	 * sorted set
+	 * 
+	 * @param <E>
+	 * @param iterable
+	 * @return
+	 */
 	public static <E> MutableSortedSet<E> newTreeSortedSet(Iterable<E> iterable) {
 		if (Iterate.isEmpty(iterable))
 			return newTreeSortedSet();
 		return new TreeSortedSet<>(iterable);
 	}
 
-	public static <E> MutableSortedSet<E> newTreeSortedSet(Comparator<E> comparator) {
-		if (comparator == null)
-			return newTreeSortedSet();
-		return new TreeSortedSet<>(comparator);
+	/**
+	 * sorted set
+	 * 
+	 * @param <E>
+	 * @param comparator
+	 * @return
+	 */
+	public static <E> MutableSortedSet<E> newTreeSortedSet(Comparator<E> comparator, Iterable<E> iterable) {
+		if (comparator != null && iterable != null)
+			return new TreeSortedSet<>(comparator, iterable);
+		if (comparator != null)
+			return newTreeSortedSet(comparator);
+		if (iterable != null)
+			return newTreeSortedSet(iterable);
+		return newTreeSortedSet();
 	}
 
 }
