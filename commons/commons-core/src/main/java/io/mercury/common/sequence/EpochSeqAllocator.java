@@ -69,7 +69,7 @@ public final class EpochSeqAllocator {
 
 	public static void main(String[] args) {
 
-		MutableLongSet longSet = MutableSets.newLongHashSet(Capacity.L21_SIZE_2097152);
+		MutableLongSet longSet = MutableSets.newLongHashSet(Capacity.L21_SIZE);
 		long t0 = System.nanoTime();
 		for (int i = 0; i < 1000000; i++) {
 			longSet.add(EpochSeqAllocator.allocate());

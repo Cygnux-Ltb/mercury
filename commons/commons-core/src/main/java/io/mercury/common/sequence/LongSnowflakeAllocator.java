@@ -14,24 +14,21 @@ import io.mercury.common.util.HexUtil;
 
 /**
  * 
- * 
- * 
  * 通过将63位正整数long类型拆分为三部分实现唯一序列 <br>
  * 时间戳 | 所有者(可以是某个业务或者分布式系统上的机器) | 自增序列<br>
  * 
  * <pre>
- * 0b_01111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111
- * 
+ * 0b01111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111
+ *  |------------timestamp--------------|----owner id-----|----increment----|
  * <pre>
  *
  * @author yellow013
  */
-public final class IntSnowflakeAllocator {
+public final class LongSnowflakeAllocator {
 
 	/**
 	 * 
 	 * @author yellow013
-	 *
 	 */
 	public static class Bulider {
 
@@ -41,25 +38,25 @@ public final class IntSnowflakeAllocator {
 			this.baselineTime = baselineTime;
 		}
 
-		public IntSnowflakeAllocator bulid() {
-			return new IntSnowflakeAllocator(this);
+		public LongSnowflakeAllocator bulid() {
+			return new LongSnowflakeAllocator(this);
 		}
 
 	}
 
-	public static IntSnowflakeAllocator newAllocator(LocalDate baselineTime) {
+	public static LongSnowflakeAllocator newAllocator(LocalDate baselineTime) {
 		return newAllocator(LocalDateTime.of(baselineTime, LocalTime.MIN));
 	}
 
-	public static IntSnowflakeAllocator newAllocator(LocalDateTime baselineTime) {
+	public static LongSnowflakeAllocator newAllocator(LocalDateTime baselineTime) {
 		return newAllocator(ZonedDateTime.of(baselineTime, ZoneOffset.UTC));
 	}
 
-	public static IntSnowflakeAllocator newAllocator(ZonedDateTime baselineTime) {
+	public static LongSnowflakeAllocator newAllocator(ZonedDateTime baselineTime) {
 		return new Bulider(baselineTime).bulid();
 	}
 
-	private IntSnowflakeAllocator(Bulider bulider) {
+	private LongSnowflakeAllocator(Bulider bulider) {
 		this.baselineEpoch = bulider.baselineTime.toEpochSecond();
 	}
 
@@ -156,6 +153,16 @@ public final class IntSnowflakeAllocator {
 	}
 
 	public static void main(String[] args) {
+		
+		ZonedDateTime baseline = ZonedDateTime.of(LocalDate.of(2016, 1, 1), LocalTime.MIN, TimeZone.UTC);
+		
+		long baseEpochMilli = baseline.toInstant().toEpochMilli();
+		System.out.println(baseEpochMilli);
+		System.out.println(System.currentTimeMillis() - baseEpochMilli);
+		System.out.println(Short.MAX_VALUE);
+		System.out.println(Integer.MAX_VALUE);
+		System.out.println(0b01111111_11111111_11111111_11111111);
+		System.out.println(0b11111111_11111111);
 
 		long l0 = 0b00000000_00000000_00000000_00000000_11111111_11111111_11111111_11111111L;
 		System.out.println(longBinaryFormat(l0));
@@ -164,7 +171,6 @@ public final class IntSnowflakeAllocator {
 		System.out.println(HexUtil.toHexString(-1L));
 		System.out.println(l + " -> " + longBinaryFormat(l));
 
-		ZonedDateTime baseline = ZonedDateTime.of(LocalDate.of(2020, 1, 1), LocalTime.MIN, TimeZone.UTC);
 
 		System.out.println(Byte.SIZE);
 

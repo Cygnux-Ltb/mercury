@@ -23,7 +23,7 @@ import io.mercury.common.datetime.TimeZone;
  *
  * @author yellow013
  */
-public final class LongSnowflakeAllocator {
+public final class IntSnowflakeAllocator {
 
 	/**
 	 * 
@@ -38,17 +38,17 @@ public final class LongSnowflakeAllocator {
 			this.baselineEpoch = baselineEpoch;
 		}
 
-		public LongSnowflakeAllocator bulid() {
-			return new LongSnowflakeAllocator(this);
+		public IntSnowflakeAllocator bulid() {
+			return new IntSnowflakeAllocator(this);
 		}
 
 	}
 
-	public static LongSnowflakeAllocator newAllocator(LocalDateTime baselineEpoch) {
+	public static IntSnowflakeAllocator newAllocator(LocalDateTime baselineEpoch) {
 		return new Bulider(baselineEpoch).bulid();
 	}
 
-	private LongSnowflakeAllocator(Bulider bulider) {
+	private IntSnowflakeAllocator(Bulider bulider) {
 		this.baselineEpoch = ZonedDateTime.of(bulider.baselineEpoch, ZoneOffset.UTC).toEpochSecond();
 	}
 
