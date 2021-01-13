@@ -3,6 +3,7 @@ package io.mercury.common.sequence;
 import static io.mercury.common.util.BitFormatter.longBinaryFormat;
 import static java.lang.System.currentTimeMillis;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -10,23 +11,19 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
 import io.mercury.common.datetime.TimeZone;
-import io.mercury.common.util.HexUtil;
 
 /**
  * 
  * 
  * 
- * 通过将63位正整数long类型拆分为三部分实现唯一序列 <br>
+ * 通过将31位正整数int类型拆分为三部分实现唯一序列 <br>
  * 时间戳 | 所有者(可以是某个业务或者分布式系统上的机器) | 自增序列<br>
- * 
- * <pre>
- * 0b_01111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111
- * 
- * <pre>
+ * 0b_01111111 11111111 11111111 11111111<br>
+ * 可用的部分只有31位
  *
  * @author yellow013
  */
-public final class IntSnowflakeAllocator {
+public final class LongSnowflakeAllocator {
 
 	/**
 	 * 
@@ -35,32 +32,24 @@ public final class IntSnowflakeAllocator {
 	 */
 	public static class Bulider {
 
-		private final ZonedDateTime baselineTime;
+		private final LocalDateTime baselineEpoch;
 
-		private Bulider(ZonedDateTime baselineTime) {
-			this.baselineTime = baselineTime;
+		private Bulider(LocalDateTime baselineEpoch) {
+			this.baselineEpoch = baselineEpoch;
 		}
 
-		public IntSnowflakeAllocator bulid() {
-			return new IntSnowflakeAllocator(this);
+		public LongSnowflakeAllocator bulid() {
+			return new LongSnowflakeAllocator(this);
 		}
 
 	}
 
-	public static IntSnowflakeAllocator newAllocator(LocalDate baselineTime) {
-		return newAllocator(LocalDateTime.of(baselineTime, LocalTime.MIN));
+	public static LongSnowflakeAllocator newAllocator(LocalDateTime baselineEpoch) {
+		return new Bulider(baselineEpoch).bulid();
 	}
 
-	public static IntSnowflakeAllocator newAllocator(LocalDateTime baselineTime) {
-		return newAllocator(ZonedDateTime.of(baselineTime, ZoneOffset.UTC));
-	}
-
-	public static IntSnowflakeAllocator newAllocator(ZonedDateTime baselineTime) {
-		return new Bulider(baselineTime).bulid();
-	}
-
-	private IntSnowflakeAllocator(Bulider bulider) {
-		this.baselineEpoch = bulider.baselineTime.toEpochSecond();
+	private LongSnowflakeAllocator(Bulider bulider) {
+		this.baselineEpoch = ZonedDateTime.of(bulider.baselineEpoch, ZoneOffset.UTC).toEpochSecond();
 	}
 
 	// 开始时间截 (使用自己业务系统指定的时间)
@@ -75,7 +64,7 @@ public final class IntSnowflakeAllocator {
 	// 机器ID所占的位数
 	private final long workerIdBits = 10L;
 
-	// 支持的最大机器ID, 结果是31 (这个移位算法可以很快的计算出几位二进制数所能表示的最大十进制数)
+	// 支持的最大机器ID，结果是31 (这个移位算法可以很快的计算出几位二进制数所能表示的最大十进制数)
 	@SuppressWarnings("unused")
 	private final long maxWorkerId = -1L ^ (-1L << workerIdBits);
 
@@ -88,7 +77,7 @@ public final class IntSnowflakeAllocator {
 	// 时间截向左移22位(10+12)
 	private final long timestampLeftShift = sequenceBits + workerIdBits;
 
-	// 生成序列的掩码, 这里为4095 (0xfff == 4095 == 0b111111111111)
+	// 生成序列的掩码，这里为4095 (0xfff == 4095 == 0b111111111111)
 	private final long sequenceMask = -1L ^ (-1L << sequenceBits);
 
 	// 工作机器ID(0~1024)
@@ -107,23 +96,23 @@ public final class IntSnowflakeAllocator {
 	 * @return SnowflakeId
 	 */
 	public synchronized long nextSeq() throws ClockBackwardException {
-		long timestamp = currentTimeMillis();
+		long timestamp = System.currentTimeMillis();
 
-		// 如果当前时间小于上一次ID生成的时间戳, 说明系统时钟回退过这个时候应当抛出异常
+		// 如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过这个时候应当抛出异常
 		if (timestamp < lastTimestamp) {
 			throw new ClockBackwardException(lastTimestamp - timestamp);
 		}
 
-		// 如果是同一时间生成的, 则进行毫秒内序列
+		// 如果是同一时间生成的，则进行毫秒内序列
 		if (lastTimestamp == timestamp) {
 			sequence = (sequence + 1) & sequenceMask;
 			// 毫秒内序列溢出
 			if (sequence == 0) {
-				// 阻塞到下一个毫秒, 获得新的时间戳
+				// 阻塞到下一个毫秒,获得新的时间戳
 				timestamp = tilNextMillis(lastTimestamp);
 			}
 		}
-		// 时间戳改变, 毫秒内序列重置
+		// 时间戳改变，毫秒内序列重置
 		else {
 			sequence = 0L;
 		}
@@ -132,39 +121,36 @@ public final class IntSnowflakeAllocator {
 		lastTimestamp = timestamp;
 
 		// 移位并通过或运算拼到一起组成64位的ID
-		return
-		// 时间戳左移至高位
-		((timestamp - twepoch) << timestampLeftShift)
-				// 所有者ID左移至中间位
-				| (workerId << workerIdShift)
-				// 自增位
-				| sequence;
+		return ((timestamp - twepoch) << timestampLeftShift) // 时间戳左移至高位
+				| (workerId << workerIdShift) // 所有者ID左移至中间位
+				| sequence; // 自增位
 	}
 
 	/**
-	 * 阻塞到下一个毫秒, 直到获得新的时间戳
+	 * 阻塞到下一个毫秒，直到获得新的时间戳
 	 * 
 	 * @param lastTimestamp 上次生成ID的时间截
 	 * @return 当前时间戳
 	 */
-	protected long tilNextMillis(final long lastTimestamp) {
-		long timestamp;
-		do {
+	protected long tilNextMillis(long lastTimestamp) {
+		long timestamp = currentTimeMillis();
+		while (timestamp <= lastTimestamp) {
 			timestamp = currentTimeMillis();
-		} while (timestamp <= lastTimestamp);
+		}
 		return timestamp;
 	}
 
+
 	public static void main(String[] args) {
 
-		long l0 = 0b00000000_00000000_00000000_00000000_11111111_11111111_11111111_11111111L;
-		System.out.println(longBinaryFormat(l0));
-
-		long l = -1 >>> (Long.SIZE - (Byte.SIZE * 3 + 2));
-		System.out.println(HexUtil.toHexString(-1L));
-		System.out.println(l + " -> " + longBinaryFormat(l));
+		long l = 0b00000000_00000000_00000000_00000000_00000000_00000000_11111111_11111111L;
+		long l0 = 0b00000000_00000000_00000000_01111111_11111111_11111111_11111111_11111111L;
+		long l1 = 0b00000000_00000000_00000000_00000000_00000000_00000000_00000000_11111111L;
 
 		ZonedDateTime baseline = ZonedDateTime.of(LocalDate.of(2020, 1, 1), LocalTime.MIN, TimeZone.UTC);
+
+		long years = Duration.between(LocalDateTime.of(LocalDate.of(2020, 1, 1), LocalTime.MIN),
+				LocalDateTime.of(LocalDate.of(2021, 1, 1), LocalTime.MIN)).toMillis();
 
 		System.out.println(Byte.SIZE);
 
@@ -173,10 +159,9 @@ public final class IntSnowflakeAllocator {
 		System.out.println(l);
 		System.out.println(longBinaryFormat(l0));
 		System.out.println(l0);
-		System.out.println(longBinaryFormat(Long.MAX_VALUE));
-
-		System.out.println(3600 * 24 * 365L);
-		System.out.println(l0 / (1000 * 3600 * 24 * 365L));
+		System.out.println(l1);
+		System.out.println(years);
+		System.out.println(l0 / years);
 
 	}
 
