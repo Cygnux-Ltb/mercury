@@ -27,7 +27,7 @@ public abstract class GroupBaseImpl<K, V> implements Group<K, V> {
 	 */
 	private static final long serialVersionUID = 8384604279192455942L;
 
-	protected final ConcurrentMutableMap<K, V> savedMap = newConcurrentHashMap(Capacity.L04_SIZE_16);
+	protected final ConcurrentMutableMap<K, V> savedMap = newConcurrentHashMap(Capacity.L04_SIZE);
 
 	@Override
 	public V acquireMember(K k) {
