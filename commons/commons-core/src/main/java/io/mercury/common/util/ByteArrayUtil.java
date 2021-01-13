@@ -1,11 +1,7 @@
-package io.mercury.common.util;
-
 /*
- * #%L
- * ch-commons-util
- * %%
+ * 
  * Copyright (C) 2012 Cloudhopper by Twitter
- * %%
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,16 +13,15 @@ package io.mercury.common.util;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * #L%
+ * 
  */
+package io.mercury.common.util;
 
 /**
+ * 
  * Utility class for working with byte arrays such as converting between byte
  * arrays and numbers.
  * 
- * @author joelauer (twitter: @jjlauer or
- *         <a href="http://twitter.com/jjlauer" target=
- *         window>http://twitter.com/jjlauer</a>)
  */
 public final class ByteArrayUtil {
 
@@ -110,8 +105,8 @@ public final class ByteArrayUtil {
 	 */
 	public static byte[] toByteArray(short value) {
 		byte[] buf = new byte[2];
-		buf[1] = (byte) (value & 0xFF);
 		buf[0] = (byte) ((value >>> 8) & 0xFF);
+		buf[1] = (byte) (value & 0xFF);
 		return buf;
 	}
 
@@ -122,10 +117,10 @@ public final class ByteArrayUtil {
 	 */
 	public static byte[] toByteArray(int value) {
 		byte[] buf = new byte[4];
-		buf[3] = (byte) (value & 0xFF);
-		buf[2] = (byte) ((value >>> 8) & 0xFF);
-		buf[1] = (byte) ((value >>> 16) & 0xFF);
 		buf[0] = (byte) ((value >>> 24) & 0xFF);
+		buf[1] = (byte) ((value >>> 16) & 0xFF);
+		buf[2] = (byte) ((value >>> 8) & 0xFF);
+		buf[3] = (byte) (value & 0xFF);
 		return buf;
 	}
 
@@ -136,14 +131,14 @@ public final class ByteArrayUtil {
 	 */
 	public static byte[] toByteArray(long value) {
 		byte[] buf = new byte[8];
-		buf[7] = (byte) (value & 0xFF);
-		buf[6] = (byte) ((value >>> 8) & 0xFF);
-		buf[5] = (byte) ((value >>> 16) & 0xFF);
-		buf[4] = (byte) ((value >>> 24) & 0xFF);
-		buf[3] = (byte) ((value >>> 32) & 0xFF);
-		buf[2] = (byte) ((value >>> 40) & 0xFF);
-		buf[1] = (byte) ((value >>> 48) & 0xFF);
 		buf[0] = (byte) ((value >>> 56) & 0xFF);
+		buf[1] = (byte) ((value >>> 48) & 0xFF);
+		buf[2] = (byte) ((value >>> 40) & 0xFF);
+		buf[3] = (byte) ((value >>> 32) & 0xFF);
+		buf[4] = (byte) ((value >>> 24) & 0xFF);
+		buf[5] = (byte) ((value >>> 16) & 0xFF);
+		buf[6] = (byte) ((value >>> 8) & 0xFF);
+		buf[7] = (byte) (value & 0xFF);
 		return buf;
 	}
 

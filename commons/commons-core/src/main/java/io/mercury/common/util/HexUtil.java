@@ -1,11 +1,6 @@
-package io.mercury.common.util;
-
 /*
- * #%L
- * ch-commons-util
- * %%
  * Copyright (C) 2012 Cloudhopper by Twitter
- * %%
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,8 +12,10 @@ package io.mercury.common.util;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * #L%
+ * 
  */
+
+package io.mercury.common.util;
 
 /**
  * Utility class for encoding or decoding objects to a hexidecimal format.
@@ -46,9 +43,8 @@ public class HexUtil {
 	 *               noop)
 	 */
 	public static String toHexString(byte[] bytes) {
-		if (bytes == null) {
+		if (bytes == null)
 			return "";
-		}
 		return toHexString(bytes, 0, bytes.length);
 	}
 
@@ -225,21 +221,21 @@ public class HexUtil {
 	 */
 	public static void appendHexString(StringBuilder buffer, int value) {
 		assertNotNull(buffer);
-		int nibble = (value & 0xF0000000) >>> 28;
+		int nibble = (value & 0xF000_0000) >>> 28;
 		buffer.append(HEX_TABLE[nibble]);
-		nibble = (value & 0x0F000000) >>> 24;
+		nibble = (value & 0x0F00_0000) >>> 24;
 		buffer.append(HEX_TABLE[nibble]);
-		nibble = (value & 0x00F00000) >>> 20;
+		nibble = (value & 0x00F0_0000) >>> 20;
 		buffer.append(HEX_TABLE[nibble]);
-		nibble = (value & 0x000F0000) >>> 16;
+		nibble = (value & 0x000F_0000) >>> 16;
 		buffer.append(HEX_TABLE[nibble]);
-		nibble = (value & 0x0000F000) >>> 12;
+		nibble = (value & 0x0000_F000) >>> 12;
 		buffer.append(HEX_TABLE[nibble]);
-		nibble = (value & 0x00000F00) >>> 8;
+		nibble = (value & 0x0000_0F00) >>> 8;
 		buffer.append(HEX_TABLE[nibble]);
-		nibble = (value & 0x000000F0) >>> 4;
+		nibble = (value & 0x0000_00F0) >>> 4;
 		buffer.append(HEX_TABLE[nibble]);
-		nibble = (value & 0x0000000F);
+		nibble = (value & 0x0000_000F);
 		buffer.append(HEX_TABLE[nibble]);
 	}
 
@@ -269,8 +265,8 @@ public class HexUtil {
 	 * @param value  The long value that will be converted to a hexidecimal String.
 	 */
 	public static void appendHexString(StringBuilder buffer, long value) {
-		appendHexString(buffer, (int) ((value & 0xFFFFFFFF00000000L) >>> 32));
-		appendHexString(buffer, (int) (value & 0x00000000FFFFFFFFL));
+		appendHexString(buffer, (int) ((value & 0xFFFF_FFFF_0000_0000L) >>> 32));
+		appendHexString(buffer, (int) (value & 0x0000_0000_FFFF_FFFFL));
 	}
 
 	private static void assertNotNull(StringBuilder buffer) {
@@ -300,40 +296,47 @@ public class HexUtil {
 	 * @throws IllegalArgumentException Thrown if a character that does not
 	 *                                  represent a hexidecimal character is used.
 	 */
-	public static int hexCharToIntValue(char c) {
-		if (c == '0') {
+	public static int hexCharToInt(char c) {
+		switch (c) {
+		case '0':
 			return 0;
-		} else if (c == '1') {
+		case '1':
 			return 1;
-		} else if (c == '2') {
+		case '2':
 			return 2;
-		} else if (c == '3') {
+		case '3':
 			return 3;
-		} else if (c == '4') {
+		case '4':
 			return 4;
-		} else if (c == '5') {
+		case '5':
 			return 5;
-		} else if (c == '6') {
+		case '6':
 			return 6;
-		} else if (c == '7') {
+		case '7':
 			return 7;
-		} else if (c == '8') {
+		case '8':
 			return 8;
-		} else if (c == '9') {
+		case '9':
 			return 9;
-		} else if (c == 'A' || c == 'a') {
+		case 'A':
+		case 'a':
 			return 10;
-		} else if (c == 'B' || c == 'b') {
+		case 'B':
+		case 'b':
 			return 11;
-		} else if (c == 'C' || c == 'c') {
+		case 'C':
+		case 'c':
 			return 12;
-		} else if (c == 'D' || c == 'd') {
+		case 'D':
+		case 'd':
 			return 13;
-		} else if (c == 'E' || c == 'e') {
+		case 'E':
+		case 'e':
 			return 14;
-		} else if (c == 'F' || c == 'f') {
+		case 'F':
+		case 'f':
 			return 15;
-		} else {
+		default:
 			throw new IllegalArgumentException("The character [" + c + "] does not represent a valid hex digit");
 		}
 	}
@@ -394,8 +397,8 @@ public class HexUtil {
 		int end = offset + length;
 
 		for (int i = offset; i < end; i += 2) {
-			int highNibble = hexCharToIntValue(hexString.charAt(i));
-			int lowNibble = hexCharToIntValue(hexString.charAt(i + 1));
+			int highNibble = hexCharToInt(hexString.charAt(i));
+			int lowNibble = hexCharToInt(hexString.charAt(i + 1));
 			bytes[j++] = (byte) (((highNibble << 4) & 0xF0) | (lowNibble & 0x0F));
 		}
 		return bytes;
