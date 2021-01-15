@@ -297,7 +297,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 		 * @return
 		 */
 		public Builder<K, V> entries(Capacity capacity) {
-			this.entries = capacity.size();
+			this.entries = capacity.value();
 			return this;
 		}
 

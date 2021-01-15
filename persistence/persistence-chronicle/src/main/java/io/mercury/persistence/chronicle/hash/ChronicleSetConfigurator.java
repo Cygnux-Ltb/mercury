@@ -107,7 +107,7 @@ public final class ChronicleSetConfigurator<K> {
 		private boolean recover = false;
 		private boolean persistent = true;
 
-		private long entries = Capacity.L16_SIZE_65536.size();
+		private long entries = Capacity.L16_SIZE.value();
 		private int actualChunkSize;
 
 		private Builder(@Nonnull Class<K> keyClass, @Nonnull String rootPath, @Nonnull String folder) {
@@ -142,7 +142,7 @@ public final class ChronicleSetConfigurator<K> {
 		}
 
 		public Builder<K> entriesOfPow2(Capacity capacity) {
-			this.entries = capacity.size();
+			this.entries = capacity.value();
 			return this;
 		}
 

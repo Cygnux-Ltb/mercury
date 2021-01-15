@@ -20,7 +20,7 @@ public class ChronicleMapTest {
 
 		ChronicleMapConfigurator<String, byte[]> options = ChronicleMapConfigurator
 				.newBuilder(String.class, byte[].class, SysProperties.USER_HOME, "test")
-				.entries(Capacity.L16_SIZE_65536).averageKey(new String(new byte[32])).averageValue(new byte[128])
+				.entries(Capacity.L16_SIZE).averageKey(new String(new byte[32])).averageValue(new byte[128])
 				.build();
 
 		try (ChronicleMapKeeperOfDate<String, byte[]> mapKeeper = new ChronicleMapKeeperOfDate<>(options)) {
