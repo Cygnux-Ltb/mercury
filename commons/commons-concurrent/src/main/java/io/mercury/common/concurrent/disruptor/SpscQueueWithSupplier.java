@@ -35,7 +35,7 @@ public class SpscQueueWithSupplier<T> extends ScQueue<T> {
 				// 实现EventFactory的Lambda
 				() -> supplier.get(),
 				// 队列容量
-				capacity.size(),
+				capacity.value(),
 				// 实现ThreadFactory的Lambda
 				(Runnable runnable) -> Threads
 						.newMaxPriorityThread("DisruptorQueue-" + super.queueName + "-WorkingThread", runnable),
@@ -109,7 +109,7 @@ public class SpscQueueWithSupplier<T> extends ScQueue<T> {
 
 	public static void main(String[] args) {
 
-		SpscQueueWithSupplier<Integer> queue = new SpscQueueWithSupplier<>(Capacity.L10_SIZE_1024, true,
+		SpscQueueWithSupplier<Integer> queue = new SpscQueueWithSupplier<>(Capacity.L10_SIZE, true,
 				WaitStrategyOption.BusySpin, () -> Integer.valueOf(0), (integer) -> System.out.println(integer));
 
 		Threads.startNewThread(() -> {

@@ -17,7 +17,7 @@ public class ConcurrentQueue<E> implements McQueue<E> {
 	private final String queueName;
 
 	public ConcurrentQueue(String queueName, Capacity capacity, WaitingStrategy strategy) {
-		this.queue = new MpmcArrayQueue<>(Math.max(capacity.size(), 64));
+		this.queue = new MpmcArrayQueue<>(Math.max(capacity.value(), 64));
 		this.queueName = StringUtil.isNullOrEmpty(queueName) ? "ConcurrentQueue-" + Threads.currentThreadName()
 				: queueName;
 		this.strategy = strategy == null ? WaitingStrategy.SleepWaiting : strategy;

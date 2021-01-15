@@ -19,7 +19,7 @@ import io.mercury.common.collections.MutableSets;
 @ThreadSafe
 public final class DeduplicationCounter<T extends Comparable<T>> {
 
-	private MutableSet<T> deRepeatSet = MutableSets.newUnifiedSet(Capacity.L06_SIZE_64);
+	private MutableSet<T> deRepeatSet = MutableSets.newUnifiedSet(Capacity.L06_SIZE);
 
 	private volatile int count;
 	private final int initCount;

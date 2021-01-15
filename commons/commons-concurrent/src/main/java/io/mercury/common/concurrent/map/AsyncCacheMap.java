@@ -23,10 +23,10 @@ import io.mercury.common.util.StringUtil;
 @ThreadSafe
 public final class AsyncCacheMap<K, V> {
 
-	private final MutableMap<K, V> mutableMap = MutableMaps.newUnifiedMap(Capacity.L08_SIZE_256);
+	private final MutableMap<K, V> mutableMap = MutableMaps.newUnifiedMap(Capacity.L08_SIZE);
 
 	private final MutableLongObjectMap<Consumer<V>> consumerMap = MutableMaps
-			.newLongObjectHashMap(Capacity.L07_SIZE_128);
+			.newLongObjectHashMap(Capacity.L07_SIZE);
 
 	private final String cacheName;
 

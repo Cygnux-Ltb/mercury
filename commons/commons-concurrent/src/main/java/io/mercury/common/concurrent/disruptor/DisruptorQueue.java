@@ -51,7 +51,7 @@ public class DisruptorQueue<T> extends ScQueue<T> {
 				// 实现EventFactory<LoadContainer<>>的Lambda
 				LoadContainer::new,
 				// 队列容量
-				bufferSize.size(),
+				bufferSize.value(),
 				// 实现ThreadFactory的Lambda
 				(Runnable runnable) -> Threads
 						.newMaxPriorityThread("DisruptorQueue-" + super.queueName + "-WorkingThread", runnable),
@@ -119,7 +119,7 @@ public class DisruptorQueue<T> extends ScQueue<T> {
 
 	public static void main(String[] args) {
 
-		DisruptorQueue<Integer> queue = new DisruptorQueue<>("Test-Queue", Capacity.L06_SIZE_64, true,
+		DisruptorQueue<Integer> queue = new DisruptorQueue<>("Test-Queue", Capacity.L06_SIZE, true,
 				(integer) -> System.out.println(integer));
 
 		Threads.startNewThread(() -> {
