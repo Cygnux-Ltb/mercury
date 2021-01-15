@@ -120,8 +120,9 @@ public final class SocketTransceiver extends BaseTransceiver<String> {
 	private void processSendQueue(String msg) {
 		try {
 			if (isRun.get()) {
-				if (writer == null)
+				if (writer == null) {
 					this.writer = new OutputStreamWriter(socket.getOutputStream());
+				}
 				writer.write(msg);
 				writer.flush();
 			}
@@ -133,7 +134,7 @@ public final class SocketTransceiver extends BaseTransceiver<String> {
 
 	@Override
 	protected ScQueue<String> initSendQueue() {
-		return new SpscQueue<>("", Capacity.L07_SIZE_128, true, (msg) -> {
+		return new SpscQueue<>("socket-queue", Capacity.L07_SIZE, true, (msg) -> {
 			processSendQueue(msg);
 		});
 	}

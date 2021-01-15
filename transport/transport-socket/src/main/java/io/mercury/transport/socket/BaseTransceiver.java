@@ -6,9 +6,9 @@ import io.mercury.transport.core.api.Sender;
 
 public abstract class BaseTransceiver<T> implements Transceiver<T> {
 
-	private Sender<T> sender;
+	private final Sender<T> sender;
 
-	private ScQueue<T> queue;
+	private final ScQueue<T> queue;
 
 	protected BaseTransceiver() {
 		this.queue = initSendQueue();

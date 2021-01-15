@@ -4,6 +4,7 @@
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>io.mercury</groupId>
 		<artifactId>transport</artifactId>
@@ -24,7 +25,7 @@
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-network</artifactId>
-			<version>2.20.105</version>
+			<version>2.20.108</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -48,13 +49,13 @@
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-threads</artifactId>
-			<version>2.20.43</version>
+			<version>2.20.111</version>
 		</dependency>
 
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-bytes</artifactId>
-			<version>2.20.43</version>
+			<version>2.20.111</version>
 		</dependency>
 
 		<dependency>
@@ -109,7 +110,7 @@
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-all</artifactId>
-			<version>4.1.54.Final</version>
+			<version>${netty.version}</version>
 			<scope>test</scope>
 		</dependency>
 
