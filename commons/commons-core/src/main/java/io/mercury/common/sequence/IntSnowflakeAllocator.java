@@ -7,6 +7,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
@@ -18,8 +19,11 @@ import io.mercury.common.datetime.TimeZone;
  * 
  * 通过将31位正整数int类型拆分为三部分实现唯一序列 <br>
  * 时间戳 | 所有者(可以是某个业务或者分布式系统上的机器) | 自增序列<br>
- * 0b_01111111 11111111 11111111 11111111<br>
- * 可用的部分只有31位
+ * 
+ * <pre>
+ * 0b01111111_11111111_11111111_11111111
+ * 0b|---timestamp----|-owner--|increment|
+ * </pre>
  *
  * @author yellow013
  */
@@ -32,10 +36,10 @@ public final class IntSnowflakeAllocator {
 	 */
 	public static class Bulider {
 
-		private final LocalDateTime baselineEpoch;
+		private final ZonedDateTime baseline;
 
-		private Bulider(LocalDateTime baselineEpoch) {
-			this.baselineEpoch = baselineEpoch;
+		private Bulider(ZonedDateTime baseline) {
+			this.baseline = baseline;
 		}
 
 		public IntSnowflakeAllocator bulid() {
@@ -44,12 +48,31 @@ public final class IntSnowflakeAllocator {
 
 	}
 
-	public static IntSnowflakeAllocator newAllocator(LocalDateTime baselineEpoch) {
-		return new Bulider(baselineEpoch).bulid();
+	/**
+	 * 
+	 * @param baseline
+	 * @return
+	 */
+	public static IntSnowflakeAllocator newAllocator(LocalDate baseline) {
+		return new Bulider(ZonedDateTime.of(baseline, LocalTime.MIN, ZoneOffset.UTC)).bulid();
 	}
 
+	/**
+	 * 
+	 * @param baseline
+	 * @param zoneId
+	 * @return
+	 */
+	public static IntSnowflakeAllocator newAllocator(LocalDate baseline, ZoneId zoneId) {
+		return new Bulider(ZonedDateTime.of(baseline, LocalTime.MIN, zoneId)).bulid();
+	}
+
+	/**
+	 * 
+	 * @param bulider
+	 */
 	private IntSnowflakeAllocator(Bulider bulider) {
-		this.baselineEpoch = ZonedDateTime.of(bulider.baselineEpoch, ZoneOffset.UTC).toEpochSecond();
+		this.baselineEpoch = bulider.baseline.toEpochSecond();
 	}
 
 	// 开始时间截 (使用自己业务系统指定的时间)
@@ -139,7 +162,6 @@ public final class IntSnowflakeAllocator {
 		}
 		return timestamp;
 	}
-
 
 	public static void main(String[] args) {
 

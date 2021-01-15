@@ -9,9 +9,6 @@ import java.util.Arrays;
  * Primarily used to aid testing, the implementation is naive and not
  * performant. <b>NOT RECOMMENDED FOR USE IN PRODUCTION</b>.
  * 
- * @author John Woolf (twitter: @jwoolf330 or
- *         <a href="http://twitter.com/jwoolf330" target=
- *         window>http://twitter.com/jwoolf330</a>)
  *
  */
 public final class HexString {

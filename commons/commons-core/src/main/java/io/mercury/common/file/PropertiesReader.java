@@ -8,6 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.collections.api.set.MutableSet;
 import org.slf4j.Logger;
@@ -31,6 +33,7 @@ public final class PropertiesReader {
 	static {
 		MutableSet<File> allPropFile = FileScanner.depthFirst(
 				new File(PropertiesReader.class.getResource("/").getPath()),
+				
 				file -> file.getName().endsWith(FILE_SUFFIX));
 		try {
 			for (File propFile : allPropFile) {

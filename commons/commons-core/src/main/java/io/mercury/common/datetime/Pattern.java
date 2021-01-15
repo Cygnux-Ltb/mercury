@@ -17,6 +17,7 @@ import static io.mercury.common.datetime.Pattern.TimePattern.HH_MM_SS_SSSSSS;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.Temporal;
 
 /**
  * 
@@ -101,7 +102,7 @@ public abstract class Pattern {
 
 	/**
 	 * 
-	 * @return the new java.time.format.DateTimeFormatter
+	 * @return the new <b> [java.time.format.DateTimeFormatter] </b> object
 	 */
 	public DateTimeFormatter newDateTimeFormatter() {
 		return DateTimeFormatter.ofPattern(pattern);
@@ -109,10 +110,19 @@ public abstract class Pattern {
 
 	/**
 	 * 
-	 * @return the new java.text.SimpleDateFormat.SimpleDateFormat
+	 * @return the new <b> [java.text.SimpleDateFormat.SimpleDateFormat] </b> object
 	 */
 	public DateFormat newSimpleDateFormat() {
 		return new SimpleDateFormat(pattern);
+	}
+
+	/**
+	 * 
+	 * @param temporal
+	 * @return
+	 */
+	public String format(Temporal temporal) {
+		return formatter.format(temporal);
 	}
 
 	/**

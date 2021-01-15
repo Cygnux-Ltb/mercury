@@ -23,12 +23,29 @@ import io.mercury.common.util.BitFormatter;
  * 
  * Use Epoch Time ID
  * 
+ * <pre>
+ * 0b|-----------------epoch milliseconds ----------------|---increment----|
+ * 0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111
+ * 
+ * </pre>
+ * 
  * @author yellow013
  *
  */
 @ThreadSafe
 public final class EpochSeqAllocator {
 
+	/**
+	 * 
+	 * 
+	 * <pre>
+	 * 0b|-----------------epoch milliseconds ----------------|---increment----|
+	 * 0b01111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111
+	 * 
+	 * </pre>
+	 * 
+	 * @return
+	 */
 	public static final long allocate() {
 		long seq = allocate0();
 		while (seq <= 0) {
@@ -45,26 +62,34 @@ public final class EpochSeqAllocator {
 	private static volatile long incr;
 
 	// 自增位最大限制
-	private static final long incrLimit = 0xffff;
+	private static final long IncrLimit = 0xFFFF;
+
+	// 自增位使用bit位数
+	private static final int IncrBits = 16;
 
 	/**
 	 * 
 	 * @return
 	 */
 	private synchronized static final long allocate0() {
-		long currentEpochMillis = currentTimeMillis();
-		if (lastEpochMillis != currentEpochMillis) {
-			lastEpochMillis = currentEpochMillis;
+		long newEpochMillis = currentTimeMillis();
+		if (lastEpochMillis != newEpochMillis) {
+			lastEpochMillis = newEpochMillis;
 			incr = 0;
 		}
-		if (++incr > incrLimit) {
+		if (++incr > IncrLimit) {
 			return -1L;
 		}
-		return (lastEpochMillis << Short.SIZE) | incr;
+		return (lastEpochMillis << IncrBits) | incr;
 	}
 
-	public static final long parseEpoch(long seq) {
-		return seq >>> Short.SIZE;
+	/**
+	 * 
+	 * @param seq
+	 * @return
+	 */
+	public static final long parseEpochMillis(long seq) {
+		return seq >>> IncrBits;
 	}
 
 	public static void main(String[] args) {
@@ -110,9 +135,11 @@ public final class EpochSeqAllocator {
 		System.out.println(BitFormatter.intBinary(Short.MAX_VALUE));
 
 		long allocate = EpochSeqAllocator.allocate();
+		System.out.println("--------------------");
 		System.out.println(allocate);
 		System.out.println(BitFormatter.longBinaryFormat(allocate));
-		System.out.println(BitFormatter.longBinaryFormat(EpochSeqAllocator.parseEpoch(allocate)));
+		System.out.println(EpochSeqAllocator.parseEpochMillis(allocate));
+		System.out.println(BitFormatter.longBinaryFormat(EpochSeqAllocator.parseEpochMillis(allocate)));
 
 	}
 

@@ -1,4 +1,4 @@
-package io.mercury.common.serialization.specific;
+package io.mercury.common.serialization.spec;
 
 import java.nio.ByteBuffer;
 

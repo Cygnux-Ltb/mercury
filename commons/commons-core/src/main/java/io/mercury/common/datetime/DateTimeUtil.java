@@ -435,7 +435,7 @@ public final class DateTimeUtil {
 	 * @param date
 	 * @return
 	 */
-	public final static LocalDateTime dateToLocalDateTime(@Nonnull Date date) {
+	public final static LocalDateTime toLocalDateTime(@Nonnull Date date) {
 		return LocalDateTime.ofInstant(date.toInstant(), TimeZone.SYS_DEFAULT);
 	}
 
@@ -445,8 +445,17 @@ public final class DateTimeUtil {
 	 * @param zoneId
 	 * @return
 	 */
-	public final static LocalDateTime dateToLocalDateTime(@Nonnull Date date, @Nonnull ZoneId zoneId) {
+	public final static LocalDateTime toLocalDateTime(@Nonnull Date date, @Nonnull ZoneId zoneId) {
 		return LocalDateTime.ofInstant(date.toInstant(), zoneId);
+	}
+
+	/**
+	 * 
+	 * @param pattern
+	 * @return
+	 */
+	public final static String fmtDate(@Nonnull DatePattern pattern) {
+		return pattern.getFormatter().format(LocalDate.now());
 	}
 
 	/**
@@ -455,7 +464,7 @@ public final class DateTimeUtil {
 	 * @param pattern
 	 * @return
 	 */
-	public final static String fmtDate(@Nonnull LocalDate date, @Nonnull DatePattern pattern) {
+	public final static String fmtDate(@Nonnull DatePattern pattern, @Nonnull LocalDate date) {
 		return pattern.getFormatter().format(date);
 	}
 
@@ -464,8 +473,8 @@ public final class DateTimeUtil {
 	 * @param pattern
 	 * @return
 	 */
-	public final static String fmtDateWithNow(@Nonnull DatePattern pattern) {
-		return fmtDate(LocalDate.now(), pattern);
+	public final static String fmtTime(@Nonnull TimePattern pattern) {
+		return pattern.getFormatter().format(LocalTime.now());
 	}
 
 	/**
@@ -474,17 +483,8 @@ public final class DateTimeUtil {
 	 * @param pattern
 	 * @return
 	 */
-	public final static String fmtTime(@Nonnull LocalTime time, @Nonnull TimePattern pattern) {
+	public final static String fmtTime(@Nonnull TimePattern pattern, @Nonnull LocalTime time) {
 		return pattern.getFormatter().format(time);
-	}
-
-	/**
-	 * 
-	 * @param pattern
-	 * @return
-	 */
-	public final static String fmtTimeWithNow(@Nonnull TimePattern pattern) {
-		return fmtTime(LocalTime.now(), pattern);
 	}
 
 	/**
@@ -493,7 +493,7 @@ public final class DateTimeUtil {
 	 * @param pattern
 	 * @return
 	 */
-	public final static String fmtDatetime(@Nonnull LocalDateTime datetime, @Nonnull DateTimePattern pattern) {
+	public final static String fmtDateTime(@Nonnull DateTimePattern pattern, @Nonnull LocalDateTime datetime) {
 		return pattern.getFormatter().format(datetime);
 	}
 
@@ -502,8 +502,8 @@ public final class DateTimeUtil {
 	 * @param pattern
 	 * @return
 	 */
-	public final static String fmtDatetimeWithNow(@Nonnull DateTimePattern pattern) {
-		return fmtDatetime(LocalDateTime.now(), pattern);
+	public final static String fmtDateTime(@Nonnull DateTimePattern pattern) {
+		return pattern.getFormatter().format(LocalDateTime.now());
 	}
 
 	/**

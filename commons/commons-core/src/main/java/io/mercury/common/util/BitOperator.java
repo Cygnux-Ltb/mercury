@@ -1,13 +1,6 @@
 package io.mercury.common.util;
 
-import static io.mercury.common.util.BitFormatter.byteBinary;
-import static io.mercury.common.util.BitFormatter.charBinary;
-import static io.mercury.common.util.BitFormatter.charBinaryFormat;
-import static io.mercury.common.util.BitFormatter.intBinary;
-import static io.mercury.common.util.BitFormatter.intBinaryFormat;
-import static io.mercury.common.util.BitFormatter.longBinary;
 import static io.mercury.common.util.BitFormatter.longBinaryFormat;
-import static java.lang.Integer.toBinaryString;
 
 import java.nio.ByteBuffer;
 
@@ -214,9 +207,21 @@ public final class BitOperator {
 
 	/**
 	 * 
+	 * 获取n位所能表示的最大值
+	 * 
+	 * @param n
+	 * @return
+	 */
+	public static long maxValueOfBit(int n) {
+		return n < 1 || n > 63 ? 0 : -1L ^ (-1L << n);
+	}
+
+	/**
+	 * 清理DirectMemory
+	 * 
 	 * @param buffer
 	 */
-	@SuppressWarnings({ "restriction" })
+	@SuppressWarnings("restriction")
 	public static boolean cleanDirectMemory(final ByteBuffer buffer) throws RuntimeException {
 		if (buffer.isDirect()) {
 			if (buffer instanceof sun.nio.ch.DirectBuffer) {
@@ -234,61 +239,16 @@ public final class BitOperator {
 
 	public static void main(String[] args) {
 
-		int i1 = 1002;
-		int i2 = 10777;
+		int i = 46346;
 
-		System.out.println(intBinaryFormat(i1));
-		System.out.println(intBinaryFormat(i2));
+		System.out.println(longBinaryFormat(-1L));
+		System.out.println(longBinaryFormat(-1L << i));
+		System.out.println(longBinaryFormat(-1L << Math.abs(i)));
+		System.out.println(longBinaryFormat(-1L ^ (-1L << i)));
+		System.out.println(maxValueOfBit(i));
 
-		System.out.println(merge(i1, i2));
-		System.out.println(longBinaryFormat(merge(i1, i2)));
-
-		System.out.println(getLongHighPos(merge(i1, i2)));
-		System.out.println(intBinaryFormat(getLongHighPos(merge(i1, i2))));
-
-		System.out.println(getLongLowPos(merge(i1, i2)));
-		System.out.println(intBinaryFormat(getLongLowPos(merge(i1, i2))));
-
-		System.out.println(intBinaryFormat(1));
-		System.out.println(intBinaryFormat(~1));
-
-		System.out.println(intBinaryFormat(10));
-		System.out.println(intBinaryFormat(20));
-		System.out.println(intBinaryFormat(10 ^ 20));
-		System.out.println(intBinaryFormat((10 ^ 20) ^ 20));
-
-		System.out.println(intBinaryFormat(10243250));
-		System.out.println(intBinaryFormat(1));
-		System.out.println(intBinaryFormat(10243250 & 1));
-		System.out.println(intBinaryFormat(1123121));
-		System.out.println(intBinaryFormat(1));
-		System.out.println(intBinaryFormat(1123121 & 1));
-
-		byte b = 3;
-
-		System.out.println(charBinary('b'));
-		System.out.println(charBinaryFormat('b'));
-
-		System.out.println(intBinary(10777));
-		System.out.println(intBinaryFormat(10777));
-
-		System.out.println(longBinary(106544777L));
-		System.out.println(longBinaryFormat(106544777L));
-
-		System.out.println(byteBinary(b));
-
-		System.out.println(longBinary(-3L));
-		System.out.println(intBinary(-3));
-		System.out.println(charBinary('3'));
-		System.out.println(intBinary(2));
-		System.out.println(toBinaryString(2));
-		System.out.println(intBinary(-10));
-
-		System.out.println(longBinary(Long.MAX_VALUE));
-		System.out.println(longBinary(Long.MIN_VALUE));
-		System.out.println(longBinary(-1L));
-		System.out.println(longBinary(2L << 10));
-
+		
+		
 	}
 
 }

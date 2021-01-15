@@ -1,26 +1,5 @@
 package io.mercury.common.file;
 
-/*
- * #%L
- * ch-commons-util
- * %%
- * Copyright (C) 2012 Cloudhopper by Twitter
- * %%
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * #L%
- */
-
-//import SevenZip.LzmaAlone;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -41,9 +20,6 @@ import io.mercury.common.log.CommonLoggerFactory;
 /**
  * Utility methods for compressing and uncompressing a file.
  * 
- * @author joelauer (twitter: @jjlauer or
- *         <a href="http://twitter.com/jjlauer" target=
- *         window>http://twitter.com/jjlauer</a>)
  */
 public class FileCompressionUtil {
 
@@ -53,10 +29,13 @@ public class FileCompressionUtil {
 	 * Enumeration of all supported compression algorithms by this utility.
 	 */
 	public static enum Algorithm {
+
 		/** gzip */
 		GZIP("gzip", "gz", new GzipCompressor()),
+
 		/** poorly supported for now */
 		// LZMA("lzma", "7z", new LzmaCompressor()),
+
 		/** zip */
 		ZIP("zip", "zip", new ZipCompressor());
 
@@ -64,7 +43,7 @@ public class FileCompressionUtil {
 		private final String fileExt;
 		private final Compressor compressor;
 
-		Algorithm(final String name, final String fileExt, final Compressor compressor) {
+		private Algorithm(final String name, final String fileExt, final Compressor compressor) {
 			this.name = name;
 			this.fileExt = fileExt;
 			this.compressor = compressor;
@@ -101,9 +80,9 @@ public class FileCompressionUtil {
 		 * @return The matching algorithm or null if no algorithm was found
 		 */
 		public static Algorithm findByName(final String name) {
-			for (Algorithm e : Algorithm.values()) {
-				if (e.name.equalsIgnoreCase(name)) {
-					return e;
+			for (Algorithm algorithm : Algorithm.values()) {
+				if (algorithm.name.equalsIgnoreCase(name)) {
+					return algorithm;
 				}
 			}
 			return null;
@@ -117,9 +96,9 @@ public class FileCompressionUtil {
 		 * @return The matching algorithm or null if no algorithm was found
 		 */
 		public static Algorithm findByFileExtension(final String fileExt) {
-			for (Algorithm e : Algorithm.values()) {
-				if (e.fileExt.equalsIgnoreCase(fileExt)) {
-					return e;
+			for (Algorithm algorithm : Algorithm.values()) {
+				if (algorithm.fileExt.equalsIgnoreCase(fileExt)) {
+					return algorithm;
 				}
 			}
 			return null;
@@ -272,9 +251,7 @@ public class FileCompressionUtil {
 	 */
 	public static File uncompress(File sourceFile, File targetDir, boolean deleteSourceFileAfterUncompressed)
 			throws FileAlreadyExistsException, IOException {
-		//
 		// figure out compression algorithm used by its extension
-		//
 		String fileExt = FileUtil.parseFileExtension(sourceFile.getName());
 
 		// was a file extension parsed
@@ -298,9 +275,7 @@ public class FileCompressionUtil {
 					"Cannot uncompress file since target directory " + targetDir + " neither exists or is a directory");
 		}
 
-		//
 		// create a target file by stripping the file extension from the original file
-		//
 		String filename = sourceFile.getName();
 		filename = filename.substring(0, filename.length() - (fileExt.length() + 1));
 

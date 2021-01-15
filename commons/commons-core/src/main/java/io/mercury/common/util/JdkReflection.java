@@ -19,13 +19,13 @@ public final class JdkReflection {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <R, T> R extractField(Class<T> clazz, T object, String fieldName) {
+	public static <R, T> R extractField(Class<T> clazz, T obj, String fieldName) {
 		try {
 			final Field field = getField(clazz, fieldName);
 			field.setAccessible(true);
-			return (R) field.get(object);
+			return (R) field.get(obj);
 		} catch (NoSuchFieldException | IllegalAccessException e) {
-			throw new IllegalStateException("Can not access Disruptor internals: ", e);
+			throw new IllegalStateException("Can not access field: " + e.getMessage(), e);
 		}
 	}
 

@@ -7,8 +7,15 @@ import org.slf4j.Logger;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.log.LogConfigurator;
 
+/**
+ * 
+ * Use the System.nanoTime() native function
+ * 
+ * @author yellow013
+ *
+ */
 @ThreadSafe
-public final class SysNanoSequence {
+public final class NanoSequence {
 
 	/**
 	 * 
@@ -37,10 +44,10 @@ public final class SysNanoSequence {
 	public static void main(String[] args) {
 
 		LogConfigurator.filename("test-log");
-		Logger log = CommonLoggerFactory.getLogger(SysNanoSequence.class);
+		Logger log = CommonLoggerFactory.getLogger(NanoSequence.class);
 
 		for (int i = 0; i < 20; i++) {
-			log.debug(String.valueOf(SysNanoSequence.micro()));
+			log.debug(String.valueOf(NanoSequence.micro()));
 		}
 
 	}

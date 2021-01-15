@@ -4,8 +4,8 @@ import static io.mercury.common.util.BitFormatter.longBinaryFormat;
 import static java.lang.System.currentTimeMillis;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
@@ -18,8 +18,9 @@ import io.mercury.common.util.HexUtil;
  * 时间戳 | 所有者(可以是某个业务或者分布式系统上的机器) | 自增序列<br>
  * 
  * <pre>
+ * 0b|------------timestamp-------------|------owner------|---increment----|
  * 0b01111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111
- *  |------------timestamp--------------|----owner id-----|----increment----|
+ * 
  * <pre>
  *
  * @author yellow013
@@ -32,10 +33,10 @@ public final class LongSnowflakeAllocator {
 	 */
 	public static class Bulider {
 
-		private final ZonedDateTime baselineTime;
+		private final ZonedDateTime baseline;
 
-		private Bulider(ZonedDateTime baselineTime) {
-			this.baselineTime = baselineTime;
+		private Bulider(ZonedDateTime baseline) {
+			this.baseline = baseline;
 		}
 
 		public LongSnowflakeAllocator bulid() {
@@ -44,20 +45,31 @@ public final class LongSnowflakeAllocator {
 
 	}
 
-	public static LongSnowflakeAllocator newAllocator(LocalDate baselineTime) {
-		return newAllocator(LocalDateTime.of(baselineTime, LocalTime.MIN));
+	/**
+	 * 
+	 * @param baseline
+	 * @return
+	 */
+	public static LongSnowflakeAllocator newAllocator(LocalDate baseline) {
+		return new Bulider(ZonedDateTime.of(baseline, LocalTime.MIN, ZoneOffset.UTC)).bulid();
 	}
 
-	public static LongSnowflakeAllocator newAllocator(LocalDateTime baselineTime) {
-		return newAllocator(ZonedDateTime.of(baselineTime, ZoneOffset.UTC));
+	/**
+	 * 
+	 * @param baseline
+	 * @param zoneId
+	 * @return
+	 */
+	public static LongSnowflakeAllocator newAllocator(LocalDate baseline, ZoneId zoneId) {
+		return new Bulider(ZonedDateTime.of(baseline, LocalTime.MIN, zoneId)).bulid();
 	}
 
-	public static LongSnowflakeAllocator newAllocator(ZonedDateTime baselineTime) {
-		return new Bulider(baselineTime).bulid();
-	}
-
+	/**
+	 * 
+	 * @param bulider
+	 */
 	private LongSnowflakeAllocator(Bulider bulider) {
-		this.baselineEpoch = bulider.baselineTime.toEpochSecond();
+		this.baselineEpoch = bulider.baseline.toEpochSecond();
 	}
 
 	// 开始时间截 (使用自己业务系统指定的时间)
@@ -153,9 +165,9 @@ public final class LongSnowflakeAllocator {
 	}
 
 	public static void main(String[] args) {
-		
+
 		ZonedDateTime baseline = ZonedDateTime.of(LocalDate.of(2016, 1, 1), LocalTime.MIN, TimeZone.UTC);
-		
+
 		long baseEpochMilli = baseline.toInstant().toEpochMilli();
 		System.out.println(baseEpochMilli);
 		System.out.println(System.currentTimeMillis() - baseEpochMilli);
@@ -170,7 +182,6 @@ public final class LongSnowflakeAllocator {
 		long l = -1 >>> (Long.SIZE - (Byte.SIZE * 3 + 2));
 		System.out.println(HexUtil.toHexString(-1L));
 		System.out.println(l + " -> " + longBinaryFormat(l));
-
 
 		System.out.println(Byte.SIZE);
 

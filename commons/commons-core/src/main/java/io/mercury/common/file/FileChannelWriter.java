@@ -15,7 +15,7 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import io.mercury.common.character.Charsets;
 import io.mercury.common.character.Separator;
-import io.mercury.common.serialization.specific.ByteArraySerializer;
+import io.mercury.common.serialization.spec.ByteArraySerializer;
 import io.mercury.common.sys.SysProperties;
 
 /**

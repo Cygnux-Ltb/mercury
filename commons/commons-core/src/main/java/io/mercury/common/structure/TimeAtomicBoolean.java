@@ -2,47 +2,23 @@ package io.mercury.common.structure;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
-
-/*
- * #%L
- * ch-commons-util
- * %%
- * Copyright (C) 2012 Cloudhopper by Twitter
- * %%
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * #L%
- */
-
-// java imports
+import java.time.ZonedDateTime;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-// my imports
-
 /**
+ * 
  * Wrapper around Java AtomicBoolean to include the DateTime of when the state
  * last changed, effectively providing a "time" of the current state.
- *
- * @author joelauer (twitter: @jjlauer or
- *         <a href="http://twitter.com/jjlauer" target=
- *         window>http://twitter.com/jjlauer</a>)
+ * 
  */
-public class TimedStateBoolean {
+public class TimeAtomicBoolean {
 
-	private AtomicBoolean value;
-	private long valueTime;
+	private final AtomicBoolean value;
 	private final Boolean expectedValue;
+
+	private long updatedTime;
 
 	/**
 	 * Creates a new instance with the initalValue. This constructor does not setup
@@ -50,10 +26,10 @@ public class TimedStateBoolean {
 	 * 
 	 * @param initialValue The initial value of the boolean.
 	 */
-	public TimedStateBoolean(boolean initialValue) {
+	public TimeAtomicBoolean(boolean initialValue) {
 		this.value = new AtomicBoolean(initialValue);
-		this.valueTime = System.currentTimeMillis();
 		this.expectedValue = null;
+		this.updatedTime = System.currentTimeMillis();
 	}
 
 	/**
@@ -64,10 +40,10 @@ public class TimedStateBoolean {
 	 * @param expectedValue The expected value of the boolean if this was in a good
 	 *                      state.
 	 */
-	public TimedStateBoolean(boolean initialValue, boolean expectedValue) {
+	public TimeAtomicBoolean(boolean initialValue, boolean expectedValue) {
 		this.value = new AtomicBoolean(initialValue);
-		this.valueTime = System.currentTimeMillis();
-		this.expectedValue = expectedValue;
+		this.updatedTime = System.currentTimeMillis();
+		this.expectedValue = Boolean.valueOf(expectedValue);
 	}
 
 	/**
@@ -105,11 +81,11 @@ public class TimedStateBoolean {
 	 * @return
 	 */
 	public boolean getAndSet(boolean newValue) {
-		boolean oldValue = value.getAndSet(newValue);
+		boolean prev = value.getAndSet(newValue);
 		// did the state change?
-		if (oldValue != newValue)
-			valueTime = System.currentTimeMillis();
-		return oldValue;
+		if (prev != newValue)
+			updatedTime = System.currentTimeMillis();
+		return prev;
 	}
 
 	/**
@@ -136,16 +112,29 @@ public class TimedStateBoolean {
 	 * the last time this boolean changed state. In order to calculate the total
 	 * number of milliseconds this boolean has retained this value, you'll need to
 	 * do your own call to System.currentTimeMillis() and substract this value.
+	 * 
+	 * @return
 	 */
-	public long getValueTimeMillis() {
-		return valueTime;
+	public long getUpdatedMillis() {
+		return updatedTime;
 	}
 
 	/**
 	 * Returns a DateTime that represents the last time this boolean changed state.
+	 * 
+	 * @return
 	 */
-	public LocalDateTime getValueDateTime() {
-		return LocalDateTime.ofInstant(Instant.ofEpochMilli(valueTime), ZoneOffset.UTC);
+	public ZonedDateTime getUpdatedTime() {
+		return ZonedDateTime.ofInstant(Instant.ofEpochMilli(updatedTime), ZoneOffset.UTC);
+	}
+
+	/**
+	 * 
+	 * @param zoneId
+	 * @return
+	 */
+	public ZonedDateTime getValueDateTime(ZoneId zoneId) {
+		return ZonedDateTime.ofInstant(Instant.ofEpochMilli(updatedTime), zoneId);
 	}
 
 	/**
@@ -153,11 +142,11 @@ public class TimedStateBoolean {
 	 * method returns a Period that represents the duration of time this value has
 	 * retained this value.
 	 * 
-	 * @see #getValueDurationInMills()
+	 * @see #getDurationMills()
 	 */
-	public Duration getValueDuration() {
+	public Duration getDuration() {
 		long now = System.currentTimeMillis();
-		return Duration.ofMillis(now - valueTime);
+		return Duration.ofMillis(now - updatedTime);
 	}
 
 	/**
@@ -165,10 +154,10 @@ public class TimedStateBoolean {
 	 * method returns a long that represents the duration of time this value has
 	 * retained this value.
 	 * 
-	 * @see #getValueDuration()
+	 * @see #getDuration()
 	 */
-	public long getValueDurationInMills() {
-		return (System.currentTimeMillis() - valueTime);
+	public long getDurationMills() {
+		return (System.currentTimeMillis() - updatedTime);
 	}
 
 	@Override
