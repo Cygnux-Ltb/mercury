@@ -13,11 +13,12 @@ import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
 import org.rocksdb.Statistics;
+import org.rocksdb.StatsLevel;
 
 import io.mercury.common.thread.ShutdownHooks;
 import io.mercury.persistence.rocksdb.exception.RocksRuntimeException;
-import io.mercury.persistence.rocksdb.map.entity.RocksKey;
-import io.mercury.persistence.rocksdb.map.entity.RocksValue;
+import io.mercury.persistence.rocksdb.map.kv.RocksKey;
+import io.mercury.persistence.rocksdb.map.kv.RocksValue;
 
 public class RocksMap<K extends RocksKey, V extends RocksValue> implements Closeable {
 
@@ -29,6 +30,7 @@ public class RocksMap<K extends RocksKey, V extends RocksValue> implements Close
 		ColumnFamilyOptions columnFamilyOptions = new ColumnFamilyOptions();
 		this.options = new Options(dbOptions, columnFamilyOptions);
 		Statistics statistics = new Statistics();
+		statistics.setStatsLevel(StatsLevel.ALL);
 		options.setStatistics(statistics);
 		options.setCreateIfMissing(true);
 		try {

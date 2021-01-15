@@ -1,4 +1,4 @@
-package io.mercury.persistence.rocksdb.map.entity;
+package io.mercury.persistence.rocksdb.map.kv;
 
 public interface RocksReversibleKey extends RocksKey {
 

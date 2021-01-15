@@ -5,8 +5,8 @@ import java.util.Collection;
 import org.rocksdb.Options;
 
 import io.mercury.common.thread.Threads;
-import io.mercury.persistence.rocksdb.map.entity.RocksReversibleKey;
-import io.mercury.persistence.rocksdb.map.entity.RocksValue;
+import io.mercury.persistence.rocksdb.map.kv.RocksReversibleKey;
+import io.mercury.persistence.rocksdb.map.kv.RocksValue;
 
 public class RocksReversibleMap<K extends RocksReversibleKey, V extends RocksValue> {
 
