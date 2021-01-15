@@ -21,7 +21,7 @@ import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
 
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.specific.ByteBufferDeserializer;
+import io.mercury.common.serialization.spec.ByteBufferDeserializer;
 
 @NotThreadSafe
 public final class AvroBinaryDeserializer<T extends SpecificRecord> implements ByteBufferDeserializer<T> {
