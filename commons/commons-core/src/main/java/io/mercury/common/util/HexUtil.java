@@ -17,12 +17,11 @@
 
 package io.mercury.common.util;
 
+import javax.annotation.Nonnull;
+
 /**
- * Utility class for encoding or decoding objects to a hexidecimal format.
+ * Utility class for encoding and decoding objects to a hex string.
  * 
- * @author joelauer (twitter: @jjlauer or
- *         <a href="http://twitter.com/jjlauer" target=
- *         window>http://twitter.com/jjlauer</a>)
  */
 public class HexUtil {
 
@@ -31,16 +30,9 @@ public class HexUtil {
 			{ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
 	/**
-	 * Creates a String from a byte array with each byte in a "Big Endian"
-	 * hexidecimal format. For example, a byte 0x34 will return a String "34". A
-	 * byte array of { 0x34, 035 } would return "3435".
 	 * 
-	 * @param buffer The StringBuilder the byte array in hexidecimal format will be
-	 *               appended to. If the buffer is null, this method will throw a
-	 *               NullPointerException.
-	 * @param bytes  The byte array that will be converted to a hexidecimal String.
-	 *               If the byte array is null, this method will append nothing (a
-	 *               noop)
+	 * @param bytes
+	 * @return
 	 */
 	public static String toHexString(byte[] bytes) {
 		if (bytes == null)
@@ -49,22 +41,11 @@ public class HexUtil {
 	}
 
 	/**
-	 * Creates a String from a byte array with each byte in a "Big Endian"
-	 * hexidecimal format. For example, a byte 0x34 will return a String "34". A
-	 * byte array of { 0x34, 035 } would return "3435".
 	 * 
-	 * @param buffer The StringBuilder the byte array in hexidecimal format will be
-	 *               appended to. If the buffer is null, this method will throw a
-	 *               NullPointerException.
-	 * @param bytes  The byte array that will be converted to a hexidecimal String.
-	 *               If the byte array is null, this method will append nothing (a
-	 *               noop)
-	 * @param offset The offset in the byte array to start from. If the offset or
-	 *               length combination is invalid, this method will throw an
-	 *               IllegalArgumentException.
-	 * @param length The length (from the offset) to conver the bytes. If the offset
-	 *               or length combination is invalid, this method will throw an
-	 *               IllegalArgumentException.
+	 * @param bytes
+	 * @param offset
+	 * @param length
+	 * @return
 	 */
 	public static String toHexString(byte[] bytes, int offset, int length) {
 		if (bytes == null) {
@@ -72,229 +53,157 @@ public class HexUtil {
 		}
 		assertOffsetLengthValid(offset, length, bytes.length);
 		// each byte is 2 chars in string
-		StringBuilder buffer = new StringBuilder(length * 2);
+		StringBuilder buffer = new StringBuilder(length * 2 + 2).append("0x");
 		appendHexString(buffer, bytes, offset, length);
 		return buffer.toString();
 	}
 
 	/**
-	 * Appends a byte array to a StringBuilder with each byte in a "Big Endian"
-	 * hexidecimal format. For example, a byte 0x34 will be appended as a String in
-	 * format "34". A byte array of { 0x34, 035 } would append "3435".
 	 * 
-	 * @param buffer The StringBuilder the byte array in hexidecimal format will be
-	 *               appended to. If the buffer is null, this method will throw a
-	 *               NullPointerException.
-	 * @param bytes  The byte array that will be converted to a hexidecimal String.
-	 *               If the byte array is null, this method will append nothing (a
-	 *               noop)
+	 * @param buffer
+	 * @param bytes
+	 * @param offset
+	 * @param length
 	 */
-	public static void appendHexString(StringBuilder buffer, byte[] bytes) {
-		assertNotNull(buffer);
-		if (bytes == null) {
-			return; // do nothing (a noop)
+	public static void appendHexString(@Nonnull StringBuilder buffer, byte[] bytes, int offset, int length) {
+		assertNonnull(buffer);
+		if (bytes == null)
+			return;
+		assertOffsetLengthValid(offset, length, bytes.length);
+		int end = offset + length;
+		for (int i = offset; i < end; i++) {
+			buffer.append(HEX_TABLE[(bytes[i] & 0xF0) >>> 4]).append(HEX_TABLE[(bytes[i] & 0x0F)]);
 		}
+	}
+
+	/**
+	 * 
+	 * @param buffer
+	 * @param bytes
+	 */
+	public static void appendHexString(@Nonnull StringBuilder buffer, byte[] bytes) {
+		assertNonnull(buffer);
+		if (bytes == null)
+			return;
 		appendHexString(buffer, bytes, 0, bytes.length);
 	}
 
 	/**
-	 * Appends a byte array to a StringBuilder with each byte in a "Big Endian"
-	 * hexidecimal format. For example, a byte 0x34 will be appended as a String in
-	 * format "34". A byte array of { 0x34, 035 } would append "3435".
 	 * 
-	 * @param buffer The StringBuilder the byte array in hexidecimal format will be
-	 *               appended to. If the buffer is null, this method will throw a
-	 *               NullPointerException.
-	 * @param bytes  The byte array that will be converted to a hexidecimal String.
-	 *               If the byte array is null, this method will append nothing (a
-	 *               noop)
-	 * @param offset The offset in the byte array to start from. If the offset or
-	 *               length combination is invalid, this method will throw an
-	 *               IllegalArgumentException.
-	 * @param length The length (from the offset) to conver the bytes. If the offset
-	 *               or length combination is invalid, this method will throw an
-	 *               IllegalArgumentException.
-	 */
-	public static void appendHexString(StringBuilder buffer, byte[] bytes, int offset, int length) {
-		assertNotNull(buffer);
-		if (bytes == null) {
-			return; // do nothing (a noop)
-		}
-		assertOffsetLengthValid(offset, length, bytes.length);
-		int end = offset + length;
-		for (int i = offset; i < end; i++) {
-			int nibble1 = (bytes[i] & 0xF0) >>> 4;
-			int nibble0 = (bytes[i] & 0x0F);
-			buffer.append(HEX_TABLE[nibble1]);
-			buffer.append(HEX_TABLE[nibble0]);
-		}
-	}
-
-	/**
-	 * Creates a 2 character hex String from a byte with the byte in a "Big Endian"
-	 * hexidecimal format. For example, a byte 0x34 will be returned as a String in
-	 * format "34". A byte of value 0 will be returned as "00".
-	 * 
-	 * @param value The byte value that will be converted to a hexidecimal String.
+	 * @param value
+	 * @return
 	 */
 	public static String toHexString(byte value) {
-		StringBuilder buffer = new StringBuilder(2);
+		StringBuilder buffer = new StringBuilder(4).append("0x");
 		appendHexString(buffer, value);
 		return buffer.toString();
 	}
 
 	/**
-	 * Appends 2 characters to a StringBuilder with the byte in a "Big Endian"
-	 * hexidecimal format. For example, a byte 0x34 will be appended as a String in
-	 * format "34". A byte of value 0 will be appended as "00".
 	 * 
-	 * @param buffer The StringBuilder the byte value in hexidecimal format will be
-	 *               appended to. If the buffer is null, this method will throw a
-	 *               NullPointerException.
-	 * @param value  The byte value that will be converted to a hexidecimal String.
+	 * @param buffer
+	 * @param value
 	 */
-	public static void appendHexString(StringBuilder buffer, byte value) {
-		assertNotNull(buffer);
-		int nibble = (value & 0xF0) >>> 4;
-		buffer.append(HEX_TABLE[nibble]);
-		nibble = (value & 0x0F);
-		buffer.append(HEX_TABLE[nibble]);
+	public static void appendHexString(@Nonnull StringBuilder buffer, byte value) {
+		assertNonnull(buffer);
+		buffer.append(HEX_TABLE[(value & 0xF0) >>> 4]).append(HEX_TABLE[(value & 0x0F)]);
 	}
 
 	/**
-	 * Creates a 4 character hex String from a short with the short in a "Big
-	 * Endian" hexidecimal format. For example, a short 0x1234 will be returned as a
-	 * String in format "1234". A short of value 0 will be returned as "0000".
 	 * 
-	 * @param value The short value that will be converted to a hexidecimal String.
+	 * @param value
+	 * @return
 	 */
 	public static String toHexString(short value) {
-		StringBuilder buffer = new StringBuilder(4);
+		StringBuilder buffer = new StringBuilder(6).append("0x");
 		appendHexString(buffer, value);
 		return buffer.toString();
 	}
 
 	/**
-	 * Appends 4 characters to a StringBuilder with the short in a "Big Endian"
-	 * hexidecimal format. For example, a short 0x1234 will be appended as a String
-	 * in format "1234". A short of value 0 will be appended as "0000".
 	 * 
-	 * @param buffer The StringBuilder the short value in hexidecimal format will be
-	 *               appended to. If the buffer is null, this method will throw a
-	 *               NullPointerException.
-	 * @param value  The short value that will be converted to a hexidecimal String.
+	 * @param buffer
+	 * @param value
 	 */
-	public static void appendHexString(StringBuilder buffer, short value) {
-		assertNotNull(buffer);
-		int nibble = (value & 0xF000) >>> 12;
-		buffer.append(HEX_TABLE[nibble]);
-		nibble = (value & 0x0F00) >>> 8;
-		buffer.append(HEX_TABLE[nibble]);
-		nibble = (value & 0x00F0) >>> 4;
-		buffer.append(HEX_TABLE[nibble]);
-		nibble = (value & 0x000F);
-		buffer.append(HEX_TABLE[nibble]);
+	public static void appendHexString(@Nonnull StringBuilder buffer, short value) {
+		assertNonnull(buffer);
+		buffer.append(HEX_TABLE[(value & 0xF000) >>> 12]).append(HEX_TABLE[(value & 0x0F00) >>> 8])
+				.append(HEX_TABLE[(value & 0x00F0) >>> 4]).append(HEX_TABLE[(value & 0x000F)]);
 	}
 
 	/**
-	 * Creates an 8 character hex String from an int twith the int in a "Big Endian"
-	 * hexidecimal format. For example, an int 0xFFAA1234 will be returned as a
-	 * String in format "FFAA1234". A int of value 0 will be returned as "00000000".
 	 * 
-	 * @param value The int value that will be converted to a hexidecimal String.
+	 * @param value
+	 * @return
 	 */
 	public static String toHexString(int value) {
-		StringBuilder buffer = new StringBuilder(8);
+		StringBuilder buffer = new StringBuilder(10).append("0x");
 		appendHexString(buffer, value);
 		return buffer.toString();
 	}
 
 	/**
-	 * Appends 8 characters to a StringBuilder with the int in a "Big Endian"
-	 * hexidecimal format. For example, a int 0xFFAA1234 will be appended as a
-	 * String in format "FFAA1234". A int of value 0 will be appended as "00000000".
 	 * 
-	 * @param buffer The StringBuilder the int value in hexidecimal format will be
-	 *               appended to. If the buffer is null, this method will throw a
-	 *               NullPointerException.
-	 * @param value  The int value that will be converted to a hexidecimal String.
+	 * @param buffer
+	 * @param value
 	 */
-	public static void appendHexString(StringBuilder buffer, int value) {
-		assertNotNull(buffer);
-		int nibble = (value & 0xF000_0000) >>> 28;
-		buffer.append(HEX_TABLE[nibble]);
-		nibble = (value & 0x0F00_0000) >>> 24;
-		buffer.append(HEX_TABLE[nibble]);
-		nibble = (value & 0x00F0_0000) >>> 20;
-		buffer.append(HEX_TABLE[nibble]);
-		nibble = (value & 0x000F_0000) >>> 16;
-		buffer.append(HEX_TABLE[nibble]);
-		nibble = (value & 0x0000_F000) >>> 12;
-		buffer.append(HEX_TABLE[nibble]);
-		nibble = (value & 0x0000_0F00) >>> 8;
-		buffer.append(HEX_TABLE[nibble]);
-		nibble = (value & 0x0000_00F0) >>> 4;
-		buffer.append(HEX_TABLE[nibble]);
-		nibble = (value & 0x0000_000F);
-		buffer.append(HEX_TABLE[nibble]);
+	public static void appendHexString(@Nonnull StringBuilder buffer, int value) {
+		assertNonnull(buffer);
+		buffer.append(HEX_TABLE[(value & 0xF000_0000) >>> 28]).append(HEX_TABLE[(value & 0x0F00_0000) >>> 24])
+				.append(HEX_TABLE[(value & 0x00F0_0000) >>> 20]).append(HEX_TABLE[(value & 0x000F_0000) >>> 16])
+				.append(HEX_TABLE[(value & 0x0000_F000) >>> 12]).append(HEX_TABLE[(value & 0x0000_0F00) >>> 8])
+				.append(HEX_TABLE[(value & 0x0000_00F0) >>> 4]).append(HEX_TABLE[(value & 0x0000_000F)]);
 	}
 
 	/**
-	 * Creates a 16 character hex String from a long with the long in a "Big Endian"
-	 * hexidecimal format. For example, a long 0xAABBCCDDEE123456 will be returned
-	 * as a String in format "AABBCCDDEE123456". A long of value 0 will be returned
-	 * as "0000000000000000".
 	 * 
-	 * @param value The long value that will be converted to a hexidecimal String.
+	 * @param value
+	 * @return
 	 */
 	public static String toHexString(long value) {
-		StringBuilder buffer = new StringBuilder(16);
+		StringBuilder buffer = new StringBuilder(18).append("0x");
 		appendHexString(buffer, value);
 		return buffer.toString();
 	}
 
 	/**
-	 * Appends 16 characters to a StringBuilder with the long in a "Big Endian"
-	 * hexidecimal format. For example, a long 0xAABBCCDDEE123456 will be appended
-	 * as a String in format "AABBCCDDEE123456". A long of value 0 will be appended
-	 * as "0000000000000000".
 	 * 
-	 * @param buffer The StringBuilder the long value in hexidecimal format will be
-	 *               appended to. If the buffer is null, this method will throw a
-	 *               NullPointerException.
-	 * @param value  The long value that will be converted to a hexidecimal String.
+	 * @param buffer
+	 * @param value
 	 */
-	public static void appendHexString(StringBuilder buffer, long value) {
+	public static void appendHexString(@Nonnull StringBuilder buffer, long value) {
 		appendHexString(buffer, (int) ((value & 0xFFFF_FFFF_0000_0000L) >>> 32));
 		appendHexString(buffer, (int) (value & 0x0000_0000_FFFF_FFFFL));
 	}
 
-	private static void assertNotNull(StringBuilder buffer) {
-		if (buffer == null) {
+	/**
+	 * 
+	 * @param buffer
+	 */
+	private static void assertNonnull(StringBuilder buffer) {
+		if (buffer == null)
 			throw new NullPointerException("The buffer cannot be null");
-		}
-	}
-
-	private static void assertOffsetLengthValid(int offset, int length, int arrayLength) {
-		if (offset < 0) {
-			throw new IllegalArgumentException("The array offset was negative");
-		}
-		if (length < 0) {
-			throw new IllegalArgumentException("The array length was negative");
-		}
-		if (offset + length > arrayLength) {
-			throw new ArrayIndexOutOfBoundsException("The array offset+length would access past end of array");
-		}
 	}
 
 	/**
-	 * Converts a hexidecimal character such as '0' or 'A' or 'a' to its integer
-	 * value such as 0 or 10. Used to decode hexidecimal Strings to integer values.
 	 * 
-	 * @param c The hexidecimal character
-	 * @return The integer value the character represents
-	 * @throws IllegalArgumentException Thrown if a character that does not
-	 *                                  represent a hexidecimal character is used.
+	 * @param offset
+	 * @param length
+	 * @param arrayLength
+	 */
+	private static void assertOffsetLengthValid(int offset, int length, int arrayLength) {
+		if (offset < 0)
+			throw new IllegalArgumentException("The array offset was negative");
+		if (length < 0)
+			throw new IllegalArgumentException("The array length was negative");
+		if (offset + length > arrayLength)
+			throw new ArrayIndexOutOfBoundsException("The array offset+length would access past end of array");
+	}
+
+	/**
+	 * 
+	 * @param c
+	 * @return
 	 */
 	public static int hexCharToInt(char c) {
 		switch (c) {
@@ -342,17 +251,9 @@ public class HexUtil {
 	}
 
 	/**
-	 * Creates a byte array from a CharSequence (String, StringBuilder, etc.)
-	 * containing only valid hexidecimal formatted characters. Each grouping of 2
-	 * characters represent a byte in "Big Endian" format. The hex CharSequence must
-	 * be an even length of characters. For example, a String of "1234" would return
-	 * the byte array { 0x12, 0x34 }.
 	 * 
-	 * @param hexString The String, StringBuilder, etc. that contains the sequence
-	 *                  of hexidecimal character values.
-	 * @return A new byte array representing the sequence of bytes created from the
-	 *         sequence of hexidecimal characters. If the hexString is null, then
-	 *         this method will return null.
+	 * @param hexString
+	 * @return
 	 */
 	public static byte[] toByteArray(CharSequence hexString) {
 		if (hexString == null) {
