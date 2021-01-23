@@ -21,13 +21,15 @@ import io.mercury.common.datetime.TimeZone;
  * 时间戳 | 所有者(可以是某个业务或者分布式系统上的机器) | 自增序列<br>
  * 
  * <pre>
+ * 
  * 0b01111111_11111111_11111111_11111111
  * 0b|---timestamp----|-owner--|increment|
+ * 
  * </pre>
  *
  * @author yellow013
  */
-public final class IntSnowflakeAllocator {
+public final class IntSnowflakeAlgo {
 
 	/**
 	 * 
@@ -42,8 +44,8 @@ public final class IntSnowflakeAllocator {
 			this.baseline = baseline;
 		}
 
-		public IntSnowflakeAllocator bulid() {
-			return new IntSnowflakeAllocator(this);
+		public IntSnowflakeAlgo bulid() {
+			return new IntSnowflakeAlgo(this);
 		}
 
 	}
@@ -53,7 +55,7 @@ public final class IntSnowflakeAllocator {
 	 * @param baseline
 	 * @return
 	 */
-	public static IntSnowflakeAllocator newAllocator(LocalDate baseline) {
+	public static IntSnowflakeAlgo newAllocator(LocalDate baseline) {
 		return new Bulider(ZonedDateTime.of(baseline, LocalTime.MIN, ZoneOffset.UTC)).bulid();
 	}
 
@@ -63,7 +65,7 @@ public final class IntSnowflakeAllocator {
 	 * @param zoneId
 	 * @return
 	 */
-	public static IntSnowflakeAllocator newAllocator(LocalDate baseline, ZoneId zoneId) {
+	public static IntSnowflakeAlgo newAllocator(LocalDate baseline, ZoneId zoneId) {
 		return new Bulider(ZonedDateTime.of(baseline, LocalTime.MIN, zoneId)).bulid();
 	}
 
@@ -71,7 +73,7 @@ public final class IntSnowflakeAllocator {
 	 * 
 	 * @param bulider
 	 */
-	private IntSnowflakeAllocator(Bulider bulider) {
+	private IntSnowflakeAlgo(Bulider bulider) {
 		this.baselineEpoch = bulider.baseline.toEpochSecond();
 	}
 
@@ -79,7 +81,7 @@ public final class IntSnowflakeAllocator {
 	private final long baselineEpoch;
 
 	// 自增位最多占用16位
-	private final int increment_bit_limit = Byte.SIZE * 2;
+	private final int incrementBitLimit = Byte.SIZE * 2;
 
 	// 开始时间截 (这个用自己业务系统上线的时间)
 	private final long twepoch = 1575365018000L;
@@ -135,6 +137,7 @@ public final class IntSnowflakeAllocator {
 				timestamp = tilNextMillis(lastTimestamp);
 			}
 		}
+
 		// 时间戳改变，毫秒内序列重置
 		else {
 			sequence = 0L;

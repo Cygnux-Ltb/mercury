@@ -3,8 +3,11 @@ package io.mercury.common.sequence;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.annotation.concurrent.ThreadSafe;
+
 import io.mercury.common.thread.Threads;
 
+@ThreadSafe
 public final class LocalSerial {
 
 	private final AtomicLong serial;

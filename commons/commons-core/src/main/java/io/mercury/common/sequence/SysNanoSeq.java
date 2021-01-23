@@ -15,13 +15,13 @@ import io.mercury.common.log.LogConfigurator;
  *
  */
 @ThreadSafe
-public final class NanoSequence {
+public final class SysNanoSeq {
 
 	/**
 	 * 
 	 * @return
 	 */
-	public static long milli() {
+	public static long millis() {
 		return System.nanoTime() / 1000_000;
 	}
 
@@ -29,7 +29,7 @@ public final class NanoSequence {
 	 * 
 	 * @return
 	 */
-	public static long micro() {
+	public static long micros() {
 		return System.nanoTime() / 1000;
 	}
 
@@ -37,17 +37,17 @@ public final class NanoSequence {
 	 * 
 	 * @return
 	 */
-	public static long nano() {
+	public static long nanos() {
 		return System.nanoTime();
 	}
 
 	public static void main(String[] args) {
 
-		LogConfigurator.filename("test-log");
-		Logger log = CommonLoggerFactory.getLogger(NanoSequence.class);
+		LogConfigurator.setFilename("test-log");
+		Logger log = CommonLoggerFactory.getLogger(SysNanoSeq.class);
 
 		for (int i = 0; i < 20; i++) {
-			log.debug(String.valueOf(NanoSequence.micro()));
+			log.debug(String.valueOf(SysNanoSeq.micros()));
 		}
 
 	}

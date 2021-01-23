@@ -18,14 +18,14 @@ import io.mercury.common.util.HexUtil;
  * 时间戳 | 所有者(可以是某个业务或者分布式系统上的机器) | 自增序列<br>
  * 
  * <pre>
- * 0b|------------timestamp-------------|------owner------|---increment----|
+ * 0b|---------------EPOCH TIMESTAMP----------------|--OWNER---|-INCREMENT-|
  * 0b01111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111
  * 
  * <pre>
  *
  * @author yellow013
  */
-public final class LongSnowflakeAllocator {
+public final class LongSnowflakeAlgo {
 
 	/**
 	 * 
@@ -39,8 +39,8 @@ public final class LongSnowflakeAllocator {
 			this.baseline = baseline;
 		}
 
-		public LongSnowflakeAllocator bulid() {
-			return new LongSnowflakeAllocator(this);
+		public LongSnowflakeAlgo bulid() {
+			return new LongSnowflakeAlgo(this);
 		}
 
 	}
@@ -50,7 +50,7 @@ public final class LongSnowflakeAllocator {
 	 * @param baseline
 	 * @return
 	 */
-	public static LongSnowflakeAllocator newAllocator(LocalDate baseline) {
+	public static LongSnowflakeAlgo newAllocator(LocalDate baseline) {
 		return new Bulider(ZonedDateTime.of(baseline, LocalTime.MIN, ZoneOffset.UTC)).bulid();
 	}
 
@@ -60,7 +60,7 @@ public final class LongSnowflakeAllocator {
 	 * @param zoneId
 	 * @return
 	 */
-	public static LongSnowflakeAllocator newAllocator(LocalDate baseline, ZoneId zoneId) {
+	public static LongSnowflakeAlgo newAllocator(LocalDate baseline, ZoneId zoneId) {
 		return new Bulider(ZonedDateTime.of(baseline, LocalTime.MIN, zoneId)).bulid();
 	}
 
@@ -68,7 +68,7 @@ public final class LongSnowflakeAllocator {
 	 * 
 	 * @param bulider
 	 */
-	private LongSnowflakeAllocator(Bulider bulider) {
+	private LongSnowflakeAlgo(Bulider bulider) {
 		this.baselineEpoch = bulider.baseline.toEpochSecond();
 	}
 
@@ -92,7 +92,7 @@ public final class LongSnowflakeAllocator {
 	private final long sequenceBits = 12L;
 
 	// 机器ID向左移12位
-	private final long workerIdShift = sequenceBits;
+	private final long ownerIdShift = sequenceBits;
 
 	// 时间截向左移22位(10+12)
 	private final long timestampLeftShift = sequenceBits + workerIdBits;
@@ -101,7 +101,7 @@ public final class LongSnowflakeAllocator {
 	private final long sequenceMask = -1L ^ (-1L << sequenceBits);
 
 	// 工作机器ID(0~1024)
-	private long workerId;
+	private long ownerId;
 
 	// 毫秒内序列(0~4095)
 	private long sequence = 0L;
@@ -141,13 +141,9 @@ public final class LongSnowflakeAllocator {
 		lastTimestamp = timestamp;
 
 		// 移位并通过或运算拼到一起组成64位的ID
-		return
-		// 时间戳左移至高位
-		((timestamp - twepoch) << timestampLeftShift)
-				// 所有者ID左移至中间位
-				| (workerId << workerIdShift)
-				// 自增位
-				| sequence;
+		return ((timestamp - twepoch) << timestampLeftShift) // 时间戳左移至高位
+				| (ownerId << ownerIdShift) // 所有者ID左移至中间位
+				| sequence; // 自增位
 	}
 
 	/**
