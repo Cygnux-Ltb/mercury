@@ -38,20 +38,17 @@ import io.mercury.common.util.StringUtil;
  * <br>
  * NOTE: These are only 1-way hashes, you won't be able to decrypt the string.
  * 
- * @author joelauer (twitter: @jjlauer or
- *         <a href="http://twitter.com/jjlauer" target=
- *         window>http://twitter.com/jjlauer</a>)
  */
-public class Hasher {
+public final class Hasher {
 
 	// Message Digest Algorithm - 128 bit
-	private static final String ALGORITHM_MD5 = "MD5";
+	private static final String ALGO_MD5 = "MD5";
 	// Secure Hash Algorithm - 160 bit
-	private static final String ALGORITHM_SHA1 = "SHA-1";
+	private static final String ALGO_SHA1 = "SHA-1";
 	// 256 bit
-	private static final String ALGORITHM_SHA256 = "SHA-256";
+	private static final String ALGO_SHA256 = "SHA-256";
 	// 512 bit
-	private static final String ALGORITHM_SHA512 = "SHA-512";
+	private static final String ALGO_SHA512 = "SHA-512";
 
 	/**
 	 * Enum that represents each different algorithm supported by the Hasher.
@@ -59,13 +56,13 @@ public class Hasher {
 	public static enum Algorithm {
 
 		/** Message Digest Algorithm - 128 bit */
-		MD5(ALGORITHM_MD5),
+		MD5(ALGO_MD5),
 		/** Secure Hash Algorithm - 160 bit */
-		SHA1(ALGORITHM_SHA1),
+		SHA1(ALGO_SHA1),
 		/** Secure Hash Algorithm - 256 bit */
-		SHA256(ALGORITHM_SHA256),
+		SHA256(ALGO_SHA256),
 		/** Secure Hash Algorithm - 512 bit */
-		SHA512(ALGORITHM_SHA512);
+		SHA512(ALGO_SHA512);
 
 		private final String algorithm;
 
@@ -77,6 +74,7 @@ public class Hasher {
 		public String toString() {
 			return this.algorithm;
 		}
+
 	}
 
 	private Algorithm algorithm;
