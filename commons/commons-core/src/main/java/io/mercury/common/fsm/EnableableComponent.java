@@ -1,37 +1,27 @@
 package io.mercury.common.fsm;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import javax.annotation.concurrent.ThreadSafe;
 
-import io.mercury.common.annotation.lang.AbstractFunction;
-
 @ThreadSafe
-public abstract class EnableComponent<T extends Enable<T>> implements Enable<T> {
+public abstract class EnableableComponent implements Enableable {
 
-	private volatile boolean isEnable;
+	private AtomicBoolean isEnable = new AtomicBoolean(false);
 
 	@Override
 	public boolean isEnabled() {
-		return isEnable;
+		return isEnable.get();
 	}
 
 	@Override
-	public boolean isDisabled() {
-		return !isEnable;
+	public boolean enable() {
+		return isEnable.compareAndSet(false, true);
 	}
 
 	@Override
-	public T disable() {
-		this.isEnable = false;
-		return returnThis();
+	public boolean disable() {
+		return isEnable.compareAndSet(true, false);
 	}
-
-	@Override
-	public T enable() {
-		this.isEnable = true;
-		return returnThis();
-	}
-
-	@AbstractFunction
-	protected abstract T returnThis();
 
 }
