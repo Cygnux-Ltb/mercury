@@ -1,5 +1,6 @@
 package io.mercury.common.group;
 
+import static io.mercury.common.collections.ImmutableLists.newImmutableList;
 import static io.mercury.common.collections.MutableMaps.newConcurrentHashMap;
 
 import javax.annotation.Nonnull;
@@ -10,7 +11,6 @@ import org.eclipse.collections.api.map.ConcurrentMutableMap;
 
 import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.collections.Capacity;
-import io.mercury.common.collections.ImmutableLists;
 
 /**
  * 
@@ -20,7 +20,7 @@ import io.mercury.common.collections.ImmutableLists;
  * @param <V>
  */
 @ThreadSafe
-public abstract class GroupBaseImpl<K, V> implements Group<K, V> {
+public abstract class AbstractGroup<K, V> implements Group<K, V> {
 
 	/**
 	 * 
@@ -30,17 +30,17 @@ public abstract class GroupBaseImpl<K, V> implements Group<K, V> {
 	protected final ConcurrentMutableMap<K, V> savedMap = newConcurrentHashMap(Capacity.L04_SIZE);
 
 	@Override
-	public V acquireMember(K k) {
-		return savedMap.getIfAbsentPutWithKey(k, this::createMember);
+	public V acquireMember(K key) {
+		return savedMap.getIfAbsentPutWithKey(key, this::createMember);
 	}
 
 	@Override
 	public ImmutableList<V> memberList() {
-		return ImmutableLists.newImmutableList(savedMap.values());
+		return newImmutableList(savedMap.values());
 	}
 
 	@Nonnull
 	@AbstractFunction
-	protected abstract V createMember(@Nonnull K k);
+	protected abstract V createMember(@Nonnull K key);
 
 }
