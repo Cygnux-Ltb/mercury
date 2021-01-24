@@ -1,28 +1,33 @@
 package io.mercury.common.collections.list;
 
+import static io.mercury.common.collections.MutableLists.newLongArrayList;
+
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.eclipse.collections.api.list.primitive.ImmutableLongList;
 import org.eclipse.collections.api.list.primitive.MutableLongList;
 
-import io.mercury.common.collections.MutableLists;
-
+/**
+ * 
+ * @author yellow013
+ *
+ */
 @NotThreadSafe
-public class FixedLengthRecorder {
+public class LongFixedLengthList {
 
 	private int tail = -1;
 	private int count = 0;
 
 	private int capacity;
 
-	private MutableLongList priceList;
+	private MutableLongList list;
 
 	private boolean isEmpty = true;
 	private boolean isFull = false;
 
-	private FixedLengthRecorder(int capacity) {
+	private LongFixedLengthList(int capacity) {
 		this.capacity = capacity;
-		this.priceList = MutableLists.newLongArrayList(capacity);
+		this.list = newLongArrayList(capacity);
 	}
 
 	/**
@@ -30,8 +35,8 @@ public class FixedLengthRecorder {
 	 * @param cycle
 	 * @return
 	 */
-	public static FixedLengthRecorder newRecorder(int cycle) {
-		return new FixedLengthRecorder(cycle);
+	public static LongFixedLengthList newList(int size) {
+		return new LongFixedLengthList(size);
 	}
 
 	/**
@@ -57,7 +62,7 @@ public class FixedLengthRecorder {
 	public long tail() {
 		if (isEmpty)
 			return 0L;
-		return priceList.get(tail);
+		return list.get(tail);
 	}
 
 	/**
@@ -68,8 +73,8 @@ public class FixedLengthRecorder {
 		if (isEmpty)
 			return 0L;
 		if (isFull)
-			return priceList.get(tail + 1 == capacity ? 0 : tail + 1);
-		return priceList.get(tail - count + 1);
+			return list.get(tail + 1 == capacity ? 0 : tail + 1);
+		return list.get(tail - count + 1);
 	}
 
 	/**
@@ -77,7 +82,7 @@ public class FixedLengthRecorder {
 	 * @return
 	 */
 	public long sum() {
-		return priceList.sum();
+		return list.sum();
 	}
 
 	/**
@@ -85,7 +90,7 @@ public class FixedLengthRecorder {
 	 * @return
 	 */
 	public long max() {
-		return priceList.max();
+		return list.max();
 	}
 
 	/**
@@ -93,7 +98,7 @@ public class FixedLengthRecorder {
 	 * @return
 	 */
 	public long min() {
-		return priceList.min();
+		return list.min();
 	}
 
 	/**
@@ -101,7 +106,7 @@ public class FixedLengthRecorder {
 	 * @return
 	 */
 	public long average() {
-		return (long) priceList.average();
+		return (long) list.average();
 	}
 
 	/**
@@ -109,7 +114,7 @@ public class FixedLengthRecorder {
 	 * @return
 	 */
 	public long median() {
-		return (long) priceList.median();
+		return (long) list.median();
 	}
 
 	/**
@@ -117,7 +122,7 @@ public class FixedLengthRecorder {
 	 * @return
 	 */
 	public ImmutableLongList toImmutable() {
-		return priceList.toImmutable();
+		return list.toImmutable();
 	}
 
 	/**
@@ -133,7 +138,7 @@ public class FixedLengthRecorder {
 	 * @param value
 	 * @return
 	 */
-	public FixedLengthRecorder addTail(long value) {
+	public LongFixedLengthList addTail(long value) {
 		updateTail(value);
 		return this;
 	}
@@ -146,9 +151,9 @@ public class FixedLengthRecorder {
 		updateTailIndex();
 		updateCount();
 		if (isFull)
-			priceList.set(tail, value);
+			list.set(tail, value);
 		else
-			priceList.add(value);
+			list.add(value);
 	}
 
 	/**
@@ -177,16 +182,16 @@ public class FixedLengthRecorder {
 
 	public static void main(String[] args) {
 
-		FixedLengthRecorder recorder = newRecorder(10);
+		LongFixedLengthList list = newList(10);
 
 		for (int i = 1; i < 30; i++) {
-			recorder.addTail(i);
-			System.out.println("Count -> " + recorder.count);
+			list.addTail(i);
+			System.out.println("Count -> " + list.count);
 			System.out.print("Value -> ");
-			recorder.priceList.each(value -> System.out.print(value + " , "));
+			list.list.each(value -> System.out.print(value + " , "));
 			System.out.println();
-			System.out.println("Head -> " + recorder.head());
-			System.out.println("Tail -> " + recorder.tail());
+			System.out.println("Head -> " + list.head());
+			System.out.println("Tail -> " + list.tail());
 		}
 
 	}
