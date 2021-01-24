@@ -119,8 +119,7 @@ public class SpscQueue<T> extends ScQueue<T> {
 
 	public static void main(String[] args) {
 
-		SpscQueue<Integer> queue = new SpscQueue<>("Test-Queue", Capacity.L06_SIZE, true,
-				(integer) -> System.out.println(integer));
+		SpscQueue<Integer> queue = new SpscQueue<>("Test-Queue", Capacity.L06_SIZE, true, in -> System.out.println(in));
 
 		Threads.startNewThread(() -> {
 			int i = 0;

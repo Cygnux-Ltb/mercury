@@ -110,7 +110,7 @@ public class SpscQueueWithSupplier<T> extends ScQueue<T> {
 	public static void main(String[] args) {
 
 		SpscQueueWithSupplier<Integer> queue = new SpscQueueWithSupplier<>(Capacity.L10_SIZE, true,
-				WaitStrategyOption.BusySpin, () -> Integer.valueOf(0), (integer) -> System.out.println(integer));
+				WaitStrategyOption.BusySpin, () -> Integer.valueOf(0), in -> System.out.println(in));
 
 		Threads.startNewThread(() -> {
 			int i = 0;
