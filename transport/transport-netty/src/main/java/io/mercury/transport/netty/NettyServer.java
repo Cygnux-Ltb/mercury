@@ -28,10 +28,10 @@ public class NettyServer extends NettyTransport implements TransportServer {
 	 * 
 	 * @param tag
 	 * @param configurator
-	 * @param channelHandlers
+	 * @param handlers
 	 */
-	public NettyServer(String tag, NettyConfigurator configurator, ChannelHandler... channelHandlers) {
-		super(tag, configurator, channelHandlers);
+	public NettyServer(String tag, NettyConfigurator configurator, ChannelHandler... handlers) {
+		super(tag, configurator, handlers);
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class NettyServer extends NettyTransport implements TransportServer {
 
 	public static void main(String[] args) throws Exception {
 
-		NettyConfigurator configurator = NettyConfigurator.builder().host("192.168.1.138").port(7901).build();
+		NettyConfigurator configurator = NettyConfigurator.builder("192.168.1.138", 7901).build();
 
 		NettyServer nettyServer = new NettyServer("LocalTest", configurator, new GeneralNettyHandler() {
 

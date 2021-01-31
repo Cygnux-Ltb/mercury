@@ -9,9 +9,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 
 public abstract class GeneralNettyHandler extends ChannelInboundHandlerAdapter {
 
-	/**
-	 * buffer size
-	 */
+	// buffer size
 	protected int byteBufSize;
 
 	private static final Logger log = CommonLoggerFactory.getLogger(GeneralNettyHandler.class);

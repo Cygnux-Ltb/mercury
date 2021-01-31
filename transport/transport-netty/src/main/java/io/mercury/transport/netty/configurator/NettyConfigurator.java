@@ -42,8 +42,8 @@ public final class NettyConfigurator implements TransportConfigurator {
 		this.connectionInfo = host + ":" + port;
 	}
 
-	public static Builder builder() {
-		return new Builder();
+	public static Builder builder(String host, int port) {
+		return new Builder(host, port);
 	}
 
 	@Override
@@ -109,8 +109,8 @@ public final class NettyConfigurator implements TransportConfigurator {
 
 	public static class Builder {
 
-		private String host = "127.0.0.1";
-		private int port = 9500;
+		private final String host;
+		private final int port;
 		private int backlog = 128;
 		private boolean keepAlive = true;
 		private boolean tcpNoDelay = true;
@@ -120,17 +120,10 @@ public final class NettyConfigurator implements TransportConfigurator {
 		private char separator = ';';
 		private ShutdownEvent shutdownEvent;
 
-		private Builder() {
-		}
-
-		public Builder host(String host) {
+		private Builder(String host, int port) {
+			super();
 			this.host = host;
-			return this;
-		}
-
-		public Builder port(int port) {
 			this.port = port;
-			return this;
 		}
 
 		public Builder backlog(int backlog) {

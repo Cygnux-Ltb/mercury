@@ -11,12 +11,18 @@ import io.netty.channel.nio.NioEventLoopGroup;
 
 public abstract class NettyTransport {
 
-	protected String tag;
-	protected NettyConfigurator configurator;
+	protected final String tag;
+	protected final NettyConfigurator configurator;
 
 	protected final ChannelHandler[] handlers;
 	protected final EventLoopGroup workerGroup;
 
+	/**
+	 * 
+	 * @param tag
+	 * @param configurator
+	 * @param handlers
+	 */
 	protected NettyTransport(String tag, NettyConfigurator configurator, ChannelHandler... handlers) {
 		Assertor.nonNull(configurator, "configurator");
 		Assertor.requiredLength(handlers, 1, "handlers");
