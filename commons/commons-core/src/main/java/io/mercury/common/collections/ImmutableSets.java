@@ -27,19 +27,10 @@ public final class ImmutableSets {
 
 	/**
 	 * 
-	 * @return ImmutableIntSetFactory
+	 * @return ImmutableIntSetFactoryInstance
 	 */
-	public static ImmutableIntSetFactory getIntSetFactory() {
+	public static ImmutableIntSetFactory intSetFactory() {
 		return ImmutableIntSetFactoryImpl.INSTANCE;
-	}
-
-	/**
-	 * 
-	 * @param i
-	 * @return ImmutableIntSet
-	 */
-	public static ImmutableIntSet newImmutableIntSet(int i) {
-		return ImmutableIntSetFactoryImpl.INSTANCE.with(i);
 	}
 
 	/**
@@ -55,19 +46,10 @@ public final class ImmutableSets {
 
 	/**
 	 * 
-	 * @return ImmutableLongSetFactory
+	 * @return ImmutableLongSetFactoryInstance
 	 */
-	public static ImmutableLongSetFactory getLongSetFactory() {
+	public static ImmutableLongSetFactory longSetFactoryInstance() {
 		return ImmutableLongSetFactoryImpl.INSTANCE;
-	}
-
-	/**
-	 * 
-	 * @param l
-	 * @return ImmutableLongSet
-	 */
-	public static ImmutableLongSet newImmutableLongSet(long l) {
-		return ImmutableLongSetFactoryImpl.INSTANCE.with(l);
 	}
 
 	/**
@@ -83,19 +65,10 @@ public final class ImmutableSets {
 
 	/**
 	 * 
-	 * @return ImmutableDoubleSetFactory
+	 * @return ImmutableDoubleSetFactoryInstance
 	 */
-	public static ImmutableDoubleSetFactory getDoubleSetFactory() {
+	public static ImmutableDoubleSetFactory doubleSetFactory() {
 		return ImmutableDoubleSetFactoryImpl.INSTANCE;
-	}
-
-	/**
-	 * 
-	 * @param d
-	 * @return ImmutableDoubleSet
-	 */
-	public static ImmutableDoubleSet newImmutableDoubleSet(double d) {
-		return ImmutableDoubleSetFactoryImpl.INSTANCE.with(d);
 	}
 
 	/**
@@ -111,9 +84,9 @@ public final class ImmutableSets {
 
 	/**
 	 * 
-	 * @return ImmutableSetFactory
+	 * @return ImmutableSetFactoryInstance
 	 */
-	public static ImmutableSetFactory getSetFactory() {
+	public static ImmutableSetFactory objectSetFactory() {
 		return ImmutableSetFactoryImpl.INSTANCE;
 	}
 
@@ -132,25 +105,11 @@ public final class ImmutableSets {
 	/**
 	 * 
 	 * @param <E>
-	 * @param e
-	 * @return ImmutableSet
-	 */
-	public static <E> ImmutableSet<E> newImmutableSet(E e) {
-		if (e == null)
-			return ImmutableSetFactoryImpl.INSTANCE.empty();
-		return ImmutableSetFactoryImpl.INSTANCE.with(e);
-	}
-
-	/**
-	 * 
-	 * @param <E>
 	 * @param values
 	 * @return ImmutableSet
 	 */
 	@SafeVarargs
 	public static <E> ImmutableSet<E> newImmutableSet(@Nonnull E... values) {
-		if (isNullOrEmpty(values))
-			return ImmutableSetFactoryImpl.INSTANCE.empty();
 		return ImmutableSetFactoryImpl.INSTANCE.with(values);
 	}
 
@@ -158,7 +117,7 @@ public final class ImmutableSets {
 	 * 
 	 * @return ImmutableSortedSetFactory
 	 */
-	public static ImmutableSortedSetFactory SortedSetFactory() {
+	public static ImmutableSortedSetFactory objSortedSetFactoryInstance() {
 		return ImmutableSortedSetFactoryImpl.INSTANCE;
 	}
 
@@ -185,13 +144,6 @@ public final class ImmutableSets {
 		if (isNullOrEmpty(values))
 			return ImmutableSortedSetFactoryImpl.INSTANCE.empty();
 		return ImmutableSortedSetFactoryImpl.INSTANCE.with(values);
-	}
-
-	public static void main(String[] args) {
-		for (int i = 1; i < 32; i++) {
-			System.out.println("1 << " + i + " : " + (1 << i));
-		}
-		System.out.println(Integer.MAX_VALUE);
 	}
 
 }

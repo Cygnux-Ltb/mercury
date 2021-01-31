@@ -3,6 +3,9 @@ package io.mercury.common.collections;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import javax.annotation.Nonnull;
+
+import org.eclipse.collections.api.block.function.primitive.IntFunction;
 import org.eclipse.collections.api.factory.map.ImmutableMapFactory;
 import org.eclipse.collections.api.factory.map.primitive.ImmutableIntDoubleMapFactory;
 import org.eclipse.collections.api.factory.map.primitive.ImmutableIntIntMapFactory;
@@ -13,6 +16,7 @@ import org.eclipse.collections.api.factory.map.primitive.ImmutableLongIntMapFact
 import org.eclipse.collections.api.factory.map.primitive.ImmutableLongLongMapFactory;
 import org.eclipse.collections.api.factory.map.primitive.ImmutableLongObjectMapFactory;
 import org.eclipse.collections.api.map.ImmutableMap;
+import org.eclipse.collections.api.map.primitive.ImmutableIntIntMap;
 import org.eclipse.collections.impl.map.immutable.ImmutableMapFactoryImpl;
 import org.eclipse.collections.impl.map.immutable.primitive.ImmutableIntDoubleMapFactoryImpl;
 import org.eclipse.collections.impl.map.immutable.primitive.ImmutableIntIntMapFactoryImpl;
@@ -30,73 +34,83 @@ public final class ImmutableMaps {
 
 	/**
 	 * 
-	 * @return ImmutableIntIntMapFactory
+	 * @return ImmutableIntIntMapFactoryInstance
 	 */
-	public static ImmutableIntIntMapFactory getIntIntMapFactory() {
+	@Nonnull
+	public static ImmutableIntIntMapFactory immutableIntIntMapFactory() {
 		return ImmutableIntIntMapFactoryImpl.INSTANCE;
 	}
 
 	/**
 	 * 
-	 * @return ImmutableIntLongMapFactory
+	 * @return The new ImmutableIntIntMap
 	 */
-	public static ImmutableIntLongMapFactory getIntLongMapFactory() {
+	public static <T> ImmutableIntIntMap newImmutableIntIntMapFrom(@Nonnull Iterable<T> iterable,
+			@Nonnull IntFunction<T> keyFunction, @Nonnull IntFunction<T> valueFunction) {
+		return ImmutableIntIntMapFactoryImpl.INSTANCE.from(iterable, keyFunction, valueFunction);
+	}
+
+	/**
+	 * 
+	 * @return ImmutableIntLongMapFactoryInstance
+	 */
+	public static ImmutableIntLongMapFactory immutableIntLongMapFactory() {
 		return ImmutableIntLongMapFactoryImpl.INSTANCE;
 	}
 
 	/**
 	 * 
-	 * @return ImmutableIntDoubleMapFactory
+	 * @return ImmutableIntDoubleMapFactoryInstance
 	 */
-	public static ImmutableIntDoubleMapFactory getIntDoubleMapFactory() {
+	public static ImmutableIntDoubleMapFactory immutableIntDoubleMapFactory() {
 		return ImmutableIntDoubleMapFactoryImpl.INSTANCE;
 	}
 
 	/**
 	 * 
-	 * @return ImmutableIntObjectMapFactory
+	 * @return ImmutableIntObjectMapFactoryInstance
 	 */
-	public static ImmutableIntObjectMapFactory getIntObjectMapFactory() {
+	public static ImmutableIntObjectMapFactory immutableIntObjectMapFactory() {
 		return ImmutableIntObjectMapFactoryImpl.INSTANCE;
 	}
 
 	/**
 	 * 
-	 * @return ImmutableLongIntMapFactory
+	 * @return ImmutableLongIntMapFactoryInstance
 	 */
-	public static ImmutableLongIntMapFactory getLongIntMapFactory() {
+	public static ImmutableLongIntMapFactory immutableLongIntMapFactory() {
 		return ImmutableLongIntMapFactoryImpl.INSTANCE;
 	}
 
 	/**
 	 * 
-	 * @return ImmutableLongLongMapFactory
+	 * @return ImmutableLongLongMapFactoryInstance
 	 */
-	public static ImmutableLongLongMapFactory getLongLongMapFactory() {
+	public static ImmutableLongLongMapFactory immutableLongLongMapFactory() {
 		return ImmutableLongLongMapFactoryImpl.INSTANCE;
 	}
 
 	/**
 	 * 
-	 * @return ImmutableLongDoubleMapFactory
+	 * @return ImmutableLongDoubleMapFactoryInstance
 	 */
-	public static ImmutableLongDoubleMapFactory getLongDoubleMapFactory() {
+	public static ImmutableLongDoubleMapFactory immutableLongDoubleMapFactory() {
 		return ImmutableLongDoubleMapFactoryImpl.INSTANCE;
 	}
 
 	/**
 	 * 
-	 * @return ImmutableLongObjectMapFactory
+	 * @return ImmutableLongObjectMapFactoryInstance
 	 */
-	public static ImmutableLongObjectMapFactory getLongObjectMapFactory() {
+	public static ImmutableLongObjectMapFactory immutableLongObjectMapFactory() {
 		return ImmutableLongObjectMapFactoryImpl.INSTANCE;
 	}
 
 	/**
 	 * 
-	 * @return ImmutableMapFactory
+	 * @return ImmutableMapFactoryInstance
 	 */
-	public static ImmutableMapFactory getMapFactory() {
+	public static ImmutableMapFactory immutableMapFactory() {
 		return ImmutableMapFactoryImpl.INSTANCE;
 	}
 
@@ -106,7 +120,7 @@ public final class ImmutableMaps {
 	 * @param <V>
 	 * @param key
 	 * @param value
-	 * @return ImmutableMap
+	 * @return The new ImmutableMap
 	 */
 	public static <K, V> ImmutableMap<K, V> newImmutableMap(K key, V value) {
 		return ImmutableMapFactoryImpl.INSTANCE.with(key, value);
@@ -117,7 +131,7 @@ public final class ImmutableMaps {
 	 * @param <K>
 	 * @param <V>
 	 * @param map
-	 * @return ImmutableMap
+	 * @return The new ImmutableMap
 	 */
 	public static <K, V> ImmutableMap<K, V> newImmutableMap(Map<K, V> map) {
 		if (map == null || map.isEmpty())
@@ -128,7 +142,7 @@ public final class ImmutableMaps {
 	/**
 	 * @param <Map<K,  V>>
 	 * @param supplier
-	 * @return ImmutableMap
+	 * @return The new ImmutableMap
 	 */
 	public static <K, V> ImmutableMap<K, V> newImmutableMap(Supplier<Map<K, V>> supplier) {
 		if (supplier == null)
