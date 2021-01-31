@@ -1,5 +1,7 @@
 package io.mercury.common.file;
 
+import static io.mercury.common.character.Separator.LINE_SEPARATOR;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -36,9 +38,9 @@ public final class FileChannelWriter {
 	 * @throws NullPointerException
 	 * @throws IOException
 	 */
-	public static final File write(List<String> data, @Nonnull final File target)
+	public static final File write(List<String> lines, @Nonnull final File target)
 			throws NullPointerException, IOException {
-		return write(data, Charsets.UTF8, target, 8192, true);
+		return write(lines, Charsets.UTF8, target, 8192, true);
 	}
 
 	/**
@@ -50,9 +52,9 @@ public final class FileChannelWriter {
 	 * @throws NullPointerException
 	 * @throws IOException
 	 */
-	public static final File write(List<String> data, @Nonnull File target, boolean append)
+	public static final File write(List<String> lines, @Nonnull File target, boolean append)
 			throws NullPointerException, IOException {
-		return write(data, Charsets.UTF8, target, 8192, append);
+		return write(lines, Charsets.UTF8, target, 8192, append);
 	}
 
 	/**
@@ -66,9 +68,13 @@ public final class FileChannelWriter {
 	 * @throws NullPointerException
 	 * @throws IOException
 	 */
-	public static final File write(List<String> data, @Nonnull Charset charset, @Nonnull File target, int capacity,
+	public static final File write(List<String> lines, @Nonnull Charset charset, @Nonnull File target, int capacity,
 			boolean append) throws NullPointerException, IOException {
-		return write(data, str -> str.getBytes(charset), target, capacity, append);
+		return write(lines,
+				line -> line.endsWith(LINE_SEPARATOR) ? line.getBytes(charset)
+						: new StringBuilder(line.length() + LINE_SEPARATOR.length()).append(line).append(LINE_SEPARATOR)
+								.toString().getBytes(charset),
+				target, capacity, append);
 	}
 
 	/**

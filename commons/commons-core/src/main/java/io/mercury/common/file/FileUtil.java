@@ -1,5 +1,8 @@
 package io.mercury.common.file;
 
+import static io.mercury.common.sys.SysProperties.JAVA_IO_TMPDIR;
+import static io.mercury.common.sys.SysProperties.USER_HOME;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -16,7 +19,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import javax.annotation.Nonnull;
+
 import io.mercury.common.datetime.Pattern;
+import io.mercury.common.util.Assertor;
 
 /**
  * 
@@ -25,61 +31,61 @@ import io.mercury.common.datetime.Pattern;
  * NOTE: Some code copied from the JXL project.
  * 
  */
-public class FileUtil {
+public final class FileUtil {
 
 	private FileUtil() {
 		// do nothing
 	}
 
-	private static boolean equals(InputStream is1, InputStream is2) throws IOException {
-		int BUFFSIZE = 1024;
-		byte buf1[] = new byte[BUFFSIZE];
-		byte buf2[] = new byte[BUFFSIZE];
+	/**
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public static final File mkdirInTmp(@Nonnull File file) throws NullPointerException {
+		Assertor.nonNull(file, "flie");
+		return mkdirInTmp(file.getPath());
+	}
 
-		if (is1 == is2) {
-			return true;
-		}
-		if (is1 == null && is2 == null) {
-			return true;
-		}
-		if (is1 == null || is2 == null) {
-			return false;
-		}
+	/**
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public static final File mkdirInTmp(@Nonnull String path) throws NullPointerException, IllegalArgumentException {
+		Assertor.nonEmpty(path, "path");
+		File file = new File(JAVA_IO_TMPDIR, path);
+		file.mkdirs();
+		return file;
+	}
 
-		int read1 = -1;
-		int read2 = -1;
+	/**
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public static final File mkdirInHome(@Nonnull File file) {
+		Assertor.nonNull(file, "flie");
+		return mkdirInHome(file.getPath());
+	}
 
-		do {
-			int offset1 = 0;
-			while (offset1 < BUFFSIZE && (read1 = is1.read(buf1, offset1, BUFFSIZE - offset1)) >= 0) {
-				offset1 += read1;
-			}
+	/**
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public static final File mkdirInHome(@Nonnull String path) {
+		Assertor.nonEmpty(path, "path");
+		File file = new File(USER_HOME, path);
+		file.mkdirs();
+		return file;
+	}
+	
+	
+	public static void main(String[] args) {
 
-			int offset2 = 0;
-			while (offset2 < BUFFSIZE && (read2 = is2.read(buf2, offset2, BUFFSIZE - offset2)) >= 0) {
-				offset2 += read2;
-			}
+		System.out.println(FileUtil.mkdirInHome("aaaa"));
 
-			if (offset1 != offset2) {
-				return false;
-			}
-
-			if (offset1 != BUFFSIZE) {
-				Arrays.fill(buf1, offset1, BUFFSIZE, (byte) 0);
-				Arrays.fill(buf2, offset2, BUFFSIZE, (byte) 0);
-			}
-
-			if (!Arrays.equals(buf1, buf2)) {
-				return false;
-			}
-
-		} while (read1 >= 0 && read2 >= 0);
-
-		if (read1 < 0 && read2 < 0) {
-			return true; // both at EOF
-		}
-
-		return false;
 	}
 
 	/**
@@ -120,6 +126,57 @@ public class FileUtil {
 				}
 			}
 		}
+	}
+
+	private static boolean equals(InputStream is1, InputStream is2) throws IOException {
+		int buffsize = 1024;
+		byte buf1[] = new byte[buffsize];
+		byte buf2[] = new byte[buffsize];
+
+		if (is1 == is2) {
+			return true;
+		}
+		if (is1 == null && is2 == null) {
+			return true;
+		}
+		if (is1 == null || is2 == null) {
+			return false;
+		}
+
+		int read1 = -1;
+		int read2 = -1;
+
+		do {
+			int offset1 = 0;
+			while (offset1 < buffsize && (read1 = is1.read(buf1, offset1, buffsize - offset1)) >= 0) {
+				offset1 += read1;
+			}
+
+			int offset2 = 0;
+			while (offset2 < buffsize && (read2 = is2.read(buf2, offset2, buffsize - offset2)) >= 0) {
+				offset2 += read2;
+			}
+
+			if (offset1 != offset2) {
+				return false;
+			}
+
+			if (offset1 != buffsize) {
+				Arrays.fill(buf1, offset1, buffsize, (byte) 0);
+				Arrays.fill(buf2, offset2, buffsize, (byte) 0);
+			}
+
+			if (!Arrays.equals(buf1, buf2)) {
+				return false;
+			}
+
+		} while (read1 >= 0 && read2 >= 0);
+
+		if (read1 < 0 && read2 < 0) {
+			return true; // both at EOF
+		}
+
+		return false;
 	}
 
 	/**
