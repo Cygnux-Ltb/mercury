@@ -1,5 +1,7 @@
 package io.mercury.commons.reflect;
 
+import static io.mercury.common.collections.ImmutableSets.newImmutableSet;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -13,8 +15,6 @@ import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
-
-import io.mercury.common.collections.ImmutableSets;
 
 /**
  * 加载 AmqpProxy 反射信息
@@ -42,8 +42,7 @@ public final class AmqpProxyReflection {
 				.setUrls(ClasspathHelper.forPackage(scanPackage)).setScanners(new SubTypesScanner(),
 						new MethodAnnotationsScanner(), new MethodParameterScanner(), new TypeAnnotationsScanner()));
 
-		ImmutableSet<Method> immutableSet = ImmutableSets
-				.newImmutableSet(reflections.getMethodsAnnotatedWith(annotationType));
+		ImmutableSet<Method> immutableSet = newImmutableSet(reflections.getMethodsAnnotatedWith(annotationType));
 		immutableSet.each(this::assertionProxyeedMethod);
 
 		return immutableSet;
