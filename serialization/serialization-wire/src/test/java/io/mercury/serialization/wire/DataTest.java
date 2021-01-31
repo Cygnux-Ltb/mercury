@@ -13,7 +13,7 @@ import net.openhft.chronicle.wire.YamlWire;
 public class DataTest {
 	
 	static {
-		LogConfigurator.logLevel(LogLevel.ERROR);
+		LogConfigurator.setLogLevel(LogLevel.ERROR);
 	}
 
 	@Test

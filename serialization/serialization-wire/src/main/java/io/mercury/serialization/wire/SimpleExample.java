@@ -21,7 +21,7 @@ import net.openhft.chronicle.wire.WireType;
 public class SimpleExample {
 
 	static {
-		LogConfigurator.logLevel(LogLevel.ERROR);
+		LogConfigurator.setLogLevel(LogLevel.ERROR);
 	}
 	
 	public static void main(String[] args) {

@@ -23,7 +23,7 @@ import net.openhft.chronicle.wire.Wires;
 public class Test5 {
 	
 	static {
-		LogConfigurator.logLevel(LogLevel.ERROR);
+		LogConfigurator.setLogLevel(LogLevel.ERROR);
 	}
 
 	public static void main(String[] args) {
