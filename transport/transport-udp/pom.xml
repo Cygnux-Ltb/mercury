@@ -20,8 +20,6 @@
 
 	<dependencies>
 
-
-
 		<!-- Efficient reliable UDP unicast, UDP multicast, and IPC transport protocol. -->
 		<dependency>
 			<groupId>io.aeron</groupId>
