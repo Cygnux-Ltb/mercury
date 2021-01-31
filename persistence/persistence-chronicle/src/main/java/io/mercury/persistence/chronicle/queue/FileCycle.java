@@ -143,7 +143,6 @@ public enum FileCycle {
 		System.out.println(FileCycle.MINUTELY.toIndex(System.currentTimeMillis() / 1000));
 		System.out.println(Integer.MAX_VALUE);
 		System.out.println(Instant.now().getEpochSecond() / 60);
-
 		System.out.println(RollCycles.DAILY.lengthInMillis());
 
 	}

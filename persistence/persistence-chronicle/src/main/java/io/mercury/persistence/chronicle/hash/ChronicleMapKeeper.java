@@ -8,14 +8,14 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
-import io.mercury.common.collections.keeper.KeeperBaseImpl;
+import io.mercury.common.collections.keeper.AbstractKeeper;
 import io.mercury.common.util.Assertor;
 import io.mercury.persistence.chronicle.exception.ChronicleIOException;
 import net.openhft.chronicle.map.ChronicleMap;
 import net.openhft.chronicle.map.ChronicleMapBuilder;
 
 @ThreadSafe
-public class ChronicleMapKeeper<K, V> extends KeeperBaseImpl<String, ChronicleMap<K, V>> implements Closeable {
+public class ChronicleMapKeeper<K, V> extends AbstractKeeper<String, ChronicleMap<K, V>> implements Closeable {
 
 	private ChronicleMapConfigurator<K, V> configurator;
 

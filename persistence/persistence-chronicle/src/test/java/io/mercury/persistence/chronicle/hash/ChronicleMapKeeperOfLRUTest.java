@@ -14,7 +14,7 @@ import net.openhft.chronicle.map.ChronicleMap;
 public class ChronicleMapKeeperOfLRUTest {
 
 	static {
-		LogConfigurator.logLevel(LogLevel.INFO);
+		LogConfigurator.setLogLevel(LogLevel.INFO);
 	}
 
 	public static void main(String[] args) {
