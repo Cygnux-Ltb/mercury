@@ -55,9 +55,9 @@ public class SimpleServerAndClientTest extends NetworkTestCommon {
 	private ThreadDump threadDump;
 
 	static {
-		LogConfigurator.folder("runtime");
-		LogConfigurator.filename("socket-test");
-		LogConfigurator.logLevel(LogLevel.INFO);
+		LogConfigurator.setFolder("runtime");
+		LogConfigurator.setFilename("socket-test");
+		LogConfigurator.setLogLevel(LogLevel.INFO);
 	}
 
 	@Before

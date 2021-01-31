@@ -7,6 +7,6 @@ public interface Transceiver<T> extends Receiver {
 
 	Sender<T> getSender();
 
-	void startSend();
+	boolean startSend();
 
 }

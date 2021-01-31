@@ -51,8 +51,13 @@ public abstract class BaseTransceiver<T> implements Transceiver<T> {
 	}
 
 	@Override
-	public void startSend() {
-		queue.start();
+	public boolean startSend() {
+		try {
+			queue.start();
+			return true;
+		} catch (Exception e) {
+			throw new RuntimeException("start queue exception : " + e.getMessage(), e);
+		}
 	}
 
 	@AbstractFunction
