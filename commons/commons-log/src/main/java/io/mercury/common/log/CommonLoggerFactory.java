@@ -19,17 +19,17 @@ public final class CommonLoggerFactory {
 
 	public static final synchronized Logger getLogger(Class<?> clazz) {
 		// 配置日志存储目录, 基于${user.home}
-		String folder = LogConfigurator.folder();
+		String folder = LogConfigurator.getFolder();
 		if (folder == null || folder.isEmpty())
-			LogConfigurator.folder(DefaultFolder);
+			LogConfigurator.setFolder(DefaultFolder);
 		// 配置日志文件名
-		String filename = LogConfigurator.filename();
+		String filename = LogConfigurator.getFilename();
 		if (filename == null || filename.isEmpty())
-			LogConfigurator.filename(DefaultFileName);
+			LogConfigurator.setFilename(DefaultFileName);
 		// 配置日志級別
-		String level = LogConfigurator.level();
+		String level = LogConfigurator.getLogLevel();
 		if (level == null || level.isEmpty())
-			LogConfigurator.logLevel(DefaultLevel);
+			LogConfigurator.setLogLevel(DefaultLevel);
 		return LoggerFactory.getLogger(clazz);
 	}
 
