@@ -23,7 +23,7 @@ public class ArangoDemo {
 
 	public static void main(final String[] args) {
 
-		LogConfigurator.logLevel(LogLevel.INFO);
+		LogConfigurator.setLogLevel(LogLevel.INFO);
 
 		final ArangoDB arangoDB = new ArangoDB.Builder().host("127.0.0.1", 8529).user("root").password("root")
 				.useProtocol(Protocol.VST).build();
