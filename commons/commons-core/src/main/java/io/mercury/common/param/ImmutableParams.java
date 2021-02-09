@@ -1,6 +1,6 @@
 package io.mercury.common.param;
 
-import static io.mercury.common.util.Assertor.nonEmpty;
+import static io.mercury.common.util.Assertor.nonEmptyMap;
 import static io.mercury.common.util.Assertor.nonNull;
 import static io.mercury.common.util.Assertor.requiredLength;
 import static java.lang.System.out;
@@ -32,7 +32,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 	public ImmutableParams(@Nonnull Map<?, ?> map, @Nonnull K... keys)
 			throws NullPointerException, IllegalArgumentException {
 		requiredLength(keys, 1, "keys");
-		nonEmpty(map, "map");
+		nonEmptyMap(map, "map");
 		MutableMap<K, String> mutableMap = MutableMaps.newUnifiedMap();
 		for (K key : keys) {
 			if (map.containsKey(key.paramName()))
