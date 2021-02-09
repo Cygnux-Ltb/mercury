@@ -2,11 +2,11 @@ package io.mercury.common.sequence;
 
 public interface Serial<T extends Serial<T>> extends Comparable<T> {
 
-	long serialId();
+	long getSerialId();
 
 	@Override
 	default int compareTo(T o) {
-		return serialId() < o.serialId() ? -1 : serialId() > o.serialId() ? 1 : 0;
+		return getSerialId() < o.getSerialId() ? -1 : getSerialId() > o.getSerialId() ? 1 : 0;
 	}
 
 }
