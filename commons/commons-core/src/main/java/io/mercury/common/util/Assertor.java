@@ -148,7 +148,7 @@ public final class Assertor {
 	 * @throws NullPointerException
 	 * @throws IllegalArgumentException
 	 */
-	public static <T extends Collection<?>> T nonEmpty(T collection, String objName)
+	public static <T extends Collection<?>> T nonEmptyCollection(T collection, String objName)
 			throws NullPointerException, IllegalArgumentException {
 		if (collection == null)
 			throw new NullPointerException(objName + " can not be null");
@@ -166,7 +166,7 @@ public final class Assertor {
 	 * @throws NullPointerException
 	 * @throws IllegalArgumentException
 	 */
-	public static <T extends Map<?, ?>> T nonEmpty(T map, String objName)
+	public static <T extends Map<?, ?>> T nonEmptyMap(T map, String objName)
 			throws NullPointerException, IllegalArgumentException {
 		if (map == null)
 			throw new NullPointerException(objName + " can not be null");
