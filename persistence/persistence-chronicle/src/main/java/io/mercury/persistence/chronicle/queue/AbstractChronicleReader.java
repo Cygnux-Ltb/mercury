@@ -50,8 +50,8 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 	 * @param excerptTailer
 	 * @param consumer
 	 */
-	protected AbstractChronicleReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param,
-			Logger logger, ExcerptTailer excerptTailer, Consumer<T> consumer) {
+	AbstractChronicleReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param, Logger logger,
+			ExcerptTailer excerptTailer, Consumer<T> consumer) {
 		super(allocateSeq);
 		this.readerName = readerName;
 		this.fileCycle = fileCycle;
@@ -282,10 +282,18 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 			this.exitRunnable = builder.exitRunnable;
 		}
 
+		/**
+		 * 
+		 * @return
+		 */
 		public static Builder newBuilder() {
 			return new Builder();
 		}
 
+		/**
+		 * 
+		 * @return
+		 */
 		static ReaderParam defaultParam() {
 			return new Builder().build();
 		}

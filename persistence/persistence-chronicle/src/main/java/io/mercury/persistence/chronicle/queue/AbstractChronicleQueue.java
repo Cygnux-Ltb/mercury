@@ -35,7 +35,7 @@ import net.openhft.chronicle.queue.impl.single.SingleChronicleQueue;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
 
 @Immutable
-public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReader<T>, A extends AbstractChronicleAppender<T>>
+public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleReader<T>, AT extends AbstractChronicleAppender<T>>
 		implements net.openhft.chronicle.core.io.Closeable {
 
 	private final String rootPath;
@@ -43,8 +43,10 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	private final boolean readOnly;
 	private final long epoch;
 	private final FileCycle fileCycle;
+
 	// 文件清理周期
 	private final int fileClearCycle;
+	// 存储文件释放回调
 	private final ObjIntConsumer<File> storeFileListener;
 
 	private final File savePath;
@@ -87,9 +89,9 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 				// .rollTimeZone(rollTimeZone)
 				// 文件存储回调
 				.storeFileListener(this::storeFileHandle);
-
-		if (epoch > 0L)
+		if (epoch > 0L) {
 			builder.epoch(epoch);
+		}
 		// TODO 待解决CPU缓存行填充问题
 		ShutdownHooks.addShutdownHookThread("ChronicleQueue-Cleanup", this::shutdownHandle);
 		return builder.build();
@@ -139,7 +141,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 					} catch (RuntimeInterruptedException e) {
 						logger.info("Last execution fileClearTask");
 						fileClearTask();
-						logger.info("{} exit now", Threads.currentThreadName());
+						logger.info("Thread -> {} quit now", Threads.currentThreadName());
 					}
 					if (isClearRunning.get()) {
 						fileClearTask();
@@ -183,10 +185,6 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 			}
 		}
 	}
-
-	/**
-	 ******************************** 文件清理程序 END ********************************
-	 */
 
 	/**
 	 * 
@@ -264,7 +262,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public R createReader() throws IllegalStateException {
+	public RT createReader() throws IllegalStateException {
 		return createReader(generateReaderName(), ReaderParam.defaultParam(), t -> logger.info(EMPTY_CONSUMER_MSG));
 	}
 
@@ -274,7 +272,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public R createReader(@Nonnull Consumer<T> dataConsumer) throws IllegalStateException {
+	public RT createReader(@Nonnull Consumer<T> dataConsumer) throws IllegalStateException {
 		return createReader(generateReaderName(), ReaderParam.defaultParam(), dataConsumer);
 	}
 
@@ -285,7 +283,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public R createReader(@Nonnull String readerName, @Nonnull Consumer<T> dataConsumer) throws IllegalStateException {
+	public RT createReader(@Nonnull String readerName, @Nonnull Consumer<T> dataConsumer) throws IllegalStateException {
 		return createReader(readerName, ReaderParam.defaultParam(), dataConsumer);
 	}
 
@@ -296,7 +294,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public R createReader(@Nonnull ReaderParam param, @Nonnull Consumer<T> dataConsumer) throws IllegalStateException {
+	public RT createReader(@Nonnull ReaderParam param, @Nonnull Consumer<T> dataConsumer) throws IllegalStateException {
 		return createReader(generateReaderName(), param, dataConsumer);
 	}
 
@@ -308,7 +306,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public R createReader(@Nonnull String readerName, @Nonnull ReaderParam param, @Nonnull Consumer<T> dataConsumer)
+	public RT createReader(@Nonnull String readerName, @Nonnull ReaderParam param, @Nonnull Consumer<T> dataConsumer)
 			throws IllegalStateException {
 		if (isClosed()) {
 			throw new IllegalStateException("Cannot be create reader, Chronicle queue is closed");
@@ -316,7 +314,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 		Assertor.nonNull(readerName, "readerName");
 		Assertor.nonNull(param, "param");
 		Assertor.nonNull(dataConsumer, "dataConsumer");
-		R reader = createReader(readerName, param, logger, dataConsumer);
+		RT reader = createReader(readerName, param, logger, dataConsumer);
 		addAccessor(reader);
 		return reader;
 	}
@@ -331,7 +329,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	 * @throws IllegalStateException
 	 */
 	@AbstractFunction
-	protected abstract R createReader(@Nonnull String readerName, @Nonnull ReaderParam param, @Nonnull Logger log,
+	protected abstract RT createReader(@Nonnull String readerName, @Nonnull ReaderParam param, @Nonnull Logger log,
 			@Nonnull Consumer<T> consumer) throws IllegalStateException;
 
 	/**
@@ -347,7 +345,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public A acquireAppender() throws IllegalStateException {
+	public AT acquireAppender() throws IllegalStateException {
 		return acquireAppender(generateAppenderName(), null);
 	}
 
@@ -357,7 +355,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public A acquireAppender(@Nonnull String appenderName) throws IllegalStateException {
+	public AT acquireAppender(@Nonnull String appenderName) throws IllegalStateException {
 		Assertor.nonNull(appenderName, "appenderName");
 		return acquireAppender(appenderName, null);
 	}
@@ -368,7 +366,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public A acquireAppender(@Nonnull Supplier<T> dataProducer) throws IllegalStateException {
+	public AT acquireAppender(@Nonnull Supplier<T> dataProducer) throws IllegalStateException {
 		Assertor.nonNull(dataProducer, "dataProducer");
 		return acquireAppender(generateAppenderName(), dataProducer);
 	}
@@ -380,12 +378,12 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public A acquireAppender(@Nonnull String appenderName, @CheckForNull Supplier<T> dataProducer)
+	public AT acquireAppender(@Nonnull String appenderName, @CheckForNull Supplier<T> dataProducer)
 			throws IllegalStateException {
 		if (isClosed())
 			throw new IllegalStateException("Cannot be acquire appender, Chronicle queue is closed");
 		Assertor.nonNull(appenderName, "appenderName");
-		A appender = acquireAppender(appenderName, logger, dataProducer);
+		AT appender = acquireAppender(appenderName, logger, dataProducer);
 		addAccessor(appender);
 		return appender;
 	}
@@ -399,7 +397,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	 * @throws IllegalStateException
 	 */
 	@AbstractFunction
-	protected abstract A acquireAppender(@Nonnull String appenderName, @Nonnull Logger logger,
+	protected abstract AT acquireAppender(@Nonnull String appenderName, @Nonnull Logger logger,
 			@CheckForNull Supplier<T> dataProducer) throws IllegalStateException;
 
 	/**
@@ -434,7 +432,7 @@ public abstract class AbstractChronicleQueue<T, R extends AbstractChronicleReade
 	 *
 	 * @param <B>
 	 */
-	protected abstract static class QueueBuilder<B extends QueueBuilder<B>> {
+	abstract static class QueueBuilder<B extends QueueBuilder<B>> {
 
 		private String rootPath = SysProperties.JAVA_IO_TMPDIR + "/";
 		private String folder = "auto-create-" + datetimeOfSecond() + "/";

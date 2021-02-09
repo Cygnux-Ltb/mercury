@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 
 import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.serialization.Serializer;
-import io.mercury.persistence.chronicle.exception.ChronicleWriteException;
+import io.mercury.persistence.chronicle.exception.ChronicleAppendException;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleQueue.CloseableChronicleAccessor;
 import net.openhft.chronicle.queue.ExcerptAppender;
 
@@ -25,8 +25,8 @@ public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAcc
 
 	private final Supplier<T> dataSupplier;
 
-	protected AbstractChronicleAppender(long allocateSeq, String appenderName, Logger logger,
-			ExcerptAppender excerptAppender, Supplier<T> dataSupplier) {
+	AbstractChronicleAppender(long allocateSeq, String appenderName, Logger logger, ExcerptAppender excerptAppender,
+			Supplier<T> dataSupplier) {
 		super(allocateSeq);
 		this.appenderName = appenderName;
 		this.logger = logger;
@@ -54,9 +54,9 @@ public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAcc
 	 * 
 	 * @param t
 	 * @throws IllegalStateException
-	 * @throws ChronicleWriteException
+	 * @throws ChronicleAppendException
 	 */
-	public void append(@Nonnull T t) throws IllegalStateException, ChronicleWriteException {
+	public void append(@Nonnull T t) throws IllegalStateException, ChronicleAppendException {
 		if (isClose) {
 			throw new IllegalStateException("Unable to append data, Chronicle queue is closed");
 		}
@@ -67,7 +67,7 @@ public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAcc
 				logger.warn("appenderName -> {} : received null object, Not written to the queue.", appenderName);
 			}
 		} catch (Exception e) {
-			throw new ChronicleWriteException(e.getMessage(), e);
+			throw new ChronicleAppendException(e.getMessage(), e);
 		}
 	}
 
@@ -76,10 +76,10 @@ public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAcc
 	 * @param obj
 	 * @param serializer
 	 * @throws IllegalStateException
-	 * @throws ChronicleWriteException
+	 * @throws ChronicleAppendException
 	 */
 	public void append(@Nonnull Object obj, Serializer<Object, T> serializer)
-			throws IllegalStateException, ChronicleWriteException {
+			throws IllegalStateException, ChronicleAppendException {
 		append(serializer.serialization(obj));
 	}
 
