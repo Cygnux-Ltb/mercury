@@ -148,7 +148,7 @@ public final class Assertor {
 	 * @throws NullPointerException
 	 * @throws IllegalArgumentException
 	 */
-	public static <T extends Collection<?>> T nonEmptyCollection(T collection, String objName)
+	public static <T extends Collection<E>, E> T nonEmptyCollection(T collection, String objName)
 			throws NullPointerException, IllegalArgumentException {
 		if (collection == null)
 			throw new NullPointerException(objName + " can not be null");
