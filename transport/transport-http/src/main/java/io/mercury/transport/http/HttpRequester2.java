@@ -14,14 +14,14 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public final class HttpRequester {
+public final class HttpRequester2 {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(HttpRequester.class);
+	private static final Logger log = CommonLoggerFactory.getLogger(HttpRequester2.class);
 
 	// OkHttpClient
 	private static final OkHttpClient HttpClient = new OkHttpClient();
 
-	private HttpRequester() {
+	private HttpRequester2() {
 	}
 
 	/**
@@ -45,6 +45,7 @@ public final class HttpRequester {
 		}
 	}
 
+	//
 	private static final MediaType ApplicationJson = MediaType.get("application/json; charset=utf-8");
 
 	/**
