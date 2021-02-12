@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 import org.apache.commons.collections4.CollectionUtils;
 
 import io.mercury.common.collections.MutableLists;
-import io.mercury.serialization.json.JsonUtil;
+import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rabbitmq.RabbitMqDeclarator;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 
@@ -184,7 +184,7 @@ public final class ExchangeRelationship extends Relationship {
 
 	@Override
 	public String toString() {
-		return JsonUtil.toJsonHasNulls(this);
+		return JsonWrapper.toJsonHasNulls(this);
 	}
 
 	public static void main(String[] args) {

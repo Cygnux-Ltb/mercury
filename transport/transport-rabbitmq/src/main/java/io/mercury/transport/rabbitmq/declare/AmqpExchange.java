@@ -6,7 +6,7 @@ import javax.annotation.Nonnull;
 
 import io.mercury.common.collections.MapUtil;
 import io.mercury.common.util.Assertor;
-import io.mercury.serialization.json.JsonUtil;
+import io.mercury.serialization.json.JsonWrapper;
 
 public final class AmqpExchange {
 
@@ -155,7 +155,7 @@ public final class AmqpExchange {
 
 	@Override
 	public String toString() {
-		return JsonUtil.toJsonHasNulls(this);
+		return JsonWrapper.toJsonHasNulls(this);
 	}
 
 	/**

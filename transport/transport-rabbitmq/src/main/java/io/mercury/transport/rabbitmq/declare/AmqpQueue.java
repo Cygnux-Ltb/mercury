@@ -4,7 +4,7 @@ import java.util.Map;
 
 import io.mercury.common.collections.MapUtil;
 import io.mercury.common.util.Assertor;
-import io.mercury.serialization.json.JsonUtil;
+import io.mercury.serialization.json.JsonWrapper;
 
 public final class AmqpQueue {
 
@@ -110,7 +110,7 @@ public final class AmqpQueue {
 
 	@Override
 	public String toString() {
-		return JsonUtil.toJsonHasNulls(this);
+		return JsonWrapper.toJsonHasNulls(this);
 	}
 
 	public boolean idempotent(AmqpQueue another) {

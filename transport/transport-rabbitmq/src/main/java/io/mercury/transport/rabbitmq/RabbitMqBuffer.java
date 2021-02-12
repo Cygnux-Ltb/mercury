@@ -15,7 +15,7 @@ import io.mercury.common.character.Charsets;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.concurrent.queue.base.McQueue;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.serialization.json.JsonUtil;
+import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 import io.mercury.transport.rabbitmq.declare.AmqpExchange;
 import io.mercury.transport.rabbitmq.declare.QueueRelationship;
@@ -198,7 +198,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 				.build();
 		try {
 			RabbitMqBuffer<String> testQueue = newQueue(connection, "rmq_test",
-					e -> JsonUtil.toJson(e).getBytes(Charsets.UTF8), bytes -> new String(bytes, Charsets.UTF8));
+					e -> JsonWrapper.toJson(e).getBytes(Charsets.UTF8), bytes -> new String(bytes, Charsets.UTF8));
 
 			testQueue.pollAndApply(str -> {
 				System.out.println(str);
