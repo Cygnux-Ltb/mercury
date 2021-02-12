@@ -26,7 +26,8 @@ import com.alibaba.fastjson.JSONValidator.Type;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public final class JsonUtil {
+@Deprecated
+ final class JsonUtil {
 
 	/**
 	 * 普通JSON序列化
