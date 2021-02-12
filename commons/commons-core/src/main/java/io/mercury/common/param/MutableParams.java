@@ -15,6 +15,7 @@ import org.eclipse.collections.api.map.primitive.MutableIntIntMap;
 import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
 
 import io.mercury.common.collections.MutableMaps;
+import io.mercury.common.param.Params.ParamKey;
 
 public final class MutableParams<K extends ParamKey> implements Params<K> {
 
@@ -43,7 +44,7 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	public MutableParams(Map<K, ?> initMap) {
 		if (initMap != null) {
 			initMap.forEach((K key, Object value) -> {
-				switch (key.type()) {
+				switch (key.getType()) {
 				case BOOLEAN:
 					putParam(key, (boolean) value);
 					break;
@@ -66,7 +67,7 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 					putParam(key, (LocalTime) value);
 					break;
 				default:
-					throw new IllegalArgumentException("param name -> " + key.paramName() + " illegal argument");
+					throw new IllegalArgumentException("param name -> " + key.getParamName() + " illegal argument");
 				}
 			});
 		}
@@ -79,10 +80,10 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	 */
 	@Override
 	public boolean getBoolean(K key) {
-		if (key.type() != ParamType.BOOLEAN)
+		if (key.getType() != ParamType.BOOLEAN)
 			throw new IllegalArgumentException(
-					"Key -> " + key + " paramType is not BOOLEAN, paramType()==" + key.type());
-		return booleanParams.get(key.id());
+					"Key -> " + key + " paramType is not BOOLEAN, paramType==" + key.getType());
+		return booleanParams.get(key.getId());
 	}
 
 	/**
@@ -92,9 +93,9 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	 */
 	@Override
 	public int getInt(K key) {
-		if (key.type() != ParamType.INT)
-			throw new IllegalArgumentException("Key -> " + key + " paramType is not INT, paramType()==" + key.type());
-		return intParams.get(key.id());
+		if (key.getType() != ParamType.INT)
+			throw new IllegalArgumentException("Key -> " + key + " paramType is not INT, paramType==" + key.getType());
+		return intParams.get(key.getId());
 	}
 
 	/**
@@ -104,10 +105,10 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	 */
 	@Override
 	public double getDouble(K key) {
-		if (key.type() != ParamType.DOUBLE)
+		if (key.getType() != ParamType.DOUBLE)
 			throw new IllegalArgumentException(
-					"Key -> " + key + " paramType is not DOUBLE, paramType()==" + key.type());
-		return doubleParams.get(key.id());
+					"Key -> " + key + " paramType is not DOUBLE, paramType==" + key.getType());
+		return doubleParams.get(key.getId());
 	}
 
 	/**
@@ -117,10 +118,10 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	 */
 	@Override
 	public String getString(K key) {
-		if (key.type() != ParamType.STRING)
+		if (key.getType() != ParamType.STRING)
 			throw new IllegalArgumentException(
-					"Key -> " + key + " paramType is not STRING, paramType()==" + key.type());
-		return stringParams.get(key.id());
+					"Key -> " + key + " paramType is not STRING, paramType==" + key.getType());
+		return stringParams.get(key.getId());
 	}
 
 	/**
@@ -129,10 +130,10 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	 * @return
 	 */
 	public LocalDateTime getDateTime(K key) {
-		if (key.type() != ParamType.DATETIME)
+		if (key.getType() != ParamType.DATETIME)
 			throw new IllegalArgumentException(
-					"Key -> " + key + " paramType is not DATETIME, paramType()==" + key.type());
-		return (LocalDateTime) temporalParams.get(key.id());
+					"Key -> " + key + " paramType is not DATETIME, paramType==" + key.getType());
+		return (LocalDateTime) temporalParams.get(key.getId());
 	}
 
 	/**
@@ -141,9 +142,9 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	 * @return
 	 */
 	public LocalDate getDate(K key) {
-		if (key.type() != ParamType.DATE)
-			throw new IllegalArgumentException("Key -> " + key + " paramType is not DATE, paramType()==" + key.type());
-		return (LocalDate) temporalParams.get(key.id());
+		if (key.getType() != ParamType.DATE)
+			throw new IllegalArgumentException("Key -> " + key + " paramType is not DATE, paramType==" + key.getType());
+		return (LocalDate) temporalParams.get(key.getId());
 	}
 
 	/**
@@ -152,10 +153,10 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	 * @return
 	 */
 	public LocalTime getTime(K key) {
-		if (key.type() != ParamType.TIME)
+		if (key.getType() != ParamType.TIME)
 			throw new IllegalArgumentException(
-					"Key -> " + key + " paramType is not TIME, getParamType()==" + key.type());
-		return (LocalTime) temporalParams.get(key.id());
+					"Key -> " + key + " paramType is not TIME, getParamType==" + key.getType());
+		return (LocalTime) temporalParams.get(key.getId());
 	}
 
 	/**
@@ -164,7 +165,7 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	 * @param value
 	 */
 	public void putParam(K key, boolean value) {
-		booleanParams.put(key.id(), value);
+		booleanParams.put(key.getId(), value);
 	}
 
 	/**
@@ -173,7 +174,7 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	 * @param value
 	 */
 	public void putParam(K key, int value) {
-		intParams.put(key.id(), value);
+		intParams.put(key.getId(), value);
 	}
 
 	/**
@@ -182,7 +183,7 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	 * @param value
 	 */
 	public void putParam(K key, double value) {
-		doubleParams.put(key.id(), value);
+		doubleParams.put(key.getId(), value);
 	}
 
 	/**
@@ -191,7 +192,7 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	 * @param value
 	 */
 	public void putParam(K key, String value) {
-		stringParams.put(key.id(), value);
+		stringParams.put(key.getId(), value);
 	}
 
 	/**
@@ -200,7 +201,7 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	 * @param value
 	 */
 	public void putParam(K key, LocalDateTime value) {
-		temporalParams.put(key.id(), value);
+		temporalParams.put(key.getId(), value);
 	}
 
 	/**
@@ -209,7 +210,7 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	 * @param value
 	 */
 	public void putParam(K key, LocalDate value) {
-		temporalParams.put(key.id(), value);
+		temporalParams.put(key.getId(), value);
 	}
 
 	/**
@@ -218,7 +219,7 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	 * @param value
 	 */
 	public void putParam(K key, LocalTime value) {
-		temporalParams.put(key.id(), value);
+		temporalParams.put(key.getId(), value);
 	}
 
 }

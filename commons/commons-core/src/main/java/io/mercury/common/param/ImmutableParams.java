@@ -15,6 +15,7 @@ import org.eclipse.collections.api.map.MutableMap;
 import org.slf4j.Logger;
 
 import io.mercury.common.collections.MutableMaps;
+import io.mercury.common.param.Params.ParamKey;
 
 public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 
@@ -35,8 +36,8 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 		nonEmptyMap(map, "map");
 		MutableMap<K, String> mutableMap = MutableMaps.newUnifiedMap();
 		for (K key : keys) {
-			if (map.containsKey(key.paramName()))
-				mutableMap.put(key, map.get(key.paramName()).toString());
+			if (map.containsKey(key.getParamName()))
+				mutableMap.put(key, map.get(key.getParamName()).toString());
 		}
 		this.params = mutableMap.toImmutable();
 	}
@@ -56,8 +57,8 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 		nonNull(prop, "prop");
 		MutableMap<K, String> mutableMap = MutableMaps.newUnifiedMap();
 		for (K key : keys) {
-			if (prop.containsKey(key.paramName()))
-				mutableMap.put(key, prop.get(key.paramName()).toString());
+			if (prop.containsKey(key.getParamName()))
+				mutableMap.put(key, prop.get(key.getParamName()).toString());
 		}
 		this.params = mutableMap.toImmutable();
 	}
@@ -71,9 +72,9 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 	 */
 	@Override
 	public boolean getBoolean(K key) throws IllegalArgumentException, NullPointerException {
-		if (key.type() != ParamType.BOOLEAN)
-			throw new IllegalArgumentException("Key -> " + key + " ParamType is not BOOLEAN, paramType==" + key.type());
-		return Boolean.parseBoolean(nonNull(params.get(key), key.paramName()));
+		if (key.getType() != ParamType.BOOLEAN)
+			throw new IllegalArgumentException("Key -> " + key + " ParamType is not BOOLEAN, paramType==" + key.getType());
+		return Boolean.parseBoolean(nonNull(params.get(key), key.getParamName()));
 	}
 
 	/**
@@ -86,9 +87,9 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 	 */
 	@Override
 	public int getInt(K key) throws IllegalArgumentException, NullPointerException, NumberFormatException {
-		if (key.type() != ParamType.INT)
-			throw new IllegalArgumentException("Key -> " + key + " ParamType is not [INT]. paramType==" + key.type());
-		return Integer.parseInt(nonNull(params.get(key), key.paramName()));
+		if (key.getType() != ParamType.INT)
+			throw new IllegalArgumentException("Key -> " + key + " ParamType is not [INT]. paramType==" + key.getType());
+		return Integer.parseInt(nonNull(params.get(key), key.getParamName()));
 	}
 
 	/**
@@ -101,10 +102,10 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 	 */
 	@Override
 	public double getDouble(K key) throws IllegalArgumentException, NullPointerException, NumberFormatException {
-		if (key.type() != ParamType.DOUBLE)
+		if (key.getType() != ParamType.DOUBLE)
 			throw new IllegalArgumentException(
-					"Key -> " + key + " ParamType is not [DOUBLE], paramType==" + key.type());
-		return Double.parseDouble(nonNull(params.get(key), key.paramName()));
+					"Key -> " + key + " ParamType is not [DOUBLE], paramType==" + key.getType());
+		return Double.parseDouble(nonNull(params.get(key), key.getParamName()));
 	}
 
 	/**
@@ -116,10 +117,10 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 	 */
 	@Override
 	public String getString(K key) throws IllegalArgumentException, NullPointerException {
-		if (key.type() != ParamType.STRING)
+		if (key.getType() != ParamType.STRING)
 			throw new IllegalArgumentException(
-					"Key -> " + key + " ParamType is not [STRING], paramType==" + key.type());
-		return nonNull(params.get(key), key.paramName());
+					"Key -> " + key + " ParamType is not [STRING], paramType==" + key.getType());
+		return nonNull(params.get(key), key.getParamName());
 	}
 
 	public void printParams() {
@@ -129,10 +130,10 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 	public void printParams(Logger log) {
 		if (log == null) {
 			params.forEachKeyValue((key, value) -> out
-					.println("Param id==" + key.id() + ", paramName -> " + key.paramName() + ", value -> " + value));
+					.println("Param id==" + key.getId() + ", paramName -> " + key.getParamName() + ", value -> " + value));
 		} else {
-			params.forEachKeyValue((key, value) -> log.info("Param id=={}, paramName -> {}, value -> {}", key.id(),
-					key.paramName(), value));
+			params.forEachKeyValue((key, value) -> log.info("Param id=={}, paramName=={}, value -> {}", key.getId(),
+					key.getParamName(), value));
 		}
 	}
 
