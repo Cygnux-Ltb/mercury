@@ -17,6 +17,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>configuration-nacos</module>
 		<module>persistence-chronicle</module>
 		<module>persistence-kyotocabinet</module>
 		<module>persistence-rocksdb</module>
