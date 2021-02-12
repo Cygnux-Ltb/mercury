@@ -14,7 +14,7 @@
 	<name>commons-cryption</name>
 
 	<properties>
-		<bouncycastle.version>1.66</bouncycastle.version>
+		<bouncycastle.version>1.68</bouncycastle.version>
 	</properties>
 
 	<licenses>
