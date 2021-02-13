@@ -56,7 +56,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 
 	protected Logger logger = CommonLoggerFactory.getLogger(getClass());;
 
-	AbstractChronicleQueue(QueueBuilder<?> builder) {
+	AbstractChronicleQueue(AbstractQueueBuilder<?> builder) {
 		this.rootPath = builder.rootPath;
 		this.folder = builder.folder;
 		this.readOnly = builder.readOnly;
@@ -432,7 +432,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 	 *
 	 * @param <B>
 	 */
-	abstract static class QueueBuilder<B extends QueueBuilder<B>> {
+	abstract static class AbstractQueueBuilder<B extends AbstractQueueBuilder<B>> {
 
 		private String rootPath = SysProperties.JAVA_IO_TMPDIR + "/";
 		private String folder = "auto-create-" + datetimeOfSecond() + "/";

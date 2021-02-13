@@ -34,7 +34,7 @@ public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAcc
 		this.dataSupplier = dataSupplier;
 	}
 
-	public ExcerptAppender excerptAppender() {
+	public ExcerptAppender getExcerptAppender() {
 		return excerptAppender;
 	}
 

@@ -61,7 +61,7 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 		this.consumer = consumer;
 	}
 
-	public ExcerptTailer excerptTailer() {
+	public ExcerptTailer getExcerptTailer() {
 		return excerptTailer;
 	}
 

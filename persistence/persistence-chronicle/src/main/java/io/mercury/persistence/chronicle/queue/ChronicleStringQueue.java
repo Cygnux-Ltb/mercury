@@ -16,12 +16,12 @@ import io.mercury.persistence.chronicle.queue.AbstractChronicleReader.ReaderPara
 public class ChronicleStringQueue
 		extends AbstractChronicleQueue<String, ChronicleStringReader, ChronicleStringAppender> {
 
-	private ChronicleStringQueue(Builder builder) {
+	private ChronicleStringQueue(StringQueueBuilder builder) {
 		super(builder);
 	}
 
-	public static Builder newBuilder() {
-		return new Builder();
+	public static StringQueueBuilder newBuilder() {
+		return new StringQueueBuilder();
 	}
 
 	@Override
@@ -43,9 +43,9 @@ public class ChronicleStringQueue
 	 * @author yellow013
 	 *
 	 */
-	public static final class Builder extends QueueBuilder<Builder> {
+	public static final class StringQueueBuilder extends AbstractQueueBuilder<StringQueueBuilder> {
 
-		private Builder() {
+		private StringQueueBuilder() {
 		}
 
 		public ChronicleStringQueue build() {
@@ -53,7 +53,7 @@ public class ChronicleStringQueue
 		}
 
 		@Override
-		protected Builder self() {
+		protected StringQueueBuilder self() {
 			return this;
 		}
 

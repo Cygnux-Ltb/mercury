@@ -20,7 +20,7 @@ public class ChronicleBytesQueue
 	private final int bufferSize;
 	private final boolean useDirectMemory;
 
-	private ChronicleBytesQueue(Builder builder) {
+	private ChronicleBytesQueue(BytesQueueBuilder builder) {
 		super(builder);
 		this.bufferSize = builder.bufferSize;
 		this.useDirectMemory = builder.useDirectMemory;
@@ -30,8 +30,8 @@ public class ChronicleBytesQueue
 	 * 
 	 * @return
 	 */
-	public static Builder newBuilder() {
-		return new Builder();
+	public static BytesQueueBuilder newBuilder() {
+		return new BytesQueueBuilder();
 	}
 
 	@Override
@@ -53,12 +53,12 @@ public class ChronicleBytesQueue
 	 * @author yellow013
 	 *
 	 */
-	public static final class Builder extends QueueBuilder<Builder> {
+	public static final class BytesQueueBuilder extends AbstractQueueBuilder<BytesQueueBuilder> {
 
 		private int bufferSize = 256;
 		private boolean useDirectMemory = false;
 
-		private Builder() {
+		private BytesQueueBuilder() {
 		}
 
 		public ChronicleBytesQueue build() {
@@ -71,18 +71,18 @@ public class ChronicleBytesQueue
 		 * @param readBufferSize
 		 * @return
 		 */
-		public Builder bufferSize(int bufferSize) {
+		public BytesQueueBuilder bufferSize(int bufferSize) {
 			this.bufferSize = Math.max(bufferSize, 256);
 			return this;
 		}
 
-		public Builder useDirectMemory(boolean useDirectMemory) {
+		public BytesQueueBuilder useDirectMemory(boolean useDirectMemory) {
 			this.useDirectMemory = useDirectMemory;
 			return this;
 		}
 
 		@Override
-		protected Builder self() {
+		protected BytesQueueBuilder self() {
 			return this;
 		}
 
