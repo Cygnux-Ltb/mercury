@@ -8,9 +8,9 @@ public class JsonParserTest {
 	public void test() {
 		String json = "{\"A\":\"1\",\"B\":\"2\",\"C\":\"11\",\"D\":null,\"E\":null}";
 
-		System.out.println(JsonParser2.isJsonObject(json));
-		System.out.println(JsonParser2.toImmutableMap(json));
-		
+		System.out.println(JsonParser.isJsonObject(json));
+		System.out.println(JsonParser.toImmutableMap(json));
+
 	}
 
 }
