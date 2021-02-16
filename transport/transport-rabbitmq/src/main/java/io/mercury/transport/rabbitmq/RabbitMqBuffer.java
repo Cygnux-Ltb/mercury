@@ -90,7 +90,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 		this.serializer = serializer;
 		this.deserializer = deserializer;
 		this.rabbitMqChannel = RabbitMqChannel.newWith(connection);
-		this.name = "rabbitmq-buffer::" + connection.connectionInfo() + "/" + queueName + "";
+		this.name = "rabbitmq-buffer::" + connection.getConnectionInfo() + "/" + queueName + "";
 		declareQueue();
 	}
 

@@ -81,7 +81,7 @@ public class RabbitMqPublisher extends AbstractRabbitMqTransport implements Publ
 		this.confirmTimeout = configurator.confirmTimeout();
 		this.confirmRetry = configurator.confirmRetry();
 		this.hasPropsSupplier = msgPropsSupplier != null;
-		this.publisherName = "publisher::" + rmqConnection.connectionInfo() + "$" + exchangeName;
+		this.publisherName = "publisher::" + rmqConnection.getConnectionInfo() + "$" + exchangeName;
 		createConnection();
 		declare();
 	}
@@ -98,7 +98,7 @@ public class RabbitMqPublisher extends AbstractRabbitMqTransport implements Publ
 		} catch (DeclareException e) {
 			// 在定义Exchange和进行绑定时抛出任何异常都需要终止程序
 			log.error("Exchange declare throw exception -> connection configurator info : {}, " + "error message : {}",
-					rmqConnection.fullInfo(), e.getMessage(), e);
+					rmqConnection.getConfiguratorInfo(), e.getMessage(), e);
 			destroy();
 			throw new DeclareRuntimeException(e);
 		}
@@ -106,7 +106,7 @@ public class RabbitMqPublisher extends AbstractRabbitMqTransport implements Publ
 	}
 
 	@Override
-	public void send(@Nonnull byte[] msg) throws PublishFailedException {
+	public void sent(@Nonnull byte[] msg) throws PublishFailedException {
 		publish(msg);
 	}
 

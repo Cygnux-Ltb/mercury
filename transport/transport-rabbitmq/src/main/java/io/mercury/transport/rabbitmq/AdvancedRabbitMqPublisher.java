@@ -244,7 +244,7 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 		this.hasAckCallback = ackCallback != null;
 		this.hasNoAckCallback = noAckCallback != null;
 		this.hasPropsSupplier = msgPropsSupplier != null;
-		this.publisherName = "publisher::[" + rmqConnection.connectionInfo() + "$" + exchangeName + "]";
+		this.publisherName = "publisher::[" + rmqConnection.getConnectionInfo() + "$" + exchangeName + "]";
 		createConnection();
 		declareExchange();
 		/*
@@ -276,7 +276,7 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 				channel.confirmSelect();
 			} catch (IOException ioe) {
 				log.error("Enables publisher acknowledgements failure, publisherName -> {}, connectionInfo -> {}",
-						publisherName, rmqConnection.connectionInfo(), ioe);
+						publisherName, rmqConnection.getConnectionInfo(), ioe);
 				throw new InitializeFailureException(
 						"Enables publisher acknowledgements failure, From publisher -> {}" + publisherName, ioe);
 			}
@@ -299,7 +299,7 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 		} catch (DeclareException e) {
 			// 在定义Exchange和进行绑定时抛出任何异常都需要终止程序
 			log.error("Exchange declare throw exception -> connection configurator info : {}, " + "error message : {}",
-					rmqConnection.fullInfo(), e.getMessage(), e);
+					rmqConnection.getConfiguratorInfo(), e.getMessage(), e);
 			destroy();
 			throw new DeclareRuntimeException(e);
 		}
@@ -307,7 +307,7 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 	}
 
 	@Override
-	public void send(@Nonnull T msg) throws PublishFailedException {
+	public void sent(@Nonnull T msg) throws PublishFailedException {
 		publish(msg);
 	}
 

@@ -166,7 +166,7 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 		this.maxAckTotal = configurator.maxAckTotal();
 		this.maxAckReconnection = configurator.maxAckReconnection();
 		this.qos = configurator.qos();
-		this.receiverName = "receiver::" + rmqConnection.connectionInfo() + "$" + queueName;
+		this.receiverName = "receiver::" + rmqConnection.getConnectionInfo() + "$" + queueName;
 		createConnection();
 		declare();
 	}
@@ -177,7 +177,7 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 			this.receiveQueue.declare(operator);
 		} catch (DeclareException e) {
 			log.error("Queue declare throw exception -> connection configurator info : {}, error message : {}",
-					rmqConnection.fullInfo(), e.getMessage(), e);
+					rmqConnection.getConfiguratorInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			destroy();
 			throw new DeclareRuntimeException(e);
@@ -198,7 +198,7 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 		} catch (DeclareException e) {
 			log.error(
 					"ErrorMsgExchange declare throw exception -> connection configurator info : {}, error message : {}",
-					rmqConnection.fullInfo(), e.getMessage(), e);
+					rmqConnection.getConfiguratorInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			destroy();
 			throw new DeclareRuntimeException(e);
@@ -212,7 +212,7 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 			this.errMsgQueue.declare(operator);
 		} catch (DeclareException e) {
 			log.error("ErrorMsgQueue declare throw exception -> connection configurator info : {}, error message : {}",
-					rmqConnection.fullInfo(), e.getMessage(), e);
+					rmqConnection.getConfiguratorInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			destroy();
 			throw new DeclareRuntimeException(e);

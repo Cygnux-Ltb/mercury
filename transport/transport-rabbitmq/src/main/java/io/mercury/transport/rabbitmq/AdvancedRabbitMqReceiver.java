@@ -225,7 +225,7 @@ public class AdvancedRabbitMqReceiver<T> extends AbstractRabbitMqTransport imple
 		this.exclusive = configurator.exclusive();
 		this.consumer = consumer;
 		this.selfAckConsumer = selfAckConsumer;
-		this.receiverName = "receiver::[" + rmqConnection.connectionInfo() + "$" + queueName + "]";
+		this.receiverName = "receiver::[" + rmqConnection.getConnectionInfo() + "$" + queueName + "]";
 		createConnection();
 		declareQueue();
 		if (selfAckConsumer != null) {
@@ -251,7 +251,7 @@ public class AdvancedRabbitMqReceiver<T> extends AbstractRabbitMqTransport imple
 			this.receiveQueue.declare(operator);
 		} catch (DeclareException e) {
 			log.error("Queue declare throw exception -> connection info : {}, error message : {}",
-					rmqConnection.fullInfo(), e.getMessage(), e);
+					rmqConnection.getConfiguratorInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			destroy();
 			throw new DeclareRuntimeException(e);
@@ -272,7 +272,7 @@ public class AdvancedRabbitMqReceiver<T> extends AbstractRabbitMqTransport imple
 		} catch (DeclareException e) {
 			log.error(
 					"ErrorMsgExchange declare throw exception -> connection configurator info : {}, error message : {}",
-					rmqConnection.fullInfo(), e.getMessage(), e);
+					rmqConnection.getConfiguratorInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			destroy();
 			throw new DeclareRuntimeException(e);
@@ -286,7 +286,7 @@ public class AdvancedRabbitMqReceiver<T> extends AbstractRabbitMqTransport imple
 			this.errMsgQueue.declare(operator);
 		} catch (DeclareException e) {
 			log.error("ErrorMsgQueue declare throw exception -> connection configurator info : {}, error message : {}",
-					rmqConnection.fullInfo(), e.getMessage(), e);
+					rmqConnection.getConfiguratorInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			destroy();
 			throw new DeclareRuntimeException(e);

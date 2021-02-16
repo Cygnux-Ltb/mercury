@@ -105,17 +105,17 @@ public final class RmqConnection implements TransportConfigurator {
 	}
 
 	@Override
-	public String connectionInfo() {
+	public String getConnectionInfo() {
 		return connectionInfo;
 	}
 
 	@Override
-	public String host() {
+	public String getHost() {
 		return host;
 	}
 
 	@Override
-	public int port() {
+	public int getPort() {
 		return port;
 	}
 
@@ -200,7 +200,7 @@ public final class RmqConnection implements TransportConfigurator {
 	 * 
 	 */
 	@Override
-	public String fullInfo() {
+	public String getConfiguratorInfo() {
 		return toString();
 	}
 
@@ -358,7 +358,7 @@ public final class RmqConnection implements TransportConfigurator {
 
 		RmqConnection configuration = configuration("localhost", 5672, "admin", "admin", "report").build();
 		System.out.println(configuration);
-		System.out.println(configuration.fullInfo());
+		System.out.println(configuration.getConfiguratorInfo());
 
 	}
 
