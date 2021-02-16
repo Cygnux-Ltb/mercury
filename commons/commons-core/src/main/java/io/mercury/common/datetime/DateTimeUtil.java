@@ -11,9 +11,10 @@ import java.util.Date;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
-import io.mercury.common.datetime.Pattern.DatePattern;
-import io.mercury.common.datetime.Pattern.DateTimePattern;
-import io.mercury.common.datetime.Pattern.TimePattern;
+import io.mercury.common.datetime.pattern.DatePattern;
+import io.mercury.common.datetime.pattern.DateTimePattern;
+import io.mercury.common.datetime.pattern.TPattern;
+import io.mercury.common.datetime.pattern.TimePattern;
 import io.mercury.common.util.StringUtil;
 
 @ThreadSafe
@@ -383,12 +384,12 @@ public final class DateTimeUtil {
 		return LocalDateTime.parse(str, pattern.getFormatter());
 	}
 
-	private static void checkFormatParam(Pattern pattern, String str) {
+	private static void checkFormatParam(TPattern pattern, String str) {
 		if (pattern == null)
 			throw new IllegalArgumentException("pattern cannot null");
 		if (StringUtil.isNullOrEmpty(str))
 			throw new IllegalArgumentException("str cannot null or empty.");
-		if (str.length() == pattern.getPattern().length())
+		if (str.length() != pattern.getPattern().length())
 			throw new IllegalArgumentException("str and pattern length no match.");
 	}
 

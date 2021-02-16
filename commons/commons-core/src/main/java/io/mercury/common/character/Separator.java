@@ -19,8 +19,9 @@ public interface Separator {
 	
 	public static void main(String[] args) {
 		
-		
 		System.out.println(LINE_SEPARATOR.length());
+		System.out.println(FILE_SEPARATOR.length());
+		System.out.println(PATH_SEPARATOR.length());
 		
 	}
 

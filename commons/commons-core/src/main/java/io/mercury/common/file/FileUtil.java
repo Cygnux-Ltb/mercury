@@ -21,7 +21,8 @@ import java.util.Comparator;
 
 import javax.annotation.Nonnull;
 
-import io.mercury.common.datetime.Pattern;
+import io.mercury.common.datetime.pattern.DatePattern;
+import io.mercury.common.datetime.pattern.TPattern;
 import io.mercury.common.util.Assertor;
 
 /**
@@ -445,7 +446,7 @@ public final class FileUtil {
 	 */
 	public static class FileNameDateTimeComparator implements Comparator<File> {
 
-		private Pattern pattern;
+		private TPattern pattern;
 		private ZoneId zone;
 
 		/**
@@ -456,9 +457,9 @@ public final class FileUtil {
 			this(null, null);
 		}
 
-		public FileNameDateTimeComparator(Pattern pattern, ZoneId zone) {
+		public FileNameDateTimeComparator(TPattern pattern, ZoneId zone) {
 			if (pattern == null) {
-				this.pattern = Pattern.DatePattern.YYYY_MM_DD;
+				this.pattern = DatePattern.YYYY_MM_DD;
 			} else {
 				this.pattern = pattern;
 			}

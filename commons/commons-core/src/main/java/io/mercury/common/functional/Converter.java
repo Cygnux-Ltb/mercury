@@ -21,11 +21,11 @@ public interface Converter<F, T> extends BiFunction<F, T, T> {
 	 * @return
 	 */
 	@Nonnull
-	T conversion(@Nonnull F from, @Nonnull T to);
+	T convert(@Nonnull F from, @Nonnull T to);
 
 	@Override
 	default T apply(F from, T to) {
-		return conversion(from, to);
+		return convert(from, to);
 	}
 
 }
