@@ -39,7 +39,7 @@ public class NettyClient extends NettyTransport implements TransportClient {
 					}
 				}).option(ChannelOption.SO_KEEPALIVE, configurator.keepAlive())
 				.option(ChannelOption.TCP_NODELAY, configurator.tcpNoDelay());
-		log.info("{} : Init-BootStrap.connect -> {}", tag, configurator.connectionInfo());
+		log.info("{} : Init-BootStrap.connect -> {}", tag, configurator.getConnectionInfo());
 
 	}
 
@@ -48,7 +48,7 @@ public class NettyClient extends NettyTransport implements TransportClient {
 		try {
 			// Start the client.
 			// Connect a Channel to the remote peer.
-			bootstrap.connect(configurator.host(), configurator.port()).sync()
+			bootstrap.connect(configurator.getHost(), configurator.getPort()).sync()
 					// Wait until the connection is closed.
 					// Returns a channel where the I/O operation associated with this future takes
 					// place.

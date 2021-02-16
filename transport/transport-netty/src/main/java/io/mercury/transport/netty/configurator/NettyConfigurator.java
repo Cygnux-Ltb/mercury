@@ -47,12 +47,12 @@ public final class NettyConfigurator implements TransportConfigurator {
 	}
 
 	@Override
-	public String host() {
+	public String getHost() {
 		return host;
 	}
 
 	@Override
-	public int port() {
+	public int getPort() {
 		return port;
 	}
 
@@ -89,12 +89,12 @@ public final class NettyConfigurator implements TransportConfigurator {
 	}
 
 	@Override
-	public String fullInfo() {
+	public String getConfiguratorInfo() {
 		return this.toString();
 	}
 
 	@Override
-	public String connectionInfo() {
+	public String getConnectionInfo() {
 		return connectionInfo;
 	}
 

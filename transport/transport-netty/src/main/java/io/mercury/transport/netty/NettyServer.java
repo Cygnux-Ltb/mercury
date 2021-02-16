@@ -47,14 +47,14 @@ public class NettyServer extends NettyTransport implements TransportServer {
 				}).option(ChannelOption.SO_BACKLOG, configurator.backlog())
 				.childOption(ChannelOption.SO_KEEPALIVE, configurator.keepAlive())
 				.childOption(ChannelOption.TCP_NODELAY, configurator.tcpNoDelay());
-		log.info("{} : Init-ServerBootStrap.bind -> {}", tag, configurator.connectionInfo());
+		log.info("{} : Init-ServerBootStrap.bind -> {}", tag, configurator.getConnectionInfo());
 	}
 
 	@Override
 	public void startup() {
 		try {
 			// Create a new Channel and bind it.
-			bootstrap.bind(configurator.host(), configurator.port()).sync()
+			bootstrap.bind(configurator.getHost(), configurator.getPort()).sync()
 					// Returns a channel where the I/O operation associated with this future takes
 					// place.
 					.channel()
