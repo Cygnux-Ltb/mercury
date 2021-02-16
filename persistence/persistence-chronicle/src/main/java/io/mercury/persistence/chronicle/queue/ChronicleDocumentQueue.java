@@ -25,7 +25,7 @@ public class ChronicleDocumentQueue<T extends Marshallable>
 		this.marshallableSupplier = builder.marshallableSupplier;
 	}
 
-	public static <T extends Marshallable> DocumentQueueBuilder<T> newBuilder() {
+	public static <T extends Marshallable> DocumentQueueBuilder<T> newBuilder(Class<T> saveType) {
 		return new DocumentQueueBuilder<>();
 	}
 

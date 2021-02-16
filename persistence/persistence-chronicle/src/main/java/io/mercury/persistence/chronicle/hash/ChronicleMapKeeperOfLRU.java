@@ -50,7 +50,7 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 				// 设置remove函数是否返回null
 				.removeReturnsNull(true)
 				// 设置LRU名称
-				.name(configurator.fullInfo() + "-last-used-log")
+				.name(configurator.getConfiguratorInfo() + "-last-used-log")
 				// 设置LRU记录条目总数
 				.entries(fileTotal);
 		File persistentFile = new File(configurator.savePath(), ".last-used-log");
@@ -72,7 +72,7 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 		} catch (IOException e) {
 			throw new ChronicleIOException(e);
 		}
-		this.cleanupThread = Threads.startNewThread("Keeper-{" + configurator.fullInfo() + "}-Cleanup-Thread",
+		this.cleanupThread = Threads.startNewThread("Keeper-{" + configurator.getConfiguratorInfo() + "}-Cleanup-Thread",
 				this::cleanupFunc);
 	}
 
