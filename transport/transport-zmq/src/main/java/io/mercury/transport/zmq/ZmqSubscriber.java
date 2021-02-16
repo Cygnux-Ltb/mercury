@@ -39,13 +39,13 @@ public class ZmqSubscriber implements Subscriber, Closeable {
 	private void init() {
 		this.zCtx = new ZContext(configurator.ioThreads());
 		this.zSocket = zCtx.createSocket(SocketType.SUB);
-		this.zSocket.connect(configurator.host());
+		this.zSocket.connect(configurator.getHost());
 		this.zSocket.subscribe(configurator.topic().getBytes());
 		this.zSocket.setTCPKeepAlive(1);
 		this.zSocket.setTCPKeepAliveCount(10);
 		this.zSocket.setTCPKeepAliveIdle(15);
 		this.zSocket.setTCPKeepAliveInterval(15);
-		this.name = "ZMQ.SUB$" + configurator.host() + "::" + configurator.topic();
+		this.name = "ZMQ.SUB$" + configurator.getHost() + "::" + configurator.topic();
 	}
 
 	@Override

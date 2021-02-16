@@ -9,7 +9,7 @@ public final class ZmqConfigurator implements TransportConfigurator {
 	private String topic;
 	private int ioThreads;
 
-	private final String fullInfo = "ZmqConfigurator";
+	private final String configuratorInfo = "ZmqConfigurator";
 	private final String connectionInfo;
 
 	private ZmqConfigurator(Builder builder) {
@@ -25,12 +25,12 @@ public final class ZmqConfigurator implements TransportConfigurator {
 	}
 
 	@Override
-	public String host() {
+	public String getHost() {
 		return host;
 	}
 
 	@Override
-	public int port() {
+	public int getPort() {
 		return port;
 	}
 
@@ -43,12 +43,12 @@ public final class ZmqConfigurator implements TransportConfigurator {
 	}
 
 	@Override
-	public String fullInfo() {
-		return fullInfo;
+	public String getConfiguratorInfo() {
+		return configuratorInfo;
 	}
 
 	@Override
-	public String connectionInfo() {
+	public String getConnectionInfo() {
 		return connectionInfo;
 	}
 

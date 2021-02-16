@@ -33,12 +33,12 @@ public class ZmqSender implements Sender<byte[]>, Closeable {
 	private void init() {
 		this.zCtx = new ZContext(configurator.ioThreads());
 		this.zSocket = zCtx.createSocket(SocketType.REQ);
-		this.zSocket.connect(configurator.host());
-		this.name = "ZMQ::REQ$" + configurator.connectionInfo();
+		this.zSocket.connect(configurator.getHost());
+		this.name = "ZMQ::REQ$" + configurator.getConnectionInfo();
 	}
 
 	@Override
-	public void send(byte[] msg) {
+	public void sent(byte[] msg) {
 		zSocket.send(msg);
 		zSocket.recv();
 	}
@@ -72,7 +72,7 @@ public class ZmqSender implements Sender<byte[]>, Closeable {
 
 		try (ZmqSender sender = new ZmqSender(configurator)) {
 
-			sender.send("TEST MSG".getBytes());
+			sender.sent("TEST MSG".getBytes());
 
 			sender.destroy();
 

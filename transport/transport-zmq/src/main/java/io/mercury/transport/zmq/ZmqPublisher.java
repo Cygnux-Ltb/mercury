@@ -35,9 +35,9 @@ public class ZmqPublisher implements Publisher<byte[]>, Closeable {
 	private void init() {
 		this.zCtx = new ZContext(configurator.ioThreads());
 		this.zSocket = zCtx.createSocket(SocketType.PUB);
-		this.zSocket.bind(configurator.host());
+		this.zSocket.bind(configurator.getHost());
 		this.topic = configurator.topic();
-		this.name = "ZMQ::PUB$" + configurator.host();
+		this.name = "ZMQ::PUB$" + configurator.getHost();
 	}
 
 	@Override

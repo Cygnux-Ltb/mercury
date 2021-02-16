@@ -38,8 +38,8 @@ public class ZmqPipeline implements Receiver, Closeable {
 	private void init() {
 		this.zCtx = new ZContext(configurator.ioThreads());
 		this.zSocket = zCtx.createSocket(SocketType.REP);
-		this.zSocket.bind(configurator.host());
-		this.name = "ZMQ::REP:" + configurator.host();
+		this.zSocket.bind(configurator.getHost());
+		this.name = "ZMQ::REP:" + configurator.getHost();
 	}
 
 	@Override
