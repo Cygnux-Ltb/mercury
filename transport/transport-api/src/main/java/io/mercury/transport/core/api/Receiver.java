@@ -1,9 +1,11 @@
 package io.mercury.transport.core.api;
 
+import java.io.Closeable;
+
 import io.mercury.transport.core.exception.ConnectionBreakException;
 import io.mercury.transport.core.exception.ReceiverStartException;
 
-public interface Receiver extends TransportModule {
+public interface Receiver extends TransportModule, Closeable {
 
 	/**
 	 * Start receive

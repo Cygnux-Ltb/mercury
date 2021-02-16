@@ -6,6 +6,6 @@ public interface Sender<T> extends TransportModule {
 	 * 
 	 * @param msg
 	 */
-	void send(T msg);
+	void sent(T msg);
 
 }

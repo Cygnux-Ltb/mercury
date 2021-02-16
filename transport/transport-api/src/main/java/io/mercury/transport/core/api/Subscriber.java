@@ -1,6 +1,8 @@
 package io.mercury.transport.core.api;
 
-public interface Subscriber extends TransportModule {
+import java.io.Closeable;
+
+public interface Subscriber extends TransportModule, Closeable {
 
 	/**
 	 * Start subscribe

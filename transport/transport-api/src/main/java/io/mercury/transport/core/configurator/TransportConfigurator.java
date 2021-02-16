@@ -4,10 +4,10 @@ import io.mercury.common.config.Configurator;
 
 public interface TransportConfigurator extends Configurator {
 
-	String host();
+	String getHost();
 
-	int port();
+	int getPort();
 
-	String connectionInfo();
+	String getConnectionInfo();
 
 }
