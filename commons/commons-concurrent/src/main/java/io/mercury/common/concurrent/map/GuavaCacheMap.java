@@ -36,14 +36,18 @@ public class GuavaCacheMap<K, V> {
 	}
 
 	@Nonnull
-	public Optional<V> get(K k) {
+	public Optional<V> getOptional(K key) {
 		try {
-			V v = cache.get(k);
-			return v != null ? Optional.of(v) : Optional.empty();
+			V value = cache.get(key);
+			return value != null ? Optional.of(value) : Optional.empty();
 		} catch (ExecutionException e) {
-			log.error("CacheMap.get -> [{}] throw {}", k, e.getMessage(), e);
+			log.error("CacheMap.get -> [{}] throw {}", key, e.getMessage(), e);
 			return Optional.empty();
 		}
+	}
+	
+	public void setUnavailable(K key) {
+		cache.invalidate(key);
 	}
 
 	/**

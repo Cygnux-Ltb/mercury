@@ -45,12 +45,12 @@ public final class CacheList<T> {
 	 * 
 	 * @return
 	 */
-	public Optional<List<T>> get() {
+	public Optional<List<T>> getOptional() {
 		if (saved == null || !saved.available) {
 			List<T> refreshed = refresher.get();
-			return refreshed == null ? Optional.empty() : set(refreshed).get();
+			return refreshed == null ? Optional.empty() : set(refreshed).getOptional();
 		} else {
-			return saved.available ? Optional.of(saved.value) : get();
+			return saved.available ? Optional.of(saved.value) : getOptional();
 		}
 	}
 
