@@ -23,6 +23,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONValidator;
 import com.alibaba.fastjson.JSONValidator.Type;
 
+@Deprecated
 public final class JsonParser0 {
 
 	/**
