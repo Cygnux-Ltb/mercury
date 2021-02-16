@@ -44,7 +44,7 @@ public final class SocketTransceiver extends BaseTransceiver<String> {
 
 	private void init() {
 		try {
-			this.socket = new Socket(configurator.host(), configurator.port());
+			this.socket = new Socket(configurator.getHost(), configurator.getPort());
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e.getMessage());
@@ -142,6 +142,11 @@ public final class SocketTransceiver extends BaseTransceiver<String> {
 	@Override
 	public void reconnect() {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void close() throws IOException {
+		destroy();
 	}
 
 }

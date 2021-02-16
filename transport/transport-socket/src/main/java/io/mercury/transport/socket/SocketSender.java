@@ -31,7 +31,7 @@ public final class SocketSender implements Sender<byte[]> {
 
 	private void init() {
 		try {
-			this.socket = new Socket(configurator.host(), configurator.port());
+			this.socket = new Socket(configurator.getHost(), configurator.getPort());
 		} catch (IOException e) {
 			log.error("Throw IOException -> {}", e.getMessage(), e);
 			throw new RuntimeException(e);
@@ -62,7 +62,7 @@ public final class SocketSender implements Sender<byte[]> {
 	}
 
 	@Override
-	public void send(byte[] msg) {
+	public void sent(byte[] msg) {
 		innerQueue.enqueue(msg);
 	}
 
@@ -87,7 +87,7 @@ public final class SocketSender implements Sender<byte[]> {
 	public static void main(String[] args) {
 		SocketConfigurator configurator = SocketConfigurator.builder().host("192.168.1.138").port(7901).build();
 		SocketSender sender = new SocketSender(configurator);
-		sender.send("hello".getBytes());
+		sender.sent("hello".getBytes());
 	}
 
 }

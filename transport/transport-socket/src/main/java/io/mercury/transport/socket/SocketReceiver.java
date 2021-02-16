@@ -41,9 +41,9 @@ public class SocketReceiver implements Receiver {
 
 	private void init() {
 		try {
-			this.socket = new Socket(configurator.host(), configurator.port());
+			this.socket = new Socket(configurator.getHost(), configurator.getPort());
 		} catch (Exception e) {
-			log.error("new Socket({}, {}) throw Exception -> {}", configurator.host(), configurator.port(),
+			log.error("new Socket({}, {}) throw Exception -> {}", configurator.getHost(), configurator.getPort(),
 					e.getMessage(), e);
 			throw new RuntimeException(e);
 		}
@@ -129,11 +129,22 @@ public class SocketReceiver implements Receiver {
 
 		receiver.receive();
 
+		try {
+			receiver.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
 	public void reconnect() {
 
+	}
+
+	@Override
+	public void close() throws IOException {
+		destroy();
 	}
 
 }

@@ -24,7 +24,7 @@ public abstract class BaseTransceiver<T> implements Transceiver<T> {
 		}
 
 		@Override
-		public void send(T msg) {
+		public void sent(T msg) {
 			queue.enqueue(msg);
 		}
 

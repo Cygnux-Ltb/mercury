@@ -9,7 +9,7 @@ public final class SocketConfigurator implements TransportConfigurator {
 	private long receiveInterval;
 	private int sendQueueSize;
 
-	private final String fullInfo = "SocketConfigurator";
+	private final String configuratorInfo = "SocketConfigurator";
 	private final String connectionInfo = "";
 
 	private SocketConfigurator(Builder builder) {
@@ -24,12 +24,12 @@ public final class SocketConfigurator implements TransportConfigurator {
 	}
 
 	@Override
-	public String host() {
+	public String getHost() {
 		return host;
 	}
 
 	@Override
-	public int port() {
+	public int getPort() {
 		return port;
 	}
 
@@ -42,12 +42,12 @@ public final class SocketConfigurator implements TransportConfigurator {
 	}
 
 	@Override
-	public String fullInfo() {
-		return fullInfo;
+	public String getConfiguratorInfo() {
+		return configuratorInfo;
 	}
 	
 	@Override
-	public String connectionInfo() {
+	public String getConnectionInfo() {
 		return connectionInfo;
 	}
 
