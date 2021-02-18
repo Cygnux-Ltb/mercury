@@ -19,6 +19,6 @@ public interface Group<K, V> extends Serializable {
 	V acquireMember(@Nonnull K k);
 
 	@Nonnull
-	ImmutableList<V> memberList();
+	ImmutableList<V> getMemberList();
 
 }

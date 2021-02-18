@@ -35,7 +35,7 @@ public abstract class AbstractGroup<K, V> implements Group<K, V> {
 	}
 
 	@Override
-	public ImmutableList<V> memberList() {
+	public ImmutableList<V> getMemberList() {
 		return newImmutableList(savedMap.values());
 	}
 
