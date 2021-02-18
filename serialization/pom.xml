@@ -91,6 +91,14 @@
 				<version>${jackson.version}</version>
 			</dependency>
 
+			<!-- Add-on module for Jackson (http://jackson.codehaus.org) to support 
+				JDK 8 data types. -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.datatype</groupId>
+				<artifactId>jackson-datatype-jdk8</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+
 			<!-- Add-on module to support JSR-310 (Java 8 Date & Time API) data types. -->
 			<dependency>
 				<groupId>com.fasterxml.jackson.datatype</groupId>
@@ -103,6 +111,15 @@
 			<dependency>
 				<groupId>com.fasterxml.jackson.datatype</groupId>
 				<artifactId>jackson-datatype-eclipse-collections</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+
+			<!-- Add-on module for Jackson (http://jackson.codehaus.org) to support 
+				introspection of method/constructor parameter names, without having to add 
+				explicit property name annotation. -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.module</groupId>
+				<artifactId>jackson-module-parameter-names</artifactId>
 				<version>${jackson.version}</version>
 			</dependency>
 

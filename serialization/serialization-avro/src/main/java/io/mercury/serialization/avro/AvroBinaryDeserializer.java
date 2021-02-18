@@ -32,8 +32,8 @@ public final class AvroBinaryDeserializer<T extends SpecificRecord> implements B
 
 	private DatumReader<T> reader;
 
-	public AvroBinaryDeserializer(Class<T> tClass) {
-		this.reader = new SpecificDatumReader<>(tClass);
+	public AvroBinaryDeserializer(Class<T> clazz) {
+		this.reader = new SpecificDatumReader<>(clazz);
 	}
 
 	@Override
