@@ -15,9 +15,9 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.StringUtil;
 
 /**
- * Nacos信息读取
+ * NACOS信息读取
  * 
- * 使用Nacos读取properties配置文件
+ * 使用NACOS读取properties配置文件
  * 
  * @author: yellow013
  */

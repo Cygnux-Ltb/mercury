@@ -13,10 +13,6 @@
 	<artifactId>configuration-nacos</artifactId>
 	<name>configuration-nacos</name>
 
-	<properties>
-		<jackson.version>2.12.1</jackson.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>io.mercury</groupId>

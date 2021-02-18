@@ -22,7 +22,7 @@
 		<chronicle-wire.version>2.20.117</chronicle-wire.version>
 		<chronicle-values.version>2.20.80</chronicle-values.version>
 		<chronicle-algorithms.version>2.20.80</chronicle-algorithms.version>
-		<chronicle-queue.version>5.20.122</chronicle-queue.version>
+		<chronicle-queue.version>5.20.123</chronicle-queue.version>
 		<chronicle-map.version>3.20.84</chronicle-map.version>
 	</properties>
 
