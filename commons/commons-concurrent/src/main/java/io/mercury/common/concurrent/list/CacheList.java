@@ -1,19 +1,20 @@
 package io.mercury.common.concurrent.list;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.concurrent.ThreadSafe;
 
 @ThreadSafe
 public final class CacheList<T> {
 
-	private volatile Saved saved;
+	private final AtomicReference<Saved> savedRef;
 
-	private Supplier<List<T>> refresher;
+	private final Supplier<List<T>> refresher;
 
-	private class Saved {
+	private final class Saved {
 
 		private volatile boolean available;
 		private volatile List<T> value;
@@ -29,6 +30,7 @@ public final class CacheList<T> {
 		if (refresher == null)
 			throw new IllegalArgumentException("refresher is can't null...");
 		this.refresher = refresher;
+		this.savedRef = new AtomicReference<>(new Saved(true, refresher.get()));
 	}
 
 	/**
@@ -36,21 +38,25 @@ public final class CacheList<T> {
 	 * @param value
 	 * @return
 	 */
-	private CacheList<T> set(List<T> value) {
-		this.saved = new Saved(true, value);
-		return this;
-	}
 
 	/**
 	 * 
 	 * @return
 	 */
-	public Optional<List<T>> getOptional() {
-		if (saved == null || !saved.available) {
-			List<T> refreshed = refresher.get();
-			return refreshed == null ? Optional.empty() : set(refreshed).getOptional();
+	@CheckForNull
+	public List<T> get() {
+		return extractValue(savedRef.get());
+	}
+
+	private final List<T> extractValue(Saved saved) {
+		if (saved.available) {
+			return saved.value;
 		} else {
-			return saved.available ? Optional.of(saved.value) : getOptional();
+			return extractValue(savedRef.updateAndGet(save -> {
+				save.available = true;
+				save.value = refresher.get();
+				return save;
+			}));
 		}
 	}
 
@@ -59,7 +65,11 @@ public final class CacheList<T> {
 	 * @return
 	 */
 	public CacheList<T> setUnavailable() {
-		saved.available = false;
+		savedRef.get().available = false;
+		savedRef.updateAndGet(save -> {
+			save.available = false;
+			return save;
+		});
 		return this;
 	}
 
