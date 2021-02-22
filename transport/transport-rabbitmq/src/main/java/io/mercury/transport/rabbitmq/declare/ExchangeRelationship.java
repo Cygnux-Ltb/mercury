@@ -7,9 +7,11 @@ import javax.annotation.Nonnull;
 import org.apache.commons.collections4.CollectionUtils;
 
 import io.mercury.common.collections.MutableLists;
+import io.mercury.common.util.Assertor;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rabbitmq.RabbitMqDeclarator;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
+import lombok.Getter;
 
 /**
  * 定义Exchange和其他实体绑定关系
@@ -21,10 +23,9 @@ public final class ExchangeRelationship extends Relationship {
 
 	public final static ExchangeRelationship Anonymous = new ExchangeRelationship(AmqpExchange.Anonymous);
 
-	/**
-	 * exchange
-	 */
-	private AmqpExchange exchange;
+	// exchange
+	@Getter
+	private final AmqpExchange exchange;
 
 	/**
 	 * 
@@ -32,7 +33,7 @@ public final class ExchangeRelationship extends Relationship {
 	 * @return
 	 */
 	public static ExchangeRelationship fanout(@Nonnull String exchangeName) {
-		return new ExchangeRelationship(AmqpExchange.fanout(exchangeName));
+		return withExchange(AmqpExchange.fanout(exchangeName));
 	}
 
 	/**
@@ -41,7 +42,7 @@ public final class ExchangeRelationship extends Relationship {
 	 * @return
 	 */
 	public static ExchangeRelationship direct(@Nonnull String exchangeName) {
-		return new ExchangeRelationship(AmqpExchange.direct(exchangeName));
+		return withExchange(AmqpExchange.direct(exchangeName));
 	}
 
 	/**
@@ -50,7 +51,7 @@ public final class ExchangeRelationship extends Relationship {
 	 * @return
 	 */
 	public static ExchangeRelationship topic(@Nonnull String exchangeName) {
-		return new ExchangeRelationship(AmqpExchange.topic(exchangeName));
+		return withExchange(AmqpExchange.topic(exchangeName));
 	}
 
 	/**
@@ -59,6 +60,7 @@ public final class ExchangeRelationship extends Relationship {
 	 * @return
 	 */
 	public static ExchangeRelationship withExchange(@Nonnull AmqpExchange exchange) {
+		Assertor.nonNull(exchange, "exchange");
 		return new ExchangeRelationship(exchange);
 	}
 
@@ -81,19 +83,11 @@ public final class ExchangeRelationship extends Relationship {
 	}
 
 	/**
-	 * @return the exchange
-	 */
-	public AmqpExchange exchange() {
-		return exchange;
-	}
-
-	/**
-	 * <b>exchange().name()<b><br>
 	 * 
 	 * @return the exchange name
 	 */
-	public String exchangeName() {
-		return exchange.name();
+	public String getExchangeName() {
+		return exchange.getName();
 	}
 
 	/**
@@ -102,7 +96,7 @@ public final class ExchangeRelationship extends Relationship {
 	 * @return
 	 */
 	public ExchangeRelationship exchangeDurable(boolean durable) {
-		exchange.durable(durable);
+		exchange.setDurable(durable);
 		return this;
 	}
 
@@ -112,7 +106,7 @@ public final class ExchangeRelationship extends Relationship {
 	 * @return
 	 */
 	public ExchangeRelationship exchangeAutoDelete(boolean autoDelete) {
-		exchange.autoDelete(autoDelete);
+		exchange.setAutoDelete(autoDelete);
 		return this;
 	}
 
@@ -122,7 +116,7 @@ public final class ExchangeRelationship extends Relationship {
 	 * @return
 	 */
 	public ExchangeRelationship exchangeInternal(boolean internal) {
-		exchange.internal(internal);
+		exchange.setInternal(internal);
 		return this;
 	}
 

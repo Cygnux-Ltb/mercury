@@ -29,6 +29,7 @@
 		<java.version>1.8</java.version>
 		<slf4j.version>1.7.30</slf4j.version>
 		<junit.version>4.13.1</junit.version>
+		<lombok.version>1.18.18</lombok.version>
 	</properties>
 
 	<build>
@@ -64,6 +65,13 @@
 				<groupId>com.google.code.findbugs</groupId>
 				<artifactId>jsr305</artifactId>
 				<version>3.0.2</version>
+			</dependency>
+			<!-- Spice up your java: Automatic Resource Management, automatic generation 
+				of getters, setters, equals, hashCode and toString, and more! -->
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

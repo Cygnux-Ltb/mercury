@@ -155,7 +155,7 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
 		super(nonEmpty(tag) ? tag : "receiver-" + DateTimeUtil.datetimeOfMillisecond(), configurator.connection());
 		this.receiveQueue = configurator.receiveQueue();
-		this.queueName = receiveQueue.queueName();
+		this.queueName = receiveQueue.getQueueName();
 		this.deserializer = deserializer;
 		this.consumer = consumer;
 		this.errMsgExchange = configurator.errMsgExchange();
@@ -183,7 +183,7 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 			throw new DeclareRuntimeException(e);
 		}
 		if (errMsgExchange != null && errMsgQueue != null) {
-			errMsgExchange.bindingQueue(errMsgQueue.queue());
+			errMsgExchange.bindingQueue(errMsgQueue.getQueue());
 			declareErrMsgExchange(operator);
 		} else if (errMsgExchange != null) {
 			declareErrMsgExchange(operator);
@@ -203,7 +203,7 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 			destroy();
 			throw new DeclareRuntimeException(e);
 		}
-		this.errMsgExchangeName = errMsgExchange.exchangeName();
+		this.errMsgExchangeName = errMsgExchange.getExchangeName();
 		this.hasErrMsgExchange = true;
 	}
 
@@ -217,7 +217,7 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 			destroy();
 			throw new DeclareRuntimeException(e);
 		}
-		this.errMsgQueueName = errMsgQueue.queueName();
+		this.errMsgQueueName = errMsgQueue.getQueueName();
 		this.hasErrMsgQueue = true;
 	}
 

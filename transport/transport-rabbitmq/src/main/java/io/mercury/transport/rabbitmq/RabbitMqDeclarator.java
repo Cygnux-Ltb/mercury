@@ -106,7 +106,8 @@ public final class RabbitMqDeclarator extends AbstractRabbitMqTransport {
 		} catch (Exception e) {
 			throw DeclareException.with(e);
 		}
-		return declareQueue(queue.name(), queue.durable(), queue.exclusive(), queue.autoDelete(), queue.args());
+		return declareQueue(queue.getName(), queue.isDurable(), queue.isExclusive(), queue.isAutoDelete(),
+				queue.getArgs());
 	}
 
 	/**
@@ -147,16 +148,16 @@ public final class RabbitMqDeclarator extends AbstractRabbitMqTransport {
 		} catch (Exception e) {
 			throw DeclareException.with(e);
 		}
-		switch (exchange.type()) {
+		switch (exchange.getType()) {
 		case Direct:
-			return declareDirectExchange(exchange.name(), exchange.durable(), exchange.autoDelete(),
-					exchange.internal(), exchange.args());
+			return declareDirectExchange(exchange.getName(), exchange.isDurable(), exchange.isAutoDelete(),
+					exchange.isInternal(), exchange.getArgs());
 		case Fanout:
-			return declareFanoutExchange(exchange.name(), exchange.durable(), exchange.autoDelete(),
-					exchange.internal(), exchange.args());
+			return declareFanoutExchange(exchange.getName(), exchange.isDurable(), exchange.isAutoDelete(),
+					exchange.isInternal(), exchange.getArgs());
 		case Topic:
-			return declareTopicExchange(exchange.name(), exchange.durable(), exchange.autoDelete(), exchange.internal(),
-					exchange.args());
+			return declareTopicExchange(exchange.getName(), exchange.isDurable(), exchange.isAutoDelete(),
+					exchange.isInternal(), exchange.getArgs());
 		default:
 			return false;
 		}

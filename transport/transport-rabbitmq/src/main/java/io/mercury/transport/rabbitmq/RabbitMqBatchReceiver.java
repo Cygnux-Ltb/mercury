@@ -64,7 +64,7 @@ public class RabbitMqBatchReceiver<T> extends AbstractRabbitMqTransport implemen
 			BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent) {
 		super(nonEmpty(tag) ? tag : "batch-receiver-" + DateTimeUtil.datetimeOfMillisecond(),
 				configurator.connection());
-		this.receiveQueue = configurator.receiveQueue().queue().name();
+		this.receiveQueue = configurator.receiveQueue().getQueueName();
 		createConnection();
 		queueDeclare();
 		this.consumer = new BatchProcessConsumer<T>(channel, configurator.qos(), autoFlushInterval, batchHandler,
@@ -76,7 +76,7 @@ public class RabbitMqBatchReceiver<T> extends AbstractRabbitMqTransport implemen
 			Predicate<T> filter) {
 		super(nonEmpty(tag) ? tag : "batch-receiver-" + DateTimeUtil.datetimeOfMillisecond(),
 				configurator.connection());
-		this.receiveQueue = configurator.receiveQueue().queueName();
+		this.receiveQueue = configurator.receiveQueue().getQueueName();
 		createConnection();
 		queueDeclare();
 		this.consumer = new BatchProcessConsumer<T>(super.channel, configurator.qos(), autoFlushInterval, batchHandler,

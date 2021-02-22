@@ -5,9 +5,11 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 
 import io.mercury.common.collections.MutableLists;
+import io.mercury.common.util.Assertor;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rabbitmq.RabbitMqDeclarator;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
+import lombok.Getter;
 
 /**
  * 定义Queue和其他实体绑定关系
@@ -17,10 +19,9 @@ import io.mercury.transport.rabbitmq.exception.DeclareException;
  */
 public final class QueueRelationship extends Relationship {
 
-	/**
-	 * queue
-	 */
-	private AmqpQueue queue;
+	// queue
+	@Getter
+	private final AmqpQueue queue;
 
 	/**
 	 * 
@@ -28,7 +29,7 @@ public final class QueueRelationship extends Relationship {
 	 * @return
 	 */
 	public static QueueRelationship named(String name) {
-		return new QueueRelationship(AmqpQueue.named(name));
+		return withQueue(AmqpQueue.named(name));
 	}
 
 	/**
@@ -37,21 +38,18 @@ public final class QueueRelationship extends Relationship {
 	 * @return
 	 */
 	public static QueueRelationship withQueue(AmqpQueue queue) {
+		Assertor.nonNull(queue, "queue");
 		return new QueueRelationship(queue);
 	}
 
-	/**
-	 * 
-	 * @param queue
-	 */
 	private QueueRelationship(AmqpQueue queue) {
 		this.queue = queue;
 	}
 
 	@Override
-	protected void declare0(RabbitMqDeclarator operator) {
+	protected void declare0(RabbitMqDeclarator declarator) {
 		try {
-			operator.declareQueue(queue);
+			declarator.declareQueue(queue);
 		} catch (DeclareException e) {
 			log.error("Declare Queue failure -> {}", queue);
 			throw new RuntimeException(e);
@@ -59,19 +57,11 @@ public final class QueueRelationship extends Relationship {
 	}
 
 	/**
-	 * @return the queue
-	 */
-	public AmqpQueue queue() {
-		return queue;
-	}
-
-	/**
-	 * <b>queue().name()<b><br>
 	 * 
 	 * @return the queue name
 	 */
-	public String queueName() {
-		return queue.name();
+	public String getQueueName() {
+		return queue.getName();
 	}
 
 	/**
@@ -80,7 +70,7 @@ public final class QueueRelationship extends Relationship {
 	 * @return
 	 */
 	public QueueRelationship queueDurable(boolean durable) {
-		queue.durable(durable);
+		queue.setDurable(durable);
 		return this;
 	}
 
@@ -90,7 +80,7 @@ public final class QueueRelationship extends Relationship {
 	 * @return
 	 */
 	public QueueRelationship queueAutoDelete(boolean autoDelete) {
-		queue.autoDelete(autoDelete);
+		queue.setAutoDelete(autoDelete);
 		return this;
 	}
 
@@ -100,7 +90,7 @@ public final class QueueRelationship extends Relationship {
 	 * @return
 	 */
 	public QueueRelationship queueExclusive(boolean exclusive) {
-		queue.exclusive(exclusive);
+		queue.setExclusive(exclusive);
 		return this;
 	}
 

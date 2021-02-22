@@ -78,12 +78,6 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 	// 发布消息使用的序列化器
 	private final Function<T, byte[]> serializer;
 
-	// 是否存在ACK成功回调
-	private final boolean hasAckCallback;
-
-	// 是否存在ACK未成功回调
-	private final boolean hasNoAckCallback;
-
 	/**
 	 * 
 	 * @param <T>
@@ -233,7 +227,7 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 		super(nonEmpty(tag) ? tag : "publisher-" + DateTimeUtil.datetimeOfMillisecond(), configurator.connection());
 		Assertor.nonNull(configurator.publishExchange(), "exchangeRelation");
 		this.publishExchange = configurator.publishExchange();
-		this.exchangeName = publishExchange.exchangeName();
+		this.exchangeName = publishExchange.getExchangeName();
 		this.defaultRoutingKey = configurator.defaultRoutingKey();
 		this.defaultMsgProps = configurator.defaultMsgProps();
 		this.msgPropsSupplier = configurator.msgPropsSupplier();
@@ -241,22 +235,23 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 		this.confirmTimeout = configurator.confirmTimeout();
 		this.confirmRetry = configurator.confirmRetry();
 		this.serializer = serializer;
-		this.hasAckCallback = ackCallback != null;
-		this.hasNoAckCallback = noAckCallback != null;
+
 		this.hasPropsSupplier = msgPropsSupplier != null;
 		this.publisherName = "publisher::[" + rmqConnection.getConnectionInfo() + "$" + exchangeName + "]";
 		createConnection();
 		declareExchange();
-		/*
-		 * 如果设置为需要应答确认, 则进行相关设置
-		 */
+		// 如果设置为需要应答确认, 则进行相关设置
 		if (confirm) {
-			/*
-			 * 添加Ack & NoAck回调
-			 */
+
+			// 是否存在ACK成功回调
+			final boolean hasAckCallback = ackCallback != null;
+			// 是否存在ACK未成功回调
+			final boolean hasNoAckCallback = noAckCallback != null;
+
+			// 添加ACK & NoAck回调
 			channel.addConfirmListener(
 					// ACK Callback
-					(deliveryTag, multiple) -> {
+					(long deliveryTag, boolean multiple) -> {
 						if (hasAckCallback) {
 							ackCallback.handle(deliveryTag, multiple);
 						} else {
@@ -264,7 +259,7 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 						}
 					},
 					// NoAck Callback
-					(deliveryTag, multiple) -> {
+					(long deliveryTag, boolean multiple) -> {
 						if (hasNoAckCallback) {
 							ackCallback.handle(deliveryTag, multiple);
 						} else {

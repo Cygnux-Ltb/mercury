@@ -73,7 +73,7 @@ public class RabbitMqPublisher extends AbstractRabbitMqTransport implements Publ
 		super(nonEmpty(tag) ? tag : "publisher-" + DateTimeUtil.datetimeOfMillisecond(), configurator.connection());
 		Assertor.nonNull(configurator.publishExchange(), "exchangeRelation");
 		this.publishExchange = configurator.publishExchange();
-		this.exchangeName = publishExchange.exchangeName();
+		this.exchangeName = publishExchange.getExchangeName();
 		this.defaultRoutingKey = configurator.defaultRoutingKey();
 		this.defaultMsgProps = configurator.defaultMsgProps();
 		this.msgPropsSupplier = configurator.msgPropsSupplier();

@@ -1,11 +1,14 @@
 package io.mercury.transport.rabbitmq.declare;
 
+import javax.annotation.Nonnull;
+
 import org.eclipse.collections.api.list.MutableList;
 import org.slf4j.Logger;
 
 import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.util.Assertor;
 import io.mercury.transport.rabbitmq.RabbitMqDeclarator;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 
@@ -20,10 +23,11 @@ public abstract class Relationship {
 	 * @param operator
 	 * @throws DeclareException
 	 */
-	public void declare(RabbitMqDeclarator operator) throws DeclareException {
-		declare0(operator);
+	public void declare(@Nonnull RabbitMqDeclarator declarator) throws DeclareException {
+		Assertor.nonNull(declarator, "declarator");
+		declare0(declarator);
 		for (Binding binding : bindings) {
-			declareBinding(operator, binding);
+			declareBinding(declarator, binding);
 		}
 	}
 
@@ -33,10 +37,10 @@ public abstract class Relationship {
 	 * @param binding
 	 * @throws DeclareException
 	 */
-	private void declareBinding(RabbitMqDeclarator operator, Binding binding) throws DeclareException {
+	private void declareBinding(RabbitMqDeclarator declarator, Binding binding) throws DeclareException {
 		AmqpExchange source = binding.source();
 		try {
-			operator.declareExchange(source);
+			declarator.declareExchange(source);
 		} catch (DeclareException declareException) {
 			log.error("Declare source exchange failure -> {}", source);
 			throw declareException;
@@ -46,13 +50,13 @@ public abstract class Relationship {
 		case Exchange:
 			AmqpExchange destExchange = binding.destExchange();
 			try {
-				operator.declareExchange(destExchange);
+				declarator.declareExchange(destExchange);
 			} catch (DeclareException e) {
 				log.error("Declare dest exchange failure -> destExchange==[{}]", destExchange, e);
 				throw e;
 			}
 			try {
-				operator.bindExchange(destExchange.name(), source.name(), routingKey);
+				declarator.bindExchange(destExchange.getName(), source.getName(), routingKey);
 			} catch (DeclareException e) {
 				log.error("Declare bind exchange failure -> destExchange==[{}], source==[{}], routingKey==[{}]",
 						destExchange, source, routingKey, e);
@@ -62,13 +66,13 @@ public abstract class Relationship {
 		case Queue:
 			AmqpQueue destQueue = binding.destQueue();
 			try {
-				operator.declareQueue(destQueue);
+				declarator.declareQueue(destQueue);
 			} catch (DeclareException e) {
 				log.error("Declare dest queue failure -> destQueue==[{}]", destQueue, e);
 				throw e;
 			}
 			try {
-				operator.bindQueue(destQueue.name(), source.name(), routingKey);
+				declarator.bindQueue(destQueue.getName(), source.getName(), routingKey);
 			} catch (DeclareException e) {
 				log.error("Declare bind queue failure -> destQueue==[{}], source==[{}], routingKey==[{}]", destQueue,
 						source, routingKey, e);
