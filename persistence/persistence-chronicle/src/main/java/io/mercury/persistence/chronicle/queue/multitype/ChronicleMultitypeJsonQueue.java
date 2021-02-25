@@ -10,13 +10,14 @@ import org.slf4j.Logger;
 import io.mercury.common.codec.Envelope;
 import io.mercury.common.sequence.EpochSeqAllocator;
 import io.mercury.persistence.chronicle.queue.multitype.AbstractChronicleMultitypeReader.ReaderParam;
-import io.mercury.persistence.chronicle.queue.multitype.ChronicleMultitypeStringQueue.JsonPacket;
+import io.mercury.persistence.chronicle.queue.multitype.ChronicleMultitypeJsonQueue.JsonPacket;
+import io.mercury.serialization.json.JsonWrapper;
 
 @Immutable
-public class ChronicleMultitypeStringQueue<E extends Envelope> extends
-		AbstractChronicleMultitypeQueue<E, String, JsonPacket, ChronicleMultitypeStringAppender<E>, ChronicleMultitypeStringReader> {
+public class ChronicleMultitypeJsonQueue<E extends Envelope> extends
+		AbstractChronicleMultitypeQueue<E, String, JsonPacket, ChronicleMultitypeJsonAppender<E>, ChronicleMultitypeJsonReader> {
 
-	private ChronicleMultitypeStringQueue(Builder<E> builder) {
+	private ChronicleMultitypeJsonQueue(Builder<E> builder) {
 		super(builder);
 	}
 
@@ -25,16 +26,16 @@ public class ChronicleMultitypeStringQueue<E extends Envelope> extends
 	}
 
 	@Override
-	protected ChronicleMultitypeStringReader createReader(String readerName, ReaderParam readerParam, Logger logger,
+	protected ChronicleMultitypeJsonReader createReader(String readerName, ReaderParam readerParam, Logger logger,
 			Consumer<JsonPacket> consumer) throws IllegalStateException {
-		return new ChronicleMultitypeStringReader(EpochSeqAllocator.allocate(), readerName, fileCycle(), readerParam,
+		return new ChronicleMultitypeJsonReader(EpochSeqAllocator.allocate(), readerName, fileCycle(), readerParam,
 				logger, internalQueue.createTailer(), consumer);
 	}
 
 	@Override
-	protected ChronicleMultitypeStringAppender<E> acquireAppender(String appenderName, Logger logger,
+	protected ChronicleMultitypeJsonAppender<E> acquireAppender(String appenderName, Logger logger,
 			Supplier<String> supplier) throws IllegalStateException {
-		return new ChronicleMultitypeStringAppender<>(EpochSeqAllocator.allocate(), appenderName, logger,
+		return new ChronicleMultitypeJsonAppender<>(EpochSeqAllocator.allocate(), appenderName, logger,
 				internalQueue.acquireAppender(), supplier);
 	}
 
@@ -48,8 +49,8 @@ public class ChronicleMultitypeStringQueue<E extends Envelope> extends
 		private Builder() {
 		}
 
-		public ChronicleMultitypeStringQueue<E> build() {
-			return new ChronicleMultitypeStringQueue<>(this);
+		public ChronicleMultitypeJsonQueue<E> build() {
+			return new ChronicleMultitypeJsonQueue<>(this);
 		}
 
 		@Override
@@ -85,6 +86,11 @@ public class ChronicleMultitypeStringQueue<E extends Envelope> extends
 		public JsonPacket setContent(String content) {
 			this.content = content;
 			return this;
+		}
+
+		@Override
+		public String toString() {
+			return JsonWrapper.toJson(this);
 		}
 
 	}

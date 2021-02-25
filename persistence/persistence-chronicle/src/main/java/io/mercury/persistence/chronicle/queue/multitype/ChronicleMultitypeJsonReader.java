@@ -8,16 +8,16 @@ import javax.annotation.concurrent.NotThreadSafe;
 import org.slf4j.Logger;
 
 import io.mercury.persistence.chronicle.queue.FileCycle;
-import io.mercury.persistence.chronicle.queue.multitype.ChronicleMultitypeStringQueue.JsonPacket;
+import io.mercury.persistence.chronicle.queue.multitype.ChronicleMultitypeJsonQueue.JsonPacket;
 import io.mercury.serialization.json.JsonParseException;
 import io.mercury.serialization.json.JsonParser;
 import net.openhft.chronicle.queue.ExcerptTailer;
 
 @Immutable
 @NotThreadSafe
-public final class ChronicleMultitypeStringReader extends AbstractChronicleMultitypeReader<JsonPacket> {
+public final class ChronicleMultitypeJsonReader extends AbstractChronicleMultitypeReader<JsonPacket> {
 
-	ChronicleMultitypeStringReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param,
+	ChronicleMultitypeJsonReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param,
 			Logger logger, ExcerptTailer excerptTailer, Consumer<JsonPacket> consumer) {
 		super(allocateSeq, readerName, fileCycle, param, logger, excerptTailer, consumer);
 	}
