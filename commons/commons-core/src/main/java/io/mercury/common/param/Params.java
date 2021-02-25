@@ -1,5 +1,7 @@
 package io.mercury.common.param;
 
+import org.slf4j.Logger;
+
 import io.mercury.common.param.Params.ParamKey;
 
 public interface Params<K extends ParamKey> {
@@ -12,6 +14,14 @@ public interface Params<K extends ParamKey> {
 
 	String getString(K key);
 
+	default void printParams() {
+		printParams(null);
+	}
+
+	default void printParams(Logger log) {
+		throw new UnsupportedOperationException("function -> printParams(log) is not implements");
+	}
+
 	/**
 	 * 
 	 * @author yellow013
@@ -19,11 +29,11 @@ public interface Params<K extends ParamKey> {
 	 */
 	public static interface ParamKey {
 
-		int getId();
+		int getParamId();
 
 		String getParamName();
 
-		ParamType getType();
+		ValueType getValueType();
 
 	}
 
@@ -32,7 +42,7 @@ public interface Params<K extends ParamKey> {
 	 * @author yellow013
 	 *
 	 */
-	public static enum ParamType {
+	public static enum ValueType {
 
 		STRING,
 

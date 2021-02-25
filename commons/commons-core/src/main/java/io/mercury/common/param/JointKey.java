@@ -1,6 +1,6 @@
 package io.mercury.common.param;
 
-import io.mercury.common.param.Params.ParamType;
+import io.mercury.common.param.Params.ValueType;
 
 /**
  * Inner Key type
@@ -11,6 +11,6 @@ public interface JointKey {
 
 	int key1();
 
-	ParamType type();
+	ValueType getValuetype();
 
 }

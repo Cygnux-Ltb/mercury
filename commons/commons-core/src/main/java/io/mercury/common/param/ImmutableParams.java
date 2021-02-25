@@ -72,8 +72,9 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 	 */
 	@Override
 	public boolean getBoolean(K key) throws IllegalArgumentException, NullPointerException {
-		if (key.getType() != ParamType.BOOLEAN)
-			throw new IllegalArgumentException("Key -> " + key + " ParamType is not BOOLEAN, paramType==" + key.getType());
+		if (key.getValueType() != ValueType.BOOLEAN)
+			throw new IllegalArgumentException(
+					"Key -> " + key + " ValueType is not BOOLEAN, valueType==" + key.getValueType());
 		return Boolean.parseBoolean(nonNull(params.get(key), key.getParamName()));
 	}
 
@@ -87,8 +88,9 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 	 */
 	@Override
 	public int getInt(K key) throws IllegalArgumentException, NullPointerException, NumberFormatException {
-		if (key.getType() != ParamType.INT)
-			throw new IllegalArgumentException("Key -> " + key + " ParamType is not [INT]. paramType==" + key.getType());
+		if (key.getValueType() != ValueType.INT)
+			throw new IllegalArgumentException(
+					"Key -> " + key + " ValueType is not [INT]. valueType==" + key.getValueType());
 		return Integer.parseInt(nonNull(params.get(key), key.getParamName()));
 	}
 
@@ -102,9 +104,9 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 	 */
 	@Override
 	public double getDouble(K key) throws IllegalArgumentException, NullPointerException, NumberFormatException {
-		if (key.getType() != ParamType.DOUBLE)
+		if (key.getValueType() != ValueType.DOUBLE)
 			throw new IllegalArgumentException(
-					"Key -> " + key + " ParamType is not [DOUBLE], paramType==" + key.getType());
+					"Key -> " + key + " ValueType is not [DOUBLE], valueType==" + key.getValueType());
 		return Double.parseDouble(nonNull(params.get(key), key.getParamName()));
 	}
 
@@ -117,9 +119,9 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 	 */
 	@Override
 	public String getString(K key) throws IllegalArgumentException, NullPointerException {
-		if (key.getType() != ParamType.STRING)
+		if (key.getValueType() != ValueType.STRING)
 			throw new IllegalArgumentException(
-					"Key -> " + key + " ParamType is not [STRING], paramType==" + key.getType());
+					"Key -> " + key + " ValueType is not [STRING], paramType==" + key.getValueType());
 		return nonNull(params.get(key), key.getParamName());
 	}
 
@@ -129,11 +131,11 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 
 	public void printParams(Logger log) {
 		if (log == null) {
-			params.forEachKeyValue((key, value) -> out
-					.println("Param id==" + key.getId() + ", paramName -> " + key.getParamName() + ", value -> " + value));
+			params.forEachKeyValue((key, value) -> out.println(
+					"Param id==" + key.getParamId() + ", paramName -> " + key.getParamName() + ", value -> " + value));
 		} else {
-			params.forEachKeyValue((key, value) -> log.info("Param id=={}, paramName=={}, value -> {}", key.getId(),
-					key.getParamName(), value));
+			params.forEachKeyValue((key, value) -> log.info("Param id=={}, paramName=={}, value -> {}",
+					key.getParamId(), key.getParamName(), value));
 		}
 	}
 
