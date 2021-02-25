@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
+import org.zeromq.ZMQ.Socket;
 
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
@@ -18,7 +19,7 @@ import io.mercury.transport.zmq.configurator.ZmqConfigurator;
 public class ZmqPublisher implements Publisher<byte[]>, Closeable {
 
 	private ZContext zCtx;
-	private ZMQ.Socket zSocket;
+	private Socket socket;
 
 	private String topic;
 
@@ -34,8 +35,8 @@ public class ZmqPublisher implements Publisher<byte[]>, Closeable {
 
 	private void init() {
 		this.zCtx = new ZContext(configurator.ioThreads());
-		this.zSocket = zCtx.createSocket(SocketType.PUB);
-		this.zSocket.bind(configurator.getHost());
+		this.socket = zCtx.createSocket(SocketType.PUB);
+		this.socket.bind(configurator.getHost());
 		this.topic = configurator.topic();
 		this.name = "ZMQ::PUB$" + configurator.getHost();
 	}
@@ -47,13 +48,13 @@ public class ZmqPublisher implements Publisher<byte[]>, Closeable {
 
 	@Override
 	public void publish(String target, byte[] msg) {
-		zSocket.sendMore(target);
-		zSocket.send(msg, ZMQ.NOBLOCK);
+		socket.sendMore(target);
+		socket.send(msg, ZMQ.NOBLOCK);
 	}
 
 	@Override
 	public boolean destroy() {
-		zSocket.close();
+		socket.close();
 		zCtx.close();
 		return zCtx.isClosed();
 	}
