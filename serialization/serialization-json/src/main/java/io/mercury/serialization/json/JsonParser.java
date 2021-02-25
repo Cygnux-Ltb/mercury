@@ -1,5 +1,6 @@
 package io.mercury.serialization.json;
 
+import static com.google.gson.JsonParser.parseString;
 import static io.mercury.common.collections.ImmutableLists.newImmutableList;
 import static io.mercury.common.collections.ImmutableMaps.newImmutableMap;
 import static io.mercury.common.collections.MutableLists.newFastList;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
@@ -37,7 +39,7 @@ public final class JsonParser {
 	 * @return
 	 */
 	public static JsonElement parseJson(String json) {
-		return com.google.gson.JsonParser.parseString(json);
+		return parseString(json);
 	}
 
 	/**
@@ -46,7 +48,7 @@ public final class JsonParser {
 	 * @return
 	 */
 	public static boolean isJsonArray(String json) {
-		return com.google.gson.JsonParser.parseString(json).isJsonArray();
+		return parseString(json).isJsonArray();
 	}
 
 	/**
@@ -55,7 +57,7 @@ public final class JsonParser {
 	 * @return
 	 */
 	public static boolean isJsonObject(String json) {
-		return com.google.gson.JsonParser.parseString(json).isJsonObject();
+		return parseString(json).isJsonObject();
 	}
 
 	/**
@@ -65,6 +67,7 @@ public final class JsonParser {
 	 * @return
 	 * @throws JsonParseException
 	 */
+	@Nullable
 	public static final <T> T toObject(@Nonnull String json) throws JsonParseException {
 		try {
 			if (json == null)
@@ -84,6 +87,7 @@ public final class JsonParser {
 	 * @return
 	 * @throws JsonParseException
 	 */
+	@Nullable
 	public static final <T> T toObject(@Nonnull String json, @Nonnull Class<T> clazz) throws JsonParseException {
 		try {
 			if (json == null || clazz == null)

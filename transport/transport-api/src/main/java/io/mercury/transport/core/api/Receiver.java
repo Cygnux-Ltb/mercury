@@ -5,7 +5,7 @@ import java.io.Closeable;
 import io.mercury.transport.core.exception.ConnectionBreakException;
 import io.mercury.transport.core.exception.ReceiverStartException;
 
-public interface Receiver extends TransportModule, Closeable {
+public interface Receiver extends TransportModule, Closeable, Runnable {
 
 	/**
 	 * Start receive
@@ -16,5 +16,10 @@ public interface Receiver extends TransportModule, Closeable {
 	 * Reconnect
 	 */
 	void reconnect() throws ConnectionBreakException, ReceiverStartException;
+
+	@Override
+	default void run() {
+		receive();
+	}
 
 }
