@@ -8,7 +8,7 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 
 import io.mercury.common.number.Randoms;
-import io.mercury.common.sequence.EpochSeqAllocator;
+import io.mercury.common.sequence.EpochSequence;
 import io.mercury.common.thread.Threads;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleReader.ReaderParam;
 
@@ -27,14 +27,14 @@ public class ChronicleStringQueue
 	@Override
 	protected ChronicleStringReader createReader(String readerName, ReaderParam readerParam, Logger logger,
 			Consumer<String> consumer) throws IllegalStateException {
-		return new ChronicleStringReader(EpochSeqAllocator.allocate(), readerName, fileCycle(), readerParam, logger,
+		return new ChronicleStringReader(EpochSequence.allocate(), readerName, fileCycle(), readerParam, logger,
 				internalQueue.createTailer(), consumer);
 	}
 
 	@Override
 	protected ChronicleStringAppender acquireAppender(String appenderName, Logger logger, Supplier<String> supplier)
 			throws IllegalStateException {
-		return new ChronicleStringAppender(EpochSeqAllocator.allocate(), appenderName, logger,
+		return new ChronicleStringAppender(EpochSequence.allocate(), appenderName, logger,
 				internalQueue.acquireAppender(), supplier);
 	}
 

@@ -8,7 +8,7 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 
 import io.mercury.common.codec.Envelope;
-import io.mercury.common.sequence.EpochSeqAllocator;
+import io.mercury.common.sequence.EpochSequence;
 import io.mercury.persistence.chronicle.queue.multitype.AbstractChronicleMultitypeReader.ReaderParam;
 import io.mercury.persistence.chronicle.queue.multitype.ChronicleMultitypeJsonQueue.JsonPacket;
 import io.mercury.serialization.json.JsonWrapper;
@@ -28,14 +28,14 @@ public class ChronicleMultitypeJsonQueue<E extends Envelope> extends
 	@Override
 	protected ChronicleMultitypeJsonReader createReader(String readerName, ReaderParam readerParam, Logger logger,
 			Consumer<JsonPacket> consumer) throws IllegalStateException {
-		return new ChronicleMultitypeJsonReader(EpochSeqAllocator.allocate(), readerName, fileCycle(), readerParam,
+		return new ChronicleMultitypeJsonReader(EpochSequence.allocate(), readerName, fileCycle(), readerParam,
 				logger, internalQueue.createTailer(), consumer);
 	}
 
 	@Override
 	protected ChronicleMultitypeJsonAppender<E> acquireAppender(String appenderName, Logger logger,
 			Supplier<String> supplier) throws IllegalStateException {
-		return new ChronicleMultitypeJsonAppender<>(EpochSeqAllocator.allocate(), appenderName, logger,
+		return new ChronicleMultitypeJsonAppender<>(EpochSequence.allocate(), appenderName, logger,
 				internalQueue.acquireAppender(), supplier);
 	}
 

@@ -8,7 +8,7 @@ import javax.annotation.concurrent.Immutable;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.sequence.EpochSeqAllocator;
+import io.mercury.common.sequence.EpochSequence;
 import io.mercury.common.util.Assertor;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleReader.ReaderParam;
 import net.openhft.chronicle.wire.Marshallable;
@@ -32,14 +32,14 @@ public class ChronicleDocumentQueue<T extends Marshallable>
 	@Override
 	protected ChronicleDocumentReader<T> createReader(String readerName, ReaderParam readerParam, Logger logger,
 			Consumer<T> consumer) throws IllegalStateException {
-		return new ChronicleDocumentReader<>(EpochSeqAllocator.allocate(), readerName, fileCycle(), readerParam, logger,
+		return new ChronicleDocumentReader<>(EpochSequence.allocate(), readerName, fileCycle(), readerParam, logger,
 				internalQueue.createTailer(), consumer, marshallableSupplier);
 	}
 
 	@Override
 	protected ChronicleDocumentAppender<T> acquireAppender(String appenderName, Logger logger, Supplier<T> supplier)
 			throws IllegalStateException {
-		return new ChronicleDocumentAppender<>(EpochSeqAllocator.allocate(), appenderName, logger,
+		return new ChronicleDocumentAppender<>(EpochSequence.allocate(), appenderName, logger,
 				internalQueue.acquireAppender(), supplier);
 	}
 
