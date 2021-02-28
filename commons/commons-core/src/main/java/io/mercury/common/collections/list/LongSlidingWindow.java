@@ -2,6 +2,8 @@ package io.mercury.common.collections.list;
 
 import static io.mercury.common.collections.MutableLists.newLongArrayList;
 
+import java.util.function.LongConsumer;
+
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.eclipse.collections.api.list.primitive.ImmutableLongList;
@@ -9,34 +11,35 @@ import org.eclipse.collections.api.list.primitive.MutableLongList;
 
 /**
  * 
+ * 内部包含Long原始类型的数组, 长度不可变
+ * 
  * @author yellow013
  *
  */
 @NotThreadSafe
-public class LongFixedLengthList {
+public final class LongSlidingWindow {
+
+	private final int capacity;
+	private final MutableLongList list;
 
 	private int tail = -1;
 	private int count = 0;
 
-	private int capacity;
-
-	private MutableLongList list;
-
 	private boolean isEmpty = true;
 	private boolean isFull = false;
 
-	private LongFixedLengthList(int capacity) {
+	private LongSlidingWindow(int capacity) {
 		this.capacity = capacity;
 		this.list = newLongArrayList(capacity);
 	}
 
 	/**
 	 * 
-	 * @param cycle
+	 * @param capacity
 	 * @return
 	 */
-	public static LongFixedLengthList newList(int size) {
-		return new LongFixedLengthList(size);
+	public static final LongSlidingWindow newWindow(int capacity) {
+		return new LongSlidingWindow(capacity);
 	}
 
 	/**
@@ -75,6 +78,14 @@ public class LongFixedLengthList {
 		if (isFull)
 			return list.get(tail + 1 == capacity ? 0 : tail + 1);
 		return list.get(tail - count + 1);
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public int count() {
+		return count;
 	}
 
 	/**
@@ -121,16 +132,8 @@ public class LongFixedLengthList {
 	 * 
 	 * @return
 	 */
-	public ImmutableLongList toImmutable() {
+	public ImmutableLongList snapshot() {
 		return list.toImmutable();
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public int count() {
-		return count;
 	}
 
 	/**
@@ -138,7 +141,7 @@ public class LongFixedLengthList {
 	 * @param value
 	 * @return
 	 */
-	public LongFixedLengthList addTail(long value) {
+	public LongSlidingWindow addTail(long value) {
 		updateTail(value);
 		return this;
 	}
@@ -149,7 +152,7 @@ public class LongFixedLengthList {
 	 */
 	private void updateTail(long value) {
 		updateTailIndex();
-		updateCount();
+		updateStatus();
 		if (isFull)
 			list.set(tail, value);
 		else
@@ -167,7 +170,7 @@ public class LongFixedLengthList {
 	/**
 	 * 
 	 */
-	private void updateCount() {
+	private void updateStatus() {
 		if (!isFull) {
 			if (count == capacity) {
 				isFull = true;
@@ -180,18 +183,27 @@ public class LongFixedLengthList {
 		}
 	}
 
+	/**
+	 * 
+	 * @param consumer
+	 */
+	public void each(LongConsumer consumer) {
+		list.each(value -> consumer.accept(value));
+	}
+
 	public static void main(String[] args) {
 
-		LongFixedLengthList list = newList(10);
+		LongSlidingWindow window = newWindow(10);
 
 		for (int i = 1; i < 30; i++) {
-			list.addTail(i);
-			System.out.println("Count -> " + list.count);
-			System.out.print("Value -> ");
-			list.list.each(value -> System.out.print(value + " , "));
+			window.addTail(i);
+			System.out.println("count -> " + window.count);
+			System.out.print("values -> ");
+			window.each(value -> System.out.print(value + " , "));
 			System.out.println();
-			System.out.println("Head -> " + list.head());
-			System.out.println("Tail -> " + list.tail());
+			System.out.println("head -> " + window.head());
+			System.out.println("tail -> " + window.tail());
+			System.out.println();
 		}
 
 	}

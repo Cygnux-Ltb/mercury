@@ -2,15 +2,32 @@ package io.mercury.common.collections.list;
 
 import java.util.List;
 
+import org.eclipse.collections.impl.list.mutable.FastList;
+
 import io.mercury.common.annotation.lang.AbstractFunction;
 
 public abstract class LimitedList<L extends List<E>, E> extends LimitedContainer<E> {
 
 	private L savedList;
 
-	public LimitedList(int capacity) {
+	private LimitedList(int capacity) {
 		super(capacity);
 		this.savedList = initList(capacity);
+	}
+
+	/**
+	 * 
+	 * @param <E>
+	 * @param capacity
+	 * @return
+	 */
+	public final static <E> LimitedList<FastList<E>, E> newLimitedFastList(int capacity) {
+		return new LimitedList<FastList<E>, E>(capacity) {
+			@Override
+			protected FastList<E> initList(int capacity) {
+				return new FastList<>(capacity);
+			}
+		};
 	}
 
 	@AbstractFunction
