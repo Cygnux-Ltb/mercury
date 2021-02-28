@@ -33,7 +33,7 @@ import io.mercury.common.util.BitFormatter;
  *
  */
 @ThreadSafe
-public final class EpochSeqAllocator {
+public final class EpochSequence {
 
 	/**
 	 * 
@@ -97,7 +97,7 @@ public final class EpochSeqAllocator {
 		MutableLongSet longSet = MutableSets.newLongHashSet(Capacity.L21_SIZE);
 		long t0 = System.nanoTime();
 		for (int i = 0; i < 1000000; i++) {
-			longSet.add(EpochSeqAllocator.allocate());
+			longSet.add(EpochSequence.allocate());
 		}
 		long t1 = System.nanoTime();
 		long tx = (t1 - t0) / 1000000;
@@ -134,12 +134,12 @@ public final class EpochSeqAllocator {
 		System.out.println(BitFormatter.intBinary(0xffff));
 		System.out.println(BitFormatter.intBinary(Short.MAX_VALUE));
 
-		long allocate = EpochSeqAllocator.allocate();
+		long allocate = EpochSequence.allocate();
 		System.out.println("--------------------");
 		System.out.println(allocate);
 		System.out.println(BitFormatter.longBinaryFormat(allocate));
-		System.out.println(EpochSeqAllocator.parseEpochMillis(allocate));
-		System.out.println(BitFormatter.longBinaryFormat(EpochSeqAllocator.parseEpochMillis(allocate)));
+		System.out.println(EpochSequence.parseEpochMillis(allocate));
+		System.out.println(BitFormatter.longBinaryFormat(EpochSequence.parseEpochMillis(allocate)));
 
 	}
 
