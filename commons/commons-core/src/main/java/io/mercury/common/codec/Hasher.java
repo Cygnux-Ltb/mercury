@@ -70,9 +70,13 @@ public final class Hasher {
 			this.algorithm = algorithm;
 		}
 
+		public String getAlgorithm() {
+			return algorithm;
+		}
+
 		@Override
 		public String toString() {
-			return this.algorithm;
+			return algorithm;
 		}
 
 	}

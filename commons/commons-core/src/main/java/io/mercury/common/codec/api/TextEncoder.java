@@ -1,6 +1,6 @@
-package io.mercury.common.codec;
+package io.mercury.common.codec.api;
 
 @FunctionalInterface
-public interface EncoderOfText<T> extends Encoder<T, CharSequence> {
+public interface TextEncoder<T> extends Encoder<T, CharSequence> {
 
 }

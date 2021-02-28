@@ -1,4 +1,4 @@
-package io.mercury.common.codec;
+package io.mercury.common.codec.api;
 
 import java.util.function.Function;
 
