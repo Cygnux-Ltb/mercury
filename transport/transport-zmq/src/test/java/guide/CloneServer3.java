@@ -17,7 +17,8 @@ import org.zeromq.ZMQ.Socket;
  * @author Danish Shrestha &lt;dshrestha06@gmail.com&gt;
  *
  */
-public class clonesrv3 {
+public class CloneServer3 {
+
 	private static Map<String, kvsimple> kvMap = new LinkedHashMap<String, kvsimple>();
 
 	public void run() {
@@ -47,7 +48,7 @@ public class clonesrv3 {
 						break;
 					kvMsg.setSequence(++sequence);
 					kvMsg.send(publisher);
-					clonesrv3.kvMap.put(kvMsg.getKey(), kvMsg);
+					CloneServer3.kvMap.put(kvMsg.getKey(), kvMsg);
 					System.out.printf("I: publishing update %5d\n", sequence);
 				}
 
@@ -89,6 +90,6 @@ public class clonesrv3 {
 	}
 
 	public static void main(String[] args) {
-		new clonesrv3().run();
+		new CloneServer3().run();
 	}
 }

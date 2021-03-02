@@ -9,7 +9,8 @@ import org.zeromq.ZMQ;
 //  Binds PULL socket to tcp://localhost:5558
 //  Collects results from workers via that socket
 //
-public class tasksink {
+public class TaskSink {
+	
 	public static void main(String[] args) throws Exception {
 		// Prepare our context and socket
 		try (ZContext context = new ZContext()) {

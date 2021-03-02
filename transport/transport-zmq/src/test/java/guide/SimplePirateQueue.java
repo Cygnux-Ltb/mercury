@@ -15,7 +15,7 @@ import org.zeromq.ZMsg;
 // This is identical to load-balancing  pattern, with no reliability mechanisms
 // at all. It depends on the client for recovery. Runs forever.
 //
-public class spqueue {
+public class SimplePirateQueue {
 
 	private final static String WORKER_READY = "\001"; // Signals worker is ready
 

@@ -4,10 +4,10 @@ import org.zeromq.ZMsg;
 
 //  Freelance client - Model 3
 //  Uses flcliapi class to encapsulate Freelance pattern
-public class flclient3 {
+public class FreelanceClient3 {
 	public static void main(String[] argv) {
 		// Create new freelance client object
-		flcliapi client = new flcliapi();
+		FreelanceClientApi client = new FreelanceClientApi();
 
 		// Connect to several endpoints
 		client.connect("tcp://localhost:5555");

@@ -14,7 +14,7 @@ import org.zeromq.ZMQ.Socket;
 /**
  * Clone server Model Four
  */
-public class clonesrv4 {
+public class CloneServer4 {
 	private static Map<String, kvsimple> kvMap = new LinkedHashMap<String, kvsimple>();
 
 	public void run() {
@@ -44,7 +44,7 @@ public class clonesrv4 {
 						break;
 					kvMsg.setSequence(++sequence);
 					kvMsg.send(publisher);
-					clonesrv4.kvMap.put(kvMsg.getKey(), kvMsg);
+					CloneServer4.kvMap.put(kvMsg.getKey(), kvMsg);
 					System.out.printf("I: publishing update %5d\n", sequence);
 				}
 
@@ -92,6 +92,6 @@ public class clonesrv4 {
 	}
 
 	public static void main(String[] args) {
-		new clonesrv4().run();
+		new CloneServer4().run();
 	}
 }

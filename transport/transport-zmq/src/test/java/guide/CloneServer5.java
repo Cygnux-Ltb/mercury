@@ -14,7 +14,8 @@ import org.zeromq.ZMQ.PollItem;
 import org.zeromq.ZMQ.Socket;
 
 //  Clone server - Model Five
-public class clonesrv5 {
+
+public class CloneServer5 {
 	private ZContext ctx; // Context wrapper
 	private Map<String, kvmsg> kvmap; // Key-value store
 	private ZLoop loop; // zloop reactor
@@ -31,7 +32,7 @@ public class clonesrv5 {
 	private static class Snapshots implements IZLoopHandler {
 		@Override
 		public int handle(ZLoop loop, PollItem item, Object arg) {
-			clonesrv5 srv = (clonesrv5) arg;
+			CloneServer5 srv = (CloneServer5) arg;
 			Socket socket = item.getSocket();
 
 			byte[] identity = socket.recv();
@@ -70,7 +71,7 @@ public class clonesrv5 {
 	private static class Collector implements IZLoopHandler {
 		@Override
 		public int handle(ZLoop loop, PollItem item, Object arg) {
-			clonesrv5 srv = (clonesrv5) arg;
+			CloneServer5 srv = (CloneServer5) arg;
 			Socket socket = item.getSocket();
 
 			kvmsg msg = kvmsg.recv(socket);
@@ -91,7 +92,7 @@ public class clonesrv5 {
 	private static class FlushTTL implements IZLoopHandler {
 		@Override
 		public int handle(ZLoop loop, PollItem item, Object arg) {
-			clonesrv5 srv = (clonesrv5) arg;
+			CloneServer5 srv = (CloneServer5) arg;
 			if (srv.kvmap != null) {
 				for (kvmsg msg : new ArrayList<kvmsg>(srv.kvmap.values())) {
 					srv.flushSingle(msg);
@@ -101,7 +102,7 @@ public class clonesrv5 {
 		}
 	}
 
-	public clonesrv5() {
+	public CloneServer5() {
 		port = 5556;
 		ctx = new ZContext();
 		kvmap = new HashMap<String, kvmsg>();
@@ -157,7 +158,6 @@ public class clonesrv5 {
 	}
 
 	public static void main(String[] args) {
-		clonesrv5 srv = new clonesrv5();
-		srv.run();
+		new CloneServer5().run();
 	}
 }

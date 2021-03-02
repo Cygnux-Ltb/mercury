@@ -15,7 +15,7 @@ import org.zeromq.ZMQ.Socket;
  * @author Danish Shrestha &lt;dshrestha06@gmail.com&gt;
  *
  */
-public class clonecli1 {
+public class CloneClient1 {
 	private static Map<String, kvsimple> kvMap = new HashMap<String, kvsimple>();
 	private static AtomicLong sequence = new AtomicLong();
 
@@ -30,7 +30,7 @@ public class clonecli1 {
 				if (kvMsg == null)
 					break;
 
-				clonecli1.kvMap.put(kvMsg.getKey(), kvMsg);
+				CloneClient1.kvMap.put(kvMsg.getKey(), kvMsg);
 				System.out.println("receiving " + kvMsg);
 				sequence.incrementAndGet();
 			}
@@ -38,6 +38,6 @@ public class clonecli1 {
 	}
 
 	public static void main(String[] args) {
-		new clonecli1().run();
+		new CloneClient1().run();
 	}
 }

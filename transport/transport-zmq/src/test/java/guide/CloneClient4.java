@@ -15,7 +15,7 @@ import org.zeromq.ZMQ.Socket;
  * Clone client Model Four
  *
  */
-public class clonecli4 {
+public class CloneClient4 {
 	// This client is identical to clonecli3 except for where we
 	// handles subtrees.
 	private final static String SUBTREE = "/client/";
@@ -51,7 +51,7 @@ public class clonecli4 {
 				}
 
 				System.out.println("receiving " + kvMsg.getSequence());
-				clonecli4.kvMap.put(kvMsg.getKey(), kvMsg);
+				CloneClient4.kvMap.put(kvMsg.getKey(), kvMsg);
 			}
 
 			Poller poller = ctx.createPoller(1);
@@ -73,7 +73,7 @@ public class clonecli4 {
 					if (kvMsg.getSequence() > sequence) {
 						sequence = kvMsg.getSequence();
 						System.out.println("receiving " + sequence);
-						clonecli4.kvMap.put(kvMsg.getKey(), kvMsg);
+						CloneClient4.kvMap.put(kvMsg.getKey(), kvMsg);
 					}
 				}
 
@@ -93,6 +93,6 @@ public class clonecli4 {
 	}
 
 	public static void main(String[] args) {
-		new clonecli4().run();
+		new CloneClient4().run();
 	}
 }

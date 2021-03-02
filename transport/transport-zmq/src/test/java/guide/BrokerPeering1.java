@@ -11,7 +11,7 @@ import org.zeromq.ZMQ.Socket;
 //  Broker peering simulation (part 1)
 //  Prototypes the state flow
 
-public class peering1 {
+public class BrokerPeering1 {
 
 	public static void main(String[] argv) {
 		// First argument is this broker's name

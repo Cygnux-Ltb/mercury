@@ -15,7 +15,8 @@ import org.zeromq.ZThread;
 /**
  * Load-balancing broker Demonstrates use of the high level API
  */
-public class lbbroker2 {
+public class LoadBalancingBroker2 {
+	
 	private static final int NBR_CLIENTS = 10;
 	private static final int NBR_WORKERS = 3;
 	private static byte[] WORKER_READY = { '\001' }; // Signals worker is ready

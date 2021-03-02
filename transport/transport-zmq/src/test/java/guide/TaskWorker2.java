@@ -8,7 +8,8 @@ import org.zeromq.ZMQ;
  * Task worker - design 2 Adds pub-sub flow to receive and respond to kill
  * signal
  */
-public class taskwork2 {
+public class TaskWorker2 {
+	
 	public static void main(String[] args) throws InterruptedException {
 		try (ZContext context = new ZContext()) {
 			ZMQ.Socket receiver = context.createSocket(SocketType.PULL);

@@ -16,10 +16,10 @@ import org.zeromq.ZMQ.PollItem;
 import org.zeromq.ZMQ.Socket;
 
 //  Clone server - Model Six
-public class clonesrv6 {
+public class CloneServer6 {
 	private ZContext ctx; // Context wrapper
 	private Map<String, kvmsg> kvmap; // Key-value store
-	private bstar bStar; // Bstar reactor core
+	private BinaryStarReactor bStar; // Bstar reactor core
 	private long sequence; // How many updates we're at
 	private int port; // Main port we're working on
 	private int peer; // Main port of our peer
@@ -36,7 +36,7 @@ public class clonesrv6 {
 	private static class Snapshots implements IZLoopHandler {
 		@Override
 		public int handle(ZLoop loop, PollItem item, Object arg) {
-			clonesrv6 srv = (clonesrv6) arg;
+			CloneServer6 srv = (CloneServer6) arg;
 			Socket socket = item.getSocket();
 
 			byte[] identity = socket.recv();
@@ -72,7 +72,7 @@ public class clonesrv6 {
 	private static class Collector implements IZLoopHandler {
 		@Override
 		public int handle(ZLoop loop, PollItem item, Object arg) {
-			clonesrv6 srv = (clonesrv6) arg;
+			CloneServer6 srv = (CloneServer6) arg;
 			Socket socket = item.getSocket();
 
 			kvmsg msg = kvmsg.recv(socket);
@@ -106,7 +106,7 @@ public class clonesrv6 {
 	private static class SendHugz implements IZLoopHandler {
 		@Override
 		public int handle(ZLoop loop, PollItem item, Object arg) {
-			clonesrv6 srv = (clonesrv6) arg;
+			CloneServer6 srv = (CloneServer6) arg;
 
 			kvmsg msg = new kvmsg(srv.sequence);
 			msg.setKey("HUGZ");
@@ -121,7 +121,7 @@ public class clonesrv6 {
 	private static class FlushTTL implements IZLoopHandler {
 		@Override
 		public int handle(ZLoop loop, PollItem item, Object arg) {
-			clonesrv6 srv = (clonesrv6) arg;
+			CloneServer6 srv = (CloneServer6) arg;
 			if (srv.kvmap != null) {
 				for (kvmsg msg : new ArrayList<kvmsg>(srv.kvmap.values())) {
 					srv.flushSingle(msg);
@@ -138,7 +138,7 @@ public class clonesrv6 {
 	private static class NewActive implements IZLoopHandler {
 		@Override
 		public int handle(ZLoop loop, PollItem item, Object arg) {
-			clonesrv6 srv = (clonesrv6) arg;
+			CloneServer6 srv = (CloneServer6) arg;
 
 			srv.active = true;
 			srv.passive = false;
@@ -162,7 +162,7 @@ public class clonesrv6 {
 	private static class NewPassive implements IZLoopHandler {
 		@Override
 		public int handle(ZLoop loop, PollItem item, Object arg) {
-			clonesrv6 srv = (clonesrv6) arg;
+			CloneServer6 srv = (CloneServer6) arg;
 
 			if (srv.kvmap != null) {
 				for (kvmsg msg : srv.kvmap.values())
@@ -184,7 +184,7 @@ public class clonesrv6 {
 	private static class Subscriber implements IZLoopHandler {
 		@Override
 		public int handle(ZLoop loop, PollItem item, Object arg) {
-			clonesrv6 srv = (clonesrv6) arg;
+			CloneServer6 srv = (CloneServer6) arg;
 			@SuppressWarnings("unused")
 			Socket socket = item.getSocket();
 
@@ -239,16 +239,16 @@ public class clonesrv6 {
 		}
 	}
 
-	public clonesrv6(boolean primary) {
+	public CloneServer6(boolean primary) {
 		if (primary) {
-			bStar = new bstar(true, "tcp://*:5003", "tcp://localhost:5004");
+			bStar = new BinaryStarReactor(true, "tcp://*:5003", "tcp://localhost:5004");
 			bStar.voter("tcp://*:5556", SocketType.ROUTER, new Snapshots(), this);
 
 			port = 5556;
 			peer = 5566;
 			this.primary = true;
 		} else {
-			bStar = new bstar(false, "tcp://*:5004", "tcp://localhost:5003");
+			bStar = new BinaryStarReactor(false, "tcp://*:5004", "tcp://localhost:5003");
 			bStar.voter("tcp://*:5566", SocketType.ROUTER, new Snapshots(), this);
 
 			port = 5566;
@@ -364,12 +364,12 @@ public class clonesrv6 {
 	// requests in the clone pattern). Ports 5557/5567 are used by the
 	// publisher, and ports 5558/5568 are used by the collector:
 	public static void main(String[] args) {
-		clonesrv6 srv = null;
+		CloneServer6 srv = null;
 
 		if (args.length == 1 && "-p".equals(args[0])) {
-			srv = new clonesrv6(true);
+			srv = new CloneServer6(true);
 		} else if (args.length == 1 && "-b".equals(args[0])) {
-			srv = new clonesrv6(false);
+			srv = new CloneServer6(false);
 		} else {
 			System.out.printf("Usage: clonesrv4 { -p | -b }\n");
 			System.exit(0);

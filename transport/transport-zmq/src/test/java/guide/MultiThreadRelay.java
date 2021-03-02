@@ -5,9 +5,9 @@ import org.zeromq.ZContext;
 import org.zeromq.ZMQ.Socket;
 
 /**
- * Multithreaded relay
+ * Multithread relay
  */
-public class mtrelay {
+public class MultiThreadRelay {
 
 	private static class Step1 extends Thread {
 		private ZContext context;

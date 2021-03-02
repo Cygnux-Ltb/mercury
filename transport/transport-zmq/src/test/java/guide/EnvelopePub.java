@@ -8,7 +8,7 @@ import org.zeromq.ZMQ.Socket;
  * Pubsub envelope publisher
  */
 
-public class psenvpub {
+public class EnvelopePub {
 
 	public static void main(String[] args) throws Exception {
 		// Prepare our context and publisher

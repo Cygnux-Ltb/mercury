@@ -15,7 +15,7 @@ import org.zeromq.ZMsg;
 // Paranoid Pirate queue
 //
 
-public class ppqueue {
+public class ParanoidPirateQueue {
 
 	private final static int HEARTBEAT_LIVENESS = 3; // 3-5 is reasonable
 	private final static int HEARTBEAT_INTERVAL = 1000; // msecs

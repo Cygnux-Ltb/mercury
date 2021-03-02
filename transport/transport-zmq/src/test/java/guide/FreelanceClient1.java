@@ -8,7 +8,7 @@ import org.zeromq.ZMsg;
 
 //  Freelance client - Model 1
 //  Uses REQ socket to query one or more services
-public class flclient1 {
+public class FreelanceClient1 {
 	private static final int REQUEST_TIMEOUT = 1000;
 	private static final int MAX_RETRIES = 3; // Before we abandon
 

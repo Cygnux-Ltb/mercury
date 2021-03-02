@@ -14,7 +14,7 @@ import org.zeromq.ZMQ.Socket;
  * @author Danish Shrestha &lt;dshrestha06@gmail.com&gt;
  * 
  */
-public class clonecli2 {
+public class CloneClient2 {
 	private static Map<String, kvsimple> kvMap = new HashMap<String, kvsimple>();
 
 	public void run() {
@@ -40,7 +40,7 @@ public class clonecli2 {
 				}
 
 				System.out.println("receiving " + kvMsg.getSequence());
-				clonecli2.kvMap.put(kvMsg.getKey(), kvMsg);
+				CloneClient2.kvMap.put(kvMsg.getKey(), kvMsg);
 			}
 
 			// now apply pending updates, discard out-of-getSequence messages
@@ -53,13 +53,13 @@ public class clonecli2 {
 				if (kvMsg.getSequence() > sequence) {
 					sequence = kvMsg.getSequence();
 					System.out.println("receiving " + sequence);
-					clonecli2.kvMap.put(kvMsg.getKey(), kvMsg);
+					CloneClient2.kvMap.put(kvMsg.getKey(), kvMsg);
 				}
 			}
 		}
 	}
 
 	public static void main(String[] args) {
-		new clonecli2().run();
+		new CloneClient2().run();
 	}
 }

@@ -15,7 +15,7 @@ import org.zeromq.ZMsg;
 //  Broker peering simulation (part 2)
 //  Prototypes the request-reply flow
 
-public class peering2 {
+public class BrokerPeering2 {
 
 	private static final int NBR_CLIENTS = 10;
 	private static final int NBR_WORKERS = 3;

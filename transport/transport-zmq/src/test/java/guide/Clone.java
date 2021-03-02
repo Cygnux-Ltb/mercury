@@ -12,7 +12,7 @@ import org.zeromq.ZMsg;
 import org.zeromq.ZThread;
 import org.zeromq.ZThread.IAttachedRunnable;
 
-public class clone {
+public class Clone {
 	private ZContext ctx; // Our context wrapper
 	private Socket pipe; // Pipe through to clone agent
 
@@ -20,7 +20,7 @@ public class clone {
 	// Here are the constructor and destructor for the clone class. Note that
 	// we create a context specifically for the pipe that connects our
 	// frontend to the backend agent:
-	public clone() {
+	public Clone() {
 		ctx = new ZContext();
 		pipe = ZThread.fork(ctx, new CloneAgent());
 	}

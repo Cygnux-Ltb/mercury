@@ -5,13 +5,13 @@ import java.util.Random;
 /**
  * Clone client model 6
  */
-public class clonecli6 {
+public class CloneClient6 {
 	private final static String SUBTREE = "/client/";
 
 	public void run() {
 
 		// Create distributed hash instance
-		clone clone = new clone();
+		Clone clone = new Clone();
 		Random rand = new Random(System.nanoTime());
 
 		// Specify configuration
@@ -34,6 +34,6 @@ public class clonecli6 {
 	}
 
 	public static void main(String[] args) {
-		new clonecli6().run();
+		new CloneClient6().run();
 	}
 }

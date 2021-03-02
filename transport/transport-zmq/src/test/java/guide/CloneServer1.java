@@ -15,7 +15,7 @@ import org.zeromq.ZMQ.Socket;
  * @author Danish Shrestha &lt;dshrestha06@gmail.com&gt;
  *
  */
-public class clonesrv1 {
+public class CloneServer1 {
 	private static AtomicLong sequence = new AtomicLong();
 
 	public void run() {
@@ -47,6 +47,6 @@ public class clonesrv1 {
 	}
 
 	public static void main(String[] args) {
-		new clonesrv1().run();
+		new CloneServer1().run();
 	}
 }

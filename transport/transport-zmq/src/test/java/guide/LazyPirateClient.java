@@ -11,7 +11,7 @@ import org.zeromq.ZMQ.Socket;
 // To run, start lpserver and then randomly kill/restart it
 //
 
-public class lpclient {
+public class LazyPirateClient {
 
 	private final static int REQUEST_TIMEOUT = 2500; // msecs, (> 1000!)
 	private final static int REQUEST_RETRIES = 3; // Before we abandon

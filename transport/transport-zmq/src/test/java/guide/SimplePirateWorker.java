@@ -14,7 +14,7 @@ import org.zeromq.ZMsg;
 // Connects REQ socket to tcp://*:5556
 // Implements worker part of load-balancing queueing
 //
-public class spworker {
+public class SimplePirateWorker {
 
 	private final static String WORKER_READY = "\001"; // Signals worker is ready
 

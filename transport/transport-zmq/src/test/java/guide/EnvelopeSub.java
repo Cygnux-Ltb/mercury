@@ -9,7 +9,7 @@ import org.zeromq.ZMQ.Socket;
  * Pubsub envelope subscriber
  */
 
-public class psenvsub {
+public class EnvelopeSub {
 
 	public static void main(String[] args) {
 		// Prepare our context and subscriber

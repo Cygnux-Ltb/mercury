@@ -9,7 +9,8 @@ import org.zeromq.ZMQ.Socket;
 
 //  Pathological subscriber
 //  Subscribes to one random topic and prints received messages
-public class pathosub {
+public class PathologicalSub {
+	
 	public static void main(String[] args) {
 		try (ZContext context = new ZContext()) {
 			Socket subscriber = context.createSocket(SocketType.SUB);

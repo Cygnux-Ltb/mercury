@@ -11,7 +11,8 @@ import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQException;
 
-public class interrupt {
+public class Interrupt {
+	
 	public static void main(String[] args) {
 		// Prepare our context and socket
 		final ZContext context = new ZContext();

@@ -9,7 +9,7 @@ import org.zeromq.ZMsg;
 
 //  Binary Star server proof-of-concept implementation. This server does no
 //  real work; it just demonstrates the Binary Star failover model.
-public class bstarsrv {
+public class BinaryStarServer {
 	// States we can be in at any point in time
 	enum State {
 		STATE_PRIMARY, // Primary, waiting for peer to connect
@@ -120,7 +120,7 @@ public class bstarsrv {
 			Socket statesub = ctx.createSocket(SocketType.SUB);
 			statesub.subscribe(ZMQ.SUBSCRIPTION_ALL);
 			Socket frontend = ctx.createSocket(SocketType.ROUTER);
-			bstarsrv fsm = new bstarsrv();
+			BinaryStarServer fsm = new BinaryStarServer();
 
 			if (argv.length == 1 && argv[0].equals("-p")) {
 				System.out.printf("I: Primary active, waiting for backup (passive)\n");

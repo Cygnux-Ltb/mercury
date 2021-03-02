@@ -8,7 +8,8 @@ import org.zeromq.ZContext;
 import org.zeromq.ZMQ.Poller;
 import org.zeromq.ZMQ.Socket;
 
-public class lbbroker {
+public class LoadBalancingBroker {
+	
 	private static final int NBR_CLIENTS = 10;
 	private static final int NBR_WORKERS = 3;
 

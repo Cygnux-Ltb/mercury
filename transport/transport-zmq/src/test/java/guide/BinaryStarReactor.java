@@ -10,7 +10,8 @@ import org.zeromq.ZMQ.Socket;
 import org.zeromq.ZMsg;
 
 //  bstar class - Binary Star reactor
-public class bstar {
+public class BinaryStarReactor {
+
 	// States we can be in at any point in time
 	enum State {
 		STATE_PRIMARY, // Primary, waiting for peer to connect
@@ -150,7 +151,7 @@ public class bstar {
 
 		@Override
 		public int handle(ZLoop loop, PollItem item, Object arg) {
-			bstar self = (bstar) arg;
+			BinaryStarReactor self = (BinaryStarReactor) arg;
 			self.statepub.send(String.format("%d", self.state.ordinal()));
 			return 0;
 		}
@@ -161,7 +162,7 @@ public class bstar {
 
 		@Override
 		public int handle(ZLoop loop, PollItem item, Object arg) {
-			bstar self = (bstar) arg;
+			BinaryStarReactor self = (BinaryStarReactor) arg;
 			String state = item.getSocket().recvStr();
 			if (state != null) {
 				self.event = Event.values()[Integer.parseInt(state)];
@@ -176,7 +177,7 @@ public class bstar {
 
 		@Override
 		public int handle(ZLoop loop, PollItem item, Object arg) {
-			bstar self = (bstar) arg;
+			BinaryStarReactor self = (BinaryStarReactor) arg;
 			// If server can accept input now, call appl handler
 			self.event = Event.CLIENT_REQUEST;
 			if (self.execute())
@@ -195,7 +196,7 @@ public class bstar {
 	// This is the constructor for our {{bstar}} class. We have to tell it
 	// whether we're primary or backup server, as well as our local and
 	// remote endpoints to bind and connect to:
-	public bstar(boolean primary, String local, String remote) {
+	public BinaryStarReactor(boolean primary, String local, String remote) {
 		// Initialize the Binary Star
 		ctx = new ZContext();
 		loop = new ZLoop(ctx);

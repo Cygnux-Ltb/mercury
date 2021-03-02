@@ -13,7 +13,7 @@ import org.zeromq.ZMQ.Socket;
 //  - echoes request as-is
 //  - randomly runs slowly, or exits to simulate a crash.
 //
-public class lpserver {
+public class LazyPirateServer {
 
 	public static void main(String[] argv) throws Exception {
 		Random rand = new Random(System.nanoTime());

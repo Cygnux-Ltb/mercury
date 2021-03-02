@@ -21,7 +21,7 @@ import org.zeromq.ZThread.IAttachedRunnable;
  * @author Danish Shrestha &lt;dshrestha06@gmail.com&gt;
  *
  */
-public class clonesrv2 {
+public class CloneServer2 {
 
 	public void run() {
 		try (ZContext ctx = new ZContext()) {
@@ -118,6 +118,6 @@ public class clonesrv2 {
 	}
 
 	public static void main(String[] args) {
-		new clonesrv2().run();
+		new CloneServer2().run();
 	}
 }

@@ -8,7 +8,7 @@ import org.zeromq.ZMQ;
 //  Reading from multiple sockets in Java
 //  This version uses ZMQ.Poller
 //
-public class mspoller {
+public class MultiSocketPoller {
 
 	public static void main(String[] args) {
 		try (ZContext context = new ZContext()) {

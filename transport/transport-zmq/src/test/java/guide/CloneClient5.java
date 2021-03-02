@@ -14,7 +14,7 @@ import org.zeromq.ZMQ.Socket;
  * Clone client Model Five
  *
  */
-public class clonecli5 {
+public class CloneClient5 {
 	// This client is identical to clonecli3 except for where we
 	// handles subtrees.
 	private final static String SUBTREE = "/client/";
@@ -94,6 +94,6 @@ public class clonecli5 {
 	}
 
 	public static void main(String[] args) {
-		new clonecli5().run();
+		new CloneClient5().run();
 	}
 }

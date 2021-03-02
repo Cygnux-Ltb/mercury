@@ -11,7 +11,8 @@ import org.zeromq.ZMQ;
 //  Connects PUSH socket to tcp://localhost:5558
 //  Sends results to sink via that socket
 //
-public class taskwork {
+public class TaskWorker {
+	
 	public static void main(String[] args) throws Exception {
 		try (ZContext context = new ZContext()) {
 			// Socket to receive messages on

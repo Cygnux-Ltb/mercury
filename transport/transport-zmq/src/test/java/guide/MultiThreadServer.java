@@ -6,9 +6,9 @@ import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Socket;
 
 /**
- * Multi threaded Hello World server
+ * Multi thread Hello World server
  */
-public class mtserver {
+public class MultiThreadServer {
 
 	private static class Worker extends Thread {
 		private ZContext context;

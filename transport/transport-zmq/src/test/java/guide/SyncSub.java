@@ -8,7 +8,7 @@ import org.zeromq.ZMQ.Socket;
 /**
  * Synchronized subscriber.
  */
-public class syncsub {
+public class SyncSub {
 
 	public static void main(String[] args) {
 		try (ZContext context = new ZContext()) {

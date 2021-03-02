@@ -8,7 +8,8 @@ import org.zeromq.ZMQ.Socket;
 /**
  * Demonstrate identities as used by the request-reply pattern.
  */
-public class identity {
+public class Identity {
+	
 	public static void main(String[] args) throws InterruptedException {
 		try (ZContext context = new ZContext()) {
 			Socket sink = context.createSocket(SocketType.ROUTER);

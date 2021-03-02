@@ -12,7 +12,8 @@ import org.zeromq.ZMQ.Socket;
 
 //  Last value cache
 //  Uses XPUB subscription messages to re-send data
-public class lvcache {
+public class LastValueCache {
+
 	public static void main(String[] args) {
 		try (ZContext context = new ZContext()) {
 			Socket frontend = context.createSocket(SocketType.SUB);

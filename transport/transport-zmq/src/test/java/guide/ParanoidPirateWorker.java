@@ -13,7 +13,8 @@ import org.zeromq.ZMsg;
 //
 // Paranoid Pirate worker
 //
-public class ppworker {
+public class ParanoidPirateWorker {
+
 	private final static int HEARTBEAT_LIVENESS = 3; // 3-5 is reasonable
 	private final static int HEARTBEAT_INTERVAL = 1000; // msecs
 	private final static int INTERVAL_INIT = 1000; // Initial reconnect

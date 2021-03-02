@@ -10,7 +10,7 @@ import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
-public class hwserver {
+public class HelloWorldServer {
 	public static void main(String[] args) throws Exception {
 		try (ZContext context = new ZContext()) {
 			// Socket to talk to clients

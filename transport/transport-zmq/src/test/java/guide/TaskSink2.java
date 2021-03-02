@@ -7,7 +7,8 @@ import org.zeromq.ZMQ;
 /**
  * Task sink - design 2 Adds pub-sub flow to send kill signal to workers
  */
-public class tasksink2 {
+public class TaskSink2 {
+	
 	public static void main(String[] args) throws Exception {
 		// Prepare our context and socket
 		try (ZContext context = new ZContext()) {

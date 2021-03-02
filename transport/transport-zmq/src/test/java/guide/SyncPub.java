@@ -7,7 +7,7 @@ import org.zeromq.ZMQ.Socket;
 /**
  * Synchronized publisher.
  */
-public class syncpub {
+public class SyncPub {
 	/**
 	 * We wait for 10 subscribers
 	 */

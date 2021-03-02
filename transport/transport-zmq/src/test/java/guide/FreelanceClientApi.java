@@ -15,7 +15,7 @@ import org.zeromq.ZThread.IAttachedRunnable;
 
 //  flcliapi class - Freelance Pattern agent class
 //  Implements the Freelance Protocol at http://rfc.zeromq.org/spec:10
-public class flcliapi {
+public class FreelanceClientApi {
 	// If not a single service replies within this time, give up
 	private static final int GLOBAL_TIMEOUT = 2500;
 	// PING interval for servers we think are alive
@@ -34,7 +34,7 @@ public class flcliapi {
 	private ZContext ctx; // Our context wrapper
 	private Socket pipe; // Pipe through to flcliapi agent
 
-	public flcliapi() {
+	public FreelanceClientApi() {
 		ctx = new ZContext();
 		FreelanceAgent agent = new FreelanceAgent();
 		pipe = ZThread.fork(ctx, agent);

@@ -14,7 +14,7 @@ import org.zeromq.ZMsg;
 //  Broker peering simulation (part 3)
 //  Prototypes the full flow of status and tasks
 
-public class peering3 {
+public class BrokerPeering3 {
 
 	private static final int NBR_CLIENTS = 10;
 	private static final int NBR_WORKERS = 5;
