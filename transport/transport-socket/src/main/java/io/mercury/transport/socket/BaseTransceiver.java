@@ -29,7 +29,7 @@ public abstract class BaseTransceiver<T> implements Transceiver<T> {
 		}
 
 		@Override
-		public String name() {
+		public String getName() {
 			return null;
 		}
 

@@ -71,7 +71,7 @@ public final class SocketTransceiver extends BaseTransceiver<String> {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return null;
 	}
 

@@ -57,7 +57,7 @@ public final class SocketSender implements Sender<byte[]> {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "SocketSender -> " + socket.hashCode();
 	}
 
@@ -81,7 +81,7 @@ public final class SocketSender implements Sender<byte[]> {
 		}
 	}
 
-	private JctScQueue<byte[]> innerQueue = JctScQueue.mpsc(name() + "-InnerQueue").capacity(512)
+	private JctScQueue<byte[]> innerQueue = JctScQueue.mpsc(getName() + "-InnerQueue").capacity(512)
 			.buildWithProcessor(bytes -> processSendQueue(bytes));
 
 	public static void main(String[] args) {

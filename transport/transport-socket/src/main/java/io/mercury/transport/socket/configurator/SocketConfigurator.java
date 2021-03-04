@@ -23,12 +23,10 @@ public final class SocketConfigurator implements TransportConfigurator {
 		return new Builder();
 	}
 
-	@Override
 	public String getHost() {
 		return host;
 	}
 
-	@Override
 	public int getPort() {
 		return port;
 	}

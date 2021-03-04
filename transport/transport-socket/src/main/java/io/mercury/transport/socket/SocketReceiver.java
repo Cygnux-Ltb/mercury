@@ -67,7 +67,7 @@ public class SocketReceiver implements Receiver {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "SocketReceiver -> " + socket.hashCode();
 	}
 
