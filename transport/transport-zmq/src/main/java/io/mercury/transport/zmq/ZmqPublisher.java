@@ -1,97 +1,175 @@
 package io.mercury.transport.zmq;
 
 import java.io.Closeable;
-import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
 
 import org.zeromq.SocketType;
-import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
-import org.zeromq.ZMQ.Socket;
 
+import io.mercury.common.character.Charsets;
+import io.mercury.common.serialization.spec.ByteArraySerializer;
 import io.mercury.common.thread.Threads;
-import io.mercury.common.util.Assertor;
+import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.core.api.Publisher;
-import io.mercury.transport.zmq.configurator.ZmqConfigurator;
+import io.mercury.transport.core.configurator.TcpKeepAliveOption;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
-public class ZmqPublisher implements Publisher<byte[]>, Closeable {
+public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>, Closeable {
 
-	private ZContext zCtx;
-	private Socket socket;
+	// default topic
+	@Getter
+	private final String defaultTopic;
 
-	private String topic;
+	@Getter
+	private final String name;
 
-	private String name;
+	@Getter
+	private final ZmqPubConfigurator configurator;
 
-	private ZmqConfigurator configurator;
+	private final ByteArraySerializer<T> serializer;
 
-	public ZmqPublisher(@Nonnull ZmqConfigurator configurator) {
-		Assertor.nonNull(configurator, "configurator");
+	private ZmqPublisher(@Nonnull ZmqPubConfigurator configurator, @Nonnull ByteArraySerializer<T> serializer) {
+		super(configurator);
 		this.configurator = configurator;
-		init();
+		this.serializer = serializer;
+		this.defaultTopic = configurator.getDefaultTopic();
+		initSocket(SocketType.PUB).bind(configurator.getAddr());
+		setTcpKeepAlive(configurator.getTcpKeepAliveOption());
+		this.name = "ZMQ::PUB$" + configurator.connectionInfo;
 	}
 
-	private void init() {
-		this.zCtx = new ZContext(configurator.ioThreads());
-		this.socket = zCtx.createSocket(SocketType.PUB);
-		this.socket.bind(configurator.getHost());
-		this.topic = configurator.topic();
-		this.name = "ZMQ::PUB$" + configurator.getHost();
+	/**
+	 * 
+	 * @param configurator
+	 * @return
+	 */
+	public static ZmqPublisher<String> newPublisher(@Nonnull ZmqPubConfigurator configurator) {
+		return newPublisher(configurator, Charsets.UTF8);
+	}
+
+	/**
+	 * 
+	 * @param configurator
+	 * @param charset
+	 * @return
+	 */
+	public static ZmqPublisher<String> newPublisher(@Nonnull ZmqPubConfigurator configurator, Charset charset) {
+		return new ZmqPublisher<>(configurator, str -> str.getBytes(charset));
+	}
+
+	/**
+	 * 
+	 * @param <T>
+	 * @param configurator
+	 * @param serializer
+	 * @return
+	 */
+	public static <T> ZmqPublisher<T> newPublisher(@Nonnull ZmqPubConfigurator configurator,
+			@Nonnull ByteArraySerializer<T> serializer) {
+		return new ZmqPublisher<>(configurator, serializer);
 	}
 
 	@Override
-	public void publish(byte[] msg) {
-		publish(topic, msg);
+	public void publish(T msg) {
+		publish(defaultTopic, msg);
 	}
 
 	@Override
-	public void publish(String target, byte[] msg) {
-		socket.sendMore(target);
-		socket.send(msg, ZMQ.NOBLOCK);
+	public void publish(String target, T msg) {
+		if (isRunning.get()) {
+			byte[] bytes = serializer.serialization(msg);
+			if (bytes != null && bytes.length > 0) {
+				socket.sendMore(target);
+				socket.send(bytes, ZMQ.NOBLOCK);
+			}
+		} else {
+
+		}
 	}
 
-	@Override
-	public boolean destroy() {
-		socket.close();
-		zCtx.close();
-		return zCtx.isClosed();
-	}
+	public static final class ZmqPubConfigurator extends ZmqConfigurator {
 
-	@Override
-	public String name() {
-		return name;
+		@Getter
+		private final String defaultTopic;
+
+		@Getter
+		private final String connectionInfo;
+
+		private ZmqPubConfigurator(Builder builder) {
+			super(builder.addr, builder.ioThreads, builder.tcpKeepAliveOption);
+			this.defaultTopic = builder.defaultTopic;
+			this.connectionInfo = builder.addr + "/" + defaultTopic;
+		}
+
+		public static Builder newBuilder() {
+			return new Builder();
+		}
+
+		@Override
+		public String getConfiguratorInfo() {
+			return toString();
+		}
+
+		private transient String toStringCache;
+
+		@Override
+		public String toString() {
+			if (toStringCache == null)
+				this.toStringCache = JsonWrapper.toJson(this);
+			return toStringCache;
+		}
+
+		@Accessors(chain = true)
+		public static class Builder {
+
+			@Getter
+			@Setter
+			private String addr = "tcp://*:5555";
+
+			@Getter
+			@Setter
+			private String defaultTopic = "";
+
+			@Getter
+			@Setter
+			private int ioThreads = 1;
+
+			@Getter
+			@Setter
+			private TcpKeepAliveOption tcpKeepAliveOption = null;
+
+			private Builder() {
+			}
+
+			public ZmqPubConfigurator build() {
+				return new ZmqPubConfigurator(this);
+			}
+		}
 	}
 
 	public static void main(String[] args) {
 //		JeroMqConfigurator configurator = JeroMqConfigurator.builder().setHost("tcp://*:5559").setIoThreads(1)
 //				.setTopic("").build();
 
-		ZmqConfigurator configurator = ZmqConfigurator.builder().setHost("tcp://127.0.0.1:13001").setTopic("command")
-				.setIoThreads(2).build();
+		ZmqPubConfigurator configurator = ZmqPubConfigurator.newBuilder().setAddr("tcp://127.0.0.1:13001")
+				.setDefaultTopic("command").setIoThreads(2).build();
 
-		try (ZmqPublisher publisher = new ZmqPublisher(configurator)) {
+		try (ZmqPublisher<String> publisher = ZmqPublisher.newPublisher(configurator)) {
 			Random random = new Random();
 
 			for (;;) {
-				publisher.publish(String.valueOf(random.nextInt()).getBytes());
+				publisher.publish(String.valueOf(random.nextInt()));
 				Threads.sleep(1000);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-	}
-
-	@Override
-	public boolean isConnected() {
-		return !zCtx.isClosed();
-	}
-
-	@Override
-	public void close() throws IOException {
-		destroy();
 	}
 
 }
