@@ -39,7 +39,7 @@ import io.mercury.transport.rabbitmq.exception.MsgHandleException;
  *         [已完成]改造升级, 使用共同的构建者建立Exchange, RoutingKey, Queue的绑定关系
  *
  */
-public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Receiver, Subscriber, Runnable {
+public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, Subscriber, Runnable {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqReceiver.class);
 
@@ -386,7 +386,7 @@ public class RabbitMqReceiver<T> extends AbstractRabbitMqTransport implements Re
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return receiverName;
 	}
 

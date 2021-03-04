@@ -39,7 +39,7 @@ import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfigurator;
  *         处理批量数据, 手动ACK
  * 
  */
-public class RabbitMqBatchReceiver<T> extends AbstractRabbitMqTransport implements Receiver, Runnable {
+public class RabbitMqBatchReceiver<T> extends RabbitMqTransport implements Receiver, Runnable {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqBatchReceiver.class);
 
@@ -110,7 +110,7 @@ public class RabbitMqBatchReceiver<T> extends AbstractRabbitMqTransport implemen
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return receiverName;
 	}
 

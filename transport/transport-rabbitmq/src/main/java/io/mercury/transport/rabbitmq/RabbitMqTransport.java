@@ -24,9 +24,9 @@ import io.mercury.common.util.StringUtil;
 import io.mercury.transport.core.api.TransportModule;
 import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 
-public abstract class AbstractRabbitMqTransport implements TransportModule, Closeable {
+public abstract class RabbitMqTransport implements TransportModule, Closeable {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(AbstractRabbitMqTransport.class);
+	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqTransport.class);
 
 	// 连接RabbitMQ Server使用的组件
 	protected ConnectionFactory connectionFactory;
@@ -46,7 +46,7 @@ public abstract class AbstractRabbitMqTransport implements TransportModule, Clos
 	 * 
 	 * @param tag
 	 */
-	protected AbstractRabbitMqTransport(String tag) {
+	protected RabbitMqTransport(String tag) {
 		// Generally not used
 		this.tag = tag;
 	}
@@ -57,7 +57,7 @@ public abstract class AbstractRabbitMqTransport implements TransportModule, Clos
 	 * @param moduleType
 	 * @param rmqConnection
 	 */
-	protected AbstractRabbitMqTransport(@Nonnull String tag, @Nonnull RmqConnection rmqConnection) {
+	protected RabbitMqTransport(@Nonnull String tag, @Nonnull RmqConnection rmqConnection) {
 		Assertor.nonNull(rmqConnection, "rmqConnection");
 		this.tag = tag;
 		this.rmqConnection = rmqConnection;
@@ -174,7 +174,7 @@ public abstract class AbstractRabbitMqTransport implements TransportModule, Clos
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return tag;
 	}
 

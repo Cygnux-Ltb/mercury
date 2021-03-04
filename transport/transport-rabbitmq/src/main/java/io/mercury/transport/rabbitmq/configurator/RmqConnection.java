@@ -109,12 +109,10 @@ public final class RmqConnection implements TransportConfigurator {
 		return connectionInfo;
 	}
 
-	@Override
 	public String getHost() {
 		return host;
 	}
 
-	@Override
 	public int getPort() {
 		return port;
 	}

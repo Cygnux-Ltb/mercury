@@ -17,7 +17,7 @@ import io.mercury.transport.rabbitmq.declare.AmqpExchange;
 import io.mercury.transport.rabbitmq.declare.AmqpQueue;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 
-public final class RabbitMqDeclarator extends AbstractRabbitMqTransport {
+public final class RabbitMqDeclarator extends RabbitMqTransport {
 
 	/**
 	 * Create OperationalChannel of host, port, username and password
@@ -395,7 +395,7 @@ public final class RabbitMqDeclarator extends AbstractRabbitMqTransport {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return tag;
 	}
 

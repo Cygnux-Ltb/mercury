@@ -41,7 +41,7 @@ import io.mercury.transport.rabbitmq.exception.NoAckException;
  *
  */
 @ThreadSafe
-public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport implements Publisher<T>, Sender<T> {
+public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements Publisher<T>, Sender<T> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(AdvancedRabbitMqPublisher.class);
 
@@ -447,7 +447,7 @@ public class AdvancedRabbitMqPublisher<T> extends AbstractRabbitMqTransport impl
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return publisherName;
 	}
 
