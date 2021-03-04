@@ -41,7 +41,7 @@ public class NettySender implements Sender<byte[]> {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "NettySender-ContextHashCode:" + context.hashCode() + "&";// + byteBuf.capacity();
 	}
 
