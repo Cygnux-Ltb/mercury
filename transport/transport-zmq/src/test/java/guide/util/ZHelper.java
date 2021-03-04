@@ -1,4 +1,4 @@
-package guide;
+package guide.util;
 
 import java.math.BigInteger;
 import java.util.Arrays;

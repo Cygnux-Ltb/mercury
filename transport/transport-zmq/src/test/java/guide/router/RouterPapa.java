@@ -1,4 +1,4 @@
-package guide;
+package guide.router;
 
 //
 //Custom routing Router to Papa (ROUTER to REP)
@@ -9,7 +9,9 @@ import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Socket;
 
-public class rtpapa {
+import guide.util.ZHelper;
+
+public class RouterPapa {
 	// We will do this all in one thread to emphasize the getSequence of events
 	public static void main(String[] args) {
 		try (ZContext context = new ZContext()) {

@@ -1,4 +1,4 @@
-package guide;
+package guide.peering;
 
 import java.io.IOException;
 import java.util.ArrayList;

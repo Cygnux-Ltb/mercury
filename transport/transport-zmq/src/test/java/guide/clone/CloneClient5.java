@@ -1,4 +1,4 @@
-package guide;
+package guide.clone;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +9,8 @@ import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Poller;
 import org.zeromq.ZMQ.Socket;
+
+import guide.util.KvMsg;
 
 /**
  * Clone client Model Five
@@ -31,7 +33,7 @@ public class CloneClient5 {
 			Socket publisher = ctx.createSocket(SocketType.PUSH);
 			publisher.connect("tcp://localhost:5558");
 
-			Map<String, kvmsg> kvMap = new HashMap<String, kvmsg>();
+			Map<String, KvMsg> kvMap = new HashMap<String, KvMsg>();
 
 			// get state snapshot
 			snapshot.sendMore("ICANHAZ?");
@@ -39,7 +41,7 @@ public class CloneClient5 {
 			long sequence = 0;
 
 			while (true) {
-				kvmsg kvMsg = kvmsg.recv(snapshot);
+				KvMsg kvMsg = KvMsg.recv(snapshot);
 				if (kvMsg == null)
 					break; // Interrupted
 
@@ -67,7 +69,7 @@ public class CloneClient5 {
 					break; // Context has been shut down
 
 				if (poller.pollin(0)) {
-					kvmsg kvMsg = kvmsg.recv(subscriber);
+					KvMsg kvMsg = KvMsg.recv(subscriber);
 					if (kvMsg == null)
 						break; // Interrupted
 
@@ -80,7 +82,7 @@ public class CloneClient5 {
 				}
 
 				if (System.currentTimeMillis() >= alarm) {
-					kvmsg kvMsg = new kvmsg(0);
+					KvMsg kvMsg = new KvMsg(0);
 					kvMsg.fmtKey("%s%d", SUBTREE, random.nextInt(10000));
 					kvMsg.fmtBody("%d", random.nextInt(1000000));
 					kvMsg.setProp("ttl", "%d", random.nextInt(30));

@@ -1,4 +1,4 @@
-package guide;
+package guide.queue;
 
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
@@ -9,7 +9,7 @@ import org.zeromq.ZMQ.Socket;
  * Simple message queuing broker Same as request-reply broker but using QUEUE
  * device.
  */
-public class msgqueue {
+public class MsgQueue {
 
 	public static void main(String[] args) {
 		// Prepare our context and sockets

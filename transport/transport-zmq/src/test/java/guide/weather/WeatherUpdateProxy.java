@@ -1,4 +1,4 @@
-package guide;
+package guide.weather;
 
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
@@ -8,7 +8,8 @@ import org.zeromq.ZMQ.Socket;
 /**
  * Weather proxy device.
  */
-public class wuproxy {
+public class WeatherUpdateProxy {
+
 	public static void main(String[] args) {
 		// Prepare our context and sockets
 		try (ZContext context = new ZContext()) {

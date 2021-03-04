@@ -1,4 +1,4 @@
-package guide;
+package guide.queue;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -11,6 +11,51 @@ import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.PollItem;
 import org.zeromq.ZMQ.Socket;
 import org.zeromq.ZMsg;
+
+public class LruQueue3 {
+
+	public final static String LRU_READY = "\001";
+	protected final static FrontendHandler handle_frontend = new FrontendHandler();
+	protected final static BackendHandler handle_backend = new BackendHandler();
+
+	public static void main(String[] args) {
+		// Prepare our context and sockets
+		try (ZContext context = new ZContext()) {
+			LRUQueueArg arg = new LRUQueueArg();
+			Socket frontend = context.createSocket(SocketType.ROUTER);
+			Socket backend = context.createSocket(SocketType.ROUTER);
+			arg.frontend = frontend;
+			arg.backend = backend;
+
+			frontend.bind("ipc://frontend.ipc");
+			backend.bind("ipc://backend.ipc");
+
+			int client_nbr;
+			for (client_nbr = 0; client_nbr < 10; client_nbr++)
+				new ClientThread3().start();
+
+			int worker_nbr;
+			for (worker_nbr = 0; worker_nbr < 3; worker_nbr++)
+				new WorkerThread3().start();
+
+			// Queue of available workers
+			arg.workers = new LinkedList<ZFrame>();
+
+			// Prepare reactor and fire it up
+			ZLoop reactor = new ZLoop(context);
+			reactor.verbose(true);
+			PollItem poller = new PollItem(arg.backend, ZMQ.Poller.POLLIN);
+			reactor.addPoller(poller, handle_backend, arg);
+			reactor.start();
+
+			for (ZFrame frame : arg.workers) {
+				frame.destroy();
+			}
+		}
+
+		System.exit(0);
+	}
+}
 
 class ClientThread3 extends Thread {
 	@Override
@@ -51,7 +96,7 @@ class WorkerThread3 extends Thread {
 
 			worker.connect("ipc://backend.ipc");
 
-			ZFrame frame = new ZFrame(lruqueue3.LRU_READY);
+			ZFrame frame = new ZFrame(LruQueue3.LRU_READY);
 			// Tell backend we're ready for work
 			frame.send(worker, 0);
 
@@ -115,12 +160,12 @@ class BackendHandler implements ZLoop.IZLoopHandler {
 			// Enable reader on frontend if we went from 0 to 1 workers
 			if (arg.workers.size() == 1) {
 				PollItem poller = new PollItem(arg.frontend, ZMQ.Poller.POLLIN);
-				loop.addPoller(poller, lruqueue3.handle_frontend, arg);
+				loop.addPoller(poller, LruQueue3.handle_frontend, arg);
 			}
 
 			// Forward message to client if it's not a READY
 			ZFrame frame = msg.getFirst();
-			if (new String(frame.getData(), ZMQ.CHARSET).equals(lruqueue3.LRU_READY))
+			if (new String(frame.getData(), ZMQ.CHARSET).equals(LruQueue3.LRU_READY))
 				msg.destroy();
 			else
 				msg.send(arg.frontend);
@@ -128,49 +173,4 @@ class BackendHandler implements ZLoop.IZLoopHandler {
 		return 0;
 	}
 
-}
-
-public class lruqueue3 {
-
-	public final static String LRU_READY = "\001";
-	protected final static FrontendHandler handle_frontend = new FrontendHandler();
-	protected final static BackendHandler handle_backend = new BackendHandler();
-
-	public static void main(String[] args) {
-		// Prepare our context and sockets
-		try (ZContext context = new ZContext()) {
-			LRUQueueArg arg = new LRUQueueArg();
-			Socket frontend = context.createSocket(SocketType.ROUTER);
-			Socket backend = context.createSocket(SocketType.ROUTER);
-			arg.frontend = frontend;
-			arg.backend = backend;
-
-			frontend.bind("ipc://frontend.ipc");
-			backend.bind("ipc://backend.ipc");
-
-			int client_nbr;
-			for (client_nbr = 0; client_nbr < 10; client_nbr++)
-				new ClientThread3().start();
-
-			int worker_nbr;
-			for (worker_nbr = 0; worker_nbr < 3; worker_nbr++)
-				new WorkerThread3().start();
-
-			// Queue of available workers
-			arg.workers = new LinkedList<ZFrame>();
-
-			// Prepare reactor and fire it up
-			ZLoop reactor = new ZLoop(context);
-			reactor.verbose(true);
-			PollItem poller = new PollItem(arg.backend, ZMQ.Poller.POLLIN);
-			reactor.addPoller(poller, handle_backend, arg);
-			reactor.start();
-
-			for (ZFrame frame : arg.workers) {
-				frame.destroy();
-			}
-		}
-
-		System.exit(0);
-	}
 }

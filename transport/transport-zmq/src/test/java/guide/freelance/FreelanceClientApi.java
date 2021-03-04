@@ -1,4 +1,4 @@
-package guide;
+package guide.freelance;
 
 import java.util.ArrayList;
 import java.util.HashMap;

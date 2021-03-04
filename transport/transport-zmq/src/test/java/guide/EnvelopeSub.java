@@ -15,8 +15,10 @@ public class EnvelopeSub {
 		// Prepare our context and subscriber
 		try (ZContext context = new ZContext()) {
 			Socket subscriber = context.createSocket(SocketType.SUB);
+			
 			subscriber.connect("tcp://localhost:5563");
 			subscriber.subscribe("B".getBytes(ZMQ.CHARSET));
+			subscriber.subscribe("C".getBytes(ZMQ.CHARSET));
 
 			while (!Thread.currentThread().isInterrupted()) {
 				// Read envelope with address

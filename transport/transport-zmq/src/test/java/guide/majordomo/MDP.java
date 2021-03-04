@@ -1,4 +1,4 @@
-package guide;
+package guide.majordomo;
 
 import java.util.Arrays;
 

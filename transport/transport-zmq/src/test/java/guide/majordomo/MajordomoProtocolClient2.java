@@ -1,4 +1,4 @@
-package guide;
+package guide.majordomo;
 
 import org.zeromq.ZMsg;
 
@@ -7,11 +7,11 @@ import org.zeromq.ZMsg;
  * all MDP aspects
  */
 
-public class mdclient2 {
+public class MajordomoProtocolClient2 {
 
 	public static void main(String[] args) {
 		boolean verbose = (args.length > 0 && "-v".equals(args[0]));
-		mdcliapi2 clientSession = new mdcliapi2("tcp://localhost:5555", verbose);
+		MajordomoProtocolClientAPI2 clientSession = new MajordomoProtocolClientAPI2("tcp://localhost:5555", verbose);
 
 		int count;
 		for (count = 0; count < 100000; count++) {

@@ -1,4 +1,4 @@
-package guide;
+package guide.clone;
 
 import java.util.Random;
 

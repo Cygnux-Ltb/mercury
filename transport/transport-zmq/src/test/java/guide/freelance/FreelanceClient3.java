@@ -1,4 +1,4 @@
-package guide;
+package guide.freelance;
 
 import org.zeromq.ZMsg;
 

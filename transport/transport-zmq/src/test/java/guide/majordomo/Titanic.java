@@ -1,4 +1,4 @@
-package guide;
+package guide.majordomo;
 
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -22,7 +22,7 @@ import org.zeromq.ZThread;
 import org.zeromq.ZThread.IAttachedRunnable;
 import org.zeromq.ZThread.IDetachedRunnable;
 
-public class titanic {
+public class Titanic {
 	// Return a new UUID as a printable character string
 	// Caller must free returned string when finished with it
 	static String generateUUID() {
@@ -50,7 +50,7 @@ public class titanic {
 	static class TitanicRequest implements IAttachedRunnable {
 		@Override
 		public void run(Object[] args, ZContext ctx, Socket pipe) {
-			mdwrkapi worker = new mdwrkapi("tcp://localhost:5555", "titanic.request", false);
+			MajordomoProtocolWorkerAPI worker = new MajordomoProtocolWorkerAPI("tcp://localhost:5555", "titanic.request", false);
 			ZMsg reply = null;
 
 			while (true) {
@@ -103,7 +103,7 @@ public class titanic {
 	static class TitanicReply implements IDetachedRunnable {
 		@Override
 		public void run(Object[] args) {
-			mdwrkapi worker = new mdwrkapi("tcp://localhost:5555", "titanic.reply", false);
+			MajordomoProtocolWorkerAPI worker = new MajordomoProtocolWorkerAPI("tcp://localhost:5555", "titanic.reply", false);
 			ZMsg reply = null;
 
 			while (true) {
@@ -150,7 +150,7 @@ public class titanic {
 	static class TitanicClose implements IDetachedRunnable {
 		@Override
 		public void run(Object[] args) {
-			mdwrkapi worker = new mdwrkapi("tcp://localhost:5555", "titanic.close", false);
+			MajordomoProtocolWorkerAPI worker = new MajordomoProtocolWorkerAPI("tcp://localhost:5555", "titanic.close", false);
 			ZMsg reply = null;
 
 			while (true) {
@@ -298,7 +298,7 @@ public class titanic {
 		String serviceName = service.toString();
 
 		// Create MDP client session with short timeout
-		mdcliapi client = new mdcliapi("tcp://localhost:5555", false);
+		MajordomoProtocolClientAPI client = new MajordomoProtocolClientAPI("tcp://localhost:5555", false);
 		client.setTimeout(1000); // 1 sec
 		client.setRetries(1); // only 1 retry
 

@@ -1,4 +1,4 @@
-package guide;
+package guide.majordomo;
 
 //  Titanic client example
 //  Implements client side of http://rfc.zeromq.org/spec:9
@@ -10,8 +10,9 @@ package guide;
 import org.zeromq.ZFrame;
 import org.zeromq.ZMsg;
 
-public class ticlient {
-	static ZMsg serviceCall(mdcliapi session, String service, ZMsg request) {
+public class TitanicClient {
+	
+	static ZMsg serviceCall(MajordomoProtocolClientAPI session, String service, ZMsg request) {
 		ZMsg reply = session.send(service, request);
 		if (reply != null) {
 			ZFrame status = reply.pop();
@@ -30,7 +31,7 @@ public class ticlient {
 
 	public static void main(String[] args) throws Exception {
 		boolean verbose = (args.length > 0 && args[0].equals("-v"));
-		mdcliapi session = new mdcliapi("tcp://localhost:5555", verbose);
+		MajordomoProtocolClientAPI session = new MajordomoProtocolClientAPI("tcp://localhost:5555", verbose);
 
 		// 1. Send 'echo' request to Titanic
 		ZMsg request = new ZMsg();

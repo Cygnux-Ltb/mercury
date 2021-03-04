@@ -1,4 +1,4 @@
-package guide;
+package guide.util;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Socket;
 
-public class kvmsg {
+public class KvMsg {
 	// Keys are short strings
 	private static final int KVMSG_KEY_MAX = 255;
 
@@ -72,7 +72,7 @@ public class kvmsg {
 	// Here are the constructor and destructor for the class:
 
 	// Constructor, takes a getSequence number for the new kvmsg instance:
-	public kvmsg(long sequence) {
+	public KvMsg(long sequence) {
 		props = new Properties();
 		setSequence(sequence);
 	}
@@ -83,11 +83,11 @@ public class kvmsg {
 	// .split recv method
 	// This method reads a getKey-value message from the socket and returns a
 	// new {{kvmsg}} instance:
-	public static kvmsg recv(Socket socket) {
+	public static KvMsg recv(Socket socket) {
 		// This method is almost unchanged from kvsimple
 		// .skip
 		assert (socket != null);
-		kvmsg self = new kvmsg(0);
+		KvMsg self = new KvMsg(0);
 
 		// Read all frames off the wire, reject if bogus
 		int frameNbr;
@@ -130,8 +130,8 @@ public class kvmsg {
 
 	// .split dup method
 	// This method duplicates a {{kvmsg}} instance, returns the new instance:
-	public kvmsg dup() {
-		kvmsg kvmsg = new kvmsg(0);
+	public KvMsg dup() {
+		KvMsg kvmsg = new KvMsg(0);
 		int frameNbr;
 		for (frameNbr = 0; frameNbr < KVMSG_FRAMES; frameNbr++) {
 			if (present[frameNbr]) {
@@ -267,7 +267,7 @@ public class kvmsg {
 	// the getKey and value are both null. It nullifies the {{kvmsg}} reference
 	// so that the object is owned by the hash map, not the caller:
 
-	public void store(Map<String, kvmsg> hash) {
+	public void store(Map<String, KvMsg> hash) {
 		if (size() > 0) {
 			if (present[FRAME_KEY] && present[FRAME_BODY]) {
 				hash.put(getKey(), this);
@@ -314,11 +314,11 @@ public class kvmsg {
 			Socket input = ctx.createSocket(SocketType.DEALER);
 			input.connect("ipc://kvmsg_selftest.ipc");
 
-			Map<String, kvmsg> kvmap = new HashMap<String, kvmsg>();
+			Map<String, KvMsg> kvmap = new HashMap<String, KvMsg>();
 
 			// .until
 			// Test send and receive of simple message
-			kvmsg kvmsg = new kvmsg(1);
+			KvMsg kvmsg = new KvMsg(1);
 			kvmsg.setKey("getKey");
 			kvmsg.setUUID();
 			kvmsg.setBody("body".getBytes(ZMQ.CHARSET));
@@ -327,14 +327,14 @@ public class kvmsg {
 			kvmsg.send(output);
 			kvmsg.store(kvmap);
 
-			kvmsg = guide.kvmsg.recv(input);
+			kvmsg = guide.util.KvMsg.recv(input);
 			if (verbose)
 				kvmsg.dump();
 			assert (kvmsg.getKey().equals("getKey"));
 			kvmsg.store(kvmap);
 
 			// Test send and receive of message with properties
-			kvmsg = new kvmsg(2);
+			kvmsg = new KvMsg(2);
 			kvmsg.setProp("prop1", "value1");
 			kvmsg.setProp("prop2", "value1");
 			kvmsg.setProp("prop2", "value2");
@@ -347,7 +347,7 @@ public class kvmsg {
 			kvmsg.send(output);
 			kvmsg.destroy();
 
-			kvmsg = guide.kvmsg.recv(input);
+			kvmsg = guide.util.KvMsg.recv(input);
 			if (verbose)
 				kvmsg.dump();
 			assert (kvmsg.key.equals("getKey"));

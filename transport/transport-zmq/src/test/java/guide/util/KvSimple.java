@@ -1,4 +1,4 @@
-package guide;
+package guide.util;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -13,12 +13,13 @@ import org.zeromq.ZMQ.Socket;
  * @author Danish Shrestha &lt;dshrestha06@gmail.com&gt;
  *
  */
-public class kvsimple {
+public class KvSimple {
+	
 	private final String key;
 	private long sequence;
 	private final byte[] body;
 
-	public kvsimple(String key, long sequence, byte[] body) {
+	public KvSimple(String key, long sequence, byte[] body) {
 		this.key = key;
 		this.sequence = sequence;
 		this.body = body; // clone if needed
@@ -51,7 +52,7 @@ public class kvsimple {
 		publisher.send(body, 0);
 	}
 
-	public static kvsimple recv(Socket updates) {
+	public static KvSimple recv(Socket updates) {
 		byte[] data = updates.recv(0);
 		if (data == null || !updates.hasReceiveMore())
 			return null;
@@ -64,7 +65,7 @@ public class kvsimple {
 		if (body == null || updates.hasReceiveMore())
 			return null;
 
-		return new kvsimple(key, sequence, body);
+		return new KvSimple(key, sequence, body);
 	}
 
 	@Override
@@ -90,7 +91,7 @@ public class kvsimple {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		kvsimple other = (kvsimple) obj;
+		KvSimple other = (KvSimple) obj;
 		if (!Arrays.equals(body, other.body))
 			return false;
 		if (key == null) {

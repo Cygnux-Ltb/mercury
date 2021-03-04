@@ -1,4 +1,4 @@
-package guide;
+package guide.clone;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,10 +15,13 @@ import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.PollItem;
 import org.zeromq.ZMQ.Socket;
 
+import guide.star.BinaryStarReactor;
+import guide.util.KvMsg;
+
 //  Clone server - Model Six
 public class CloneServer6 {
 	private ZContext ctx; // Context wrapper
-	private Map<String, kvmsg> kvmap; // Key-value store
+	private Map<String, KvMsg> kvmap; // Key-value store
 	private BinaryStarReactor bStar; // Bstar reactor core
 	private long sequence; // How many updates we're at
 	private int port; // Main port we're working on
@@ -26,7 +29,7 @@ public class CloneServer6 {
 	private Socket publisher; // Publish updates and hugz
 	private Socket collector; // Collect updates from clients
 	private Socket subscriber; // Get updates from peer
-	private List<kvmsg> pending; // Pending updates from clients
+	private List<KvMsg> pending; // Pending updates from clients
 	@SuppressWarnings("unused")
 	private boolean primary; // TRUE if we're primary
 	private boolean active; // TRUE if we're active
@@ -51,14 +54,14 @@ public class CloneServer6 {
 
 				if (subtree != null) {
 					// Send state socket to client
-					for (Entry<String, kvmsg> entry : srv.kvmap.entrySet()) {
+					for (Entry<String, KvMsg> entry : srv.kvmap.entrySet()) {
 						sendSingle(entry.getValue(), identity, subtree, socket);
 					}
 
 					// Now send END message with getSequence number
 					System.out.printf("I: sending shapshot=%d\n", srv.sequence);
 					socket.send(identity, ZMQ.SNDMORE);
-					kvmsg kvmsg = new kvmsg(srv.sequence);
+					KvMsg kvmsg = new KvMsg(srv.sequence);
 					kvmsg.setKey("KTHXBAI");
 					kvmsg.setBody(subtree.getBytes(ZMQ.CHARSET));
 					kvmsg.send(socket);
@@ -75,7 +78,7 @@ public class CloneServer6 {
 			CloneServer6 srv = (CloneServer6) arg;
 			Socket socket = item.getSocket();
 
-			kvmsg msg = kvmsg.recv(socket);
+			KvMsg msg = KvMsg.recv(socket);
 			if (msg != null) {
 				if (srv.active) {
 					msg.setSequence(++srv.sequence);
@@ -108,7 +111,7 @@ public class CloneServer6 {
 		public int handle(ZLoop loop, PollItem item, Object arg) {
 			CloneServer6 srv = (CloneServer6) arg;
 
-			kvmsg msg = new kvmsg(srv.sequence);
+			KvMsg msg = new KvMsg(srv.sequence);
 			msg.setKey("HUGZ");
 			msg.setBody(ZMQ.MESSAGE_SEPARATOR);
 			msg.send(srv.publisher);
@@ -123,7 +126,7 @@ public class CloneServer6 {
 		public int handle(ZLoop loop, PollItem item, Object arg) {
 			CloneServer6 srv = (CloneServer6) arg;
 			if (srv.kvmap != null) {
-				for (kvmsg msg : new ArrayList<kvmsg>(srv.kvmap.values())) {
+				for (KvMsg msg : new ArrayList<KvMsg>(srv.kvmap.values())) {
 					srv.flushSingle(msg);
 				}
 			}
@@ -148,7 +151,7 @@ public class CloneServer6 {
 			srv.bStar.zloop().removePoller(poller);
 
 			// Apply pending list to own hash table
-			for (kvmsg msg : srv.pending) {
+			for (KvMsg msg : srv.pending) {
 				msg.setSequence(++srv.sequence);
 				msg.send(srv.publisher);
 				msg.store(srv.kvmap);
@@ -165,7 +168,7 @@ public class CloneServer6 {
 			CloneServer6 srv = (CloneServer6) arg;
 
 			if (srv.kvmap != null) {
-				for (kvmsg msg : srv.kvmap.values())
+				for (KvMsg msg : srv.kvmap.values())
 					msg.destroy();
 			}
 			srv.active = false;
@@ -190,7 +193,7 @@ public class CloneServer6 {
 
 			// Get state snapshot if necessary
 			if (srv.kvmap == null) {
-				srv.kvmap = new HashMap<String, kvmsg>();
+				srv.kvmap = new HashMap<String, KvMsg>();
 				Socket snapshot = srv.ctx.createSocket(SocketType.DEALER);
 				snapshot.connect(String.format("tcp://localhost:%d", srv.peer));
 
@@ -199,7 +202,7 @@ public class CloneServer6 {
 				snapshot.send(""); // blank subtree to get all
 
 				while (true) {
-					kvmsg msg = kvmsg.recv(snapshot);
+					KvMsg msg = KvMsg.recv(snapshot);
 					if (msg == null)
 						break; // Interrupted
 					if (msg.getKey().equals("KTHXBAI")) {
@@ -215,7 +218,7 @@ public class CloneServer6 {
 			}
 
 			// Find and remove update off pending list
-			kvmsg msg = kvmsg.recv(item.getSocket());
+			KvMsg msg = KvMsg.recv(item.getSocket());
 			if (msg == null)
 				return 0;
 
@@ -258,10 +261,10 @@ public class CloneServer6 {
 
 		// Primary server will become first active
 		if (primary)
-			kvmap = new HashMap<String, kvmsg>();
+			kvmap = new HashMap<String, KvMsg>();
 
 		ctx = new ZContext();
-		pending = new ArrayList<kvmsg>();
+		pending = new ArrayList<KvMsg>();
 		bStar.setVerbose(true);
 
 		// Set up our clone server sockets
@@ -298,11 +301,11 @@ public class CloneServer6 {
 		bStar.start();
 
 		// Interrupted, so shut down
-		for (kvmsg value : pending)
+		for (KvMsg value : pending)
 			value.destroy();
 
 		bStar.destroy();
-		for (kvmsg value : kvmap.values())
+		for (KvMsg value : kvmap.values())
 			value.destroy();
 
 		ctx.destroy();
@@ -310,7 +313,7 @@ public class CloneServer6 {
 
 	// Send one state snapshot key-value pair to a socket
 	// Hash item data is our kvmsg object, ready to send
-	private static void sendSingle(kvmsg msg, byte[] identity, String subtree, Socket socket) {
+	private static void sendSingle(KvMsg msg, byte[] identity, String subtree, Socket socket) {
 		if (msg.getKey().startsWith(subtree)) {
 			socket.send(identity, // Choose recipient
 					ZMQ.SNDMORE);
@@ -325,8 +328,8 @@ public class CloneServer6 {
 
 	// If message was already on pending list, remove it and return TRUE,
 	// else return FALSE.
-	boolean wasPending(kvmsg msg) {
-		Iterator<kvmsg> it = pending.iterator();
+	boolean wasPending(KvMsg msg) {
+		Iterator<KvMsg> it = pending.iterator();
 		while (it.hasNext()) {
 			if (java.util.Arrays.equals(msg.UUID(), it.next().UUID())) {
 				it.remove();
@@ -342,7 +345,7 @@ public class CloneServer6 {
 	// .skip
 	// If key-value pair has expired, delete it and publish the
 	// fact to listening clients.
-	private void flushSingle(kvmsg msg) {
+	private void flushSingle(KvMsg msg) {
 		long ttl = Long.parseLong(msg.getProp("ttl"));
 		if (ttl > 0 && System.currentTimeMillis() >= ttl) {
 			msg.setSequence(++sequence);

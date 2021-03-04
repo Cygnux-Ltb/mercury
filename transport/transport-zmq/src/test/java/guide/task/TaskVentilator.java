@@ -1,4 +1,4 @@
-package guide;
+package guide.task;
 
 import java.util.Random;
 

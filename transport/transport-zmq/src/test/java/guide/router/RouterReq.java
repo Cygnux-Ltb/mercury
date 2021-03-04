@@ -1,4 +1,4 @@
-package guide;
+package guide.router;
 
 import java.util.Random;
 
@@ -6,10 +6,12 @@ import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ.Socket;
 
+import guide.util.ZHelper;
+
 /**
  * ROUTER-TO-REQ example
  */
-public class rtreq {
+public class RouterReq {
 	private static Random rand = new Random();
 	private static final int NBR_WORKERS = 10;
 

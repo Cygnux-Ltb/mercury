@@ -1,4 +1,4 @@
-package guide;
+package guide.weather;
 
 import java.util.Random;
 
@@ -11,7 +11,8 @@ import org.zeromq.ZMQ;
 //  Binds PUB socket to tcp://*:5556
 //  Publishes random weather updates
 //
-public class wuserver {
+public class WeatherUpdateServer {
+	
 	public static void main(String[] args) throws Exception {
 		// Prepare our context and publisher
 		try (ZContext context = new ZContext()) {

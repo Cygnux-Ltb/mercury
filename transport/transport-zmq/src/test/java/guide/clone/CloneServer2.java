@@ -1,4 +1,4 @@
-package guide;
+package guide.clone;
 
 import java.nio.ByteBuffer;
 import java.util.Iterator;
@@ -14,6 +14,8 @@ import org.zeromq.ZMQ.Poller;
 import org.zeromq.ZMQ.Socket;
 import org.zeromq.ZThread;
 import org.zeromq.ZThread.IAttachedRunnable;
+
+import guide.util.KvSimple;
 
 /**
  * Clone server Model Two
@@ -40,7 +42,7 @@ public class CloneServer2 {
 				ByteBuffer b = ByteBuffer.allocate(4);
 				b.asIntBuffer().put(body);
 
-				kvsimple kvMsg = new kvsimple(key + "", currentSequenceNumber, b.array());
+				KvSimple kvMsg = new KvSimple(key + "", currentSequenceNumber, b.array());
 				kvMsg.send(publisher);
 				kvMsg.send(updates); // send a message to State Manager thread.
 
@@ -55,7 +57,7 @@ public class CloneServer2 {
 	}
 
 	public static class StateManager implements IAttachedRunnable {
-		private static Map<String, kvsimple> kvMap = new LinkedHashMap<String, kvsimple>();
+		private static Map<String, KvSimple> kvMap = new LinkedHashMap<>();
 
 		@Override
 		public void run(Object[] args, ZContext ctx, Socket pipe) {
@@ -75,7 +77,7 @@ public class CloneServer2 {
 
 				// apply state updates from main thread
 				if (poller.pollin(0)) {
-					kvsimple kvMsg = kvsimple.recv(pipe);
+					KvSimple kvMsg = KvSimple.recv(pipe);
 					if (kvMsg == null)
 						break;
 					StateManager.kvMap.put(kvMsg.getKey(), kvMsg);
@@ -94,10 +96,10 @@ public class CloneServer2 {
 						break;
 					}
 
-					Iterator<Entry<String, kvsimple>> iter = kvMap.entrySet().iterator();
+					Iterator<Entry<String, KvSimple>> iter = kvMap.entrySet().iterator();
 					while (iter.hasNext()) {
-						Entry<String, kvsimple> entry = iter.next();
-						kvsimple msg = entry.getValue();
+						Entry<String, KvSimple> entry = iter.next();
+						KvSimple msg = entry.getValue();
 						System.out.println("Sending message " + entry.getValue().getSequence());
 						this.sendMessage(msg, identity, snapshot);
 					}
@@ -105,13 +107,13 @@ public class CloneServer2 {
 					// now send end message with getSequence number
 					System.out.println("Sending state snapshot = " + stateSequence);
 					snapshot.send(identity, ZMQ.SNDMORE);
-					kvsimple message = new kvsimple("KTHXBAI", stateSequence, ZMQ.MESSAGE_SEPARATOR);
+					KvSimple message = new KvSimple("KTHXBAI", stateSequence, ZMQ.MESSAGE_SEPARATOR);
 					message.send(snapshot);
 				}
 			}
 		}
 
-		private void sendMessage(kvsimple msg, byte[] identity, Socket snapshot) {
+		private void sendMessage(KvSimple msg, byte[] identity, Socket snapshot) {
 			snapshot.send(identity, ZMQ.SNDMORE);
 			msg.send(snapshot);
 		}

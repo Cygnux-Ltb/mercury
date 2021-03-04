@@ -1,4 +1,4 @@
-package guide;
+package guide.peering;
 
 import java.util.ArrayList;
 import java.util.Random;

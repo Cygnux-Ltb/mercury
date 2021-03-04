@@ -1,4 +1,4 @@
-package guide;
+package guide.clone;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +9,8 @@ import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Socket;
 
+import guide.util.KvSimple;
+
 /**
  * Clone client model 1
  * 
@@ -16,7 +18,7 @@ import org.zeromq.ZMQ.Socket;
  *
  */
 public class CloneClient1 {
-	private static Map<String, kvsimple> kvMap = new HashMap<String, kvsimple>();
+	private static Map<String, KvSimple> kvMap = new HashMap<>();
 	private static AtomicLong sequence = new AtomicLong();
 
 	public void run() {
@@ -26,7 +28,7 @@ public class CloneClient1 {
 			subscriber.subscribe(ZMQ.SUBSCRIPTION_ALL);
 
 			while (true) {
-				kvsimple kvMsg = kvsimple.recv(subscriber);
+				KvSimple kvMsg = KvSimple.recv(subscriber);
 				if (kvMsg == null)
 					break;
 

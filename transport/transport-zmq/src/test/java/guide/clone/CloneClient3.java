@@ -1,4 +1,4 @@
-package guide;
+package guide.clone;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
@@ -11,6 +11,8 @@ import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Poller;
 import org.zeromq.ZMQ.Socket;
 
+import guide.util.KvSimple;
+
 /**
  * Clone client Model Three
  * 
@@ -18,7 +20,7 @@ import org.zeromq.ZMQ.Socket;
  *
  */
 public class CloneClient3 {
-	private static Map<String, kvsimple> kvMap = new HashMap<String, kvsimple>();
+	private static Map<String, KvSimple> kvMap = new HashMap<>();
 
 	public void run() {
 		try (ZContext ctx = new ZContext()) {
@@ -36,7 +38,7 @@ public class CloneClient3 {
 			long sequence = 0;
 			snapshot.send("ICANHAZ?".getBytes(ZMQ.CHARSET), 0);
 			while (true) {
-				kvsimple kvMsg = kvsimple.recv(snapshot);
+				KvSimple kvMsg = KvSimple.recv(snapshot);
 				if (kvMsg == null)
 					break; // Interrupted
 
@@ -63,7 +65,7 @@ public class CloneClient3 {
 					break; // Context has been shut down
 
 				if (poller.pollin(0)) {
-					kvsimple kvMsg = kvsimple.recv(subscriber);
+					KvSimple kvMsg = KvSimple.recv(subscriber);
 					if (kvMsg == null)
 						break; // Interrupted
 					if (kvMsg.getSequence() > sequence) {
@@ -80,7 +82,7 @@ public class CloneClient3 {
 					ByteBuffer b = ByteBuffer.allocate(4);
 					b.asIntBuffer().put(body);
 
-					kvsimple kvUpdateMsg = new kvsimple(key + "", 0, b.array());
+					KvSimple kvUpdateMsg = new KvSimple(key + "", 0, b.array());
 					kvUpdateMsg.send(push);
 					alarm = System.currentTimeMillis() + 1000;
 				}

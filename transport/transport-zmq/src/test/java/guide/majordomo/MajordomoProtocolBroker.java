@@ -1,4 +1,4 @@
-package guide;
+package guide.majordomo;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -16,7 +16,7 @@ import org.zeromq.ZMsg;
  * Majordomo Protocol broker A minimal implementation of
  * http://rfc.zeromq.org/spec:7 and spec:8
  */
-public class mdbroker {
+public class MajordomoProtocolBroker {
 
 	// We'd normally pull these from config data
 	private static final String INTERNAL_SERVICE_PREFIX = "mmi.";
@@ -76,7 +76,7 @@ public class mdbroker {
 	 * Main method - create and start new broker.
 	 */
 	public static void main(String[] args) {
-		mdbroker broker = new mdbroker(args.length > 0 && "-v".equals(args[0]));
+		MajordomoProtocolBroker broker = new MajordomoProtocolBroker(args.length > 0 && "-v".equals(args[0]));
 		// Can be called multiple times with different endpoints
 		broker.bind("tcp://*:5555");
 		broker.mediate();
@@ -85,7 +85,7 @@ public class mdbroker {
 	/**
 	 * Initialize broker state.
 	 */
-	public mdbroker(boolean verbose) {
+	public MajordomoProtocolBroker(boolean verbose) {
 		this.verbose = verbose;
 		this.services = new HashMap<String, Service>();
 		this.workers = new HashMap<String, Worker>();

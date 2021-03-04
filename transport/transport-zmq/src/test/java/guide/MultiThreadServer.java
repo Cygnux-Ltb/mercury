@@ -6,7 +6,7 @@ import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Socket;
 
 /**
- * Multi thread Hello World server
+ * Multi Thread Hello World server
  */
 public class MultiThreadServer {
 

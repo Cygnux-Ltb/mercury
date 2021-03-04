@@ -1,4 +1,4 @@
-package guide;
+package guide.router;
 
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
@@ -7,7 +7,7 @@ import org.zeromq.ZMQ;
 //
 //Custom routing Router to Mama (ROUTER to REQ)
 //
-public class rtmama {
+public class RouterMama {
 
 	private static final int NBR_WORKERS = 10;
 

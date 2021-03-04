@@ -17,7 +17,7 @@ import org.zeromq.ZMsg;
 //it easier to start and stop the example. Each task has its own
 //context and conceptually acts as a separate process.
 
-public class asyncsrv {
+public class AsyncClientToServer {
 	// ---------------------------------------------------------------------
 	// This is our client task
 	// It connects to the server, and then sends a request once per second
@@ -26,7 +26,7 @@ public class asyncsrv {
 
 	private static Random rand = new Random(System.nanoTime());
 
-	private static class client_task implements Runnable {
+	private static class ClientTask implements Runnable {
 
 		@Override
 		public void run() {
@@ -64,7 +64,7 @@ public class asyncsrv {
 	// one request at a time but one client can talk to multiple workers at
 	// once.
 
-	private static class server_task implements Runnable {
+	private static class ServerTask implements Runnable {
 		@Override
 		public void run() {
 			try (ZContext ctx = new ZContext()) {
@@ -78,7 +78,7 @@ public class asyncsrv {
 
 				// Launch pool of worker threads, precise number is not critical
 				for (int threadNbr = 0; threadNbr < 5; threadNbr++)
-					new Thread(new server_worker(ctx)).start();
+					new Thread(new ServerWorker(ctx)).start();
 
 				// Connect backend to frontend via a proxy
 				ZMQ.proxy(frontend, backend, null);
@@ -89,10 +89,10 @@ public class asyncsrv {
 	// Each worker task works on one request at a time and sends a random number
 	// of replies back, with random delays between replies:
 
-	private static class server_worker implements Runnable {
+	private static class ServerWorker implements Runnable {
 		private ZContext ctx;
 
-		public server_worker(ZContext ctx) {
+		public ServerWorker(ZContext ctx) {
 			this.ctx = ctx;
 		}
 
@@ -131,10 +131,10 @@ public class asyncsrv {
 	// waits for the server to finish.
 
 	public static void main(String[] args) throws Exception {
-		new Thread(new client_task()).start();
-		new Thread(new client_task()).start();
-		new Thread(new client_task()).start();
-		new Thread(new server_task()).start();
+		new Thread(new ClientTask()).start();
+		new Thread(new ClientTask()).start();
+		new Thread(new ClientTask()).start();
+		new Thread(new ServerTask()).start();
 
 		// Run for 5 seconds then quit
 		Thread.sleep(5 * 1000);

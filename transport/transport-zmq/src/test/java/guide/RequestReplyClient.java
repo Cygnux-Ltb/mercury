@@ -8,7 +8,7 @@ import org.zeromq.ZMQ.Socket;
  * Hello World client Connects REQ socket to tcp://localhost:5559 Sends "Hello"
  * to server, expects "World" back
  */
-public class rrclient {
+public class RequestReplyClient {
 
 	public static void main(String[] args) {
 		try (ZContext context = new ZContext()) {

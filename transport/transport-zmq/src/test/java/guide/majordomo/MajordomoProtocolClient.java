@@ -1,15 +1,15 @@
-package guide;
+package guide.majordomo;
 
 import org.zeromq.ZMsg;
 
 /**
  * Majordomo Protocol client example. Uses the mdcli API to hide all MDP aspects
  */
-public class mdclient {
+public class MajordomoProtocolClient {
 
 	public static void main(String[] args) {
 		boolean verbose = (args.length > 0 && "-v".equals(args[0]));
-		mdcliapi clientSession = new mdcliapi("tcp://localhost:5555", verbose);
+		MajordomoProtocolClientAPI clientSession = new MajordomoProtocolClientAPI("tcp://localhost:5555", verbose);
 
 		int count;
 		for (count = 0; count < 100000; count++) {

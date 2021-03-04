@@ -1,4 +1,4 @@
-package guide;
+package guide.clone;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +11,8 @@ import org.zeromq.ZMQ.Socket;
 import org.zeromq.ZMsg;
 import org.zeromq.ZThread;
 import org.zeromq.ZThread.IAttachedRunnable;
+
+import guide.util.KvMsg;
 
 public class Clone {
 	private ZContext ctx; // Our context wrapper
@@ -183,7 +185,7 @@ public class Clone {
 				kvmap.put(key, value);
 
 				// Send key-value pair on to server
-				kvmsg kvmsg = new kvmsg(0);
+				KvMsg kvmsg = new KvMsg(0);
 				kvmsg.setKey(key);
 				kvmsg.setUUID();
 				kvmsg.fmtBody("%s", value);
@@ -274,7 +276,7 @@ public class Clone {
 					if (!self.controlMessage())
 						break; // Interrupted
 				} else if (pollSize == 2 && poller.pollin(1)) {
-					kvmsg msg = kvmsg.recv(poller.getSocket(1));
+					KvMsg msg = KvMsg.recv(poller.getSocket(1));
 					if (msg == null)
 						break; // Interrupted
 

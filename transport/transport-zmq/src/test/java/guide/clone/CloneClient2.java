@@ -1,4 +1,4 @@
-package guide;
+package guide.clone;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +8,8 @@ import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Socket;
 
+import guide.util.KvSimple;
+
 /**
  * Clone client Model Two
  * 
@@ -15,7 +17,8 @@ import org.zeromq.ZMQ.Socket;
  * 
  */
 public class CloneClient2 {
-	private static Map<String, kvsimple> kvMap = new HashMap<String, kvsimple>();
+	
+	private static Map<String, KvSimple> kvMap = new HashMap<>();
 
 	public void run() {
 		try (ZContext ctx = new ZContext()) {
@@ -30,7 +33,7 @@ public class CloneClient2 {
 			snapshot.send("ICANHAZ?".getBytes(ZMQ.CHARSET), 0);
 			long sequence = 0;
 			while (true) {
-				kvsimple kvMsg = kvsimple.recv(snapshot);
+				KvSimple kvMsg = KvSimple.recv(snapshot);
 				if (kvMsg == null)
 					break;
 				sequence = kvMsg.getSequence();
@@ -45,7 +48,7 @@ public class CloneClient2 {
 
 			// now apply pending updates, discard out-of-getSequence messages
 			while (true) {
-				kvsimple kvMsg = kvsimple.recv(subscriber);
+				KvSimple kvMsg = KvSimple.recv(subscriber);
 
 				if (kvMsg == null)
 					break;

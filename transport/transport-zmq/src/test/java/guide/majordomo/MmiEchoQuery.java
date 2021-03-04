@@ -1,15 +1,15 @@
-package guide;
+package guide.majordomo;
 
 import org.zeromq.ZMsg;
 
 /**
  * MMI echo query example
  */
-public class mmiecho {
+public class MmiEchoQuery {
 
 	public static void main(String[] args) {
 		boolean verbose = (args.length > 0 && "-v".equals(args[0]));
-		mdcliapi clientSession = new mdcliapi("tcp://localhost:5555", verbose);
+		MajordomoProtocolClientAPI clientSession = new MajordomoProtocolClientAPI("tcp://localhost:5555", verbose);
 
 		ZMsg request = new ZMsg();
 

@@ -1,4 +1,4 @@
-package guide;
+package guide.pirate;
 
 import java.util.ArrayList;
 

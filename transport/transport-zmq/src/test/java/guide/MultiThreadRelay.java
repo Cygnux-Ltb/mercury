@@ -5,7 +5,7 @@ import org.zeromq.ZContext;
 import org.zeromq.ZMQ.Socket;
 
 /**
- * Multithread relay
+ * Multi Thread relay
  */
 public class MultiThreadRelay {
 

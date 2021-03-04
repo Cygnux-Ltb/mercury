@@ -1,4 +1,4 @@
-package guide;
+package guide.clone;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -11,6 +11,8 @@ import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Poller;
 import org.zeromq.ZMQ.Socket;
 
+import guide.util.KvSimple;
+
 /**
  * Clone server Model Three
  * 
@@ -19,7 +21,7 @@ import org.zeromq.ZMQ.Socket;
  */
 public class CloneServer3 {
 
-	private static Map<String, kvsimple> kvMap = new LinkedHashMap<String, kvsimple>();
+	private static Map<String, KvSimple> kvMap = new LinkedHashMap<>();
 
 	public void run() {
 		try (ZContext ctx = new ZContext()) {
@@ -43,7 +45,7 @@ public class CloneServer3 {
 
 				// apply state updates from main thread
 				if (poller.pollin(0)) {
-					kvsimple kvMsg = kvsimple.recv(collector);
+					KvSimple kvMsg = KvSimple.recv(collector);
 					if (kvMsg == null) // Interrupted
 						break;
 					kvMsg.setSequence(++sequence);
@@ -64,10 +66,10 @@ public class CloneServer3 {
 						break;
 					}
 
-					Iterator<Entry<String, kvsimple>> iter = kvMap.entrySet().iterator();
+					Iterator<Entry<String, KvSimple>> iter = kvMap.entrySet().iterator();
 					while (iter.hasNext()) {
-						Entry<String, kvsimple> entry = iter.next();
-						kvsimple msg = entry.getValue();
+						Entry<String, KvSimple> entry = iter.next();
+						KvSimple msg = entry.getValue();
 						System.out.println("Sending message " + entry.getValue().getSequence());
 						this.sendMessage(msg, identity, snapshot);
 					}
@@ -75,7 +77,7 @@ public class CloneServer3 {
 					// now send end message with getSequence number
 					System.out.println("Sending state snapshot = " + sequence);
 					snapshot.send(identity, ZMQ.SNDMORE);
-					kvsimple message = new kvsimple("KTHXBAI", sequence, ZMQ.SUBSCRIPTION_ALL);
+					KvSimple message = new KvSimple("KTHXBAI", sequence, ZMQ.SUBSCRIPTION_ALL);
 					message.send(snapshot);
 				}
 			}
@@ -84,7 +86,7 @@ public class CloneServer3 {
 		}
 	}
 
-	private void sendMessage(kvsimple msg, byte[] identity, Socket snapshot) {
+	private void sendMessage(KvSimple msg, byte[] identity, Socket snapshot) {
 		snapshot.send(identity, ZMQ.SNDMORE);
 		msg.send(snapshot);
 	}

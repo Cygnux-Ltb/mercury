@@ -3,7 +3,8 @@ package guide;
 import org.zeromq.ZMQ;
 
 //  Report 0MQ version
-public class version {
+public class Version {
+
 	public static void main(String[] args) {
 		String version = ZMQ.getVersionString();
 		int fullVersion = ZMQ.getFullVersion();

@@ -1,4 +1,4 @@
-package guide;
+package guide.majordomo;
 
 import java.util.Formatter;
 
@@ -12,7 +12,7 @@ import org.zeromq.ZMsg;
  * Majordomo Protocol Client API, asynchronous Java version. Implements the
  * MDP/Worker spec at http://rfc.zeromq.org/spec:7.
  */
-public class mdcliapi2 {
+public class MajordomoProtocolClientAPI2 {
 
 	private String broker;
 	private ZContext ctx;
@@ -29,7 +29,7 @@ public class mdcliapi2 {
 		this.timeout = timeout;
 	}
 
-	public mdcliapi2(String broker, boolean verbose) {
+	public MajordomoProtocolClientAPI2(String broker, boolean verbose) {
 		this.broker = broker;
 		this.verbose = verbose;
 		ctx = new ZContext();

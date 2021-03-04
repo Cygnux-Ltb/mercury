@@ -1,4 +1,4 @@
-package guide;
+package guide.clone;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,11 +13,13 @@ import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.PollItem;
 import org.zeromq.ZMQ.Socket;
 
+import guide.util.KvMsg;
+
 //  Clone server - Model Five
 
 public class CloneServer5 {
 	private ZContext ctx; // Context wrapper
-	private Map<String, kvmsg> kvmap; // Key-value store
+	private Map<String, KvMsg> kvmap; // Key-value store
 	private ZLoop loop; // zloop reactor
 	private int port; // Main port we're working on
 	private long sequence; // How many updates we're at
@@ -47,14 +49,14 @@ public class CloneServer5 {
 
 				if (subtree != null) {
 					// Send state socket to client
-					for (Entry<String, kvmsg> entry : srv.kvmap.entrySet()) {
+					for (Entry<String, KvMsg> entry : srv.kvmap.entrySet()) {
 						sendSingle(entry.getValue(), identity, subtree, socket);
 					}
 
 					// Now send END message with getSequence number
 					System.out.printf("I: sending shapshot=%d\n", srv.sequence);
 					socket.send(identity, ZMQ.SNDMORE);
-					kvmsg kvmsg = new kvmsg(srv.sequence);
+					KvMsg kvmsg = new KvMsg(srv.sequence);
 					kvmsg.setKey("KTHXBAI");
 					kvmsg.setBody(subtree.getBytes(ZMQ.CHARSET));
 					kvmsg.send(socket);
@@ -74,7 +76,7 @@ public class CloneServer5 {
 			CloneServer5 srv = (CloneServer5) arg;
 			Socket socket = item.getSocket();
 
-			kvmsg msg = kvmsg.recv(socket);
+			KvMsg msg = KvMsg.recv(socket);
 			if (msg != null) {
 				msg.setSequence(++srv.sequence);
 				msg.send(srv.publisher);
@@ -94,7 +96,7 @@ public class CloneServer5 {
 		public int handle(ZLoop loop, PollItem item, Object arg) {
 			CloneServer5 srv = (CloneServer5) arg;
 			if (srv.kvmap != null) {
-				for (kvmsg msg : new ArrayList<kvmsg>(srv.kvmap.values())) {
+				for (KvMsg msg : new ArrayList<KvMsg>(srv.kvmap.values())) {
 					srv.flushSingle(msg);
 				}
 			}
@@ -105,7 +107,7 @@ public class CloneServer5 {
 	public CloneServer5() {
 		port = 5556;
 		ctx = new ZContext();
-		kvmap = new HashMap<String, kvmsg>();
+		kvmap = new HashMap<String, KvMsg>();
 		loop = new ZLoop(ctx);
 		loop.verbose(false);
 
@@ -132,7 +134,7 @@ public class CloneServer5 {
 	}
 
 	// We call this function for each getKey-value pair in our hash table
-	private static void sendSingle(kvmsg msg, byte[] identity, String subtree, Socket socket) {
+	private static void sendSingle(KvMsg msg, byte[] identity, String subtree, Socket socket) {
 		if (msg.getKey().startsWith(subtree)) {
 			socket.send(identity, // Choose recipient
 					ZMQ.SNDMORE);
@@ -146,7 +148,7 @@ public class CloneServer5 {
 
 	// If getKey-value pair has expired, delete it and publish the
 	// fact to listening clients.
-	private void flushSingle(kvmsg msg) {
+	private void flushSingle(KvMsg msg) {
 		long ttl = Long.parseLong(msg.getProp("ttl"));
 		if (ttl > 0 && System.currentTimeMillis() >= ttl) {
 			msg.setSequence(++sequence);

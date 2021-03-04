@@ -1,4 +1,4 @@
-package guide;
+package guide.clone;
 
 import java.nio.ByteBuffer;
 import java.util.Random;
@@ -8,6 +8,8 @@ import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ.Socket;
 
+import guide.util.KvSimple;
+
 /**
  * 
  * Clone server model 1
@@ -16,6 +18,7 @@ import org.zeromq.ZMQ.Socket;
  *
  */
 public class CloneServer1 {
+	
 	private static AtomicLong sequence = new AtomicLong();
 
 	public void run() {
@@ -39,7 +42,7 @@ public class CloneServer1 {
 				ByteBuffer b = ByteBuffer.allocate(4);
 				b.asIntBuffer().put(body);
 
-				kvsimple kvMsg = new kvsimple(key + "", currentSequenceNumber, b.array());
+				KvSimple kvMsg = new KvSimple(key + "", currentSequenceNumber, b.array());
 				kvMsg.send(publisher);
 				System.out.println("sending " + kvMsg);
 			}

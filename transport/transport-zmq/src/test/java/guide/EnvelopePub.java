@@ -4,6 +4,8 @@ import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ.Socket;
 
+import io.mercury.common.thread.Threads;
+
 /**
  * Pubsub envelope publisher
  */
@@ -21,7 +23,10 @@ public class EnvelopePub {
 				publisher.sendMore("A");
 				publisher.send("We don't want to see this");
 				publisher.sendMore("B");
-				publisher.send("We would like to see this");
+				publisher.send("We B would like to see this");
+				publisher.sendMore("C");
+				publisher.send("We C would like to see this");
+				Threads.sleep(500);
 			}
 		}
 	}

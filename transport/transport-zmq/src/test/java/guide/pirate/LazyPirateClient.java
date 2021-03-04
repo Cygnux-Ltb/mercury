@@ -1,4 +1,4 @@
-package guide;
+package guide.pirate;
 
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
