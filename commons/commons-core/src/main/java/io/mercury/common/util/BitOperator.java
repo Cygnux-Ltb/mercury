@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.collections4.FunctorException;
+
 public final class BitOperator {
 
 	private BitOperator() {
@@ -228,6 +230,7 @@ public final class BitOperator {
 				try {
 					((sun.nio.ch.DirectBuffer) buffer).cleaner().clean();
 				} catch (Exception e) {
+					FunctorException
 					throw new RuntimeException("call '((sun.nio.ch.DirectBuffer) buffer).cleaner().clean()' exception",
 							e);
 				}

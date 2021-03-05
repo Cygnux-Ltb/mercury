@@ -254,13 +254,13 @@ public final class StringUtil {
 			boolean hasDecimalPoint = false;
 			for (; offset < endPoint; offset++) {
 				// 判断每个字母是否为数字
-				char ch = str.charAt(offset);
-				if (!(ch >= '0' && ch <= '9')) {
+				char c = str.charAt(offset);
+				if (!(c >= '0' && c <= '9')) {
 					// 已出现小数点后再出现其他任何字符, 返回false
 					if (hasDecimalPoint)
 						return false;
 					// 标识出现了一个小数点
-					else if (ch == '.')
+					else if (c == '.')
 						hasDecimalPoint = true;
 					// 出现其他字符返回false
 					else
