@@ -19,7 +19,7 @@ import org.zeromq.ZThread;
  * Load-balancing broker Demonstrates use of the high level API
  */
 public class LoadBalancingBroker2 {
-	
+
 	private static final int NBR_CLIENTS = 10;
 	private static final int NBR_WORKERS = 3;
 	private static byte[] WORKER_READY = { '\001' }; // Signals worker is ready
@@ -28,6 +28,7 @@ public class LoadBalancingBroker2 {
 	 * Basic request-reply client using REQ socket
 	 */
 	private static class ClientTask implements ZThread.IDetachedRunnable {
+		
 		@Override
 		public void run(Object[] args) {
 			// Prepare our context and sockets

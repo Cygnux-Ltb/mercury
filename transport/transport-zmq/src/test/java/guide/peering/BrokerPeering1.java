@@ -13,15 +13,15 @@ import org.zeromq.ZMQ.Socket;
 
 public class BrokerPeering1 {
 
-	public static void main(String[] argv) {
+	public static void main(String[] arg) {
 		// First argument is this broker's name
 		// Other arguments are our peers' names
 		//
-		if (argv.length < 1) {
+		if (arg.length < 1) {
 			System.out.println("syntax: peering1 me {you}\n");
 			System.exit(-1);
 		}
-		String self = argv[0];
+		String self = arg[0];
 		System.out.println(String.format("I: preparing broker at %s\n", self));
 		Random rand = new Random(System.nanoTime());
 
@@ -34,8 +34,8 @@ public class BrokerPeering1 {
 			Socket statefe = ctx.createSocket(SocketType.SUB);
 			statefe.subscribe(ZMQ.SUBSCRIPTION_ALL);
 			int argn;
-			for (argn = 1; argn < argv.length; argn++) {
-				String peer = argv[argn];
+			for (argn = 1; argn < arg.length; argn++) {
+				String peer = arg[argn];
 				System.out.printf("I: connecting to state backend at '%s'\n", peer);
 				statefe.connect(String.format("ipc://%s-state.ipc", peer));
 			}

@@ -23,7 +23,7 @@ import org.zeromq.ZThread;
  * The client and worker tasks are identical from the previous example.
  */
 public class LoadBalancingBroker3 {
-	
+
 	private static final int NBR_CLIENTS = 10;
 	private static final int NBR_WORKERS = 3;
 	private static byte[] WORKER_READY = { '\001' };

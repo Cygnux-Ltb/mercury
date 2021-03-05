@@ -24,7 +24,7 @@ public class AsyncClientToServer {
 	// It collects responses as they arrive, and it prints them out. We will
 	// run several client tasks in parallel, each with a different random ID.
 
-	private static Random rand = new Random(System.nanoTime());
+	private static final Random rand = new Random(System.nanoTime());
 
 	private static class ClientTask implements Runnable {
 

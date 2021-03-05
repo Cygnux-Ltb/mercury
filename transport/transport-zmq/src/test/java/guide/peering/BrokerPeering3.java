@@ -29,7 +29,7 @@ public class BrokerPeering3 {
 	// clients are active at once, the local workers should be overloaded. The
 	// client uses a REQ socket for requests and also pushes statistics to the
 	// monitor socket:
-	private static class client_task extends Thread {
+	private static class ClientTask extends Thread {
 		@Override
 		public void run() {
 			try (ZContext ctx = new ZContext()) {
@@ -82,7 +82,7 @@ public class BrokerPeering3 {
 	// This is the worker task, which uses a REQ socket to plug into the LRU
 	// router. It's the same stub worker task you've seen in other examples:
 
-	private static class worker_task extends Thread {
+	private static class WorkerTask extends Thread {
 		@Override
 		public void run() {
 			Random rand = new Random(System.nanoTime());
@@ -173,12 +173,12 @@ public class BrokerPeering3 {
 			// Start local workers
 			int worker_nbr;
 			for (worker_nbr = 0; worker_nbr < NBR_WORKERS; worker_nbr++)
-				new worker_task().start();
+				new WorkerTask().start();
 
 			// Start local clients
 			int client_nbr;
 			for (client_nbr = 0; client_nbr < NBR_CLIENTS; client_nbr++)
-				new client_task().start();
+				new ClientTask().start();
 
 			// Queue of available workers
 			int localCapacity = 0;

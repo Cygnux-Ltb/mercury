@@ -26,7 +26,7 @@ public class BrokerPeering2 {
 
 	// The client task does a request-reply dialog using a standard
 	// synchronous REQ socket:
-	private static class client_task extends Thread {
+	private static class ClientTask extends Thread {
 		@Override
 		public void run() {
 			try (ZContext ctx = new ZContext()) {
@@ -52,7 +52,7 @@ public class BrokerPeering2 {
 	// The worker task plugs into the LRU routing dialog using a REQ
 	// socket:
 
-	private static class worker_task extends Thread {
+	private static class WorkerTask extends Thread {
 		@Override
 		public void run() {
 			try (ZContext ctx = new ZContext()) {
@@ -124,12 +124,12 @@ public class BrokerPeering2 {
 			// Start local workers
 			int worker_nbr;
 			for (worker_nbr = 0; worker_nbr < NBR_WORKERS; worker_nbr++)
-				new worker_task().start();
+				new WorkerTask().start();
 
 			// Start local clients
 			int client_nbr;
 			for (client_nbr = 0; client_nbr < NBR_CLIENTS; client_nbr++)
-				new client_task().start();
+				new ClientTask().start();
 
 			// Here we handle the request-reply flow. We're using the LRU
 			// approach to poll workers at all times, and clients only when

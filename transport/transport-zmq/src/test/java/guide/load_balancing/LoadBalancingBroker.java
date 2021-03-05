@@ -11,7 +11,7 @@ import org.zeromq.ZMQ.Socket;
 import guide.util.ZHelper;
 
 public class LoadBalancingBroker {
-	
+
 	private static final int NBR_CLIENTS = 10;
 	private static final int NBR_WORKERS = 3;
 
@@ -111,10 +111,10 @@ public class LoadBalancingBroker {
 				// Initialize poll set
 				Poller items = context.createPoller(2);
 
-				//   Always poll for worker activity on backend
+				// Always poll for worker activity on backend
 				items.register(backend, Poller.POLLIN);
 
-				//   Poll front-end only if we have available workers
+				// Poll front-end only if we have available workers
 				if (workerQueue.size() > 0)
 					items.register(frontend, Poller.POLLIN);
 
