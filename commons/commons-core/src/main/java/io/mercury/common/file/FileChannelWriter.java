@@ -32,8 +32,8 @@ public final class FileChannelWriter {
 
 	/**
 	 * 
-	 * @param data   : Written data
-	 * @param target : Written target file
+	 * @param lines  : written data
+	 * @param target : written target file
 	 * @return
 	 * @throws NullPointerException
 	 * @throws IOException
@@ -45,9 +45,9 @@ public final class FileChannelWriter {
 
 	/**
 	 * 
-	 * @param data   : Written data
-	 * @param target : Written target file
-	 * @param append : Is append file end
+	 * @param lines  : written data
+	 * @param target : written target file
+	 * @param append : append file end
 	 * @return
 	 * @throws NullPointerException
 	 * @throws IOException
@@ -59,11 +59,11 @@ public final class FileChannelWriter {
 
 	/**
 	 * 
-	 * @param data     : Written data
-	 * @param charset  : Value charset
-	 * @param target   : Written target file
-	 * @param capacity : Buffer capacity
-	 * @param append   : Is append file end
+	 * @param lines    : written data
+	 * @param charset  : value charset
+	 * @param target   : written target file
+	 * @param capacity : buffer capacity
+	 * @param append   : append file end
 	 * @return
 	 * @throws NullPointerException
 	 * @throws IOException
@@ -93,7 +93,7 @@ public final class FileChannelWriter {
 			int capacity, boolean append) throws NullPointerException, IOException {
 		if (target == null)
 			throw new NullPointerException("target file must not be null.");
-		if (capacity <= 0)
+		if (capacity < 128)
 			capacity = 4096;
 		File parentFile = target.getParentFile();
 		if (!parentFile.exists())

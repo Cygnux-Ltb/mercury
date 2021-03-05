@@ -33,7 +33,7 @@ public final class FileScanner {
 	 * @return
 	 */
 	@Nonnull
-	public static final MutableSet<File> depthFirst(@Nonnull File path, FileFilter filter) {
+	public static final MutableSet<File> depthFirst(@Nonnull File path, @Nonnull FileFilter filter) {
 		if (filter == null)
 			filter = any -> true;
 		MutableSet<File> files = MutableSets.newUnifiedSet();
@@ -41,7 +41,8 @@ public final class FileScanner {
 		return files;
 	}
 
-	private static final void depthFirst0(MutableSet<File> files, File path, FileFilter filter) {
+	private static final void depthFirst0(@Nonnull MutableSet<File> files, @Nonnull File path,
+			@Nonnull FileFilter filter) {
 		if (path == null || filter == null)
 			return;
 		File[] listFiles = path.listFiles();

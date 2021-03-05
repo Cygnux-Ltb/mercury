@@ -16,7 +16,7 @@ import io.mercury.common.file.FileUtil;
 public class FileExtensionFilter implements FileFilter {
 
 	private final boolean ignoreCase;
-	private String[] extensions;
+	private final String[] extensions;
 
 	/**
 	 * Creates a new instance of a <code>FileExtensionMatcher</code> that will

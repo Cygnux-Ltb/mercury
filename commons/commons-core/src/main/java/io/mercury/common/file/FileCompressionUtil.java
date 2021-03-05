@@ -23,7 +23,7 @@ import io.mercury.common.log.CommonLoggerFactory;
  */
 public class FileCompressionUtil {
 
-	private static final Logger logger = CommonLoggerFactory.getLogger(FileCompressionUtil.class);
+	private static final Logger log = CommonLoggerFactory.getLogger(FileCompressionUtil.class);
 
 	/**
 	 * Enumeration of all supported compression algorithms by this utility.
@@ -261,10 +261,10 @@ public class FileCompressionUtil {
 		}
 
 		// try to find compression algorithm
-		Algorithm a = Algorithm.findByFileExtension(fileExt);
+		Algorithm algo = Algorithm.findByFileExtension(fileExt);
 
 		// was it not found?
-		if (a == null) {
+		if (algo == null) {
 			throw new IOException(
 					"Unrecognized or unsupported compression algorithm for file extension '" + fileExt + "'");
 		}
@@ -281,13 +281,13 @@ public class FileCompressionUtil {
 
 		File targetFile = new File(targetDir, filename);
 
-		uncompress(a, sourceFile, targetFile, deleteSourceFileAfterUncompressed);
+		uncompress(algo, sourceFile, targetFile, deleteSourceFileAfterUncompressed);
 
 		return targetFile;
 	}
 
-	private static void compress(Algorithm a, File sourceFile, File targetFile, boolean deleteSourceFileAfterCompressed)
-			throws FileAlreadyExistsException, IOException {
+	private static void compress(Algorithm algo, File sourceFile, File targetFile,
+			boolean deleteSourceFileAfterCompressed) throws FileAlreadyExistsException, IOException {
 		// check if the src file exists
 		if (!sourceFile.canRead()) {
 			throw new IOException("Source file " + sourceFile + " neither exists or can be read");
@@ -299,7 +299,7 @@ public class FileCompressionUtil {
 		}
 
 		// try to compress the file
-		a.getCompressor().compress(sourceFile, targetFile);
+		algo.getCompressor().compress(sourceFile, targetFile);
 
 		// delete file after compressing
 		if (deleteSourceFileAfterCompressed) {
@@ -384,15 +384,17 @@ public class FileCompressionUtil {
 				if (in != null) {
 					try {
 						in.close();
-					} catch (Exception e) {
+					} catch (IOException e) {
+						log.error("FileInputStream close has IOException");
 					}
 				}
 				if (out != null) {
-					logger.warn(
+					log.warn(
 							"Output stream for GZIP compressed file was not null -- indicates error with compression occurred");
 					try {
 						out.close();
-					} catch (Exception e) {
+					} catch (IOException e) {
+						log.error("GZIPOutputStream close has IOException");
 					}
 				}
 			}
@@ -413,7 +415,6 @@ public class FileCompressionUtil {
 		@Override
 		public void uncompress(InputStream srcIn, OutputStream destOut) throws IOException {
 			GZIPInputStream in = null;
-
 			try {
 				// create an input stream from the source
 				in = new GZIPInputStream(srcIn);
@@ -437,13 +438,15 @@ public class FileCompressionUtil {
 				if (in != null) {
 					try {
 						in.close();
-					} catch (Exception e) {
+					} catch (IOException e) {
+						log.error("GZIPInputStream close has IOException");
 					}
 				}
 				if (destOut != null) {
 					try {
 						destOut.close();
-					} catch (Exception e) {
+					} catch (IOException e) {
+						log.error("OutputStream close has IOException");
 					}
 				}
 			}
@@ -497,7 +500,7 @@ public class FileCompressionUtil {
 				// if the out var is not null, then something went wrong above
 				// and we did not compress the destination file correctly
 				if (out != null) {
-					logger.warn(
+					log.warn(
 							"Output stream for ZIP compressed file was not null -- indicates error with compression occurred");
 					try {
 						out.close();

@@ -29,12 +29,11 @@ public final class PropertiesReader {
 	private static final String FILE_SUFFIX = ".properties";
 
 	static {
-		MutableSet<File> allPropFile = FileScanner.depthFirst(
+		MutableSet<File> propFiles = FileScanner.depthFirst(
 				new File(PropertiesReader.class.getResource("/").getPath()),
-				
 				file -> file.getName().endsWith(FILE_SUFFIX));
 		try {
-			for (File propFile : allPropFile) {
+			for (File propFile : propFiles) {
 				log.info("Properties file -> [{}] start load", propFile);
 				String fileName = propFile.getName();
 				Properties prop = new Properties();
