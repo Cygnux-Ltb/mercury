@@ -4,10 +4,12 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.slf4j.Logger;
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
+import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.core.api.TransportModule;
 import io.mercury.transport.core.configurator.TcpKeepAliveOption;
@@ -26,23 +28,37 @@ abstract class ZmqTransport implements TransportModule, Closeable {
 
 	protected AtomicBoolean isRunning = new AtomicBoolean(true);
 
+	private static final Logger log = CommonLoggerFactory.getLogger(ZmqTransport.class);
+
 	protected ZmqTransport(ZmqConfigurator configurator) {
 		Assertor.nonNull(configurator, "configurator");
 		this.ctx = new ZContext(configurator.ioThreads);
+		log.info("init zmq context");
 	}
 
 	protected ZMQ.Socket initSocket(SocketType type) {
 		this.socket = ctx.createSocket(type);
+		log.info("create zmq socket with type -> {}", type);
 		return socket;
 	}
 
 	protected ZMQ.Socket setTcpKeepAlive(TcpKeepAliveOption option) {
 		if (option != null) {
+			log.info("setting zmq socket tcp keep alive");
 			socket.setTCPKeepAlive(option.getTcpKeepAlive());
 			socket.setTCPKeepAliveCount(option.getTcpKeepAliveCount());
 			socket.setTCPKeepAliveIdle(option.getTcpKeepAliveIdle());
 			socket.setTCPKeepAliveInterval(option.getTcpKeepAliveInterval());
 		}
+		return socket;
+	}
+
+	/**
+	 * 用于在外部设置Socket参数
+	 * 
+	 * @return
+	 */
+	public ZMQ.Socket socketSetter() {
 		return socket;
 	}
 
@@ -62,6 +78,7 @@ abstract class ZmqTransport implements TransportModule, Closeable {
 			socket.close();
 			ctx.close();
 		}
+		log.info("zmq transport destroy");
 		return ctx.isClosed();
 	}
 

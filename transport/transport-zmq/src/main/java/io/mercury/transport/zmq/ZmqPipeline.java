@@ -20,12 +20,12 @@ import lombok.experimental.Accessors;
 public class ZmqPipeline extends ZmqTransport implements Receiver, Closeable {
 
 	@Getter
-	private String name;
+	private final String name;
 
 	@Getter
-	private ZmqPipelineConfigurator configurator;
+	private final ZmqPipelineConfigurator configurator;
 
-	private Function<byte[], byte[]> pipeline;
+	private final Function<byte[], byte[]> pipeline;
 
 	public ZmqPipeline(@Nonnull ZmqPipelineConfigurator configurator, @Nonnull Function<byte[], byte[]> pipeline) {
 		super(configurator);
@@ -33,20 +33,31 @@ public class ZmqPipeline extends ZmqTransport implements Receiver, Closeable {
 		this.configurator = configurator;
 		this.pipeline = pipeline;
 		initSocket(SocketType.REP).bind(configurator.getAddr());
-		this.name = "ZMQ::REP:" + configurator.getAddr();
+		this.name = "ZMQ::REP$" + configurator.getAddr();
 	}
 
 	@Override
 	public void receive() {
 		while (isRunning.get()) {
-			byte[] recvBytes = socket.recv();
-			byte[] sendBytes = pipeline.apply(recvBytes);
-			if (sendBytes != null)
-				socket.send(sendBytes);
+			byte[] recv = socket.recv();
+			byte[] sent = pipeline.apply(recv);
+			if (sent != null)
+				socket.send(sent);
 		}
+
 		return;
 	}
 
+	@Override
+	public void reconnect() {
+		throw new UnsupportedOperationException("ZmqPipeline unsupport reconnect");
+	}
+
+	/**
+	 * 
+	 * @author yellow013
+	 *
+	 */
 	public static final class ZmqPipelineConfigurator extends ZmqConfigurator {
 
 		@Getter
@@ -101,7 +112,8 @@ public class ZmqPipeline extends ZmqTransport implements Receiver, Closeable {
 
 	public static void main(String[] args) {
 		try (ZmqPipeline receiver = new ZmqPipeline(
-				ZmqPipelineConfigurator.newBuilder().setIoThreads(10).setAddr("tcp://*:5551").build(), (byte[] byteMsg) -> {
+				ZmqPipelineConfigurator.newBuilder().setIoThreads(10).setAddr("tcp://*:5551").build(),
+				(byte[] byteMsg) -> {
 					System.out.println(new String(byteMsg));
 					return null;
 				})) {
@@ -111,11 +123,6 @@ public class ZmqPipeline extends ZmqTransport implements Receiver, Closeable {
 			e.printStackTrace();
 		}
 
-	}
-
-	@Override
-	public void reconnect() {
-		// TODO Auto-generated method stub
 	}
 
 }

@@ -44,6 +44,11 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 		}
 	}
 
+	/**
+	 * 
+	 * @author yellow013
+	 *
+	 */
 	public static final class ZmqSenderConfigurator extends ZmqConfigurator {
 
 		@Getter

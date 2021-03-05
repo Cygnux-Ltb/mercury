@@ -6,9 +6,11 @@ import java.util.function.BiConsumer;
 
 import javax.annotation.Nonnull;
 
+import org.slf4j.Logger;
 import org.zeromq.SocketType;
 
 import io.mercury.common.character.Charsets;
+import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringUtil;
 import io.mercury.serialization.json.JsonWrapper;
@@ -25,12 +27,14 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber, Clo
 	private final String[] topics;
 
 	@Getter
-	private String name;
+	private final String name;
 
 	@Getter
-	private ZmqSubConfigurator configurator;
+	private final ZmqSubConfigurator configurator;
 
 	private final BiConsumer<byte[], byte[]> consumer;
+
+	private static final Logger log = CommonLoggerFactory.getLogger(ZmqSubscriber.class);
 
 	public ZmqSubscriber(@Nonnull ZmqSubConfigurator configurator, @Nonnull BiConsumer<byte[], byte[]> consumer) {
 		super(configurator);
@@ -44,9 +48,8 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber, Clo
 		}
 		setTcpKeepAlive(configurator.getTcpKeepAliveOption());
 		this.name = "ZMQ::SUB$" + configurator.connectionInfo;
+
 	}
-	
-	
 
 	@Override
 	public void subscribe() {
@@ -55,6 +58,7 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber, Clo
 			byte[] msg = socket.recv();
 			consumer.accept(topic, msg);
 		}
+		log.warn("ZmqSubscriber -> {} has exited", name);
 	}
 
 	@Override
@@ -67,6 +71,11 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber, Clo
 		subscribe();
 	}
 
+	/**
+	 * 
+	 * @author yellow013
+	 *
+	 */
 	public static final class ZmqSubConfigurator extends ZmqConfigurator {
 
 		@Getter

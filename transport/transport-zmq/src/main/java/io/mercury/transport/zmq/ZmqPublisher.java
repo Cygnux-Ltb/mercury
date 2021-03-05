@@ -6,10 +6,12 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import org.slf4j.Logger;
 import org.zeromq.SocketType;
 import org.zeromq.ZMQ;
 
 import io.mercury.common.character.Charsets;
+import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.spec.ByteArraySerializer;
 import io.mercury.common.thread.Threads;
 import io.mercury.serialization.json.JsonWrapper;
@@ -32,6 +34,8 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>,
 	private final ZmqPubConfigurator configurator;
 
 	private final ByteArraySerializer<T> serializer;
+
+	private static final Logger log = CommonLoggerFactory.getLogger(ZmqPublisher.class);
 
 	private ZmqPublisher(@Nonnull ZmqPubConfigurator configurator, @Nonnull ByteArraySerializer<T> serializer) {
 		super(configurator);
@@ -88,10 +92,15 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>,
 				socket.send(bytes, ZMQ.NOBLOCK);
 			}
 		} else {
-
+			log.warn("ZmqPublisher -> {} has exited", name);
 		}
 	}
 
+	/**
+	 * 
+	 * @author yellow013
+	 *
+	 */
 	public static final class ZmqPubConfigurator extends ZmqConfigurator {
 
 		@Getter
@@ -153,8 +162,6 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>,
 	}
 
 	public static void main(String[] args) {
-//		JeroMqConfigurator configurator = JeroMqConfigurator.builder().setHost("tcp://*:5559").setIoThreads(1)
-//				.setTopic("").build();
 
 		ZmqPubConfigurator configurator = ZmqPubConfigurator.newBuilder().setAddr("tcp://127.0.0.1:13001")
 				.setDefaultTopic("command").setIoThreads(2).build();
