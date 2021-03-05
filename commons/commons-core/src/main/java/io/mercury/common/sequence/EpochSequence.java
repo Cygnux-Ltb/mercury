@@ -24,8 +24,8 @@ import io.mercury.common.util.BitFormatter;
  * Use Epoch Time ID
  * 
  * <pre>
- * 0b|-----------------epoch milliseconds ----------------|---increment----|
- * 0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111
+ * 0b|-----------------epoch milliseconds 47bit----------------|increment 16bit-|
+ * 0b01111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111
  * 
  * </pre>
  * 

@@ -1,16 +1,21 @@
 package io.mercury.common.sequence;
 
-import static io.mercury.common.util.BitFormatter.longBinaryFormat;
 import static java.lang.System.currentTimeMillis;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.Nonnull;
 
 import io.mercury.common.datetime.TimeZone;
-import io.mercury.common.util.HexUtil;
+import io.mercury.common.util.Assertor;
+import io.mercury.common.util.BitFormatter;
 
 /**
  * 
@@ -25,61 +30,22 @@ import io.mercury.common.util.HexUtil;
  *
  * @author yellow013
  */
-public final class LongSnowflakeAlgo {
+public final class SnowflakeAlgorithm {
 
 	/**
-	 * 
-	 * @author yellow013
+	 * 最小基线时间, UTC 2000-01-01 00:00:00.000
 	 */
-	public static class Bulider {
-
-		private final ZonedDateTime baseline;
-
-		private Bulider(ZonedDateTime baseline) {
-			this.baseline = baseline;
-		}
-
-		public LongSnowflakeAlgo bulid() {
-			return new LongSnowflakeAlgo(this);
-		}
-
-	}
-
-	/**
-	 * 
-	 * @param baseline
-	 * @return
-	 */
-	public static LongSnowflakeAlgo newAllocator(LocalDate baseline) {
-		return new Bulider(ZonedDateTime.of(baseline, LocalTime.MIN, ZoneOffset.UTC)).bulid();
-	}
-
-	/**
-	 * 
-	 * @param baseline
-	 * @param zoneId
-	 * @return
-	 */
-	public static LongSnowflakeAlgo newAllocator(LocalDate baseline, ZoneId zoneId) {
-		return new Bulider(ZonedDateTime.of(baseline, LocalTime.MIN, zoneId)).bulid();
-	}
-
-	/**
-	 * 
-	 * @param bulider
-	 */
-	private LongSnowflakeAlgo(Bulider bulider) {
-		this.baselineEpoch = bulider.baseline.toEpochSecond();
-	}
+	public static final ZonedDateTime MinimumBaseline = ZonedDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.MIN,
+			TimeZone.UTC);
 
 	// 开始时间截 (使用自己业务系统指定的时间)
-	private final long baselineEpoch;
+	private final long baselineMillis;
+
+	// 是否直接使用Epoch时间
+	private final boolean isUseEpoch;
 
 	// 自增位最多占用16位
 	private final int increment_bit_limit = Byte.SIZE * 2;
-
-	// 开始时间截 (这个用自己业务系统上线的时间)
-	private final long twepoch = 1575365018000L;
 
 	// 机器ID所占的位数
 	private final long workerIdBits = 10L;
@@ -109,27 +75,60 @@ public final class LongSnowflakeAlgo {
 	// 上次生成ID的时间截
 	private volatile long lastTimestamp = -1L;
 
-	// ==============================Function==========================================
+	/**
+	 * 
+	 * @param baseline
+	 */
+	private SnowflakeAlgorithm(ZonedDateTime baseline) {
+		if(baseline == null )
+		//ZonedDateTime epoch = ZonedDateTime.ofInstant(Instant.EPOCH, TimeZone.UTC);
+		
+		this.baselineMillis = MinimumBaseline.isBefore(baseline) ? MinimumBaseline.toInstant().toEpochMilli()
+				: baseline.toInstant().toEpochMilli();
+	}
+
+	/**
+	 * 
+	 * @param baseline
+	 * @return
+	 */
+	public static SnowflakeAlgorithm newInstance(@Nonnull LocalDate baseline) {
+		Assertor.nonNull(baseline, "baseline");
+		return newInstance(baseline, ZoneOffset.UTC);
+	}
+
+	/**
+	 * 
+	 * @param baseline
+	 * @param zoneId
+	 * @return
+	 */
+	public static SnowflakeAlgorithm newInstance(@Nonnull LocalDate baseline, @Nonnull ZoneId zoneId) {
+		Assertor.nonNull(baseline, "baseline");
+		Assertor.nonNull(zoneId, "zoneId");
+		return new SnowflakeAlgorithm(ZonedDateTime.of(baseline, LocalTime.MIN, zoneId));
+	}
+
 	/**
 	 * 获得下一个ID (该方法是线程安全的)
 	 * 
 	 * @return SnowflakeId
 	 */
-	public synchronized long nextSeq() throws ClockBackwardException {
-		long timestamp = currentTimeMillis();
+	public synchronized long next() throws ClockBackwardException {
+		long currentMillis = currentTimeMillis();
 
 		// 如果当前时间小于上一次ID生成的时间戳, 说明系统时钟回退过这个时候应当抛出异常
-		if (timestamp < lastTimestamp) {
-			throw new ClockBackwardException(lastTimestamp - timestamp);
+		if (currentMillis < lastTimestamp) {
+			throw new ClockBackwardException(lastTimestamp - currentMillis);
 		}
 
 		// 如果是同一时间生成的, 则进行毫秒内序列
-		if (lastTimestamp == timestamp) {
+		if (lastTimestamp == currentMillis) {
 			sequence = (sequence + 1) & sequenceMask;
 			// 毫秒内序列溢出
 			if (sequence == 0) {
 				// 阻塞到下一个毫秒, 获得新的时间戳
-				timestamp = tilNextMillis(lastTimestamp);
+				currentMillis = tilNextMillis(lastTimestamp);
 			}
 		}
 		// 时间戳改变, 毫秒内序列重置
@@ -138,10 +137,10 @@ public final class LongSnowflakeAlgo {
 		}
 
 		// 上次生成ID的时间截
-		lastTimestamp = timestamp;
+		lastTimestamp = currentMillis;
 
 		// 移位并通过或运算拼到一起组成64位的ID
-		return ((timestamp - twepoch) << timestampLeftShift) // 时间戳左移至高位
+		return ((currentMillis - baselineMillis) << timestampLeftShift) // 时间戳左移至高位
 				| (ownerId << ownerIdShift) // 所有者ID左移至中间位
 				| sequence; // 自增位
 	}
@@ -162,34 +161,37 @@ public final class LongSnowflakeAlgo {
 
 	public static void main(String[] args) {
 
-		ZonedDateTime baseline = ZonedDateTime.of(LocalDate.of(2016, 1, 1), LocalTime.MIN, TimeZone.UTC);
-
-		long baseEpochMilli = baseline.toInstant().toEpochMilli();
-		System.out.println(baseEpochMilli);
-		System.out.println(System.currentTimeMillis() - baseEpochMilli);
-		System.out.println(Short.MAX_VALUE);
-		System.out.println(Integer.MAX_VALUE);
-		System.out.println(0b01111111_11111111_11111111_11111111);
 		System.out.println(0b11111111_11111111);
+		System.out.println(BitFormatter.shortBinaryFormat((short) 0b11111111_11111111));
+		System.out.println(BitFormatter.shortBinaryFormat(Short.MAX_VALUE));
+		System.out.println(0b01111111_11111111_11111111_11111111);
+		System.out.println(BitFormatter.intBinaryFormat(Integer.MAX_VALUE));
+		System.out.println(BitFormatter.intBinaryFormat((int) 0b01111111_11111111_11111111_11111111));
 
 		long l0 = 0b00000000_00000000_00000000_00000000_11111111_11111111_11111111_11111111L;
-		System.out.println(longBinaryFormat(l0));
 
-		long l = -1 >>> (Long.SIZE - (Byte.SIZE * 3 + 2));
-		System.out.println(HexUtil.toHexString(-1L));
-		System.out.println(l + " -> " + longBinaryFormat(l));
+		ZonedDateTime dateTime = ZonedDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.MIN, TimeZone.UTC);
 
-		System.out.println(Byte.SIZE);
+		long l1 = dateTime.toEpochSecond() * 1000;
+		System.out.println(BitFormatter.longBinaryFormat(l1));
 
-		System.out.println(longBinaryFormat(System.currentTimeMillis() - baseline.toInstant().toEpochMilli()));
-		System.out.println(longBinaryFormat(l));
-		System.out.println(l);
-		System.out.println(longBinaryFormat(l0));
-		System.out.println(l0);
-		System.out.println(longBinaryFormat(Long.MAX_VALUE));
+		ZonedDateTime now = ZonedDateTime.now(TimeZone.UTC);
+		System.out.println(now);
+		long nowMillis = now.toInstant().toEpochMilli();
+		System.out.println(MinimumBaseline);
+		long minMillis = MinimumBaseline.toInstant().toEpochMilli();
 
-		System.out.println(3600 * 24 * 365L);
-		System.out.println(l0 / (1000 * 3600 * 24 * 365L));
+		long diffMillis = nowMillis - minMillis;
+		System.out.println("diffMillis -> " + BitFormatter.longBinaryFormat(diffMillis));
+		long dayMillis = TimeUnit.DAYS.toMillis(1);
+		System.out.println(dayMillis);
+		System.out.println(BitFormatter.longBinaryFormat(dayMillis));
+		System.out.println(diffMillis / dayMillis / 365);
+
+		long maxDiff = -1L >>> (Byte.SIZE * 5);
+		System.out.println(maxDiff);
+		System.out.println(BitFormatter.longBinaryFormat(maxDiff));
+		System.out.println(ZonedDateTime.ofInstant(Instant.EPOCH, TimeZone.UTC).plus(maxDiff * 15, ChronoUnit.SECONDS));
 
 	}
 

@@ -45,9 +45,9 @@ public final class Hasher {
 	private static final String ALGO_MD5 = "MD5";
 	// Secure Hash Algorithm - 160 bit
 	private static final String ALGO_SHA1 = "SHA-1";
-	// 256 bit
+	// Secure Hash Algorithm - 256 bit
 	private static final String ALGO_SHA256 = "SHA-256";
-	// 512 bit
+	// Secure Hash Algorithm - 512 bit
 	private static final String ALGO_SHA512 = "SHA-512";
 
 	/**
