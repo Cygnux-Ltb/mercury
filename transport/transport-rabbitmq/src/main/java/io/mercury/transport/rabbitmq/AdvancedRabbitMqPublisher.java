@@ -235,7 +235,6 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 		this.confirmTimeout = configurator.confirmTimeout();
 		this.confirmRetry = configurator.confirmRetry();
 		this.serializer = serializer;
-
 		this.hasPropsSupplier = msgPropsSupplier != null;
 		this.publisherName = "publisher::[" + rmqConnection.getConnectionInfo() + "$" + exchangeName + "]";
 		createConnection();

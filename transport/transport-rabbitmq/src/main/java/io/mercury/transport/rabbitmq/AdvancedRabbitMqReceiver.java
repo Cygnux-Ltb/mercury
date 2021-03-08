@@ -1,6 +1,5 @@
 package io.mercury.transport.rabbitmq;
 
-import static io.mercury.common.util.StringUtil.bytesToStr;
 import static io.mercury.common.util.StringUtil.nonEmpty;
 
 import java.io.IOException;
@@ -22,6 +21,7 @@ import io.mercury.common.codec.DecodeException;
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
+import io.mercury.common.util.StringUtil;
 import io.mercury.transport.core.api.Receiver;
 import io.mercury.transport.core.api.Subscriber;
 import io.mercury.transport.core.exception.ConnectionBreakException;
@@ -381,7 +381,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 										// 包装Message对象
 										new Message<>(envelope, properties, t));
 							} catch (Exception e) {
-								log.error("SelfAckConsumer accept msg==[{}] throw Exception -> {}", bytesToStr(body),
+								log.error("SelfAckConsumer accept msg==[{}] throw Exception -> {}", StringUtil.toString(body),
 										e.getMessage(), e);
 								dumpUnprocessableMsg(e, consumerTag, envelope, properties, body);
 							}
@@ -449,7 +449,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 								}
 								consumer.accept(t);
 							} catch (Exception e) {
-								log.error("Consumer accept msg==[{}] throw Exception -> {}", bytesToStr(body),
+								log.error("Consumer accept msg==[{}] throw Exception -> {}", StringUtil.toString(body),
 										e.getMessage(), e);
 								dumpUnprocessableMsg(e, consumerTag, envelope, delivery.getProperties(), body);
 							}
@@ -500,7 +500,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 			log.error("Exception handling -> Sent to ErrMsgQueue finished");
 		} else {
 			// Reject message and close connection.
-			log.error("Exception handling -> Reject Msg [{}]", bytesToStr(body));
+			log.error("Exception handling -> Reject Msg [{}]", StringUtil.toString(body));
 			channel.basicReject(envelope.getDeliveryTag(), true);
 			log.error("Exception handling -> Reject Msg finished");
 			destroy();

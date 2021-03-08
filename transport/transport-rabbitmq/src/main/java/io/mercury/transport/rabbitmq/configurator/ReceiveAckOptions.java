@@ -9,7 +9,7 @@ package io.mercury.transport.rabbitmq.configurator;
 public final class ReceiveAckOptions {
 
 	// 自动ACK, 默认true
-	private boolean autoAck = true;;
+	private boolean autoAck = true;
 
 	// 一次ACK多条, 默认false
 	private boolean multipleAck = false;

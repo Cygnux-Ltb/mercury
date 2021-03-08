@@ -1,6 +1,5 @@
 package io.mercury.transport.rabbitmq;
 
-import static io.mercury.common.util.StringUtil.bytesToStr;
 import static io.mercury.common.util.StringUtil.nonEmpty;
 
 import java.io.IOException;
@@ -19,6 +18,7 @@ import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
+import io.mercury.common.util.StringUtil;
 import io.mercury.transport.core.api.Publisher;
 import io.mercury.transport.core.api.Sender;
 import io.mercury.transport.core.exception.PublishFailedException;
@@ -142,21 +142,21 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 			try {
 				confirmPublish(target, msg, props);
 			} catch (IOException e) {
-				log.error("Method publish isConfirm==[true] throw IOException -> {}, msg==[{}]", e.getMessage(),
-						bytesToStr(msg), e);
+				log.error("Func publish isConfirm==[true] throw IOException -> {}, msg==[{}]", e.getMessage(),
+						StringUtil.toString(msg), e);
 				destroy();
 				throw new PublishFailedException(e);
 			} catch (NoAckException e) {
-				log.error("Method publish isConfirm==[true] throw NoConfirmException -> {}, msg==[{}]", e.getMessage(),
-						bytesToStr(msg), e);
+				log.error("Func publish isConfirm==[true] throw NoConfirmException -> {}, msg==[{}]", e.getMessage(),
+						StringUtil.toString(msg), e);
 				throw new PublishFailedException(e);
 			}
 		} else {
 			try {
 				basicPublish(target, msg, props);
 			} catch (IOException e) {
-				log.error("Method publish isConfirm==[false] throw IOException -> {}, msg==[{}]", e.getMessage(),
-						bytesToStr(msg), e);
+				log.error("Func publish isConfirm==[false] throw IOException -> {}, msg==[{}]", e.getMessage(),
+						StringUtil.toString(msg), e);
 				destroy();
 				throw new PublishFailedException(e);
 			}

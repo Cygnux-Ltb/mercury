@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 
 import com.rabbitmq.client.AMQP.BasicProperties;
 
-import io.mercury.common.util.StringUtil;
+import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rabbitmq.declare.AmqpQueue;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
 
@@ -196,7 +196,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	@Override
 	public String toString() {
 		if (toStringCache == null)
-			toStringCache = StringUtil.toStringWithReflection(this);
+			toStringCache = JsonWrapper.toJson(this);
 		return toStringCache;
 	}
 
