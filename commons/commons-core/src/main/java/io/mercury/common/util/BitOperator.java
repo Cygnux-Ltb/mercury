@@ -6,8 +6,6 @@ import java.nio.ByteBuffer;
 
 import javax.annotation.Nonnull;
 
-import org.apache.commons.collections4.FunctorException;
-
 public final class BitOperator {
 
 	private BitOperator() {
@@ -230,7 +228,6 @@ public final class BitOperator {
 				try {
 					((sun.nio.ch.DirectBuffer) buffer).cleaner().clean();
 				} catch (Exception e) {
-					FunctorException
 					throw new RuntimeException("call '((sun.nio.ch.DirectBuffer) buffer).cleaner().clean()' exception",
 							e);
 				}
@@ -250,8 +247,6 @@ public final class BitOperator {
 		System.out.println(longBinaryFormat(-1L ^ (-1L << i)));
 		System.out.println(maxValueOfBit(i));
 
-		
-		
 	}
 
 }

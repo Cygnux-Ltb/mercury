@@ -8,14 +8,14 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
 
+import io.mercury.common.datetime.EpochTime;
 import io.mercury.common.datetime.TimeZone;
-import io.mercury.common.util.Assertor;
 import io.mercury.common.util.BitFormatter;
+import io.mercury.common.util.BitOperator;
+import io.mercury.common.util.HexUtil;
 
 /**
  * 
@@ -23,8 +23,8 @@ import io.mercury.common.util.BitFormatter;
  * 时间戳 | 所有者(可以是某个业务或者分布式系统上的机器) | 自增序列<br>
  * 
  * <pre>
- * 0b|---------------EPOCH TIMESTAMP----------------|--OWNER---|-INCREMENT-|
- * 0b01111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111
+ * 0b|---------------EPOCH TIMESTAMP----------------|--OWNER----|-INCREMENT-|
+ * 0b01111111 11111111 11111111 11111111 11111111 11_111111 1111_1111 11111111
  * 
  * <pre>
  *
@@ -38,39 +38,49 @@ public final class SnowflakeAlgorithm {
 	public static final ZonedDateTime MinimumBaseline = ZonedDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.MIN,
 			TimeZone.UTC);
 
+	/*
+	 * 所有者ID所占的位数
+	 */
+	public static final int OwnerIdBits = 10;
+
+	/*
+	 * 序列在ID中占的位数
+	 */
+	public static final int SequenceBits = 12;
+
+	/*
+	 * 
+	 */
+	public static final int TimestampBits = 41;
+
+	/*
+	 * 所有者ID向左移12位
+	 */
+	public static final int OwnerIdLeftShift = SequenceBits;
+
+	/*
+	 * 时间截向左移22位(10+12)
+	 */
+	public static final int TimestampLeftShift = OwnerIdBits + SequenceBits;
+
+	/*
+	 * 生成序列的掩码, 4095 (0xffff == 4096 == 0b1111_11111111)
+	 */
+	public static final long SequenceMask = BitOperator.maxValueOfBit(SequenceBits);
+
+	/**
+	 * 所有者ID的掩码
+	 */
+	public static final long OwnerIdMask = BitOperator.maxValueOfBit(OwnerIdBits) << OwnerIdLeftShift;
+
 	// 开始时间截 (使用自己业务系统指定的时间)
-	private final long baselineMillis;
+	private final long baseline;
 
-	// 是否直接使用Epoch时间
-	private final boolean isUseEpoch;
+	// 所有者ID(0~1024)
+	private final long ownerId;
 
-	// 自增位最多占用16位
-	private final int increment_bit_limit = Byte.SIZE * 2;
-
-	// 机器ID所占的位数
-	private final long workerIdBits = 10L;
-
-	// 支持的最大机器ID, 结果是31 (这个移位算法可以很快的计算出几位二进制数所能表示的最大十进制数)
-	@SuppressWarnings("unused")
-	private final long maxWorkerId = -1L ^ (-1L << workerIdBits);
-
-	// 序列在ID中占的位数
-	private final long sequenceBits = 12L;
-
-	// 机器ID向左移12位
-	private final long ownerIdShift = sequenceBits;
-
-	// 时间截向左移22位(10+12)
-	private final long timestampLeftShift = sequenceBits + workerIdBits;
-
-	// 生成序列的掩码, 这里为4095 (0xfff == 4095 == 0b111111111111)
-	private final long sequenceMask = -1L ^ (-1L << sequenceBits);
-
-	// 工作机器ID(0~1024)
-	private long ownerId;
-
-	// 毫秒内序列(0~4095)
-	private long sequence = 0L;
+	// 毫秒内序列(0~4096)
+	private volatile long sequence = 0L;
 
 	// 上次生成ID的时间截
 	private volatile long lastTimestamp = -1L;
@@ -78,13 +88,10 @@ public final class SnowflakeAlgorithm {
 	/**
 	 * 
 	 * @param baseline
+	 * @return
 	 */
-	private SnowflakeAlgorithm(ZonedDateTime baseline) {
-		if(baseline == null )
-		//ZonedDateTime epoch = ZonedDateTime.ofInstant(Instant.EPOCH, TimeZone.UTC);
-		
-		this.baselineMillis = MinimumBaseline.isBefore(baseline) ? MinimumBaseline.toInstant().toEpochMilli()
-				: baseline.toInstant().toEpochMilli();
+	public SnowflakeAlgorithm(int ownerId) {
+		this(ownerId, ZonedDateTime.ofInstant(Instant.EPOCH, TimeZone.UTC));
 	}
 
 	/**
@@ -92,9 +99,8 @@ public final class SnowflakeAlgorithm {
 	 * @param baseline
 	 * @return
 	 */
-	public static SnowflakeAlgorithm newInstance(@Nonnull LocalDate baseline) {
-		Assertor.nonNull(baseline, "baseline");
-		return newInstance(baseline, ZoneOffset.UTC);
+	public SnowflakeAlgorithm(int ownerId, @Nonnull LocalDate baseline) {
+		this(ownerId, baseline, ZoneOffset.UTC);
 	}
 
 	/**
@@ -103,10 +109,59 @@ public final class SnowflakeAlgorithm {
 	 * @param zoneId
 	 * @return
 	 */
-	public static SnowflakeAlgorithm newInstance(@Nonnull LocalDate baseline, @Nonnull ZoneId zoneId) {
-		Assertor.nonNull(baseline, "baseline");
-		Assertor.nonNull(zoneId, "zoneId");
-		return new SnowflakeAlgorithm(ZonedDateTime.of(baseline, LocalTime.MIN, zoneId));
+	public SnowflakeAlgorithm(int ownerId, @Nonnull LocalDate baseline, @Nonnull ZoneId zoneId) {
+		this(ownerId, baseline == null ? EpochTime.ZeroPoint
+				: ZonedDateTime.of(baseline, LocalTime.MIN, zoneId == null ? TimeZone.UTC : zoneId));
+	}
+
+	/**
+	 * 
+	 * @param baseline
+	 */
+	private SnowflakeAlgorithm(int ownerId, ZonedDateTime baseline) {
+		if (ownerId < 0 || ownerId >= 1024)
+			throw new IllegalArgumentException("ownerId must be [greater than 0] and [less than or equal 1024]");
+		this.ownerId = ownerId;
+		this.baseline = baseline.isBefore(EpochTime.ZeroPoint) ? 0 : baseline.toInstant().toEpochMilli();
+	}
+
+	/**
+	 * 获取基线时间
+	 * 
+	 * @return
+	 */
+	public long getBaseline() {
+		return baseline;
+	}
+
+	/**
+	 * 解析序列ID中包含的Epoch时间戳
+	 * 
+	 * @param seq
+	 * @return
+	 */
+	public long parseEpochMillis(long seq) {
+		return parseBaselineDiffMillis(seq) + baseline;
+	}
+
+	/**
+	 * 解析序列ID中包含的基线偏移时间
+	 * 
+	 * @param seq
+	 * @return
+	 */
+	public static long parseBaselineDiffMillis(long seq) {
+		return (seq >> (OwnerIdBits + SequenceBits));
+	}
+
+	/**
+	 * 解析序列ID中包含的所有者ID
+	 * 
+	 * @param seq
+	 * @return
+	 */
+	public static long parseOwnerId(long seq) {
+		return (seq & OwnerIdMask) >> OwnerIdLeftShift;
 	}
 
 	/**
@@ -115,34 +170,36 @@ public final class SnowflakeAlgorithm {
 	 * @return SnowflakeId
 	 */
 	public synchronized long next() throws ClockBackwardException {
-		long currentMillis = currentTimeMillis();
+		long currentTimestamp = currentTimeMillis();
 
 		// 如果当前时间小于上一次ID生成的时间戳, 说明系统时钟回退过这个时候应当抛出异常
-		if (currentMillis < lastTimestamp) {
-			throw new ClockBackwardException(lastTimestamp - currentMillis);
+		if (currentTimestamp < lastTimestamp) {
+			throw new ClockBackwardException(lastTimestamp - currentTimestamp);
 		}
 
 		// 如果是同一时间生成的, 则进行毫秒内序列
-		if (lastTimestamp == currentMillis) {
-			sequence = (sequence + 1) & sequenceMask;
+		if (currentTimestamp == lastTimestamp) {
+			sequence = (sequence + 1) & SequenceMask;
 			// 毫秒内序列溢出
 			if (sequence == 0) {
 				// 阻塞到下一个毫秒, 获得新的时间戳
-				currentMillis = tilNextMillis(lastTimestamp);
+				currentTimestamp = tilNextMillis(lastTimestamp);
 			}
 		}
 		// 时间戳改变, 毫秒内序列重置
 		else {
 			sequence = 0L;
 		}
-
 		// 上次生成ID的时间截
-		lastTimestamp = currentMillis;
+		lastTimestamp = currentTimestamp;
 
 		// 移位并通过或运算拼到一起组成64位的ID
-		return ((currentMillis - baselineMillis) << timestampLeftShift) // 时间戳左移至高位
-				| (ownerId << ownerIdShift) // 所有者ID左移至中间位
-				| sequence; // 自增位
+		return // 时间戳左移至高位
+		((currentTimestamp - baseline) << TimestampLeftShift)
+				// 所有者ID左移至中间位
+				| (ownerId << OwnerIdLeftShift)
+				// 自增位
+				| sequence;
 	}
 
 	/**
@@ -161,37 +218,31 @@ public final class SnowflakeAlgorithm {
 
 	public static void main(String[] args) {
 
-		System.out.println(0b11111111_11111111);
-		System.out.println(BitFormatter.shortBinaryFormat((short) 0b11111111_11111111));
-		System.out.println(BitFormatter.shortBinaryFormat(Short.MAX_VALUE));
-		System.out.println(0b01111111_11111111_11111111_11111111);
-		System.out.println(BitFormatter.intBinaryFormat(Integer.MAX_VALUE));
-		System.out.println(BitFormatter.intBinaryFormat((int) 0b01111111_11111111_11111111_11111111));
+		System.out.println(BitFormatter.longBinaryFormat(SequenceMask));
+		System.out.println(BitFormatter.longBinaryFormat(OwnerIdMask));
 
-		long l0 = 0b00000000_00000000_00000000_00000000_11111111_11111111_11111111_11111111L;
+		SnowflakeAlgorithm algorithm = new SnowflakeAlgorithm(20);
 
-		ZonedDateTime dateTime = ZonedDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.MIN, TimeZone.UTC);
+		long next = algorithm.next();
+		System.out.println(BitFormatter.longBinaryFormat(next));
 
-		long l1 = dateTime.toEpochSecond() * 1000;
-		System.out.println(BitFormatter.longBinaryFormat(l1));
+		long time = algorithm.parseEpochMillis(next);
+		System.out.println(System.currentTimeMillis());
+		System.out.println(time);
+		System.out.println(BitFormatter.longBinaryFormat(time));
+		System.out.println(SnowflakeAlgorithm.parseOwnerId(next));
 
-		ZonedDateTime now = ZonedDateTime.now(TimeZone.UTC);
-		System.out.println(now);
-		long nowMillis = now.toInstant().toEpochMilli();
-		System.out.println(MinimumBaseline);
-		long minMillis = MinimumBaseline.toInstant().toEpochMilli();
+		System.out.println(ZonedDateTime.ofInstant(Instant.ofEpochMilli(time), TimeZone.UTC));
 
-		long diffMillis = nowMillis - minMillis;
-		System.out.println("diffMillis -> " + BitFormatter.longBinaryFormat(diffMillis));
-		long dayMillis = TimeUnit.DAYS.toMillis(1);
-		System.out.println(dayMillis);
-		System.out.println(BitFormatter.longBinaryFormat(dayMillis));
-		System.out.println(diffMillis / dayMillis / 365);
+		long maxSequence = BitOperator.maxValueOfBit(SequenceBits);
+		System.out.println(maxSequence);
+		System.out.println(BitFormatter.longBinaryFormat(maxSequence));
+		System.out.println(HexUtil.toHexString(maxSequence));
 
-		long maxDiff = -1L >>> (Byte.SIZE * 5);
-		System.out.println(maxDiff);
-		System.out.println(BitFormatter.longBinaryFormat(maxDiff));
-		System.out.println(ZonedDateTime.ofInstant(Instant.EPOCH, TimeZone.UTC).plus(maxDiff * 15, ChronoUnit.SECONDS));
+		long maxOwnerId = BitOperator.maxValueOfBit(OwnerIdBits);
+		System.out.println(maxOwnerId);
+		System.out.println(BitFormatter.longBinaryFormat(maxOwnerId));
+		System.out.println(HexUtil.toHexString(maxOwnerId));
 
 	}
 

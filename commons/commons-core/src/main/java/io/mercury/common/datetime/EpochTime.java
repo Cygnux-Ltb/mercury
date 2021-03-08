@@ -28,6 +28,11 @@ import javax.annotation.Nonnull;;
 public final class EpochTime {
 
 	/**
+	 * EpochTime Zero Point : UTC 1970-01-01 00:00:00.0000
+	 */
+	public static final ZonedDateTime ZeroPoint = ZonedDateTime.ofInstant(Instant.EPOCH, TimeZone.UTC);
+
+	/**
 	 * 
 	 * @return
 	 */

@@ -39,13 +39,13 @@ public final class StringUtil {
 	public static final String toString(@Nullable Object... objs) {
 		if (objs == null)
 			return StringConst.EMPTY;
-		StringBuilder builder = new StringBuilder(objs.length * 16).append('[');
+		StringBuilder sb = new StringBuilder(objs.length * 16).append('[');
 		for (int i = 0, j = objs.length - 1; i < objs.length; i++) {
-			builder.append(toString(objs[i]));
+			sb.append(toString(objs[i]));
 			if (i < j)
-				builder.append(',');
+				sb.append(',');
 		}
-		return builder.append(']').toString();
+		return sb.append(']').toString();
 	}
 
 	/**
@@ -57,23 +57,13 @@ public final class StringUtil {
 	public static final String toString(@Nullable String... strs) {
 		if (strs == null)
 			return StringConst.EMPTY;
-		StringBuilder builder = new StringBuilder(strs.length * 16).append('[');
+		StringBuilder sb = new StringBuilder(strs.length * 16).append('[');
 		for (int i = 0, j = strs.length - 1; i < strs.length; i++) {
-			builder.append(toString(strs[i]));
+			sb.append(toString(strs[i]));
 			if (i < j)
-				builder.append(',');
+				sb.append(',');
 		}
-		return builder.append(']').toString();
-	}
-
-	/**
-	 * 
-	 * @param b
-	 * @return
-	 */
-	@Nonnull
-	public static final String toString(@Nonnull byte b) {
-		return toString(new byte[] { b });
+		return sb.append(']').toString();
 	}
 
 	/**
@@ -82,18 +72,19 @@ public final class StringUtil {
 	 * @return
 	 */
 	@Nonnull
-	public static final String toString(@Nonnull byte[] bytes) {
-		return new String(bytes);
+	public static final String toString(@Nonnull byte... bytes) {
+		return toString(Charsets.UTF8, bytes);
 	}
 
 	/**
 	 * 
-	 * @param c
+	 * @param charset
+	 * @param bytes
 	 * @return
 	 */
 	@Nonnull
-	public static final String toString(@Nonnull char c) {
-		return toString(new char[] { c });
+	public static final String toString(@Nonnull Charset charset, @Nonnull byte... bytes) {
+		return bytes == null ? StringConst.NULL : new String(bytes, charset == null ? Charsets.UTF8 : charset);
 	}
 
 	/**
@@ -102,8 +93,8 @@ public final class StringUtil {
 	 * @return
 	 */
 	@Nonnull
-	public static final String toString(@Nonnull char[] chars) {
-		return new String(chars);
+	public static final String toString(@Nonnull char... chars) {
+		return chars == null ? StringConst.NULL : new String(chars);
 	}
 
 	/**
@@ -126,7 +117,7 @@ public final class StringUtil {
 	 * 
 	 */
 	@Nonnull
-	public static final String toStringWithReflection(Object obj) {
+	public static final String toStringShortPrefixStyle(Object obj) {
 		return obj == null ? StringConst.NULL
 				: ToStringBuilder.reflectionToString(obj, ToStringStyle.SHORT_PREFIX_STYLE, false);
 	}
@@ -141,7 +132,7 @@ public final class StringUtil {
 	 * 
 	 */
 	@Nonnull
-	public static final String toStringWithJson(Object obj) {
+	public static final String toStringJsonStyle(Object obj) {
 		return obj == null ? StringConst.NULL
 				: ToStringBuilder.reflectionToString(obj, ToStringStyle.JSON_STYLE, false);
 	}
@@ -369,25 +360,6 @@ public final class StringUtil {
 	}
 
 	/**
-	 * 
-	 * @param bytes
-	 * @return
-	 */
-	public static final String bytesToStr(byte[] bytes) {
-		return bytesToStr(bytes, Charsets.UTF8);
-	}
-
-	/**
-	 * 
-	 * @param bytes
-	 * @param charset
-	 * @return
-	 */
-	public static final String bytesToStr(byte[] bytes, Charset charset) {
-		return new String(bytes, charset);
-	}
-
-	/**
 	 * 是否为路径
 	 * 
 	 * @param path
@@ -503,6 +475,11 @@ public final class StringUtil {
 		return b;
 	}
 
+	/**
+	 * 
+	 * @param input
+	 * @return
+	 */
 	public static String getAsciiString(byte[] input) {
 		StringBuffer buf = new StringBuffer(input.length);
 		for (byte b : input) {

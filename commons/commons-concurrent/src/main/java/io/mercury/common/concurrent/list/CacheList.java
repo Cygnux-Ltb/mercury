@@ -7,6 +7,12 @@ import java.util.function.Supplier;
 import javax.annotation.CheckForNull;
 import javax.annotation.concurrent.ThreadSafe;
 
+/**
+ * 
+ * @author yellow013
+ *
+ * @param <T>
+ */
 @ThreadSafe
 public final class CacheList<T> {
 
@@ -14,6 +20,11 @@ public final class CacheList<T> {
 
 	private final Supplier<List<T>> refresher;
 
+	/**
+	 * 
+	 * @author yellow013
+	 *
+	 */
 	private final class Saved {
 
 		private volatile boolean available;
@@ -26,18 +37,16 @@ public final class CacheList<T> {
 
 	}
 
+	/**
+	 * 
+	 * @param refresher
+	 */
 	public CacheList(Supplier<List<T>> refresher) {
 		if (refresher == null)
 			throw new IllegalArgumentException("refresher is can't null...");
 		this.refresher = refresher;
 		this.savedRef = new AtomicReference<>(new Saved(true, refresher.get()));
 	}
-
-	/**
-	 * 
-	 * @param value
-	 * @return
-	 */
 
 	/**
 	 * 
@@ -48,6 +57,11 @@ public final class CacheList<T> {
 		return extractValue(savedRef.get());
 	}
 
+	/**
+	 * 
+	 * @param saved
+	 * @return
+	 */
 	private final List<T> extractValue(Saved saved) {
 		if (saved.available) {
 			return saved.value;
@@ -65,7 +79,6 @@ public final class CacheList<T> {
 	 * @return
 	 */
 	public CacheList<T> setUnavailable() {
-		savedRef.get().available = false;
 		savedRef.updateAndGet(save -> {
 			save.available = false;
 			return save;
