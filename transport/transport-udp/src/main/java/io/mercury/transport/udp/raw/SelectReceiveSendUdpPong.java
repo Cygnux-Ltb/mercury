@@ -39,89 +39,76 @@ import io.aeron.driver.Configuration;
  *
  * @see SendHackSelectReceiveUdpPing
  */
-public class SelectReceiveSendUdpPong
-{
-    /**
-     * Main method for launching the process.
-     *
-     * @param args passed to the process.
-     * @throws IOException if an error occurs with the channel.
-     */
-    public static void main(final String[] args) throws IOException
-    {
-        new SelectReceiveSendUdpPong().run();
-    }
+public class SelectReceiveSendUdpPong {
+	/**
+	 * Main method for launching the process.
+	 *
+	 * @param args passed to the process.
+	 * @throws IOException if an error occurs with the channel.
+	 */
+	public static void main(final String[] args) throws IOException {
+		new SelectReceiveSendUdpPong().run();
+	}
 
-    private void run() throws IOException
-    {
-        final InetSocketAddress sendAddress = new InetSocketAddress("localhost", Common.PONG_PORT);
+	private void run() throws IOException {
+		final InetSocketAddress sendAddress = new InetSocketAddress("localhost", Common.PONG_PORT);
 
-        final ByteBuffer buffer = ByteBuffer.allocateDirect(Configuration.MTU_LENGTH_DEFAULT);
+		final ByteBuffer buffer = ByteBuffer.allocateDirect(Configuration.MTU_LENGTH_DEFAULT);
 
-        final DatagramChannel receiveChannel = DatagramChannel.open();
-        Common.init(receiveChannel);
-        receiveChannel.bind(new InetSocketAddress("localhost", Common.PING_PORT));
+		final DatagramChannel receiveChannel = DatagramChannel.open();
+		Common.init(receiveChannel);
+		receiveChannel.bind(new InetSocketAddress("localhost", Common.PING_PORT));
 
-        final DatagramChannel sendChannel = DatagramChannel.open();
-        Common.init(sendChannel);
+		final DatagramChannel sendChannel = DatagramChannel.open();
+		Common.init(sendChannel);
 
-        final Selector selector = Selector.open();
+		final Selector selector = Selector.open();
 
-        final IntSupplier handler =
-            () ->
-            {
-                try
-                {
-                    buffer.clear();
-                    receiveChannel.receive(buffer);
+		final IntSupplier handler = () -> {
+			try {
+				buffer.clear();
+				receiveChannel.receive(buffer);
 
-                    final long receivedSequenceNumber = buffer.getLong(0);
-                    final long receivedTimestamp = buffer.getLong(SIZE_OF_LONG);
+				final long receivedSequenceNumber = buffer.getLong(0);
+				final long receivedTimestamp = buffer.getLong(SIZE_OF_LONG);
 
-                    buffer.clear();
-                    buffer.putLong(receivedSequenceNumber);
-                    buffer.putLong(receivedTimestamp);
-                    buffer.flip();
+				buffer.clear();
+				buffer.putLong(receivedSequenceNumber);
+				buffer.putLong(receivedTimestamp);
+				buffer.flip();
 
-                    sendChannel.send(buffer, sendAddress);
-                }
-                catch (final IOException ex)
-                {
-                    ex.printStackTrace();
-                }
+				sendChannel.send(buffer, sendAddress);
+			} catch (final IOException ex) {
+				ex.printStackTrace();
+			}
 
-                return 1;
-            };
+			return 1;
+		};
 
-        receiveChannel.register(selector, OP_READ, handler);
+		receiveChannel.register(selector, OP_READ, handler);
 
-        final AtomicBoolean running = new AtomicBoolean(true);
-        SigInt.register(() -> running.set(false));
+		final AtomicBoolean running = new AtomicBoolean(true);
+		SigInt.register(() -> running.set(false));
 
-        while (true)
-        {
-            while (selector.selectNow() == 0)
-            {
-                if (!running.get())
-                {
-                    return;
-                }
-                ThreadHints.onSpinWait();
-            }
+		while (true) {
+			while (selector.selectNow() == 0) {
+				if (!running.get()) {
+					return;
+				}
+				ThreadHints.onSpinWait();
+			}
 
-            final Set<SelectionKey> selectedKeys = selector.selectedKeys();
-            final Iterator<SelectionKey> iter = selectedKeys.iterator();
+			final Set<SelectionKey> selectedKeys = selector.selectedKeys();
+			final Iterator<SelectionKey> iter = selectedKeys.iterator();
 
-            while (iter.hasNext())
-            {
-                final SelectionKey key = iter.next();
-                if (key.isReadable())
-                {
-                    ((IntSupplier)key.attachment()).getAsInt();
-                }
+			while (iter.hasNext()) {
+				final SelectionKey key = iter.next();
+				if (key.isReadable()) {
+					((IntSupplier) key.attachment()).getAsInt();
+				}
 
-                iter.remove();
-            }
-        }
-    }
+				iter.remove();
+			}
+		}
+	}
 }

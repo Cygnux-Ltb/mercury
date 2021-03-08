@@ -58,5 +58,5 @@ class Samples {
 
 		return tempDirForTest;
 	}
-	
+
 }

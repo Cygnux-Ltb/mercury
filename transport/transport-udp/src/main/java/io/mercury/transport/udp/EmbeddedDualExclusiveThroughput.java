@@ -15,22 +15,28 @@
  */
 package io.mercury.transport.udp;
 
-import io.aeron.*;
-import io.aeron.driver.MediaDriver;
-import io.aeron.logbuffer.BufferClaim;
-import org.agrona.BitUtil;
-import org.agrona.BufferUtil;
-import org.agrona.concurrent.IdleStrategy;
-import org.agrona.concurrent.UnsafeBuffer;
-import org.agrona.console.ContinueBarrier;
+import static io.mercury.transport.udp.SamplesUtil.rateReporterHandler;
+import static org.agrona.SystemUtil.loadPropertiesFiles;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static io.mercury.transport.udp.SamplesUtil.rateReporterHandler;
-import static org.agrona.SystemUtil.loadPropertiesFiles;
+import org.agrona.BitUtil;
+import org.agrona.BufferUtil;
+import org.agrona.concurrent.IdleStrategy;
+import org.agrona.concurrent.UnsafeBuffer;
+import org.agrona.console.ContinueBarrier;
+
+import io.aeron.Aeron;
+import io.aeron.AvailableImageHandler;
+import io.aeron.ChannelUriStringBuilder;
+import io.aeron.CommonContext;
+import io.aeron.ExclusivePublication;
+import io.aeron.Subscription;
+import io.aeron.driver.MediaDriver;
+import io.aeron.logbuffer.BufferClaim;
 
 /**
  * Throughput test with dual {@link ExclusivePublication}s using
@@ -38,7 +44,7 @@ import static org.agrona.SystemUtil.loadPropertiesFiles;
  * sources into a single {@link Subscription} over UDP transport.
  */
 public class EmbeddedDualExclusiveThroughput {
-	
+
 	private static final long NUMBER_OF_MESSAGES = SampleConfiguration.NUMBER_OF_MESSAGES;
 	private static final long LINGER_TIMEOUT_MS = SampleConfiguration.LINGER_TIMEOUT_MS;
 	private static final int STREAM_ID = SampleConfiguration.STREAM_ID;

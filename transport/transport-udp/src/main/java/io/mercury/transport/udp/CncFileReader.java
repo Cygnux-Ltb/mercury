@@ -15,9 +15,16 @@
  */
 package io.mercury.transport.udp;
 
-import io.aeron.CncFileDescriptor;
-import io.aeron.CommonContext;
-import io.aeron.exceptions.AeronException;
+import static io.aeron.CncFileDescriptor.checkVersion;
+import static io.aeron.CncFileDescriptor.cncVersionOffset;
+import static io.aeron.CncFileDescriptor.createCountersMetaDataBuffer;
+import static io.aeron.CncFileDescriptor.createCountersValuesBuffer;
+import static io.aeron.CncFileDescriptor.createMetaDataBuffer;
+import static io.mercury.transport.udp.SamplesUtil.mapExistingFileReadOnly;
+
+import java.io.File;
+import java.nio.MappedByteBuffer;
+
 import org.agrona.DirectBuffer;
 import org.agrona.IoUtil;
 import org.agrona.SemanticVersion;
@@ -25,127 +32,113 @@ import org.agrona.concurrent.UnsafeBuffer;
 import org.agrona.concurrent.ringbuffer.RingBufferDescriptor;
 import org.agrona.concurrent.status.CountersReader;
 
-import java.io.File;
-import java.nio.MappedByteBuffer;
-
-import static io.aeron.CncFileDescriptor.*;
-import static io.mercury.transport.udp.SamplesUtil.mapExistingFileReadOnly;
+import io.aeron.CncFileDescriptor;
+import io.aeron.CommonContext;
+import io.aeron.exceptions.AeronException;
 
 /**
- * Reader for Aeron CnC file represented by {@link CncFileDescriptor} which can be used for observability.
+ * Reader for Aeron CnC file represented by {@link CncFileDescriptor} which can
+ * be used for observability.
  */
-public final class CncFileReader implements AutoCloseable
-{
-    private boolean isClosed = false;
-    private final int cncVersion;
-    private final String cncSemanticVersion;
-    private final MappedByteBuffer cncByteBuffer;
-    private final CountersReader countersReader;
-    private final UnsafeBuffer toDriverBuffer;
+public final class CncFileReader implements AutoCloseable {
+	private boolean isClosed = false;
+	private final int cncVersion;
+	private final String cncSemanticVersion;
+	private final MappedByteBuffer cncByteBuffer;
+	private final CountersReader countersReader;
+	private final UnsafeBuffer toDriverBuffer;
 
-    private CncFileReader(final MappedByteBuffer cncByteBuffer)
-    {
-        this.cncByteBuffer = cncByteBuffer;
+	private CncFileReader(final MappedByteBuffer cncByteBuffer) {
+		this.cncByteBuffer = cncByteBuffer;
 
-        final DirectBuffer cncMetaDataBuffer = createMetaDataBuffer(cncByteBuffer);
-        final int cncVersion = cncMetaDataBuffer.getInt(cncVersionOffset(0));
+		final DirectBuffer cncMetaDataBuffer = createMetaDataBuffer(cncByteBuffer);
+		final int cncVersion = cncMetaDataBuffer.getInt(cncVersionOffset(0));
 
-        try
-        {
-            checkVersion(cncVersion);
-        }
-        catch (final AeronException e)
-        {
-            IoUtil.unmap(cncByteBuffer);
-            throw e;
-        }
+		try {
+			checkVersion(cncVersion);
+		} catch (final AeronException e) {
+			IoUtil.unmap(cncByteBuffer);
+			throw e;
+		}
 
-        this.cncVersion = cncVersion;
-        this.cncSemanticVersion = SemanticVersion.toString(cncVersion);
+		this.cncVersion = cncVersion;
+		this.cncSemanticVersion = SemanticVersion.toString(cncVersion);
 
-        this.toDriverBuffer = CncFileDescriptor.createToDriverBuffer(cncByteBuffer, cncMetaDataBuffer);
+		this.toDriverBuffer = CncFileDescriptor.createToDriverBuffer(cncByteBuffer, cncMetaDataBuffer);
 
-        this.countersReader = new CountersReader(
-            createCountersMetaDataBuffer(cncByteBuffer, cncMetaDataBuffer),
-            createCountersValuesBuffer(cncByteBuffer, cncMetaDataBuffer));
-    }
+		this.countersReader = new CountersReader(createCountersMetaDataBuffer(cncByteBuffer, cncMetaDataBuffer),
+				createCountersValuesBuffer(cncByteBuffer, cncMetaDataBuffer));
+	}
 
-    /**
-     * Map an existing CnC file.
-     *
-     * @return the {@link CncFileReader} wrapper for reading useful data from the cnc file.
-     * @throws AeronException if the cnc version major version is not compatible.
-     */
-    public static CncFileReader map()
-    {
-        final File cncFile = CommonContext.newDefaultCncFile();
-        final MappedByteBuffer cncByteBuffer = mapExistingFileReadOnly(cncFile);
+	/**
+	 * Map an existing CnC file.
+	 *
+	 * @return the {@link CncFileReader} wrapper for reading useful data from the
+	 *         cnc file.
+	 * @throws AeronException if the cnc version major version is not compatible.
+	 */
+	public static CncFileReader map() {
+		final File cncFile = CommonContext.newDefaultCncFile();
+		final MappedByteBuffer cncByteBuffer = mapExistingFileReadOnly(cncFile);
 
-        return new CncFileReader(cncByteBuffer);
-    }
+		return new CncFileReader(cncByteBuffer);
+	}
 
-    /**
-     * Get the cnc version.
-     *
-     * @return the cnc version.
-     */
-    public int cncVersion()
-    {
-        return cncVersion;
-    }
+	/**
+	 * Get the cnc version.
+	 *
+	 * @return the cnc version.
+	 */
+	public int cncVersion() {
+		return cncVersion;
+	}
 
-    /**
-     * Get the cnc semantic version.
-     *
-     * @return the cnc semantic version.
-     */
-    public String semanticVersion()
-    {
-        return cncSemanticVersion;
-    }
+	/**
+	 * Get the cnc semantic version.
+	 *
+	 * @return the cnc semantic version.
+	 */
+	public String semanticVersion() {
+		return cncSemanticVersion;
+	}
 
-    /**
-     * Get the counters reader for querying counter values.
-     *
-     * @return the counters reader.
-     */
-    public CountersReader countersReader()
-    {
-        return countersReader;
-    }
+	/**
+	 * Get the counters reader for querying counter values.
+	 *
+	 * @return the counters reader.
+	 */
+	public CountersReader countersReader() {
+		return countersReader;
+	}
 
-    /**
-     * Get the epoch timestamp (ms) of the last driver heartbeat.
-     *
-     * @return the epoch timestamp (ms) of the last driver heartbeat.
-     */
-    public long driverHeartbeatMs()
-    {
-        final int timestampOffset = (toDriverBuffer.capacity() - RingBufferDescriptor.TRAILER_LENGTH) +
-            RingBufferDescriptor.CONSUMER_HEARTBEAT_OFFSET;
+	/**
+	 * Get the epoch timestamp (ms) of the last driver heartbeat.
+	 *
+	 * @return the epoch timestamp (ms) of the last driver heartbeat.
+	 */
+	public long driverHeartbeatMs() {
+		final int timestampOffset = (toDriverBuffer.capacity() - RingBufferDescriptor.TRAILER_LENGTH)
+				+ RingBufferDescriptor.CONSUMER_HEARTBEAT_OFFSET;
 
-        return toDriverBuffer.getLongVolatile(timestampOffset);
-    }
+		return toDriverBuffer.getLongVolatile(timestampOffset);
+	}
 
-    /**
-     * Get the number of milliseconds since the last driver heartbeat.
-     *
-     * @return the number of milliseconds since the last driver heartbeat.
-     */
-    public long driverHeartbeatAgeMs()
-    {
-        return System.currentTimeMillis() - driverHeartbeatMs();
-    }
+	/**
+	 * Get the number of milliseconds since the last driver heartbeat.
+	 *
+	 * @return the number of milliseconds since the last driver heartbeat.
+	 */
+	public long driverHeartbeatAgeMs() {
+		return System.currentTimeMillis() - driverHeartbeatMs();
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public void close()
-    {
-        if (!isClosed)
-        {
-            isClosed = true;
-            IoUtil.unmap(cncByteBuffer);
-        }
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	public void close() {
+		if (!isClosed) {
+			isClosed = true;
+			IoUtil.unmap(cncByteBuffer);
+		}
+	}
 }

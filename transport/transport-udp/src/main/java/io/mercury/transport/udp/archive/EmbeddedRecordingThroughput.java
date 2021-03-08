@@ -44,131 +44,105 @@ import io.mercury.transport.udp.SampleConfiguration;
 /**
  * Tests the throughput when recording a stream of messages.
  */
-public class EmbeddedRecordingThroughput implements AutoCloseable
-{
-    private static final long NUMBER_OF_MESSAGES = SampleConfiguration.NUMBER_OF_MESSAGES;
-    private static final int MESSAGE_LENGTH = SampleConfiguration.MESSAGE_LENGTH;
-    private static final int STREAM_ID = SampleConfiguration.STREAM_ID;
-    private static final String CHANNEL = SampleConfiguration.CHANNEL;
+public class EmbeddedRecordingThroughput implements AutoCloseable {
+	private static final long NUMBER_OF_MESSAGES = SampleConfiguration.NUMBER_OF_MESSAGES;
+	private static final int MESSAGE_LENGTH = SampleConfiguration.MESSAGE_LENGTH;
+	private static final int STREAM_ID = SampleConfiguration.STREAM_ID;
+	private static final String CHANNEL = SampleConfiguration.CHANNEL;
 
-    private final ArchivingMediaDriver archivingMediaDriver;
-    private final Aeron aeron;
-    private final AeronArchive aeronArchive;
-    private final UnsafeBuffer buffer = new UnsafeBuffer(allocateDirectAligned(MESSAGE_LENGTH, CACHE_LINE_LENGTH));
+	private final ArchivingMediaDriver archivingMediaDriver;
+	private final Aeron aeron;
+	private final AeronArchive aeronArchive;
+	private final UnsafeBuffer buffer = new UnsafeBuffer(allocateDirectAligned(MESSAGE_LENGTH, CACHE_LINE_LENGTH));
 
-    /**
-     * Main method for launching the process.
-     *
-     * @param args passed to the process.
-     */
-    public static void main(final String[] args)
-    {
-        loadPropertiesFiles(args);
+	/**
+	 * Main method for launching the process.
+	 *
+	 * @param args passed to the process.
+	 */
+	public static void main(final String[] args) {
+		loadPropertiesFiles(args);
 
-        try (EmbeddedRecordingThroughput test = new EmbeddedRecordingThroughput())
-        {
-            test.startRecording();
-            long previousRecordingId = Aeron.NULL_VALUE;
+		try (EmbeddedRecordingThroughput test = new EmbeddedRecordingThroughput()) {
+			test.startRecording();
+			long previousRecordingId = Aeron.NULL_VALUE;
 
-            final ContinueBarrier barrier = new ContinueBarrier("Execute again?");
-            do
-            {
-                if (Aeron.NULL_VALUE != previousRecordingId)
-                {
-                    test.truncateRecording(previousRecordingId);
-                }
+			final ContinueBarrier barrier = new ContinueBarrier("Execute again?");
+			do {
+				if (Aeron.NULL_VALUE != previousRecordingId) {
+					test.truncateRecording(previousRecordingId);
+				}
 
-                previousRecordingId = test.streamMessagesForRecording();
-            }
-            while (barrier.await());
-        }
-    }
+				previousRecordingId = test.streamMessagesForRecording();
+			} while (barrier.await());
+		}
+	}
 
-    EmbeddedRecordingThroughput()
-    {
-        final String archiveDirName = Archive.Configuration.archiveDirName();
-        final File archiveDir = ARCHIVE_DIR_DEFAULT.equals(archiveDirName) ?
-            Samples.createTempDir() : new File(archiveDirName);
+	EmbeddedRecordingThroughput() {
+		final String archiveDirName = Archive.Configuration.archiveDirName();
+		final File archiveDir = ARCHIVE_DIR_DEFAULT.equals(archiveDirName) ? Samples.createTempDir()
+				: new File(archiveDirName);
 
-        archivingMediaDriver = ArchivingMediaDriver.launch(
-            new MediaDriver.Context()
-                .spiesSimulateConnection(true)
-                .dirDeleteOnStart(true),
-            new Archive.Context()
-                .recordingEventsEnabled(false)
-                .archiveDir(archiveDir));
+		archivingMediaDriver = ArchivingMediaDriver.launch(
+				new MediaDriver.Context().spiesSimulateConnection(true).dirDeleteOnStart(true),
+				new Archive.Context().recordingEventsEnabled(false).archiveDir(archiveDir));
 
-        aeron = Aeron.connect();
+		aeron = Aeron.connect();
 
-        aeronArchive = AeronArchive.connect(
-            new AeronArchive.Context()
-                .aeron(aeron));
-    }
+		aeronArchive = AeronArchive.connect(new AeronArchive.Context().aeron(aeron));
+	}
 
-    public void close()
-    {
-        CloseHelper.closeAll(
-            aeronArchive,
-            aeron,
-            archivingMediaDriver,
-            () -> archivingMediaDriver.archive().context().deleteDirectory(),
-            () -> archivingMediaDriver.mediaDriver().context().deleteDirectory());
-    }
+	public void close() {
+		CloseHelper.closeAll(aeronArchive, aeron, archivingMediaDriver,
+				() -> archivingMediaDriver.archive().context().deleteDirectory(),
+				() -> archivingMediaDriver.mediaDriver().context().deleteDirectory());
+	}
 
-    private long streamMessagesForRecording()
-    {
-        try (ExclusivePublication publication = aeron.addExclusivePublication(CHANNEL, STREAM_ID))
-        {
-            final IdleStrategy idleStrategy = YieldingIdleStrategy.INSTANCE;
-            while (!publication.isConnected())
-            {
-                idleStrategy.idle();
-            }
+	private long streamMessagesForRecording() {
+		try (ExclusivePublication publication = aeron.addExclusivePublication(CHANNEL, STREAM_ID)) {
+			final IdleStrategy idleStrategy = YieldingIdleStrategy.INSTANCE;
+			while (!publication.isConnected()) {
+				idleStrategy.idle();
+			}
 
-            final long startNs = System.nanoTime();
-            final UnsafeBuffer buffer = this.buffer;
+			final long startNs = System.nanoTime();
+			final UnsafeBuffer buffer = this.buffer;
 
-            for (long i = 0; i < NUMBER_OF_MESSAGES; i++)
-            {
-                buffer.putLong(0, i);
+			for (long i = 0; i < NUMBER_OF_MESSAGES; i++) {
+				buffer.putLong(0, i);
 
-                idleStrategy.reset();
-                while (publication.offer(buffer, 0, MESSAGE_LENGTH) < 0)
-                {
-                    idleStrategy.idle();
-                }
-            }
+				idleStrategy.reset();
+				while (publication.offer(buffer, 0, MESSAGE_LENGTH) < 0) {
+					idleStrategy.idle();
+				}
+			}
 
-            final long stopPosition = publication.position();
-            final CountersReader counters = aeron.countersReader();
-            final int counterId = RecordingPos.findCounterIdBySession(counters, publication.sessionId());
+			final long stopPosition = publication.position();
+			final CountersReader counters = aeron.countersReader();
+			final int counterId = RecordingPos.findCounterIdBySession(counters, publication.sessionId());
 
-            idleStrategy.reset();
-            while (counters.getCounterValue(counterId) < stopPosition)
-            {
-                idleStrategy.idle();
-            }
+			idleStrategy.reset();
+			while (counters.getCounterValue(counterId) < stopPosition) {
+				idleStrategy.idle();
+			}
 
-            final long durationMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs);
-            final double dataRate = (stopPosition * 1000.0d / durationMs) / MEGABYTE;
-            final double recordingMb = stopPosition / MEGABYTE;
-            final long msgRate = (NUMBER_OF_MESSAGES / durationMs) * 1000L;
+			final long durationMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs);
+			final double dataRate = (stopPosition * 1000.0d / durationMs) / MEGABYTE;
+			final double recordingMb = stopPosition / MEGABYTE;
+			final long msgRate = (NUMBER_OF_MESSAGES / durationMs) * 1000L;
 
-            System.out.printf(
-                "Recorded %.02f MB @ %.02f MB/s - %,d msg/sec - %d byte payload + 32 byte header%n",
-                recordingMb, dataRate, msgRate, MESSAGE_LENGTH);
+			System.out.printf("Recorded %.02f MB @ %.02f MB/s - %,d msg/sec - %d byte payload + 32 byte header%n",
+					recordingMb, dataRate, msgRate, MESSAGE_LENGTH);
 
-            return RecordingPos.getRecordingId(counters, counterId);
-        }
-    }
+			return RecordingPos.getRecordingId(counters, counterId);
+		}
+	}
 
-    private void startRecording()
-    {
-        aeronArchive.startRecording(CHANNEL, STREAM_ID, SourceLocation.LOCAL);
-    }
+	private void startRecording() {
+		aeronArchive.startRecording(CHANNEL, STREAM_ID, SourceLocation.LOCAL);
+	}
 
-    private void truncateRecording(final long previousRecordingId)
-    {
-        aeronArchive.truncateRecording(previousRecordingId, 0L);
-    }
+	private void truncateRecording(final long previousRecordingId) {
+		aeronArchive.truncateRecording(previousRecordingId, 0L);
+	}
 }

@@ -15,42 +15,39 @@
  */
 package io.mercury.transport.udp;
 
-import io.aeron.driver.MediaDriver;
-import io.aeron.driver.ThreadingMode;
+import static org.agrona.SystemUtil.loadPropertiesFiles;
+
 import org.agrona.concurrent.BusySpinIdleStrategy;
 import org.agrona.concurrent.NoOpIdleStrategy;
 import org.agrona.concurrent.ShutdownSignalBarrier;
 
-import static org.agrona.SystemUtil.loadPropertiesFiles;
+import io.aeron.driver.MediaDriver;
+import io.aeron.driver.ThreadingMode;
 
 /**
- * Sample setup for a {@link MediaDriver} that is configured for low latency communications. This configuration
- * requires sufficient CPU resource to delivery low latency performance, i.e. 3 active polling threads.
+ * Sample setup for a {@link MediaDriver} that is configured for low latency
+ * communications. This configuration requires sufficient CPU resource to
+ * delivery low latency performance, i.e. 3 active polling threads.
  */
-public class LowLatencyMediaDriver
-{
-    /**
-     * Main method for launching the process.
-     *
-     * @param args passed to the process which will be used for loading properties files.
-     */
-    public static void main(final String[] args)
-    {
-        loadPropertiesFiles(args);
+public class LowLatencyMediaDriver {
+	/**
+	 * Main method for launching the process.
+	 *
+	 * @param args passed to the process which will be used for loading properties
+	 *             files.
+	 */
+	public static void main(final String[] args) {
+		loadPropertiesFiles(args);
 
-        final MediaDriver.Context ctx = new MediaDriver.Context()
-            .termBufferSparseFile(false)
-            .useWindowsHighResTimer(true)
-            .threadingMode(ThreadingMode.DEDICATED)
-            .conductorIdleStrategy(BusySpinIdleStrategy.INSTANCE)
-            .receiverIdleStrategy(NoOpIdleStrategy.INSTANCE)
-            .senderIdleStrategy(NoOpIdleStrategy.INSTANCE);
+		final MediaDriver.Context ctx = new MediaDriver.Context().termBufferSparseFile(false)
+				.useWindowsHighResTimer(true).threadingMode(ThreadingMode.DEDICATED)
+				.conductorIdleStrategy(BusySpinIdleStrategy.INSTANCE).receiverIdleStrategy(NoOpIdleStrategy.INSTANCE)
+				.senderIdleStrategy(NoOpIdleStrategy.INSTANCE);
 
-        try (MediaDriver ignored = MediaDriver.launch(ctx))
-        {
-            new ShutdownSignalBarrier().await();
+		try (MediaDriver ignored = MediaDriver.launch(ctx)) {
+			new ShutdownSignalBarrier().await();
 
-            System.out.println("Shutdown Driver...");
-        }
-    }
+			System.out.println("Shutdown Driver...");
+		}
+	}
 }

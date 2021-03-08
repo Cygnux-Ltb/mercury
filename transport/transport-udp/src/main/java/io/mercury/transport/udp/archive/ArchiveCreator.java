@@ -38,154 +38,120 @@ import io.aeron.logbuffer.FrameDescriptor;
 import io.aeron.logbuffer.LogBufferDescriptor;
 
 /**
- * Command line utility for creating a new Archive for migration testing and replay.
+ * Command line utility for creating a new Archive for migration testing and
+ * replay.
  * <p>
- * Creates 2 recordings, one starts at position 0 and the other starts in the second term.
+ * Creates 2 recordings, one starts at position 0 and the other starts in the
+ * second term.
  */
-public class ArchiveCreator
-{
-    private static final String MESSAGE_PREFIX = "Message-Prefix-";
-    @SuppressWarnings("unused")
+public class ArchiveCreator {
+	private static final String MESSAGE_PREFIX = "Message-Prefix-";
+	@SuppressWarnings("unused")
 	private static final long CATALOG_CAPACITY = 128 * 1024;
-    private static final int TERM_LENGTH = LogBufferDescriptor.TERM_MIN_LENGTH;
-    private static final int SEGMENT_LENGTH = TERM_LENGTH * 2;
-    private static final int STREAM_ID = 33;
+	private static final int TERM_LENGTH = LogBufferDescriptor.TERM_MIN_LENGTH;
+	private static final int SEGMENT_LENGTH = TERM_LENGTH * 2;
+	private static final int STREAM_ID = 33;
 
-    private static int recordingNumber = 0;
+	private static int recordingNumber = 0;
 
-    /**
-     * Main method for launching the process.
-     *
-     * @param args passed to the process.
-     */
-    public static void main(final String[] args)
-    {
-        final String archiveDirName = Archive.Configuration.archiveDirName();
-        final File archiveDir = ARCHIVE_DIR_DEFAULT.equals(archiveDirName) ?
-            new File("archive") : new File(archiveDirName);
+	/**
+	 * Main method for launching the process.
+	 *
+	 * @param args passed to the process.
+	 */
+	public static void main(final String[] args) {
+		final String archiveDirName = Archive.Configuration.archiveDirName();
+		final File archiveDir = ARCHIVE_DIR_DEFAULT.equals(archiveDirName) ? new File("archive")
+				: new File(archiveDirName);
 
-        final MediaDriver.Context driverContext = new MediaDriver.Context()
-            .publicationTermBufferLength(TERM_LENGTH)
-            .termBufferSparseFile(true)
-            .threadingMode(ThreadingMode.SHARED)
-            .errorHandler(Throwable::printStackTrace)
-            .spiesSimulateConnection(true)
-            .dirDeleteOnStart(true);
+		final MediaDriver.Context driverContext = new MediaDriver.Context().publicationTermBufferLength(TERM_LENGTH)
+				.termBufferSparseFile(true).threadingMode(ThreadingMode.SHARED).errorHandler(Throwable::printStackTrace)
+				.spiesSimulateConnection(true).dirDeleteOnStart(true);
 
-        final Archive.Context archiveContext = new Archive.Context()
-            //error ?
-        	//.catalogCapacity(CATALOG_CAPACITY)
-            .segmentFileLength(SEGMENT_LENGTH)
-            .deleteArchiveOnStart(true)
-            .archiveDir(archiveDir)
-            .fileSyncLevel(0)
-            .threadingMode(ArchiveThreadingMode.SHARED);
+		final Archive.Context archiveContext = new Archive.Context()
+				// error ?
+				// .catalogCapacity(CATALOG_CAPACITY)
+				.segmentFileLength(SEGMENT_LENGTH).deleteArchiveOnStart(true).archiveDir(archiveDir).fileSyncLevel(0)
+				.threadingMode(ArchiveThreadingMode.SHARED);
 
-        System.out.println("Creating basic archive at " + archiveContext.archiveDir());
+		System.out.println("Creating basic archive at " + archiveContext.archiveDir());
 
-        try (ArchivingMediaDriver ignore = ArchivingMediaDriver.launch(driverContext, archiveContext);
-            Aeron aeron = Aeron.connect();
-            AeronArchive aeronArchive = AeronArchive.connect(new AeronArchive.Context().aeron(aeron)))
-        {
-            createRecording(
-                aeron,
-                aeronArchive,
-                0,
-                (SEGMENT_LENGTH * 5L) + 1);
+		try (ArchivingMediaDriver ignore = ArchivingMediaDriver.launch(driverContext, archiveContext);
+				Aeron aeron = Aeron.connect();
+				AeronArchive aeronArchive = AeronArchive.connect(new AeronArchive.Context().aeron(aeron))) {
+			createRecording(aeron, aeronArchive, 0, (SEGMENT_LENGTH * 5L) + 1);
 
-            createRecording(
-                aeron,
-                aeronArchive,
-                (long)TERM_LENGTH + (FrameDescriptor.FRAME_ALIGNMENT * 2),
-                (SEGMENT_LENGTH * 3L) + 1);
+			createRecording(aeron, aeronArchive, (long) TERM_LENGTH + (FrameDescriptor.FRAME_ALIGNMENT * 2),
+					(SEGMENT_LENGTH * 3L) + 1);
 
-        }
-        catch (final Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
+		} catch (final Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 
-    private static void createRecording(
-        final Aeron aeron, final AeronArchive aeronArchive, final long startPosition, final long targetPosition)
-    {
-        final int initialTermId = 7;
-        recordingNumber++;
-        final ChannelUriStringBuilder uriBuilder = new ChannelUriStringBuilder()
-            .media("udp")
-            .endpoint("localhost:" + recordingNumber)
-            .termLength(TERM_LENGTH);
+	private static void createRecording(final Aeron aeron, final AeronArchive aeronArchive, final long startPosition,
+			final long targetPosition) {
+		final int initialTermId = 7;
+		recordingNumber++;
+		final ChannelUriStringBuilder uriBuilder = new ChannelUriStringBuilder().media("udp")
+				.endpoint("localhost:" + recordingNumber).termLength(TERM_LENGTH);
 
-        if (startPosition > 0)
-        {
-            uriBuilder.initialPosition(startPosition, initialTermId, TERM_LENGTH);
-        }
+		if (startPosition > 0) {
+			uriBuilder.initialPosition(startPosition, initialTermId, TERM_LENGTH);
+		}
 
-        try (Publication publication = aeronArchive.addRecordedExclusivePublication(uriBuilder.build(), STREAM_ID))
-        {
-            final CountersReader counters = aeron.countersReader();
-            final int counterId = awaitRecordingCounterId(counters, publication.sessionId());
-            final long recordingId = RecordingPos.getRecordingId(counters, counterId);
+		try (Publication publication = aeronArchive.addRecordedExclusivePublication(uriBuilder.build(), STREAM_ID)) {
+			final CountersReader counters = aeron.countersReader();
+			final int counterId = awaitRecordingCounterId(counters, publication.sessionId());
+			final long recordingId = RecordingPos.getRecordingId(counters, counterId);
 
-            System.out.println(
-                "recordingId=" + recordingId +
-                " position " + publication.position() +
-                " to " + targetPosition);
+			System.out.println(
+					"recordingId=" + recordingId + " position " + publication.position() + " to " + targetPosition);
 
-            offerToPosition(publication, targetPosition);
-            awaitPosition(counters, counterId, publication.position());
+			offerToPosition(publication, targetPosition);
+			awaitPosition(counters, counterId, publication.position());
 
-            aeronArchive.stopRecording(publication);
-        }
-    }
+			aeronArchive.stopRecording(publication);
+		}
+	}
 
-    private static void checkInterruptStatus()
-    {
-        if (Thread.interrupted())
-        {
-            LangUtil.rethrowUnchecked(new InterruptedException());
-        }
-    }
+	private static void checkInterruptStatus() {
+		if (Thread.interrupted()) {
+			LangUtil.rethrowUnchecked(new InterruptedException());
+		}
+	}
 
-    private static int awaitRecordingCounterId(final CountersReader counters, final int sessionId)
-    {
-        int counterId;
-        while (NULL_VALUE == (counterId = RecordingPos.findCounterIdBySession(counters, sessionId)))
-        {
-            Thread.yield();
-            checkInterruptStatus();
-        }
+	private static int awaitRecordingCounterId(final CountersReader counters, final int sessionId) {
+		int counterId;
+		while (NULL_VALUE == (counterId = RecordingPos.findCounterIdBySession(counters, sessionId))) {
+			Thread.yield();
+			checkInterruptStatus();
+		}
 
-        return counterId;
-    }
+		return counterId;
+	}
 
-    private static void offerToPosition(final Publication publication, final long minimumPosition)
-    {
-        final ExpandableArrayBuffer buffer = new ExpandableArrayBuffer();
+	private static void offerToPosition(final Publication publication, final long minimumPosition) {
+		final ExpandableArrayBuffer buffer = new ExpandableArrayBuffer();
 
-        for (int i = 0; publication.position() < minimumPosition; i++)
-        {
-            final int length = buffer.putStringWithoutLengthAscii(0, MESSAGE_PREFIX + i);
+		for (int i = 0; publication.position() < minimumPosition; i++) {
+			final int length = buffer.putStringWithoutLengthAscii(0, MESSAGE_PREFIX + i);
 
-            while (publication.offer(buffer, 0, length) <= 0)
-            {
-                Thread.yield();
-                checkInterruptStatus();
-            }
-        }
-    }
+			while (publication.offer(buffer, 0, length) <= 0) {
+				Thread.yield();
+				checkInterruptStatus();
+			}
+		}
+	}
 
-    private static void awaitPosition(final CountersReader counters, final int counterId, final long position)
-    {
-        while (counters.getCounterValue(counterId) < position)
-        {
-            if (counters.getCounterState(counterId) != CountersReader.RECORD_ALLOCATED)
-            {
-                throw new IllegalStateException("count not active: " + counterId);
-            }
+	private static void awaitPosition(final CountersReader counters, final int counterId, final long position) {
+		while (counters.getCounterValue(counterId) < position) {
+			if (counters.getCounterState(counterId) != CountersReader.RECORD_ALLOCATED) {
+				throw new IllegalStateException("count not active: " + counterId);
+			}
 
-            Thread.yield();
-            checkInterruptStatus();
-        }
-    }
+			Thread.yield();
+			checkInterruptStatus();
+		}
+	}
 }

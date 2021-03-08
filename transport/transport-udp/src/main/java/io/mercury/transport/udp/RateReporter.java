@@ -15,9 +15,9 @@
  */
 package io.mercury.transport.udp;
 
-import java.util.concurrent.locks.LockSupport;
-
 import static org.agrona.UnsafeAccess.UNSAFE;
+
+import java.util.concurrent.locks.LockSupport;
 
 class RateReporterLhsPadding {
 	byte p000, p001, p002, p003, p004, p005, p006, p007, p008, p009, p010, p011, p012, p013, p014, p015;
@@ -28,7 +28,7 @@ class RateReporterLhsPadding {
 
 @SuppressWarnings("restriction")
 class RateReporterValues extends RateReporterLhsPadding {
-	
+
 	static final long TOTAL_BYTES_OFFSET;
 	static final long TOTAL_MESSAGES_OFFSET;
 

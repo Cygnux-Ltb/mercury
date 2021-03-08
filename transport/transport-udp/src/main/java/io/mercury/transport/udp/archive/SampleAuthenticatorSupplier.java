@@ -19,15 +19,14 @@ import io.aeron.security.Authenticator;
 import io.aeron.security.AuthenticatorSupplier;
 
 /**
- * Sample {@link AuthenticatorSupplier} which returns a new {@link SampleAuthenticator}.
+ * Sample {@link AuthenticatorSupplier} which returns a new
+ * {@link SampleAuthenticator}.
  */
-public class SampleAuthenticatorSupplier implements AuthenticatorSupplier
-{
-    /**
-     * {@inheritDoc}
-     */
-    public Authenticator get()
-    {
-        return new SampleAuthenticator();
-    }
+public class SampleAuthenticatorSupplier implements AuthenticatorSupplier {
+	/**
+	 * {@inheritDoc}
+	 */
+	public Authenticator get() {
+		return new SampleAuthenticator();
+	}
 }

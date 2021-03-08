@@ -15,115 +15,110 @@
  */
 package io.mercury.transport.udp;
 
-import io.aeron.*;
-import io.aeron.driver.MediaDriver;
-import io.aeron.driver.ThreadingMode;
-import io.aeron.logbuffer.BufferClaim;
-import org.agrona.concurrent.IdleStrategy;
-import org.agrona.concurrent.SigInt;
+import static org.agrona.SystemUtil.loadPropertiesFiles;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.agrona.SystemUtil.loadPropertiesFiles;
+import org.agrona.concurrent.IdleStrategy;
+import org.agrona.concurrent.SigInt;
+
+import io.aeron.Aeron;
+import io.aeron.CommonContext;
+import io.aeron.ExclusivePublication;
+import io.aeron.Publication;
+import io.aeron.Subscription;
+import io.aeron.driver.MediaDriver;
+import io.aeron.driver.ThreadingMode;
+import io.aeron.logbuffer.BufferClaim;
 
 /**
- * Throughput test using {@link ExclusivePublication#tryClaim(int, BufferClaim)} over IPC transport.
+ * Throughput test using {@link ExclusivePublication#tryClaim(int, BufferClaim)}
+ * over IPC transport.
  */
-public class EmbeddedExclusiveBufferClaimIpcThroughput
-{
-    private static final int BURST_LENGTH = 1_000_000;
-    private static final int MESSAGE_LENGTH = SampleConfiguration.MESSAGE_LENGTH;
-    private static final int FRAGMENT_COUNT_LIMIT = SampleConfiguration.FRAGMENT_COUNT_LIMIT;
-    private static final String CHANNEL = CommonContext.IPC_CHANNEL;
-    private static final int STREAM_ID = SampleConfiguration.STREAM_ID;
+public class EmbeddedExclusiveBufferClaimIpcThroughput {
+	private static final int BURST_LENGTH = 1_000_000;
+	private static final int MESSAGE_LENGTH = SampleConfiguration.MESSAGE_LENGTH;
+	private static final int FRAGMENT_COUNT_LIMIT = SampleConfiguration.FRAGMENT_COUNT_LIMIT;
+	private static final String CHANNEL = CommonContext.IPC_CHANNEL;
+	private static final int STREAM_ID = SampleConfiguration.STREAM_ID;
 
-    /**
-     * Main method for launching the process.
-     *
-     * @param args passed to the process.
-     * @throws InterruptedException if the join on the created threads is interrupted.
-     */
-    public static void main(final String[] args) throws InterruptedException
-    {
-        loadPropertiesFiles(args);
+	/**
+	 * Main method for launching the process.
+	 *
+	 * @param args passed to the process.
+	 * @throws InterruptedException if the join on the created threads is
+	 *                              interrupted.
+	 */
+	public static void main(final String[] args) throws InterruptedException {
+		loadPropertiesFiles(args);
 
-        final AtomicBoolean running = new AtomicBoolean(true);
-        SigInt.register(() -> running.set(false));
+		final AtomicBoolean running = new AtomicBoolean(true);
+		SigInt.register(() -> running.set(false));
 
-        final MediaDriver.Context ctx = new MediaDriver.Context()
-            .threadingMode(ThreadingMode.SHARED);
+		final MediaDriver.Context ctx = new MediaDriver.Context().threadingMode(ThreadingMode.SHARED);
 
-        try (MediaDriver ignore = MediaDriver.launch(ctx);
-            Aeron aeron = Aeron.connect();
-            Subscription subscription = aeron.addSubscription(CHANNEL, STREAM_ID);
-            Publication publication = aeron.addExclusivePublication(CHANNEL, STREAM_ID))
-        {
-            final ImageRateSubscriber subscriber = new ImageRateSubscriber(FRAGMENT_COUNT_LIMIT, running, subscription);
-            final Thread subscriberThread = new Thread(subscriber);
-            subscriberThread.setName("subscriber");
-            final Thread publisherThread = new Thread(new Publisher(running, publication));
-            publisherThread.setName("publisher");
-            final Thread rateReporterThread = new Thread(new ImageRateReporter(MESSAGE_LENGTH, running, subscriber));
-            rateReporterThread.setName("rate-reporter");
+		try (MediaDriver ignore = MediaDriver.launch(ctx);
+				Aeron aeron = Aeron.connect();
+				Subscription subscription = aeron.addSubscription(CHANNEL, STREAM_ID);
+				Publication publication = aeron.addExclusivePublication(CHANNEL, STREAM_ID)) {
+			final ImageRateSubscriber subscriber = new ImageRateSubscriber(FRAGMENT_COUNT_LIMIT, running, subscription);
+			final Thread subscriberThread = new Thread(subscriber);
+			subscriberThread.setName("subscriber");
+			final Thread publisherThread = new Thread(new Publisher(running, publication));
+			publisherThread.setName("publisher");
+			final Thread rateReporterThread = new Thread(new ImageRateReporter(MESSAGE_LENGTH, running, subscriber));
+			rateReporterThread.setName("rate-reporter");
 
-            rateReporterThread.start();
-            subscriberThread.start();
-            publisherThread.start();
+			rateReporterThread.start();
+			subscriberThread.start();
+			publisherThread.start();
 
-            subscriberThread.join();
-            publisherThread.join();
-            rateReporterThread.join();
-        }
-    }
+			subscriberThread.join();
+			publisherThread.join();
+			rateReporterThread.join();
+		}
+	}
 
-    static final class Publisher implements Runnable
-    {
-        private final AtomicBoolean running;
-        private final Publication publication;
+	static final class Publisher implements Runnable {
+		private final AtomicBoolean running;
+		private final Publication publication;
 
-        Publisher(final AtomicBoolean running, final Publication publication)
-        {
-            this.running = running;
-            this.publication = publication;
-        }
+		Publisher(final AtomicBoolean running, final Publication publication) {
+			this.running = running;
+			this.publication = publication;
+		}
 
-        public void run()
-        {
-            final IdleStrategy idleStrategy = SampleConfiguration.newIdleStrategy();
-            final AtomicBoolean running = this.running;
-            final Publication publication = this.publication;
-            final BufferClaim bufferClaim = new BufferClaim();
-            long backPressureCount = 0;
-            long totalMessageCount = 0;
+		public void run() {
+			final IdleStrategy idleStrategy = SampleConfiguration.newIdleStrategy();
+			final AtomicBoolean running = this.running;
+			final Publication publication = this.publication;
+			final BufferClaim bufferClaim = new BufferClaim();
+			long backPressureCount = 0;
+			long totalMessageCount = 0;
 
-            outputResults:
-            while (running.get())
-            {
-                for (int i = 0; i < BURST_LENGTH; i++)
-                {
-                    idleStrategy.reset();
-                    while (publication.tryClaim(MESSAGE_LENGTH, bufferClaim) <= 0)
-                    {
-                        ++backPressureCount;
-                        if (!running.get())
-                        {
-                            break outputResults;
-                        }
-                        idleStrategy.idle();
-                    }
+			outputResults: while (running.get()) {
+				for (int i = 0; i < BURST_LENGTH; i++) {
+					idleStrategy.reset();
+					while (publication.tryClaim(MESSAGE_LENGTH, bufferClaim) <= 0) {
+						++backPressureCount;
+						if (!running.get()) {
+							break outputResults;
+						}
+						idleStrategy.idle();
+					}
 
-                    final int offset = bufferClaim.offset();
-                    bufferClaim.buffer().putInt(offset, i); // Example field write
-                    // Real app would write whatever fields are required via a flyweight like SBE
+					final int offset = bufferClaim.offset();
+					bufferClaim.buffer().putInt(offset, i); // Example field write
+					// Real app would write whatever fields are required via a flyweight like SBE
 
-                    bufferClaim.commit();
+					bufferClaim.commit();
 
-                    ++totalMessageCount;
-                }
-            }
+					++totalMessageCount;
+				}
+			}
 
-            final double backPressureRatio = backPressureCount / (double)totalMessageCount;
-            System.out.format("Publisher back pressure ratio: %f%n", backPressureRatio);
-        }
-    }
+			final double backPressureRatio = backPressureCount / (double) totalMessageCount;
+			System.out.format("Publisher back pressure ratio: %f%n", backPressureRatio);
+		}
+	}
 }

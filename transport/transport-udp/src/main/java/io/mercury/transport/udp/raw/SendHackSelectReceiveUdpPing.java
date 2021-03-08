@@ -41,111 +41,92 @@ import io.aeron.driver.Configuration;
  *
  * @see HackSelectReceiveSendUdpPong
  */
-public class SendHackSelectReceiveUdpPing implements ToIntFunction<SelectionKey>
-{
-    private static final InetSocketAddress SEND_ADDRESS = new InetSocketAddress("localhost", Common.PING_PORT);
+public class SendHackSelectReceiveUdpPing implements ToIntFunction<SelectionKey> {
+	private static final InetSocketAddress SEND_ADDRESS = new InetSocketAddress("localhost", Common.PING_PORT);
 
-    private static final Histogram HISTOGRAM = new Histogram(TimeUnit.SECONDS.toNanos(10), 3);
-    private final ByteBuffer buffer = ByteBuffer.allocateDirect(Configuration.MTU_LENGTH_DEFAULT);
-    private DatagramChannel receiveChannel;
-    private int sequenceNumber;
+	private static final Histogram HISTOGRAM = new Histogram(TimeUnit.SECONDS.toNanos(10), 3);
+	private final ByteBuffer buffer = ByteBuffer.allocateDirect(Configuration.MTU_LENGTH_DEFAULT);
+	private DatagramChannel receiveChannel;
+	private int sequenceNumber;
 
-    /**
-     * Main method for launching the process.
-     *
-     * @param args passed to the process.
-     * @throws IOException if an error occurs with the channel.
-     */
-    public static void main(final String[] args) throws IOException
-    {
-        new SendHackSelectReceiveUdpPing().run();
-    }
+	/**
+	 * Main method for launching the process.
+	 *
+	 * @param args passed to the process.
+	 * @throws IOException if an error occurs with the channel.
+	 */
+	public static void main(final String[] args) throws IOException {
+		new SendHackSelectReceiveUdpPing().run();
+	}
 
-    private void run() throws IOException
-    {
-        receiveChannel = DatagramChannel.open();
-        Common.init(receiveChannel);
-        receiveChannel.bind(new InetSocketAddress("localhost", Common.PONG_PORT));
+	private void run() throws IOException {
+		receiveChannel = DatagramChannel.open();
+		Common.init(receiveChannel);
+		receiveChannel.bind(new InetSocketAddress("localhost", Common.PONG_PORT));
 
-        final DatagramChannel sendChannel = DatagramChannel.open();
-        Common.init(sendChannel);
+		final DatagramChannel sendChannel = DatagramChannel.open();
+		Common.init(sendChannel);
 
-        final Selector selector = Selector.open();
-        receiveChannel.register(selector, OP_READ, this);
-        final NioSelectedKeySet keySet = Common.keySet(selector);
+		final Selector selector = Selector.open();
+		receiveChannel.register(selector, OP_READ, this);
+		final NioSelectedKeySet keySet = Common.keySet(selector);
 
-        final AtomicBoolean running = new AtomicBoolean(true);
-        SigInt.register(() -> running.set(false));
+		final AtomicBoolean running = new AtomicBoolean(true);
+		SigInt.register(() -> running.set(false));
 
-        while (running.get())
-        {
-            measureRoundTrip(HISTOGRAM, SEND_ADDRESS, buffer, sendChannel, selector, keySet, running);
+		while (running.get()) {
+			measureRoundTrip(HISTOGRAM, SEND_ADDRESS, buffer, sendChannel, selector, keySet, running);
 
-            HISTOGRAM.reset();
-            System.gc();
-            LockSupport.parkNanos(1000 * 1000 * 1000);
-        }
-    }
+			HISTOGRAM.reset();
+			System.gc();
+			LockSupport.parkNanos(1000 * 1000 * 1000);
+		}
+	}
 
-    public int applyAsInt(final SelectionKey key)
-    {
-        try
-        {
-            buffer.clear();
-            receiveChannel.receive(buffer);
+	public int applyAsInt(final SelectionKey key) {
+		try {
+			buffer.clear();
+			receiveChannel.receive(buffer);
 
-            final long receivedSequenceNumber = buffer.getLong(0);
-            final long timestampNs = buffer.getLong(SIZE_OF_LONG);
+			final long receivedSequenceNumber = buffer.getLong(0);
+			final long timestampNs = buffer.getLong(SIZE_OF_LONG);
 
-            if (receivedSequenceNumber != sequenceNumber)
-            {
-                throw new IllegalStateException("Data Loss:" + sequenceNumber + " to " + receivedSequenceNumber);
-            }
+			if (receivedSequenceNumber != sequenceNumber) {
+				throw new IllegalStateException("Data Loss:" + sequenceNumber + " to " + receivedSequenceNumber);
+			}
 
-            final long durationNs = System.nanoTime() - timestampNs;
-            HISTOGRAM.recordValue(durationNs);
-        }
-        catch (final IOException ex)
-        {
-            ex.printStackTrace();
-        }
+			final long durationNs = System.nanoTime() - timestampNs;
+			HISTOGRAM.recordValue(durationNs);
+		} catch (final IOException ex) {
+			ex.printStackTrace();
+		}
 
-        return 1;
-    }
+		return 1;
+	}
 
-    private void measureRoundTrip(
-        final Histogram histogram,
-        final InetSocketAddress sendAddress,
-        final ByteBuffer buffer,
-        final DatagramChannel sendChannel,
-        final Selector selector,
-        final NioSelectedKeySet keySet,
-        final AtomicBoolean running)
-        throws IOException
-    {
-        for (sequenceNumber = 0; sequenceNumber < Common.NUM_MESSAGES; sequenceNumber++)
-        {
-            final long timestampNs = System.nanoTime();
+	private void measureRoundTrip(final Histogram histogram, final InetSocketAddress sendAddress,
+			final ByteBuffer buffer, final DatagramChannel sendChannel, final Selector selector,
+			final NioSelectedKeySet keySet, final AtomicBoolean running) throws IOException {
+		for (sequenceNumber = 0; sequenceNumber < Common.NUM_MESSAGES; sequenceNumber++) {
+			final long timestampNs = System.nanoTime();
 
-            buffer.clear();
-            buffer.putLong(sequenceNumber);
-            buffer.putLong(timestampNs);
-            buffer.flip();
+			buffer.clear();
+			buffer.putLong(sequenceNumber);
+			buffer.putLong(timestampNs);
+			buffer.flip();
 
-            sendChannel.send(buffer, sendAddress);
+			sendChannel.send(buffer, sendAddress);
 
-            while (selector.selectNow() == 0)
-            {
-                if (!running.get())
-                {
-                    return;
-                }
-                ThreadHints.onSpinWait();
-            }
+			while (selector.selectNow() == 0) {
+				if (!running.get()) {
+					return;
+				}
+				ThreadHints.onSpinWait();
+			}
 
-            keySet.forEach(this);
-        }
+			keySet.forEach(this);
+		}
 
-        histogram.outputPercentileDistribution(System.out, 1000.0);
-    }
+		histogram.outputPercentileDistribution(System.out, 1000.0);
+	}
 }
