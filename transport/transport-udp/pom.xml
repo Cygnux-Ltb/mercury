@@ -15,7 +15,7 @@
 	<name>transport-udp</name>
 
 	<properties>
-		<aeron.version>1.31.1</aeron.version>
+		<aeron.version>1.32.0</aeron.version>
 	</properties>
 
 	<dependencies>
@@ -25,12 +25,12 @@
 			<groupId>io.aeron</groupId>
 			<artifactId>aeron-archive</artifactId>
 			<version>${aeron.version}</version>
-			<exclusions>
+			<!-- <exclusions>
 				<exclusion>
 					<groupId>org.agrona</groupId>
 					<artifactId>agrona</artifactId>
 				</exclusion>
-			</exclusions>
+			</exclusions> -->
 		</dependency>
 
 		<dependency>
