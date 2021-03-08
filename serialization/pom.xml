@@ -18,7 +18,6 @@
 
 	<modules>
 		<module>serialization-avro</module>
-		<module>serialization-flatbuffers</module>
 		<module>serialization-json</module>
 		<module>serialization-kryo</module>
 		<module>serialization-protobuf</module>
