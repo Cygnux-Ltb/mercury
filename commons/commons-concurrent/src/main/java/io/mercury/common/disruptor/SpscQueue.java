@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.disruptor;
+package io.mercury.common.disruptor;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -11,7 +11,8 @@ import com.lmax.disruptor.dsl.ProducerType;
 
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.queue.LoadContainer;
-import io.mercury.common.concurrent.queue.base.ScQueue;
+import io.mercury.common.concurrent.queue.QueueStyle;
+import io.mercury.common.concurrent.queue.ScQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
@@ -136,6 +137,11 @@ public class SpscQueue<T> extends ScQueue<T> {
 	@Override
 	public boolean isEmpty() {
 		return false;
+	}
+
+	@Override
+	public QueueStyle getQueueStyle() {
+		return QueueStyle.SPSC;
 	}
 
 }

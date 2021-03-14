@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.disruptor;
+package io.mercury.common.disruptor;
 
 import java.util.concurrent.TimeUnit;
 
