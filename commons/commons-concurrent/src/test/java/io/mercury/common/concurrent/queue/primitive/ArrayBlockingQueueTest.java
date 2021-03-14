@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 
 import org.junit.Ignore;
 
-import io.mercury.common.concurrent.queue.ConcurrentBlockingQueue;
+import io.mercury.common.concurrent.queue.lowlatency.ConcurrentBlockingQueue;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Ignore

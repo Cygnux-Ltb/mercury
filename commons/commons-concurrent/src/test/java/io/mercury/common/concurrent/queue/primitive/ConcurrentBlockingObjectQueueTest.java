@@ -12,7 +12,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import io.mercury.common.concurrent.queue.ConcurrentBlockingQueue;
+import io.mercury.common.concurrent.queue.lowlatency.ConcurrentBlockingQueue;
 
 /**
  * Created by robaustin on 31/01/2014.
