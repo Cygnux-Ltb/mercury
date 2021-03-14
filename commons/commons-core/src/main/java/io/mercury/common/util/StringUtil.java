@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import io.mercury.common.character.Charsets;
+import io.mercury.common.character.Separator;
 
 public final class StringUtil {
 
@@ -386,7 +387,8 @@ public final class StringUtil {
 	 * @return
 	 */
 	public static final String fixPath(String path) {
-		return isNullOrEmpty(path) ? "/" : path.endsWith("/") || path.endsWith("\\") ? path : path + "/";
+		return isNullOrEmpty(path) ? "/"
+				: path.endsWith("/") || path.endsWith("\\") ? path : path + Separator.FILE_SEPARATOR;
 	}
 
 	/**

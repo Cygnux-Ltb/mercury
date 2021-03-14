@@ -87,8 +87,7 @@ public final class SnowflakeAlgorithm {
 
 	/**
 	 * 
-	 * @param baseline
-	 * @return
+	 * @param ownerId
 	 */
 	public SnowflakeAlgorithm(int ownerId) {
 		this(ownerId, ZonedDateTime.ofInstant(Instant.EPOCH, TimeZone.UTC));
@@ -96,8 +95,8 @@ public final class SnowflakeAlgorithm {
 
 	/**
 	 * 
+	 * @param ownerId
 	 * @param baseline
-	 * @return
 	 */
 	public SnowflakeAlgorithm(int ownerId, @Nonnull LocalDate baseline) {
 		this(ownerId, baseline, ZoneOffset.UTC);
@@ -105,9 +104,9 @@ public final class SnowflakeAlgorithm {
 
 	/**
 	 * 
+	 * @param ownerId
 	 * @param baseline
 	 * @param zoneId
-	 * @return
 	 */
 	public SnowflakeAlgorithm(int ownerId, @Nonnull LocalDate baseline, @Nonnull ZoneId zoneId) {
 		this(ownerId, baseline == null ? EpochTime.ZeroPoint
@@ -171,32 +170,28 @@ public final class SnowflakeAlgorithm {
 	 */
 	public synchronized long next() throws ClockBackwardException {
 		long currentTimestamp = currentTimeMillis();
-
 		// 如果当前时间小于上一次ID生成的时间戳, 说明系统时钟回退过这个时候应当抛出异常
-		if (currentTimestamp < lastTimestamp) {
+		if (currentTimestamp < lastTimestamp)
 			throw new ClockBackwardException(lastTimestamp - currentTimestamp);
-		}
-
 		// 如果是同一时间生成的, 则进行毫秒内序列
 		if (currentTimestamp == lastTimestamp) {
 			sequence = (sequence + 1) & SequenceMask;
 			// 毫秒内序列溢出
-			if (sequence == 0) {
+			if (sequence == 0L) {
 				// 阻塞到下一个毫秒, 获得新的时间戳
 				currentTimestamp = tilNextMillis(lastTimestamp);
 			}
 		}
 		// 时间戳改变, 毫秒内序列重置
-		else {
+		else
 			sequence = 0L;
-		}
 		// 上次生成ID的时间截
 		lastTimestamp = currentTimestamp;
 
 		// 移位并通过或运算拼到一起组成64位的ID
 		return // 时间戳左移至高位
 		((currentTimestamp - baseline) << TimestampLeftShift)
-				// 所有者ID左移至中间位
+				// 所有者ID左移至中间
 				| (ownerId << OwnerIdLeftShift)
 				// 自增位
 				| sequence;
@@ -208,7 +203,7 @@ public final class SnowflakeAlgorithm {
 	 * @param lastTimestamp 上次生成ID的时间截
 	 * @return 当前时间戳
 	 */
-	protected long tilNextMillis(final long lastTimestamp) {
+	private long tilNextMillis(final long lastTimestamp) {
 		long timestamp;
 		do {
 			timestamp = currentTimeMillis();

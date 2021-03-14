@@ -36,6 +36,16 @@ import io.mercury.common.util.BitFormatter;
 public final class EpochSequence {
 
 	/**
+	 * 自增位最大限制
+	 */
+	public static final long IncrLimit = 0xFFFF;
+
+	/**
+	 * 自增位使用bit位数
+	 */
+	public static final int IncrBits = 16;
+
+	/**
 	 * 
 	 * 
 	 * <pre>
@@ -60,12 +70,6 @@ public final class EpochSequence {
 
 	// 自增位
 	private static volatile long incr;
-
-	// 自增位最大限制
-	private static final long IncrLimit = 0xFFFF;
-
-	// 自增位使用bit位数
-	private static final int IncrBits = 16;
 
 	/**
 	 * 
