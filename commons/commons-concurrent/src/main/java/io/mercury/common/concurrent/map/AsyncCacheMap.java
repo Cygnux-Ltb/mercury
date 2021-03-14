@@ -9,8 +9,8 @@ import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
 
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.concurrent.queue.base.ScQueue;
-import io.mercury.common.concurrent.queue.jct.JctScQueue;
+import io.mercury.common.concurrent.queue.ScQueue;
+import io.mercury.common.concurrent.queue.jct.JctSingleConsumerQueue;
 import io.mercury.common.util.StringUtil;
 
 /**
@@ -25,8 +25,7 @@ public final class AsyncCacheMap<K, V> {
 
 	private final MutableMap<K, V> mutableMap = MutableMaps.newUnifiedMap(Capacity.L08_SIZE);
 
-	private final MutableLongObjectMap<Consumer<V>> consumerMap = MutableMaps
-			.newLongObjectHashMap(Capacity.L07_SIZE);
+	private final MutableLongObjectMap<Consumer<V>> consumerMap = MutableMaps.newLongObjectHashMap(Capacity.L07_SIZE);
 
 	private final String cacheName;
 
@@ -68,9 +67,9 @@ public final class AsyncCacheMap<K, V> {
 
 	public AsyncCacheMap(String cacheName) {
 		this.cacheName = StringUtil.isNullOrEmpty(cacheName) ? "AsyncCacheMap-" + hashCode() : cacheName;
-		this.execQueue = JctScQueue.mpsc(this.cacheName + "-ExecQueue").capacity(64)
+		this.execQueue = JctSingleConsumerQueue.newMultiProducersQueue(this.cacheName + "-ExecQueue").capacity(64)
 				.buildWithProcessor(event -> asyncExec(event));
-		this.queryQueue = JctScQueue.mpsc(this.cacheName + "-QueryQueue").capacity(64)
+		this.queryQueue = JctSingleConsumerQueue.newMultiProducersQueue(this.cacheName + "-QueryQueue").capacity(64)
 				.buildWithProcessor(result -> consumerMap.remove(result.nanoTime).accept(result.value));
 	}
 

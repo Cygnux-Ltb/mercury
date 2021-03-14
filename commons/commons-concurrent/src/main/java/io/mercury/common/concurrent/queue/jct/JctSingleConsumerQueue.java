@@ -8,12 +8,12 @@ import org.slf4j.Logger;
 
 import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.annotation.thread.SpinWaiting;
-import io.mercury.common.concurrent.disruptor.SpscQueue;
 import io.mercury.common.concurrent.queue.QueueStyle;
 import io.mercury.common.concurrent.queue.QueueWorkingException;
+import io.mercury.common.concurrent.queue.ScQueue;
 import io.mercury.common.concurrent.queue.StartMode;
 import io.mercury.common.concurrent.queue.WaitingStrategy;
-import io.mercury.common.concurrent.queue.base.ScQueue;
+import io.mercury.common.disruptor.SpscQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
@@ -27,7 +27,7 @@ import io.mercury.common.util.StringUtil;
  *            Single Consumer Queue
  * 
  */
-public abstract class JctScQueue<E> extends ScQueue<E> {
+public abstract class JctSingleConsumerQueue<E> extends ScQueue<E> {
 
 	/**
 	 * 
@@ -44,7 +44,7 @@ public abstract class JctScQueue<E> extends ScQueue<E> {
 	 */
 	private final WaitingStrategy strategy;
 
-	protected JctScQueue(Processor<E> processor, int capacity, WaitingStrategy strategy) {
+	protected JctSingleConsumerQueue(Processor<E> processor, int capacity, WaitingStrategy strategy) {
 		super(processor);
 		this.queue = createQueue(capacity);
 		this.strategy = strategy;
@@ -97,7 +97,7 @@ public abstract class JctScQueue<E> extends ScQueue<E> {
 	 *            Single Producer Single Consumer Queue
 	 * 
 	 */
-	private static final class JctSpscQueue<E> extends JctScQueue<E> {
+	private static final class JctSpscQueue<E> extends JctSingleConsumerQueue<E> {
 
 		private static final Logger log = CommonLoggerFactory.getLogger(SpscQueue.class);
 
@@ -135,12 +135,17 @@ public abstract class JctScQueue<E> extends ScQueue<E> {
 		}
 
 		@Override
-		public void startProcessThread() {
+		protected void startProcessThread() {
 			if (!isRunning.compareAndSet(false, true)) {
 				log.error("JctSpscQueue -> {}, Error call, This queue is started", queueName);
 				return;
 			}
 			Threads.startNewMaxPriorityThread(queueName + "-ProcessThread", queueRunnable);
+		}
+
+		@Override
+		public QueueStyle getQueueStyle() {
+			return QueueStyle.SPSC;
 		}
 
 	}
@@ -154,7 +159,7 @@ public abstract class JctScQueue<E> extends ScQueue<E> {
 	 *            Multiple Producer Single Consumer Queue
 	 * 
 	 */
-	private static final class JctMpscQueue<E> extends JctScQueue<E> {
+	private static final class JctMpscQueue<E> extends JctSingleConsumerQueue<E> {
 
 		private static final Logger log = CommonLoggerFactory.getLogger(JctMpscQueue.class);
 
@@ -193,12 +198,17 @@ public abstract class JctScQueue<E> extends ScQueue<E> {
 		}
 
 		@Override
-		public void startProcessThread() {
+		protected void startProcessThread() {
 			if (!isRunning.compareAndSet(false, true)) {
 				log.error("JctMPSCQueue -> {}, Error call, This queue is started", queueName);
 				return;
 			}
 			Threads.startNewThread(queueName + "-ProcessThread", queueRunnable);
+		}
+
+		@Override
+		public QueueStyle getQueueStyle() {
+			return QueueStyle.MPSC;
 		}
 	}
 
@@ -207,7 +217,7 @@ public abstract class JctScQueue<E> extends ScQueue<E> {
 	 * 
 	 * @return
 	 */
-	public static JctQueueBuilder spsc() {
+	public static JctQueueBuilder newSingleProducerQueue() {
 		return new JctQueueBuilder(QueueStyle.SPSC);
 	}
 
@@ -217,7 +227,7 @@ public abstract class JctScQueue<E> extends ScQueue<E> {
 	 * @param queueName
 	 * @return
 	 */
-	public static JctQueueBuilder spsc(String queueName) {
+	public static JctQueueBuilder newSingleProducerQueue(String queueName) {
 		return new JctQueueBuilder(QueueStyle.SPSC).queueName(queueName);
 	}
 
@@ -226,8 +236,8 @@ public abstract class JctScQueue<E> extends ScQueue<E> {
 	 * 
 	 * @return
 	 */
-	public static JctQueueBuilder mpsc() {
-		return new JctQueueBuilder(QueueStyle.SPSC);
+	public static JctQueueBuilder newMultiProducersQueue() {
+		return new JctQueueBuilder(QueueStyle.MPSC);
 	}
 
 	/**
@@ -236,7 +246,7 @@ public abstract class JctScQueue<E> extends ScQueue<E> {
 	 * @param queueName
 	 * @return
 	 */
-	public static JctQueueBuilder mpsc(String queueName) {
+	public static JctQueueBuilder newMultiProducersQueue(String queueName) {
 		return new JctQueueBuilder(QueueStyle.MPSC).queueName(queueName);
 	}
 
@@ -278,7 +288,7 @@ public abstract class JctScQueue<E> extends ScQueue<E> {
 			return this;
 		}
 
-		public final <E> JctScQueue<E> buildWithProcessor(Processor<E> processor) {
+		public final <E> JctSingleConsumerQueue<E> buildWithProcessor(Processor<E> processor) {
 			switch (style) {
 			case SPSC:
 				return new JctSpscQueue<>(queueName, capacity, mode, strategy, processor);

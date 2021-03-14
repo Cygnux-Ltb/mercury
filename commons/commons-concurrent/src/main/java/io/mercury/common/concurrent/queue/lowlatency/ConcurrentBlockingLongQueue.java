@@ -1,9 +1,7 @@
-package io.mercury.common.concurrent.queue.primitive;
+package io.mercury.common.concurrent.queue.lowlatency;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
-import io.mercury.common.concurrent.queue.base.BaseConcurrentBlockingQueue;
 
 /**
  * A low latency, lock free, primitive bounded blocking queue backed by an

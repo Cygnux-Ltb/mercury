@@ -1,10 +1,12 @@
-package io.mercury.common.concurrent.queue;
+package io.mercury.common.concurrent.queue.jct;
 
 import org.jctools.queues.MpmcArrayQueue;
 
 import io.mercury.common.annotation.thread.SpinWaiting;
 import io.mercury.common.collections.Capacity;
-import io.mercury.common.concurrent.queue.base.McQueue;
+import io.mercury.common.concurrent.queue.McQueue;
+import io.mercury.common.concurrent.queue.QueueStyle;
+import io.mercury.common.concurrent.queue.WaitingStrategy;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringUtil;
 
@@ -61,6 +63,11 @@ public class ConcurrentQueue<E> implements McQueue<E> {
 	@Override
 	public boolean isEmpty() {
 		return queue.isEmpty();
+	}
+
+	@Override
+	public QueueStyle getQueueStyle() {
+		return QueueStyle.MPMC;
 	}
 
 }

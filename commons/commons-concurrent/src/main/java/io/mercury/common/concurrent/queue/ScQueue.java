@@ -1,9 +1,8 @@
-package io.mercury.common.concurrent.queue.base;
+package io.mercury.common.concurrent.queue;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.mercury.common.annotation.lang.AbstractFunction;
-import io.mercury.common.concurrent.queue.Queue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.number.ThreadSafeRandoms;
 import io.mercury.common.util.Assertor;

@@ -1,11 +1,9 @@
-package io.mercury.common.concurrent.queue.base;
+package io.mercury.common.concurrent.queue;
 
 import java.util.function.Predicate;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-
-import io.mercury.common.concurrent.queue.Queue;
 
 public interface McQueue<E> extends Queue<E> {
 

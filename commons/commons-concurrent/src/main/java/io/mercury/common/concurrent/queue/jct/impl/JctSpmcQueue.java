@@ -7,7 +7,8 @@ import javax.annotation.Nonnull;
 
 import org.jctools.queues.SpmcArrayQueue;
 
-import io.mercury.common.concurrent.queue.base.McQueue;
+import io.mercury.common.concurrent.queue.McQueue;
+import io.mercury.common.concurrent.queue.QueueStyle;
 
 public class JctSpmcQueue<E> implements McQueue<E> {
 
@@ -44,6 +45,11 @@ public class JctSpmcQueue<E> implements McQueue<E> {
 	@Override
 	public boolean isEmpty() {
 		return queue.isEmpty();
+	}
+
+	@Override
+	public QueueStyle getQueueStyle() {
+		return QueueStyle.SPMC;
 	}
 
 }

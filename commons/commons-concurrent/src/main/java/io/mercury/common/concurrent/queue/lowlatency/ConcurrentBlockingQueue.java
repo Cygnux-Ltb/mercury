@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.queue;
+package io.mercury.common.concurrent.queue.lowlatency;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -7,8 +7,6 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
-import io.mercury.common.concurrent.queue.base.BaseConcurrentBlockingQueue;
 
 /**
  * A low latency, lock free, Object bounded blocking queue backed by an

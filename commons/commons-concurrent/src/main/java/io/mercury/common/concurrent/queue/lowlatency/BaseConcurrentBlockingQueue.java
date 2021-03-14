@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.queue.base;
+package io.mercury.common.concurrent.queue.lowlatency;
 
 import sun.misc.Unsafe;
 
