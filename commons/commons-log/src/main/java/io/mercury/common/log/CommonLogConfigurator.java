@@ -1,6 +1,6 @@
 package io.mercury.common.log;
 
-public final class LogConfigurator {
+public final class CommonLogConfigurator {
 
 	private static final String Log4j2Folder = "log4j2.folder";
 

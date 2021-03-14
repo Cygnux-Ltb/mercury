@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import org.junit.Test;
 import org.slf4j.Logger;
 
-import io.mercury.common.log.LogConfigurator.LogLevel;
+import io.mercury.common.log.CommonLogConfigurator.LogLevel;
 
 public class CommonLoggerFactoryTest {
 
@@ -15,8 +15,8 @@ public class CommonLoggerFactoryTest {
 	public void test() {
 
 		System.out.println(System.getProperty("user.home"));
-		LogConfigurator.setFilename("new");
-		LogConfigurator.setLogLevel(LogLevel.ERROR);
+		CommonLogConfigurator.setFilename("new");
+		CommonLogConfigurator.setLogLevel(LogLevel.ERROR);
 
 		log.error("this is error");
 		log.warn("this is warn");
