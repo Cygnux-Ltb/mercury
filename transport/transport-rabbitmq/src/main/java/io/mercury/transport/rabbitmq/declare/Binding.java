@@ -1,17 +1,21 @@
 package io.mercury.transport.rabbitmq.declare;
 
 import static io.mercury.common.util.Assertor.nonNull;
+import static lombok.AccessLevel.PACKAGE;
+
+import lombok.Getter;
 
 public final class Binding {
 
-	static enum DestType {
-		Exchange, Queue
-	}
-
+	@Getter(PACKAGE)
 	private AmqpExchange source;
+	@Getter(PACKAGE)
 	private AmqpExchange destExchange;
+	@Getter(PACKAGE)
 	private AmqpQueue destQueue;
+	@Getter(PACKAGE)
 	private String routingKey;
+	@Getter(PACKAGE)
 	private DestType destType;
 
 	/**
@@ -64,39 +68,8 @@ public final class Binding {
 		this.destType = DestType.Queue;
 	}
 
-	/**
-	 * @return the source
-	 */
-	AmqpExchange source() {
-		return source;
-	}
-
-	/**
-	 * @return the routingKey
-	 */
-	String routingKey() {
-		return routingKey;
-	}
-
-	/**
-	 * @return the destExchange
-	 */
-	AmqpExchange destExchange() {
-		return destExchange;
-	}
-
-	/**
-	 * @return the destQueue
-	 */
-	AmqpQueue destQueue() {
-		return destQueue;
-	}
-
-	/**
-	 * @return the destinationType
-	 */
-	DestType destType() {
-		return destType;
+	static enum DestType {
+		Exchange, Queue
 	}
 
 	public static void main(String[] args) {
@@ -108,7 +81,7 @@ public final class Binding {
 		System.out.println(exchange1);
 
 		System.out.println(exchange0 == exchange1);
-		System.out.println(exchange0.idempotent(exchange1));
+		System.out.println(exchange0.isIdempotent(exchange1));
 
 		System.out.println(AmqpExchange.direct("ABC"));
 		System.out.println(AmqpQueue.named("ABC"));

@@ -38,17 +38,17 @@ public abstract class Relationship {
 	 * @throws DeclareException
 	 */
 	private void declareBinding(RabbitMqDeclarator declarator, Binding binding) throws DeclareException {
-		AmqpExchange source = binding.source();
+		AmqpExchange source = binding.getSource();
 		try {
 			declarator.declareExchange(source);
 		} catch (DeclareException declareException) {
 			log.error("Declare source exchange failure -> {}", source);
 			throw declareException;
 		}
-		String routingKey = binding.routingKey();
-		switch (binding.destType()) {
+		String routingKey = binding.getRoutingKey();
+		switch (binding.getDestType()) {
 		case Exchange:
-			AmqpExchange destExchange = binding.destExchange();
+			AmqpExchange destExchange = binding.getDestExchange();
 			try {
 				declarator.declareExchange(destExchange);
 			} catch (DeclareException e) {
@@ -64,7 +64,7 @@ public abstract class Relationship {
 			}
 			break;
 		case Queue:
-			AmqpQueue destQueue = binding.destQueue();
+			AmqpQueue destQueue = binding.getDestQueue();
 			try {
 				declarator.declareQueue(destQueue);
 			} catch (DeclareException e) {

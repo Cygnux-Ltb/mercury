@@ -59,7 +59,7 @@ public final class AmqpQueue {
 		return JsonWrapper.toJsonHasNulls(this);
 	}
 
-	public boolean idempotent(AmqpQueue another) {
+	public boolean isIdempotent(AmqpQueue another) {
 		return name.equals(another.name) && durable == another.durable && exclusive == another.exclusive
 				&& autoDelete == another.autoDelete && MapUtil.isEquals(args, another.args);
 	}

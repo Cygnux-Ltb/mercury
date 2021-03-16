@@ -14,6 +14,11 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public final class AmqpExchange {
 
+	/**
+	 * The <b> Anonymous </b> Exchange
+	 */
+	public static final AmqpExchange Anonymous = new AmqpExchange(ExchangeType.Anonymous, "");
+
 	// 交换器名称
 	@Getter
 	@Setter
@@ -78,11 +83,6 @@ public final class AmqpExchange {
 	}
 
 	/**
-	 * The <b> Anonymous </b> Exchange
-	 */
-	public static final AmqpExchange Anonymous = new AmqpExchange(ExchangeType.Anonymous, "");
-
-	/**
 	 * 
 	 * @param type
 	 * @param name
@@ -102,7 +102,7 @@ public final class AmqpExchange {
 	 * @param another
 	 * @return
 	 */
-	public boolean idempotent(AmqpExchange another) {
+	public boolean isIdempotent(AmqpExchange another) {
 		return name.equals(another.name) && type == another.type && durable == another.durable
 				&& autoDelete == another.autoDelete && internal == another.internal
 				&& MapUtil.isEquals(args, another.args);

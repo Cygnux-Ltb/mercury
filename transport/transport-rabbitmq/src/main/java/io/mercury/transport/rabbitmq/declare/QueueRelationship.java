@@ -19,7 +19,9 @@ import lombok.Getter;
  */
 public final class QueueRelationship extends Relationship {
 
-	// queue
+	/**
+	 * queue
+	 */
 	@Getter
 	private final AmqpQueue queue;
 
