@@ -3,7 +3,7 @@ package io.mercury.transport.rabbitmq;
 import java.io.IOException;
 import java.util.Arrays;
 
-import io.mercury.transport.rabbitmq.configurator.RmqConnection;
+import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
 import io.mercury.transport.rabbitmq.configurator.RmqPublisherConfigurator;
 import io.mercury.transport.rabbitmq.declare.AmqpQueue;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
@@ -12,7 +12,7 @@ public class RabbitMqPublisherTest {
 
 	public static void main(String[] args) {
 
-		RmqConnection connection = RmqConnection.configuration("10.0.64.201", 5672, "root", "root2018").build();
+		RabbitConnection connection = RabbitConnection.configuration("10.0.64.201", 5672, "root", "root2018").build();
 
 		RmqPublisherConfigurator configurator = RmqPublisherConfigurator
 				.configuration(connection, ExchangeRelationship.fanout("TEST_DIR")
