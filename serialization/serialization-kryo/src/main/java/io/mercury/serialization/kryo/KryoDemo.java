@@ -16,6 +16,8 @@ public class KryoDemo {
 		SomeClass object = new SomeClass();
 		object.value = "Hello Kryo!";
 
+		//Output output = new ByteBufferOutput();
+		
 		Output output = new Output(new FileOutputStream("file.bin"));
 		kryo.writeObject(output, object);
 		output.close();
