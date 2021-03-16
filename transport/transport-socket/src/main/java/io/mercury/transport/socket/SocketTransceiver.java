@@ -11,8 +11,8 @@ import java.util.function.Consumer;
 import org.apache.commons.io.IOUtils;
 
 import io.mercury.common.collections.Capacity;
-import io.mercury.common.concurrent.disruptor.SpscQueue;
-import io.mercury.common.concurrent.queue.base.ScQueue;
+import io.mercury.common.concurrent.queue.ScQueue;
+import io.mercury.common.disruptor.SpscQueue;
 import io.mercury.common.thread.Threads;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
 
