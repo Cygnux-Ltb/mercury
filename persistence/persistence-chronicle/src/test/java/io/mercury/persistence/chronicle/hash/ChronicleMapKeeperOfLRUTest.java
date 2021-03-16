@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.time.Duration;
 
 import io.mercury.common.datetime.EpochTime;
-import io.mercury.common.log.LogConfigurator;
-import io.mercury.common.log.LogConfigurator.LogLevel;
+import io.mercury.common.log.CommonLogConfigurator;
+import io.mercury.common.log.CommonLogConfigurator.LogLevel;
 import io.mercury.common.sys.SysProperties;
 import io.mercury.common.thread.Threads;
 import io.mercury.persistence.chronicle.hash.ChronicleMapConfigurator.Builder;
@@ -14,7 +14,7 @@ import net.openhft.chronicle.map.ChronicleMap;
 public class ChronicleMapKeeperOfLRUTest {
 
 	static {
-		LogConfigurator.setLogLevel(LogLevel.INFO);
+		CommonLogConfigurator.setLogLevel(LogLevel.INFO);
 	}
 
 	public static void main(String[] args) {

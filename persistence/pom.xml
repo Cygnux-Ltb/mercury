@@ -25,7 +25,7 @@
 
 	<properties>
 		<jackson.version>2.12.1</jackson.version>
-		<netty.version>4.1.59.Final</netty.version>
+		<netty.version>4.1.60.Final</netty.version>
 	</properties>
 
 	<build>
@@ -79,20 +79,6 @@
 				<version>${netty.version}</version>
 			</dependency>
 
-			<!-- Netty/Codec -->
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-codec</artifactId>
-				<version>${netty.version}</version>
-			</dependency>
-
-			<!-- Netty/Handler -->
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-handler</artifactId>
-				<version>${netty.version}</version>
-			</dependency>
-
 			<!-- Apache Commons Compress software defines an API for working with 
 				compression and archive formats. These include: bzip2, gzip, pack200, lzma, 
 				xz, Snappy, traditional Unix Compress, DEFLATE, DEFLATE64, LZ4, Brotli, Zstandard 
@@ -131,7 +117,7 @@
 			<dependency>
 				<groupId>com.github.luben</groupId>
 				<artifactId>zstd-jni</artifactId>
-				<version>1.4.8-4</version>
+				<version>1.4.9-1</version>
 			</dependency>
 
 			<!-- Date and time library to replace JDK date handling -->
