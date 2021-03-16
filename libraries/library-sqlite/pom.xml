@@ -14,10 +14,28 @@
 	<name>library-sqlite</name>
 
 	<dependencies>
+		<dependency>
+			<groupId>io.mercury</groupId>
+			<artifactId>commons-core</artifactId>
+		</dependency>
+
 		<!-- Java(TM) Persistence API -->
 		<dependency>
 			<groupId>javax.persistence</groupId>
 			<artifactId>javax.persistence-api</artifactId>
+		</dependency>
+
+		<!-- The Apache Commons DbUtils package is a set of Java utility classes 
+			for easing JDBC development. -->
+		<dependency>
+			<groupId>commons-dbutils</groupId>
+			<artifactId>commons-dbutils</artifactId>
+		</dependency>
+
+		<!-- Ultimate JDBC Connection Pool -->
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
 		</dependency>
 
 		<!-- SQLite JDBC library -->
@@ -26,5 +44,6 @@
 			<artifactId>sqlite-jdbc</artifactId>
 			<version>3.34.0</version>
 		</dependency>
+
 	</dependencies>
 </project>
