@@ -1,5 +1,6 @@
 package io.mercury.transport.rabbitmq;
 
+import static io.mercury.common.datetime.DateTimeUtil.datetimeOfMillisecond;
 import static io.mercury.common.util.StringUtil.nonEmpty;
 
 import java.io.IOException;
@@ -14,7 +15,6 @@ import org.slf4j.Logger;
 import com.rabbitmq.client.AMQP.BasicProperties;
 
 import io.mercury.common.character.Charsets;
-import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
@@ -22,7 +22,7 @@ import io.mercury.common.util.StringUtil;
 import io.mercury.transport.core.api.Publisher;
 import io.mercury.transport.core.api.Sender;
 import io.mercury.transport.core.exception.PublishFailedException;
-import io.mercury.transport.rabbitmq.configurator.RmqConnection;
+import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
 import io.mercury.transport.rabbitmq.configurator.RmqPublisherConfigurator;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
@@ -56,30 +56,30 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 
 	/**
 	 * 
-	 * @param configurator
+	 * @param cfg
 	 */
-	public RabbitMqPublisher(@Nonnull RmqPublisherConfigurator configurator) {
-		this(null, configurator);
+	public RabbitMqPublisher(@Nonnull RmqPublisherConfigurator cfg) {
+		this(null, cfg);
 	}
 
 	/**
 	 * 
 	 * @param tag
-	 * @param configurator
+	 * @param cfg
 	 * @param ackCallback
 	 * @param noAckCallback
 	 */
-	public RabbitMqPublisher(String tag, @Nonnull RmqPublisherConfigurator configurator) {
-		super(nonEmpty(tag) ? tag : "publisher-" + DateTimeUtil.datetimeOfMillisecond(), configurator.connection());
-		Assertor.nonNull(configurator.publishExchange(), "exchangeRelation");
-		this.publishExchange = configurator.publishExchange();
+	public RabbitMqPublisher(String tag, @Nonnull RmqPublisherConfigurator cfg) {
+		super(nonEmpty(tag) ? tag : "publisher-" + datetimeOfMillisecond(), cfg.getConnection());
+		Assertor.nonNull(cfg.getPublishExchange(), "exchangeRelation");
+		this.publishExchange = cfg.getPublishExchange();
 		this.exchangeName = publishExchange.getExchangeName();
-		this.defaultRoutingKey = configurator.defaultRoutingKey();
-		this.defaultMsgProps = configurator.defaultMsgProps();
-		this.msgPropsSupplier = configurator.msgPropsSupplier();
-		this.confirm = configurator.confirm();
-		this.confirmTimeout = configurator.confirmTimeout();
-		this.confirmRetry = configurator.confirmRetry();
+		this.defaultRoutingKey = cfg.getDefaultRoutingKey();
+		this.defaultMsgProps = cfg.getDefaultMsgProps();
+		this.msgPropsSupplier = cfg.getMsgPropsSupplier();
+		this.confirm = cfg.getConfirmOptions().isConfirm();
+		this.confirmTimeout = cfg.getConfirmOptions().getConfirmTimeout();
+		this.confirmRetry = cfg.getConfirmOptions().getConfirmRetry();
 		this.hasPropsSupplier = msgPropsSupplier != null;
 		this.publisherName = "publisher::" + rmqConnection.getConnectionInfo() + "$" + exchangeName;
 		createConnection();
@@ -135,7 +135,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 		while (!isConnected()) {
 			log.error("Detect connection isConnected() == false, retry {}", (++retry));
 			destroy();
-			Threads.sleep(rmqConnection.recoveryInterval());
+			Threads.sleep(rmqConnection.getRecoveryInterval());
 			createConnection();
 		}
 		if (confirm) {
@@ -255,7 +255,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 
 	public static void main(String[] args) {
 
-		RmqConnection connectionConfigurator0 = RmqConnection.configuration("127.0.0.1", 5672, "guest", "guest")
+		RabbitConnection connectionConfigurator0 = RabbitConnection.configuration("127.0.0.1", 5672, "guest", "guest")
 				.build();
 
 		ExchangeRelationship fanoutExchange = ExchangeRelationship.fanout("fanout-test");

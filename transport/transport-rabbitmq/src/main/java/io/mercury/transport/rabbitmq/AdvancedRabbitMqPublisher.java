@@ -5,7 +5,6 @@ import static io.mercury.common.util.StringUtil.nonEmpty;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeoutException;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
@@ -19,13 +18,14 @@ import com.rabbitmq.client.ConfirmCallback;
 import io.mercury.common.character.Charsets;
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.serialization.spec.ByteArraySerializer;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.core.api.Publisher;
 import io.mercury.transport.core.api.Sender;
 import io.mercury.transport.core.exception.InitializeFailureException;
 import io.mercury.transport.core.exception.PublishFailedException;
-import io.mercury.transport.rabbitmq.configurator.RmqConnection;
+import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
 import io.mercury.transport.rabbitmq.configurator.RmqPublisherConfigurator;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
@@ -76,18 +76,18 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	private final String publisherName;
 
 	// 发布消息使用的序列化器
-	private final Function<T, byte[]> serializer;
+	private final ByteArraySerializer<T> serializer;
 
 	/**
 	 * 
 	 * @param <T>
-	 * @param configurator
+	 * @param cfg
 	 * @param serializer
 	 * @return
 	 */
-	public final static <T> AdvancedRabbitMqPublisher<T> create(@Nonnull RmqPublisherConfigurator configurator,
-			@Nonnull Function<T, byte[]> serializer) {
-		return new AdvancedRabbitMqPublisher<>(null, configurator, serializer, null, null);
+	public final static <T> AdvancedRabbitMqPublisher<T> create(@Nonnull RmqPublisherConfigurator cfg,
+			@Nonnull ByteArraySerializer<T> serializer) {
+		return new AdvancedRabbitMqPublisher<>(null, cfg, serializer, null, null);
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @return
 	 */
 	public final static <T> AdvancedRabbitMqPublisher<T> create(String tag,
-			@Nonnull RmqPublisherConfigurator configurator, @Nonnull Function<T, byte[]> serializer) {
+			@Nonnull RmqPublisherConfigurator configurator, @Nonnull ByteArraySerializer<T> serializer) {
 		return new AdvancedRabbitMqPublisher<>(tag, configurator, serializer, null, null);
 	}
 
@@ -114,7 +114,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @return
 	 */
 	public final static <T> AdvancedRabbitMqPublisher<T> create(String tag,
-			@Nonnull RmqPublisherConfigurator configurator, @Nonnull Function<T, byte[]> serializer,
+			@Nonnull RmqPublisherConfigurator configurator, @Nonnull ByteArraySerializer<T> serializer,
 			@Nonnull AckCallback ackCallback, @Nonnull NoAckCallback noAckCallback) {
 		return new AdvancedRabbitMqPublisher<>(tag, configurator, serializer, ackCallback, noAckCallback);
 	}
@@ -217,23 +217,23 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	/**
 	 * 
 	 * @param tag           标签
-	 * @param configurator  配置器
+	 * @param cfg           配置器
 	 * @param serializer    序列化器
 	 * @param ackCallback   ACK成功回调
 	 * @param noAckCallback ACK未成功回调
 	 */
-	private AdvancedRabbitMqPublisher(String tag, @Nonnull RmqPublisherConfigurator configurator,
-			@Nonnull Function<T, byte[]> serializer, AckCallback ackCallback, NoAckCallback noAckCallback) {
-		super(nonEmpty(tag) ? tag : "publisher-" + DateTimeUtil.datetimeOfMillisecond(), configurator.connection());
-		Assertor.nonNull(configurator.publishExchange(), "exchangeRelation");
-		this.publishExchange = configurator.publishExchange();
+	private AdvancedRabbitMqPublisher(String tag, @Nonnull RmqPublisherConfigurator cfg,
+			@Nonnull ByteArraySerializer<T> serializer, AckCallback ackCallback, NoAckCallback noAckCallback) {
+		super(nonEmpty(tag) ? tag : "publisher-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
+		Assertor.nonNull(cfg.getPublishExchange(), "exchangeRelation");
+		this.publishExchange = cfg.getPublishExchange();
 		this.exchangeName = publishExchange.getExchangeName();
-		this.defaultRoutingKey = configurator.defaultRoutingKey();
-		this.defaultMsgProps = configurator.defaultMsgProps();
-		this.msgPropsSupplier = configurator.msgPropsSupplier();
-		this.confirm = configurator.confirm();
-		this.confirmTimeout = configurator.confirmTimeout();
-		this.confirmRetry = configurator.confirmRetry();
+		this.defaultRoutingKey = cfg.getDefaultRoutingKey();
+		this.defaultMsgProps = cfg.getDefaultMsgProps();
+		this.msgPropsSupplier = cfg.getMsgPropsSupplier();
+		this.confirm = cfg.getConfirmOptions().isConfirm();
+		this.confirmTimeout = cfg.getConfirmOptions().getConfirmTimeout();
+		this.confirmRetry = cfg.getConfirmOptions().getConfirmRetry();
 		this.serializer = serializer;
 		this.hasPropsSupplier = msgPropsSupplier != null;
 		this.publisherName = "publisher::[" + rmqConnection.getConnectionInfo() + "$" + exchangeName + "]";
@@ -330,7 +330,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 		while (!isConnected()) {
 			log.error("Detect connection isConnected() == false, retry {}", (++retry));
 			destroy();
-			Threads.sleep(rmqConnection.recoveryInterval());
+			Threads.sleep(rmqConnection.getRecoveryInterval());
 			createConnection();
 		}
 		if (confirm) {
@@ -417,7 +417,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	private void basicPublish(String routingKey, T msg, BasicProperties props) throws IOException {
 		try {
 			// TODO 添加序列化异常处理
-			byte[] bytes = serializer.apply(msg);
+			byte[] bytes = serializer.serialization(msg);
 			if (bytes != null) {
 				channel.basicPublish(
 						// exchange: the exchange to publish the message to
@@ -467,7 +467,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 
 	public static void main(String[] args) {
 
-		RmqConnection connection = RmqConnection.configuration("127.0.0.1", 5672, "guest", "guest").build();
+		RabbitConnection connection = RabbitConnection.configuration("127.0.0.1", 5672, "guest", "guest").build();
 
 		ExchangeRelationship fanoutExchange = ExchangeRelationship.fanout("fanout-test");
 

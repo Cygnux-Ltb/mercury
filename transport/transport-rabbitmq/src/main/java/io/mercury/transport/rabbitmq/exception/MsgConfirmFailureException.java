@@ -57,8 +57,8 @@ public class MsgConfirmFailureException extends Exception {
 	 * @param msg
 	 * @param throwable
 	 */
-	public MsgConfirmFailureException(String exchange, String routingKey, int confirmRetry, long confirmTimeout, byte[] msg,
-			Throwable throwable) {
+	public MsgConfirmFailureException(String exchange, String routingKey, int confirmRetry, long confirmTimeout,
+			byte[] msg, Throwable throwable) {
 		super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
 				+ "], confirmRetry==[" + confirmRetry + "], confirmTimeout==[" + confirmTimeout + "], msg==["
 				+ new String(msg) + "]", throwable);

@@ -22,7 +22,7 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringUtil;
 import io.mercury.transport.core.api.TransportModule;
-import io.mercury.transport.rabbitmq.configurator.RmqConnection;
+import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
 
 public abstract class RabbitMqTransport implements TransportModule, Closeable {
 
@@ -34,7 +34,7 @@ public abstract class RabbitMqTransport implements TransportModule, Closeable {
 	protected volatile Channel channel;
 
 	// 存储配置信息对象
-	protected RmqConnection rmqConnection;
+	protected RabbitConnection rmqConnection;
 
 	// 停机事件, 在监听到ShutdownSignalException时调用
 	protected ShutdownEvent shutdownEvent;
@@ -57,11 +57,11 @@ public abstract class RabbitMqTransport implements TransportModule, Closeable {
 	 * @param moduleType
 	 * @param rmqConnection
 	 */
-	protected RabbitMqTransport(@Nonnull String tag, @Nonnull RmqConnection rmqConnection) {
+	protected RabbitMqTransport(@Nonnull String tag, @Nonnull RabbitConnection rmqConnection) {
 		Assertor.nonNull(rmqConnection, "rmqConnection");
 		this.tag = tag;
 		this.rmqConnection = rmqConnection;
-		this.shutdownEvent = rmqConnection.shutdownEvent();
+		this.shutdownEvent = rmqConnection.getShutdownEvent();
 	}
 
 	/**
@@ -97,9 +97,9 @@ public abstract class RabbitMqTransport implements TransportModule, Closeable {
 	protected boolean closeAndReconnection() {
 		log.info("Function closeAndReconnection()");
 		closeConnection();
-		sleep(rmqConnection.recoveryInterval() / 2);
+		sleep(rmqConnection.getRecoveryInterval() / 2);
 		createConnection();
-		sleep(rmqConnection.recoveryInterval() / 2);
+		sleep(rmqConnection.getRecoveryInterval() / 2);
 		return isConnected();
 	}
 

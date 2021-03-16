@@ -9,10 +9,10 @@ public final class DeclareRuntimeException extends RuntimeException {
 
 	/**
 	 * 
-	 * @param declareException
+	 * @param exception
 	 */
-	public DeclareRuntimeException(DeclareException declareException) {
-		super(declareException);
+	public DeclareRuntimeException(DeclareException exception) {
+		super(exception);
 	}
 
 }

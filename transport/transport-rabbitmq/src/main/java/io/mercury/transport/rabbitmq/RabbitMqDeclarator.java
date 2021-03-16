@@ -12,7 +12,7 @@ import com.rabbitmq.client.Channel;
 
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.util.Assertor;
-import io.mercury.transport.rabbitmq.configurator.RmqConnection;
+import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
 import io.mercury.transport.rabbitmq.declare.AmqpExchange;
 import io.mercury.transport.rabbitmq.declare.AmqpQueue;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
@@ -31,7 +31,7 @@ public final class RabbitMqDeclarator extends RabbitMqTransport {
 	 * @throws TimeoutException
 	 */
 	public static RabbitMqDeclarator newWith(String host, int port, String username, String password) {
-		return newWith(RmqConnection.configuration(host, port, username, password).build());
+		return newWith(RabbitConnection.configuration(host, port, username, password).build());
 	}
 
 	/**
@@ -48,7 +48,7 @@ public final class RabbitMqDeclarator extends RabbitMqTransport {
 	 */
 	public static RabbitMqDeclarator newWith(String host, int port, String username, String password,
 			String virtualHost) {
-		return newWith(RmqConnection.configuration(host, port, username, password, virtualHost).build());
+		return newWith(RabbitConnection.configuration(host, port, username, password, virtualHost).build());
 	}
 
 	/**
@@ -59,7 +59,7 @@ public final class RabbitMqDeclarator extends RabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqDeclarator newWith(RmqConnection connection) {
+	public static RabbitMqDeclarator newWith(RabbitConnection connection) {
 		return new RabbitMqDeclarator(connection);
 	}
 
@@ -73,7 +73,7 @@ public final class RabbitMqDeclarator extends RabbitMqTransport {
 		return new RabbitMqDeclarator(channel);
 	}
 
-	private RabbitMqDeclarator(RmqConnection connection) {
+	private RabbitMqDeclarator(RabbitConnection connection) {
 		super("declarator-" + DateTimeUtil.datetimeOfMillisecond(), connection);
 		createConnection();
 	}

@@ -63,24 +63,24 @@ public class RabbitMqBatchReceiver<T> extends RabbitMqTransport implements Recei
 	public RabbitMqBatchReceiver(String tag, @Nonnull RmqReceiverConfigurator configurator, long autoFlushInterval,
 			BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent) {
 		super(nonEmpty(tag) ? tag : "batch-receiver-" + DateTimeUtil.datetimeOfMillisecond(),
-				configurator.connection());
-		this.receiveQueue = configurator.receiveQueue().getQueueName();
+				configurator.getConnection());
+		this.receiveQueue = configurator.getReceiveQueue().getQueueName();
 		createConnection();
 		queueDeclare();
-		this.consumer = new BatchProcessConsumer<T>(channel, configurator.qos(), autoFlushInterval, batchHandler,
-				deserializer, refreshNowEvent, null);
+		this.consumer = new BatchProcessConsumer<T>(channel, configurator.getAckOptions().getQos(), autoFlushInterval,
+				batchHandler, deserializer, refreshNowEvent, null);
 	}
 
 	public RabbitMqBatchReceiver(String tag, @Nonnull RmqReceiverConfigurator configurator, long autoFlushInterval,
 			BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent,
 			Predicate<T> filter) {
 		super(nonEmpty(tag) ? tag : "batch-receiver-" + DateTimeUtil.datetimeOfMillisecond(),
-				configurator.connection());
-		this.receiveQueue = configurator.receiveQueue().getQueueName();
+				configurator.getConnection());
+		this.receiveQueue = configurator.getReceiveQueue().getQueueName();
 		createConnection();
 		queueDeclare();
-		this.consumer = new BatchProcessConsumer<T>(super.channel, configurator.qos(), autoFlushInterval, batchHandler,
-				deserializer, refreshNowEvent, filter);
+		this.consumer = new BatchProcessConsumer<T>(super.channel, configurator.getAckOptions().getQos(),
+				autoFlushInterval, batchHandler, deserializer, refreshNowEvent, filter);
 	}
 
 	private void queueDeclare() {

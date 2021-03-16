@@ -5,7 +5,6 @@ import static io.mercury.common.util.StringUtil.nonEmpty;
 import java.io.IOException;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,6 +19,7 @@ import com.rabbitmq.client.Envelope;
 import io.mercury.common.codec.DecodeException;
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.serialization.spec.ByteArrayDeserializer;
 import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringUtil;
 import io.mercury.transport.core.api.Receiver;
@@ -45,7 +45,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	private static final Logger log = CommonLoggerFactory.getLogger(AdvancedRabbitMqReceiver.class);
 
 	// 接收消息使用的反序列化器
-	private final Function<byte[], T> deserializer;
+	private final ByteArrayDeserializer<T> deserializer;
 
 	// 接收消息时使用的回调函数
 	private final Consumer<T> consumer;
@@ -117,7 +117,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 			@Nonnull Consumer<byte[]> consumer) {
 		Assertor.nonNull(configurator, "configurator");
 		Assertor.nonNull(consumer, "consumer");
-		return new AdvancedRabbitMqReceiver<byte[]>(null, configurator, msg -> msg, consumer, null);
+		return new AdvancedRabbitMqReceiver<byte[]>(null, configurator, (msg, reuse) -> msg, consumer, null);
 	}
 
 	/**
@@ -131,51 +131,51 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 			@Nonnull Consumer<byte[]> consumer) {
 		Assertor.nonNull(configurator, "configurator");
 		Assertor.nonNull(consumer, "consumer");
-		return new AdvancedRabbitMqReceiver<byte[]>(tag, configurator, msg -> msg, consumer, null);
+		return new AdvancedRabbitMqReceiver<byte[]>(tag, configurator, (msg, reuse) -> msg, consumer, null);
 	}
 
 	/**
 	 * 
 	 * @param <T>
 	 * @param tag
-	 * @param configurator
+	 * @param cfg
 	 * @param deserializer
 	 * @param consumer
 	 * @return
 	 */
-	public static <T> AdvancedRabbitMqReceiver<T> create(String tag, @Nonnull RmqReceiverConfigurator configurator,
-			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
-		Assertor.nonNull(configurator, "configurator");
+	public static <T> AdvancedRabbitMqReceiver<T> create(String tag, @Nonnull RmqReceiverConfigurator cfg,
+			@Nonnull ByteArrayDeserializer<T> deserializer, @Nonnull Consumer<T> consumer) {
+		Assertor.nonNull(cfg, "cfg");
 		Assertor.nonNull(deserializer, "deserializer");
 		Assertor.nonNull(consumer, "consumer");
-		return new AdvancedRabbitMqReceiver<>(tag, configurator, deserializer, consumer, null);
+		return new AdvancedRabbitMqReceiver<>(tag, cfg, deserializer, consumer, null);
 	}
 
 	/**
 	 * 
-	 * @param configurator
+	 * @param cfg
 	 * @param selfAckConsumer
 	 * @return
 	 */
-	public static AdvancedRabbitMqReceiver<byte[]> createWithSelfAck(@Nonnull RmqReceiverConfigurator configurator,
+	public static AdvancedRabbitMqReceiver<byte[]> createWithSelfAck(@Nonnull RmqReceiverConfigurator cfg,
 			@Nonnull SelfAckConsumer<byte[]> selfAckConsumer) {
-		Assertor.nonNull(configurator, "configurator");
+		Assertor.nonNull(cfg, "cfg");
 		Assertor.nonNull(selfAckConsumer, "selfAckConsumer");
-		return new AdvancedRabbitMqReceiver<>(null, configurator, msg -> msg, null, selfAckConsumer);
+		return new AdvancedRabbitMqReceiver<>(null, cfg, (msg, reuse) -> msg, null, selfAckConsumer);
 	}
 
 	/**
 	 * 
 	 * @param tag
-	 * @param configurator
+	 * @param cfg
 	 * @param selfAckConsumer
 	 * @return
 	 */
 	public static AdvancedRabbitMqReceiver<byte[]> createWithSelfAck(String tag,
-			@Nonnull RmqReceiverConfigurator configurator, @Nonnull SelfAckConsumer<byte[]> selfAckConsumer) {
-		Assertor.nonNull(configurator, "configurator");
+			@Nonnull RmqReceiverConfigurator cfg, @Nonnull SelfAckConsumer<byte[]> selfAckConsumer) {
+		Assertor.nonNull(cfg, "cfg");
 		Assertor.nonNull(selfAckConsumer, "selfAckConsumer");
-		return new AdvancedRabbitMqReceiver<>(tag, configurator, msg -> msg, null, selfAckConsumer);
+		return new AdvancedRabbitMqReceiver<>(tag, cfg, (msg, reuse) -> msg, null, selfAckConsumer);
 	}
 
 	/**
@@ -188,7 +188,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @return
 	 */
 	public static <T> AdvancedRabbitMqReceiver<T> createWithSelfAck(String tag,
-			@Nonnull RmqReceiverConfigurator configurator, @Nonnull Function<byte[], T> deserializer,
+			@Nonnull RmqReceiverConfigurator configurator, @Nonnull ByteArrayDeserializer<T> deserializer,
 			@Nonnull SelfAckConsumer<T> selfAckConsumer) {
 		Assertor.nonNull(configurator, "configurator");
 		Assertor.nonNull(deserializer, "deserializer");
@@ -199,30 +199,30 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	/**
 	 * 
 	 * @param tag
-	 * @param configurator
+	 * @param cfg
 	 * @param deserializer
 	 * @param consumer
 	 * @param selfAckConsumer
 	 */
-	private AdvancedRabbitMqReceiver(String tag, @Nonnull RmqReceiverConfigurator configurator,
-			@Nonnull Function<byte[], T> deserializer, @Nullable Consumer<T> consumer,
+	private AdvancedRabbitMqReceiver(String tag, @Nonnull RmqReceiverConfigurator cfg,
+			@Nonnull ByteArrayDeserializer<T> deserializer, @Nullable Consumer<T> consumer,
 			@Nullable SelfAckConsumer<T> selfAckConsumer) {
-		super(nonEmpty(tag) ? tag : "receiver-" + DateTimeUtil.datetimeOfMillisecond(), configurator.connection());
+		super(nonEmpty(tag) ? tag : "receiver-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
 		if (consumer == null && selfAckConsumer == null) {
 			throw new NullPointerException("[Consumer] and [SelfAckConsumer] cannot all be null");
 		}
-		this.receiveQueue = configurator.receiveQueue();
+		this.receiveQueue = cfg.getReceiveQueue();
 		this.queueName = receiveQueue.getQueueName();
 		this.deserializer = deserializer;
-		this.errMsgExchange = configurator.errMsgExchange();
-		this.errMsgRoutingKey = configurator.errMsgRoutingKey();
-		this.errMsgQueue = configurator.errMsgQueue();
-		this.autoAck = configurator.autoAck();
-		this.multipleAck = configurator.multipleAck();
-		this.maxAckTotal = configurator.maxAckTotal();
-		this.maxAckReconnection = configurator.maxAckReconnection();
-		this.qos = configurator.qos();
-		this.exclusive = configurator.exclusive();
+		this.errMsgExchange = cfg.getErrMsgExchange();
+		this.errMsgRoutingKey = cfg.getErrMsgRoutingKey();
+		this.errMsgQueue = cfg.getErrMsgQueue();
+		this.autoAck = cfg.getAckOptions().isAutoAck();
+		this.multipleAck = cfg.getAckOptions().isMultipleAck();
+		this.maxAckTotal = cfg.getAckOptions().getMaxAckTotal();
+		this.maxAckReconnection = cfg.getAckOptions().getMaxAckReconnection();
+		this.qos = cfg.getAckOptions().getQos();
+		this.exclusive = cfg.isExclusive();
 		this.consumer = consumer;
 		this.selfAckConsumer = selfAckConsumer;
 		this.receiverName = "receiver::[" + rmqConnection.getConnectionInfo() + "$" + queueName + "]";
@@ -369,7 +369,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 										consumerTag, envelope.getDeliveryTag(), body.length);
 								T t = null;
 								try {
-									t = deserializer.apply(body);
+									t = deserializer.deserialization(body);
 								} catch (Exception e) {
 									throw new DecodeException(e);
 								}
@@ -381,8 +381,8 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 										// 包装Message对象
 										new Message<>(envelope, properties, t));
 							} catch (Exception e) {
-								log.error("SelfAckConsumer accept msg==[{}] throw Exception -> {}", StringUtil.toString(body),
-										e.getMessage(), e);
+								log.error("SelfAckConsumer accept msg==[{}] throw Exception -> {}",
+										StringUtil.toString(body), e.getMessage(), e);
 								dumpUnprocessableMsg(e, consumerTag, envelope, properties, body);
 							}
 							if (!autoAck) {
@@ -443,7 +443,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 										consumerTag, envelope.getDeliveryTag(), body.length);
 								T t = null;
 								try {
-									t = deserializer.apply(body);
+									t = deserializer.deserialization(body);
 								} catch (Exception e) {
 									throw new DecodeException(e);
 								}

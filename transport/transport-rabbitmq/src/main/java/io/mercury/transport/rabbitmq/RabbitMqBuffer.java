@@ -13,10 +13,11 @@ import com.rabbitmq.client.GetResponse;
 
 import io.mercury.common.character.Charsets;
 import io.mercury.common.collections.MutableLists;
-import io.mercury.common.concurrent.queue.base.McQueue;
+import io.mercury.common.concurrent.queue.McQueue;
+import io.mercury.common.concurrent.queue.QueueStyle;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.rabbitmq.configurator.RmqConnection;
+import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
 import io.mercury.transport.rabbitmq.declare.AmqpExchange;
 import io.mercury.transport.rabbitmq.declare.QueueRelationship;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
@@ -25,7 +26,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqBuffer.class);
 
-	private RmqConnection connection;
+	private RabbitConnection connection;
 	private RabbitMqChannel rabbitMqChannel;
 	private String queueName;
 	private List<String> exchangeNames;
@@ -46,7 +47,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 	 * @return
 	 * @throws DeclareException
 	 */
-	public static final <E> RabbitMqBuffer<E> newQueue(RmqConnection connection, String queueName,
+	public static final <E> RabbitMqBuffer<E> newQueue(RabbitConnection connection, String queueName,
 			Function<E, byte[]> serializer, Function<byte[], E> deserializer) throws DeclareException {
 		return new RabbitMqBuffer<>(connection, queueName, MutableLists.emptyFastList(), MutableLists.emptyFastList(),
 				serializer, deserializer);
@@ -64,7 +65,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 	 * @return
 	 * @throws DeclareException
 	 */
-	public static final <E> RabbitMqBuffer<E> newQueue(RmqConnection connection, String queueName,
+	public static final <E> RabbitMqBuffer<E> newQueue(RabbitConnection connection, String queueName,
 			List<String> exchangeNames, List<String> routingKeys, Function<E, byte[]> serializer,
 			Function<byte[], E> deserializer) throws DeclareException {
 		return new RabbitMqBuffer<>(connection, queueName, exchangeNames, routingKeys, serializer, deserializer);
@@ -80,7 +81,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 	 * @param deserializer
 	 * @throws DeclareException
 	 */
-	private RabbitMqBuffer(RmqConnection connection, String queueName, List<String> exchangeNames,
+	private RabbitMqBuffer(RabbitConnection connection, String queueName, List<String> exchangeNames,
 			List<String> routingKeys, Function<E, byte[]> serializer, Function<byte[], E> deserializer)
 			throws DeclareException {
 		this.connection = connection;
@@ -111,7 +112,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 	 * 
 	 * @return
 	 */
-	public RmqConnection getConnection() {
+	public RabbitConnection getConnection() {
 		return connection;
 	}
 
@@ -194,7 +195,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 
 	public static void main(String[] args) {
 
-		RmqConnection connection = RmqConnection.configuration("203.60.1.26", 5672, "global", "global2018", "report")
+		RabbitConnection connection = RabbitConnection.configuration("203.60.1.26", 5672, "global", "global2018", "report")
 				.build();
 		try {
 			RabbitMqBuffer<String> testQueue = newQueue(connection, "rmq_test",
@@ -213,6 +214,11 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 	@Override
 	public boolean isEmpty() {
 		return false;
+	}
+
+	@Override
+	public QueueStyle getQueueStyle() {
+		return QueueStyle.MPMC;
 	}
 
 }
