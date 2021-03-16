@@ -3,8 +3,8 @@ package io.mercury.serialization.wire;
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
 
-import io.mercury.common.log.LogConfigurator;
-import io.mercury.common.log.LogConfigurator.LogLevel;
+import io.mercury.common.log.CommonLogConfigurator;
+import io.mercury.common.log.CommonLogConfigurator.LogLevel;
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.wire.BinaryWire;
 import net.openhft.chronicle.wire.TextWire;
@@ -19,7 +19,7 @@ import net.openhft.chronicle.wire.Wire;
 public class SimpleExampleWithDataType {
 
 	static {
-		LogConfigurator.setLogLevel(LogLevel.ERROR);
+		CommonLogConfigurator.setLogLevel(LogLevel.ERROR);
 	}
 
 	public static void main(String[] args) {
@@ -38,6 +38,7 @@ public class SimpleExampleWithDataType {
 		Data data = new Data("Hello World", 1234567890L, TimeUnit.NANOSECONDS, 10.50);
 		data.writeMarshallable(wire);
 		System.out.println(bytes);
+		System.out.println(wire);
 
 		Data data2 = new Data();
 		data2.readMarshallable(wire);

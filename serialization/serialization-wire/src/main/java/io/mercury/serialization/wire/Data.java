@@ -2,7 +2,7 @@ package io.mercury.serialization.wire;
 
 import java.util.concurrent.TimeUnit;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 import io.mercury.serialization.json.JsonWrapper;
 import net.openhft.chronicle.wire.Marshallable;
@@ -35,7 +35,7 @@ public final class Data implements Marshallable {
 	}
 
 	@Override
-	public void readMarshallable(@NotNull WireIn wire) throws IllegalStateException {
+	public void readMarshallable(@Nonnull WireIn wire) throws IllegalStateException {
 		wire.read(() -> Field1).text(this, (obj, s) -> this.message = s)
 			.read(() -> Field2).int64(this, (obj, i) -> this.number = i)
 			.read(() -> Field3).asEnum(TimeUnit.class, e -> this.timeUnit = e)
@@ -43,7 +43,7 @@ public final class Data implements Marshallable {
 	}
 
 	@Override
-	public void writeMarshallable(WireOut wire) {
+	public void writeMarshallable(@Nonnull WireOut wire) {
 		wire.write(() -> Field1).text(message)
 			.write(() -> Field2).int64(number)
 			.write(() -> Field3).asEnum(timeUnit)
