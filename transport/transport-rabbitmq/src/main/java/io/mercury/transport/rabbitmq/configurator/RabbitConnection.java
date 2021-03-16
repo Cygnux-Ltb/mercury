@@ -14,52 +14,67 @@ import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringUtil;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.core.configurator.TransportConfigurator;
+import lombok.Getter;
 
-public final class RmqConnection implements TransportConfigurator {
+public final class RabbitConnection implements TransportConfigurator {
 
 	// 连接地址
+	@Getter
 	private final String host;
 
 	// 端口号
+	@Getter
 	private final int port;
 
 	// 用户名
+	@Getter
 	private final String username;
 
 	// 密码
+	@Getter
 	private final String password;
 
 	// 虚拟主机
+	@Getter
 	private final String virtualHost;
 
 	// SSL上下文
+	@Getter
 	private final SSLContext sslContext;
 
 	// 连接超时时间
+	@Getter
 	private final int connectionTimeout;
 
 	// 自动恢复连接
+	@Getter
 	private final boolean automaticRecovery;
 
 	// 重试连接间隔
+	@Getter
 	private final long recoveryInterval;
 
 	// 握手通信超时时间
+	@Getter
 	private final int handshakeTimeout;
 
 	// 关闭超时时间
+	@Getter
 	private final int shutdownTimeout;
 
 	// 请求心跳超时时间
+	@Getter
 	private final int requestedHeartbeat;
 
 	// 停机处理回调函数
+	@Getter
 	private final transient ShutdownEvent shutdownEvent;
 
 	// 配置连接信息
+	@Getter
 	private final String connectionInfo;
 
-	private RmqConnection(Builder builder) {
+	private RabbitConnection(Builder builder) {
 		this.host = builder.host;
 		this.port = builder.port;
 		this.username = builder.username;
@@ -102,96 +117,6 @@ public final class RmqConnection implements TransportConfigurator {
 	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
 			@Nonnull String password, @CheckForNull String virtualHost) {
 		return new Builder(host, port, username, password, virtualHost);
-	}
-
-	@Override
-	public String getConnectionInfo() {
-		return connectionInfo;
-	}
-
-	public String getHost() {
-		return host;
-	}
-
-	public int getPort() {
-		return port;
-	}
-
-	/**
-	 * @return the username
-	 */
-	public String username() {
-		return username;
-	}
-
-	/**
-	 * @return the password
-	 */
-	public String password() {
-		return password;
-	}
-
-	/**
-	 * @return the virtualHost
-	 */
-	public String virtualHost() {
-		return virtualHost;
-	}
-
-	/**
-	 * @return the sslContext
-	 */
-	public SSLContext sslContext() {
-		return sslContext;
-	}
-
-	/**
-	 * @return the connectionTimeout
-	 */
-	public int connectionTimeout() {
-		return connectionTimeout;
-	}
-
-	/**
-	 * @return the automaticRecovery
-	 */
-	public boolean automaticRecovery() {
-		return automaticRecovery;
-	}
-
-	/**
-	 * @return the recoveryInterval
-	 */
-	public long recoveryInterval() {
-		return recoveryInterval;
-	}
-
-	/**
-	 * @return the handshakeTimeout
-	 */
-	public int handshakeTimeout() {
-		return handshakeTimeout;
-	}
-
-	/**
-	 * @return the shutdownTimeout
-	 */
-	public int shutdownTimeout() {
-		return shutdownTimeout;
-	}
-
-	/**
-	 * @return the requestedHeartbeat
-	 */
-	public int requestedHeartbeat() {
-		return requestedHeartbeat;
-	}
-
-	/**
-	 * @return the shutdownEvent
-	 */
-	public ShutdownEvent shutdownEvent() {
-		return shutdownEvent;
 	}
 
 	/**
@@ -282,8 +207,8 @@ public final class RmqConnection implements TransportConfigurator {
 				this.virtualHost = virtualHost;
 		}
 
-		public RmqConnection build() {
-			return new RmqConnection(this);
+		public RabbitConnection build() {
+			return new RabbitConnection(this);
 		}
 
 		/**
@@ -354,7 +279,7 @@ public final class RmqConnection implements TransportConfigurator {
 
 	public static void main(String[] args) {
 
-		RmqConnection configuration = configuration("localhost", 5672, "admin", "admin", "report").build();
+		RabbitConnection configuration = configuration("localhost", 5672, "admin", "admin", "report").build();
 		System.out.println(configuration);
 		System.out.println(configuration.getConfiguratorInfo());
 

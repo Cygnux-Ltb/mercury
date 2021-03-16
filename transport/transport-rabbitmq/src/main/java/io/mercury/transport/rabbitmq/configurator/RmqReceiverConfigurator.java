@@ -8,31 +8,38 @@ import javax.annotation.Nonnull;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
 import io.mercury.transport.rabbitmq.declare.QueueRelationship;
+import lombok.Getter;
 
 /**
  * 
  * @author yellow013
  *
  */
-public final class RmqReceiverConfigurator extends RmqConfigurator {
+public final class RmqReceiverConfigurator extends RabbitConfigurator {
 
 	// 接受者QueueDeclare
-	private QueueRelationship receiveQueue;
+	@Getter
+	private final QueueRelationship receiveQueue;
 
 	// 错误消息ExchangeDeclare
-	private ExchangeRelationship errMsgExchange;
+	@Getter
+	private final ExchangeRelationship errMsgExchange;
 
 	// 错误消息RoutingKey
-	private String errMsgRoutingKey;
+	@Getter
+	private final String errMsgRoutingKey;
 
 	// 错误消息QueueDeclare
-	private QueueRelationship errMsgQueue;
+	@Getter
+	private final QueueRelationship errMsgQueue;
 
 	// 消费者独占队列
-	private boolean exclusive;
+	@Getter
+	private final boolean exclusive;
 
 	// ACK选项
-	private ReceiveAckOptions ackOptions;
+	@Getter
+	private final ReceiveAckOptions ackOptions;
 
 	/**
 	 * 
@@ -54,91 +61,10 @@ public final class RmqReceiverConfigurator extends RmqConfigurator {
 	 * @param receiveQueue
 	 * @return
 	 */
-	public static Builder configuration(@Nonnull RmqConnection connection, @Nonnull QueueRelationship receiveQueue) {
+	public static Builder configuration(@Nonnull RabbitConnection connection, @Nonnull QueueRelationship receiveQueue) {
 		nonNull(connection, "connection");
 		nonNull(receiveQueue, "receiveQueue");
 		return new Builder(connection, receiveQueue);
-	}
-
-	/**
-	 * @return the queueDeclare
-	 */
-	public QueueRelationship receiveQueue() {
-		return receiveQueue;
-	}
-
-	/**
-	 * @return the errorMsgExchange
-	 */
-	public ExchangeRelationship errMsgExchange() {
-		return errMsgExchange;
-	}
-
-	/**
-	 * 
-	 * @return the errorMsgRoutingKey
-	 */
-	public String errMsgRoutingKey() {
-		return errMsgRoutingKey;
-	}
-
-	/**
-	 * 
-	 * @return the errorMsgQueue
-	 */
-	public QueueRelationship errMsgQueue() {
-		return errMsgQueue;
-	}
-
-	/**
-	 * 
-	 * @return the exclusive
-	 */
-	public boolean exclusive() {
-		return exclusive;
-	}
-
-	/**
-	 * 
-	 * @return the ackOptions
-	 */
-	public ReceiveAckOptions ackOptions() {
-		return ackOptions;
-	}
-
-	/**
-	 * @return the isAutoAck
-	 */
-	public boolean autoAck() {
-		return ackOptions.isAutoAck();
-	}
-
-	/**
-	 * @return the isMultipleAck
-	 */
-	public boolean multipleAck() {
-		return ackOptions.isMultipleAck();
-	}
-
-	/**
-	 * @return the maxAckTotal
-	 */
-	public int maxAckTotal() {
-		return ackOptions.getMaxAckTotal();
-	}
-
-	/**
-	 * @return the maxAckReconnection
-	 */
-	public int maxAckReconnection() {
-		return ackOptions.getMaxAckReconnection();
-	}
-
-	/**
-	 * @return the qos
-	 */
-	public int qos() {
-		return ackOptions.getQos();
 	}
 
 	private transient String toStringCache;
@@ -153,7 +79,7 @@ public final class RmqReceiverConfigurator extends RmqConfigurator {
 	public static class Builder {
 
 		// 连接配置
-		private RmqConnection connection;
+		private RabbitConnection connection;
 		// 接受者QueueRelationship
 		private QueueRelationship receiveQueue;
 		// 错误消息ExchangeRelationship
@@ -171,7 +97,7 @@ public final class RmqReceiverConfigurator extends RmqConfigurator {
 		// ACK选项
 		private ReceiveAckOptions ackOptions = defaultOption();
 
-		private Builder(RmqConnection connection, QueueRelationship receiveQueue) {
+		private Builder(RabbitConnection connection, QueueRelationship receiveQueue) {
 			this.connection = connection;
 			this.receiveQueue = receiveQueue;
 		}

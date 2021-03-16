@@ -13,28 +13,34 @@ import com.rabbitmq.client.AMQP.BasicProperties;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rabbitmq.declare.AmqpQueue;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
+import lombok.Getter;
 
 /**
  * 
  * @author yellow013
  * 
  */
-public final class RmqPublisherConfigurator extends RmqConfigurator {
+public final class RmqPublisherConfigurator extends RabbitConfigurator {
 
 	// 发布者ExchangeDeclare
-	private ExchangeRelationship publishExchange;
+	@Getter
+	private final ExchangeRelationship publishExchange;
 
 	// 消息发布RoutingKey
-	private String defaultRoutingKey;
+	@Getter
+	private final String defaultRoutingKey;
 
 	// 消息发布参数
-	private BasicProperties defaultMsgProps;
+	@Getter
+	private final BasicProperties defaultMsgProps;
 
 	// 消息参数提供者
-	private Supplier<BasicProperties> msgPropsSupplier;
+	@Getter
+	private final Supplier<BasicProperties> msgPropsSupplier;
 
 	// 发布确认选项
-	private PublishConfirmOptions confirmOptions;
+	@Getter
+	private final PublishConfirmOptions confirmOptions;
 
 	/**
 	 * 
@@ -60,7 +66,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	 */
 	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
 			@Nonnull String password) {
-		return configuration(RmqConnection.configuration(host, port, username, password).build());
+		return configuration(RabbitConnection.configuration(host, port, username, password).build());
 	}
 
 	/**
@@ -75,7 +81,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	 */
 	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
 			@Nonnull String password, String virtualHost) {
-		return configuration(RmqConnection.configuration(host, port, username, password, virtualHost).build());
+		return configuration(RabbitConnection.configuration(host, port, username, password, virtualHost).build());
 	}
 
 	/**
@@ -84,7 +90,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	 * @param connection
 	 * @return
 	 */
-	public static Builder configuration(@Nonnull RmqConnection connection) {
+	public static Builder configuration(@Nonnull RabbitConnection connection) {
 		return configuration(connection, ExchangeRelationship.Anonymous);
 	}
 
@@ -101,7 +107,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	 */
 	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
 			@Nonnull String password, @Nonnull ExchangeRelationship publishExchange) {
-		return configuration(RmqConnection.configuration(host, port, username, password).build(), publishExchange);
+		return configuration(RabbitConnection.configuration(host, port, username, password).build(), publishExchange);
 	}
 
 	/**
@@ -117,7 +123,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	 */
 	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
 			@Nonnull String password, String virtualHost, @Nonnull ExchangeRelationship publishExchange) {
-		return configuration(RmqConnection.configuration(host, port, username, password, virtualHost).build(),
+		return configuration(RabbitConnection.configuration(host, port, username, password, virtualHost).build(),
 				publishExchange);
 	}
 
@@ -128,67 +134,9 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	 * @param exchangeRelation
 	 * @return
 	 */
-	public static Builder configuration(@Nonnull RmqConnection connection,
+	public static Builder configuration(@Nonnull RabbitConnection connection,
 			@Nonnull ExchangeRelationship publishExchange) {
 		return new Builder(nonNull(connection, "connection"), nonNull(publishExchange, "publishExchange"));
-	}
-
-	/**
-	 * @return the exchangeDeclare
-	 */
-	public ExchangeRelationship publishExchange() {
-		return publishExchange;
-	}
-
-	/**
-	 * @return the defaultRoutingKey
-	 */
-	public String defaultRoutingKey() {
-		return defaultRoutingKey;
-	}
-
-	/**
-	 * @return the msgProperties
-	 */
-	public BasicProperties defaultMsgProps() {
-		return defaultMsgProps;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public Supplier<BasicProperties> msgPropsSupplier() {
-		return msgPropsSupplier;
-	}
-
-	/**
-	 * 
-	 * @return the confirmOptions
-	 */
-	public PublishConfirmOptions confirmOptions() {
-		return confirmOptions;
-	}
-
-	/**
-	 * @return the isConfirm
-	 */
-	public boolean confirm() {
-		return confirmOptions.isConfirm();
-	}
-
-	/**
-	 * @return the confirmTimeout
-	 */
-	public long confirmTimeout() {
-		return confirmOptions.getConfirmTimeout();
-	}
-
-	/**
-	 * @return the confirmRetry
-	 */
-	public int confirmRetry() {
-		return confirmOptions.getConfirmRetry();
 	}
 
 	private transient String toStringCache;
@@ -203,7 +151,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	public static class Builder {
 
 		// 连接配置
-		private RmqConnection connection;
+		private RabbitConnection connection;
 		// 消息发布Exchange和相关绑定
 		private ExchangeRelationship publishExchange;
 		// 消息发布RoutingKey, 默认为空字符串
@@ -219,7 +167,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 		 * 
 		 * @param connection
 		 */
-		private Builder(RmqConnection connection) {
+		private Builder(RabbitConnection connection) {
 			this.connection = connection;
 		}
 
@@ -228,7 +176,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 		 * @param connection
 		 * @param publishExchange
 		 */
-		private Builder(RmqConnection connection, ExchangeRelationship publishExchange) {
+		private Builder(RabbitConnection connection, ExchangeRelationship publishExchange) {
 			this.connection = connection;
 			this.publishExchange = publishExchange;
 		}
@@ -292,7 +240,7 @@ public final class RmqPublisherConfigurator extends RmqConfigurator {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(configuration(RmqConnection.configuration("localhost", 5672, "user0", "userpass").build(),
+		System.out.println(configuration(RabbitConnection.configuration("localhost", 5672, "user0", "userpass").build(),
 				ExchangeRelationship.direct("TEST").bindingQueue(AmqpQueue.named("TEST_0"))).build());
 	}
 
