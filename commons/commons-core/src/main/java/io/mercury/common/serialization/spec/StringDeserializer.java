@@ -3,6 +3,6 @@ package io.mercury.common.serialization.spec;
 import io.mercury.common.serialization.Deserializer;
 
 @FunctionalInterface
-public interface TextDeserializer<R> extends Deserializer<String, R> {
+public interface StringDeserializer<R> extends Deserializer<String, R> {
 
 }
