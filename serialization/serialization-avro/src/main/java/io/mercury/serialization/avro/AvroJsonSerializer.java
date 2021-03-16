@@ -14,12 +14,12 @@ import org.slf4j.Logger;
 
 import io.mercury.common.character.Charsets;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.spec.TextSerializer;
+import io.mercury.common.serialization.spec.StringSerializer;
 
 @NotThreadSafe
-public class AvroTextSerializer<T extends SpecificRecord> implements TextSerializer<T> {
+public class AvroJsonSerializer<T extends SpecificRecord> implements StringSerializer<T> {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(AvroTextSerializer.class);
+	private static final Logger log = CommonLoggerFactory.getLogger(AvroJsonSerializer.class);
 
 	private JsonEncoder encoder;
 
@@ -30,11 +30,11 @@ public class AvroTextSerializer<T extends SpecificRecord> implements TextSeriali
 	/**
 	 * Use default ByteArrayOutputStream size
 	 */
-	public AvroTextSerializer(Class<T> recordClass) {
+	public AvroJsonSerializer(Class<T> recordClass) {
 		this(recordClass, 8192);
 	}
 
-	public AvroTextSerializer(Class<T> recordClass, int size) {
+	public AvroJsonSerializer(Class<T> recordClass, int size) {
 		this.writer = new SpecificDatumWriter<>(recordClass);
 		this.outputStream = new ByteArrayOutputStream(size);
 	}
