@@ -11,11 +11,11 @@ public final class NacosReadException extends RuntimeException {
 		super(message);
 	}
 
-	public NacosReadException(Exception e) {
+	public NacosReadException(Throwable e) {
 		super(e.getMessage(), e);
 	}
 
-	public NacosReadException(String message, Exception e) {
+	public NacosReadException(String message, Throwable e) {
 		super(message, e);
 	}
 
