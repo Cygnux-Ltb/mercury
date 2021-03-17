@@ -76,7 +76,7 @@ public class NacosReader {
 			throws NacosReadException {
 		String saved = getSaved0(service, group, dataId);
 		try {
-			return PropertiesUtil.toProperties(saved);
+			return PropertiesUtil.loadProperties(saved);
 		} catch (IOException e) {
 			throw new NacosReadException(e);
 		}
