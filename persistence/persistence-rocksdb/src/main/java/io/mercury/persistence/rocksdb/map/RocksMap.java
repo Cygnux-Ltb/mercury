@@ -43,7 +43,7 @@ public class RocksMap<K extends RocksKey, V extends RocksValue> implements Close
 
 	public static void main(String[] args) {
 		Options options = new Options();
-		ShutdownHooks.addShutdownHookThread("RocksContainerCloseThread", () -> options.close());
+		ShutdownHooks.addShutdownHook("RocksContainerCloseThread", () -> options.close());
 	}
 
 	public void scan() {

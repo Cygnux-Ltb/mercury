@@ -26,9 +26,6 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 	// 存储路径
 	private final File savePath;
 
-	// 最小过期时间为两小时
-	private final long minExpireMillis = 2 * 60 * 60 * 1000;
-
 	public ChronicleMapKeeperOfLRU(@Nonnull ChronicleMapConfigurator<K, V> configurator, Duration expire) {
 		this(configurator, expire, 65536);
 	}
@@ -36,7 +33,9 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 	public ChronicleMapKeeperOfLRU(@Nonnull ChronicleMapConfigurator<K, V> configurator, Duration expire,
 			int fileTotal) {
 		super(configurator);
-		long millis = expire.toMillis();
+		final long millis = expire.toMillis();
+		// 定义最小过期时间为两小时
+		final long minExpireMillis = 2 * 60 * 60 * 1000;
 		this.expireMillis = millis < minExpireMillis ? minExpireMillis : millis;
 		this.savePath = configurator.savePath();
 		// LRU记录构建器
@@ -72,8 +71,8 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 		} catch (IOException e) {
 			throw new ChronicleIOException(e);
 		}
-		this.cleanupThread = Threads.startNewThread("Keeper-{" + configurator.getConfiguratorInfo() + "}-Cleanup-Thread",
-				this::cleanupFunc);
+		this.cleanupThread = Threads.startNewThread(
+				"Keeper-{" + configurator.getConfiguratorInfo() + "}-Cleanup-Thread", this::cleanupFunc);
 	}
 
 	/**
@@ -125,9 +124,9 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 	public ChronicleMap<K, V> acquire(String filename) throws ChronicleIOException {
 		ChronicleMap<K, V> acquire = super.acquire(filename);
 		// 存储文件名和到期时间
-		long x = EpochTime.millis() + expireMillis;
-		System.out.println("分配新文件 -> " + filename + ", 过期时间为 -> " + x);
-		lastUsedLog.put(filename, x);
+		long expireEpoch = EpochTime.millis() + expireMillis;
+		System.out.println("分配新文件 -> " + filename + ", 过期时间为 -> " + expireEpoch);
+		lastUsedLog.put(filename, expireEpoch);
 		return acquire;
 	}
 

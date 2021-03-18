@@ -115,7 +115,7 @@ public abstract class AbstractChronicleMultitypeQueue<
 			builder.epoch(epoch);
 		}
 		// TODO 待解决CPU缓存行填充问题
-		ShutdownHooks.addShutdownHookThread("ChronicleQueue-Cleanup", this::shutdownHandle);
+		ShutdownHooks.addShutdownHook("ChronicleQueue-Cleanup", this::shutdownHandle);
 		return builder.build();
 	}
 

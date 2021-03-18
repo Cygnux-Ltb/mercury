@@ -28,7 +28,7 @@ public class ChronicleMapKeeper<K, V> extends AbstractKeeper<String, ChronicleMa
 		return configurator;
 	}
 
-	private final Object lock = new Object();
+	protected final Object lock = new Object();
 
 	// 关闭状态
 	protected volatile boolean isClosed = false;
