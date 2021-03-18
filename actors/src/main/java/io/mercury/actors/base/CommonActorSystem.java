@@ -1,6 +1,6 @@
 package io.mercury.actors.base;
 
-import static io.mercury.common.thread.ShutdownHooks.addShutdownHookThread;
+import static io.mercury.common.thread.ShutdownHooks.addShutdownHook;
 
 import akka.actor.ActorPath;
 import akka.actor.ActorRef;
@@ -27,7 +27,7 @@ public final class CommonActorSystem {
 		this.internal = ActorSystem.create(name);
 		this.logger = Logging.getLogger(internal, this);
 		// Add ShutdownHook
-		addShutdownHookThread("CommonActorSystemTerminateThread", this::terminateActorSystem);
+		addShutdownHook("CommonActorSystemTerminateThread", this::terminateActorSystem);
 	}
 
 	private void terminateActorSystem() {
