@@ -1,6 +1,5 @@
 package io.mercury.common.collections.queue;
 
-import java.util.Collection;
 import java.util.LinkedList;
 
 import javax.annotation.concurrent.NotThreadSafe;
@@ -14,7 +13,7 @@ public class PreloadingQueue<T> {
 		return list.removeFirst();
 	}
 
-	public void addLast(T content) {
+	public void add(T content) {
 		list.addLast(content);
 	}
 
@@ -26,7 +25,7 @@ public class PreloadingQueue<T> {
 		return !isEmpty();
 	}
 
-	public Collection<T> getAllElement() {
+	public LinkedList<T> getLinkedList() {
 		return list;
 	}
 

@@ -48,10 +48,10 @@ public abstract class LimitedContainer<E> {
 			count++;
 	}
 
-	abstract protected void setTail(int tail, E e);
+	protected abstract void setTail(int tail, E e);
 
-	abstract public E getTail();
+	public abstract E getTail();
 
-	abstract public E getHead();
+	public abstract E getHead();
 
 }

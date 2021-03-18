@@ -25,33 +25,58 @@ public final class LongRangeMap<V> {
 	private final MutableLongObjectMap<V> savedMap;
 	private final MutableLongSet savedKey;
 
+	/**
+	 * Use Capacity.L06_SIZE
+	 */
 	public LongRangeMap() {
 		this(Capacity.L06_SIZE);
 	}
 
+	/**
+	 * @param capacity
+	 */
 	public LongRangeMap(Capacity capacity) {
 		this.savedMap = MutableMaps.newLongObjectHashMap(capacity);
 		this.savedKey = MutableSets.newLongHashSet(capacity);
-
 	}
 
+	/**
+	 * 
+	 * @param key
+	 * @param value
+	 * @return
+	 */
 	public synchronized LongRangeMap<V> put(long key, V value) {
 		savedMap.put(key, value);
 		savedKey.add(key);
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 */
 	@CheckForNull
 	public V get(long key) {
 		return savedMap.get(key);
 	}
 
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 */
 	@CheckForNull
 	public synchronized V remove(long key) {
 		savedKey.remove(key);
 		return savedMap.remove(key);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public MutableList<V> getAll() {
 		return MutableLists.newFastList(savedMap.values());
 	}
@@ -61,6 +86,12 @@ public final class LongRangeMap<V> {
 		savedKey.clear();
 	}
 
+	/**
+	 * 
+	 * @param startPoint
+	 * @param endPoint
+	 * @return
+	 */
 	public synchronized MutableList<V> scan(long startPoint, long endPoint) {
 		MutableLongSet selectKey = selectKey(startPoint, endPoint);
 		MutableList<V> selected = MutableLists.newFastList(selectKey.size());
@@ -68,6 +99,12 @@ public final class LongRangeMap<V> {
 		return selected;
 	}
 
+	/**
+	 * 
+	 * @param startPoint
+	 * @param endPoint
+	 * @return
+	 */
 	public synchronized MutableList<V> remove(long startPoint, long endPoint) {
 		MutableLongSet selectKey = selectKey(startPoint, endPoint);
 		MutableList<V> removed = MutableLists.newFastList(selectKey.size());

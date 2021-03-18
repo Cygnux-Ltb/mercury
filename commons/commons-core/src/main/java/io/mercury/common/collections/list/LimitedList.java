@@ -21,7 +21,7 @@ public abstract class LimitedList<L extends List<E>, E> extends LimitedContainer
 	 * @param capacity
 	 * @return
 	 */
-	public final static <E> LimitedList<FastList<E>, E> newLimitedFastList(int capacity) {
+	public final static <E> LimitedList<FastList<E>, E> newWithFastList(int capacity) {
 		return new LimitedList<FastList<E>, E>(capacity) {
 			@Override
 			protected FastList<E> initList(int capacity) {

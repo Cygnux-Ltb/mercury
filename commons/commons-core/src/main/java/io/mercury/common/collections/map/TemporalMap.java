@@ -33,6 +33,9 @@ public abstract class TemporalMap<K extends Temporal, V, T extends TemporalMap<K
 	 */
 	private final BiPredicate<K, K> hasNextKey;
 
+	/**
+	 * 
+	 */
 	private final MutableLongObjectMap<V> savedMap;
 
 	public TemporalMap(ToLongFunction<K> keyFunc, Function<K, K> nextKeyFunc, BiPredicate<K, K> hasNextKey) {
@@ -47,7 +50,7 @@ public abstract class TemporalMap<K extends Temporal, V, T extends TemporalMap<K
 		this.savedMap = MutableMaps.newLongObjectHashMap(capacity);
 	}
 
-	abstract protected T returnThis();
+	protected abstract T returnThis();
 
 	/**
 	 * 
