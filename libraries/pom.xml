@@ -18,14 +18,13 @@
 	<modules>
 		<module>library-arangodb</module>
 		<module>library-cassandra</module>
-		<module>library-derby</module>
 		<module>library-h2</module>
-		<module>library-hsqldb</module>
+		<module>library-ignite</module>
 		<module>library-janusgraph</module>
 		<module>library-redis</module>
 		<module>library-sqlite</module>
 	</modules>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -47,6 +46,28 @@
 				<groupId>javax.persistence</groupId>
 				<artifactId>javax.persistence-api</artifactId>
 				<version>2.2</version>
+			</dependency>
+
+			<!-- A set of annotations used for code inspection support and code documentation -->
+			<dependency>
+				<groupId>org.jetbrains</groupId>
+				<artifactId>annotations</artifactId>
+				<version>19.0.0</version>
+			</dependency>
+
+			<!-- The Apache Commons DbUtils package is a set of Java utility classes 
+				for easing JDBC development. -->
+			<dependency>
+				<groupId>commons-dbutils</groupId>
+				<artifactId>commons-dbutils</artifactId>
+				<version>1.7</version>
+			</dependency>
+
+			<!-- Ultimate JDBC Connection Pool -->
+			<dependency>
+				<groupId>com.zaxxer</groupId>
+				<artifactId>HikariCP</artifactId>
+				<version>4.0.3</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

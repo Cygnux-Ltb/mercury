@@ -13,17 +13,19 @@ import com.arangodb.entity.BaseDocument;
 import com.arangodb.model.DBCreateOptions;
 import com.arangodb.velocypack.VPackSlice;
 
+import io.mercury.common.log.CommonLogConfigurator;
+import io.mercury.common.log.CommonLogConfigurator.LogLevel;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.log.LogConfigurator;
-import io.mercury.common.log.LogConfigurator.LogLevel;
 
 public class ArangoDemo {
+
+	static {
+		CommonLogConfigurator.setLogLevel(LogLevel.INFO);
+	}
 
 	private static final Logger log = CommonLoggerFactory.getLogger(ArangoDemo.class);
 
 	public static void main(final String[] args) {
-
-		LogConfigurator.setLogLevel(LogLevel.INFO);
 
 		final ArangoDB arangoDB = new ArangoDB.Builder().host("127.0.0.1", 8529).user("root").password("root")
 				.useProtocol(Protocol.VST).build();
