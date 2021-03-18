@@ -81,7 +81,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 		this.confirmTimeout = cfg.getConfirmOptions().getConfirmTimeout();
 		this.confirmRetry = cfg.getConfirmOptions().getConfirmRetry();
 		this.hasPropsSupplier = msgPropsSupplier != null;
-		this.publisherName = "publisher::" + rmqConnection.getConnectionInfo() + "$" + exchangeName;
+		this.publisherName = "publisher::" + rabbitConnection.getConnectionInfo() + "$" + exchangeName;
 		createConnection();
 		declare();
 	}
@@ -98,7 +98,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 		} catch (DeclareException e) {
 			// 在定义Exchange和进行绑定时抛出任何异常都需要终止程序
 			log.error("Exchange declare throw exception -> connection configurator info : {}, " + "error message : {}",
-					rmqConnection.getConfiguratorInfo(), e.getMessage(), e);
+					rabbitConnection.getConfiguratorInfo(), e.getMessage(), e);
 			destroy();
 			throw new DeclareRuntimeException(e);
 		}
@@ -135,7 +135,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 		while (!isConnected()) {
 			log.error("Detect connection isConnected() == false, retry {}", (++retry));
 			destroy();
-			Threads.sleep(rmqConnection.getRecoveryInterval());
+			Threads.sleep(rabbitConnection.getRecoveryInterval());
 			createConnection();
 		}
 		if (confirm) {

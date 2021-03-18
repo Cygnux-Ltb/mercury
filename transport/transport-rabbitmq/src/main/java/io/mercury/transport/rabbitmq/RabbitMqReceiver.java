@@ -166,7 +166,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 		this.maxAckTotal = cfg.getAckOptions().getMaxAckTotal();
 		this.maxAckReconnection = cfg.getAckOptions().getMaxAckReconnection();
 		this.qos = cfg.getAckOptions().getQos();
-		this.receiverName = "receiver::" + rmqConnection.getConnectionInfo() + "$" + queueName;
+		this.receiverName = "receiver::" + rabbitConnection.getConnectionInfo() + "$" + queueName;
 		createConnection();
 		declare();
 	}
@@ -177,7 +177,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 			this.receiveQueue.declare(operator);
 		} catch (DeclareException e) {
 			log.error("Queue declare throw exception -> connection configurator info : {}, error message : {}",
-					rmqConnection.getConfiguratorInfo(), e.getMessage(), e);
+					rabbitConnection.getConfiguratorInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			destroy();
 			throw new DeclareRuntimeException(e);
@@ -198,7 +198,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 		} catch (DeclareException e) {
 			log.error(
 					"ErrorMsgExchange declare throw exception -> connection configurator info : {}, error message : {}",
-					rmqConnection.getConfiguratorInfo(), e.getMessage(), e);
+					rabbitConnection.getConfiguratorInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			destroy();
 			throw new DeclareRuntimeException(e);
@@ -212,7 +212,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 			this.errMsgQueue.declare(declarator);
 		} catch (DeclareException e) {
 			log.error("ErrorMsgQueue declare throw exception -> connection configurator info : {}, error message : {}",
-					rmqConnection.getConfiguratorInfo(), e.getMessage(), e);
+					rabbitConnection.getConfiguratorInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			destroy();
 			throw new DeclareRuntimeException(e);

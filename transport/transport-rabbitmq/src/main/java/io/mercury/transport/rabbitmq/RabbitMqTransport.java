@@ -34,7 +34,7 @@ public abstract class RabbitMqTransport implements TransportModule, Closeable {
 	protected volatile Channel channel;
 
 	// 存储配置信息对象
-	protected RabbitConnection rmqConnection;
+	protected RabbitConnection rabbitConnection;
 
 	// 停机事件, 在监听到ShutdownSignalException时调用
 	protected ShutdownEvent shutdownEvent;
@@ -55,13 +55,13 @@ public abstract class RabbitMqTransport implements TransportModule, Closeable {
 	 * 
 	 * @param tag
 	 * @param moduleType
-	 * @param rmqConnection
+	 * @param rabbitConnection
 	 */
-	protected RabbitMqTransport(@Nonnull String tag, @Nonnull RabbitConnection rmqConnection) {
-		Assertor.nonNull(rmqConnection, "rmqConnection");
+	protected RabbitMqTransport(@Nonnull String tag, @Nonnull RabbitConnection rabbitConnection) {
+		Assertor.nonNull(rabbitConnection, "rmqConnection");
 		this.tag = tag;
-		this.rmqConnection = rmqConnection;
-		this.shutdownEvent = rmqConnection.getShutdownEvent();
+		this.rabbitConnection = rabbitConnection;
+		this.shutdownEvent = rabbitConnection.getShutdownEvent();
 	}
 
 	/**
@@ -70,7 +70,7 @@ public abstract class RabbitMqTransport implements TransportModule, Closeable {
 	protected void createConnection() {
 		log.info("Create connection started");
 		if (connectionFactory == null) {
-			connectionFactory = rmqConnection.newConnectionFactory();
+			connectionFactory = rabbitConnection.newConnectionFactory();
 		}
 		try {
 			connection = connectionFactory.newConnection();
@@ -97,9 +97,9 @@ public abstract class RabbitMqTransport implements TransportModule, Closeable {
 	protected boolean closeAndReconnection() {
 		log.info("Function closeAndReconnection()");
 		closeConnection();
-		sleep(rmqConnection.getRecoveryInterval() / 2);
+		sleep(rabbitConnection.getRecoveryInterval() / 2);
 		createConnection();
-		sleep(rmqConnection.getRecoveryInterval() / 2);
+		sleep(rabbitConnection.getRecoveryInterval() / 2);
 		return isConnected();
 	}
 

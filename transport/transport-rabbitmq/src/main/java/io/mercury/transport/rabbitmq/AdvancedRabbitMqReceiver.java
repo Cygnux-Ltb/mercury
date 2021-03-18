@@ -171,8 +171,8 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @param selfAckConsumer
 	 * @return
 	 */
-	public static AdvancedRabbitMqReceiver<byte[]> createWithSelfAck(String tag,
-			@Nonnull RmqReceiverConfigurator cfg, @Nonnull SelfAckConsumer<byte[]> selfAckConsumer) {
+	public static AdvancedRabbitMqReceiver<byte[]> createWithSelfAck(String tag, @Nonnull RmqReceiverConfigurator cfg,
+			@Nonnull SelfAckConsumer<byte[]> selfAckConsumer) {
 		Assertor.nonNull(cfg, "cfg");
 		Assertor.nonNull(selfAckConsumer, "selfAckConsumer");
 		return new AdvancedRabbitMqReceiver<>(tag, cfg, (msg, reuse) -> msg, null, selfAckConsumer);
@@ -182,18 +182,17 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * 
 	 * @param <T>
 	 * @param tag
-	 * @param configurator
+	 * @param cfg
 	 * @param deserializer
 	 * @param selfAckConsumer
 	 * @return
 	 */
-	public static <T> AdvancedRabbitMqReceiver<T> createWithSelfAck(String tag,
-			@Nonnull RmqReceiverConfigurator configurator, @Nonnull ByteArrayDeserializer<T> deserializer,
-			@Nonnull SelfAckConsumer<T> selfAckConsumer) {
-		Assertor.nonNull(configurator, "configurator");
+	public static <T> AdvancedRabbitMqReceiver<T> createWithSelfAck(String tag, @Nonnull RmqReceiverConfigurator cfg,
+			@Nonnull ByteArrayDeserializer<T> deserializer, @Nonnull SelfAckConsumer<T> selfAckConsumer) {
+		Assertor.nonNull(cfg, "configurator");
 		Assertor.nonNull(deserializer, "deserializer");
 		Assertor.nonNull(selfAckConsumer, "selfAckConsumer");
-		return new AdvancedRabbitMqReceiver<>(tag, configurator, deserializer, null, selfAckConsumer);
+		return new AdvancedRabbitMqReceiver<>(tag, cfg, deserializer, null, selfAckConsumer);
 	}
 
 	/**
@@ -225,7 +224,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 		this.exclusive = cfg.isExclusive();
 		this.consumer = consumer;
 		this.selfAckConsumer = selfAckConsumer;
-		this.receiverName = "receiver::[" + rmqConnection.getConnectionInfo() + "$" + queueName + "]";
+		this.receiverName = "receiver::[" + rabbitConnection.getConnectionInfo() + "$" + queueName + "]";
 		createConnection();
 		declareQueue();
 		if (selfAckConsumer != null) {
@@ -251,7 +250,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 			this.receiveQueue.declare(operator);
 		} catch (DeclareException e) {
 			log.error("Queue declare throw exception -> connection info : {}, error message : {}",
-					rmqConnection.getConfiguratorInfo(), e.getMessage(), e);
+					rabbitConnection.getConfiguratorInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			destroy();
 			throw new DeclareRuntimeException(e);
@@ -272,7 +271,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 		} catch (DeclareException e) {
 			log.error(
 					"ErrorMsgExchange declare throw exception -> connection configurator info : {}, error message : {}",
-					rmqConnection.getConfiguratorInfo(), e.getMessage(), e);
+					rabbitConnection.getConfiguratorInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			destroy();
 			throw new DeclareRuntimeException(e);
@@ -286,7 +285,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 			this.errMsgQueue.declare(operator);
 		} catch (DeclareException e) {
 			log.error("ErrorMsgQueue declare throw exception -> connection configurator info : {}, error message : {}",
-					rmqConnection.getConfiguratorInfo(), e.getMessage(), e);
+					rabbitConnection.getConfiguratorInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			destroy();
 			throw new DeclareRuntimeException(e);

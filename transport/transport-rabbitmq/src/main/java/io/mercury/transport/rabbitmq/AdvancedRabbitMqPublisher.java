@@ -94,96 +94,96 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * 
 	 * @param <T>
 	 * @param tag
-	 * @param configurator
+	 * @param cfg
 	 * @param serializer
 	 * @return
 	 */
 	public final static <T> AdvancedRabbitMqPublisher<T> create(String tag,
-			@Nonnull RmqPublisherConfigurator configurator, @Nonnull ByteArraySerializer<T> serializer) {
-		return new AdvancedRabbitMqPublisher<>(tag, configurator, serializer, null, null);
+			@Nonnull RmqPublisherConfigurator cfg, @Nonnull ByteArraySerializer<T> serializer) {
+		return new AdvancedRabbitMqPublisher<>(tag, cfg, serializer, null, null);
 	}
 
 	/**
 	 * 
 	 * @param <T>
 	 * @param tag
-	 * @param configurator
+	 * @param cfg
 	 * @param serializer
 	 * @param ackCallback
 	 * @param noAckCallback
 	 * @return
 	 */
 	public final static <T> AdvancedRabbitMqPublisher<T> create(String tag,
-			@Nonnull RmqPublisherConfigurator configurator, @Nonnull ByteArraySerializer<T> serializer,
+			@Nonnull RmqPublisherConfigurator cfg, @Nonnull ByteArraySerializer<T> serializer,
 			@Nonnull AckCallback ackCallback, @Nonnull NoAckCallback noAckCallback) {
-		return new AdvancedRabbitMqPublisher<>(tag, configurator, serializer, ackCallback, noAckCallback);
+		return new AdvancedRabbitMqPublisher<>(tag, cfg, serializer, ackCallback, noAckCallback);
 	}
 
 	/**
 	 * 
-	 * @param configurator
+	 * @param cfg
 	 * @return
 	 */
 	public final static AdvancedRabbitMqPublisher<byte[]> createWithBytes(
-			@Nonnull RmqPublisherConfigurator configurator) {
-		return createWithBytes(null, configurator, null, null);
+			@Nonnull RmqPublisherConfigurator cfg) {
+		return createWithBytes(null, cfg, null, null);
 	}
 
 	/**
 	 * 
 	 * @param tag
-	 * @param configurator
+	 * @param cfg
 	 * @return
 	 */
 	public final static AdvancedRabbitMqPublisher<byte[]> createWithBytes(String tag,
-			@Nonnull RmqPublisherConfigurator configurator) {
-		return createWithBytes(tag, configurator, null, null);
+			@Nonnull RmqPublisherConfigurator cfg) {
+		return createWithBytes(tag, cfg, null, null);
 	}
 
 	/**
 	 * 
 	 * @param tag
-	 * @param configurator
+	 * @param cfg
 	 * @param ackCallback
 	 * @param noAckCallback
 	 * @return
 	 */
 	public final static AdvancedRabbitMqPublisher<byte[]> createWithBytes(String tag,
-			@Nonnull RmqPublisherConfigurator configurator, @Nonnull AckCallback ackCallback,
+			@Nonnull RmqPublisherConfigurator cfg, @Nonnull AckCallback ackCallback,
 			@Nonnull NoAckCallback noAckCallback) {
-		return new AdvancedRabbitMqPublisher<>(tag, configurator, msg -> msg, ackCallback, noAckCallback);
+		return new AdvancedRabbitMqPublisher<>(tag, cfg, msg -> msg, ackCallback, noAckCallback);
 	}
 
 	/**
 	 * 
-	 * @param configurator
+	 * @param cfg
 	 * @return
 	 */
 	public final static AdvancedRabbitMqPublisher<String> createWithString(
-			@Nonnull RmqPublisherConfigurator configurator) {
-		return createWithString(null, configurator, Charsets.UTF8, null, null);
+			@Nonnull RmqPublisherConfigurator cfg) {
+		return createWithString(null, cfg, Charsets.UTF8, null, null);
 	}
 
 	/**
 	 * 
-	 * @param configurator
+	 * @param cfg
 	 * @param charset
 	 * @return
 	 */
 	public final static AdvancedRabbitMqPublisher<String> createWithString(
-			@Nonnull RmqPublisherConfigurator configurator, @Nonnull Charset charset) {
-		return createWithString(null, configurator, charset, null, null);
+			@Nonnull RmqPublisherConfigurator cfg, @Nonnull Charset charset) {
+		return createWithString(null, cfg, charset, null, null);
 	}
 
 	/**
 	 * 
 	 * @param tag
-	 * @param configurator
+	 * @param cfg
 	 * @return
 	 */
 	public final static AdvancedRabbitMqPublisher<String> createWithString(String tag,
-			@Nonnull RmqPublisherConfigurator configurator) {
-		return createWithString(tag, configurator, Charsets.UTF8, null, null);
+			@Nonnull RmqPublisherConfigurator cfg) {
+		return createWithString(tag, cfg, Charsets.UTF8, null, null);
 	}
 
 	/**
@@ -236,17 +236,15 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 		this.confirmRetry = cfg.getConfirmOptions().getConfirmRetry();
 		this.serializer = serializer;
 		this.hasPropsSupplier = msgPropsSupplier != null;
-		this.publisherName = "publisher::[" + rmqConnection.getConnectionInfo() + "$" + exchangeName + "]";
+		this.publisherName = "publisher::[" + rabbitConnection.getConnectionInfo() + "$" + exchangeName + "]";
 		createConnection();
 		declareExchange();
 		// 如果设置为需要应答确认, 则进行相关设置
 		if (confirm) {
-
 			// 是否存在ACK成功回调
 			final boolean hasAckCallback = ackCallback != null;
 			// 是否存在ACK未成功回调
 			final boolean hasNoAckCallback = noAckCallback != null;
-
 			// 添加ACK & NoAck回调
 			channel.addConfirmListener(
 					// ACK Callback
@@ -270,7 +268,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 				channel.confirmSelect();
 			} catch (IOException ioe) {
 				log.error("Enables publisher acknowledgements failure, publisherName -> {}, connectionInfo -> {}",
-						publisherName, rmqConnection.getConnectionInfo(), ioe);
+						publisherName, rabbitConnection.getConnectionInfo(), ioe);
 				throw new InitializeFailureException(
 						"Enables publisher acknowledgements failure, From publisher -> {}" + publisherName, ioe);
 			}
@@ -293,7 +291,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 		} catch (DeclareException e) {
 			// 在定义Exchange和进行绑定时抛出任何异常都需要终止程序
 			log.error("Exchange declare throw exception -> connection configurator info : {}, " + "error message : {}",
-					rmqConnection.getConfiguratorInfo(), e.getMessage(), e);
+					rabbitConnection.getConfiguratorInfo(), e.getMessage(), e);
 			destroy();
 			throw new DeclareRuntimeException(e);
 		}
@@ -330,7 +328,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 		while (!isConnected()) {
 			log.error("Detect connection isConnected() == false, retry {}", (++retry));
 			destroy();
-			Threads.sleep(rmqConnection.getRecoveryInterval());
+			Threads.sleep(rabbitConnection.getRecoveryInterval());
 			createConnection();
 		}
 		if (confirm) {
