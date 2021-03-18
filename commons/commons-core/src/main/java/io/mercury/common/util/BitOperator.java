@@ -190,7 +190,7 @@ public final class BitOperator {
 	private static final int MAXIMUM_CAPACITY = 1 << 30;
 
 	/**
-	 * 返回参数的最小的2的幂
+	 * 返回最接近参数的2的幂
 	 * 
 	 * @param i
 	 * @return

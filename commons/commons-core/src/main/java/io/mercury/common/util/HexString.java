@@ -13,7 +13,15 @@ import java.util.Arrays;
  */
 public final class HexString {
 
-	public static final HexString NULL = new HexString(new byte[0], "");
+	public static final HexString EMPTY = new HexString(new byte[0], "");
+
+	private final String hex;
+	private final byte[] bytes;
+
+	private HexString(byte[] bytes, String hex) {
+		this.bytes = bytes;
+		this.hex = hex;
+	}
 
 	/**
 	 * Create a new <code>HexString</code> instance from the given hexadecimal
@@ -28,7 +36,18 @@ public final class HexString {
 	 *                                  number of characters) is passed
 	 */
 	public static HexString valueOf(String hex) {
-		return (hex == null || hex.equals("")) ? NULL : createHexString(hex);
+		return StringUtil.isNullOrEmpty(hex) ? EMPTY : createHexString(hex);
+	}
+
+	private static HexString createHexString(String hex) throws IllegalArgumentException {
+		// though method is private, leaving checks in place to show intent
+		if (hex == null) {
+			throw new IllegalArgumentException("hex string argument cannot be null; use HexString.EMPTY instead");
+		} else if (hex.equals("")) {
+			throw new IllegalArgumentException("hex string argument cannot be empty; use HexString.EMPTY instead");
+		}
+		byte[] bytes = HexUtil.toByteArray(hex);
+		return new HexString(bytes, hex.toUpperCase());
 	}
 
 	/**
@@ -42,18 +61,7 @@ public final class HexString {
 	 *         array
 	 */
 	public static HexString valueOf(byte[] bytes) {
-		return (bytes == null || bytes.length == 0) ? NULL : createHexString(bytes);
-	}
-
-	private static HexString createHexString(String hex) throws IllegalArgumentException {
-		// though method is private, leaving checks in place to show intent
-		if (hex == null) {
-			throw new IllegalArgumentException("hex string argument cannot be null; use HexString.NULL instead");
-		} else if (hex.equals("")) {
-			throw new IllegalArgumentException("hex string argument cannot be empty; use HexString.NULL instead");
-		}
-		byte[] bytes = HexUtil.toByteArray(hex);
-		return new HexString(bytes, hex.toUpperCase());
+		return ArrayUtil.isNullOrEmpty(bytes) ? EMPTY : createHexString(bytes);
 	}
 
 	private static HexString createHexString(byte[] bytes) throws IllegalArgumentException {
@@ -70,14 +78,6 @@ public final class HexString {
 
 	private static byte[] copyByteArray(byte[] bytes) {
 		return Arrays.copyOf(bytes, bytes.length);
-	}
-
-	private final String hex;
-	private final byte[] bytes;
-
-	private HexString(byte[] bytes, String hex) {
-		this.bytes = bytes;
-		this.hex = hex;
 	}
 
 	/**

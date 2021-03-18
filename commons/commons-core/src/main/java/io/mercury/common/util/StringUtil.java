@@ -14,8 +14,11 @@ import io.mercury.common.character.Separator;
 public final class StringUtil {
 
 	public static interface StringConst {
+		
 		String NULL = "null";
+		
 		String EMPTY = "";
+		
 	}
 
 	private StringUtil() {

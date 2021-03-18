@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
  * Utility class for encoding and decoding objects to a hex string.
  * 
  */
-public class HexUtil {
+public final class HexUtil {
 
 	public static final char[] HEX_TABLE =
 			// 16进制Table
@@ -48,9 +48,8 @@ public class HexUtil {
 	 * @return
 	 */
 	public static String toHexString(byte[] bytes, int offset, int length) {
-		if (bytes == null) {
+		if (bytes == null)
 			return "";
-		}
 		assertOffsetLengthValid(offset, length, bytes.length);
 		// each byte is 2 chars in string
 		StringBuilder buffer = new StringBuilder(length * 2 + 2).append("0x");

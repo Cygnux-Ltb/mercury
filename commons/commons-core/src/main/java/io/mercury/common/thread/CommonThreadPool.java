@@ -76,14 +76,14 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
 
 	@Override
 	protected void beforeExecute(Thread thread, Runnable runnable) {
-		log.debug("Thread name -> {}, Runnable -> {}, execute before", thread.getName(), runnable);
+		log.debug("Thread name -> {}, execute before", thread.getName());
 		if (hasBeforeHandle)
 			beforeHandler.accept(thread, runnable);
 	}
 
 	@Override
 	protected void afterExecute(Runnable runnable, Throwable throwable) {
-		log.debug("Runnable -> {}, execute after", runnable);
+		log.debug("Throwable -> {}, execute after", throwable.getMessage());
 		if (hasAfterHandle)
 			afterHandler.accept(runnable, throwable);
 	}
@@ -110,43 +110,47 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
 		private BiConsumer<Thread, Runnable> beforeHandler;
 		private BiConsumer<Runnable, Throwable> afterHandler;
 
-		public ThreadPoolBuilder corePoolSize(int corePoolSize) {
+		public ThreadPoolBuilder setCorePoolSize(int corePoolSize) {
 			this.corePoolSize = corePoolSize;
 			return this;
 		}
 
-		public ThreadPoolBuilder maximumPoolSize(int maximumPoolSize) {
+		public ThreadPoolBuilder setMaximumPoolSize(int maximumPoolSize) {
 			this.maximumPoolSize = maximumPoolSize;
 			return this;
 		}
 
-		public ThreadPoolBuilder keepAliveTime(long keepAliveTime, TimeUnit timeUnit) {
+		public ThreadPoolBuilder setKeepAliveTime(long keepAliveTime) {
 			this.keepAliveTime = keepAliveTime;
+			return this;
+		}
+
+		public ThreadPoolBuilder setTimeUnit(TimeUnit timeUnit) {
 			this.timeUnit = timeUnit;
 			return this;
 		}
 
-		public ThreadPoolBuilder workQueue(BlockingQueue<Runnable> workQueue) {
+		public ThreadPoolBuilder setWorkQueue(BlockingQueue<Runnable> workQueue) {
 			this.workQueue = workQueue;
 			return this;
 		}
 
-		public ThreadPoolBuilder threadFactory(ThreadFactory threadFactory) {
+		public ThreadPoolBuilder setThreadFactory(ThreadFactory threadFactory) {
 			this.threadFactory = threadFactory;
 			return this;
 		}
 
-		public ThreadPoolBuilder rejectedHandler(RejectedExecutionHandler rejectedHandler) {
+		public ThreadPoolBuilder setRejectedHandler(RejectedExecutionHandler rejectedHandler) {
 			this.rejectedHandler = rejectedHandler;
 			return this;
 		}
 
-		public ThreadPoolBuilder beforeHandler(BiConsumer<Thread, Runnable> beforeHandler) {
+		public ThreadPoolBuilder setBeforeHandler(BiConsumer<Thread, Runnable> beforeHandler) {
 			this.beforeHandler = beforeHandler;
 			return this;
 		}
 
-		public ThreadPoolBuilder afterHandler(BiConsumer<Runnable, Throwable> afterHandler) {
+		public ThreadPoolBuilder setAfterHandler(BiConsumer<Runnable, Throwable> afterHandler) {
 			this.afterHandler = afterHandler;
 			return this;
 		}

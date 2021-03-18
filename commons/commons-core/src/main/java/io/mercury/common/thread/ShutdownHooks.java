@@ -11,7 +11,7 @@ import io.mercury.common.number.ThreadSafeRandoms;
 
 public final class ShutdownHooks {
 
-	private final MutableList<Runnable> runnables = MutableLists.newFastList(64);
+	private final MutableList<Runnable> shutdownTasks = MutableLists.newFastList(64);
 
 	private static final ShutdownHooks INSTANCE = new ShutdownHooks();
 
@@ -22,26 +22,35 @@ public final class ShutdownHooks {
 	private void executeShutdownHook() {
 		System.out.println("start execution all shutdown hook");
 		ThreadPoolExecutor executor = CommonThreadPool.newBuilder().build();
-		for (Runnable runnable : runnables)
-			executor.execute(runnable);
+		for (Runnable shutdownTask : shutdownTasks)
+			executor.execute(shutdownTask);
 		executor.shutdown();
 		while (!executor.isTerminated())
 			Threads.sleepIgnoreInterrupts(100);
 		System.out.println("all shutdown hook execution completed");
 	}
 
-	public static synchronized void addShutdownHookTask(Runnable runnable) {
-		INSTANCE.runnables.add(runnable);
+	/**
+	 * 
+	 * @param task
+	 */
+	public static synchronized void addShutdownHookSubTask(Runnable task) {
+		INSTANCE.shutdownTasks.add(task);
 	}
 
-	public static Thread addShutdownHookThread(Runnable runnable) {
-		return addShutdownHookThread("ShutdownHooksSubThread-" + ThreadSafeRandoms.randomUnsignedInt(), runnable);
+	/**
+	 * 
+	 * @param hook
+	 * @return
+	 */
+	public static Thread addShutdownHook(Runnable hook) {
+		return addShutdownHook("ShutdownHooksSubThread-" + ThreadSafeRandoms.randomUnsignedInt(), hook);
 	}
 
-	public static Thread addShutdownHookThread(String threadName, Runnable runnable) {
-		Thread thread = new Thread(runnable, threadName);
-		Runtime.getRuntime().addShutdownHook(thread);
-		return thread;
+	public static Thread addShutdownHook(String threadName, Runnable hook) {
+		Thread hookThread = Threads.newThread(threadName, hook);
+		Runtime.getRuntime().addShutdownHook(hookThread);
+		return hookThread;
 	}
 
 	/**
@@ -49,7 +58,7 @@ public final class ShutdownHooks {
 	 * @param closeable
 	 */
 	public static void closeResourcesWhenShutdown(Closeable closeable) {
-		addShutdownHookTask(() -> {
+		addShutdownHookSubTask(() -> {
 			try {
 				closeable.close();
 			} catch (IOException e) {
@@ -60,14 +69,14 @@ public final class ShutdownHooks {
 
 	public static void main(String[] args) {
 
-		ShutdownHooks.addShutdownHookTask(new Thread(() -> System.out.println("关闭钩子1")));
-		ShutdownHooks.addShutdownHookTask(new Thread(() -> System.out.println("关闭钩子2")));
-		ShutdownHooks.addShutdownHookTask(new Thread(() -> System.out.println("关闭钩子3")));
-		ShutdownHooks.addShutdownHookTask(new Thread(() -> System.out.println("关闭钩子4")));
-		ShutdownHooks.addShutdownHookTask(new Thread(() -> System.out.println("关闭钩子5")));
-		ShutdownHooks.addShutdownHookTask(new Thread(() -> System.out.println("关闭钩子6")));
-		ShutdownHooks.addShutdownHookTask(new Thread(() -> System.out.println("关闭钩子7")));
-		ShutdownHooks.addShutdownHookTask(new Thread(() -> System.out.println("关闭钩子8")));
+		ShutdownHooks.addShutdownHookSubTask(new Thread(() -> System.out.println("关闭钩子1")));
+		ShutdownHooks.addShutdownHookSubTask(new Thread(() -> System.out.println("关闭钩子2")));
+		ShutdownHooks.addShutdownHookSubTask(new Thread(() -> System.out.println("关闭钩子3")));
+		ShutdownHooks.addShutdownHookSubTask(new Thread(() -> System.out.println("关闭钩子4")));
+		ShutdownHooks.addShutdownHookSubTask(new Thread(() -> System.out.println("关闭钩子5")));
+		ShutdownHooks.addShutdownHookSubTask(new Thread(() -> System.out.println("关闭钩子6")));
+		ShutdownHooks.addShutdownHookSubTask(new Thread(() -> System.out.println("关闭钩子7")));
+		ShutdownHooks.addShutdownHookSubTask(new Thread(() -> System.out.println("关闭钩子8")));
 
 	}
 

@@ -4,6 +4,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 
 import io.mercury.common.character.Separator;
+import io.mercury.common.util.PropertiesUtil;
 
 public class LibraryPathManager {
 
@@ -41,19 +42,15 @@ public class LibraryPathManager {
 	}
 
 	public static void main(String[] args) {
-
-		System.getProperties().entrySet().forEach(
-				entity -> System.out.println(entity.getKey().toString() + " --old-- " + entity.getValue().toString()));
-
+		System.out.println("---old---");
+		PropertiesUtil.showProperties(System.getProperties());
 		try {
-			addLibraryDir("/java_lib");
+			addLibraryDir("~/java_lib");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.getProperties().entrySet().forEach(
-				entity -> System.out.println(entity.getKey().toString() + " --new-- " + entity.getValue().toString()));
-
+		System.out.println("---nwe---");
+		PropertiesUtil.showProperties(System.getProperties());
 	}
 
 }

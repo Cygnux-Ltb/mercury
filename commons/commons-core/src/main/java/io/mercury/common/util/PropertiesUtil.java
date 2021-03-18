@@ -37,7 +37,7 @@ public final class PropertiesUtil {
 	 * @return
 	 * @throws IOException
 	 */
-	public static Properties loadProperties(final File file) throws IOException {
+	public static Properties loadProperties(@Nonnull  File file) throws IOException {
 		Assertor.nonNull(file, "file");
 		return loadProperties(new FileInputStream(file));
 	}
@@ -48,7 +48,7 @@ public final class PropertiesUtil {
 	 * @return
 	 * @throws IOException
 	 */
-	public static final Properties loadProperties(String text) throws IOException {
+	public static final Properties loadProperties(@Nonnull String text) throws IOException {
 		return loadProperties(text, Charsets.UTF8);
 	}
 
@@ -135,8 +135,8 @@ public final class PropertiesUtil {
 	 * 
 	 * @param properties
 	 */
-	public static final void printProperties(@Nonnull Properties properties) {
-		printProperties(properties, null);
+	public static final void showProperties(@Nonnull Properties properties) {
+		showProperties(properties, null);
 	}
 
 	/**
@@ -144,7 +144,7 @@ public final class PropertiesUtil {
 	 * @param properties
 	 * @param log
 	 */
-	public static final void printProperties(@Nonnull Properties properties, Logger log) {
+	public static final void showProperties(@Nonnull Properties properties, Logger log) {
 		List<Entry<Object, Object>> list = new ArrayList<>(properties.entrySet());
 		for (int i = 0; i < list.size(); i++) {
 			Entry<Object, Object> entry = list.get(i);
