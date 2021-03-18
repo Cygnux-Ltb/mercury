@@ -30,7 +30,7 @@
                             "name": "ContentType",
                             "symbols": [
                                 "OBJECT",
-                                "LIST",
+                                "ARRAY",
                                 "STRING"
                             ]
                         }

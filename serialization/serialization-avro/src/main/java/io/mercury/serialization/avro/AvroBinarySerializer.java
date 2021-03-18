@@ -11,6 +11,7 @@ import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecord;
+import org.apache.commons.compress.utils.IOUtils;
 import org.slf4j.Logger;
 
 import io.mercury.common.log.CommonLoggerFactory;
@@ -56,11 +57,7 @@ public final class AvroBinarySerializer<T extends SpecificRecord> implements Byt
 			return wrap;
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
-			try {
-				outputStream.close();
-			} catch (IOException ioe) {
-				log.error(ioe.getMessage(), ioe);
-			}
+			IOUtils.closeQuietly(outputStream);
 			throw new RuntimeException("AvroBytesSerializer serialization exception -> " + e.getMessage());
 		}
 	}

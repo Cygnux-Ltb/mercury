@@ -10,6 +10,7 @@ import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.io.JsonEncoder;
 import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecord;
+import org.apache.commons.compress.utils.IOUtils;
 import org.slf4j.Logger;
 
 import io.mercury.common.character.Charsets;
@@ -51,11 +52,7 @@ public class AvroJsonSerializer<T extends SpecificRecord> implements StringSeria
 			return new String(bytes, Charsets.UTF8);
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
-			try {
-				outputStream.close();
-			} catch (IOException e1) {
-				log.error(e1.getMessage(), e);
-			}
+			IOUtils.closeQuietly(outputStream);
 			throw new RuntimeException("AvroTextSerializer serialization exception -> " + e.getMessage());
 		}
 

@@ -16,8 +16,8 @@ public class KryoDemo {
 		SomeClass object = new SomeClass();
 		object.value = "Hello Kryo!";
 
-		//Output output = new ByteBufferOutput();
-		
+		// Output output = new ByteBufferOutput();
+
 		Output output = new Output(new FileOutputStream("file.bin"));
 		kryo.writeObject(output, object);
 		output.close();
@@ -27,10 +27,10 @@ public class KryoDemo {
 
 		System.out.println("object2.value == " + object2.value);
 		input.close();
-		
+
 	}
 
-	static public class SomeClass {
+	public static class SomeClass {
 		String value;
 	}
 
