@@ -1,7 +1,7 @@
 {
     "namespace": "io.mercury.serialization.avro.structure",
     "type": "record",
-    "name": "AvroBinaryMessage",
+    "name": "AvroBinaryMsg",
     "fields": [
         {
             "name": "sequence",
@@ -30,8 +30,11 @@
                             "name": "ContentType",
                             "symbols": [
                                 "OBJECT",
-                                "ARRAY",
-                                "STRING"
+                                "LIST",
+                                "STRING",
+                                "INT",
+                                "LONG",
+                                "DOUBLE"
                             ]
                         }
                     }
