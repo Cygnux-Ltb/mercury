@@ -23,6 +23,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONValidator;
 import com.alibaba.fastjson.JSONValidator.Type;
 
+import io.mercury.serialization.json.JsonParser.JsonParseException;
+
 @Deprecated
 public final class JsonParser0 {
 

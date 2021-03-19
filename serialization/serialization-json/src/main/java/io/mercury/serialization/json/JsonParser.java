@@ -267,6 +267,33 @@ public final class JsonParser {
 		}
 	}
 
+	/**
+	 * 
+	 * @author yellow013
+	 *
+	 */
+	public static final class JsonParseException extends RuntimeException {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 9000408863460789219L;
+
+		public JsonParseException(String json, Throwable throwable) {
+			super("Parse JSON -> [" + json + "], Throw exception -> [" + throwable.getClass().getSimpleName() + "]",
+					throwable);
+		}
+
+		public JsonParseException(Throwable throwable) {
+			super("Parse JSON throw exception -> [" + throwable.getClass().getSimpleName() + "]", throwable);
+		}
+
+		public JsonParseException(String message) {
+			super(message);
+		}
+
+	}
+
 	public static void main(String[] args) {
 		Map<String, String> map0 = new HashMap<>();
 		map0.put("A", "1");

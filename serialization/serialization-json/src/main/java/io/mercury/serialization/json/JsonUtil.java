@@ -26,6 +26,8 @@ import com.alibaba.fastjson.JSONValidator.Type;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import io.mercury.serialization.json.JsonParser.JsonParseException;
+
 @Deprecated
  final class JsonUtil {
 
