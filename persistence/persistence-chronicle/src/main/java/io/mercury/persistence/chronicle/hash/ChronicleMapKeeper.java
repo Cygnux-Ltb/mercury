@@ -17,15 +17,15 @@ import net.openhft.chronicle.map.ChronicleMapBuilder;
 @ThreadSafe
 public class ChronicleMapKeeper<K, V> extends AbstractKeeper<String, ChronicleMap<K, V>> implements Closeable {
 
-	private ChronicleMapConfigurator<K, V> configurator;
+	private ChronicleMapConfigurator<K, V> cfg;
 
-	public ChronicleMapKeeper(@Nonnull ChronicleMapConfigurator<K, V> configurator) {
-		Assertor.nonNull(configurator, "configurator");
-		this.configurator = configurator;
+	public ChronicleMapKeeper(@Nonnull ChronicleMapConfigurator<K, V> cfg) {
+		Assertor.nonNull(cfg, "cfg");
+		this.cfg = cfg;
 	}
 
 	public ChronicleMapConfigurator<K, V> getConfigurator() {
-		return configurator;
+		return cfg;
 	}
 
 	protected final Object lock = new Object();
@@ -39,7 +39,7 @@ public class ChronicleMapKeeper<K, V> extends AbstractKeeper<String, ChronicleMa
 		synchronized (lock) {
 			if (isClosed) {
 				throw new IllegalStateException(
-						"ChronicleMapKeeper configurator of -> {" + configurator.getConfiguratorInfo() + "} is closed");
+						"ChronicleMapKeeper configurator of -> {" + cfg.getConfiguratorInfo() + "} is closed");
 			}
 			return super.acquire(filename);
 		}
@@ -50,18 +50,18 @@ public class ChronicleMapKeeper<K, V> extends AbstractKeeper<String, ChronicleMa
 		// 构建器
 		ChronicleMapBuilder<K, V> builder = ChronicleMapBuilder
 				// 设置KeyClass, ValueClass
-				.of(configurator.keyClass(), configurator.valueClass())
+				.of(cfg.keyClass(), cfg.valueClass())
 				// 设置put函数是否返回null
-				.putReturnsNull(configurator.putReturnsNull())
+				.putReturnsNull(cfg.putReturnsNull())
 				// 设置remove函数是否返回null
-				.removeReturnsNull(configurator.removeReturnsNull())
+				.removeReturnsNull(cfg.removeReturnsNull())
 				// 设置名称
-				.name(configurator.getConfiguratorInfo())
+				.name(cfg.getConfiguratorInfo())
 				// 设置条目总数
-				.entries(configurator.entries());
+				.entries(cfg.entries());
 		// 设置块大小
-		if (configurator.actualChunkSize() > 0)
-			builder.actualChunkSize(configurator.actualChunkSize());
+		if (cfg.actualChunkSize() > 0)
+			builder.actualChunkSize(cfg.actualChunkSize());
 
 		// 设置关闭操作
 		// builder.setPreShutdownAction(null);
@@ -69,14 +69,14 @@ public class ChronicleMapKeeper<K, V> extends AbstractKeeper<String, ChronicleMa
 		// builder.checksumEntries(false);
 
 		// 基于Key值设置平均长度
-		if (configurator.averageKey() != null)
-			builder.averageKey(configurator.averageKey());
+		if (cfg.averageKey() != null)
+			builder.averageKey(cfg.averageKey());
 		// 基于Value值设置平均长度
-		if (configurator.averageValue() != null)
-			builder.averageValue(configurator.averageValue());
+		if (cfg.averageValue() != null)
+			builder.averageValue(cfg.averageValue());
 		// 持久化选项
-		if (configurator.persistent()) {
-			File persistentFile = new File(configurator.savePath(), filename);
+		if (cfg.persistent()) {
+			File persistentFile = new File(cfg.savePath(), filename);
 			try {
 				if (!persistentFile.exists()) {
 					// 创建文件目录
@@ -86,7 +86,7 @@ public class ChronicleMapKeeper<K, V> extends AbstractKeeper<String, ChronicleMa
 					return builder.createPersistedTo(persistentFile);
 				} else {
 					// Is recover data
-					if (configurator.recover())
+					if (cfg.recover())
 						return builder.createOrRecoverPersistedTo(persistentFile);
 					else
 						return builder.createPersistedTo(persistentFile);

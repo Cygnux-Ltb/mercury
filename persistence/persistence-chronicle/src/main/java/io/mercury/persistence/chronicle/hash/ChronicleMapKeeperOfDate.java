@@ -9,8 +9,8 @@ import net.openhft.chronicle.map.ChronicleMap;
 
 public final class ChronicleMapKeeperOfDate<K, V> extends ChronicleMapKeeper<K, V> {
 
-	public ChronicleMapKeeperOfDate(ChronicleMapConfigurator<K, V> configurator) {
-		super(configurator);
+	public ChronicleMapKeeperOfDate(ChronicleMapConfigurator<K, V> cfg) {
+		super(cfg);
 	}
 
 	public ChronicleMap<K, V> acquire(LocalDate date) throws ChronicleIOException {

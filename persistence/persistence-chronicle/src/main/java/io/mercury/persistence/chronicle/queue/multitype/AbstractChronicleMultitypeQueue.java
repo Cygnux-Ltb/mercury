@@ -78,7 +78,7 @@ public abstract class AbstractChronicleMultitypeQueue<
 
 	protected Logger logger = CommonLoggerFactory.getLogger(getClass());;
 
-	AbstractChronicleMultitypeQueue(QueueBuilder<?> builder) {
+	protected AbstractChronicleMultitypeQueue(QueueBuilder<?> builder) {
 		this.rootPath = builder.rootPath;
 		this.folder = builder.folder;
 		this.readOnly = builder.readOnly;

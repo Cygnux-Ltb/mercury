@@ -50,7 +50,7 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 	 * @param excerptTailer
 	 * @param consumer
 	 */
-	AbstractChronicleReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param, Logger logger,
+	protected AbstractChronicleReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param, Logger logger,
 			ExcerptTailer excerptTailer, Consumer<T> consumer) {
 		super(allocateSeq);
 		this.readerName = readerName;

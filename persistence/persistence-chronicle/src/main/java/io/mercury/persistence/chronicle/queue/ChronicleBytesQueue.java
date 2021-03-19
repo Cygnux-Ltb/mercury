@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
 
@@ -12,6 +13,12 @@ import io.mercury.common.number.Randoms;
 import io.mercury.common.sequence.EpochSequence;
 import io.mercury.common.thread.Threads;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleReader.ReaderParam;
+import io.mercury.persistence.chronicle.queue.ChronicleBytesQueue.ChronicleBytesAppender;
+import io.mercury.persistence.chronicle.queue.ChronicleBytesQueue.ChronicleBytesReader;
+import net.openhft.chronicle.bytes.Bytes;
+import net.openhft.chronicle.bytes.BytesStore;
+import net.openhft.chronicle.queue.ExcerptAppender;
+import net.openhft.chronicle.queue.ExcerptTailer;
 
 @Immutable
 public class ChronicleBytesQueue
@@ -37,15 +44,15 @@ public class ChronicleBytesQueue
 	@Override
 	protected ChronicleBytesReader createReader(String readerName, ReaderParam readerParam, Logger logger,
 			Consumer<ByteBuffer> consumer) throws IllegalStateException {
-		return new ChronicleBytesReader(EpochSequence.allocate(), readerName, fileCycle(), readerParam, logger, bufferSize,
-				useDirectMemory, internalQueue.createTailer(), consumer);
+		return new ChronicleBytesReader(EpochSequence.allocate(), readerName, fileCycle(), readerParam, logger,
+				bufferSize, useDirectMemory, internalQueue.createTailer(), consumer);
 	}
 
 	@Override
 	protected ChronicleBytesAppender acquireAppender(String appenderName, Logger logger, Supplier<ByteBuffer> supplier)
 			throws IllegalStateException {
-		return new ChronicleBytesAppender(EpochSequence.allocate(), appenderName, logger, internalQueue.acquireAppender(),
-				supplier);
+		return new ChronicleBytesAppender(EpochSequence.allocate(), appenderName, logger,
+				internalQueue.acquireAppender(), supplier);
 	}
 
 	/**
@@ -84,6 +91,65 @@ public class ChronicleBytesQueue
 		@Override
 		protected BytesQueueBuilder self() {
 			return this;
+		}
+
+	}
+
+	/**
+	 * 
+	 * @author yellow013
+	 *
+	 */
+	@Immutable
+	@NotThreadSafe
+	public static final class ChronicleBytesAppender extends AbstractChronicleAppender<ByteBuffer> {
+
+		ChronicleBytesAppender(long allocateSeq, String appenderName, Logger logger, ExcerptAppender excerptAppender,
+				Supplier<ByteBuffer> supplier) {
+			super(allocateSeq, appenderName, logger, excerptAppender, supplier);
+		}
+
+		@Override
+		protected void append0(ByteBuffer t) {
+			// use heap memory or direct by the byteBuffer
+			excerptAppender.writeBytes(BytesStore.wrap(t));
+		}
+
+	}
+
+	/**
+	 * 
+	 * @author yellow013
+	 *
+	 */
+	@Immutable
+	@NotThreadSafe
+	public static final class ChronicleBytesReader extends AbstractChronicleReader<ByteBuffer> {
+
+		private final int bufferSize;
+		private final boolean useDirectMemory;
+
+		ChronicleBytesReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param, Logger logger,
+				int bufferSize, boolean useDirectMemory, ExcerptTailer excerptTailer, Consumer<ByteBuffer> consumer) {
+			super(allocateSeq, readerName, fileCycle, param, logger, excerptTailer, consumer);
+			this.bufferSize = bufferSize;
+			this.useDirectMemory = useDirectMemory;
+		}
+
+		@Override
+		protected ByteBuffer next0() {
+			Bytes<ByteBuffer> bytes;
+			if (useDirectMemory)
+				// use direct memory
+				bytes = Bytes.elasticByteBuffer(bufferSize);
+			else
+				// use heap memory
+				bytes = Bytes.elasticHeapByteBuffer(bufferSize);
+			excerptTailer.readBytes(bytes);
+			if (bytes.isEmpty())
+				return null;
+			logger.debug("ChronicleBytesReader.next0() -> {}", bytes.toDebugString());
+			return bytes.underlyingObject();
 		}
 
 	}

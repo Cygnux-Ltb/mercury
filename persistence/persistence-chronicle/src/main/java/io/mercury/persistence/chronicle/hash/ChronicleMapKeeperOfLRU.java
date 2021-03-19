@@ -26,20 +26,20 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 	// 存储路径
 	private final File savePath;
 
-	public ChronicleMapKeeperOfLRU(@Nonnull ChronicleMapConfigurator<K, V> configurator, Duration expire) {
-		this(configurator, expire, 65536);
+	public ChronicleMapKeeperOfLRU(@Nonnull ChronicleMapConfigurator<K, V> cfg, @Nonnull Duration expire) {
+		this(cfg, expire, 65536);
 	}
 
-	public ChronicleMapKeeperOfLRU(@Nonnull ChronicleMapConfigurator<K, V> configurator, Duration expire,
+	public ChronicleMapKeeperOfLRU(@Nonnull ChronicleMapConfigurator<K, V> cfg, @Nonnull Duration expire,
 			int fileTotal) {
-		super(configurator);
+		super(cfg);
 		final long millis = expire.toMillis();
 		// 定义最小过期时间为两小时
 		final long minExpireMillis = 2 * 60 * 60 * 1000;
 		this.expireMillis = millis < minExpireMillis ? minExpireMillis : millis;
-		this.savePath = configurator.savePath();
+		this.savePath = cfg.savePath();
 		// LRU记录构建器
-		ChronicleMapBuilder<String, Long> builder = ChronicleMapBuilder
+		final ChronicleMapBuilder<String, Long> builder = ChronicleMapBuilder
 				// 设置KeyClass, ValueClass
 				.of(String.class, Long.class)
 				// 设置Key的平均大小
@@ -49,10 +49,10 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 				// 设置remove函数是否返回null
 				.removeReturnsNull(true)
 				// 设置LRU名称
-				.name(configurator.getConfiguratorInfo() + "-last-used-log")
-				// 设置LRU记录条目总数
-				.entries(fileTotal);
-		File persistentFile = new File(configurator.savePath(), ".last-used-log");
+				.name(cfg.getConfiguratorInfo() + "-last-used-log")
+				// 设置LRU记录条目总数, 最小65536条
+				.entries(fileTotal < 65536 ? 65536 : fileTotal);
+		File persistentFile = new File(cfg.savePath(), ".last-used-log");
 		try {
 			if (!persistentFile.exists()) {
 				// 创建文件目录
@@ -63,7 +63,7 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 				this.lastUsedLog = builder.createPersistedTo(persistentFile);
 			} else {
 				// Is recover data
-				if (configurator.recover())
+				if (cfg.recover())
 					this.lastUsedLog = builder.createOrRecoverPersistedTo(persistentFile);
 				else
 					this.lastUsedLog = builder.createPersistedTo(persistentFile);
@@ -71,8 +71,8 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 		} catch (IOException e) {
 			throw new ChronicleIOException(e);
 		}
-		this.cleanupThread = Threads.startNewThread(
-				"Keeper-{" + configurator.getConfiguratorInfo() + "}-Cleanup-Thread", this::cleanupFunc);
+		this.cleanupThread = Threads.startNewThread("Keeper-{" + cfg.getConfiguratorInfo() + "}-Cleanup-Thread",
+				this::cleanupFunc);
 	}
 
 	/**

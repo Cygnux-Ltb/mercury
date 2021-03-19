@@ -5,12 +5,17 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
 
 import io.mercury.common.sequence.EpochSequence;
 import io.mercury.common.util.Assertor;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleReader.ReaderParam;
+import io.mercury.persistence.chronicle.queue.ChronicleDocumentQueue.ChronicleDocumentAppender;
+import io.mercury.persistence.chronicle.queue.ChronicleDocumentQueue.ChronicleDocumentReader;
+import net.openhft.chronicle.queue.ExcerptAppender;
+import net.openhft.chronicle.queue.ExcerptTailer;
 import net.openhft.chronicle.wire.Marshallable;
 
 @Immutable
@@ -68,6 +73,42 @@ public class ChronicleDocumentQueue<T extends Marshallable>
 		public DocumentQueueBuilder<T> setMarshallableSupplier(@Nonnull Supplier<T> marshallableSupplier) {
 			this.marshallableSupplier = marshallableSupplier;
 			return this;
+		}
+
+	}
+
+	@Immutable
+	@NotThreadSafe
+	public static final class ChronicleDocumentAppender<T extends Marshallable> extends AbstractChronicleAppender<T> {
+
+		ChronicleDocumentAppender(long allocateSeq, String appenderName, Logger logger, ExcerptAppender excerptAppender,
+				Supplier<T> supplier) {
+			super(allocateSeq, appenderName, logger, excerptAppender, supplier);
+		}
+
+		@Override
+		protected void append0(T t) {
+			excerptAppender.writeDocument(t);
+		}
+
+	}
+
+	@Immutable
+	@NotThreadSafe
+	public static final class ChronicleDocumentReader<T extends Marshallable> extends AbstractChronicleReader<T> {
+
+		private final Supplier<T> marshallableSupplier;
+
+		ChronicleDocumentReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param,
+				Logger logger, ExcerptTailer excerptTailer, Consumer<T> consumer, Supplier<T> marshallableSupplier) {
+			super(allocateSeq, readerName, fileCycle, param, logger, excerptTailer, consumer);
+			this.marshallableSupplier = marshallableSupplier;
+		}
+
+		@Override
+		protected T next0() {
+			final T t = marshallableSupplier.get();
+			return excerptTailer.readDocument(t) ? t : null;
 		}
 
 	}

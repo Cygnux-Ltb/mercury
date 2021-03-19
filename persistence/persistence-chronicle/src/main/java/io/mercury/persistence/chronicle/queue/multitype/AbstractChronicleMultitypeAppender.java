@@ -28,7 +28,7 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, T> 
 
 	private final Supplier<T> dataSupplier;
 
-	AbstractChronicleMultitypeAppender(long allocateSeq, String appenderName, Logger logger,
+	protected AbstractChronicleMultitypeAppender(long allocateSeq, String appenderName, Logger logger,
 			ExcerptAppender excerptAppender, Supplier<T> dataSupplier) {
 		super(allocateSeq);
 		this.appenderName = appenderName;

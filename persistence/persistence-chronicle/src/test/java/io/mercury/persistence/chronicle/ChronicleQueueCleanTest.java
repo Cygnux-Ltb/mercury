@@ -6,9 +6,9 @@ import org.junit.Test;
 
 import io.mercury.common.datetime.TimeZone;
 import io.mercury.common.thread.Threads;
-import io.mercury.persistence.chronicle.queue.ChronicleStringAppender;
 import io.mercury.persistence.chronicle.queue.ChronicleStringQueue;
-import io.mercury.persistence.chronicle.queue.ChronicleStringReader;
+import io.mercury.persistence.chronicle.queue.ChronicleStringQueue.ChronicleStringAppender;
+import io.mercury.persistence.chronicle.queue.ChronicleStringQueue.ChronicleStringReader;
 import io.mercury.persistence.chronicle.queue.FileCycle;
 
 public class ChronicleQueueCleanTest {

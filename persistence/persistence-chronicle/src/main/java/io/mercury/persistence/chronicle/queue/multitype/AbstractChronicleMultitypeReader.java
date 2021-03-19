@@ -51,7 +51,7 @@ public abstract class AbstractChronicleMultitypeReader<T> extends CloseableChron
 	 * @param excerptTailer
 	 * @param consumer
 	 */
-	AbstractChronicleMultitypeReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param,
+	protected AbstractChronicleMultitypeReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param,
 			Logger logger, ExcerptTailer excerptTailer, Consumer<T> consumer) {
 		super(allocateSeq);
 		this.readerName = readerName;

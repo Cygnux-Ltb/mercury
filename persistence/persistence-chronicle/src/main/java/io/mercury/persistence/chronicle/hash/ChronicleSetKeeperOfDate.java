@@ -8,8 +8,8 @@ import net.openhft.chronicle.set.ChronicleSet;
 
 public final class ChronicleSetKeeperOfDate<K> extends ChronicleSetKeeper<K> {
 
-	public ChronicleSetKeeperOfDate(ChronicleSetConfigurator<K> options) {
-		super(options);
+	public ChronicleSetKeeperOfDate(ChronicleSetConfigurator<K> cfg) {
+		super(cfg);
 	}
 
 	public ChronicleSet<K> acquire(LocalDate date) throws ChronicleIOException {

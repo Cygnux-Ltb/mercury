@@ -432,7 +432,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 	 *
 	 * @param <B>
 	 */
-	abstract static class AbstractQueueBuilder<B extends AbstractQueueBuilder<B>> {
+	protected abstract static class AbstractQueueBuilder<B extends AbstractQueueBuilder<B>> {
 
 		private String rootPath = SysProperties.JAVA_IO_TMPDIR + "/";
 		private String folder = "auto-create-" + datetimeOfSecond() + "/";

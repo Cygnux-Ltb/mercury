@@ -17,8 +17,8 @@ public class ChronicleSetKeeper<K> extends AbstractKeeper<String, ChronicleSet<K
 
 	private ChronicleSetConfigurator<K> configurator;
 
-	public ChronicleSetKeeper(@Nonnull ChronicleSetConfigurator<K> configurator) {
-		this.configurator = Assertor.nonNull(configurator, "configurator");
+	public ChronicleSetKeeper(@Nonnull ChronicleSetConfigurator<K> cfg) {
+		this.configurator = Assertor.nonNull(cfg, "cfg");
 	}
 
 	@Override
