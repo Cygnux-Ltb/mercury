@@ -32,14 +32,14 @@ public final class H2Util {
 	}
 
 	public static final <T> List<T> query(@Nonnull Connection connection, @Nonnull String sql,
-			@Nonnull ResultSetProcessor processor, Class<T> type) throws SQLException {
+			@Nonnull ResultSetProcessor processor, @Nonnull Class<T> type) throws SQLException {
 		Assertor.nonNull(connection, "connection");
 		try (// create a database connection
-				Statement statement = connection.createStatement();
-				ResultSet rs = statement.executeQuery(sql);) {
+				Statement st = connection.createStatement();
+				ResultSet rs = st.executeQuery(sql);) {
 			return processor.toBeanList(rs, type);
 		} catch (SQLException e) {
-			log.error("error message -> ", e.getMessage(), e);
+			log.error("error message -> {}", e.getMessage(), e);
 			throw e;
 		}
 	}
