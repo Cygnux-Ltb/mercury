@@ -10,25 +10,25 @@ public interface TPattern {
 	 * 
 	 * @return the pattern string
 	 */
-	public String getPattern();
+	String getPattern();
 
 	/**
 	 * 
 	 * @return the DateTimeFormatter instance
 	 */
-	public DateTimeFormatter getFormatter();
+	DateTimeFormatter getFormatter();
 
 	/**
 	 * 
 	 * @return the new <b> [java.time.format.DateTimeFormatter] </b> object
 	 */
-	public DateTimeFormatter newDateTimeFormatter();
+	DateTimeFormatter newDateTimeFormatter();
 
 	/**
 	 * 
 	 * @return the new <b> [java.text.SimpleDateFormat.SimpleDateFormat] </b> object
 	 */
-	public SimpleDateFormat newSimpleDateFormat();
+	SimpleDateFormat newSimpleDateFormat();
 
 	/**
 	 * 

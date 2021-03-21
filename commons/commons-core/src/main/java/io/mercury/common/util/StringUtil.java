@@ -14,11 +14,11 @@ import io.mercury.common.character.Separator;
 public final class StringUtil {
 
 	public static interface StringConst {
-		
+
 		String NULL = "null";
-		
+
 		String EMPTY = "";
-		
+
 	}
 
 	private StringUtil() {
@@ -288,9 +288,28 @@ public final class StringUtil {
 			return StringConst.EMPTY;
 		StringBuilder builder = new StringBuilder(str.length());
 		for (int i = 0; i < str.length(); i++) {
-			char ch = str.charAt(i);
-			if ('0' <= ch && ch <= '9')
-				builder.append(ch);
+			char c = str.charAt(i);
+			if ('0' <= c && c <= '9')
+				builder.append(c);
+		}
+		return builder.toString();
+	}
+
+	/**
+	 * 删除除字符串中的非字母
+	 * 
+	 * @param str
+	 * @return
+	 */
+	@Nonnull
+	public static final String removeNonAlphabet(String str) {
+		if (isNullOrEmpty(str))
+			return StringConst.EMPTY;
+		StringBuilder builder = new StringBuilder(str.length());
+		for (int i = 0; i < str.length(); i++) {
+			char c = str.charAt(i);
+			if (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z'))
+				builder.append(c);
 		}
 		return builder.toString();
 	}
