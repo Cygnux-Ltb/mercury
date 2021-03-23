@@ -1,5 +1,6 @@
 package io.mercury.persistence.h2;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -11,29 +12,45 @@ import javax.sql.DataSource;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import io.mercury.common.file.FileUtil;
+
 public class H2Connector {
 
-	private String EmbeddedMemoryMode = "jdbc:h2:mem:";
+	private static final String MemMode = "jdbc:h2:mem:";
 
-	private String EmbeddedLocalModeProtocol = "jdbc";
+	private static final String FileMode = "jdbc:h2:file:";
 
 	private static final String DriverClass = "org.h2.Driver";
-	
-	public String getEmbeddedPrivateMemoryMode() {
-		return EmbeddedMemoryMode;
+
+	private final String url;
+
+	public static final H2Connector mem() {
+		return new H2Connector(MemMode);
 	}
 
-	public String getEmbeddedNamedMemoryMode(@Nonnull String dbName) {
-		return EmbeddedMemoryMode + dbName;
+	public static final H2Connector mem(@Nonnull String dbName) {
+		return new H2Connector(MemMode + dbName);
 	}
 
-	public void get() {
+	public static final H2Connector file(@Nonnull File dbFile) {
+		FileUtil.mkdir(dbFile);
+		return new H2Connector(FileMode + dbFile.getAbsolutePath());
+	}
+
+	/**
+	 * 
+	 * @param url
+	 */
+	private H2Connector(String url) {
+		this.url = url;
+	}
+
+	public DataSource get() {
 		HikariConfig config = new HikariConfig();
-		config.setJdbcUrl("");
+		config.setJdbcUrl(url);
 		config.setDriverClassName(DriverClass);
 		DataSource dataSource = new HikariDataSource(config);
-		
-
+		return dataSource;
 	}
 
 	/**

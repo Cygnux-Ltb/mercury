@@ -38,6 +38,15 @@ public final class FileUtil {
 		// do nothing
 	}
 
+	public static final boolean mkdir(File file) {
+		Assertor.nonNull(file, "file");
+		if (file.isDirectory()) {
+			return file.mkdirs();
+		} else {
+			return file.getParentFile().mkdirs();
+		}
+	}
+
 	/**
 	 * 
 	 * @param path
@@ -81,12 +90,9 @@ public final class FileUtil {
 		file.mkdirs();
 		return file;
 	}
-	
-	
+
 	public static void main(String[] args) {
-
 		System.out.println(FileUtil.mkdirInHome("aaaa"));
-
 	}
 
 	/**
