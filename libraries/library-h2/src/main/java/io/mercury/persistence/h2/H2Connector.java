@@ -24,15 +24,64 @@ public class H2Connector {
 
 	private final String url;
 
+	/**
+	 * private/私有<br>
+	 * <br>
+	 * 被开启的数据库是私有的(private). URL为"jdbc:h2:mem:". <br>
+	 * 在同一个虚拟机中开启两个连接意味着打开两个不同的(private)数据库.
+	 * 
+	 * @return H2Connector
+	 */
 	public static final H2Connector mem() {
 		return new H2Connector(MemMode);
 	}
 
-	public static final H2Connector mem(@Nonnull String dbName) {
-		return new H2Connector(MemMode + dbName);
+	/**
+	 * named/命名<br>
+	 * <br>
+	 * 其他应用可以通过使用命令来访问, 有时需要到同一个内存数据库的多个连接. <br>
+	 * 在这个场景中, 数据库URL必须包含一个名字. 例如："jdbc:h2:mem:example". <br>
+	 * 仅在同一个虚拟机和ClassLoader下可以通过这个URL访问到同样的数据库. <br>
+	 * <br>
+	 * 默认最后一个连接到数据库的连接关闭时就会关闭数据库. 对于一个内存数据库, 这意味着内容将会丢失. <br>
+	 * 为了保持数据库开启, 可以添加"DB_CLOSE_DELAY=-1"到数据库URL中. <br>
+	 * 为了让内存数据库的数据在虚拟机运行时始终存在, 请使用"jdbc:h2:mem:example;DB_CLOSE_DELAY=-1"
+	 * 
+	 * @param named
+	 * @return H2Connector
+	 */
+	public static final H2Connector mem(@Nonnull String named) {
+		return new H2Connector(MemMode + named);
 	}
 
+	/**
+	 * 
+	 * 连接到本地数据库的URL是"<b>jdbc:h2:[file:][{path}]{databaseName}</b>",
+	 * 其中前缀"[file:]"是可选的.<br>
+	 * 如果没有设置路径或者只使用了相对路径, 则当前工作目录将被作为起点使用. <br>
+	 * 路径和数据库名称的大小写敏感取决于操作系统, 推荐只使用小写字母. <br>
+	 * 数据库名称必须最少三个字母(File.createTempFile的限制). 数据库名字不允许包含分号";". <br>
+	 * <br>
+	 * 可以使用"<b>~</b>"来指向当前用户home目录, 例如"jdbc:h2:~/sample".<br>
+	 * <br>
+	 * 文件模式下的本地文件连接URL的实例：<br>
+	 * <br>
+	 * jdbc:h2:file:/data/sample
+	 * 
+	 * @param dbFile
+	 * @return
+	 */
 	public static final H2Connector file(@Nonnull File dbFile) {
+		FileUtil.mkdir(dbFile);
+		return new H2Connector(FileMode + dbFile.getAbsolutePath());
+	}
+
+	/**
+	 * 
+	 * @param dbFile
+	 * @return
+	 */
+	public static final H2Connector server(@Nonnull File dbFile, String tcpAddr) {
 		FileUtil.mkdir(dbFile);
 		return new H2Connector(FileMode + dbFile.getAbsolutePath());
 	}
@@ -43,6 +92,14 @@ public class H2Connector {
 	 */
 	private H2Connector(String url) {
 		this.url = url;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String getUrl() {
+		return url;
 	}
 
 	public DataSource get() {

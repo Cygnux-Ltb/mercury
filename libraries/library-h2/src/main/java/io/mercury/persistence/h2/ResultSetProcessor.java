@@ -9,6 +9,8 @@ import org.apache.commons.dbutils.RowProcessor;
 @FunctionalInterface
 public interface ResultSetProcessor extends RowProcessor {
 
+	
+	
 	@Override
 	default Object[] toArray(ResultSet rs) throws SQLException {
 		throw new UnsupportedOperationException("Unsupport toArray(ResultSet) function");
