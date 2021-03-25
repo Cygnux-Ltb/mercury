@@ -41,16 +41,13 @@
 
 		<dependency>
 			<groupId>io.mercury</groupId>
-			<artifactId>commons-cryption</artifactId>
+			<artifactId>library-cryption</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<!-- Common Java utility classes used across Cloudhopper-based projects -->
-		<!-- <dependency>
-			<groupId>com.cloudhopper</groupId>
-			<artifactId>ch-commons-util</artifactId>
-			<version>6.0.4</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>com.cloudhopper</groupId> <artifactId>ch-commons-util</artifactId> 
+			<version>6.0.4</version> </dependency> -->
 	</dependencies>
 
 </project>
