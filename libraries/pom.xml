@@ -21,6 +21,8 @@
 		<module>library-redis</module>
 		<module>library-sqlite</module>
     <module>library-hsqldb</module>
+    <module>library-cryption</module>
+    <module>library-jmx</module>
   </modules>
 
 	<dependencies>

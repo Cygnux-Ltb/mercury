@@ -20,6 +20,10 @@ public class H2Connector {
 
 	private static final String FileMode = "jdbc:h2:file:";
 
+	private static final String TcpMode = "jdbc:h2:tcp:";
+
+	private static final String SslMode = "jdbc:h2:ssl:";
+
 	private static final String DriverClass = "org.h2.Driver";
 
 	private final String url;
@@ -55,8 +59,9 @@ public class H2Connector {
 	}
 
 	/**
-	 * 
-	 * 连接到本地数据库的URL是"<b>jdbc:h2:[file:][{path}]{databaseName}</b>",
+	 * 使用本地文件<br>
+	 * <br>
+	 * 连接到本地数据库的URL是"<b>jdbc:h2:[file:][{path}]{databaseName}</b>", <br>
 	 * 其中前缀"[file:]"是可选的.<br>
 	 * 如果没有设置路径或者只使用了相对路径, 则当前工作目录将被作为起点使用. <br>
 	 * 路径和数据库名称的大小写敏感取决于操作系统, 推荐只使用小写字母. <br>
@@ -79,9 +84,58 @@ public class H2Connector {
 	/**
 	 * 
 	 * @param dbFile
+	 * @param addr
 	 * @return
 	 */
-	public static final H2Connector server(@Nonnull File dbFile, String tcpAddr) {
+	public static final H2Connector serverWithTCP(@Nonnull File dbFile, String addr) {
+		FileUtil.mkdir(dbFile);
+		return new H2Connector(FileMode + dbFile.getAbsolutePath());
+	}
+
+	/**
+	 * 
+	 * 使用TCP
+	 * 
+	 * 格式如下，通过指定server和port连接到以内嵌模式运行的H2服务器，参数path和databaseName对应该内嵌数据库启动时的参数：
+	 * 
+	 * jdbc:h2:tcp://<server>[:<port>]/[<path>]<databaseName>
+	 * 
+	 * 范例：
+	 * 
+	 * jdbc:h2:tcp://localhost/~/test （对应内嵌模式下的jdbc:h2:~/test)
+	 * jdbc:h2:tcp://dbserv:8084/~/sample （对应内嵌模式下的jdbc:h2:~/sample)
+	 * jdbc:h2:tcp://localhost/mem:test （对应内嵌模式下的jdbc:h2:mem:test)
+	 * 
+	 * 
+	 * @param dbFile
+	 * @param addr
+	 * @param port
+	 * @return
+	 */
+	public static final H2Connector serverWithTCP(@Nonnull File dbFile, String addr, int port) {
+		FileUtil.mkdir(dbFile);
+		return new H2Connector(FileMode + dbFile.getAbsolutePath());
+	}
+
+	/**
+	 * 
+	 * @param dbFile
+	 * @param addr
+	 * @return
+	 */
+	public static final H2Connector serverWithTLS(@Nonnull File dbFile, String addr) {
+		FileUtil.mkdir(dbFile);
+		return new H2Connector(FileMode + dbFile.getAbsolutePath());
+	}
+
+	/**
+	 * 
+	 * @param dbFile
+	 * @param addr
+	 * @param port
+	 * @return
+	 */
+	public static final H2Connector serverWithTLS(@Nonnull File dbFile, String addr, int port) {
 		FileUtil.mkdir(dbFile);
 		return new H2Connector(FileMode + dbFile.getAbsolutePath());
 	}

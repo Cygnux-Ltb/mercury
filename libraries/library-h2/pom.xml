@@ -47,6 +47,21 @@
 			<version>1.4.200</version>
 		</dependency>
 
+		<!-- A high performance caching library -->
+		<dependency>
+			<groupId>com.github.ben-manes.caffeine</groupId>
+			<artifactId>caffeine</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+
+
+		<!-- A high performance caching library -->
+		<dependency>
+			<groupId>com.github.ben-manes.caffeine</groupId>
+			<artifactId>guava</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+
 	</dependencies>
 
 </project>
