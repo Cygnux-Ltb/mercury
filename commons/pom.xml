@@ -17,6 +17,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>commons-cache</module>
 		<module>commons-concurrent</module>
 		<module>commons-core</module>
 		<module>commons-cryption</module>
