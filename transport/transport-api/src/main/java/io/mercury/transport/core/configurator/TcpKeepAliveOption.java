@@ -2,44 +2,44 @@ package io.mercury.transport.core.configurator;
 
 public final class TcpKeepAliveOption {
 
-	private int TcpKeepAlive;
-	private int TcpKeepAliveCount;
-	private int TcpKeepAliveIdle;
-	private int TcpKeepAliveInterval;
+	private int tcpKeepAlive;
+	private int tcpKeepAliveCount;
+	private int tcpKeepAliveIdle;
+	private int tcpKeepAliveInterval;
 
 	public int getTcpKeepAlive() {
-		return TcpKeepAlive;
+		return tcpKeepAlive;
 	}
 
 	public int getTcpKeepAliveCount() {
-		return TcpKeepAliveCount;
+		return tcpKeepAliveCount;
 	}
 
 	public int getTcpKeepAliveIdle() {
-		return TcpKeepAliveIdle;
+		return tcpKeepAliveIdle;
 	}
 
 	public int getTcpKeepAliveInterval() {
-		return TcpKeepAliveInterval;
+		return tcpKeepAliveInterval;
 	}
 
 	public TcpKeepAliveOption setTcpKeepAlive(int tcpKeepAlive) {
-		TcpKeepAlive = tcpKeepAlive;
+		this.tcpKeepAlive = tcpKeepAlive;
 		return this;
 	}
 
 	public TcpKeepAliveOption setTcpKeepAliveCount(int tcpKeepAliveCount) {
-		TcpKeepAliveCount = tcpKeepAliveCount;
+		this.tcpKeepAliveCount = tcpKeepAliveCount;
 		return this;
 	}
 
 	public TcpKeepAliveOption setTcpKeepAliveIdle(int tcpKeepAliveIdle) {
-		TcpKeepAliveIdle = tcpKeepAliveIdle;
+		this.tcpKeepAliveIdle = tcpKeepAliveIdle;
 		return this;
 	}
 
 	public TcpKeepAliveOption setTcpKeepAliveInterval(int tcpKeepAliveInterval) {
-		TcpKeepAliveInterval = tcpKeepAliveInterval;
+		this.tcpKeepAliveInterval = tcpKeepAliveInterval;
 		return this;
 	}
 

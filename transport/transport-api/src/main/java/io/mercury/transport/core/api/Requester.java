@@ -2,7 +2,7 @@ package io.mercury.transport.core.api;
 
 import io.mercury.transport.core.exception.RequestException;
 
-public interface Requester<T> extends TransportModule {
+public interface Requester<T> extends Transport {
 
 	/**
 	 * 

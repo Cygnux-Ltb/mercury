@@ -1,6 +1,6 @@
 package io.mercury.transport.core.api;
 
-public interface TransportModule {
+public interface Transport {
 
 	String getName();
 

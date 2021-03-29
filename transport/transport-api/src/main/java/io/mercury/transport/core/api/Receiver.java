@@ -5,7 +5,7 @@ import java.io.Closeable;
 import io.mercury.transport.core.exception.ConnectionBreakException;
 import io.mercury.transport.core.exception.ReceiverStartException;
 
-public interface Receiver extends TransportModule, Closeable, Runnable {
+public interface Receiver extends Transport, Closeable, Runnable {
 
 	/**
 	 * Start receive
