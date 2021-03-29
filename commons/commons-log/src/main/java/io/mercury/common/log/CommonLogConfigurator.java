@@ -1,50 +1,68 @@
 package io.mercury.common.log;
 
+/**
+ * 
+ * @author yellow013
+ *
+ */
 public final class CommonLogConfigurator {
 
-	private static final String Log4j2Folder = "log4j2.folder";
-
-	private static final String Log4j2Filename = "log4j2.filename";
-
-	private static final String Log4j2Level = "log4j2.level";
-
+	/**
+	 * 
+	 * @param folder
+	 */
 	public static synchronized void setFolder(String folder) {
-		System.setProperty(Log4j2Folder, folder);
+		System.setProperty("log4j2.folder", folder);
 	}
 
+	/**
+	 * 
+	 * @param filename
+	 */
 	public static synchronized void setFilename(String filename) {
-		System.setProperty(Log4j2Filename, filename);
+		System.setProperty("log4j2.filename", filename);
 	}
 
+	/**
+	 * 
+	 * @param level
+	 */
 	public static synchronized void setLogLevel(LogLevel level) {
-		System.setProperty(Log4j2Level, level.name());
+		System.setProperty("log4j2.level", level.name());
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public static synchronized String getFolder() {
-		return System.getProperty(Log4j2Folder);
+		return System.getProperty("log4j2.folder");
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public static synchronized String getFilename() {
-		return System.getProperty(Log4j2Filename);
+		return System.getProperty("log4j2.filename");
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public static synchronized String getLogLevel() {
-		return System.getProperty(Log4j2Level);
+		return System.getProperty("log4j2.level");
 	}
 
+	/**
+	 * 
+	 * @author yellow013
+	 *
+	 */
 	public static enum LogLevel {
 
-		DEBUG,
-
-		INFO,
-
-		WARN,
-
-		ERROR,
-
-		FATAL,
-
-		;
+		DEBUG, INFO, WARN, ERROR, FATAL;
 
 	}
 

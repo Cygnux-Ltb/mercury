@@ -8,6 +8,11 @@ import org.slf4j.LoggerFactory;
 
 import io.mercury.common.log.CommonLogConfigurator.LogLevel;
 
+/**
+ * 
+ * @author yellow013
+ *
+ */
 public final class CommonLoggerFactory {
 
 	public static final String DefaultFolder = "default";
@@ -17,6 +22,11 @@ public final class CommonLoggerFactory {
 
 	public static final LogLevel DefaultLevel = LogLevel.ERROR;
 
+	/**
+	 * 
+	 * @param clazz
+	 * @return
+	 */
 	public static final synchronized Logger getLogger(Class<?> clazz) {
 		// 配置日志存储目录, 基于${user.home}
 		String folder = CommonLogConfigurator.getFolder();
