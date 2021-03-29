@@ -1,4 +1,6 @@
-package io.mercury.common.datetime.pattern;
+package io.mercury.common.datetime.pattern.spec;
+
+import io.mercury.common.datetime.pattern.AbstractPattern;
 
 /**
  * 日期格式列表

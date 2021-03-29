@@ -37,7 +37,7 @@ public final class ImmutableMaps {
 	 * @return ImmutableIntIntMapFactoryInstance
 	 */
 	@Nonnull
-	public static ImmutableIntIntMapFactory immutableIntIntMapFactory() {
+	public static final ImmutableIntIntMapFactory immutableIntIntMapFactory() {
 		return ImmutableIntIntMapFactoryImpl.INSTANCE;
 	}
 
@@ -45,7 +45,7 @@ public final class ImmutableMaps {
 	 * 
 	 * @return The new ImmutableIntIntMap
 	 */
-	public static <T> ImmutableIntIntMap newImmutableIntIntMapFrom(@Nonnull Iterable<T> iterable,
+	public static final <T> ImmutableIntIntMap newImmutableIntIntMapFrom(@Nonnull Iterable<T> iterable,
 			@Nonnull IntFunction<T> keyFunction, @Nonnull IntFunction<T> valueFunction) {
 		return ImmutableIntIntMapFactoryImpl.INSTANCE.from(iterable, keyFunction, valueFunction);
 	}
@@ -54,7 +54,7 @@ public final class ImmutableMaps {
 	 * 
 	 * @return ImmutableIntLongMapFactoryInstance
 	 */
-	public static ImmutableIntLongMapFactory immutableIntLongMapFactory() {
+	public static final ImmutableIntLongMapFactory immutableIntLongMapFactory() {
 		return ImmutableIntLongMapFactoryImpl.INSTANCE;
 	}
 
@@ -62,7 +62,7 @@ public final class ImmutableMaps {
 	 * 
 	 * @return ImmutableIntDoubleMapFactoryInstance
 	 */
-	public static ImmutableIntDoubleMapFactory immutableIntDoubleMapFactory() {
+	public static final ImmutableIntDoubleMapFactory immutableIntDoubleMapFactory() {
 		return ImmutableIntDoubleMapFactoryImpl.INSTANCE;
 	}
 
@@ -70,7 +70,7 @@ public final class ImmutableMaps {
 	 * 
 	 * @return ImmutableIntObjectMapFactoryInstance
 	 */
-	public static ImmutableIntObjectMapFactory immutableIntObjectMapFactory() {
+	public static final ImmutableIntObjectMapFactory immutableIntObjectMapFactory() {
 		return ImmutableIntObjectMapFactoryImpl.INSTANCE;
 	}
 
@@ -78,7 +78,7 @@ public final class ImmutableMaps {
 	 * 
 	 * @return ImmutableLongIntMapFactoryInstance
 	 */
-	public static ImmutableLongIntMapFactory immutableLongIntMapFactory() {
+	public static final ImmutableLongIntMapFactory immutableLongIntMapFactory() {
 		return ImmutableLongIntMapFactoryImpl.INSTANCE;
 	}
 
@@ -86,7 +86,7 @@ public final class ImmutableMaps {
 	 * 
 	 * @return ImmutableLongLongMapFactoryInstance
 	 */
-	public static ImmutableLongLongMapFactory immutableLongLongMapFactory() {
+	public static final ImmutableLongLongMapFactory immutableLongLongMapFactory() {
 		return ImmutableLongLongMapFactoryImpl.INSTANCE;
 	}
 
@@ -94,7 +94,7 @@ public final class ImmutableMaps {
 	 * 
 	 * @return ImmutableLongDoubleMapFactoryInstance
 	 */
-	public static ImmutableLongDoubleMapFactory immutableLongDoubleMapFactory() {
+	public static final ImmutableLongDoubleMapFactory immutableLongDoubleMapFactory() {
 		return ImmutableLongDoubleMapFactoryImpl.INSTANCE;
 	}
 
@@ -102,7 +102,7 @@ public final class ImmutableMaps {
 	 * 
 	 * @return ImmutableLongObjectMapFactoryInstance
 	 */
-	public static ImmutableLongObjectMapFactory immutableLongObjectMapFactory() {
+	public static final ImmutableLongObjectMapFactory immutableLongObjectMapFactory() {
 		return ImmutableLongObjectMapFactoryImpl.INSTANCE;
 	}
 
@@ -110,7 +110,7 @@ public final class ImmutableMaps {
 	 * 
 	 * @return ImmutableMapFactoryInstance
 	 */
-	public static ImmutableMapFactory immutableMapFactory() {
+	public static final ImmutableMapFactory immutableMapFactory() {
 		return ImmutableMapFactoryImpl.INSTANCE;
 	}
 
@@ -122,7 +122,7 @@ public final class ImmutableMaps {
 	 * @param value
 	 * @return The new ImmutableMap
 	 */
-	public static <K, V> ImmutableMap<K, V> newImmutableMap(K key, V value) {
+	public static final <K, V> ImmutableMap<K, V> newImmutableMap(K key, V value) {
 		return ImmutableMapFactoryImpl.INSTANCE.with(key, value);
 	}
 
@@ -133,7 +133,7 @@ public final class ImmutableMaps {
 	 * @param map
 	 * @return The new ImmutableMap
 	 */
-	public static <K, V> ImmutableMap<K, V> newImmutableMap(Map<K, V> map) {
+	public static final <K, V> ImmutableMap<K, V> newImmutableMap(Map<K, V> map) {
 		if (map == null || map.isEmpty())
 			return ImmutableMapFactoryImpl.INSTANCE.empty();
 		return ImmutableMapFactoryImpl.INSTANCE.withAll(map);
@@ -144,7 +144,7 @@ public final class ImmutableMaps {
 	 * @param supplier
 	 * @return The new ImmutableMap
 	 */
-	public static <K, V> ImmutableMap<K, V> newImmutableMap(Supplier<Map<K, V>> supplier) {
+	public static final <K, V> ImmutableMap<K, V> newImmutableMap(Supplier<Map<K, V>> supplier) {
 		if (supplier == null)
 			return newImmutableMap(MutableMaps.newUnifiedMap());
 		return newImmutableMap(supplier.get());

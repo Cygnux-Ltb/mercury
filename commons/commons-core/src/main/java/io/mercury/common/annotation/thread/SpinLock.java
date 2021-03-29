@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ ElementType.METHOD, ElementType.LOCAL_VARIABLE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SpinWaiting {
+public @interface SpinLock {
 }

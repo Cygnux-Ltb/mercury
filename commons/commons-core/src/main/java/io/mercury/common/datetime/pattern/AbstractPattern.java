@@ -1,8 +1,12 @@
 package io.mercury.common.datetime.pattern;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.Temporal;
+
+import io.mercury.common.datetime.TimeZone;
 
 /**
  * 
@@ -59,7 +63,7 @@ p       pad next                    pad modifier      1
  * </pre>
  * 
  */
-public abstract class AbstractPattern implements TPattern {
+public abstract class AbstractPattern implements TemporalPattern {
 
 	private final String pattern;
 	private final DateTimeFormatter formatter;
@@ -113,6 +117,22 @@ public abstract class AbstractPattern implements TPattern {
 	@Override
 	public String format(Temporal temporal) {
 		return formatter.format(temporal);
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String now() {
+		return format(LocalDateTime.now());
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String nowWithUTC() {
+		return format(ZonedDateTime.now(TimeZone.UTC).toLocalDateTime());
 	}
 
 }

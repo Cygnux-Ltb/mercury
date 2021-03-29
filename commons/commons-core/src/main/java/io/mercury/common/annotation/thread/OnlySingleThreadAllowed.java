@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ ElementType.METHOD, ElementType.CONSTRUCTOR })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface OnlySingleThreadCall {
+public @interface OnlySingleThreadAllowed {
 }

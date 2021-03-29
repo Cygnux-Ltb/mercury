@@ -11,10 +11,10 @@ import java.util.Date;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
-import io.mercury.common.datetime.pattern.DatePattern;
-import io.mercury.common.datetime.pattern.DateTimePattern;
-import io.mercury.common.datetime.pattern.TPattern;
-import io.mercury.common.datetime.pattern.TimePattern;
+import io.mercury.common.datetime.pattern.TemporalPattern;
+import io.mercury.common.datetime.pattern.spec.DatePattern;
+import io.mercury.common.datetime.pattern.spec.DateTimePattern;
+import io.mercury.common.datetime.pattern.spec.TimePattern;
 import io.mercury.common.util.StringUtil;
 
 @ThreadSafe
@@ -384,7 +384,7 @@ public final class DateTimeUtil {
 		return LocalDateTime.parse(str, pattern.getFormatter());
 	}
 
-	private static void checkFormatParam(TPattern pattern, String str) {
+	private static void checkFormatParam(TemporalPattern pattern, String str) {
 		if (pattern == null)
 			throw new IllegalArgumentException("pattern cannot null");
 		if (StringUtil.isNullOrEmpty(str))

@@ -1,5 +1,7 @@
 package io.mercury.common.param;
 
+import java.util.Set;
+
 import org.slf4j.Logger;
 
 import io.mercury.common.param.Params.ParamKey;
@@ -10,9 +12,13 @@ public interface Params<K extends ParamKey> {
 
 	int getInt(K key);
 
+	long getLong(K key);
+
 	double getDouble(K key);
 
 	String getString(K key);
+
+	Set<K> getParamKeys();
 
 	default void printParams() {
 		printParams(null);
@@ -51,6 +57,8 @@ public interface Params<K extends ParamKey> {
 		DOUBLE,
 
 		INT,
+
+		LONG,
 
 		DATE,
 

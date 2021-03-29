@@ -14,9 +14,9 @@ import org.eclipse.collections.api.list.MutableList;
 @NotThreadSafe
 public final class LocalDateMap<V> extends TemporalMap<LocalDate, V, LocalDateMap<V>> {
 
-	private LocalDateMap(ToLongFunction<LocalDate> keyToLangFunc, Function<LocalDate, LocalDate> nextKeyFunc,
+	private LocalDateMap(ToLongFunction<LocalDate> keyFunc, Function<LocalDate, LocalDate> nextKeyFunc,
 			BiPredicate<LocalDate, LocalDate> hasNextKey) {
-		super(keyToLangFunc, nextKeyFunc, hasNextKey);
+		super(keyFunc, nextKeyFunc, hasNextKey);
 	}
 
 	private static final BiPredicate<LocalDate, LocalDate> HasNextKey = (nextKey,
@@ -32,7 +32,7 @@ public final class LocalDateMap<V> extends TemporalMap<LocalDate, V, LocalDateMa
 	}
 
 	@Override
-	protected LocalDateMap<V> returnThis() {
+	protected LocalDateMap<V> self() {
 		return this;
 	}
 

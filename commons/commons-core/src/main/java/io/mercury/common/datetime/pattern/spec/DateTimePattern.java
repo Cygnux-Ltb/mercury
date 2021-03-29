@@ -1,16 +1,18 @@
-package io.mercury.common.datetime.pattern;
+package io.mercury.common.datetime.pattern.spec;
+
+import static io.mercury.common.datetime.pattern.DatetimeSeparator.BLANK;
+import static io.mercury.common.datetime.pattern.DatetimeSeparator.LINE;
+import static io.mercury.common.datetime.pattern.DatetimeSeparator.TIME;
+
+import io.mercury.common.datetime.pattern.AbstractPattern;;
 
 /**
- * 日期时间格式列表
+ * 常用日期时间格式列表
  * 
  * @author yellow013
  *
  */
 public final class DateTimePattern extends AbstractPattern {
-
-	private static final String LINE = "-";
-	private static final String BLANK = " ";
-	private static final String TIME = "T";
 
 	/**
 	 * Example: 2018031413

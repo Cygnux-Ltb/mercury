@@ -52,7 +52,7 @@ public final class LocalTimeMap<V> extends TemporalMap<LocalTime, V, LocalTimeMa
 	}
 
 	@Override
-	protected LocalTimeMap<V> returnThis() {
+	protected LocalTimeMap<V> self() {
 		return this;
 	}
 

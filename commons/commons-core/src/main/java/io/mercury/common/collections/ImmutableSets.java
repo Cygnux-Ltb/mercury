@@ -29,7 +29,7 @@ public final class ImmutableSets {
 	 * 
 	 * @return ImmutableIntSetFactoryInstance
 	 */
-	public static ImmutableIntSetFactory intSetFactory() {
+	public static final ImmutableIntSetFactory intSetFactory() {
 		return ImmutableIntSetFactoryImpl.INSTANCE;
 	}
 
@@ -38,7 +38,7 @@ public final class ImmutableSets {
 	 * @param values
 	 * @return ImmutableIntSet
 	 */
-	public static ImmutableIntSet newImmutableIntSet(@Nonnull int... values) {
+	public static final ImmutableIntSet newImmutableIntSet(@Nonnull int... values) {
 		if (isNullOrEmpty(values))
 			return ImmutableIntSetFactoryImpl.INSTANCE.empty();
 		return ImmutableIntSetFactoryImpl.INSTANCE.with(values);
@@ -48,7 +48,7 @@ public final class ImmutableSets {
 	 * 
 	 * @return ImmutableLongSetFactoryInstance
 	 */
-	public static ImmutableLongSetFactory longSetFactoryInstance() {
+	public static final ImmutableLongSetFactory longSetFactoryInstance() {
 		return ImmutableLongSetFactoryImpl.INSTANCE;
 	}
 
@@ -57,7 +57,7 @@ public final class ImmutableSets {
 	 * @param values
 	 * @return ImmutableLongSet
 	 */
-	public static ImmutableLongSet newImmutableLongSet(@Nonnull long... values) {
+	public static final ImmutableLongSet newImmutableLongSet(@Nonnull long... values) {
 		if (isNullOrEmpty(values))
 			return ImmutableLongSetFactoryImpl.INSTANCE.empty();
 		return ImmutableLongSetFactoryImpl.INSTANCE.with(values);
@@ -67,7 +67,7 @@ public final class ImmutableSets {
 	 * 
 	 * @return ImmutableDoubleSetFactoryInstance
 	 */
-	public static ImmutableDoubleSetFactory doubleSetFactory() {
+	public static final ImmutableDoubleSetFactory doubleSetFactory() {
 		return ImmutableDoubleSetFactoryImpl.INSTANCE;
 	}
 
@@ -76,7 +76,7 @@ public final class ImmutableSets {
 	 * @param values
 	 * @return ImmutableDoubleSet
 	 */
-	public static ImmutableDoubleSet newImmutableDoubleSet(@Nonnull double... values) {
+	public static final ImmutableDoubleSet newImmutableDoubleSet(@Nonnull double... values) {
 		if (isNullOrEmpty(values))
 			return ImmutableDoubleSetFactoryImpl.INSTANCE.empty();
 		return ImmutableDoubleSetFactoryImpl.INSTANCE.with(values);
@@ -86,7 +86,7 @@ public final class ImmutableSets {
 	 * 
 	 * @return ImmutableSetFactoryInstance
 	 */
-	public static ImmutableSetFactory objectSetFactory() {
+	public static final ImmutableSetFactory objectSetFactory() {
 		return ImmutableSetFactoryImpl.INSTANCE;
 	}
 
@@ -96,7 +96,7 @@ public final class ImmutableSets {
 	 * @param iterable
 	 * @return ImmutableSet
 	 */
-	public static <E> ImmutableSet<E> newImmutableSet(@Nonnull Iterable<E> iterable) {
+	public static final <E> ImmutableSet<E> newImmutableSet(@Nonnull Iterable<E> iterable) {
 		if (iterable == null)
 			return ImmutableSetFactoryImpl.INSTANCE.empty();
 		return ImmutableSetFactoryImpl.INSTANCE.withAll(iterable);
@@ -109,7 +109,7 @@ public final class ImmutableSets {
 	 * @return ImmutableSet
 	 */
 	@SafeVarargs
-	public static <E> ImmutableSet<E> newImmutableSet(@Nonnull E... values) {
+	public static final <E> ImmutableSet<E> newImmutableSet(@Nonnull E... values) {
 		return ImmutableSetFactoryImpl.INSTANCE.with(values);
 	}
 
@@ -117,7 +117,7 @@ public final class ImmutableSets {
 	 * 
 	 * @return ImmutableSortedSetFactory
 	 */
-	public static ImmutableSortedSetFactory objSortedSetFactoryInstance() {
+	public static final ImmutableSortedSetFactory objSortedSetFactoryInstance() {
 		return ImmutableSortedSetFactoryImpl.INSTANCE;
 	}
 
@@ -127,7 +127,7 @@ public final class ImmutableSets {
 	 * @param iterable
 	 * @return ImmutableSortedSet
 	 */
-	public static <E> ImmutableSortedSet<E> newImmutableSortedSet(@Nonnull Iterable<E> iterable) {
+	public static final <E> ImmutableSortedSet<E> newImmutableSortedSet(@Nonnull Iterable<E> iterable) {
 		if (iterable == null)
 			return ImmutableSortedSetFactoryImpl.INSTANCE.empty();
 		return ImmutableSortedSetFactoryImpl.INSTANCE.withAll(iterable);
@@ -140,7 +140,7 @@ public final class ImmutableSets {
 	 * @return ImmutableSortedSet
 	 */
 	@SafeVarargs
-	public static <E> ImmutableSortedSet<E> newImmutableSortedSet(@Nonnull E... values) {
+	public static final <E> ImmutableSortedSet<E> newImmutableSortedSet(@Nonnull E... values) {
 		if (isNullOrEmpty(values))
 			return ImmutableSortedSetFactoryImpl.INSTANCE.empty();
 		return ImmutableSortedSetFactoryImpl.INSTANCE.with(values);

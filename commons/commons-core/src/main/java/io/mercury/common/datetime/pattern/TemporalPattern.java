@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.Temporal;
 
-public interface TPattern {
+public interface TemporalPattern {
 
 	/**
 	 * 

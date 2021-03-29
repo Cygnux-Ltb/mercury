@@ -7,19 +7,24 @@ import static java.lang.System.out;
 
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 
 import org.eclipse.collections.api.map.ImmutableMap;
 import org.eclipse.collections.api.map.MutableMap;
+import org.eclipse.collections.api.set.ImmutableSet;
 import org.slf4j.Logger;
 
+import io.mercury.common.collections.ImmutableSets;
 import io.mercury.common.collections.MutableMaps;
 import io.mercury.common.param.Params.ParamKey;
 
 public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 
 	private final ImmutableMap<K, String> params;
+
+	private final ImmutableSet<K> keys;
 
 	/**
 	 * 根据传入的Key获取Map中的相应字段
@@ -40,6 +45,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 				mutableMap.put(key, map.get(key.getParamName()).toString());
 		}
 		this.params = mutableMap.toImmutable();
+		this.keys = ImmutableSets.newImmutableSet(keys);
 	}
 
 	/**
@@ -61,6 +67,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 				mutableMap.put(key, prop.get(key.getParamName()).toString());
 		}
 		this.params = mutableMap.toImmutable();
+		this.keys = ImmutableSets.newImmutableSet(keys);
 	}
 
 	/**
@@ -103,6 +110,22 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 	 * @throws NumberFormatException
 	 */
 	@Override
+	public long getLong(K key) throws IllegalArgumentException, NullPointerException, NumberFormatException {
+		if (key.getValueType() != ValueType.LONG)
+			throw new IllegalArgumentException(
+					"Key -> " + key + " ValueType is not [LONG]. valueType==" + key.getValueType());
+		return Long.parseLong(nonNull(params.get(key), key.getParamName()));
+	}
+
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 * @throws IllegalArgumentException
+	 * @throws NullPointerException
+	 * @throws NumberFormatException
+	 */
+	@Override
 	public double getDouble(K key) throws IllegalArgumentException, NullPointerException, NumberFormatException {
 		if (key.getValueType() != ValueType.DOUBLE)
 			throw new IllegalArgumentException(
@@ -125,18 +148,19 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 		return nonNull(params.get(key), key.getParamName());
 	}
 
-	public void printParams() {
-		printParams(null);
+	@Override
+	public Set<K> getParamKeys() {
+		return keys.toSet();
 	}
 
+	@Override
 	public void printParams(Logger log) {
-		if (log == null) {
+		if (log == null)
 			params.forEachKeyValue((key, value) -> out.println(
 					"Param id==" + key.getParamId() + ", paramName -> " + key.getParamName() + ", value -> " + value));
-		} else {
+		else
 			params.forEachKeyValue((key, value) -> log.info("Param id=={}, paramName=={}, value -> {}",
 					key.getParamId(), key.getParamName(), value));
-		}
 	}
 
 }

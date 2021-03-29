@@ -1,12 +1,14 @@
-package io.mercury.common.datetime.pattern;
+package io.mercury.common.datetime.pattern.spec;
+
+import io.mercury.common.datetime.pattern.AbstractPattern;
 
 /**
- * 时间格式列表
+ * 常用时间格式列表
  * 
  * @author yellow013
  *
  */
-public  final class TimePattern extends AbstractPattern {
+public final class TimePattern extends AbstractPattern {
 
 	/**
 	 * Example: 13

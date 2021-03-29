@@ -23,7 +23,7 @@ public final class Multimaps {
 	 * @param <V>
 	 * @return MutableListMultimap
 	 */
-	public static <K, V> MutableListMultimap<K, V> newFastListMultimap() {
+	public static final <K, V> MutableListMultimap<K, V> newFastListMultimap() {
 		return FastListMultimap.newMultimap();
 	}
 
@@ -34,7 +34,7 @@ public final class Multimaps {
 	 * @param iterable
 	 * @return MutableListMultimap
 	 */
-	public static <K, V> MutableListMultimap<K, V> newFastListMultimap(Iterable<Pair<K, V>> iterable) {
+	public static final <K, V> MutableListMultimap<K, V> newFastListMultimap(Iterable<Pair<K, V>> iterable) {
 		if (iterable == null)
 			return FastListMultimap.newMultimap();
 		return FastListMultimap.newMultimap(iterable);
@@ -48,7 +48,7 @@ public final class Multimaps {
 	 * @return MutableListMultimap
 	 */
 	@SafeVarargs
-	public static <K, V> MutableListMultimap<K, V> newFastListMultimap(Pair<K, V>... pairs) {
+	public static final <K, V> MutableListMultimap<K, V> newFastListMultimap(Pair<K, V>... pairs) {
 		if (ArrayUtil.isNullOrEmpty(pairs))
 			return FastListMultimap.newMultimap();
 		return FastListMultimap.newMultimap(pairs);
@@ -60,7 +60,7 @@ public final class Multimaps {
 	 * @param <V>
 	 * @return MutableSetMultimap
 	 */
-	public static <K, V> MutableSetMultimap<K, V> newUnifiedSetMultimap() {
+	public static final <K, V> MutableSetMultimap<K, V> newUnifiedSetMultimap() {
 		return UnifiedSetMultimap.newMultimap();
 	}
 
@@ -71,7 +71,7 @@ public final class Multimaps {
 	 * @param iterable
 	 * @return MutableSetMultimap
 	 */
-	public static <K, V> MutableSetMultimap<K, V> newUnifiedSetMultimap(Iterable<Pair<K, V>> iterable) {
+	public static final <K, V> MutableSetMultimap<K, V> newUnifiedSetMultimap(Iterable<Pair<K, V>> iterable) {
 		if (iterable == null)
 			return UnifiedSetMultimap.newMultimap();
 		return UnifiedSetMultimap.newMultimap(iterable);
@@ -85,7 +85,7 @@ public final class Multimaps {
 	 * @return MutableSetMultimap
 	 */
 	@SafeVarargs
-	public static <K, V> MutableSetMultimap<K, V> newUnifiedSetMultimap(Pair<K, V>... pairs) {
+	public static final <K, V> MutableSetMultimap<K, V> newUnifiedSetMultimap(Pair<K, V>... pairs) {
 		if (ArrayUtil.isNullOrEmpty(pairs))
 			return UnifiedSetMultimap.newMultimap();
 		return UnifiedSetMultimap.newMultimap(pairs);
@@ -97,7 +97,7 @@ public final class Multimaps {
 	 * @param <V>
 	 * @return MutableSortedSetMultimap
 	 */
-	public static <K, V> MutableSortedSetMultimap<K, V> newTreeSortedSetMultimap() {
+	public static final <K, V> MutableSortedSetMultimap<K, V> newTreeSortedSetMultimap() {
 		return TreeSortedSetMultimap.newMultimap();
 	}
 
@@ -108,7 +108,7 @@ public final class Multimaps {
 	 * @param comparator
 	 * @return MutableSortedSetMultimap
 	 */
-	public static <K, V> MutableSortedSetMultimap<K, V> newTreeSortedSetMultimap(Comparator<V> comparator) {
+	public static final <K, V> MutableSortedSetMultimap<K, V> newTreeSortedSetMultimap(Comparator<V> comparator) {
 		if (comparator == null)
 			return TreeSortedSetMultimap.newMultimap();
 		return TreeSortedSetMultimap.newMultimap(comparator);
@@ -121,7 +121,7 @@ public final class Multimaps {
 	 * @param iterable
 	 * @return MutableSortedSetMultimap
 	 */
-	public static <K, V> MutableSortedSetMultimap<K, V> newTreeSortedSetMultimap(Iterable<Pair<K, V>> iterable) {
+	public static final <K, V> MutableSortedSetMultimap<K, V> newTreeSortedSetMultimap(Iterable<Pair<K, V>> iterable) {
 		if (iterable == null)
 			return TreeSortedSetMultimap.newMultimap();
 		return TreeSortedSetMultimap.newMultimap(iterable);
@@ -135,7 +135,7 @@ public final class Multimaps {
 	 * @return MutableSortedSetMultimap
 	 */
 	@SafeVarargs
-	public static <K, V> MutableSortedSetMultimap<K, V> newTreeSortedSetMultimap(Pair<K, V>... pairs) {
+	public static final <K, V> MutableSortedSetMultimap<K, V> newTreeSortedSetMultimap(Pair<K, V>... pairs) {
 		if (ArrayUtil.isNullOrEmpty(pairs))
 			return TreeSortedSetMultimap.newMultimap();
 		return TreeSortedSetMultimap.newMultimap(pairs);

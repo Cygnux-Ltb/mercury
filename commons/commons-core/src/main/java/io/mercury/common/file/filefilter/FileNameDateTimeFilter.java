@@ -9,15 +9,15 @@ import java.time.ZonedDateTime;
 import org.slf4j.Logger;
 
 import io.mercury.common.datetime.TimeZone;
-import io.mercury.common.datetime.pattern.DatePattern;
-import io.mercury.common.datetime.pattern.TPattern;
+import io.mercury.common.datetime.pattern.TemporalPattern;
+import io.mercury.common.datetime.pattern.spec.DatePattern;
 import io.mercury.common.log.CommonLoggerFactory;
 
 public class FileNameDateTimeFilter implements FileFilter {
 
 	private static final Logger logger = CommonLoggerFactory.getLogger(FileNameDateTimeFilter.class);
 
-	private TPattern pattern;
+	private TemporalPattern pattern;
 	private ZonedDateTime cutoffDate;
 	private ZoneId zone;
 
@@ -29,11 +29,11 @@ public class FileNameDateTimeFilter implements FileFilter {
 		this(cutoffDate, null, zone);
 	}
 
-	public FileNameDateTimeFilter(LocalDateTime cutoffDate, TPattern pattern) {
+	public FileNameDateTimeFilter(LocalDateTime cutoffDate, TemporalPattern pattern) {
 		this(cutoffDate, pattern, null);
 	}
 
-	public FileNameDateTimeFilter(LocalDateTime cutoffDate, TPattern pattern, ZoneId zone) {
+	public FileNameDateTimeFilter(LocalDateTime cutoffDate, TemporalPattern pattern, ZoneId zone) {
 		if (pattern == null) {
 			this.pattern = DatePattern.YYYY_MM_DD;
 		} else {

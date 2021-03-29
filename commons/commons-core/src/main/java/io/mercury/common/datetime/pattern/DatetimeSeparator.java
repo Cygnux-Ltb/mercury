@@ -1,6 +1,13 @@
 package io.mercury.common.datetime.pattern;
 
-public interface PatternSeparator {
+/**
+ * 
+ * 日期时间分割符
+ * 
+ * @author yellow013
+ *
+ */
+public interface DatetimeSeparator {
 
 	String LINE = "-";
 	String BLANK = " ";

@@ -6,6 +6,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * 标识抽象函数
+ * 
+ * @author yellow013
+ *
+ */
 @Documented
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.SOURCE)

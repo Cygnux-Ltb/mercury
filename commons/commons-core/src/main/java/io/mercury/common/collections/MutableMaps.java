@@ -55,7 +55,7 @@ public final class MutableMaps {
 	 * 
 	 * @return MutableIntIntMap
 	 */
-	public static MutableIntIntMap newIntIntHashMap() {
+	public static final MutableIntIntMap newIntIntHashMap() {
 		return new IntIntHashMap();
 	}
 
@@ -64,7 +64,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableIntIntMap
 	 */
-	public static MutableIntIntMap newIntIntHashMap(Capacity capacity) {
+	public static final MutableIntIntMap newIntIntHashMap(Capacity capacity) {
 		return new IntIntHashMap(capacity.value());
 	}
 
@@ -72,7 +72,7 @@ public final class MutableMaps {
 	 * 
 	 * @return MutableIntLongMap
 	 */
-	public static MutableIntLongMap newIntLongHashMap() {
+	public static final MutableIntLongMap newIntLongHashMap() {
 		return new IntLongHashMap();
 	}
 
@@ -81,7 +81,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableIntLongMap
 	 */
-	public static MutableIntLongMap newIntLongHashMap(Capacity capacity) {
+	public static final MutableIntLongMap newIntLongHashMap(Capacity capacity) {
 		return new IntLongHashMap(capacity.value());
 	}
 
@@ -89,7 +89,7 @@ public final class MutableMaps {
 	 * 
 	 * @return MutableIntDoubleMap
 	 */
-	public static MutableIntDoubleMap newIntDoubleHashMap() {
+	public static final MutableIntDoubleMap newIntDoubleHashMap() {
 		return new IntDoubleHashMap();
 	}
 
@@ -98,7 +98,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableIntDoubleMap
 	 */
-	public static MutableIntDoubleMap newIntDoubleHashMap(Capacity capacity) {
+	public static final MutableIntDoubleMap newIntDoubleHashMap(Capacity capacity) {
 		return new IntDoubleHashMap(capacity.value());
 	}
 
@@ -106,7 +106,7 @@ public final class MutableMaps {
 	 * 
 	 * @return MutableIntBooleanMap
 	 */
-	public static MutableIntBooleanMap newIntBooleanHashMap() {
+	public static final MutableIntBooleanMap newIntBooleanHashMap() {
 		return new IntBooleanHashMap();
 	}
 
@@ -115,7 +115,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableIntBooleanMap
 	 */
-	public static MutableIntBooleanMap newIntBooleanHashMap(Capacity capacity) {
+	public static final MutableIntBooleanMap newIntBooleanHashMap(Capacity capacity) {
 		return new IntBooleanHashMap(capacity.value());
 	}
 
@@ -124,7 +124,7 @@ public final class MutableMaps {
 	 * @param <V>
 	 * @return MutableIntObjectMap<V>
 	 */
-	public static <V> MutableIntObjectMap<V> newIntObjectHashMap() {
+	public static final <V> MutableIntObjectMap<V> newIntObjectHashMap() {
 		return new IntObjectHashMap<>();
 	}
 
@@ -134,7 +134,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableIntObjectMap<V>
 	 */
-	public static <V> MutableIntObjectMap<V> newIntObjectHashMap(Capacity capacity) {
+	public static final <V> MutableIntObjectMap<V> newIntObjectHashMap(Capacity capacity) {
 		return new IntObjectHashMap<>(capacity.value());
 	}
 
@@ -143,7 +143,7 @@ public final class MutableMaps {
 	 * 
 	 * @return MutableLongLongMap
 	 */
-	public static MutableLongLongMap newLongLongHashMap() {
+	public static final MutableLongLongMap newLongLongHashMap() {
 		return new LongLongHashMap();
 	}
 
@@ -152,7 +152,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableLongLongMap
 	 */
-	public static MutableLongLongMap newLongLongHashMap(Capacity capacity) {
+	public static final MutableLongLongMap newLongLongHashMap(Capacity capacity) {
 		return new LongLongHashMap(capacity.value());
 	}
 
@@ -160,7 +160,7 @@ public final class MutableMaps {
 	 * 
 	 * @return MutableLongIntMap
 	 */
-	public static MutableLongIntMap newLongIntHashMap() {
+	public static final MutableLongIntMap newLongIntHashMap() {
 		return new LongIntHashMap();
 	}
 
@@ -169,7 +169,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableLongIntMap
 	 */
-	public static MutableLongIntMap newLongIntHashMap(Capacity capacity) {
+	public static final MutableLongIntMap newLongIntHashMap(Capacity capacity) {
 		return new LongIntHashMap(capacity.value());
 	}
 
@@ -177,7 +177,7 @@ public final class MutableMaps {
 	 * 
 	 * @return MutableLongDoubleMap
 	 */
-	public static MutableLongDoubleMap newLongDoubleHashMap() {
+	public static final MutableLongDoubleMap newLongDoubleHashMap() {
 		return new LongDoubleHashMap();
 	}
 
@@ -186,7 +186,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableLongDoubleMap
 	 */
-	public static MutableLongDoubleMap newLongDoubleHashMap(Capacity capacity) {
+	public static final MutableLongDoubleMap newLongDoubleHashMap(Capacity capacity) {
 		return new LongDoubleHashMap(capacity.value());
 	}
 
@@ -194,7 +194,7 @@ public final class MutableMaps {
 	 * 
 	 * @return MutableLongBooleanMap
 	 */
-	public static MutableLongBooleanMap newLongBooleanHashMap() {
+	public static final MutableLongBooleanMap newLongBooleanHashMap() {
 		return new LongBooleanHashMap();
 	}
 
@@ -203,7 +203,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableLongBooleanMap
 	 */
-	public static MutableLongBooleanMap newLongBooleanHashMap(Capacity capacity) {
+	public static final MutableLongBooleanMap newLongBooleanHashMap(Capacity capacity) {
 		return new LongBooleanHashMap(capacity.value());
 	}
 
@@ -212,7 +212,7 @@ public final class MutableMaps {
 	 * @param <V>
 	 * @return MutableLongObjectMap<V>
 	 */
-	public static <V> MutableLongObjectMap<V> newLongObjectHashMap() {
+	public static final <V> MutableLongObjectMap<V> newLongObjectHashMap() {
 		return new LongObjectHashMap<>();
 	}
 
@@ -222,7 +222,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableLongObjectMap<V>
 	 */
-	public static <V> MutableLongObjectMap<V> newLongObjectHashMap(Capacity capacity) {
+	public static final <V> MutableLongObjectMap<V> newLongObjectHashMap(Capacity capacity) {
 		return new LongObjectHashMap<>(capacity.value());
 	}
 
@@ -231,7 +231,7 @@ public final class MutableMaps {
 	 * 
 	 * @return MutableDoubleBooleanMap
 	 */
-	public static MutableDoubleBooleanMap newDoubleBooleanHashMap() {
+	public static final MutableDoubleBooleanMap newDoubleBooleanHashMap() {
 		return new DoubleBooleanHashMap();
 	}
 
@@ -240,7 +240,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableDoubleBooleanMap
 	 */
-	public static MutableDoubleBooleanMap newDoubleBooleanHashMap(Capacity capacity) {
+	public static final MutableDoubleBooleanMap newDoubleBooleanHashMap(Capacity capacity) {
 		return new DoubleBooleanHashMap(capacity.value());
 	}
 
@@ -248,7 +248,7 @@ public final class MutableMaps {
 	 * 
 	 * @return MutableDoubleIntMap
 	 */
-	public static MutableDoubleIntMap newDoubleIntHashMap() {
+	public static final MutableDoubleIntMap newDoubleIntHashMap() {
 		return new DoubleIntHashMap();
 	}
 
@@ -257,7 +257,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableDoubleIntMap
 	 */
-	public static MutableDoubleIntMap newDoubleIntHashMap(Capacity capacity) {
+	public static final MutableDoubleIntMap newDoubleIntHashMap(Capacity capacity) {
 		return new DoubleIntHashMap(capacity.value());
 	}
 
@@ -265,7 +265,7 @@ public final class MutableMaps {
 	 * 
 	 * @return MutableDoubleLongMap
 	 */
-	public static MutableDoubleLongMap newDoubleLongHashMap() {
+	public static final MutableDoubleLongMap newDoubleLongHashMap() {
 		return new DoubleLongHashMap();
 	}
 
@@ -274,7 +274,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableDoubleLongMap
 	 */
-	public static MutableDoubleLongMap newDoubleLongHashMap(Capacity capacity) {
+	public static final MutableDoubleLongMap newDoubleLongHashMap(Capacity capacity) {
 		return new DoubleLongHashMap(capacity.value());
 	}
 
@@ -283,7 +283,7 @@ public final class MutableMaps {
 	 * @param <K>
 	 * @return MutableObjectBooleanMap<K>
 	 */
-	public static <K> MutableObjectBooleanMap<K> newObjectBooleanHashMap() {
+	public static final <K> MutableObjectBooleanMap<K> newObjectBooleanHashMap() {
 		return new ObjectBooleanHashMap<>();
 	}
 
@@ -293,7 +293,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableObjectBooleanMap<K>
 	 */
-	public static <K> MutableObjectBooleanMap<K> newObjectBooleanHashMap(Capacity capacity) {
+	public static final <K> MutableObjectBooleanMap<K> newObjectBooleanHashMap(Capacity capacity) {
 		return new ObjectBooleanHashMap<>(capacity.value());
 	}
 
@@ -302,7 +302,7 @@ public final class MutableMaps {
 	 * @param <K>
 	 * @return MutableObjectIntMap<K>
 	 */
-	public static <K> MutableObjectIntMap<K> newObjectIntHashMap() {
+	public static final <K> MutableObjectIntMap<K> newObjectIntHashMap() {
 		return new ObjectIntHashMap<>();
 	}
 
@@ -312,7 +312,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableObjectIntMap<K>
 	 */
-	public static <K> MutableObjectIntMap<K> newObjectIntHashMap(Capacity capacity) {
+	public static final <K> MutableObjectIntMap<K> newObjectIntHashMap(Capacity capacity) {
 		return new ObjectIntHashMap<>(capacity.value());
 	}
 
@@ -321,7 +321,7 @@ public final class MutableMaps {
 	 * @param <K>
 	 * @return MutableObjectLongMap<K>
 	 */
-	public static <K> MutableObjectLongMap<K> newObjectLongHashMap() {
+	public static final <K> MutableObjectLongMap<K> newObjectLongHashMap() {
 		return new ObjectLongHashMap<>();
 	}
 
@@ -331,7 +331,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableObjectLongMap<K>
 	 */
-	public static <K> MutableObjectLongMap<K> newObjectLongHashMap(Capacity capacity) {
+	public static final <K> MutableObjectLongMap<K> newObjectLongHashMap(Capacity capacity) {
 		return new ObjectLongHashMap<>(capacity.value());
 	}
 
@@ -340,7 +340,7 @@ public final class MutableMaps {
 	 * @param <K>
 	 * @return MutableObjectDoubleMap<K>
 	 */
-	public static <K> MutableObjectDoubleMap<K> newObjectDoubleHashMap() {
+	public static final <K> MutableObjectDoubleMap<K> newObjectDoubleHashMap() {
 		return new ObjectDoubleHashMap<>();
 	}
 
@@ -350,7 +350,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableObjectDoubleMap<K>
 	 */
-	public static <K> MutableObjectDoubleMap<K> newObjectDoubleHashMap(Capacity capacity) {
+	public static final <K> MutableObjectDoubleMap<K> newObjectDoubleHashMap(Capacity capacity) {
 		return new ObjectDoubleHashMap<>(capacity.value());
 	}
 
@@ -360,7 +360,7 @@ public final class MutableMaps {
 	 * @param <V>
 	 * @return MutableMap<K, V>
 	 */
-	public static <K, V> MutableMap<K, V> newUnifiedMap() {
+	public static final <K, V> MutableMap<K, V> newUnifiedMap() {
 		return UnifiedMap.newMap();
 	}
 
@@ -371,7 +371,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableMap<K, V>
 	 */
-	public static <K, V> MutableMap<K, V> newUnifiedMap(Capacity capacity) {
+	public static final <K, V> MutableMap<K, V> newUnifiedMap(Capacity capacity) {
 		return UnifiedMap.newMap(capacity.value());
 	}
 
@@ -382,7 +382,7 @@ public final class MutableMaps {
 	 * @param map
 	 * @return MutableMap<K, V>
 	 */
-	public static <K, V> MutableMap<K, V> newUnifiedMap(Map<K, V> map) {
+	public static final <K, V> MutableMap<K, V> newUnifiedMap(Map<K, V> map) {
 		if (map == null || map.isEmpty())
 			return newUnifiedMap();
 		return UnifiedMap.newMap(map);
@@ -395,7 +395,7 @@ public final class MutableMaps {
 	 * @param supplier
 	 * @return MutableMap<K, V>
 	 */
-	public static <K, V> MutableMap<K, V> newUnifiedMap(Supplier<Map<K, V>> supplier) {
+	public static final <K, V> MutableMap<K, V> newUnifiedMap(Supplier<Map<K, V>> supplier) {
 		if (supplier == null)
 			return newUnifiedMap();
 		return newUnifiedMap(supplier.get());
@@ -407,7 +407,7 @@ public final class MutableMaps {
 	 * @param <V>
 	 * @return ConcurrentMutableMap<K, V>
 	 */
-	public static <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMap() {
+	public static final <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMap() {
 		return ConcurrentHashMap.newMap();
 	}
 
@@ -418,7 +418,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return ConcurrentMutableMap<K, V>
 	 */
-	public static <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMap(Capacity capacity) {
+	public static final <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMap(Capacity capacity) {
 		return ConcurrentHashMap.newMap(capacity.value());
 	}
 
@@ -429,7 +429,7 @@ public final class MutableMaps {
 	 * @param map
 	 * @return ConcurrentMutableMap<K, V>
 	 */
-	public static <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMap(Map<K, V> map) {
+	public static final <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMap(Map<K, V> map) {
 		if (map == null || map.isEmpty())
 			return newConcurrentHashMap();
 		return ConcurrentHashMap.newMap(map);
@@ -441,7 +441,7 @@ public final class MutableMaps {
 	 * @param <V>
 	 * @return ConcurrentMutableMap<K, V>
 	 */
-	public static <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMapUnsafe() {
+	public static final <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMapUnsafe() {
 		return ConcurrentHashMapUnsafe.newMap();
 	}
 
@@ -452,7 +452,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return ConcurrentMutableMap<K, V>
 	 */
-	public static <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMapUnsafe(Capacity capacity) {
+	public static final <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMapUnsafe(Capacity capacity) {
 		return ConcurrentHashMapUnsafe.newMap(capacity.value());
 	}
 
@@ -463,7 +463,7 @@ public final class MutableMaps {
 	 * @param map
 	 * @return ConcurrentMutableMap<K, V>
 	 */
-	public static <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMapUnsafe(Map<K, V> map) {
+	public static final <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMapUnsafe(Map<K, V> map) {
 		if (map == null || map.isEmpty())
 			return newConcurrentHashMapUnsafe();
 		return ConcurrentHashMapUnsafe.newMap(map);
@@ -475,7 +475,7 @@ public final class MutableMaps {
 	 * @param <V>
 	 * @return MutableBiMap<K, V>
 	 */
-	public static <K, V> MutableBiMap<K, V> newHashBiMap() {
+	public static final <K, V> MutableBiMap<K, V> newHashBiMap() {
 		return new HashBiMap<>();
 	}
 
@@ -486,7 +486,7 @@ public final class MutableMaps {
 	 * @param capacity
 	 * @return MutableBiMap<K, V>
 	 */
-	public static <K, V> MutableBiMap<K, V> newHashBiMap(Capacity capacity) {
+	public static final <K, V> MutableBiMap<K, V> newHashBiMap(Capacity capacity) {
 		return new HashBiMap<>(capacity.value());
 	}
 

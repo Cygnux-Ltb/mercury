@@ -50,7 +50,7 @@ public abstract class TemporalMap<K extends Temporal, V, T extends TemporalMap<K
 		this.savedMap = MutableMaps.newLongObjectHashMap(capacity);
 	}
 
-	protected abstract T returnThis();
+	protected abstract T self();
 
 	/**
 	 * 
@@ -60,7 +60,7 @@ public abstract class TemporalMap<K extends Temporal, V, T extends TemporalMap<K
 	 */
 	public T put(@Nonnull K key, V value) {
 		savedMap.put(keyFunc.applyAsLong(key), value);
-		return returnThis();
+		return self();
 	}
 
 	/**
@@ -93,12 +93,20 @@ public abstract class TemporalMap<K extends Temporal, V, T extends TemporalMap<K
 		return result;
 	}
 
-	private MutableList<V> loadResult(MutableList<V> rtnList, V value) {
-		if (value != null)
-			rtnList.add(value);
-		return rtnList;
+	/**
+	 * 
+	 * @param list
+	 * @param value
+	 * @return
+	 */
+	private MutableList<V> loadResult(MutableList<V> list, V value) {
+		list.add(value);
+		return list;
 	}
 
+	/**
+	 * 
+	 */
 	protected MutableLongObjectMap<V> savedMap() {
 		return savedMap;
 	}

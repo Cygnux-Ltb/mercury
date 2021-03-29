@@ -50,7 +50,7 @@ public final class LocalDateTimeMap<V> extends TemporalMap<LocalDateTime, V, Loc
 	}
 
 	@Override
-	protected LocalDateTimeMap<V> returnThis() {
+	protected LocalDateTimeMap<V> self() {
 		return this;
 	}
 
