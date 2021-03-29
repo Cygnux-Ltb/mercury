@@ -10,6 +10,8 @@ import io.mercury.common.collections.MutableMaps;
 
 /**
  * 
+ * 去除重复数据的计数器组
+ * 
  * @author yellow013
  *
  * @param <T>

@@ -32,7 +32,7 @@ public class JctSpmcQueue<E> implements McQueue<E> {
 	}
 
 	@Override
-	public String queueName() {
+	public String getQueueName() {
 		return queueName;
 	}
 

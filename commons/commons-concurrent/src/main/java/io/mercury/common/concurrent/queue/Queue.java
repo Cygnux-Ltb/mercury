@@ -4,7 +4,7 @@ public interface Queue<E> {
 
 	boolean enqueue(E e);
 
-	String queueName();
+	String getQueueName();
 
 	boolean isEmpty();
 

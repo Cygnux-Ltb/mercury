@@ -19,7 +19,7 @@ public final class JctMpmcQueue<E> implements McQueue<E> {
 	}
 
 	@Override
-	public String queueName() {
+	public String getQueueName() {
 		return null;
 	}
 

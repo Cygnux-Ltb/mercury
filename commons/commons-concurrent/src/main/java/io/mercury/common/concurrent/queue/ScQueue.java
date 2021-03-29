@@ -27,7 +27,7 @@ public abstract class ScQueue<E> implements Queue<E> {
 	/**
 	 * Close flag
 	 */
-	protected final AtomicBoolean isClosed = new AtomicBoolean(true);
+	protected final AtomicBoolean isClosed = new AtomicBoolean(false);
 
 	/**
 	 * 
@@ -52,7 +52,7 @@ public abstract class ScQueue<E> implements Queue<E> {
 	}
 
 	@Override
-	public String queueName() {
+	public String getQueueName() {
 		return queueName;
 	}
 

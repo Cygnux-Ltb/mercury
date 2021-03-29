@@ -9,6 +9,27 @@ public final class JctConcurrentMaps {
 
 	/**
 	 * 
+	 * @param <K>
+	 * @param <V>
+	 * @return
+	 */
+	public static <K, V> ConcurrentMap<K, V> newNonBlockingHashMap() {
+		return new NonBlockingHashMap<>();
+	}
+
+	/**
+	 * 
+	 * @param <K>
+	 * @param <V>
+	 * @param initCapacity
+	 * @return
+	 */
+	public static <K, V> ConcurrentMap<K, V> newNonBlockingHashMap(final int initCapacity) {
+		return new NonBlockingHashMap<>(initCapacity);
+	}
+
+	/**
+	 * 
 	 * @param <V>
 	 * @return
 	 */
@@ -46,27 +67,6 @@ public final class JctConcurrentMaps {
 	public static <V> ConcurrentMap<Long, V> newLongNonBlockingHashMap(final int initCapacity,
 			final boolean spaceOptimization) {
 		return new NonBlockingHashMapLong<>(initCapacity, spaceOptimization);
-	}
-
-	/**
-	 * 
-	 * @param <K>
-	 * @param <V>
-	 * @return
-	 */
-	public static <K, V> ConcurrentMap<K, V> newNonBlockingHashMap() {
-		return new NonBlockingHashMap<>();
-	}
-
-	/**
-	 * 
-	 * @param <K>
-	 * @param <V>
-	 * @param initCapacity
-	 * @return
-	 */
-	public static <K, V> ConcurrentMap<K, V> newNonBlockingHashMap(final int initCapacity) {
-		return new NonBlockingHashMap<>(initCapacity);
 	}
 
 }
