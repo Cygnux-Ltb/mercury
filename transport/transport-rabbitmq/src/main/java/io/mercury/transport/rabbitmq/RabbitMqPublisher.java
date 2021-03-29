@@ -244,7 +244,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 	}
 
 	@Override
-	public String getName() {
+	public String getPublisherName() {
 		return publisherName;
 	}
 

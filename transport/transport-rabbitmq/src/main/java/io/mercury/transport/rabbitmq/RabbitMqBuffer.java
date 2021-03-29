@@ -27,7 +27,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqBuffer.class);
 
 	private RabbitConnection connection;
-	private RabbitMqChannel rabbitMqChannel;
+	private RabbitMqChannel channel;
 	private String queueName;
 	private List<String> exchangeNames;
 	private List<String> routingKeys;
@@ -90,7 +90,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 		this.routingKeys = routingKeys;
 		this.serializer = serializer;
 		this.deserializer = deserializer;
-		this.rabbitMqChannel = RabbitMqChannel.newWith(connection);
+		this.channel = RabbitMqChannel.newWith(connection);
 		this.name = "rabbitmq-buffer::" + connection.getConnectionInfo() + "/" + queueName + "";
 		declareQueue();
 	}
@@ -105,7 +105,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 				exchangeNames.stream().map(exchangeName -> routingKeys.isEmpty() ? AmqpExchange.fanout(exchangeName)
 						: AmqpExchange.direct(exchangeName)).collect(Collectors.toList()),
 				routingKeys);
-		queueRelationship.declare(RabbitMqDeclarator.newWith(rabbitMqChannel.internalChannel()));
+		queueRelationship.declare(RabbitMqDeclarator.newWith(channel.internalChannel()));
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 	public boolean enqueue(E e) {
 		byte[] msg = serializer.apply(e);
 		try {
-			rabbitMqChannel.internalChannel().basicPublish("", queueName, null, msg);
+			channel.internalChannel().basicPublish("", queueName, null, msg);
 			return true;
 		} catch (IOException ioe) {
 			log.error("enqueue basicPublish throw -> {}", ioe.getMessage(), ioe);
@@ -161,7 +161,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 	 */
 	private GetResponse basicGet() {
 		try {
-			return rabbitMqChannel.internalChannel().basicGet(queueName, false);
+			return channel.internalChannel().basicGet(queueName, false);
 		} catch (IOException ioe) {
 			log.error("poll basicGet throw -> {}", ioe.getMessage(), ioe);
 			return null;
@@ -175,7 +175,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 	 */
 	private boolean basicAck(Envelope envelope) {
 		try {
-			rabbitMqChannel.internalChannel().basicAck(envelope.getDeliveryTag(), false);
+			channel.internalChannel().basicAck(envelope.getDeliveryTag(), false);
 			return true;
 		} catch (IOException ioe) {
 			log.error("poll basicAck throw -> {}", ioe.getMessage(), ioe);
@@ -184,19 +184,19 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 	}
 
 	@Override
-	public String queueName() {
+	public String getQueueName() {
 		return name;
 	}
 
 	@Override
 	public void close() throws IOException {
-		rabbitMqChannel.close();
+		channel.close();
 	}
 
 	public static void main(String[] args) {
 
-		RabbitConnection connection = RabbitConnection.configuration("203.60.1.26", 5672, "global", "global2018", "report")
-				.build();
+		RabbitConnection connection = RabbitConnection
+				.configuration("203.60.1.26", 5672, "global", "global2018", "report").build();
 		try {
 			RabbitMqBuffer<String> testQueue = newQueue(connection, "rmq_test",
 					e -> JsonWrapper.toJson(e).getBytes(Charsets.UTF8), bytes -> new String(bytes, Charsets.UTF8));

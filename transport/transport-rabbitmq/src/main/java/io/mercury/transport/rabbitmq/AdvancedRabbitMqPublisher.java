@@ -444,7 +444,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	}
 
 	@Override
-	public String getName() {
+	public String getPublisherName() {
 		return publisherName;
 	}
 
