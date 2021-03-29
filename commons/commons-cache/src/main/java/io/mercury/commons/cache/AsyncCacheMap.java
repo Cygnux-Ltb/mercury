@@ -67,9 +67,9 @@ public final class AsyncCacheMap<K, V> {
 
 	public AsyncCacheMap(String cacheName) {
 		this.cacheName = StringUtil.isNullOrEmpty(cacheName) ? "AsyncCacheMap-" + hashCode() : cacheName;
-		this.execQueue = JctSingleConsumerQueue.newMultiProducersQueue(this.cacheName + "-ExecQueue").capacity(64)
+		this.execQueue = JctSingleConsumerQueue.multiProducer(this.cacheName + "-ExecQueue").setCapacity(64)
 				.buildWithProcessor(event -> asyncExec(event));
-		this.queryQueue = JctSingleConsumerQueue.newMultiProducersQueue(this.cacheName + "-QueryQueue").capacity(64)
+		this.queryQueue = JctSingleConsumerQueue.multiProducer(this.cacheName + "-QueryQueue").setCapacity(64)
 				.buildWithProcessor(result -> consumerMap.remove(result.nanoTime).accept(result.value));
 	}
 

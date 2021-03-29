@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.map;
+package io.mercury.commons.cache;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -15,13 +15,13 @@ import com.google.common.cache.LoadingCache;
 
 import io.mercury.common.log.CommonLoggerFactory;
 
-public class GuavaCacheMap<K, V> {
+public class CacheMap<K, V> {
 
 	private final LoadingCache<K, V> cache;
 
-	private static final Logger log = CommonLoggerFactory.getLogger(GuavaCacheMap.class);
+	private static final Logger log = CommonLoggerFactory.getLogger(CacheMap.class);
 
-	private GuavaCacheMap(CacheMapBuilder builder, Function<K, V> refresher) {
+	private CacheMap(CacheMapBuilder builder, Function<K, V> refresher) {
 		this.cache = CacheBuilder.newBuilder().maximumSize(builder.maximumSize).expireAfterAccess(builder.duration)
 				.build(new CacheLoader<K, V>() {
 					@Override
@@ -71,8 +71,8 @@ public class GuavaCacheMap<K, V> {
 			return this;
 		}
 
-		public <K, V> GuavaCacheMap<K, V> buildWith(@Nonnull Function<K, V> refresher) {
-			return new GuavaCacheMap<>(this, refresher);
+		public <K, V> CacheMap<K, V> buildWith(@Nonnull Function<K, V> refresher) {
+			return new CacheMap<>(this, refresher);
 		}
 
 	}
