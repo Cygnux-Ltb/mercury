@@ -14,26 +14,26 @@ public final class VertexScanner {
 
 	/**
 	 * 
-	 * @param <V>         startVertex
+	 * @param <V>   start
 	 * @param <E>
 	 * @param graph
-	 * @param startVertex
+	 * @param start
 	 * @return
 	 */
-	public <V, E extends Edge> ImmutableSet<V> breadthFirst(Graph<V, E> graph, V startVertex) {
-		return MutableSets.newUnifiedSet(new BreadthFirstIterator<>(graph, startVertex)).toImmutable();
+	public <V, E extends Edge> ImmutableSet<V> breadthFirst(Graph<V, E> graph, V start) {
+		return MutableSets.newUnifiedSet(new BreadthFirstIterator<>(graph, start)).toImmutable();
 	}
 
 	/**
 	 * 
-	 * @param <V>         startVertex
+	 * @param <V>   start
 	 * @param <E>
 	 * @param graph
-	 * @param startVertex
+	 * @param start
 	 * @return
 	 */
-	public <V, E extends Edge> ImmutableSet<V> depthFirst(Graph<V, E> graph, V startVertex) {
-		return MutableSets.newUnifiedSet(new DepthFirstIterator<>(graph, startVertex)).toImmutable();
+	public <V, E extends Edge> ImmutableSet<V> depthFirst(Graph<V, E> graph, V start) {
+		return MutableSets.newUnifiedSet(new DepthFirstIterator<>(graph, start)).toImmutable();
 	}
 
 }
