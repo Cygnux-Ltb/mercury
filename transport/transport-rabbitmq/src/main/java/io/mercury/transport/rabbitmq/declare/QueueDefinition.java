@@ -17,7 +17,7 @@ import lombok.Getter;
  * @author yellow013
  *
  */
-public final class QueueRelationship extends Relationship {
+public final class QueueDefinition  extends Relationship {
 
 	/**
 	 * queue
@@ -30,7 +30,7 @@ public final class QueueRelationship extends Relationship {
 	 * @param name
 	 * @return
 	 */
-	public static QueueRelationship named(String name) {
+	public static QueueDefinition named(String name) {
 		return withQueue(AmqpQueue.named(name));
 	}
 
@@ -39,12 +39,12 @@ public final class QueueRelationship extends Relationship {
 	 * @param queue
 	 * @return
 	 */
-	public static QueueRelationship withQueue(AmqpQueue queue) {
+	public static QueueDefinition withQueue(AmqpQueue queue) {
 		Assertor.nonNull(queue, "queue");
-		return new QueueRelationship(queue);
+		return new QueueDefinition(queue);
 	}
 
-	private QueueRelationship(AmqpQueue queue) {
+	private QueueDefinition(AmqpQueue queue) {
 		this.queue = queue;
 	}
 
@@ -67,31 +67,34 @@ public final class QueueRelationship extends Relationship {
 	}
 
 	/**
+	 * 是否持久化, 默认true
 	 * 
 	 * @param durable
 	 * @return
 	 */
-	public QueueRelationship queueDurable(boolean durable) {
+	public QueueDefinition queueDurable(boolean durable) {
 		queue.setDurable(durable);
 		return this;
 	}
 
 	/**
+	 * channel关闭后自动删除队列, 默认false
 	 * 
 	 * @param autoDelete
 	 * @return
 	 */
-	public QueueRelationship queueAutoDelete(boolean autoDelete) {
+	public QueueDefinition queueAutoDelete(boolean autoDelete) {
 		queue.setAutoDelete(autoDelete);
 		return this;
 	}
 
 	/**
+	 * 连接独占此队列, 默认false
 	 * 
 	 * @param exclusive
 	 * @return
 	 */
-	public QueueRelationship queueExclusive(boolean exclusive) {
+	public QueueDefinition queueExclusive(boolean exclusive) {
 		queue.setExclusive(exclusive);
 		return this;
 	}
@@ -101,7 +104,7 @@ public final class QueueRelationship extends Relationship {
 	 * @param exchanges
 	 * @return
 	 */
-	public QueueRelationship binding(AmqpExchange... exchanges) {
+	public QueueDefinition binding(AmqpExchange... exchanges) {
 		return binding(exchanges != null ? MutableLists.newFastList(exchanges) : null, null);
 	}
 
@@ -111,7 +114,7 @@ public final class QueueRelationship extends Relationship {
 	 * @param routingKeys
 	 * @return
 	 */
-	public QueueRelationship binding(List<AmqpExchange> exchanges, List<String> routingKeys) {
+	public QueueDefinition binding(List<AmqpExchange> exchanges, List<String> routingKeys) {
 		if (exchanges != null) {
 			exchanges.forEach(exchange -> {
 				if (CollectionUtils.isNotEmpty(routingKeys)) {
@@ -131,7 +134,7 @@ public final class QueueRelationship extends Relationship {
 
 	public static void main(String[] args) {
 		System.out.println(
-				QueueRelationship.named("TEST").binding(AmqpExchange.fanout("T0")).binding(AmqpExchange.fanout("T1")));
+				QueueDefinition.named("TEST").binding(AmqpExchange.fanout("T0")).binding(AmqpExchange.fanout("T1")));
 	}
 
 }

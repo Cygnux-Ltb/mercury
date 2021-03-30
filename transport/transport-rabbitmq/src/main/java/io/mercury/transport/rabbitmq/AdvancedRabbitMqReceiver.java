@@ -27,8 +27,8 @@ import io.mercury.transport.core.api.Subscriber;
 import io.mercury.transport.core.exception.ConnectionBreakException;
 import io.mercury.transport.core.exception.ReceiverStartException;
 import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfigurator;
-import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
-import io.mercury.transport.rabbitmq.declare.QueueRelationship;
+import io.mercury.transport.rabbitmq.declare.ExchangeDefinition;
+import io.mercury.transport.rabbitmq.declare.QueueDefinition;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 import io.mercury.transport.rabbitmq.exception.DeclareRuntimeException;
 import io.mercury.transport.rabbitmq.exception.MsgHandleException;
@@ -54,19 +54,19 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	private final SelfAckConsumer<T> selfAckConsumer;
 
 	// 接受者QueueDeclare
-	private final QueueRelationship receiveQueue;
+	private final QueueDefinition receiveQueue;
 
 	// 接受者QueueName
 	private final String queueName;
 
 	// 消息无法处理时发送到的错误消息ExchangeDeclare
-	private final ExchangeRelationship errMsgExchange;
+	private final ExchangeDefinition errMsgExchange;
 
 	// 消息无法处理时发送到的错误消息Exchange使用的RoutingKey
 	private final String errMsgRoutingKey;
 
 	// 消息无法处理时发送到的错误消息QueueDeclare
-	private final QueueRelationship errMsgQueue;
+	private final QueueDefinition errMsgQueue;
 
 	// 消息无法处理时发送到的错误消息Exchange
 	private String errMsgExchangeName;

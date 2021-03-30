@@ -1,12 +1,13 @@
 package io.mercury.transport.rabbitmq.declare;
 
+import static io.mercury.common.collections.MutableLists.newFastList;
+
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import io.mercury.common.collections.MutableLists;
 import io.mercury.common.util.Assertor;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rabbitmq.RabbitMqDeclarator;
@@ -19,9 +20,9 @@ import lombok.Getter;
  * @author yellow013
  *
  */
-public final class ExchangeRelationship extends Relationship {
+public final class ExchangeDefinition extends Relationship {
 
-	public final static ExchangeRelationship Anonymous = new ExchangeRelationship(AmqpExchange.Anonymous);
+	public final static ExchangeDefinition Anonymous = new ExchangeDefinition(AmqpExchange.Anonymous);
 
 	// exchange
 	@Getter
@@ -32,7 +33,7 @@ public final class ExchangeRelationship extends Relationship {
 	 * @param exchangeName
 	 * @return
 	 */
-	public static ExchangeRelationship fanout(@Nonnull String exchangeName) {
+	public static ExchangeDefinition fanout(@Nonnull String exchangeName) {
 		return withExchange(AmqpExchange.fanout(exchangeName));
 	}
 
@@ -41,7 +42,7 @@ public final class ExchangeRelationship extends Relationship {
 	 * @param exchangeName
 	 * @return
 	 */
-	public static ExchangeRelationship direct(@Nonnull String exchangeName) {
+	public static ExchangeDefinition direct(@Nonnull String exchangeName) {
 		return withExchange(AmqpExchange.direct(exchangeName));
 	}
 
@@ -50,7 +51,7 @@ public final class ExchangeRelationship extends Relationship {
 	 * @param exchangeName
 	 * @return
 	 */
-	public static ExchangeRelationship topic(@Nonnull String exchangeName) {
+	public static ExchangeDefinition topic(@Nonnull String exchangeName) {
 		return withExchange(AmqpExchange.topic(exchangeName));
 	}
 
@@ -59,16 +60,16 @@ public final class ExchangeRelationship extends Relationship {
 	 * @param exchange
 	 * @return
 	 */
-	public static ExchangeRelationship withExchange(@Nonnull AmqpExchange exchange) {
+	public static ExchangeDefinition withExchange(@Nonnull AmqpExchange exchange) {
 		Assertor.nonNull(exchange, "exchange");
-		return new ExchangeRelationship(exchange);
+		return new ExchangeDefinition(exchange);
 	}
 
 	/**
 	 * 
 	 * @param exchange
 	 */
-	private ExchangeRelationship(AmqpExchange exchange) {
+	private ExchangeDefinition(AmqpExchange exchange) {
 		this.exchange = exchange;
 	}
 
@@ -95,7 +96,7 @@ public final class ExchangeRelationship extends Relationship {
 	 * @param durable
 	 * @return
 	 */
-	public ExchangeRelationship exchangeDurable(boolean durable) {
+	public ExchangeDefinition exchangeDurable(boolean durable) {
 		exchange.setDurable(durable);
 		return this;
 	}
@@ -105,7 +106,7 @@ public final class ExchangeRelationship extends Relationship {
 	 * @param autoDelete
 	 * @return
 	 */
-	public ExchangeRelationship exchangeAutoDelete(boolean autoDelete) {
+	public ExchangeDefinition exchangeAutoDelete(boolean autoDelete) {
 		exchange.setAutoDelete(autoDelete);
 		return this;
 	}
@@ -115,7 +116,7 @@ public final class ExchangeRelationship extends Relationship {
 	 * @param internal
 	 * @return
 	 */
-	public ExchangeRelationship exchangeInternal(boolean internal) {
+	public ExchangeDefinition exchangeInternal(boolean internal) {
 		exchange.setInternal(internal);
 		return this;
 	}
@@ -125,8 +126,8 @@ public final class ExchangeRelationship extends Relationship {
 	 * @param exchanges
 	 * @return
 	 */
-	public ExchangeRelationship bindingExchange(AmqpExchange... exchanges) {
-		return bindingExchange(exchanges != null ? MutableLists.newFastList(exchanges) : null, null);
+	public ExchangeDefinition bindingExchange(AmqpExchange... exchanges) {
+		return bindingExchange(exchanges != null ? newFastList(exchanges) : null, null);
 	}
 
 	/**
@@ -135,7 +136,7 @@ public final class ExchangeRelationship extends Relationship {
 	 * @param routingKeys
 	 * @return
 	 */
-	public ExchangeRelationship bindingExchange(List<AmqpExchange> exchanges, List<String> routingKeys) {
+	public ExchangeDefinition bindingExchange(List<AmqpExchange> exchanges, List<String> routingKeys) {
 		if (exchanges != null) {
 			exchanges.forEach(exchange -> {
 				if (CollectionUtils.isNotEmpty(routingKeys)) {
@@ -153,8 +154,8 @@ public final class ExchangeRelationship extends Relationship {
 	 * @param queues
 	 * @return
 	 */
-	public ExchangeRelationship bindingQueue(AmqpQueue... queues) {
-		return bindingQueue(queues != null ? MutableLists.newFastList(queues) : null, null);
+	public ExchangeDefinition bindingQueue(AmqpQueue... queues) {
+		return bindingQueue(queues != null ? newFastList(queues) : null, null);
 	}
 
 	/**
@@ -163,7 +164,7 @@ public final class ExchangeRelationship extends Relationship {
 	 * @param routingKeys
 	 * @return
 	 */
-	public ExchangeRelationship bindingQueue(List<AmqpQueue> queues, List<String> routingKeys) {
+	public ExchangeDefinition bindingQueue(List<AmqpQueue> queues, List<String> routingKeys) {
 		if (queues != null) {
 			queues.forEach(queue -> {
 				if (CollectionUtils.isNotEmpty(routingKeys)) {
@@ -182,7 +183,7 @@ public final class ExchangeRelationship extends Relationship {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(ExchangeRelationship.direct("TEST_DIRECT").exchangeAutoDelete(true).exchangeInternal(true));
+		System.out.println(ExchangeDefinition.direct("TEST_DIRECT").exchangeAutoDelete(true).exchangeInternal(true));
 	}
 
 }

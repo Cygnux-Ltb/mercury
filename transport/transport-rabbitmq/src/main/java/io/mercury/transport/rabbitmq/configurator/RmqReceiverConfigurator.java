@@ -6,8 +6,8 @@ import static io.mercury.transport.rabbitmq.configurator.ReceiveAckOptions.defau
 import javax.annotation.Nonnull;
 
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
-import io.mercury.transport.rabbitmq.declare.QueueRelationship;
+import io.mercury.transport.rabbitmq.declare.ExchangeDefinition;
+import io.mercury.transport.rabbitmq.declare.QueueDefinition;
 import lombok.Getter;
 
 /**
@@ -19,11 +19,11 @@ public final class RmqReceiverConfigurator extends RabbitConfigurator {
 
 	// 接受者QueueDeclare
 	@Getter
-	private final QueueRelationship receiveQueue;
+	private final QueueDefinition receiveQueue;
 
 	// 错误消息ExchangeDeclare
 	@Getter
-	private final ExchangeRelationship errMsgExchange;
+	private final ExchangeDefinition errMsgExchange;
 
 	// 错误消息RoutingKey
 	@Getter
@@ -31,7 +31,7 @@ public final class RmqReceiverConfigurator extends RabbitConfigurator {
 
 	// 错误消息QueueDeclare
 	@Getter
-	private final QueueRelationship errMsgQueue;
+	private final QueueDefinition errMsgQueue;
 
 	// 消费者独占队列
 	@Getter
@@ -61,7 +61,7 @@ public final class RmqReceiverConfigurator extends RabbitConfigurator {
 	 * @param receiveQueue
 	 * @return
 	 */
-	public static Builder configuration(@Nonnull RabbitConnection connection, @Nonnull QueueRelationship receiveQueue) {
+	public static Builder configuration(@Nonnull RabbitConnection connection, @Nonnull QueueDefinition receiveQueue) {
 		nonNull(connection, "connection");
 		nonNull(receiveQueue, "receiveQueue");
 		return new Builder(connection, receiveQueue);
@@ -81,23 +81,23 @@ public final class RmqReceiverConfigurator extends RabbitConfigurator {
 		// 连接配置
 		private RabbitConnection connection;
 		// 接受者QueueRelationship
-		private QueueRelationship receiveQueue;
+		private QueueDefinition receiveQueue;
 		// 错误消息ExchangeRelationship
 
 		// UnProcessable Message
 		// 错误消息处理Exchange和关联关系
-		private ExchangeRelationship errMsgExchange;
+		private ExchangeDefinition errMsgExchange;
 		// 错误消息处理RoutingKey
 		private String errMsgRoutingKey = "";
 		// 错误消息处理QueueRelationship和关联关系
-		private QueueRelationship errMsgQueue;
+		private QueueDefinition errMsgQueue;
 
 		// 接收者是否独占队列
 		private boolean exclusive = false;
 		// ACK选项
 		private ReceiveAckOptions ackOptions = defaultOption();
 
-		private Builder(RabbitConnection connection, QueueRelationship receiveQueue) {
+		private Builder(RabbitConnection connection, QueueDefinition receiveQueue) {
 			this.connection = connection;
 			this.receiveQueue = receiveQueue;
 		}
@@ -105,7 +105,7 @@ public final class RmqReceiverConfigurator extends RabbitConfigurator {
 		/**
 		 * @param errorMsgExchange the errorMsgExchange to set
 		 */
-		public Builder setErrMsgExchange(ExchangeRelationship errMsgExchange) {
+		public Builder setErrMsgExchange(ExchangeDefinition errMsgExchange) {
 			this.errMsgExchange = errMsgExchange;
 			return this;
 		}
@@ -123,7 +123,7 @@ public final class RmqReceiverConfigurator extends RabbitConfigurator {
 		 * 
 		 * @param errorMsgQueue
 		 */
-		public Builder setErrMsgQueue(QueueRelationship errMsgQueue) {
+		public Builder setErrMsgQueue(QueueDefinition errMsgQueue) {
 			this.errMsgQueue = errMsgQueue;
 			return this;
 		}

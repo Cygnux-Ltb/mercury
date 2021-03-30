@@ -19,7 +19,7 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
 import io.mercury.transport.rabbitmq.declare.AmqpExchange;
-import io.mercury.transport.rabbitmq.declare.QueueRelationship;
+import io.mercury.transport.rabbitmq.declare.QueueDefinition;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 
 public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
@@ -100,7 +100,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 	 * @throws DeclareException
 	 */
 	private void declareQueue() throws DeclareException {
-		QueueRelationship queueRelationship = QueueRelationship.named(queueName).binding(
+		QueueDefinition queueRelationship = QueueDefinition.named(queueName).binding(
 				// 如果routingKeys为空集合, 则创建fanout交换器, 否则创建直接交换器
 				exchangeNames.stream().map(exchangeName -> routingKeys.isEmpty() ? AmqpExchange.fanout(exchangeName)
 						: AmqpExchange.direct(exchangeName)).collect(Collectors.toList()),

@@ -26,8 +26,8 @@ import io.mercury.transport.core.exception.ConnectionBreakException;
 import io.mercury.transport.core.exception.ReceiverStartException;
 import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
 import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfigurator;
-import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
-import io.mercury.transport.rabbitmq.declare.QueueRelationship;
+import io.mercury.transport.rabbitmq.declare.ExchangeDefinition;
+import io.mercury.transport.rabbitmq.declare.QueueDefinition;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 import io.mercury.transport.rabbitmq.exception.DeclareRuntimeException;
 import io.mercury.transport.rabbitmq.exception.MsgHandleException;
@@ -50,19 +50,19 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 	private final Consumer<T> consumer;
 
 	// 接受者QueueDeclare
-	private final QueueRelationship receiveQueue;
+	private final QueueDefinition receiveQueue;
 
 	// 接受者QueueName
 	private final String queueName;
 
 	// 消息无法处理时发送到的错误消息ExchangeDeclare
-	private final ExchangeRelationship errMsgExchange;
+	private final ExchangeDefinition errMsgExchange;
 
 	// 消息无法处理时发送到的错误消息Exchange使用的RoutingKey
 	private final String errMsgRoutingKey;
 
 	// 消息无法处理时发送到的错误消息QueueDeclare
-	private final QueueRelationship errMsgQueue;
+	private final QueueDefinition errMsgQueue;
 
 	// 消息无法处理时发送到的错误消息Exchange
 	private String errMsgExchangeName;
@@ -400,7 +400,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 		RabbitMqReceiver<byte[]> receiver = RabbitMqReceiver.create("test",
 				RmqReceiverConfigurator
 						.configuration(RabbitConnection.configuration("127.0.0.1", 5672, "user", "u_pass").build(),
-								QueueRelationship.named("TEST"))
+								QueueDefinition.named("TEST"))
 						.build(),
 				msg -> System.out.println(new String(msg, Charsets.UTF8)));
 		receiver.receive();
