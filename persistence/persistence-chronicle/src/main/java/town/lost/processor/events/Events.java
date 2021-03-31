@@ -7,4 +7,5 @@ public interface Events {
 
 	// @MethodId(2)
 	void eventTwo(EventTwo two);
+	
 }

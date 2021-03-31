@@ -145,8 +145,8 @@ public class OMSBenchmarkMain {
                     .orderQty(1e6)
                     .price(1.6)
                     .symbol(BASE85.parse("AUDUSD"))
-                    .ordType(OrderType.limit)
-                    .side(BuySell.buy);
+                    .ordType(OrderType.Limit)
+                    .side(BuySell.Buy);
             tailer = input.createTailer();
             in = input.acquireAppender().methodWriter(OMSIn.class);
         }
