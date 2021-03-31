@@ -1,9 +1,9 @@
 package io.mercury.common.fsm;
 
-public interface FiniteStateMachine<S extends State, A extends Action> {
+public interface FiniteStateMachine {
 
-	S state();
+	State getState();
 
-	S action(A action);
+	State doAction(Action action);
 
 }
