@@ -18,7 +18,7 @@ import net.openhft.chronicle.queue.ExcerptAppender;
 
 @Immutable
 @NotThreadSafe
-public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, T> extends CloseableChronicleAccessor
+public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN> extends CloseableChronicleAccessor
 		implements Runnable {
 
 	private final String appenderName;
@@ -26,10 +26,10 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, T> 
 	protected final Logger logger;
 	protected final ExcerptAppender excerptAppender;
 
-	private final Supplier<T> dataSupplier;
+	private final Supplier<IN> dataSupplier;
 
 	protected AbstractChronicleMultitypeAppender(long allocateSeq, String appenderName, Logger logger,
-			ExcerptAppender excerptAppender, Supplier<T> dataSupplier) {
+			ExcerptAppender excerptAppender, Supplier<IN> dataSupplier) {
 		super(allocateSeq);
 		this.appenderName = appenderName;
 		this.logger = logger;
@@ -59,7 +59,7 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, T> 
 	 * @throws IllegalStateException
 	 * @throws ChronicleAppendException
 	 */
-	public void append(@Nonnull E envelope, @Nonnull T t) throws IllegalStateException, ChronicleAppendException {
+	public void append(@Nonnull E envelope, @Nonnull IN t) throws IllegalStateException, ChronicleAppendException {
 		if (isClose) {
 			throw new IllegalStateException("Unable to append data, Chronicle queue is closed");
 		}
@@ -81,13 +81,13 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, T> 
 	 * @throws IllegalStateException
 	 * @throws ChronicleAppendException
 	 */
-	public void append(@Nonnull E envelope, @Nonnull Object obj, Serializer<Object, T> serializer)
+	public void append(@Nonnull E envelope, @Nonnull Object obj, Serializer<Object, IN> serializer)
 			throws IllegalStateException, ChronicleAppendException {
 		append(envelope, serializer.serialization(obj));
 	}
 
 	@AbstractFunction
-	protected abstract void append0(@Nonnull E envelope, @Nonnull T t);
+	protected abstract void append0(@Nonnull E envelope, @Nonnull IN t);
 
 	@CheckForNull
 	private E envelope;
@@ -116,7 +116,7 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, T> 
 				logger.info("Chronicle queue is closed, {} Thread exit", appenderName);
 				break;
 			} else {
-				T t = dataSupplier.get();
+				IN t = dataSupplier.get();
 				append(envelope, t);
 			}
 		}

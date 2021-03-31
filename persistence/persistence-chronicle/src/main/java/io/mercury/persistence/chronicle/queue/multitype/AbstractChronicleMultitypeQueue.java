@@ -50,13 +50,13 @@ public abstract class AbstractChronicleMultitypeQueue<
 		// 信封类型
 		E extends Envelope,
 		// 写入类型
-		T0,
+		IN,
 		// 读取类型
-		T1,
+		OUT,
 		// 追加器类型
-		AT extends AbstractChronicleMultitypeAppender<E, T0>,
+		AT extends AbstractChronicleMultitypeAppender<E, IN>,
 		// 读取器类型
-		RT extends AbstractChronicleMultitypeReader<T1>>
+		RT extends AbstractChronicleMultitypeReader<OUT>>
 		// 实现特定关闭对象
 		implements net.openhft.chronicle.core.io.Closeable {
 
@@ -311,7 +311,7 @@ public abstract class AbstractChronicleMultitypeQueue<
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public AT acquireAppender(@Nonnull Supplier<T0> dataProducer) throws IllegalStateException {
+	public AT acquireAppender(@Nonnull Supplier<IN> dataProducer) throws IllegalStateException {
 		Assertor.nonNull(dataProducer, "dataProducer");
 		return acquireAppender(generateAppenderName(), dataProducer);
 	}
@@ -323,7 +323,7 @@ public abstract class AbstractChronicleMultitypeQueue<
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public AT acquireAppender(@Nonnull String appenderName, @CheckForNull Supplier<T0> dataProducer)
+	public AT acquireAppender(@Nonnull String appenderName, @CheckForNull Supplier<IN> dataProducer)
 			throws IllegalStateException {
 		if (isClosed())
 			throw new IllegalStateException("Cannot be acquire appender, Chronicle queue is closed");
@@ -343,7 +343,7 @@ public abstract class AbstractChronicleMultitypeQueue<
 	 */
 	@AbstractFunction
 	protected abstract AT acquireAppender(@Nonnull String appenderName, @Nonnull Logger logger,
-			@CheckForNull Supplier<T0> dataProducer) throws IllegalStateException;
+			@CheckForNull Supplier<IN> dataProducer) throws IllegalStateException;
 
 	private String generateReaderName() {
 		return queueName + "-reader-" + randomUnsignedInt();
@@ -366,7 +366,7 @@ public abstract class AbstractChronicleMultitypeQueue<
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public RT createReader(@Nonnull Consumer<T1> dataConsumer) throws IllegalStateException {
+	public RT createReader(@Nonnull Consumer<OUT> dataConsumer) throws IllegalStateException {
 		return createReader(generateReaderName(), ReaderParam.defaultParam(), dataConsumer);
 	}
 
@@ -377,7 +377,7 @@ public abstract class AbstractChronicleMultitypeQueue<
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public RT createReader(@Nonnull String readerName, @Nonnull Consumer<T1> dataConsumer)
+	public RT createReader(@Nonnull String readerName, @Nonnull Consumer<OUT> dataConsumer)
 			throws IllegalStateException {
 		return createReader(readerName, ReaderParam.defaultParam(), dataConsumer);
 	}
@@ -389,7 +389,7 @@ public abstract class AbstractChronicleMultitypeQueue<
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public RT createReader(@Nonnull ReaderParam param, @Nonnull Consumer<T1> dataConsumer)
+	public RT createReader(@Nonnull ReaderParam param, @Nonnull Consumer<OUT> dataConsumer)
 			throws IllegalStateException {
 		return createReader(generateReaderName(), param, dataConsumer);
 	}
@@ -402,7 +402,7 @@ public abstract class AbstractChronicleMultitypeQueue<
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public RT createReader(@Nonnull String readerName, @Nonnull ReaderParam param, @Nonnull Consumer<T1> dataConsumer)
+	public RT createReader(@Nonnull String readerName, @Nonnull ReaderParam param, @Nonnull Consumer<OUT> dataConsumer)
 			throws IllegalStateException {
 		if (isClosed()) {
 			throw new IllegalStateException("Cannot be create reader, Chronicle queue is closed");
@@ -426,7 +426,7 @@ public abstract class AbstractChronicleMultitypeQueue<
 	 */
 	@AbstractFunction
 	protected abstract RT createReader(@Nonnull String readerName, @Nonnull ReaderParam param, @Nonnull Logger log,
-			@Nonnull Consumer<T1> consumer) throws IllegalStateException;
+			@Nonnull Consumer<OUT> consumer) throws IllegalStateException;
 
 	/**
 	 * 已分配的访问器

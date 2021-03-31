@@ -29,7 +29,7 @@ import net.openhft.chronicle.queue.TailerState;
 
 @Immutable
 @NotThreadSafe
-public abstract class AbstractChronicleMultitypeReader<T> extends CloseableChronicleAccessor implements Runnable {
+public abstract class AbstractChronicleMultitypeReader<OUT> extends CloseableChronicleAccessor implements Runnable {
 
 	private final String readerName;
 	private final FileCycle fileCycle;
@@ -39,7 +39,7 @@ public abstract class AbstractChronicleMultitypeReader<T> extends CloseableChron
 	protected final Logger logger;
 	protected final ExcerptTailer excerptTailer;
 
-	private final Consumer<T> consumer;
+	private final Consumer<OUT> consumer;
 
 	/**
 	 * 
@@ -51,8 +51,8 @@ public abstract class AbstractChronicleMultitypeReader<T> extends CloseableChron
 	 * @param excerptTailer
 	 * @param consumer
 	 */
-	protected AbstractChronicleMultitypeReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param,
-			Logger logger, ExcerptTailer excerptTailer, Consumer<T> consumer) {
+	protected AbstractChronicleMultitypeReader(long allocateSeq, String readerName, FileCycle fileCycle,
+			ReaderParam param, Logger logger, ExcerptTailer excerptTailer, Consumer<OUT> consumer) {
 		super(allocateSeq);
 		this.readerName = readerName;
 		this.fileCycle = fileCycle;
@@ -164,7 +164,7 @@ public abstract class AbstractChronicleMultitypeReader<T> extends CloseableChron
 	 * @return
 	 */
 	@AbstractFunction
-	protected abstract T next0();
+	protected abstract OUT next0();
 
 	/**
 	 * Get next element of current cursor position.
@@ -174,7 +174,7 @@ public abstract class AbstractChronicleMultitypeReader<T> extends CloseableChron
 	 * @throws ChronicleReadException
 	 */
 	@CheckForNull
-	public T next() throws IllegalStateException, ChronicleReadException {
+	public OUT next() throws IllegalStateException, ChronicleReadException {
 		if (isClose) {
 			throw new IllegalStateException("Unable to read next, Chronicle queue is closed");
 		}
@@ -201,7 +201,7 @@ public abstract class AbstractChronicleMultitypeReader<T> extends CloseableChron
 				exit();
 				break;
 			}
-			T next = null;
+			OUT next = null;
 			try {
 				next = next();
 			} catch (ChronicleReadException e) {
