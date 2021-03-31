@@ -6,7 +6,12 @@ package town.lost.oms.dto;
 
 import net.openhft.chronicle.bytes.BytesIn;
 import net.openhft.chronicle.bytes.BytesOut;
-import net.openhft.chronicle.wire.*;
+import net.openhft.chronicle.wire.Base85LongConverter;
+import net.openhft.chronicle.wire.LongConversion;
+import net.openhft.chronicle.wire.MicroTimestampLongConverter;
+import net.openhft.chronicle.wire.SelfDescribingMarshallable;
+import net.openhft.chronicle.wire.WireIn;
+import net.openhft.chronicle.wire.WireOut;
 
 public abstract class AbstractEvent<E extends AbstractEvent<E>> extends SelfDescribingMarshallable {
 

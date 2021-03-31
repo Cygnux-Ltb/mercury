@@ -5,5 +5,7 @@
 package town.lost.oms.dto;
 
 public enum OrderType {
-    market, limit
+
+	Market, Limit
+
 }

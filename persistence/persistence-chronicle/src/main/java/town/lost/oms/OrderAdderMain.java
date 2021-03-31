@@ -4,6 +4,10 @@
 
 package town.lost.oms;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import net.openhft.chronicle.core.Mocker;
 import net.openhft.chronicle.core.pool.ClassAliasPool;
 import net.openhft.chronicle.core.time.SystemTimeProvider;
@@ -15,10 +19,6 @@ import town.lost.oms.api.OMSIn;
 import town.lost.oms.dto.BuySell;
 import town.lost.oms.dto.NewOrderSingle;
 import town.lost.oms.dto.OrderType;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class OrderAdderMain {
     public static void main(String[] args) throws IOException {
@@ -33,8 +33,8 @@ public class OrderAdderMain {
                     .transactTime(now())
                     .sendingTime(now())
                     .orderQty(1)
-                    .ordType(OrderType.market)
-                    .side(BuySell.buy)
+                    .ordType(OrderType.Market)
+                    .side(BuySell.Buy)
                     .symbol(toLong("EURUSD"));
 
             System.out.println("\nHit blank line to add an order, anything else to exit");
