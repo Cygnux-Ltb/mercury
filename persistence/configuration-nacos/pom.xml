@@ -16,7 +16,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>io.mercury</groupId>
-			<artifactId>commons-concurrent</artifactId>
+			<artifactId>commons-core</artifactId>
 		</dependency>
 
 		<dependency>

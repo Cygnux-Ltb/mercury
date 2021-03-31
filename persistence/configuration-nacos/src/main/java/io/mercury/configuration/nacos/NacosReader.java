@@ -20,43 +20,82 @@ import io.mercury.common.util.StringUtil;
  */
 public class NacosReader {
 
+	/**
+	 * 
+	 * @param serverAddr
+	 * @param group
+	 * @param dataId
+	 * @return
+	 * @throws NacosConnectionException
+	 * @throws NacosReadException
+	 */
 	public static final Properties getProperties(String serverAddr, String group, String dataId)
-			throws NacosReadException {
+			throws NacosConnectionException, NacosReadException {
 		return getProperties0(connection(serverAddr), group, dataId);
 	}
 
+	/**
+	 * 
+	 * @param serverAddr
+	 * @param namespace
+	 * @param group
+	 * @param dataId
+	 * @return
+	 * @throws NacosConnectionException
+	 * @throws NacosReadException
+	 */
 	public static final Properties getProperties(String serverAddr, String namespace, String group, String dataId)
-			throws NacosReadException {
+			throws NacosConnectionException, NacosReadException {
 		return getProperties0(connection(serverAddr, namespace), group, dataId);
 	}
 
-	public static final String getSaved(String serverAddr, String group, String dataId) throws NacosReadException {
+	/**
+	 * 
+	 * @param serverAddr
+	 * @param group
+	 * @param dataId
+	 * @return
+	 * @throws NacosConnectionException
+	 * @throws NacosReadException
+	 */
+	public static final String getSaved(String serverAddr, String group, String dataId)
+			throws NacosConnectionException, NacosReadException {
 		return getSaved0(connection(serverAddr), group, dataId);
 	}
 
+	/**
+	 * 
+	 * @param serverAddr
+	 * @param namespace
+	 * @param group
+	 * @param dataId
+	 * @return
+	 * @throws NacosConnectionException
+	 * @throws NacosReadException
+	 */
 	public static final String getSaved(String serverAddr, String namespace, String group, String dataId)
-			throws NacosReadException {
+			throws NacosConnectionException, NacosReadException {
 		return getSaved0(connection(serverAddr, namespace), group, dataId);
 	}
 
-	private static final ConfigService connection(String serverAddr) throws NacosReadException {
+	private static final ConfigService connection(String serverAddr) throws NacosConnectionException {
 		Properties prop = new Properties();
 		prop.put(PropertyKeyConst.SERVER_ADDR, serverAddr);
 		return createConfigService(prop);
 	}
 
-	private static final ConfigService connection(String serverAddr, String namespace) throws NacosReadException {
+	private static final ConfigService connection(String serverAddr, String namespace) throws NacosConnectionException {
 		Properties prop = new Properties();
 		prop.put(PropertyKeyConst.SERVER_ADDR, serverAddr);
 		prop.put(PropertyKeyConst.NAMESPACE, namespace);
 		return createConfigService(prop);
 	}
 
-	private static ConfigService createConfigService(Properties prop) throws NacosReadException {
+	private static ConfigService createConfigService(Properties prop) throws NacosConnectionException {
 		try {
 			return ConfigFactory.createConfigService(prop);
 		} catch (NacosException e) {
-			throw new NacosReadException("ConfigFactory.createConfigService has error", e);
+			throw new NacosConnectionException("ConfigFactory.createConfigService has error", e);
 		}
 	}
 
