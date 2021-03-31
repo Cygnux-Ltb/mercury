@@ -17,10 +17,4 @@ public final class ChronicleIOException extends RuntimeException {
 		super(message + Separator.LINE_SEPARATOR + "because : " + throwable.getMessage(), throwable);
 	}
 
-	public static void main(String[] args) {
-
-		System.out.println("111 \n 111");
-
-	}
-
 }
