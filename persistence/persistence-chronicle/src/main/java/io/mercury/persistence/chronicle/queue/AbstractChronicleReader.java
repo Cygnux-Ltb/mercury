@@ -28,7 +28,7 @@ import net.openhft.chronicle.queue.TailerState;
 
 @Immutable
 @NotThreadSafe
-public abstract class AbstractChronicleReader<T> extends CloseableChronicleAccessor implements Runnable {
+public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAccessor implements Runnable {
 
 	private final String readerName;
 	private final FileCycle fileCycle;
@@ -38,7 +38,7 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 	protected final Logger logger;
 	protected final ExcerptTailer excerptTailer;
 
-	private final Consumer<T> consumer;
+	private final Consumer<OUT> consumer;
 
 	/**
 	 * 
@@ -50,8 +50,8 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 	 * @param excerptTailer
 	 * @param consumer
 	 */
-	protected AbstractChronicleReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param, Logger logger,
-			ExcerptTailer excerptTailer, Consumer<T> consumer) {
+	protected AbstractChronicleReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param,
+			Logger logger, ExcerptTailer excerptTailer, Consumer<OUT> consumer) {
 		super(allocateSeq);
 		this.readerName = readerName;
 		this.fileCycle = fileCycle;
@@ -163,7 +163,7 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 	 * @return
 	 */
 	@AbstractFunction
-	protected abstract T next0();
+	protected abstract OUT next0();
 
 	/**
 	 * Get next element of current cursor position.
@@ -173,7 +173,7 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 	 * @throws ChronicleReadException
 	 */
 	@CheckForNull
-	public T next() throws IllegalStateException, ChronicleReadException {
+	public OUT next() throws IllegalStateException, ChronicleReadException {
 		if (isClose) {
 			throw new IllegalStateException("Unable to read next, Chronicle queue is closed");
 		}
@@ -186,21 +186,21 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 
 	@Override
 	public void run() {
-		final boolean readFailLogging = param.isReadFailLogging();
-		final boolean readFailCrash = param.isReadFailCrash();
-		final boolean waitingData = param.isWaitingData();
-		final boolean spinWaiting = param.isSpinWaiting();
-		final TimeUnit readIntervalUnit = param.getReadIntervalUnit();
-		final long readIntervalTime = param.getReadIntervalTime();
+		final boolean readFailLogging = param.readFailLogging;
+		final boolean readFailCrash = param.readFailCrash;
+		final boolean waitingData = param.waitingData;
+		final boolean spinWaiting = param.spinWaiting;
+		final TimeUnit readIntervalUnit = param.readIntervalUnit;
+		final long readIntervalTime = param.readIntervalTime;
 		if (param.delayReadTime > 0)
-			sleep(param.getDelayReadUnit(), param.getDelayReadTime());
+			sleep(param.delayReadUnit, param.delayReadTime);
 		for (;;) {
 			if (isClose) {
 				logger.info("ChronicleReader is cloesd, execute exit()");
 				exit();
 				break;
 			}
-			T next = null;
+			OUT next = null;
 			try {
 				next = next();
 			} catch (ChronicleReadException e) {
@@ -298,46 +298,6 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 			return new Builder().build();
 		}
 
-		public boolean isReadFailCrash() {
-			return readFailCrash;
-		}
-
-		public boolean isReadFailLogging() {
-			return readFailLogging;
-		}
-
-		public TimeUnit getReadIntervalUnit() {
-			return readIntervalUnit;
-		}
-
-		public long getReadIntervalTime() {
-			return readIntervalTime;
-		}
-
-		public TimeUnit getDelayReadUnit() {
-			return delayReadUnit;
-		}
-
-		public long getDelayReadTime() {
-			return delayReadTime;
-		}
-
-		public boolean isWaitingData() {
-			return waitingData;
-		}
-
-		public boolean isSpinWaiting() {
-			return spinWaiting;
-		}
-
-		public boolean isAsyncExit() {
-			return asyncExit;
-		}
-
-		public Runnable getExitRunnable() {
-			return exitRunnable;
-		}
-
 		public static class Builder {
 
 			// 读取失败崩溃
@@ -362,23 +322,23 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 			private Runnable exitRunnable;
 
 			/**
-			 * 设置读取失败崩溃
+			 * 设置读取失败后崩溃
 			 * 
 			 * @param readFailCrash
 			 * @return
 			 */
-			public Builder readFailCrash(boolean readFailCrash) {
+			public Builder isReadFailCrash(boolean readFailCrash) {
 				this.readFailCrash = readFailCrash;
 				return this;
 			}
 
 			/**
-			 * 设置读取失败记录
+			 * 设置读取失败进行记录
 			 * 
 			 * @param readFailLogging
 			 * @return
 			 */
-			public Builder readFailLogging(boolean readFailLogging) {
+			public Builder isReadFailLogging(boolean readFailLogging) {
 				this.readFailLogging = readFailLogging;
 				return this;
 			}
@@ -389,7 +349,7 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 			 * @param waitingData
 			 * @return
 			 */
-			public Builder waitingData(boolean waitingData) {
+			public Builder isWaitingData(boolean waitingData) {
 				this.waitingData = waitingData;
 				return this;
 			}
@@ -400,7 +360,7 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 			 * @param spinWaiting
 			 * @return
 			 */
-			public Builder spinWaiting(boolean spinWaiting) {
+			public Builder isSpinWaiting(boolean spinWaiting) {
 				this.spinWaiting = spinWaiting;
 				return this;
 			}
@@ -412,7 +372,7 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 			 * @param time
 			 * @return
 			 */
-			public Builder readInterval(@Nonnull TimeUnit timeUnit, long time) {
+			public Builder setReadInterval(@Nonnull TimeUnit timeUnit, long time) {
 				this.readIntervalUnit = nonNull(timeUnit, "timeUnit");
 				this.readIntervalTime = greaterThan(time, 0, "time");
 				return this;
@@ -425,7 +385,7 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 			 * @param time
 			 * @return
 			 */
-			public Builder delayRead(@Nonnull TimeUnit timeUnit, long time) {
+			public Builder setDelayRead(@Nonnull TimeUnit timeUnit, long time) {
 				this.delayReadUnit = nonNull(timeUnit, "timeUnit");
 				this.delayReadTime = greaterThan(time, 0, "time");
 				return this;
@@ -437,7 +397,7 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 			 * @param asyncExit
 			 * @return
 			 */
-			public Builder asyncExit(boolean asyncExit) {
+			public Builder isAsyncExit(boolean asyncExit) {
 				this.asyncExit = asyncExit;
 				return this;
 			}
@@ -448,7 +408,7 @@ public abstract class AbstractChronicleReader<T> extends CloseableChronicleAcces
 			 * @param exitRunnable
 			 * @return
 			 */
-			public Builder exitRunnable(@Nonnull Runnable exitRunnable) {
+			public Builder setExitRunnable(@Nonnull Runnable exitRunnable) {
 				this.exitRunnable = nonNull(exitRunnable, "exitRunnable");
 				return this;
 			}

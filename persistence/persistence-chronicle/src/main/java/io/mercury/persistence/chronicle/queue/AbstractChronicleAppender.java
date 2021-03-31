@@ -16,17 +16,17 @@ import net.openhft.chronicle.queue.ExcerptAppender;
 
 @Immutable
 @NotThreadSafe
-public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAccessor implements Runnable {
+public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAccessor implements Runnable {
 
 	private final String appenderName;
 
 	protected final Logger logger;
 	protected final ExcerptAppender excerptAppender;
 
-	private final Supplier<T> dataSupplier;
+	private final Supplier<IN> dataSupplier;
 
-	protected AbstractChronicleAppender(long allocateSeq, String appenderName, Logger logger, ExcerptAppender excerptAppender,
-			Supplier<T> dataSupplier) {
+	protected AbstractChronicleAppender(long allocateSeq, String appenderName, Logger logger,
+			ExcerptAppender excerptAppender, Supplier<IN> dataSupplier) {
 		super(allocateSeq);
 		this.appenderName = appenderName;
 		this.logger = logger;
@@ -56,7 +56,7 @@ public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAcc
 	 * @throws IllegalStateException
 	 * @throws ChronicleAppendException
 	 */
-	public void append(@Nonnull T t) throws IllegalStateException, ChronicleAppendException {
+	public void append(@Nonnull IN t) throws IllegalStateException, ChronicleAppendException {
 		if (isClose) {
 			throw new IllegalStateException("Unable to append data, Chronicle queue is closed");
 		}
@@ -78,13 +78,13 @@ public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAcc
 	 * @throws IllegalStateException
 	 * @throws ChronicleAppendException
 	 */
-	public void append(@Nonnull Object obj, Serializer<Object, T> serializer)
+	public void append(@Nonnull Object obj, Serializer<Object, IN> serializer)
 			throws IllegalStateException, ChronicleAppendException {
 		append(serializer.serialization(obj));
 	}
 
 	@AbstractFunction
-	protected abstract void append0(@Nonnull T t);
+	protected abstract void append0(@Nonnull IN t);
 
 	@Override
 	public void run() {
@@ -94,7 +94,7 @@ public abstract class AbstractChronicleAppender<T> extends CloseableChronicleAcc
 					logger.info("Chronicle queue is closed, {} Thread exit", appenderName);
 					break;
 				} else {
-					T t = dataSupplier.get();
+					IN t = dataSupplier.get();
 					append(t);
 				}
 			}
