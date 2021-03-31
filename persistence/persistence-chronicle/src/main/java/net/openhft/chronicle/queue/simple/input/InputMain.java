@@ -1,10 +1,10 @@
 package net.openhft.chronicle.queue.simple.input;
 
+import java.util.Scanner;
+
 import net.openhft.chronicle.queue.ExcerptAppender;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueue;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
-
-import java.util.Scanner;
 
 /**
  * Created by catherine on 17/07/2016.

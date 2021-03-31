@@ -1,12 +1,13 @@
 package net.openhft.chronicle.queue.simple.avro;
 
+import java.io.IOException;
+
+import org.apache.avro.generic.GenericRecord;
+
 import net.openhft.chronicle.queue.ExcerptAppender;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueue;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
 import net.openhft.chronicle.wire.DocumentContext;
-import org.apache.avro.generic.GenericRecord;
-
-import java.io.IOException;
 
 public class InputMain {
 
