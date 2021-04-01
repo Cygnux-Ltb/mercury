@@ -19,7 +19,8 @@
 	<modules>
 		<module>configuration-nacos</module>
 		<module>persistence-chronicle</module>
-		<module>persistence-kyotocabinet</module>
+		<module>persistence-h2</module>
+		<!-- <module>persistence-kyotocabinet</module> -->
 		<module>persistence-rocksdb</module>
 	</modules>
 
@@ -72,11 +73,26 @@
 				<version>19.0.0</version>
 			</dependency>
 
-			<!-- Netty/Buffer -->
+			<!-- Java(TM) Persistence API -->
 			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-buffer</artifactId>
-				<version>${netty.version}</version>
+				<groupId>javax.persistence</groupId>
+				<artifactId>javax.persistence-api</artifactId>
+				<version>2.2</version>
+			</dependency>
+
+			<!-- The Apache Commons DbUtils package is a set of Java utility classes 
+				for easing JDBC development. -->
+			<dependency>
+				<groupId>commons-dbutils</groupId>
+				<artifactId>commons-dbutils</artifactId>
+				<version>1.7</version>
+			</dependency>
+
+			<!-- Ultimate JDBC Connection Pool -->
+			<dependency>
+				<groupId>com.zaxxer</groupId>
+				<artifactId>HikariCP</artifactId>
+				<version>4.0.3</version>
 			</dependency>
 
 			<!-- Apache Commons Compress software defines an API for working with 
@@ -112,12 +128,19 @@
 				<version>0.12</version>
 			</dependency>
 
+			<!-- Netty/Buffer -->
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-buffer</artifactId>
+				<version>4.1.62.Final</version>
+			</dependency>
+
 			<!-- JNI bindings for Zstd native library that provides fast and high 
 				compression lossless algorithm for Java and all JVM languages -->
 			<dependency>
 				<groupId>com.github.luben</groupId>
 				<artifactId>zstd-jni</artifactId>
-				<version>1.4.9-1</version>
+				<version>1.4.9-2</version>
 			</dependency>
 
 			<!-- Date and time library to replace JDK date handling -->
