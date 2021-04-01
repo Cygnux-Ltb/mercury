@@ -1,7 +1,5 @@
 package io.mercury.common.concurrent.map;
 
-import static io.mercury.common.datetime.DateTimeUtil.date;
-
 import java.time.LocalDate;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -12,6 +10,8 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import org.eclipse.collections.api.list.MutableList;
 
+import io.mercury.common.datetime.DateTimeUtil;
+
 @NotThreadSafe
 public final class ConcurrentLocalDateMap<V> extends ConcurrentTemporalMap<LocalDate, V, ConcurrentLocalDateMap<V>> {
 
@@ -20,19 +20,24 @@ public final class ConcurrentLocalDateMap<V> extends ConcurrentTemporalMap<Local
 		super(keyToLangFunc, nextKeyFunc, hasNextKey);
 	}
 
-	private static final ToLongFunction<LocalDate> keyToLangFunc = key -> date(key);
-	private static final Function<LocalDate, LocalDate> nextKeyFunc = key -> key.plusDays(1);
+	private static final ToLongFunction<LocalDate> KeyFunc = DateTimeUtil::date;
+	private static final Function<LocalDate, LocalDate> NextKeyFunc = key -> key.plusDays(1);
 
-	private static final BiPredicate<LocalDate, LocalDate> hasNextKey = (nextKey, endPoint) -> nextKey.isBefore(endPoint)
-			|| nextKey.equals(endPoint);
+	private static final BiPredicate<LocalDate, LocalDate> HasNextKey = (nextKey,
+			endPoint) -> nextKey.isBefore(endPoint) || nextKey.equals(endPoint);
 
+	/**
+	 * 
+	 * @param <V>
+	 * @return
+	 */
 	public final static <V> ConcurrentLocalDateMap<V> newMap() {
-		return new ConcurrentLocalDateMap<>(keyToLangFunc, nextKeyFunc, hasNextKey);
+		return new ConcurrentLocalDateMap<>(KeyFunc, NextKeyFunc, HasNextKey);
 	}
 
 	@Override
 	public ConcurrentLocalDateMap<V> put(@Nonnull LocalDate key, V value) {
-		put(keyToLangFunc.applyAsLong(key), value);
+		put(KeyFunc.applyAsLong(key), value);
 		return this;
 	}
 

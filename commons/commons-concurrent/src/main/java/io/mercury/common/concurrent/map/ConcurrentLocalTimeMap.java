@@ -1,9 +1,5 @@
 package io.mercury.common.concurrent.map;
 
-import static io.mercury.common.datetime.DateTimeUtil.timeOfHour;
-import static io.mercury.common.datetime.DateTimeUtil.timeOfMinute;
-import static io.mercury.common.datetime.DateTimeUtil.timeOfSecond;
-
 import java.time.LocalTime;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -22,33 +18,48 @@ public final class ConcurrentLocalTimeMap<V> extends ConcurrentTemporalMap<Local
 		super(keyToLangFunc, nextKeyFunc, hasNextKey);
 	}
 
-	private static final ToLongFunction<LocalTime> keyToLangFuncWithHour = key -> timeOfHour(key);
-	private static final Function<LocalTime, LocalTime> nextKeyFuncWithHour = key -> key.plusHours(1);
+	private static final ToLongFunction<LocalTime> KeyFuncWithHour = DateTimeUtil::timeOfHour;
+	private static final Function<LocalTime, LocalTime> NextKeyFuncWithHour = key -> key.plusHours(1);
 
-	private static final ToLongFunction<LocalTime> keyToLangFuncWithMinute = key -> timeOfMinute(key);
-	private static final Function<LocalTime, LocalTime> nextKeyFuncWithMinute = key -> key.plusMinutes(1);
+	private static final ToLongFunction<LocalTime> KeyFuncWithMinute = DateTimeUtil::timeOfMinute;
+	private static final Function<LocalTime, LocalTime> NextKeyFuncWithMinute = key -> key.plusMinutes(1);
 
-	private static final ToLongFunction<LocalTime> keyToLangFuncWithSecond = key -> timeOfSecond(key);
-	private static final Function<LocalTime, LocalTime> nextKeyFuncWithSecond = key -> key.plusSeconds(1);
+	private static final ToLongFunction<LocalTime> KeyFuncWithSecond = DateTimeUtil::timeOfSecond;
+	private static final Function<LocalTime, LocalTime> NextKeyFuncWithSecond = key -> key.plusSeconds(1);
 
-	private static final BiPredicate<LocalTime, LocalTime> hasNextKey = (nextKey,
+	private static final BiPredicate<LocalTime, LocalTime> HasNextKey = (nextKey,
 			endPoint) -> nextKey.isBefore(endPoint) || nextKey.equals(endPoint);
 
+	/**
+	 * 
+	 * @param <V>
+	 * @return
+	 */
 	public final static <V> ConcurrentLocalTimeMap<V> newMapToHour() {
-		return new ConcurrentLocalTimeMap<>(keyToLangFuncWithHour, nextKeyFuncWithHour, hasNextKey);
+		return new ConcurrentLocalTimeMap<>(KeyFuncWithHour, NextKeyFuncWithHour, HasNextKey);
 	}
 
+	/**
+	 * 
+	 * @param <V>
+	 * @return
+	 */
 	public final static <V> ConcurrentLocalTimeMap<V> newMapToMinute() {
-		return new ConcurrentLocalTimeMap<>(keyToLangFuncWithMinute, nextKeyFuncWithMinute, hasNextKey);
+		return new ConcurrentLocalTimeMap<>(KeyFuncWithMinute, NextKeyFuncWithMinute, HasNextKey);
 	}
 
+	/**
+	 * 
+	 * @param <V>
+	 * @return
+	 */
 	public final static <V> ConcurrentLocalTimeMap<V> newMapToSecond() {
-		return new ConcurrentLocalTimeMap<>(keyToLangFuncWithSecond, nextKeyFuncWithSecond, hasNextKey);
+		return new ConcurrentLocalTimeMap<>(KeyFuncWithSecond, NextKeyFuncWithSecond, HasNextKey);
 	}
 
 	@Override
 	public ConcurrentLocalTimeMap<V> put(@Nonnull LocalTime key, V value) {
-		put(keyToLangFunc.applyAsLong(key), value);
+		put(keyFunc.applyAsLong(key), value);
 		return this;
 	}
 

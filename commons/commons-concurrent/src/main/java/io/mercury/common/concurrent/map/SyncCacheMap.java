@@ -32,6 +32,7 @@ public final class SyncCacheMap<K, V> {
 			this.available = available;
 			this.value = value;
 		}
+		
 	}
 
 	public SyncCacheMap(Function<K, V> refresher) {

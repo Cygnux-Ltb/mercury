@@ -12,12 +12,13 @@ import javax.annotation.concurrent.NotThreadSafe;
 import org.eclipse.collections.api.list.MutableList;
 import org.jctools.maps.NonBlockingHashMapLong;
 
+import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.collections.MutableLists;
 
 @NotThreadSafe
 public abstract class ConcurrentTemporalMap<K extends Temporal, V, T extends ConcurrentTemporalMap<K, V, T>> {
 
-	protected final ToLongFunction<K> keyToLangFunc;
+	protected final ToLongFunction<K> keyFunc;
 
 	private final Function<K, K> nextKeyFunc;
 
@@ -25,14 +26,13 @@ public abstract class ConcurrentTemporalMap<K extends Temporal, V, T extends Con
 
 	private final ConcurrentMap<Long, V> savedMap;
 
-	public ConcurrentTemporalMap(ToLongFunction<K> keyToLangFunc, Function<K, K> nextKeyFunc,
-			BiPredicate<K, K> hasNextKey) {
-		this(keyToLangFunc, nextKeyFunc, hasNextKey, 128);
+	public ConcurrentTemporalMap(ToLongFunction<K> keyFunc, Function<K, K> nextKeyFunc, BiPredicate<K, K> hasNextKey) {
+		this(keyFunc, nextKeyFunc, hasNextKey, 128);
 	}
 
-	public ConcurrentTemporalMap(ToLongFunction<K> keyToLangFunc, Function<K, K> nextKeyFunc,
-			BiPredicate<K, K> hasNextKey, int initialCapacity) {
-		this.keyToLangFunc = keyToLangFunc;
+	public ConcurrentTemporalMap(ToLongFunction<K> keyFunc, Function<K, K> nextKeyFunc, BiPredicate<K, K> hasNextKey,
+			int initialCapacity) {
+		this.keyFunc = keyFunc;
 		this.nextKeyFunc = nextKeyFunc;
 		this.hasNextKey = hasNextKey;
 		this.savedMap = new NonBlockingHashMapLong<>(initialCapacity);
@@ -45,7 +45,8 @@ public abstract class ConcurrentTemporalMap<K extends Temporal, V, T extends Con
 	 * @param value
 	 * @return
 	 */
-	abstract public T put(@Nonnull K key, V value);
+	@AbstractFunction
+	public abstract T put(@Nonnull K key, V value);
 
 	/**
 	 * general get method
@@ -54,7 +55,7 @@ public abstract class ConcurrentTemporalMap<K extends Temporal, V, T extends Con
 	 * @return
 	 */
 	public V get(@Nonnull K key) {
-		return savedMap.get(keyToLangFunc.applyAsLong(key));
+		return savedMap.get(keyFunc.applyAsLong(key));
 	}
 
 	/**

@@ -1,4 +1,4 @@
-package io.mercury.commons.cache;
+package io.mercury.common.concurrent.cache;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 
@@ -15,6 +16,14 @@ import com.google.common.cache.LoadingCache;
 
 import io.mercury.common.log.CommonLoggerFactory;
 
+/**
+ * 
+ * @author yellow013
+ *
+ * @param <K>
+ * @param <V>
+ */
+@ThreadSafe
 public class CacheMap<K, V> {
 
 	private final LoadingCache<K, V> cache;
@@ -45,7 +54,7 @@ public class CacheMap<K, V> {
 			return Optional.empty();
 		}
 	}
-	
+
 	public void setUnavailable(K key) {
 		cache.invalidate(key);
 	}

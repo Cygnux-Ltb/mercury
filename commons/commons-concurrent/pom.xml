@@ -26,7 +26,7 @@
 		<dependency>
 			<groupId>org.jctools</groupId>
 			<artifactId>jctools-core</artifactId>
-			<version>3.2.0</version>
+			<version>3.3.0</version>
 		</dependency>
 
 		<!-- Disruptor - Concurrent Programming Framework -->
@@ -37,11 +37,11 @@
 		</dependency>
 
 		<!-- Conversant Disruptor - very high throughput Java BlockingQueue -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.conversantmedia</groupId>
 			<artifactId>disruptor</artifactId>
 			<version>1.2.19</version>
-		</dependency>
+		</dependency> -->
 
 	</dependencies>
 
