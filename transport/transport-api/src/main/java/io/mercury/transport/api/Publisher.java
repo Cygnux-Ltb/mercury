@@ -1,8 +1,8 @@
-package io.mercury.transport.core.api;
+package io.mercury.transport.api;
 
 import java.io.Closeable;
 
-import io.mercury.transport.core.exception.PublishFailedException;
+import io.mercury.transport.exception.PublishFailedException;
 
 public interface Publisher<T> extends Transport, Closeable {
 
@@ -23,6 +23,10 @@ public interface Publisher<T> extends Transport, Closeable {
 	 */
 	void publish(String target, T msg) throws PublishFailedException;
 
+	/**
+	 * 
+	 * @return
+	 */
 	String getPublisherName();
 
 }

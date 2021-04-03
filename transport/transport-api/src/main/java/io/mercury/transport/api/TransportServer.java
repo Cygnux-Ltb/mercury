@@ -1,4 +1,4 @@
-package io.mercury.transport.core.api;
+package io.mercury.transport.api;
 
 public interface TransportServer extends Transport {
 

@@ -1,6 +1,6 @@
-package io.mercury.transport.core.api;
+package io.mercury.transport.api;
 
-import io.mercury.transport.core.exception.RequestException;
+import io.mercury.transport.exception.RequestException;
 
 public interface Requester<T> extends Transport {
 
