@@ -19,9 +19,9 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringUtil;
-import io.mercury.transport.core.api.Publisher;
-import io.mercury.transport.core.api.Sender;
-import io.mercury.transport.core.exception.PublishFailedException;
+import io.mercury.transport.api.Publisher;
+import io.mercury.transport.api.Sender;
+import io.mercury.transport.exception.PublishFailedException;
 import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
 import io.mercury.transport.rabbitmq.configurator.RmqPublisherConfigurator;
 import io.mercury.transport.rabbitmq.declare.ExchangeDefinition;
@@ -193,19 +193,19 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 			basicPublish(routingKey, msg, props);
 			if (channel.waitForConfirms(confirmTimeout))
 				return;
-			log.error("Call method channel.waitForConfirms(confirmTimeout==[{}]) retry==[{}]", confirmTimeout, retry);
+			log.error("Call func channel.waitForConfirms(confirmTimeout==[{}]) retry==[{}]", confirmTimeout, retry);
 			if (++retry == confirmRetry)
 				throw new NoAckException(exchangeName, routingKey, retry, confirmTimeout);
 			confirmPublish0(routingKey, msg, props, retry);
 		} catch (IOException e) {
-			log.error("Method channel.confirmSelect() throw IOException from publisherName -> {}, routingKey -> {}",
+			log.error("Func channel.confirmSelect() throw IOException from publisherName -> {}, routingKey -> {}",
 					publisherName, routingKey, e);
 			throw e;
 		} catch (InterruptedException e) {
-			log.error("Method channel.waitForConfirms() throw InterruptedException from publisherName -> {}, "
+			log.error("Func channel.waitForConfirms() throw InterruptedException from publisherName -> {}, "
 					+ "routingKey -> {}", publisherName, routingKey, e);
 		} catch (TimeoutException e) {
-			log.error("Method channel.waitForConfirms() throw TimeoutException from publisherName -> {}, "
+			log.error("Func channel.waitForConfirms() throw TimeoutException from publisherName -> {}, "
 					+ "routingKey -> {}", publisherName, routingKey, e);
 		}
 	}
@@ -231,7 +231,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 		} catch (IOException e) {
 			StringBuilder sb = new StringBuilder(240);
 			props.appendPropertyDebugStringTo(sb);
-			log.error("Method channel.basicPublish(exchange==[{}], routingKey==[{}], properties==[{}], msg==[...]) "
+			log.error("Func channel.basicPublish(exchange==[{}], routingKey==[{}], properties==[{}], msg==[...]) "
 					+ "throw IOException -> {}", exchangeName, routingKey, sb.toString(), e.getMessage(), e);
 			throw e;
 		}
@@ -239,7 +239,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 
 	@Override
 	public boolean destroy() {
-		log.info("Call method destroy() from Publisher name==[{}]", publisherName);
+		log.info("Call func destroy() from Publisher name==[{}]", publisherName);
 		return super.destroy();
 	}
 

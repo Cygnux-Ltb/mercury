@@ -21,12 +21,10 @@ public final class AmqpExchange {
 
 	// 交换器名称
 	@Getter
-	@Setter
 	private String name;
 
 	// 交换器类型
 	@Getter
-	@Setter
 	private ExchangeType type;
 
 	// 是否持久化

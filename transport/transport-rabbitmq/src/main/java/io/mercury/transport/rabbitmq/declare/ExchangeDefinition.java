@@ -2,7 +2,8 @@ package io.mercury.transport.rabbitmq.declare;
 
 import static io.mercury.common.collections.MutableLists.newFastList;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 
@@ -96,7 +97,7 @@ public final class ExchangeDefinition extends Relationship {
 	 * @param durable
 	 * @return
 	 */
-	public ExchangeDefinition exchangeDurable(boolean durable) {
+	public ExchangeDefinition setDurable(boolean durable) {
 		exchange.setDurable(durable);
 		return this;
 	}
@@ -106,7 +107,7 @@ public final class ExchangeDefinition extends Relationship {
 	 * @param autoDelete
 	 * @return
 	 */
-	public ExchangeDefinition exchangeAutoDelete(boolean autoDelete) {
+	public ExchangeDefinition setAutoDelete(boolean autoDelete) {
 		exchange.setAutoDelete(autoDelete);
 		return this;
 	}
@@ -116,8 +117,18 @@ public final class ExchangeDefinition extends Relationship {
 	 * @param internal
 	 * @return
 	 */
-	public ExchangeDefinition exchangeInternal(boolean internal) {
+	public ExchangeDefinition setInternal(boolean internal) {
 		exchange.setInternal(internal);
+		return this;
+	}
+	
+	/**
+	 * 
+	 * @param args
+	 * @return
+	 */
+	public ExchangeDefinition setArgs(Map<String, Object> args) {
+		exchange.setArgs(args);
 		return this;
 	}
 
@@ -136,14 +147,13 @@ public final class ExchangeDefinition extends Relationship {
 	 * @param routingKeys
 	 * @return
 	 */
-	public ExchangeDefinition bindingExchange(List<AmqpExchange> exchanges, List<String> routingKeys) {
+	public ExchangeDefinition bindingExchange(Collection<AmqpExchange> exchanges, Collection<String> routingKeys) {
 		if (exchanges != null) {
 			exchanges.forEach(exchange -> {
-				if (CollectionUtils.isNotEmpty(routingKeys)) {
+				if (CollectionUtils.isNotEmpty(routingKeys))
 					routingKeys.forEach(routingKey -> bindings.add(new Binding(this.exchange, exchange, routingKey)));
-				} else {
+				else
 					bindings.add(new Binding(this.exchange, exchange));
-				}
 			});
 		}
 		return this;
@@ -164,14 +174,13 @@ public final class ExchangeDefinition extends Relationship {
 	 * @param routingKeys
 	 * @return
 	 */
-	public ExchangeDefinition bindingQueue(List<AmqpQueue> queues, List<String> routingKeys) {
+	public ExchangeDefinition bindingQueue(Collection<AmqpQueue> queues, Collection<String> routingKeys) {
 		if (queues != null) {
 			queues.forEach(queue -> {
-				if (CollectionUtils.isNotEmpty(routingKeys)) {
+				if (CollectionUtils.isNotEmpty(routingKeys))
 					routingKeys.forEach(routingKey -> bindings.add(new Binding(exchange, queue, routingKey)));
-				} else {
+				else
 					bindings.add(new Binding(exchange, queue));
-				}
 			});
 		}
 		return this;
@@ -183,7 +192,19 @@ public final class ExchangeDefinition extends Relationship {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(ExchangeDefinition.direct("TEST_DIRECT").exchangeAutoDelete(true).exchangeInternal(true));
+		System.out.println(ExchangeDefinition.direct("TEST_DIRECT").setAutoDelete(true).setInternal(true));
+
+		AmqpExchange exchange0 = AmqpExchange.direct("ABC");
+		AmqpExchange exchange1 = AmqpExchange.direct("ABC");
+
+		System.out.println(exchange0);
+		System.out.println(exchange1);
+
+		System.out.println(exchange0 == exchange1);
+		System.out.println(exchange0.isIdempotent(exchange1));
+
+		System.out.println(AmqpExchange.direct("ABC"));
+		System.out.println(AmqpQueue.named("ABC"));
 	}
 
 }

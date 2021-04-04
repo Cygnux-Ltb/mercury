@@ -13,7 +13,7 @@ import io.mercury.common.functional.ShutdownEvent;
 import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringUtil;
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.core.configurator.TransportConfigurator;
+import io.mercury.transport.configurator.TransportConfigurator;
 import lombok.Getter;
 
 public final class RabbitConnection implements TransportConfigurator {

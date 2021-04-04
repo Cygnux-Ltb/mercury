@@ -1,19 +1,25 @@
 package io.mercury.transport.rabbitmq.configurator;
 
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
+@Accessors(chain = true)
 public final class PublishConfirmOptions {
 
 	// 是否执行发布确认, 默认false
 	@Getter
+	@Setter
 	private boolean confirm = false;
 
 	// 发布确认超时毫秒数, 默认5000毫秒
 	@Getter
+	@Setter
 	private long confirmTimeout = 5000;
 
 	// 发布确认重试次数, 默认3次
 	@Getter
+	@Setter
 	private int confirmRetry = 3;
 
 	/**
@@ -41,21 +47,6 @@ public final class PublishConfirmOptions {
 		this.confirm = confirm;
 		this.confirmTimeout = confirmTimeout;
 		this.confirmRetry = confirmRetry;
-	}
-
-	public PublishConfirmOptions setConfirm(boolean confirm) {
-		this.confirm = confirm;
-		return this;
-	}
-
-	public PublishConfirmOptions setConfirmTimeout(long confirmTimeout) {
-		this.confirmTimeout = confirmTimeout;
-		return this;
-	}
-
-	public PublishConfirmOptions setConfirmRetry(int confirmRetry) {
-		this.confirmRetry = confirmRetry;
-		return this;
 	}
 
 }

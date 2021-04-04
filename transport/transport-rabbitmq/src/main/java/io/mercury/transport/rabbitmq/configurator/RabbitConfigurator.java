@@ -1,14 +1,16 @@
 package io.mercury.transport.rabbitmq.configurator;
 
-import javax.annotation.Nonnull;
+import static lombok.AccessLevel.PROTECTED;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * 
  * @author yellow013
  *
  */
+@RequiredArgsConstructor(access = PROTECTED)
 public abstract class RabbitConfigurator {
 
 	/**
@@ -16,9 +18,5 @@ public abstract class RabbitConfigurator {
 	 */
 	@Getter
 	private final RabbitConnection connection;
-
-	protected RabbitConfigurator(@Nonnull RabbitConnection connection) {
-		this.connection = connection;
-	}
 
 }

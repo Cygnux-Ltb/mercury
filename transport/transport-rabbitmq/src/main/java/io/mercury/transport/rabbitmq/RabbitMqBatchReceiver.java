@@ -30,7 +30,7 @@ import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.functional.BytesDeserializer;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
-import io.mercury.transport.core.api.Receiver;
+import io.mercury.transport.api.Receiver;
 import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfigurator;
 
 /**

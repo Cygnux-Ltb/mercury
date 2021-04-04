@@ -16,7 +16,6 @@ public final class AmqpQueue {
 
 	// 队列名称
 	@Getter
-	@Setter
 	private String name;
 
 	// 是否持久化

@@ -1,6 +1,7 @@
 package io.mercury.transport.rabbitmq.declare;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -17,7 +18,7 @@ import lombok.Getter;
  * @author yellow013
  *
  */
-public final class QueueDefinition  extends Relationship {
+public final class QueueDefinition extends Relationship {
 
 	/**
 	 * queue
@@ -72,7 +73,7 @@ public final class QueueDefinition  extends Relationship {
 	 * @param durable
 	 * @return
 	 */
-	public QueueDefinition queueDurable(boolean durable) {
+	public QueueDefinition setDurable(boolean durable) {
 		queue.setDurable(durable);
 		return this;
 	}
@@ -83,7 +84,7 @@ public final class QueueDefinition  extends Relationship {
 	 * @param autoDelete
 	 * @return
 	 */
-	public QueueDefinition queueAutoDelete(boolean autoDelete) {
+	public QueueDefinition setAutoDelete(boolean autoDelete) {
 		queue.setAutoDelete(autoDelete);
 		return this;
 	}
@@ -94,8 +95,18 @@ public final class QueueDefinition  extends Relationship {
 	 * @param exclusive
 	 * @return
 	 */
-	public QueueDefinition queueExclusive(boolean exclusive) {
+	public QueueDefinition setExclusive(boolean exclusive) {
 		queue.setExclusive(exclusive);
+		return this;
+	}
+
+	/**
+	 * 
+	 * @param args
+	 * @return
+	 */
+	public QueueDefinition setArgs(Map<String, Object> args) {
+		queue.setArgs(args);
 		return this;
 	}
 
@@ -114,14 +125,13 @@ public final class QueueDefinition  extends Relationship {
 	 * @param routingKeys
 	 * @return
 	 */
-	public QueueDefinition binding(List<AmqpExchange> exchanges, List<String> routingKeys) {
+	public QueueDefinition binding(Collection<AmqpExchange> exchanges, Collection<String> routingKeys) {
 		if (exchanges != null) {
 			exchanges.forEach(exchange -> {
-				if (CollectionUtils.isNotEmpty(routingKeys)) {
+				if (CollectionUtils.isNotEmpty(routingKeys))
 					routingKeys.forEach(routingKey -> bindings.add(new Binding(exchange, queue, routingKey)));
-				} else {
+				else
 					bindings.add(new Binding(exchange, queue));
-				}
 			});
 		}
 		return this;
