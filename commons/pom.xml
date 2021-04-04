@@ -17,13 +17,10 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>commons-cache</module>
 		<module>commons-concurrent</module>
 		<module>commons-core</module>
-		<module>commons-cryption</module>
 		<module>commons-graph</module>
 		<module>commons-jmh</module>
-		<module>commons-jmx</module>
 		<module>commons-log</module>
 		<module>commons-reflect</module>
 	</modules>
