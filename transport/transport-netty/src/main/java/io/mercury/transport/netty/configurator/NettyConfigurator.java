@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.mercury.common.functional.ShutdownEvent;
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.core.configurator.TransportConfigurator;
+import io.mercury.transport.configurator.TransportConfigurator;
 
 public final class NettyConfigurator implements TransportConfigurator {
 

@@ -3,7 +3,7 @@ package io.mercury.transport.netty;
 import org.slf4j.Logger;
 
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.transport.core.api.TransportClient;
+import io.mercury.transport.api.TransportClient;
 import io.mercury.transport.netty.configurator.NettyConfigurator;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelHandler;

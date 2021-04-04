@@ -4,13 +4,13 @@ import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
 
 import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.util.Assertor;
-import io.mercury.transport.core.api.TransportModule;
+import io.mercury.transport.api.Transport;
 import io.mercury.transport.netty.configurator.NettyConfigurator;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 
-public abstract class NettyTransport implements TransportModule {
+public abstract class NettyTransport implements Transport {
 
 	protected final String tag;
 	protected final NettyConfigurator configurator;

@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.sequence.SysNanoSeq;
-import io.mercury.transport.core.api.Sender;
+import io.mercury.transport.api.Sender;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
