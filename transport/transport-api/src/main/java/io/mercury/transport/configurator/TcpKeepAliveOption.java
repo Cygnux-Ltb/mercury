@@ -1,46 +1,30 @@
 package io.mercury.transport.configurator;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+@Getter
+@Setter
+@Accessors(chain = true)
 public final class TcpKeepAliveOption {
 
-	private int tcpKeepAlive;
-	private int tcpKeepAliveCount;
-	private int tcpKeepAliveIdle;
-	private int tcpKeepAliveInterval;
+	private KeepAlive keepAlive = KeepAlive.OS_Default;
+	private int keepAliveCount;
+	private int keepAliveIdle;
+	private int keepAliveInterval;
 
-	public int getTcpKeepAlive() {
-		return tcpKeepAlive;
-	}
+	@Getter
+	@RequiredArgsConstructor
+	public static enum KeepAlive {
 
-	public int getTcpKeepAliveCount() {
-		return tcpKeepAliveCount;
-	}
+		Enable(1), Disable(0), OS_Default(-1)
 
-	public int getTcpKeepAliveIdle() {
-		return tcpKeepAliveIdle;
-	}
+		;
 
-	public int getTcpKeepAliveInterval() {
-		return tcpKeepAliveInterval;
-	}
+		private final int code;
 
-	public TcpKeepAliveOption setTcpKeepAlive(int tcpKeepAlive) {
-		this.tcpKeepAlive = tcpKeepAlive;
-		return this;
-	}
-
-	public TcpKeepAliveOption setTcpKeepAliveCount(int tcpKeepAliveCount) {
-		this.tcpKeepAliveCount = tcpKeepAliveCount;
-		return this;
-	}
-
-	public TcpKeepAliveOption setTcpKeepAliveIdle(int tcpKeepAliveIdle) {
-		this.tcpKeepAliveIdle = tcpKeepAliveIdle;
-		return this;
-	}
-
-	public TcpKeepAliveOption setTcpKeepAliveInterval(int tcpKeepAliveInterval) {
-		this.tcpKeepAliveInterval = tcpKeepAliveInterval;
-		return this;
 	}
 
 }
