@@ -11,7 +11,7 @@ import io.mercury.common.concurrent.queue.ScQueue;
 import io.mercury.common.concurrent.queue.jct.JctSingleConsumerQueue;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
-import io.mercury.transport.core.api.Sender;
+import io.mercury.transport.api.Sender;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
 
 public final class SocketSender implements Sender<byte[]> {
@@ -82,8 +82,8 @@ public final class SocketSender implements Sender<byte[]> {
 		}
 	}
 
-	private ScQueue<byte[]> innerQueue = JctSingleConsumerQueue.newMultiProducersQueue(getName() + "-InnerQueue")
-			.capacity(512).buildWithProcessor(bytes -> processSendQueue(bytes));
+	private ScQueue<byte[]> innerQueue = JctSingleConsumerQueue.multiProducer(getName() + "-InnerQueue")
+			.setCapacity(512).buildWithProcessor(bytes -> processSendQueue(bytes));
 
 	public static void main(String[] args) {
 		SocketConfigurator configurator = SocketConfigurator.builder().host("192.168.1.138").port(7901).build();

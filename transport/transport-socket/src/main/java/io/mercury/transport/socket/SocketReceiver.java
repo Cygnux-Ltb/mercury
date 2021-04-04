@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
-import io.mercury.transport.core.api.Receiver;
+import io.mercury.transport.api.Receiver;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
 
 public class SocketReceiver implements Receiver {
