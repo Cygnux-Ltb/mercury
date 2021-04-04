@@ -78,7 +78,8 @@ public class MajordomoProtocolClientAPI2 {
 			empty.destroy();
 
 			ZFrame header = msg.pop();
-			assert (MDP.C_CLIENT.equals(header.toString()));
+			// assert (MDP.C_CLIENT.equals(header.toString()));
+			assert (MDP.C_CLIENT.equals(MDP.valueOf(header.toString())));
 			header.destroy();
 
 			ZFrame replyService = msg.pop();
