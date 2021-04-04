@@ -10,8 +10,8 @@ import org.zeromq.SocketType;
 
 import io.mercury.common.serialization.spec.ByteArraySerializer;
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.core.api.Sender;
-import io.mercury.transport.core.configurator.TcpKeepAliveOption;
+import io.mercury.transport.api.Sender;
+import io.mercury.transport.configurator.TcpKeepAliveOption;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -23,21 +23,21 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 	private final String name;
 
 	@Getter
-	private final ZmqSenderConfigurator configurator;
+	private final ZmqSenderConfigurator cfg;
 
-	private final ByteArraySerializer<T> serializer;
+	private final ByteArraySerializer<T> ser;
 
-	private ZmqSender(@Nonnull ZmqSenderConfigurator configurator, @Nonnull ByteArraySerializer<T> serializer) {
-		super(configurator);
-		this.configurator = configurator;
-		this.serializer = serializer;
-		initSocket(SocketType.REQ).connect(configurator.getAddr());
-		this.name = "ZMQ::REQ$" + configurator.getConnectionInfo();
+	private ZmqSender(@Nonnull ZmqSenderConfigurator cfg, @Nonnull ByteArraySerializer<T> ser) {
+		super(cfg);
+		this.cfg = cfg;
+		this.ser = ser;
+		initSocket(SocketType.REQ).connect(cfg.getAddr());
+		this.name = "ZMQ::REQ$" + cfg.getConnectionInfo();
 	}
 
 	@Override
 	public void sent(T msg) {
-		byte[] bytes = serializer.serialization(msg);
+		byte[] bytes = ser.serialization(msg);
 		if (bytes != null && bytes.length > 0) {
 			socket.send(bytes);
 			socket.recv();

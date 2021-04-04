@@ -1,5 +1,7 @@
 package io.mercury.transport.zmq;
 
+import static io.mercury.transport.configurator.TcpKeepAliveOption.KeepAlive.Enable;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.function.BiConsumer;
@@ -13,49 +15,100 @@ import io.mercury.common.character.Charsets;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringUtil;
-import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.core.api.Subscriber;
-import io.mercury.transport.core.configurator.TcpKeepAliveOption;
+import io.mercury.transport.api.Subscriber;
+import io.mercury.transport.configurator.TcpKeepAliveOption;
+import io.mercury.transport.zmq.cfg.ZmqAddress;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-public final class ZmqSubscriber extends ZmqTransport implements Subscriber, Closeable, Runnable {
+/**
+ * 
+ * @author yellow013
+ *
+ */
+public final class ZmqSubscriber extends ZmqTransport0 implements Subscriber, Closeable, Runnable {
 
-	// topics
+	@Getter
+	private final ZmqAddress addr;
+
+	/**
+	 * topics
+	 */
 	@Getter
 	private final String[] topics;
 
 	@Getter
 	private final String name;
 
-	@Getter
-	private final ZmqSubConfigurator configurator;
-
+	/**
+	 * 订阅消息消费者
+	 */
 	private final BiConsumer<byte[], byte[]> consumer;
 
 	private static final Logger log = CommonLoggerFactory.getLogger(ZmqSubscriber.class);
 
-	public ZmqSubscriber(@Nonnull ZmqSubConfigurator configurator, @Nonnull BiConsumer<byte[], byte[]> consumer) {
-		super(configurator);
-		Assertor.nonNull(consumer, "consumer");
-		this.configurator = configurator;
-		this.consumer = consumer;
-		this.topics = configurator.topics;
-		initSocket(SocketType.SUB).connect(configurator.getAddr());
+	private ZmqSubscriber(@Nonnull Builder builder) {
+		super(builder.ioThreads);
+		Assertor.nonNull(builder.consumer, "consumer");
+		this.addr = builder.addr;
+		this.consumer = builder.consumer;
+		this.topics = builder.topics;
+		if (!initSocket(SocketType.SUB).connect(addr.getAddr())) {
+			log.info("");
+		}
+		setTcpKeepAlive(builder.tcpKeepAliveOption);
 		for (String topic : topics) {
 			socket.subscribe(topic.getBytes(Charsets.UTF8));
 		}
-		setTcpKeepAlive(configurator.getTcpKeepAliveOption());
-		this.name = "ZMQ::SUB$" + configurator.connectionInfo;
+		this.name = "ZMQ::SUB$" + builder.addr.getAddr() + StringUtil.toString(topics);
+	}
 
+	public final static Builder newBuilder(ZmqAddress addr) {
+		return new Builder(addr);
+	}
+
+	/**
+	 * 
+	 * @author yellow013
+	 *
+	 */
+	@RequiredArgsConstructor
+	@Accessors(chain = true)
+	public static class Builder {
+
+		private final ZmqAddress addr;
+
+		private String[] topics = new String[] { "" };
+
+		@Setter
+		private int ioThreads = 1;
+
+		@Setter
+		private TcpKeepAliveOption tcpKeepAliveOption = new TcpKeepAliveOption().setKeepAlive(Enable)
+				.setKeepAliveCount(10).setKeepAliveIdle(30).setKeepAliveInterval(30);
+
+		private BiConsumer<byte[], byte[]> consumer;
+
+		public Builder setTopics(String... topics) {
+			this.topics = topics;
+			return this;
+		}
+
+		public ZmqSubscriber build(BiConsumer<byte[], byte[]> consumer) {
+			this.consumer = consumer;
+			return new ZmqSubscriber(this);
+		}
 	}
 
 	@Override
 	public void subscribe() {
 		while (isRunning.get()) {
 			byte[] topic = socket.recv();
+			log.debug("received topic bytes, length: {}", topic.length);
 			byte[] msg = socket.recv();
+			log.debug("received msg bytes, length: {}", topic.length);
 			consumer.accept(topic, msg);
 		}
 		log.warn("ZmqSubscriber -> {} has exited", name);
@@ -71,82 +124,11 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber, Clo
 		subscribe();
 	}
 
-	/**
-	 * 
-	 * @author yellow013
-	 *
-	 */
-	public static final class ZmqSubConfigurator extends ZmqConfigurator {
-
-		@Getter
-		private final String[] topics;
-		@Getter
-		private final String connectionInfo;
-
-		private ZmqSubConfigurator(Builder builder) {
-			super(builder.addr, builder.ioThreads, builder.tcpKeepAliveOption);
-			this.topics = builder.topics;
-			this.connectionInfo = builder.addr + "/" + StringUtil.toString(topics);
-		}
-
-		public static Builder newBuilder() {
-			return new Builder();
-		}
-
-		@Override
-		public String getConfiguratorInfo() {
-			return toString();
-		}
-
-		private transient String toStringCache;
-
-		@Override
-		public String toString() {
-			if (toStringCache == null)
-				this.toStringCache = JsonWrapper.toJson(this);
-			return toStringCache;
-		}
-
-		@Accessors(chain = true)
-		public static class Builder {
-
-			@Getter
-			@Setter
-			private String addr = "tcp://*:5555";
-
-			@Getter
-			private String[] topics = new String[] { "" };
-
-			@Getter
-			@Setter
-			private int ioThreads = 1;
-
-			@Getter
-			@Setter
-			private TcpKeepAliveOption tcpKeepAliveOption = new TcpKeepAliveOption().setTcpKeepAlive(1)
-					.setTcpKeepAliveCount(10).setTcpKeepAliveIdle(30).setTcpKeepAliveInterval(30);
-
-			private Builder() {
-			}
-
-			public Builder setTopics(String... topics) {
-				this.topics = topics;
-				return this;
-			}
-
-			public ZmqSubConfigurator build() {
-				return new ZmqSubConfigurator(this);
-			}
-		}
-	}
-
 	public static void main(String[] args) {
 
-		ZmqSubConfigurator configurator = ZmqSubConfigurator.newBuilder().setAddr("tcp://127.0.0.1:13001")
-				.setTopics("command").setIoThreads(2).build();
-
-		try (ZmqSubscriber subscriber = new ZmqSubscriber(configurator,
-				(topic, msg) -> System.out.println(new String(topic) + "->" + new String(msg)))) {
+		try (ZmqSubscriber subscriber = ZmqSubscriber.newBuilder(ZmqAddress.tcp("127.0.0.1", 13001))
+				.setTopics("command").setIoThreads(2)
+				.build((topic, msg) -> System.out.println(new String(topic) + "->" + new String(msg)))) {
 			subscriber.subscribe();
 		} catch (IOException e) {
 			e.printStackTrace();

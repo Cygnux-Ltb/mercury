@@ -15,8 +15,8 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.spec.ByteArraySerializer;
 import io.mercury.common.thread.Threads;
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.core.api.Publisher;
-import io.mercury.transport.core.configurator.TcpKeepAliveOption;
+import io.mercury.transport.api.Publisher;
+import io.mercury.transport.configurator.TcpKeepAliveOption;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -31,20 +31,25 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>,
 	private final String name;
 
 	@Getter
-	private final ZmqPubConfigurator configurator;
+	private final ZmqPubConfigurator cfg;
 
-	private final ByteArraySerializer<T> serializer;
+	private final ByteArraySerializer<T> ser;
 
 	private static final Logger log = CommonLoggerFactory.getLogger(ZmqPublisher.class);
 
-	private ZmqPublisher(@Nonnull ZmqPubConfigurator configurator, @Nonnull ByteArraySerializer<T> serializer) {
-		super(configurator);
-		this.configurator = configurator;
-		this.serializer = serializer;
-		this.defaultTopic = configurator.getDefaultTopic();
-		initSocket(SocketType.PUB).bind(configurator.getAddr());
-		setTcpKeepAlive(configurator.getTcpKeepAliveOption());
-		this.name = "ZMQ::PUB$" + configurator.connectionInfo;
+	/**
+	 * 
+	 * @param cfg
+	 * @param ser
+	 */
+	private ZmqPublisher(@Nonnull ZmqPubConfigurator cfg, @Nonnull ByteArraySerializer<T> ser) {
+		super(cfg);
+		this.cfg = cfg;
+		this.ser = ser;
+		this.defaultTopic = cfg.getDefaultTopic();
+		initSocket(SocketType.PUB).bind(cfg.getAddr());
+		setTcpKeepAlive(cfg.getTcpKeepAliveOption());
+		this.name = "ZMQ::PUB$" + cfg.connectionInfo;
 	}
 
 	/**
@@ -86,7 +91,7 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>,
 	@Override
 	public void publish(String target, T msg) {
 		if (isRunning.get()) {
-			byte[] bytes = serializer.serialization(msg);
+			byte[] bytes = ser.serialization(msg);
 			if (bytes != null && bytes.length > 0) {
 				socket.sendMore(target);
 				socket.send(bytes, ZMQ.NOBLOCK);
@@ -94,6 +99,11 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>,
 		} else {
 			log.warn("ZmqPublisher -> {} has exited", name);
 		}
+	}
+
+	@Override
+	public String getPublisherName() {
+		return name;
 	}
 
 	/**

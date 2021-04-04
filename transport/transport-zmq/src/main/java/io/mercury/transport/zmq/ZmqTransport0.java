@@ -10,7 +10,6 @@ import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Transport;
 import io.mercury.transport.configurator.TcpKeepAliveOption;
 import io.mercury.transport.configurator.TransportConfigurator;
@@ -18,7 +17,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-abstract class ZmqTransport implements Transport, Closeable {
+abstract class ZmqTransport0 implements Transport, Closeable {
 
 	// ZContext
 	@Getter(AccessLevel.PROTECTED)
@@ -30,11 +29,10 @@ abstract class ZmqTransport implements Transport, Closeable {
 	// 组件运行状态, 初始为已开始运行
 	protected AtomicBoolean isRunning = new AtomicBoolean(true);
 
-	private static final Logger log = CommonLoggerFactory.getLogger(ZmqTransport.class);
+	private static final Logger log = CommonLoggerFactory.getLogger(ZmqTransport0.class);
 
-	protected ZmqTransport(ZmqConfigurator cfg) {
-		Assertor.nonNull(cfg, "cfg");
-		this.ctx = new ZContext(cfg.ioThreads);
+	protected ZmqTransport0(int ioThreads) {
+		this.ctx = new ZContext(ioThreads);
 		log.info("init zmq context");
 	}
 

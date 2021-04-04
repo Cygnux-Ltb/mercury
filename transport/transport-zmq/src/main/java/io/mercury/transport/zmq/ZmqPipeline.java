@@ -11,8 +11,8 @@ import org.zeromq.SocketType;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.core.api.Receiver;
-import io.mercury.transport.core.configurator.TcpKeepAliveOption;
+import io.mercury.transport.api.Receiver;
+import io.mercury.transport.configurator.TcpKeepAliveOption;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -44,7 +44,6 @@ public class ZmqPipeline extends ZmqTransport implements Receiver, Closeable {
 			if (sent != null)
 				socket.send(sent);
 		}
-
 		return;
 	}
 
