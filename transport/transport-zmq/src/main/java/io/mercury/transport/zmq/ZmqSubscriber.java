@@ -18,8 +18,8 @@ import io.mercury.common.util.StringUtil;
 import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.configurator.TcpKeepAliveOption;
 import io.mercury.transport.zmq.cfg.ZmqAddress;
+import io.mercury.transport.zmq.exception.ZmqConnectionException;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -28,10 +28,7 @@ import lombok.experimental.Accessors;
  * @author yellow013
  *
  */
-public final class ZmqSubscriber extends ZmqTransport0 implements Subscriber, Closeable, Runnable {
-
-	@Getter
-	private final ZmqAddress addr;
+public final class ZmqSubscriber extends ZmqTransport implements Subscriber, Closeable, Runnable {
 
 	/**
 	 * topics
@@ -49,24 +46,58 @@ public final class ZmqSubscriber extends ZmqTransport0 implements Subscriber, Cl
 
 	private static final Logger log = CommonLoggerFactory.getLogger(ZmqSubscriber.class);
 
-	private ZmqSubscriber(@Nonnull Builder builder) {
-		super(builder.ioThreads);
+	private ZmqSubscriber(@Nonnull Builder builder) throws ZmqConnectionException {
+		super(builder.addr, builder.ioThreads);
 		Assertor.nonNull(builder.consumer, "consumer");
-		this.addr = builder.addr;
 		this.consumer = builder.consumer;
 		this.topics = builder.topics;
-		if (!initSocket(SocketType.SUB).connect(addr.getAddr())) {
-			log.info("");
+		if (socket.connect(addr.getAddr())) {
+			log.info("connected addr -> {}", addr);
+		} else {
+			log.error("unable to connect addr -> {}", addr);
+			throw new ZmqConnectionException(addr);
 		}
 		setTcpKeepAlive(builder.tcpKeepAliveOption);
 		for (String topic : topics) {
 			socket.subscribe(topic.getBytes(Charsets.UTF8));
 		}
-		this.name = "ZMQ::SUB$" + builder.addr.getAddr() + StringUtil.toString(topics);
+		this.name = "Zmq::Sub$" + builder.addr.getAddr() + "/" + StringUtil.toString(topics);
 	}
 
-	public final static Builder newBuilder(ZmqAddress addr) {
-		return new Builder(addr);
+	/**
+	 * 创建TCP协议连接
+	 * 
+	 * @param port
+	 * @return
+	 */
+	public final static Builder tcp(int port) {
+		return new Builder(ZmqAddress.tcp(port));
+	}
+
+	/**
+	 * 创建TCP协议连接
+	 * 
+	 * @param addr
+	 * @param port
+	 * @return
+	 */
+	public final static Builder tcp(String addr, int port) {
+		return new Builder(ZmqAddress.tcp(addr, port));
+	}
+
+	/**
+	 * 创建IPC协议连接
+	 * 
+	 * @param addr
+	 * @return
+	 */
+	public final static Builder ipc(String addr) {
+		return new Builder(ZmqAddress.ipc(addr));
+	}
+
+	@Override
+	protected SocketType getSocketType() {
+		return SocketType.SUB;
 	}
 
 	/**
@@ -74,7 +105,6 @@ public final class ZmqSubscriber extends ZmqTransport0 implements Subscriber, Cl
 	 * @author yellow013
 	 *
 	 */
-	@RequiredArgsConstructor
 	@Accessors(chain = true)
 	public static class Builder {
 
@@ -91,15 +121,26 @@ public final class ZmqSubscriber extends ZmqTransport0 implements Subscriber, Cl
 
 		private BiConsumer<byte[], byte[]> consumer;
 
+		private Builder(ZmqAddress addr) {
+			this.addr = addr;
+		}
+
 		public Builder setTopics(String... topics) {
 			this.topics = topics;
 			return this;
 		}
 
+		/**
+		 * 在构建时定义如何处理接收到的Topic和Content
+		 * 
+		 * @param consumer
+		 * @return
+		 */
 		public ZmqSubscriber build(BiConsumer<byte[], byte[]> consumer) {
 			this.consumer = consumer;
 			return new ZmqSubscriber(this);
 		}
+
 	}
 
 	@Override
@@ -111,7 +152,7 @@ public final class ZmqSubscriber extends ZmqTransport0 implements Subscriber, Cl
 			log.debug("received msg bytes, length: {}", topic.length);
 			consumer.accept(topic, msg);
 		}
-		log.warn("ZmqSubscriber -> {} has exited", name);
+		log.warn("ZmqSubscriber -> [{}] already closed", name);
 	}
 
 	@Override
@@ -126,8 +167,7 @@ public final class ZmqSubscriber extends ZmqTransport0 implements Subscriber, Cl
 
 	public static void main(String[] args) {
 
-		try (ZmqSubscriber subscriber = ZmqSubscriber.newBuilder(ZmqAddress.tcp("127.0.0.1", 13001))
-				.setTopics("command").setIoThreads(2)
+		try (ZmqSubscriber subscriber = ZmqSubscriber.tcp("127.0.0.1", 13001).setTopics("command").setIoThreads(2)
 				.build((topic, msg) -> System.out.println(new String(topic) + "->" + new String(msg)))) {
 			subscriber.subscribe();
 		} catch (IOException e) {

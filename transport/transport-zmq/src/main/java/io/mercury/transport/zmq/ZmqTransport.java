@@ -9,56 +9,59 @@ import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
+import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.api.Transport;
 import io.mercury.transport.configurator.TcpKeepAliveOption;
 import io.mercury.transport.configurator.TransportConfigurator;
-import lombok.AccessLevel;
+import io.mercury.transport.zmq.cfg.ZmqAddress;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-abstract class ZmqTransport0 implements Transport, Closeable {
+abstract class ZmqTransport implements Transport, Closeable {
 
 	// ZContext
-	@Getter(AccessLevel.PROTECTED)
-	private ZContext ctx;
+	protected ZContext ctx;
 
 	// ZMQ.Socket
+	@Getter
 	protected ZMQ.Socket socket;
+
+	@Getter
+	protected final ZmqAddress addr;
 
 	// 组件运行状态, 初始为已开始运行
 	protected AtomicBoolean isRunning = new AtomicBoolean(true);
 
-	private static final Logger log = CommonLoggerFactory.getLogger(ZmqTransport0.class);
+	private static final Logger log = CommonLoggerFactory.getLogger(ZmqTransport.class);
 
-	protected ZmqTransport0(int ioThreads) {
+	protected ZmqTransport(ZmqAddress addr, int ioThreads) {
 		this.ctx = new ZContext(ioThreads);
-		log.info("init zmq context");
-	}
-
-	protected ZMQ.Socket initSocket(SocketType type) {
+		this.addr = addr;
+		log.info("zmq context initialized, ioThreads=={}", ioThreads);
+		SocketType type = getSocketType();
 		this.socket = ctx.createSocket(type);
-		log.info("create zmq socket with type -> {}", type);
-		return socket;
+		log.info("zmq socket created with type -> {}", type);
 	}
 
+	@AbstractFunction
+	protected abstract SocketType getSocketType();
+
+	/**
+	 * 设置TcpKeepAlive, 由子类调用
+	 *
+	 * @param option
+	 * @return
+	 */
 	protected ZMQ.Socket setTcpKeepAlive(TcpKeepAliveOption option) {
 		if (option != null) {
 			log.info("setting zmq socket tcp keep alive");
 			socket.setTCPKeepAlive(option.getKeepAlive().getCode());
-			socket.setTCPKeepAliveCount(option.getKeepAliveCount());                                   
+			socket.setTCPKeepAliveCount(option.getKeepAliveCount());
 			socket.setTCPKeepAliveIdle(option.getKeepAliveIdle());
 			socket.setTCPKeepAliveInterval(option.getKeepAliveInterval());
 		}
-		return socket;
-	}
-
-	/**
-	 * 用于在外部设置Socket参数
-	 * 
-	 * @return
-	 */
-	public ZMQ.Socket socketSetter() {
 		return socket;
 	}
 
@@ -86,13 +89,32 @@ abstract class ZmqTransport0 implements Transport, Closeable {
 	public static abstract class ZmqConfigurator implements TransportConfigurator {
 
 		@Getter
-		private final String addr;
+		private final ZmqAddress addr;
 
 		@Getter
 		private final int ioThreads;
 
 		@Getter
 		private final TcpKeepAliveOption tcpKeepAliveOption;
+
+		@Override
+		public String getConnectionInfo() {
+			return addr.getAddr();
+		}
+		
+		@Override
+		public String getConfiguratorInfo() {
+			return toString();
+		}
+
+		private transient String toStringCache;
+
+		@Override
+		public String toString() {
+			if (toStringCache == null)
+				this.toStringCache = JsonWrapper.toJson(this);
+			return toStringCache;
+		}
 
 	}
 

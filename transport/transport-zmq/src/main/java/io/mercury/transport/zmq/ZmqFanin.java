@@ -2,16 +2,17 @@ package io.mercury.transport.zmq;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.function.Function;
 
 import javax.annotation.Nonnull;
-import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
 import org.zeromq.SocketType;
 
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.spec.BytesSerializer;
-import io.mercury.transport.api.Sender;
+import io.mercury.common.thread.Threads;
+import io.mercury.common.util.Assertor;
+import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.configurator.TcpKeepAliveOption;
 import io.mercury.transport.zmq.cfg.ZmqAddress;
 import io.mercury.transport.zmq.exception.ZmqConnectionException;
@@ -19,44 +20,52 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@NotThreadSafe
-public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
+public class ZmqFanin extends ZmqTransport implements Subscriber, Closeable {
 
 	@Getter
 	private final String name;
 
 	@Getter
-	private final ZmqSenderConfigurator cfg;
+	private final ZmqFanoutConfigurator cfg;
 
-	private final BytesSerializer<T> ser;
+	private final Function<byte[], byte[]> pipeline;
 
-	private static final Logger log = CommonLoggerFactory.getLogger(ZmqSender.class);
+	private static final Logger log = CommonLoggerFactory.getLogger(ZmqPublisher.class);
 
-	private ZmqSender(@Nonnull ZmqSenderConfigurator cfg, @Nonnull BytesSerializer<T> ser) {
+	public ZmqFanin(@Nonnull ZmqFanoutConfigurator cfg, @Nonnull Function<byte[], byte[]> pipeline) {
 		super(cfg.getAddr(), cfg.getIoThreads());
+		Assertor.nonNull(pipeline, "pipeline");
 		this.cfg = cfg;
-		this.ser = ser;
-		if (socket.connect(addr.getAddr())) {
-			log.info("connected addr -> {}", addr);
+		this.pipeline = pipeline;
+		if (socket.bind(addr.getAddr())) {
+			log.info("bound addr -> {}", addr);
 		} else {
-			log.error("unable to connect addr -> {}", addr);
+			log.error("unable to bind -> {}", addr);
 			throw new ZmqConnectionException(addr);
 		}
-		this.name = "Zmq::Req$" + cfg.getConnectionInfo();
+		setTcpKeepAlive(cfg.getTcpKeepAliveOption());
+		this.name = "Zmq::Fanout$" + cfg.getAddr();
 	}
 
 	@Override
 	protected SocketType getSocketType() {
-		return SocketType.REQ;
+		return SocketType.REP;
 	}
 
 	@Override
-	public void sent(T msg) {
-		byte[] bytes = ser.serialization(msg);
-		if (bytes != null && bytes.length > 0) {
-			socket.send(bytes);
-			socket.recv();
+	public void subscribe() {
+		while (isRunning.get()) {
+			byte[] recv = socket.recv();
+			byte[] sent = pipeline.apply(recv);
+			if (sent != null)
+				socket.send(sent);
 		}
+		return;
+	}
+
+	@Override
+	public void reconnect() {
+		throw new UnsupportedOperationException("ZmqPipeline unsupport reconnect");
 	}
 
 	/**
@@ -64,9 +73,9 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 	 * @author yellow013
 	 *
 	 */
-	public static final class ZmqSenderConfigurator extends ZmqConfigurator {
+	public static final class ZmqFanoutConfigurator extends ZmqConfigurator {
 
-		private ZmqSenderConfigurator(Builder builder) {
+		private ZmqFanoutConfigurator(Builder builder) {
 			super(builder.addr, builder.ioThreads, builder.tcpKeepAliveOption);
 		}
 
@@ -116,24 +125,23 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 				this.addr = addr;
 			}
 
-			public ZmqSenderConfigurator build() {
-				return new ZmqSenderConfigurator(this);
+			public ZmqFanoutConfigurator build() {
+				return new ZmqFanoutConfigurator(this);
 			}
 		}
 	}
 
 	public static void main(String[] args) {
-
-		ZmqSenderConfigurator configurator = ZmqSenderConfigurator.tcp("localhost", 5551).setIoThreads(1).build();
-
-		try (ZmqSender<String> sender = new ZmqSender<String>(configurator, msg -> msg.getBytes())) {
-
-			sender.sent("TEST MSG");
-
+		try (ZmqFanin receiver = new ZmqFanin(ZmqFanoutConfigurator.tcp(5551).setIoThreads(10).build(),
+				(byte[] byteMsg) -> {
+					System.out.println(new String(byteMsg));
+					return null;
+				})) {
+			Threads.sleep(15000);
+			Threads.startNewThread(() -> receiver.subscribe());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 }

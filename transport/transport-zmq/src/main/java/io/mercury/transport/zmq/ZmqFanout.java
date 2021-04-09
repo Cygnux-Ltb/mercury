@@ -6,34 +6,50 @@ import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
+import org.slf4j.Logger;
 import org.zeromq.SocketType;
 
+import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
-import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.api.Receiver;
 import io.mercury.transport.configurator.TcpKeepAliveOption;
+import io.mercury.transport.zmq.cfg.ZmqAddress;
+import io.mercury.transport.zmq.exception.ZmqConnectionException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-public class ZmqPipeline extends ZmqTransport implements Receiver, Closeable {
+public class ZmqFanout extends ZmqTransport implements Receiver, Closeable {
 
 	@Getter
 	private final String name;
 
 	@Getter
-	private final ZmqPipelineConfigurator configurator;
+	private final ZmqFanoutConfigurator cfg;
 
 	private final Function<byte[], byte[]> pipeline;
 
-	public ZmqPipeline(@Nonnull ZmqPipelineConfigurator configurator, @Nonnull Function<byte[], byte[]> pipeline) {
-		super(configurator);
+	private static final Logger log = CommonLoggerFactory.getLogger(ZmqPublisher.class);
+
+	public ZmqFanout(@Nonnull ZmqFanoutConfigurator cfg, @Nonnull Function<byte[], byte[]> pipeline) {
+		super(cfg.getAddr(), cfg.getIoThreads());
 		Assertor.nonNull(pipeline, "pipeline");
-		this.configurator = configurator;
+		this.cfg = cfg;
 		this.pipeline = pipeline;
-		initSocket(SocketType.REP).bind(configurator.getAddr());
-		this.name = "ZMQ::REP$" + configurator.getAddr();
+		if (socket.bind(addr.getAddr())) {
+			log.info("bound addr -> {}", addr);
+		} else {
+			log.error("unable to bind -> {}", addr);
+			throw new ZmqConnectionException(addr);
+		}
+		setTcpKeepAlive(cfg.getTcpKeepAliveOption());
+		this.name = "Zmq::Fanout$" + cfg.getAddr();
+	}
+
+	@Override
+	protected SocketType getSocketType() {
+		return SocketType.REP;
 	}
 
 	@Override
@@ -57,61 +73,66 @@ public class ZmqPipeline extends ZmqTransport implements Receiver, Closeable {
 	 * @author yellow013
 	 *
 	 */
-	public static final class ZmqPipelineConfigurator extends ZmqConfigurator {
+	public static final class ZmqFanoutConfigurator extends ZmqConfigurator {
 
-		@Getter
-		private final String connectionInfo;
-
-		private ZmqPipelineConfigurator(Builder builder) {
+		private ZmqFanoutConfigurator(Builder builder) {
 			super(builder.addr, builder.ioThreads, builder.tcpKeepAliveOption);
-			this.connectionInfo = builder.addr;
 		}
 
-		public static Builder newBuilder() {
-			return new Builder();
+		/**
+		 * 创建TCP协议连接
+		 * 
+		 * @param port
+		 * @return
+		 */
+		public final static Builder tcp(int port) {
+			return new Builder(ZmqAddress.tcp(port));
 		}
 
-		@Override
-		public String getConfiguratorInfo() {
-			return toString();
+		/**
+		 * 创建TCP协议连接
+		 * 
+		 * @param addr
+		 * @param port
+		 * @return
+		 */
+		public final static Builder tcp(String addr, int port) {
+			return new Builder(ZmqAddress.tcp(addr, port));
 		}
 
-		private transient String toStringCache;
-
-		@Override
-		public String toString() {
-			if (toStringCache == null)
-				this.toStringCache = JsonWrapper.toJson(this);
-			return toStringCache;
+		/**
+		 * 创建IPC协议连接
+		 * 
+		 * @param addr
+		 * @return
+		 */
+		public final static Builder ipc(String addr) {
+			return new Builder(ZmqAddress.ipc(addr));
 		}
 
 		@Accessors(chain = true)
 		public static class Builder {
 
-			@Getter
-			@Setter
-			private String addr = "tcp://*:5555";
+			private final ZmqAddress addr;
 
-			@Getter
 			@Setter
 			private int ioThreads = 1;
 
-			@Getter
 			@Setter
 			private TcpKeepAliveOption tcpKeepAliveOption = null;
 
-			private Builder() {
+			private Builder(ZmqAddress addr) {
+				this.addr = addr;
 			}
 
-			public ZmqPipelineConfigurator build() {
-				return new ZmqPipelineConfigurator(this);
+			public ZmqFanoutConfigurator build() {
+				return new ZmqFanoutConfigurator(this);
 			}
 		}
 	}
 
 	public static void main(String[] args) {
-		try (ZmqPipeline receiver = new ZmqPipeline(
-				ZmqPipelineConfigurator.newBuilder().setIoThreads(10).setAddr("tcp://*:5551").build(),
+		try (ZmqFanout receiver = new ZmqFanout(ZmqFanoutConfigurator.tcp(5551).setIoThreads(10).build(),
 				(byte[] byteMsg) -> {
 					System.out.println(new String(byteMsg));
 					return null;
