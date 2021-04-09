@@ -18,7 +18,7 @@ import com.rabbitmq.client.ConfirmCallback;
 import io.mercury.common.character.Charsets;
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.spec.ByteArraySerializer;
+import io.mercury.common.serialization.spec.BytesSerializer;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Publisher;
@@ -76,7 +76,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	private final String publisherName;
 
 	// 发布消息使用的序列化器
-	private final ByteArraySerializer<T> serializer;
+	private final BytesSerializer<T> serializer;
 
 	/**
 	 * 
@@ -86,7 +86,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @return
 	 */
 	public final static <T> AdvancedRabbitMqPublisher<T> create(@Nonnull RmqPublisherConfigurator cfg,
-			@Nonnull ByteArraySerializer<T> serializer) {
+			@Nonnull BytesSerializer<T> serializer) {
 		return new AdvancedRabbitMqPublisher<>(null, cfg, serializer, null, null);
 	}
 
@@ -99,7 +99,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @return
 	 */
 	public final static <T> AdvancedRabbitMqPublisher<T> create(String tag, @Nonnull RmqPublisherConfigurator cfg,
-			@Nonnull ByteArraySerializer<T> serializer) {
+			@Nonnull BytesSerializer<T> serializer) {
 		return new AdvancedRabbitMqPublisher<>(tag, cfg, serializer, null, null);
 	}
 
@@ -114,7 +114,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @return
 	 */
 	public final static <T> AdvancedRabbitMqPublisher<T> create(String tag, @Nonnull RmqPublisherConfigurator cfg,
-			@Nonnull ByteArraySerializer<T> serializer, @Nonnull AckCallback ackCallback,
+			@Nonnull BytesSerializer<T> serializer, @Nonnull AckCallback ackCallback,
 			@Nonnull NoAckCallback noAckCallback) {
 		return new AdvancedRabbitMqPublisher<>(tag, cfg, serializer, ackCallback, noAckCallback);
 	}
@@ -221,7 +221,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param noAckCallback ACK未成功回调
 	 */
 	private AdvancedRabbitMqPublisher(String tag, @Nonnull RmqPublisherConfigurator cfg,
-			@Nonnull ByteArraySerializer<T> serializer, AckCallback ackCallback, NoAckCallback noAckCallback) {
+			@Nonnull BytesSerializer<T> serializer, AckCallback ackCallback, NoAckCallback noAckCallback) {
 		super(nonEmpty(tag) ? tag : "publisher-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
 		Assertor.nonNull(cfg.getPublishExchange(), "exchangeRelation");
 		this.publishExchange = cfg.getPublishExchange();

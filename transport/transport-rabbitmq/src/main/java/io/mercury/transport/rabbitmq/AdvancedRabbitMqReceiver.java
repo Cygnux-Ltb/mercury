@@ -19,7 +19,7 @@ import com.rabbitmq.client.Envelope;
 import io.mercury.common.codec.DecodeException;
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.spec.ByteArrayDeserializer;
+import io.mercury.common.serialization.spec.BytesDeserializer;
 import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringUtil;
 import io.mercury.transport.api.Receiver;
@@ -45,7 +45,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	private static final Logger log = CommonLoggerFactory.getLogger(AdvancedRabbitMqReceiver.class);
 
 	// 接收消息使用的反序列化器
-	private final ByteArrayDeserializer<T> deserializer;
+	private final BytesDeserializer<T> deserializer;
 
 	// 接收消息时使用的回调函数
 	private final Consumer<T> consumer;
@@ -144,7 +144,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @return
 	 */
 	public static <T> AdvancedRabbitMqReceiver<T> create(String tag, @Nonnull RmqReceiverConfigurator cfg,
-			@Nonnull ByteArrayDeserializer<T> deserializer, @Nonnull Consumer<T> consumer) {
+			@Nonnull BytesDeserializer<T> deserializer, @Nonnull Consumer<T> consumer) {
 		Assertor.nonNull(cfg, "cfg");
 		Assertor.nonNull(deserializer, "deserializer");
 		Assertor.nonNull(consumer, "consumer");
@@ -188,7 +188,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @return
 	 */
 	public static <T> AdvancedRabbitMqReceiver<T> createWithSelfAck(String tag, @Nonnull RmqReceiverConfigurator cfg,
-			@Nonnull ByteArrayDeserializer<T> deserializer, @Nonnull SelfAckConsumer<T> selfAckConsumer) {
+			@Nonnull BytesDeserializer<T> deserializer, @Nonnull SelfAckConsumer<T> selfAckConsumer) {
 		Assertor.nonNull(cfg, "configurator");
 		Assertor.nonNull(deserializer, "deserializer");
 		Assertor.nonNull(selfAckConsumer, "selfAckConsumer");
@@ -204,7 +204,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @param selfAckConsumer
 	 */
 	private AdvancedRabbitMqReceiver(String tag, @Nonnull RmqReceiverConfigurator cfg,
-			@Nonnull ByteArrayDeserializer<T> deserializer, @Nullable Consumer<T> consumer,
+			@Nonnull BytesDeserializer<T> deserializer, @Nullable Consumer<T> consumer,
 			@Nullable SelfAckConsumer<T> selfAckConsumer) {
 		super(nonEmpty(tag) ? tag : "receiver-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
 		if (consumer == null && selfAckConsumer == null) {

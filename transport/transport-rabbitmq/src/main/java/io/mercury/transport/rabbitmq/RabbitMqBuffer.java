@@ -3,7 +3,6 @@ package io.mercury.transport.rabbitmq;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -16,6 +15,8 @@ import io.mercury.common.collections.MutableLists;
 import io.mercury.common.concurrent.queue.McQueue;
 import io.mercury.common.concurrent.queue.QueueStyle;
 import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.serialization.spec.BytesDeserializer;
+import io.mercury.common.serialization.spec.BytesSerializer;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
 import io.mercury.transport.rabbitmq.declare.AmqpExchange;
@@ -32,8 +33,8 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 	private List<String> exchangeNames;
 	private List<String> routingKeys;
 
-	private Function<E, byte[]> serializer;
-	private Function<byte[], E> deserializer;
+	private BytesSerializer<E> serializer;
+	private BytesDeserializer<E> deserializer;
 
 	private final String name;
 
@@ -48,7 +49,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 	 * @throws DeclareException
 	 */
 	public static final <E> RabbitMqBuffer<E> newQueue(RabbitConnection connection, String queueName,
-			Function<E, byte[]> serializer, Function<byte[], E> deserializer) throws DeclareException {
+			BytesSerializer<E> serializer, BytesDeserializer<E> deserializer) throws DeclareException {
 		return new RabbitMqBuffer<>(connection, queueName, MutableLists.emptyFastList(), MutableLists.emptyFastList(),
 				serializer, deserializer);
 	}
@@ -66,8 +67,8 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 	 * @throws DeclareException
 	 */
 	public static final <E> RabbitMqBuffer<E> newQueue(RabbitConnection connection, String queueName,
-			List<String> exchangeNames, List<String> routingKeys, Function<E, byte[]> serializer,
-			Function<byte[], E> deserializer) throws DeclareException {
+			List<String> exchangeNames, List<String> routingKeys, BytesSerializer<E> serializer,
+			BytesDeserializer<E> deserializer) throws DeclareException {
 		return new RabbitMqBuffer<>(connection, queueName, exchangeNames, routingKeys, serializer, deserializer);
 	}
 
@@ -82,7 +83,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 	 * @throws DeclareException
 	 */
 	private RabbitMqBuffer(RabbitConnection connection, String queueName, List<String> exchangeNames,
-			List<String> routingKeys, Function<E, byte[]> serializer, Function<byte[], E> deserializer)
+			List<String> routingKeys, BytesSerializer<E> serializer, BytesDeserializer<E> deserializer)
 			throws DeclareException {
 		this.connection = connection;
 		this.queueName = queueName;
@@ -118,7 +119,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 
 	@Override
 	public boolean enqueue(E e) {
-		byte[] msg = serializer.apply(e);
+		byte[] msg = serializer.serialization(e);
 		try {
 			channel.internalChannel().basicPublish("", queueName, null, msg);
 			return true;
@@ -137,7 +138,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 		if (body == null)
 			return null;
 		basicAck(response.getEnvelope());
-		return deserializer.apply(body);
+		return deserializer.deserialization(body);
 	}
 
 	@Override
@@ -148,7 +149,7 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 		byte[] body = response.getBody();
 		if (body == null)
 			return false;
-		if (!function.apply(deserializer.apply(body))) {
+		if (!function.apply(deserializer.deserialization(body))) {
 			log.error("PollFunction failure, no ack");
 			return false;
 		}
@@ -195,12 +196,12 @@ public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
 
 	public static void main(String[] args) {
 
-		RabbitConnection connection = RabbitConnection
-				.configuration("203.60.1.26", 5672, "global", "global2018", "report").build();
+		RabbitConnection connection = RabbitConnection.configuration("127.0.0.1", 5672, "user", "password").build();
+
 		try {
 			RabbitMqBuffer<String> testQueue = newQueue(connection, "rmq_test",
-					e -> JsonWrapper.toJson(e).getBytes(Charsets.UTF8), bytes -> new String(bytes, Charsets.UTF8));
-
+					e -> JsonWrapper.toJson(e).getBytes(Charsets.UTF8),
+					(bytes, reuuse) -> new String(bytes, Charsets.UTF8));
 			testQueue.pollAndApply(str -> {
 				System.out.println(str);
 				return true;

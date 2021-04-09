@@ -58,7 +58,7 @@ public abstract class RabbitMqTransport implements Transport, Closeable {
 	 * @param rabbitConnection
 	 */
 	protected RabbitMqTransport(@Nonnull String tag, @Nonnull RabbitConnection rabbitConnection) {
-		Assertor.nonNull(rabbitConnection, "rmqConnection");
+		Assertor.nonNull(rabbitConnection, "rabbitConnection");
 		this.tag = tag;
 		this.rabbitConnection = rabbitConnection;
 		this.shutdownEvent = rabbitConnection.getShutdownEvent();
@@ -70,7 +70,7 @@ public abstract class RabbitMqTransport implements Transport, Closeable {
 	protected void createConnection() {
 		log.info("Create connection started");
 		if (connectionFactory == null) {
-			connectionFactory = rabbitConnection.newConnectionFactory();
+			connectionFactory = rabbitConnection.createConnectionFactory();
 		}
 		try {
 			connection = connectionFactory.newConnection();

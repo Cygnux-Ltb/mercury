@@ -9,6 +9,8 @@ import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rabbitmq.declare.ExchangeDefinition;
 import io.mercury.transport.rabbitmq.declare.QueueDefinition;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * 
@@ -76,66 +78,38 @@ public final class RmqReceiverConfigurator extends RabbitConfigurator {
 		return toStringCache;
 	}
 
+	@Accessors(chain = true)
 	public static class Builder {
 
 		// 连接配置
-		private RabbitConnection connection;
+		private final RabbitConnection connection;
 		// 接受者QueueRelationship
-		private QueueDefinition receiveQueue;
+		private final QueueDefinition receiveQueue;
 		// 错误消息ExchangeRelationship
 
-		// UnProcessable Message
+		/* v UnProcessable Message v */
 		// 错误消息处理Exchange和关联关系
+		@Setter
 		private ExchangeDefinition errMsgExchange;
 		// 错误消息处理RoutingKey
+		@Setter
 		private String errMsgRoutingKey = "";
 		// 错误消息处理QueueRelationship和关联关系
+		@Setter
 		private QueueDefinition errMsgQueue;
+		/* ^ UnProcessable Message ^ */
 
 		// 接收者是否独占队列
+		@Setter
 		private boolean exclusive = false;
+
 		// ACK选项
+		@Setter
 		private ReceiveAckOptions ackOptions = defaultOption();
 
 		private Builder(RabbitConnection connection, QueueDefinition receiveQueue) {
 			this.connection = connection;
 			this.receiveQueue = receiveQueue;
-		}
-
-		/**
-		 * @param errorMsgExchange the errorMsgExchange to set
-		 */
-		public Builder setErrMsgExchange(ExchangeDefinition errMsgExchange) {
-			this.errMsgExchange = errMsgExchange;
-			return this;
-		}
-
-		/**
-		 * 
-		 * @param errorMsgRoutingKey
-		 */
-		public Builder setErrMsgRoutingKey(String errMsgRoutingKey) {
-			this.errMsgRoutingKey = errMsgRoutingKey;
-			return this;
-		}
-
-		/**
-		 * 
-		 * @param errorMsgQueue
-		 */
-		public Builder setErrMsgQueue(QueueDefinition errMsgQueue) {
-			this.errMsgQueue = errMsgQueue;
-			return this;
-		}
-
-		/**
-		 * 
-		 * @param exclusive
-		 * @return
-		 */
-		public Builder setExclusive(boolean exclusive) {
-			this.exclusive = exclusive;
-			return this;
 		}
 
 		/**
@@ -155,7 +129,9 @@ public final class RmqReceiverConfigurator extends RabbitConfigurator {
 		}
 
 		/**
-		 * @param maxAckTotal the maxAckTotal to set
+		 * 
+		 * @param maxAckTotal
+		 * @return
 		 */
 		public Builder setMaxAckTotal(int maxAckTotal) {
 			this.ackOptions.setMaxAckTotal(maxAckTotal);
@@ -163,7 +139,9 @@ public final class RmqReceiverConfigurator extends RabbitConfigurator {
 		}
 
 		/**
-		 * @param maxAckReconnection the maxAckReconnection to set
+		 * 
+		 * @param maxAckReconnection
+		 * @return
 		 */
 		public Builder setMaxAckReconnection(int maxAckReconnection) {
 			this.ackOptions.setMaxAckReconnection(maxAckReconnection);
@@ -171,7 +149,9 @@ public final class RmqReceiverConfigurator extends RabbitConfigurator {
 		}
 
 		/**
-		 * @param qos the QOS to set
+		 * 
+		 * @param qos
+		 * @return
 		 */
 		public Builder setQos(int qos) {
 			this.ackOptions.setQos(qos);

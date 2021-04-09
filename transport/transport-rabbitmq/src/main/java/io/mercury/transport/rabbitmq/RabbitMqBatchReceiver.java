@@ -27,8 +27,8 @@ import com.rabbitmq.client.Envelope;
 
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.datetime.DateTimeUtil;
-import io.mercury.common.functional.BytesDeserializer;
 import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.serialization.spec.BytesDeserializer;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Receiver;
 import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfigurator;

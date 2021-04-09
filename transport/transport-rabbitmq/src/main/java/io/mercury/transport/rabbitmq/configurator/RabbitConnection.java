@@ -15,6 +15,8 @@ import io.mercury.common.util.StringUtil;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.configurator.TransportConfigurator;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 public final class RabbitConnection implements TransportConfigurator {
 
@@ -135,7 +137,6 @@ public final class RabbitConnection implements TransportConfigurator {
 			Map<String, Object> map = new HashMap<>();
 			map.put("connection", this);
 			toStringCache = JsonWrapper.toJson(map);
-			// StringUtil.toStringForReflection(this);
 		}
 		return toStringCache;
 	}
@@ -144,7 +145,7 @@ public final class RabbitConnection implements TransportConfigurator {
 	 * 
 	 * @return ConnectionFactory
 	 */
-	public ConnectionFactory newConnectionFactory() {
+	public ConnectionFactory createConnectionFactory() {
 		ConnectionFactory factory = new ConnectionFactory();
 		factory.setHost(host);
 		factory.setPort(port);
@@ -162,6 +163,7 @@ public final class RabbitConnection implements TransportConfigurator {
 		return factory;
 	}
 
+	@Accessors(chain = true)
 	public static class Builder {
 		// 连接地址
 		private final String host;
@@ -173,21 +175,37 @@ public final class RabbitConnection implements TransportConfigurator {
 		private final String password;
 		// 虚拟主机
 		private String virtualHost = "/";
+
 		// SSL上下文
+		@Setter
 		private SSLContext sslContext;
+
 		// 连接超时时间
+		@Setter
 		private int connectionTimeout = 60 * 1000;
+
 		// 自动恢复连接
+		@Setter
 		private boolean automaticRecovery = true;
+
 		// 重试连接间隔(毫秒)
+		@Setter
 		private long recoveryInterval = 10 * 1000;
+
 		// 握手通信超时时间(毫秒)
+		@Setter
 		private int handshakeTimeout = 10 * 1000;
+
 		// 关闭超时时间(毫秒)
+		@Setter
 		private int shutdownTimeout = 10 * 1000;
+
 		// 请求心跳超时时间(秒)
+		@Setter
 		private int requestedHeartbeat = 20;
+
 		// 停机处理回调函数
+		@Setter
 		private ShutdownEvent shutdownEvent;
 
 		private Builder(String host, int port, String username, String password) {
@@ -209,70 +227,6 @@ public final class RabbitConnection implements TransportConfigurator {
 
 		public RabbitConnection build() {
 			return new RabbitConnection(this);
-		}
-
-		/**
-		 * @param sslContext the sslContext to set
-		 */
-		public Builder setSslContext(SSLContext sslContext) {
-			this.sslContext = sslContext;
-			return this;
-		}
-
-		/**
-		 * @param connectionTimeout the connectionTimeout to set
-		 */
-		public Builder setConnectionTimeout(int connectionTimeout) {
-			this.connectionTimeout = connectionTimeout;
-			return this;
-		}
-
-		/**
-		 * @param automaticRecovery the automaticRecovery to set
-		 */
-		public Builder setAutomaticRecovery(boolean automaticRecovery) {
-			this.automaticRecovery = automaticRecovery;
-			return this;
-		}
-
-		/**
-		 * @param recoveryInterval the recoveryInterval to set
-		 */
-		public Builder setRecoveryInterval(long recoveryInterval) {
-			this.recoveryInterval = recoveryInterval;
-			return this;
-		}
-
-		/**
-		 * @param handshakeTimeout the handshakeTimeout to set
-		 */
-		public Builder setHandshakeTimeout(int handshakeTimeout) {
-			this.handshakeTimeout = handshakeTimeout;
-			return this;
-		}
-
-		/**
-		 * @param requestedHeartbeat the requestedHeartbeat to set
-		 */
-		public Builder setRequestedHeartbeat(int requestedHeartbeat) {
-			this.requestedHeartbeat = requestedHeartbeat;
-			return this;
-		}
-
-		/**
-		 * @param shutdownTimeout the shutdownTimeout to set
-		 */
-		public Builder setShutdownTimeout(int shutdownTimeout) {
-			this.shutdownTimeout = shutdownTimeout;
-			return this;
-		}
-
-		/**
-		 * @param shutdownEvent the shutdownEvent to set
-		 */
-		public Builder setShutdownEvent(ShutdownEvent shutdownEvent) {
-			this.shutdownEvent = shutdownEvent;
-			return this;
 		}
 
 	}

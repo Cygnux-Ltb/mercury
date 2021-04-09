@@ -37,25 +37,6 @@ public final class ReceiveAckOptions {
 	private int qos = 256;
 
 	/**
-	 * 使用默认参数
-	 * 
-	 * @return
-	 */
-	public static final ReceiveAckOptions defaultOption() {
-		return new ReceiveAckOptions();
-	}
-
-	/**
-	 * 指定具体参数
-	 * 
-	 * @return
-	 */
-	public static final ReceiveAckOptions withOption(boolean autoAck, boolean multipleAck, int maxAckTotal,
-			int maxAckReconnection, int qos) {
-		return new ReceiveAckOptions(autoAck, multipleAck, maxAckTotal, maxAckReconnection, qos);
-	}
-
-	/**
 	 * 
 	 */
 	private ReceiveAckOptions() {
@@ -75,6 +56,25 @@ public final class ReceiveAckOptions {
 		this.maxAckTotal = maxAckTotal;
 		this.maxAckReconnection = maxAckReconnection;
 		this.qos = qos;
+	}
+
+	/**
+	 * 使用默认参数
+	 * 
+	 * @return
+	 */
+	public static final ReceiveAckOptions defaultOption() {
+		return new ReceiveAckOptions();
+	}
+
+	/**
+	 * 指定具体参数
+	 * 
+	 * @return
+	 */
+	public static final ReceiveAckOptions withOption(boolean autoAck, boolean multipleAck, int maxAckTotal,
+			int maxAckReconnection, int qos) {
+		return new ReceiveAckOptions(autoAck, multipleAck, maxAckTotal, maxAckReconnection, qos);
 	}
 
 }

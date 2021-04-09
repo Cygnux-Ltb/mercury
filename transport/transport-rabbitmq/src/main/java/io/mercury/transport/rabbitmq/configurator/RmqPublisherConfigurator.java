@@ -14,6 +14,8 @@ import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rabbitmq.declare.AmqpQueue;
 import io.mercury.transport.rabbitmq.declare.ExchangeDefinition;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * 
@@ -148,28 +150,29 @@ public final class RmqPublisherConfigurator extends RabbitConfigurator {
 		return toStringCache;
 	}
 
+	@Accessors(chain = true)
 	public static class Builder {
 
 		// 连接配置
-		private RabbitConnection connection;
+		private final RabbitConnection connection;
 		// 消息发布Exchange和相关绑定
-		private ExchangeDefinition publishExchange;
-		// 消息发布RoutingKey, 默认为空字符串
-		private String defaultRoutingKey = "";
-		// 默认消息发布参数
-		private BasicProperties defaultMsgProps = PERSISTENT_BASIC;
-		// 默认消息发布参数提供者
-		private Supplier<BasicProperties> msgPropsSupplier = null;
-		// 发布确认选项
-		private PublishConfirmOptions confirmOptions = defaultOption();
+		private final ExchangeDefinition publishExchange;
 
-		/**
-		 * 
-		 * @param connection
-		 */
-		private Builder(RabbitConnection connection) {
-			this.connection = connection;
-		}
+		// 消息发布RoutingKey, 默认为空字符串
+		@Setter
+		private String defaultRoutingKey = "";
+
+		// 默认消息发布参数
+		@Setter
+		private BasicProperties defaultMsgProps = PERSISTENT_BASIC;
+
+		// 默认消息发布参数提供者
+		@Setter
+		private Supplier<BasicProperties> msgPropsSupplier = null;
+
+		// 发布确认选项
+		@Setter
+		private PublishConfirmOptions confirmOptions = defaultOption();
 
 		/**
 		 * 
@@ -183,38 +186,8 @@ public final class RmqPublisherConfigurator extends RabbitConfigurator {
 
 		/**
 		 * 
+		 * @param confirm
 		 * @return
-		 */
-		public RmqPublisherConfigurator build() {
-			return new RmqPublisherConfigurator(this);
-		}
-
-		/**
-		 * @param defaultRoutingKey the defaultRoutingKey to set
-		 */
-		public Builder setDefaultRoutingKey(@Nonnull String defaultRoutingKey) {
-			this.defaultRoutingKey = defaultRoutingKey;
-			return this;
-		}
-
-		/**
-		 * @param msgProperties the msgProperties to set
-		 */
-		public Builder setDefaultMsgProps(@Nonnull BasicProperties defaultMsgProps) {
-			this.defaultMsgProps = defaultMsgProps;
-			return this;
-		}
-
-		/**
-		 * @param msgPropertiesSupplier
-		 */
-		public Builder setMsgPropsSupplier(@Nonnull Supplier<BasicProperties> msgPropsSupplier) {
-			this.msgPropsSupplier = msgPropsSupplier;
-			return this;
-		}
-
-		/**
-		 * @param isConfirm the isConfirm to set
 		 */
 		public Builder setConfirm(boolean confirm) {
 			this.confirmOptions.setConfirm(confirm);
@@ -222,7 +195,19 @@ public final class RmqPublisherConfigurator extends RabbitConfigurator {
 		}
 
 		/**
-		 * @param confirmTimeout the confirmTimeout to set
+		 * 
+		 * @param confirmRetry
+		 * @return
+		 */
+		public Builder setConfirmRetry(int confirmRetry) {
+			this.confirmOptions.setConfirmRetry(confirmRetry);
+			return this;
+		}
+
+		/**
+		 * 
+		 * @param confirmTimeout
+		 * @return
 		 */
 		public Builder setConfirmTimeout(long confirmTimeout) {
 			this.confirmOptions.setConfirmTimeout(confirmTimeout);
@@ -230,15 +215,19 @@ public final class RmqPublisherConfigurator extends RabbitConfigurator {
 		}
 
 		/**
-		 * @param confirmRetry the confirmRetry to set
+		 * 
+		 * @return
 		 */
-		public Builder setConfirmRetry(int confirmRetry) {
-			this.confirmOptions.setConfirmRetry(confirmRetry);
-			return this;
+		public RmqPublisherConfigurator build() {
+			return new RmqPublisherConfigurator(this);
 		}
 
 	}
 
+	/**
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		System.out.println(configuration(RabbitConnection.configuration("localhost", 5672, "user0", "userpass").build(),
 				ExchangeDefinition.direct("TEST").bindingQueue(AmqpQueue.named("TEST_0"))).build());
