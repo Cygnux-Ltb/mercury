@@ -29,6 +29,7 @@
 			<version>6.16.4</version>
 		</dependency>
 
+		<!-- Netty/Buffer -->
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-buffer</artifactId>
