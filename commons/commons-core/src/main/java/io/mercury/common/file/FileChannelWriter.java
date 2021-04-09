@@ -17,7 +17,7 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import io.mercury.common.character.Charsets;
 import io.mercury.common.character.Separator;
-import io.mercury.common.serialization.spec.ByteArraySerializer;
+import io.mercury.common.serialization.spec.BytesSerializer;
 import io.mercury.common.sys.SysProperties;
 
 /**
@@ -89,7 +89,7 @@ public final class FileChannelWriter {
 	 * @throws NullPointerException
 	 * @throws IOException
 	 */
-	public static final <T> File write(List<T> data, @Nonnull ByteArraySerializer<T> serializer, @Nonnull File target,
+	public static final <T> File write(List<T> data, @Nonnull BytesSerializer<T> serializer, @Nonnull File target,
 			int capacity, boolean append) throws NullPointerException, IOException {
 		if (target == null)
 			throw new NullPointerException("target file must not be null.");
