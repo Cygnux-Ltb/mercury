@@ -1,5 +1,7 @@
 package io.mercury.serialization.json;
 
+import javax.annotation.Nullable;
+
 public final class JsonMsg {
 
 	private long sequence;
@@ -13,6 +15,7 @@ public final class JsonMsg {
 	 * @param json
 	 * @return
 	 */
+	@Nullable
 	public static JsonMsg fromJson(String json) {
 		return JsonParser.toObject(json, JsonMsg.class);
 	}

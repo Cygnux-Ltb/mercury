@@ -38,7 +38,7 @@ public final class JsonParser {
 	 * @param json
 	 * @return
 	 */
-	public static JsonElement parseJson(String json) {
+	public static JsonElement parseJson(@Nonnull String json) {
 		return parseString(json);
 	}
 
@@ -47,7 +47,7 @@ public final class JsonParser {
 	 * @param json
 	 * @return
 	 */
-	public static boolean isJsonArray(String json) {
+	public static boolean isJsonArray(@Nonnull String json) {
 		return parseString(json).isJsonArray();
 	}
 
@@ -56,7 +56,7 @@ public final class JsonParser {
 	 * @param json
 	 * @return
 	 */
-	public static boolean isJsonObject(String json) {
+	public static boolean isJsonObject(@Nonnull String json) {
 		return parseString(json).isJsonObject();
 	}
 
