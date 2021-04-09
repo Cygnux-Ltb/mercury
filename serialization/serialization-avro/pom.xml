@@ -36,6 +36,7 @@
 					<execution>
 						<phase>generate-sources</phase>
 						<goals>
+							<goal>idl-protocol</goal>
 							<goal>schema</goal>
 						</goals>
 						<configuration>
@@ -44,6 +45,9 @@
 							<fieldVisibility>private</fieldVisibility>
 							<stringType>String</stringType>
 							<createOptionalGetters>true</createOptionalGetters>
+							<!-- <imports>
+								<import>${project.basedir}/src/main/resources/schema/errorkind.avsc</import>
+							</imports> -->
 						</configuration>
 					</execution>
 				</executions>
@@ -54,7 +58,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>io.mercury</groupId>
-			<artifactId>commons-core</artifactId>
+			<artifactId>commons-concurrent</artifactId>
 		</dependency>
 
 		<!-- Avro core components -->

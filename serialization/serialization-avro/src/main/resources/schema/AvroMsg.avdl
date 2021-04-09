@@ -1,0 +1,33 @@
+@namespace ( "io.mercury.serialization.avro.msg" )
+protocol UselessProtocol {
+	
+	enum ContentType {
+		OBJECT,
+		LIST,
+		STRING,
+		INT,
+		LONG,
+		DOUBLE
+	}
+
+	record Envelope {
+		int code;
+		int version;
+		ContentType contentType;
+	}
+
+	record AvroBinaryMsg {
+		long sequence;
+		long epoch;
+		Envelope envelope;
+		bytes content;
+	}
+	
+	record AvroTextMsg {
+		long sequence;
+		long epoch;
+		Envelope envelope;
+		string content;
+	}
+
+}

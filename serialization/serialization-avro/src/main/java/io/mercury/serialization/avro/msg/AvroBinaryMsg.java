@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT DIRECTLY
  */
-package io.mercury.serialization.avro.structure;
+package io.mercury.serialization.avro.msg;
 
 import java.util.Optional;
 
@@ -13,8 +13,8 @@ import org.apache.avro.message.SchemaStore;
 import org.apache.avro.specific.SpecificData;
 @org.apache.avro.specific.AvroGenerated
 public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 5717179991288395103L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"AvroBinaryMsg\",\"namespace\":\"io.mercury.serialization.avro.structure\",\"fields\":[{\"name\":\"sequence\",\"type\":\"long\"},{\"name\":\"envelope\",\"type\":{\"type\":\"record\",\"name\":\"Envelope\",\"fields\":[{\"name\":\"version\",\"type\":\"int\"},{\"name\":\"type\",\"type\":\"int\"},{\"name\":\"contentType\",\"type\":{\"type\":\"enum\",\"name\":\"ContentType\",\"symbols\":[\"OBJECT\",\"LIST\",\"STRING\",\"INT\",\"LONG\",\"DOUBLE\"]}}]}},{\"name\":\"content\",\"type\":\"bytes\"}]}");
+  private static final long serialVersionUID = 390609394271803188L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"AvroBinaryMsg\",\"namespace\":\"io.mercury.serialization.avro.msg\",\"fields\":[{\"name\":\"sequence\",\"type\":\"long\"},{\"name\":\"epoch\",\"type\":\"long\"},{\"name\":\"envelope\",\"type\":{\"type\":\"record\",\"name\":\"Envelope\",\"fields\":[{\"name\":\"code\",\"type\":\"int\"},{\"name\":\"version\",\"type\":\"int\"},{\"name\":\"contentType\",\"type\":{\"type\":\"enum\",\"name\":\"ContentType\",\"symbols\":[\"OBJECT\",\"LIST\",\"STRING\",\"INT\",\"LONG\",\"DOUBLE\"]}}]}},{\"name\":\"content\",\"type\":\"bytes\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -71,7 +71,8 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
   }
 
    private long sequence;
-   private io.mercury.serialization.avro.structure.Envelope envelope;
+   private long epoch;
+   private io.mercury.serialization.avro.msg.Envelope envelope;
    private java.nio.ByteBuffer content;
 
   /**
@@ -84,11 +85,13 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
   /**
    * All-args constructor.
    * @param sequence The new value for sequence
+   * @param epoch The new value for epoch
    * @param envelope The new value for envelope
    * @param content The new value for content
    */
-  public AvroBinaryMsg(java.lang.Long sequence, io.mercury.serialization.avro.structure.Envelope envelope, java.nio.ByteBuffer content) {
+  public AvroBinaryMsg(java.lang.Long sequence, java.lang.Long epoch, io.mercury.serialization.avro.msg.Envelope envelope, java.nio.ByteBuffer content) {
     this.sequence = sequence;
+    this.epoch = epoch;
     this.envelope = envelope;
     this.content = content;
   }
@@ -99,8 +102,9 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
   public java.lang.Object get(int field$) {
     switch (field$) {
     case 0: return sequence;
-    case 1: return envelope;
-    case 2: return content;
+    case 1: return epoch;
+    case 2: return envelope;
+    case 3: return content;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -109,8 +113,9 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
     case 0: sequence = (java.lang.Long)value$; break;
-    case 1: envelope = (io.mercury.serialization.avro.structure.Envelope)value$; break;
-    case 2: content = (java.nio.ByteBuffer)value$; break;
+    case 1: epoch = (java.lang.Long)value$; break;
+    case 2: envelope = (io.mercury.serialization.avro.msg.Envelope)value$; break;
+    case 3: content = (java.nio.ByteBuffer)value$; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -140,26 +145,50 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
   }
 
   /**
+   * Gets the value of the 'epoch' field.
+   * @return The value of the 'epoch' field.
+   */
+  public long getEpoch() {
+    return epoch;
+  }
+
+  /**
+   * Gets the value of the 'epoch' field as an Optional&lt;java.lang.Long&gt;.
+   * @return The value wrapped in an Optional&lt;java.lang.Long&gt;.
+   */
+  public Optional<java.lang.Long> getOptionalEpoch() {
+    return Optional.<java.lang.Long>ofNullable(epoch);
+  }
+
+  /**
+   * Sets the value of the 'epoch' field.
+   * @param value the value to set.
+   */
+  public void setEpoch(long value) {
+    this.epoch = value;
+  }
+
+  /**
    * Gets the value of the 'envelope' field.
    * @return The value of the 'envelope' field.
    */
-  public io.mercury.serialization.avro.structure.Envelope getEnvelope() {
+  public io.mercury.serialization.avro.msg.Envelope getEnvelope() {
     return envelope;
   }
 
   /**
-   * Gets the value of the 'envelope' field as an Optional&lt;io.mercury.serialization.avro.structure.Envelope&gt;.
-   * @return The value wrapped in an Optional&lt;io.mercury.serialization.avro.structure.Envelope&gt;.
+   * Gets the value of the 'envelope' field as an Optional&lt;io.mercury.serialization.avro.msg.Envelope&gt;.
+   * @return The value wrapped in an Optional&lt;io.mercury.serialization.avro.msg.Envelope&gt;.
    */
-  public Optional<io.mercury.serialization.avro.structure.Envelope> getOptionalEnvelope() {
-    return Optional.<io.mercury.serialization.avro.structure.Envelope>ofNullable(envelope);
+  public Optional<io.mercury.serialization.avro.msg.Envelope> getOptionalEnvelope() {
+    return Optional.<io.mercury.serialization.avro.msg.Envelope>ofNullable(envelope);
   }
 
   /**
    * Sets the value of the 'envelope' field.
    * @param value the value to set.
    */
-  public void setEnvelope(io.mercury.serialization.avro.structure.Envelope value) {
+  public void setEnvelope(io.mercury.serialization.avro.msg.Envelope value) {
     this.envelope = value;
   }
 
@@ -191,8 +220,8 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
    * Creates a new AvroBinaryMsg RecordBuilder.
    * @return A new AvroBinaryMsg RecordBuilder
    */
-  public static io.mercury.serialization.avro.structure.AvroBinaryMsg.Builder newBuilder() {
-    return new io.mercury.serialization.avro.structure.AvroBinaryMsg.Builder();
+  public static io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder newBuilder() {
+    return new io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder();
   }
 
   /**
@@ -200,11 +229,11 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
    * @param other The existing builder to copy.
    * @return A new AvroBinaryMsg RecordBuilder
    */
-  public static io.mercury.serialization.avro.structure.AvroBinaryMsg.Builder newBuilder(io.mercury.serialization.avro.structure.AvroBinaryMsg.Builder other) {
+  public static io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder newBuilder(io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder other) {
     if (other == null) {
-      return new io.mercury.serialization.avro.structure.AvroBinaryMsg.Builder();
+      return new io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder();
     } else {
-      return new io.mercury.serialization.avro.structure.AvroBinaryMsg.Builder(other);
+      return new io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder(other);
     }
   }
 
@@ -213,11 +242,11 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
    * @param other The existing instance to copy.
    * @return A new AvroBinaryMsg RecordBuilder
    */
-  public static io.mercury.serialization.avro.structure.AvroBinaryMsg.Builder newBuilder(io.mercury.serialization.avro.structure.AvroBinaryMsg other) {
+  public static io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder newBuilder(io.mercury.serialization.avro.msg.AvroBinaryMsg other) {
     if (other == null) {
-      return new io.mercury.serialization.avro.structure.AvroBinaryMsg.Builder();
+      return new io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder();
     } else {
-      return new io.mercury.serialization.avro.structure.AvroBinaryMsg.Builder(other);
+      return new io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder(other);
     }
   }
 
@@ -229,8 +258,9 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
     implements org.apache.avro.data.RecordBuilder<AvroBinaryMsg> {
 
     private long sequence;
-    private io.mercury.serialization.avro.structure.Envelope envelope;
-    private io.mercury.serialization.avro.structure.Envelope.Builder envelopeBuilder;
+    private long epoch;
+    private io.mercury.serialization.avro.msg.Envelope envelope;
+    private io.mercury.serialization.avro.msg.Envelope.Builder envelopeBuilder;
     private java.nio.ByteBuffer content;
 
     /** Creates a new Builder */
@@ -242,22 +272,26 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(io.mercury.serialization.avro.structure.AvroBinaryMsg.Builder other) {
+    private Builder(io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.sequence)) {
         this.sequence = data().deepCopy(fields()[0].schema(), other.sequence);
         fieldSetFlags()[0] = other.fieldSetFlags()[0];
       }
-      if (isValidValue(fields()[1], other.envelope)) {
-        this.envelope = data().deepCopy(fields()[1].schema(), other.envelope);
+      if (isValidValue(fields()[1], other.epoch)) {
+        this.epoch = data().deepCopy(fields()[1].schema(), other.epoch);
         fieldSetFlags()[1] = other.fieldSetFlags()[1];
       }
-      if (other.hasEnvelopeBuilder()) {
-        this.envelopeBuilder = io.mercury.serialization.avro.structure.Envelope.newBuilder(other.getEnvelopeBuilder());
-      }
-      if (isValidValue(fields()[2], other.content)) {
-        this.content = data().deepCopy(fields()[2].schema(), other.content);
+      if (isValidValue(fields()[2], other.envelope)) {
+        this.envelope = data().deepCopy(fields()[2].schema(), other.envelope);
         fieldSetFlags()[2] = other.fieldSetFlags()[2];
+      }
+      if (other.hasEnvelopeBuilder()) {
+        this.envelopeBuilder = io.mercury.serialization.avro.msg.Envelope.newBuilder(other.getEnvelopeBuilder());
+      }
+      if (isValidValue(fields()[3], other.content)) {
+        this.content = data().deepCopy(fields()[3].schema(), other.content);
+        fieldSetFlags()[3] = other.fieldSetFlags()[3];
       }
     }
 
@@ -265,20 +299,24 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
      * Creates a Builder by copying an existing AvroBinaryMsg instance
      * @param other The existing instance to copy.
      */
-    private Builder(io.mercury.serialization.avro.structure.AvroBinaryMsg other) {
+    private Builder(io.mercury.serialization.avro.msg.AvroBinaryMsg other) {
       super(SCHEMA$);
       if (isValidValue(fields()[0], other.sequence)) {
         this.sequence = data().deepCopy(fields()[0].schema(), other.sequence);
         fieldSetFlags()[0] = true;
       }
-      if (isValidValue(fields()[1], other.envelope)) {
-        this.envelope = data().deepCopy(fields()[1].schema(), other.envelope);
+      if (isValidValue(fields()[1], other.epoch)) {
+        this.epoch = data().deepCopy(fields()[1].schema(), other.epoch);
         fieldSetFlags()[1] = true;
       }
-      this.envelopeBuilder = null;
-      if (isValidValue(fields()[2], other.content)) {
-        this.content = data().deepCopy(fields()[2].schema(), other.content);
+      if (isValidValue(fields()[2], other.envelope)) {
+        this.envelope = data().deepCopy(fields()[2].schema(), other.envelope);
         fieldSetFlags()[2] = true;
+      }
+      this.envelopeBuilder = null;
+      if (isValidValue(fields()[3], other.content)) {
+        this.content = data().deepCopy(fields()[3].schema(), other.content);
+        fieldSetFlags()[3] = true;
       }
     }
 
@@ -303,7 +341,7 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
       * @param value The value of 'sequence'.
       * @return This builder.
       */
-    public io.mercury.serialization.avro.structure.AvroBinaryMsg.Builder setSequence(long value) {
+    public io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder setSequence(long value) {
       validate(fields()[0], value);
       this.sequence = value;
       fieldSetFlags()[0] = true;
@@ -323,8 +361,54 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
       * Clears the value of the 'sequence' field.
       * @return This builder.
       */
-    public io.mercury.serialization.avro.structure.AvroBinaryMsg.Builder clearSequence() {
+    public io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder clearSequence() {
       fieldSetFlags()[0] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'epoch' field.
+      * @return The value.
+      */
+    public long getEpoch() {
+      return epoch;
+    }
+
+    /**
+      * Gets the value of the 'epoch' field as an Optional&lt;java.lang.Long&gt;.
+      * @return The value wrapped in an Optional&lt;java.lang.Long&gt;.
+      */
+    public Optional<java.lang.Long> getOptionalEpoch() {
+      return Optional.<java.lang.Long>ofNullable(epoch);
+    }
+
+    /**
+      * Sets the value of the 'epoch' field.
+      * @param value The value of 'epoch'.
+      * @return This builder.
+      */
+    public io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder setEpoch(long value) {
+      validate(fields()[1], value);
+      this.epoch = value;
+      fieldSetFlags()[1] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'epoch' field has been set.
+      * @return True if the 'epoch' field has been set, false otherwise.
+      */
+    public boolean hasEpoch() {
+      return fieldSetFlags()[1];
+    }
+
+
+    /**
+      * Clears the value of the 'epoch' field.
+      * @return This builder.
+      */
+    public io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder clearEpoch() {
+      fieldSetFlags()[1] = false;
       return this;
     }
 
@@ -332,16 +416,16 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
       * Gets the value of the 'envelope' field.
       * @return The value.
       */
-    public io.mercury.serialization.avro.structure.Envelope getEnvelope() {
+    public io.mercury.serialization.avro.msg.Envelope getEnvelope() {
       return envelope;
     }
 
     /**
-      * Gets the value of the 'envelope' field as an Optional&lt;io.mercury.serialization.avro.structure.Envelope&gt;.
-      * @return The value wrapped in an Optional&lt;io.mercury.serialization.avro.structure.Envelope&gt;.
+      * Gets the value of the 'envelope' field as an Optional&lt;io.mercury.serialization.avro.msg.Envelope&gt;.
+      * @return The value wrapped in an Optional&lt;io.mercury.serialization.avro.msg.Envelope&gt;.
       */
-    public Optional<io.mercury.serialization.avro.structure.Envelope> getOptionalEnvelope() {
-      return Optional.<io.mercury.serialization.avro.structure.Envelope>ofNullable(envelope);
+    public Optional<io.mercury.serialization.avro.msg.Envelope> getOptionalEnvelope() {
+      return Optional.<io.mercury.serialization.avro.msg.Envelope>ofNullable(envelope);
     }
 
     /**
@@ -349,11 +433,11 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
       * @param value The value of 'envelope'.
       * @return This builder.
       */
-    public io.mercury.serialization.avro.structure.AvroBinaryMsg.Builder setEnvelope(io.mercury.serialization.avro.structure.Envelope value) {
-      validate(fields()[1], value);
+    public io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder setEnvelope(io.mercury.serialization.avro.msg.Envelope value) {
+      validate(fields()[2], value);
       this.envelopeBuilder = null;
       this.envelope = value;
-      fieldSetFlags()[1] = true;
+      fieldSetFlags()[2] = true;
       return this;
     }
 
@@ -362,19 +446,19 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
       * @return True if the 'envelope' field has been set, false otherwise.
       */
     public boolean hasEnvelope() {
-      return fieldSetFlags()[1];
+      return fieldSetFlags()[2];
     }
 
     /**
      * Gets the Builder instance for the 'envelope' field and creates one if it doesn't exist yet.
      * @return This builder.
      */
-    public io.mercury.serialization.avro.structure.Envelope.Builder getEnvelopeBuilder() {
+    public io.mercury.serialization.avro.msg.Envelope.Builder getEnvelopeBuilder() {
       if (envelopeBuilder == null) {
         if (hasEnvelope()) {
-          setEnvelopeBuilder(io.mercury.serialization.avro.structure.Envelope.newBuilder(envelope));
+          setEnvelopeBuilder(io.mercury.serialization.avro.msg.Envelope.newBuilder(envelope));
         } else {
-          setEnvelopeBuilder(io.mercury.serialization.avro.structure.Envelope.newBuilder());
+          setEnvelopeBuilder(io.mercury.serialization.avro.msg.Envelope.newBuilder());
         }
       }
       return envelopeBuilder;
@@ -386,7 +470,7 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
      * @return This builder.
      */
 
-    public io.mercury.serialization.avro.structure.AvroBinaryMsg.Builder setEnvelopeBuilder(io.mercury.serialization.avro.structure.Envelope.Builder value) {
+    public io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder setEnvelopeBuilder(io.mercury.serialization.avro.msg.Envelope.Builder value) {
       clearEnvelope();
       envelopeBuilder = value;
       return this;
@@ -404,10 +488,10 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
       * Clears the value of the 'envelope' field.
       * @return This builder.
       */
-    public io.mercury.serialization.avro.structure.AvroBinaryMsg.Builder clearEnvelope() {
+    public io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder clearEnvelope() {
       envelope = null;
       envelopeBuilder = null;
-      fieldSetFlags()[1] = false;
+      fieldSetFlags()[2] = false;
       return this;
     }
 
@@ -432,10 +516,10 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
       * @param value The value of 'content'.
       * @return This builder.
       */
-    public io.mercury.serialization.avro.structure.AvroBinaryMsg.Builder setContent(java.nio.ByteBuffer value) {
-      validate(fields()[2], value);
+    public io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder setContent(java.nio.ByteBuffer value) {
+      validate(fields()[3], value);
       this.content = value;
-      fieldSetFlags()[2] = true;
+      fieldSetFlags()[3] = true;
       return this;
     }
 
@@ -444,7 +528,7 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
       * @return True if the 'content' field has been set, false otherwise.
       */
     public boolean hasContent() {
-      return fieldSetFlags()[2];
+      return fieldSetFlags()[3];
     }
 
 
@@ -452,9 +536,9 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
       * Clears the value of the 'content' field.
       * @return This builder.
       */
-    public io.mercury.serialization.avro.structure.AvroBinaryMsg.Builder clearContent() {
+    public io.mercury.serialization.avro.msg.AvroBinaryMsg.Builder clearContent() {
       content = null;
-      fieldSetFlags()[2] = false;
+      fieldSetFlags()[3] = false;
       return this;
     }
 
@@ -463,6 +547,7 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
       try {
         AvroBinaryMsg record = new AvroBinaryMsg();
         record.sequence = fieldSetFlags()[0] ? this.sequence : (java.lang.Long) defaultValue(fields()[0]);
+        record.epoch = fieldSetFlags()[1] ? this.epoch : (java.lang.Long) defaultValue(fields()[1]);
         if (envelopeBuilder != null) {
           try {
             record.envelope = this.envelopeBuilder.build();
@@ -471,9 +556,9 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
             throw e;
           }
         } else {
-          record.envelope = fieldSetFlags()[1] ? this.envelope : (io.mercury.serialization.avro.structure.Envelope) defaultValue(fields()[1]);
+          record.envelope = fieldSetFlags()[2] ? this.envelope : (io.mercury.serialization.avro.msg.Envelope) defaultValue(fields()[2]);
         }
-        record.content = fieldSetFlags()[2] ? this.content : (java.nio.ByteBuffer) defaultValue(fields()[2]);
+        record.content = fieldSetFlags()[3] ? this.content : (java.nio.ByteBuffer) defaultValue(fields()[3]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;
@@ -508,6 +593,8 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
   {
     out.writeLong(this.sequence);
 
+    out.writeLong(this.epoch);
+
     this.envelope.customEncode(out);
 
     out.writeBytes(this.content);
@@ -521,28 +608,34 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
     if (fieldOrder == null) {
       this.sequence = in.readLong();
 
+      this.epoch = in.readLong();
+
       if (this.envelope == null) {
-        this.envelope = new io.mercury.serialization.avro.structure.Envelope();
+        this.envelope = new io.mercury.serialization.avro.msg.Envelope();
       }
       this.envelope.customDecode(in);
 
       this.content = in.readBytes(this.content);
 
     } else {
-      for (int i = 0; i < 3; i++) {
+      for (int i = 0; i < 4; i++) {
         switch (fieldOrder[i].pos()) {
         case 0:
           this.sequence = in.readLong();
           break;
 
         case 1:
+          this.epoch = in.readLong();
+          break;
+
+        case 2:
           if (this.envelope == null) {
-            this.envelope = new io.mercury.serialization.avro.structure.Envelope();
+            this.envelope = new io.mercury.serialization.avro.msg.Envelope();
           }
           this.envelope.customDecode(in);
           break;
 
-        case 2:
+        case 3:
           this.content = in.readBytes(this.content);
           break;
 

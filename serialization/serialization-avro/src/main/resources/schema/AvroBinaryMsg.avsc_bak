@@ -1,5 +1,5 @@
 {
-    "namespace": "io.mercury.serialization.avro.structure",
+    "namespace": "io.mercury.serialization.avro.msg",
     "type": "record",
     "name": "AvroBinaryMsg",
     "fields": [
@@ -10,7 +10,7 @@
         {
             "name": "envelope",
             "type": {
-                "namespace": "io.mercury.serialization.avro.structure",
+                "namespace": "io.mercury.serialization.avro.msg",
                 "type": "record",
                 "name": "Envelope",
                 "fields": [
@@ -25,7 +25,7 @@
                     {
                         "name": "contentType",
                         "type": {
-                            "namespace": "io.mercury.serialization.avro.structure",
+                            "namespace": "io.mercury.serialization.avro.msg",
                             "type": "enum",
                             "name": "ContentType",
                             "symbols": [
