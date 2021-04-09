@@ -16,10 +16,12 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<chronicle-core.version>2.20.126</chronicle-core.version>
+		<!-- v chronicle storage basic v -->
+		<chronicle-core.version>2.20.127.1</chronicle-core.version>
 		<chronicle-bytes.version>2.20.111</chronicle-bytes.version>
 		<chronicle-threads.version>2.20.111</chronicle-threads.version>
 		<chronicle-wire.version>2.20.117</chronicle-wire.version>
+		<!-- ^ chronicle storage basic ^ -->
 		<chronicle-values.version>2.20.80</chronicle-values.version>
 		<chronicle-algorithms.version>2.20.80</chronicle-algorithms.version>
 		<chronicle-queue.version>5.20.123</chronicle-queue.version>
