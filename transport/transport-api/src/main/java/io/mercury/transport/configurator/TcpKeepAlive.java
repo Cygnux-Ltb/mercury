@@ -1,5 +1,7 @@
 package io.mercury.transport.configurator;
 
+import static lombok.AccessLevel.PRIVATE;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -8,18 +10,43 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(chain = true)
-public final class TcpKeepAliveOption {
+@RequiredArgsConstructor(access = PRIVATE)
+public final class TcpKeepAlive {
 
-	private KeepAlive keepAlive = KeepAlive.OS_Default;
+	private final KeepAlive keepAlive;
 	private int keepAliveCount;
 	private int keepAliveIdle;
 	private int keepAliveInterval;
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static final TcpKeepAlive enable() {
+		return new TcpKeepAlive(KeepAlive.Enable);
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static final TcpKeepAlive disable() {
+		return new TcpKeepAlive(KeepAlive.Disable);
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static final TcpKeepAlive sysDefault() {
+		return new TcpKeepAlive(KeepAlive.SysDefault);
+	}
 
 	@Getter
 	@RequiredArgsConstructor
 	public static enum KeepAlive {
 
-		Enable(1), Disable(0), OS_Default(-1)
+		Enable(1), Disable(0), SysDefault(-1)
 
 		;
 
