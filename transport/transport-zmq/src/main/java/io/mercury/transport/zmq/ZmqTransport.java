@@ -13,7 +13,7 @@ import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.api.Transport;
-import io.mercury.transport.configurator.TcpKeepAliveOption;
+import io.mercury.transport.configurator.TcpKeepAlive;
 import io.mercury.transport.configurator.TransportConfigurator;
 import io.mercury.transport.zmq.cfg.ZmqAddress;
 import lombok.Getter;
@@ -54,13 +54,13 @@ abstract class ZmqTransport implements Transport, Closeable {
 	 * @param option
 	 * @return
 	 */
-	protected ZMQ.Socket setTcpKeepAlive(TcpKeepAliveOption option) {
-		if (option != null) {
+	protected ZMQ.Socket setTcpKeepAlive(TcpKeepAlive tcpKeepAlive) {
+		if (tcpKeepAlive != null) {
 			log.info("setting zmq socket tcp keep alive");
-			socket.setTCPKeepAlive(option.getKeepAlive().getCode());
-			socket.setTCPKeepAliveCount(option.getKeepAliveCount());
-			socket.setTCPKeepAliveIdle(option.getKeepAliveIdle());
-			socket.setTCPKeepAliveInterval(option.getKeepAliveInterval());
+			socket.setTCPKeepAlive(tcpKeepAlive.getKeepAlive().getCode());
+			socket.setTCPKeepAliveCount(tcpKeepAlive.getKeepAliveCount());
+			socket.setTCPKeepAliveIdle(tcpKeepAlive.getKeepAliveIdle());
+			socket.setTCPKeepAliveInterval(tcpKeepAlive.getKeepAliveInterval());
 		}
 		return socket;
 	}
@@ -86,34 +86,46 @@ abstract class ZmqTransport implements Transport, Closeable {
 	}
 
 	@RequiredArgsConstructor
-	public static abstract class ZmqConfigurator implements TransportConfigurator {
+	public static abstract class ZmqConfigurator<T extends ZmqConfigurator<T>> implements TransportConfigurator {
 
 		@Getter
 		private final ZmqAddress addr;
 
 		@Getter
-		private final int ioThreads;
+		private int ioThreads = 1;
 
 		@Getter
-		private final TcpKeepAliveOption tcpKeepAliveOption;
+		private TcpKeepAlive tcpKeepAlive = null;
+
+		public T setIoThreads(int ioThreads) {
+			this.ioThreads = ioThreads;
+			return returnSelf();
+		}
+
+		public T setTcpKeepAlive(TcpKeepAlive tcpKeepAlive) {
+			this.tcpKeepAlive = tcpKeepAlive;
+			return returnSelf();
+		}
 
 		@Override
 		public String getConnectionInfo() {
 			return addr.getAddr();
 		}
-		
+
 		@Override
 		public String getConfiguratorInfo() {
 			return toString();
 		}
 
-		private transient String toStringCache;
+		protected abstract T returnSelf();
+
+		private transient String strCache;
 
 		@Override
 		public String toString() {
-			if (toStringCache == null)
-				this.toStringCache = JsonWrapper.toJson(this);
-			return toStringCache;
+			if (strCache == null)
+				this.strCache = JsonWrapper.toJson(this);
+			return strCache;
 		}
 
 	}

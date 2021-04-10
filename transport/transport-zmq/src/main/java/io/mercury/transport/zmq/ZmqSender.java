@@ -12,12 +12,9 @@ import org.zeromq.SocketType;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.spec.BytesSerializer;
 import io.mercury.transport.api.Sender;
-import io.mercury.transport.configurator.TcpKeepAliveOption;
 import io.mercury.transport.zmq.cfg.ZmqAddress;
 import io.mercury.transport.zmq.exception.ZmqConnectionException;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @NotThreadSafe
 public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
@@ -64,10 +61,15 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 	 * @author yellow013
 	 *
 	 */
-	public static final class ZmqSenderConfigurator extends ZmqConfigurator {
+	public static final class ZmqSenderConfigurator extends ZmqConfigurator<ZmqSenderConfigurator> {
 
-		private ZmqSenderConfigurator(Builder builder) {
-			super(builder.addr, builder.ioThreads, builder.tcpKeepAliveOption);
+		private ZmqSenderConfigurator(ZmqAddress addr) {
+			super(addr);
+		}
+
+		@Override
+		protected ZmqSenderConfigurator returnSelf() {
+			return this;
 		}
 
 		/**
@@ -76,8 +78,8 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 		 * @param port
 		 * @return
 		 */
-		public final static Builder tcp(int port) {
-			return new Builder(ZmqAddress.tcp(port));
+		public final static ZmqSenderConfigurator tcp(int port) {
+			return new ZmqSenderConfigurator(ZmqAddress.tcp(port));
 		}
 
 		/**
@@ -87,8 +89,8 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 		 * @param port
 		 * @return
 		 */
-		public final static Builder tcp(String addr, int port) {
-			return new Builder(ZmqAddress.tcp(addr, port));
+		public final static ZmqSenderConfigurator tcp(String addr, int port) {
+			return new ZmqSenderConfigurator(ZmqAddress.tcp(addr, port));
 		}
 
 		/**
@@ -97,34 +99,15 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 		 * @param addr
 		 * @return
 		 */
-		public final static Builder ipc(String addr) {
-			return new Builder(ZmqAddress.ipc(addr));
+		public final static ZmqSenderConfigurator ipc(String addr) {
+			return new ZmqSenderConfigurator(ZmqAddress.ipc(addr));
 		}
 
-		@Accessors(chain = true)
-		public static class Builder {
-
-			private final ZmqAddress addr;
-
-			@Setter
-			private int ioThreads = 1;
-
-			@Setter
-			private TcpKeepAliveOption tcpKeepAliveOption = null;
-
-			private Builder(ZmqAddress addr) {
-				this.addr = addr;
-			}
-
-			public ZmqSenderConfigurator build() {
-				return new ZmqSenderConfigurator(this);
-			}
-		}
 	}
 
 	public static void main(String[] args) {
 
-		ZmqSenderConfigurator configurator = ZmqSenderConfigurator.tcp("localhost", 5551).setIoThreads(1).build();
+		ZmqSenderConfigurator configurator = ZmqSenderConfigurator.tcp("localhost", 5551);
 
 		try (ZmqSender<String> sender = new ZmqSender<String>(configurator, msg -> msg.getBytes())) {
 

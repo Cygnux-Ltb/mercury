@@ -1,7 +1,5 @@
 package io.mercury.transport.zmq;
 
-import static io.mercury.transport.configurator.TcpKeepAliveOption.KeepAlive.Enable;
-
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.function.BiConsumer;
@@ -16,7 +14,7 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringUtil;
 import io.mercury.transport.api.Subscriber;
-import io.mercury.transport.configurator.TcpKeepAliveOption;
+import io.mercury.transport.configurator.TcpKeepAlive;
 import io.mercury.transport.zmq.cfg.ZmqAddress;
 import io.mercury.transport.zmq.exception.ZmqConnectionException;
 import lombok.Getter;
@@ -116,7 +114,7 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber, Clo
 		private int ioThreads = 1;
 
 		@Setter
-		private TcpKeepAliveOption tcpKeepAliveOption = new TcpKeepAliveOption().setKeepAlive(Enable)
+		private TcpKeepAlive tcpKeepAliveOption = TcpKeepAlive.enable()
 				.setKeepAliveCount(10).setKeepAliveIdle(30).setKeepAliveInterval(30);
 
 		private BiConsumer<byte[], byte[]> consumer;

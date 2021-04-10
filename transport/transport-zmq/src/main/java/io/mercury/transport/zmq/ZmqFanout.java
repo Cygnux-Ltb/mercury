@@ -13,12 +13,9 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Receiver;
-import io.mercury.transport.configurator.TcpKeepAliveOption;
 import io.mercury.transport.zmq.cfg.ZmqAddress;
 import io.mercury.transport.zmq.exception.ZmqConnectionException;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 public class ZmqFanout extends ZmqTransport implements Receiver, Closeable {
 
@@ -43,7 +40,7 @@ public class ZmqFanout extends ZmqTransport implements Receiver, Closeable {
 			log.error("unable to bind -> {}", addr);
 			throw new ZmqConnectionException(addr);
 		}
-		setTcpKeepAlive(cfg.getTcpKeepAliveOption());
+		setTcpKeepAlive(cfg.getTcpKeepAlive());
 		this.name = "Zmq::Fanout$" + cfg.getAddr();
 	}
 
@@ -73,10 +70,15 @@ public class ZmqFanout extends ZmqTransport implements Receiver, Closeable {
 	 * @author yellow013
 	 *
 	 */
-	public static final class ZmqFanoutConfigurator extends ZmqConfigurator {
+	public static final class ZmqFanoutConfigurator extends ZmqConfigurator<ZmqFanoutConfigurator> {
 
-		private ZmqFanoutConfigurator(Builder builder) {
-			super(builder.addr, builder.ioThreads, builder.tcpKeepAliveOption);
+		private ZmqFanoutConfigurator(ZmqAddress addr) {
+			super(addr);
+		}
+
+		@Override
+		protected ZmqFanoutConfigurator returnSelf() {
+			return this;
 		}
 
 		/**
@@ -85,8 +87,8 @@ public class ZmqFanout extends ZmqTransport implements Receiver, Closeable {
 		 * @param port
 		 * @return
 		 */
-		public final static Builder tcp(int port) {
-			return new Builder(ZmqAddress.tcp(port));
+		public final static ZmqFanoutConfigurator tcp(int port) {
+			return new ZmqFanoutConfigurator(ZmqAddress.tcp(port));
 		}
 
 		/**
@@ -96,8 +98,8 @@ public class ZmqFanout extends ZmqTransport implements Receiver, Closeable {
 		 * @param port
 		 * @return
 		 */
-		public final static Builder tcp(String addr, int port) {
-			return new Builder(ZmqAddress.tcp(addr, port));
+		public final static ZmqFanoutConfigurator tcp(String addr, int port) {
+			return new ZmqFanoutConfigurator(ZmqAddress.tcp(addr, port));
 		}
 
 		/**
@@ -106,37 +108,17 @@ public class ZmqFanout extends ZmqTransport implements Receiver, Closeable {
 		 * @param addr
 		 * @return
 		 */
-		public final static Builder ipc(String addr) {
-			return new Builder(ZmqAddress.ipc(addr));
+		public final static ZmqFanoutConfigurator ipc(String addr) {
+			return new ZmqFanoutConfigurator(ZmqAddress.ipc(addr));
 		}
 
-		@Accessors(chain = true)
-		public static class Builder {
-
-			private final ZmqAddress addr;
-
-			@Setter
-			private int ioThreads = 1;
-
-			@Setter
-			private TcpKeepAliveOption tcpKeepAliveOption = null;
-
-			private Builder(ZmqAddress addr) {
-				this.addr = addr;
-			}
-
-			public ZmqFanoutConfigurator build() {
-				return new ZmqFanoutConfigurator(this);
-			}
-		}
 	}
 
 	public static void main(String[] args) {
-		try (ZmqFanout receiver = new ZmqFanout(ZmqFanoutConfigurator.tcp(5551).setIoThreads(10).build(),
-				(byte[] byteMsg) -> {
-					System.out.println(new String(byteMsg));
-					return null;
-				})) {
+		try (ZmqFanout receiver = new ZmqFanout(ZmqFanoutConfigurator.tcp(5551).setIoThreads(10), (byte[] byteMsg) -> {
+			System.out.println(new String(byteMsg));
+			return null;
+		})) {
 			Threads.sleep(15000);
 			Threads.startNewThread(() -> receiver.receive());
 		} catch (IOException e) {
