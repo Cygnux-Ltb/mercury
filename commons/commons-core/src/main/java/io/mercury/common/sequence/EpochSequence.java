@@ -19,6 +19,25 @@ import io.mercury.common.collections.MutableSets;
 import io.mercury.common.datetime.EpochTime;
 import io.mercury.common.util.BitFormatter;
 
+
+
+class LhsPadding
+{
+    protected long p1, p2, p3, p4, p5, p6, p7;
+}
+
+class Value extends LhsPadding
+{
+    protected volatile long value;
+}
+
+class RhsPadding extends Value
+{
+    protected long p9, p10, p11, p12, p13, p14, p15;
+}
+
+
+
 /**
  * 
  * Use Epoch Time ID
@@ -65,9 +84,11 @@ public final class EpochSequence {
 		return seq;
 	}
 
+	protected long p1, p2, p3, p4, p5, p6, p7;;
 	// 最后使用的Epoch毫秒
 	private static volatile long lastEpochMillis;
-
+	protected long p9, p10, p11, p12, p13, p14, p15;
+	
 	// 自增位
 	private static volatile long incr;
 
