@@ -1,42 +1,16 @@
 package io.mercury.common.sequence;
 
-import static io.mercury.common.thread.Threads.sleep;
-import static io.mercury.common.util.BitFormatter.intBinaryFormat;
 import static io.mercury.common.util.BitFormatter.longBinaryFormat;
 import static java.lang.System.currentTimeMillis;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-
 import javax.annotation.concurrent.ThreadSafe;
 
-import org.eclipse.collections.api.set.primitive.MutableLongSet;
+import org.eclipse.collections.api.list.primitive.MutableLongList;
 
-import io.mercury.common.collections.Capacity;
-import io.mercury.common.collections.MutableSets;
+import io.mercury.common.collections.MutableLists;
 import io.mercury.common.datetime.EpochTime;
 import io.mercury.common.util.BitFormatter;
-
-
-
-class LhsPadding
-{
-    protected long p1, p2, p3, p4, p5, p6, p7;
-}
-
-class Value extends LhsPadding
-{
-    protected volatile long value;
-}
-
-class RhsPadding extends Value
-{
-    protected long p9, p10, p11, p12, p13, p14, p15;
-}
-
-
+import io.mercury.common.util.BitOperator;
 
 /**
  * 
@@ -46,6 +20,12 @@ class RhsPadding extends Value
  * 0b|-----------------epoch milliseconds 47bit-----------|-increment 16bit-|
  * 0b01111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111
  * 
+ * </pre>
+ * 
+ * <pre>
+ * |-0-|-1-|-2-|-3-|-4-|-5-|-6-|-7-|
+ * |-0-|-1-|-2-|-3-|-4-|-5-|-6-|-7-|
+ * |-0-|-1-|-2-|-3-|-4-|-5-|-6-|-7-|
  * </pre>
  * 
  * @author yellow013
@@ -65,6 +45,27 @@ public final class EpochSequence {
 	public static final int IncrBits = 16;
 
 	/**
+	 * 自增位掩码
+	 */
+	public static final long IncrMask = BitOperator.maxValueOfBit(IncrBits);
+
+	private static final EpochSequence INSTANCE = new EpochSequence();
+
+	// 第一组占位
+	protected long p0, p1, p2, p3, p4, p5, p6;
+	// 最后使用的Epoch毫秒
+	private volatile long lastEpochMillis;
+	// 第二组占位
+	protected long p7, p8, p9, p10, p11, p12, p13;
+	// 自增位
+	private volatile long incr;
+	// 第三组占位
+	protected long p14, p15, p16, p17, p18, p19, p20;
+
+	private EpochSequence() {
+	}
+
+	/**
 	 * 
 	 * 
 	 * <pre>
@@ -76,36 +77,49 @@ public final class EpochSequence {
 	 * @return
 	 */
 	public static final long allocate() {
-		long seq = allocate0();
-		while (seq <= 0) {
-			sleep(1);
-			seq = allocate0();
-		}
-		return seq;
+		return INSTANCE.allocate0();
 	}
 
-	protected long p1, p2, p3, p4, p5, p6, p7;;
-	// 最后使用的Epoch毫秒
-	private static volatile long lastEpochMillis;
-	protected long p9, p10, p11, p12, p13, p14, p15;
-	
-	// 自增位
-	private static volatile long incr;
+	private synchronized final long allocate0() {
+		long currentEpochMillis = currentTimeMillis();
+		// 如果当前时间小于上一次ID生成的时间戳, 说明系统时钟回退过这个时候应当抛出异常
+		if (currentEpochMillis < lastEpochMillis) {
+			throw new ClockBackwardException(lastEpochMillis, currentEpochMillis);
+		}
+		// 如果是同一时间生成的, 则进行毫秒内序列
+		if (currentEpochMillis == lastEpochMillis) {
+			incr = (incr + 1) & IncrMask;
+			// 毫秒内序列溢出
+			if (incr == 0L) {
+				// 阻塞到下一个毫秒, 获得新的时间戳
+				currentEpochMillis = nextMillis(lastEpochMillis);
+			}
+		}
+		// 时间戳改变, 毫秒内序列重置
+		else {
+			incr = 0L;
+		}
+		// 更新最后一次生成ID的时间截
+		lastEpochMillis = currentEpochMillis;
+		return // 计算最终的序列
+		// 时间戳左移至高位
+		(currentEpochMillis << IncrBits)
+				// 自增位
+				| incr;
+	}
 
 	/**
+	 * 自旋阻塞到下一个毫秒, 直到获得新的时间戳
 	 * 
-	 * @return
+	 * @param lastTimestamp 上次生成ID的时间截
+	 * @return 当前时间戳
 	 */
-	private synchronized static final long allocate0() {
-		long newEpochMillis = currentTimeMillis();
-		if (lastEpochMillis != newEpochMillis) {
-			lastEpochMillis = newEpochMillis;
-			incr = 0;
-		}
-		if (++incr > IncrLimit) {
-			return -1L;
-		}
-		return (lastEpochMillis << IncrBits) | incr;
+	private long nextMillis(final long lastTimestamp) {
+		long timestamp;
+		do {
+			timestamp = currentTimeMillis();
+		} while (timestamp <= lastTimestamp);
+		return timestamp;
 	}
 
 	/**
@@ -119,16 +133,22 @@ public final class EpochSequence {
 
 	public static void main(String[] args) {
 
-		MutableLongSet longSet = MutableSets.newLongHashSet(Capacity.L21_SIZE);
+		MutableLongList longList = MutableLists.newLongArrayList(1000000);
+		System.out.println(System.currentTimeMillis());
 		long t0 = System.nanoTime();
 		for (int i = 0; i < 1000000; i++) {
-			longSet.add(EpochSequence.allocate());
+			longList.add(EpochSequence.allocate());
 		}
 		long t1 = System.nanoTime();
-		long tx = (t1 - t0) / 1000000;
-		System.out.println(longSet.size() + " count time ms -> " + tx);
+		System.out.println(System.currentTimeMillis());
+		System.out.println(longList.size() + " count time ms -> " + (t1 - t0) / 1000000);
 
-		// set.each(System.out::println);
+		System.out.println(longList.get(0));
+		System.out.println(EpochSequence.parseEpochMillis(longList.get(0)));
+		System.out.println(longList.get(longList.size() - 1));
+		System.out.println(EpochSequence.parseEpochMillis(longList.get(longList.size() - 1)));
+		System.out.println("========================================");
+		System.out.println();
 
 		long epochMillis = EpochTime.millis();
 		System.out.println("epoch millis binary: ");
@@ -136,31 +156,14 @@ public final class EpochSequence {
 		long lmEpochMillis = epochMillis << 16;
 		System.out.println("epoch millis << 16 binary: ");
 		System.out.println(longBinaryFormat(lmEpochMillis));
-
-		System.out.println(longBinaryFormat(100L));
+		System.out.println("(epoch millis << 16) | 0x7fff binary: ");
 		System.out.println(longBinaryFormat(lmEpochMillis | 0x7fff));
-
-		System.out.println(intBinaryFormat(10));
-		System.out.println(intBinaryFormat(1));
-		System.out.println(intBinaryFormat(10 | 1));
-		System.out.println(intBinaryFormat(0x7fff));
-		System.out.println(10 & 1);
-
-		ZonedDateTime dateTime = ZonedDateTime.of(LocalDate.of(2020, 1, 1), LocalTime.MIN, ZoneOffset.UTC);
-		long baseEpochMilli = dateTime.toInstant().toEpochMilli();
-		System.out.println(baseEpochMilli);
-		System.out.println(longBinaryFormat(baseEpochMilli));
-		long diff = epochMillis - baseEpochMilli;
-		System.out.println(diff);
-		System.out.println(longBinaryFormat(diff));
-
-		System.out.println((1L << 39) / (1000L * 60 * 60 * 24 * 365));
-
-		System.out.println(BitFormatter.intBinary(0xffff));
-		System.out.println(BitFormatter.intBinary(Short.MAX_VALUE));
+		System.out.println("(epoch millis << 16) | 0xffff binary: ");
+		System.out.println(longBinaryFormat(lmEpochMillis | 0xffff));
+		System.out.println("========================================");
+		System.out.println();
 
 		long allocate = EpochSequence.allocate();
-		System.out.println("--------------------");
 		System.out.println(allocate);
 		System.out.println(BitFormatter.longBinaryFormat(allocate));
 		System.out.println(EpochSequence.parseEpochMillis(allocate));

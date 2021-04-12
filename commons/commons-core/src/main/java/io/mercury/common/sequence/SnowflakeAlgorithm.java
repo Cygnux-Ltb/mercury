@@ -171,25 +171,26 @@ public final class SnowflakeAlgorithm {
 	public synchronized long next() throws ClockBackwardException {
 		long currentTimestamp = currentTimeMillis();
 		// 如果当前时间小于上一次ID生成的时间戳, 说明系统时钟回退过这个时候应当抛出异常
-		if (currentTimestamp < lastTimestamp)
-			throw new ClockBackwardException(lastTimestamp - currentTimestamp);
+		if (currentTimestamp < lastTimestamp) {
+			throw new ClockBackwardException(lastTimestamp, currentTimestamp);
+		}
 		// 如果是同一时间生成的, 则进行毫秒内序列
 		if (currentTimestamp == lastTimestamp) {
 			sequence = (sequence + 1) & SequenceMask;
 			// 毫秒内序列溢出
 			if (sequence == 0L) {
 				// 阻塞到下一个毫秒, 获得新的时间戳
-				currentTimestamp = tilNextMillis(lastTimestamp);
+				currentTimestamp = nextMillis(lastTimestamp);
 			}
 		}
 		// 时间戳改变, 毫秒内序列重置
-		else
+		else {
 			sequence = 0L;
-		// 上次生成ID的时间截
+		}
+		// 更新最后一次生成ID的时间截
 		lastTimestamp = currentTimestamp;
-
-		// 移位并通过或运算拼到一起组成64位的ID
-		return // 时间戳左移至高位
+		// 移位并通过或运算拼接在一起组成64位ID
+		return // 计算时间戳于基线时间的偏移量, 并将偏移量左移至高位
 		((currentTimestamp - baseline) << TimestampLeftShift)
 				// 所有者ID左移至中间
 				| (ownerId << OwnerIdLeftShift)
@@ -198,12 +199,12 @@ public final class SnowflakeAlgorithm {
 	}
 
 	/**
-	 * 阻塞到下一个毫秒, 直到获得新的时间戳
+	 * 自旋阻塞到下一个毫秒, 直到获得新的时间戳
 	 * 
 	 * @param lastTimestamp 上次生成ID的时间截
 	 * @return 当前时间戳
 	 */
-	private long tilNextMillis(final long lastTimestamp) {
+	private long nextMillis(final long lastTimestamp) {
 		long timestamp;
 		do {
 			timestamp = currentTimeMillis();

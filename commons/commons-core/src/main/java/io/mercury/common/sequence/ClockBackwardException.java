@@ -13,15 +13,23 @@ public final class ClockBackwardException extends RuntimeException {
 	 */
 	private static final long serialVersionUID = -5012855755917563428L;
 
-	private final long backwardMillis;
+	private final long lastEpochMillis;
+	private final long currentEpochMillis;
 
-	ClockBackwardException(long backwardMillis) {
-		super(String.format("The clock moved backwards, Refusing to generate seq for %d millis", backwardMillis));
-		this.backwardMillis = backwardMillis;
+	ClockBackwardException(long lastEpochMillis, long currentEpochMillis) {
+		super("The clock moved backwards, Refusing to generate seq for " + (lastEpochMillis - currentEpochMillis)
+				+ " millis");
+		this.currentEpochMillis = currentEpochMillis;
+		this.lastEpochMillis = lastEpochMillis;
+
 	}
 
-	public long getBackwardMillis() {
-		return backwardMillis;
+	public long getLastEpochMillis() {
+		return lastEpochMillis;
+	}
+
+	public long getCurrentEpochMillis() {
+		return currentEpochMillis;
 	}
 
 }
