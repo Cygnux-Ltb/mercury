@@ -5,7 +5,7 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.bouncycastle.LICENSE;
 
-public class BouncyCastleLicense {
+public class BouncyCastleLicenseTest {
 
 	/**
 	 * 
