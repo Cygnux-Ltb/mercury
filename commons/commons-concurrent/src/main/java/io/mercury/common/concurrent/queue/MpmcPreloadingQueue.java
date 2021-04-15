@@ -14,7 +14,7 @@ import io.mercury.common.log.CommonLoggerFactory;
 
 @ThreadSafe
 @Deprecated
-public class MpmcPreloadingQueue<E> implements McQueue<E> {
+public class MpmcPreloadingQueue<E> implements MultiConsumerQueue<E> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(MpmcPreloadingQueue.class);
 

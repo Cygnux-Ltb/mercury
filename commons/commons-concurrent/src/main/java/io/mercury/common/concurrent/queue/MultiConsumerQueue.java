@@ -5,7 +5,13 @@ import java.util.function.Predicate;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-public interface McQueue<E> extends Queue<E> {
+/**
+ * 
+ * @author yellow013
+ *
+ * @param <E>
+ */
+public interface MultiConsumerQueue<E> extends Queue<E> {
 
 	@CheckForNull
 	E dequeue();

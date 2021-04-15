@@ -2,10 +2,10 @@ package io.mercury.common.concurrent.queue.jct.impl;
 
 import org.jctools.queues.MpmcArrayQueue;
 
-import io.mercury.common.concurrent.queue.McQueue;
+import io.mercury.common.concurrent.queue.MultiConsumerQueue;
 import io.mercury.common.concurrent.queue.QueueStyle;
 
-public final class JctMpmcQueue<E> implements McQueue<E> {
+public final class JctMpmcQueue<E> implements MultiConsumerQueue<E> {
 
 	private final MpmcArrayQueue<E> queue;
 

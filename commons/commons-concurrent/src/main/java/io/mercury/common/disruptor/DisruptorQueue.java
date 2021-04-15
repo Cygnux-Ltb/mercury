@@ -12,7 +12,7 @@ import com.lmax.disruptor.dsl.ProducerType;
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.queue.LoadContainer;
 import io.mercury.common.concurrent.queue.QueueStyle;
-import io.mercury.common.concurrent.queue.ScQueue;
+import io.mercury.common.concurrent.queue.SingleConsumerQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
@@ -23,7 +23,7 @@ import io.mercury.common.thread.Threads;
  *
  * @param <T>
  */
-public class DisruptorQueue<T> extends ScQueue<T> {
+public class DisruptorQueue<T> extends SingleConsumerQueue<T> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(DisruptorQueue.class);
 

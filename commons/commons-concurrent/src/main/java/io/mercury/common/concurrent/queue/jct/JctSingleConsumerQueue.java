@@ -10,7 +10,7 @@ import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.annotation.thread.SpinLock;
 import io.mercury.common.concurrent.queue.QueueStyle;
 import io.mercury.common.concurrent.queue.QueueWorkingException;
-import io.mercury.common.concurrent.queue.ScQueue;
+import io.mercury.common.concurrent.queue.SingleConsumerQueue;
 import io.mercury.common.concurrent.queue.StartMode;
 import io.mercury.common.concurrent.queue.WaitingStrategy;
 import io.mercury.common.functional.Processor;
@@ -26,7 +26,7 @@ import io.mercury.common.util.StringUtil;
  *            Single Consumer Queue
  * 
  */
-public abstract class JctSingleConsumerQueue<E> extends ScQueue<E> {
+public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 
 	// Logger
 	private static final Logger log = CommonLoggerFactory.getLogger(JctSingleConsumerQueue.class);

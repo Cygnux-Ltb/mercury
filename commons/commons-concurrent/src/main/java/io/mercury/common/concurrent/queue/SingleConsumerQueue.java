@@ -12,7 +12,7 @@ import io.mercury.common.util.Assertor;
  *
  * @param <T> Single Consumer Queue base implements
  */
-public abstract class ScQueue<E> implements Queue<E> {
+public abstract class SingleConsumerQueue<E> implements Queue<E> {
 
 	/**
 	 * Processor Function
@@ -34,7 +34,7 @@ public abstract class ScQueue<E> implements Queue<E> {
 	 */
 	protected String queueName = "SCQueue-" + Integer.toString(ThreadSafeRandoms.randomUnsignedInt());
 
-	protected ScQueue(Processor<E> processor) {
+	protected SingleConsumerQueue(Processor<E> processor) {
 		Assertor.nonNull(processor, "processor");
 		this.processor = processor;
 	}
