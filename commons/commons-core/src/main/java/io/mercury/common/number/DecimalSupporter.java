@@ -99,7 +99,7 @@ public final class DecimalSupporter {
 
 	/**
 	 * 
-	 * @param price
+	 * @param d
 	 * @return
 	 */
 	public final static long doubleToLong2(double d) {
@@ -108,7 +108,7 @@ public final class DecimalSupporter {
 
 	/**
 	 * 
-	 * @param price
+	 * @param l
 	 * @return
 	 */
 	public final static double longToDouble2(long l) {
@@ -117,7 +117,7 @@ public final class DecimalSupporter {
 
 	/**
 	 * 
-	 * @param price
+	 * @param d
 	 * @return
 	 */
 	public final static long doubleToLong4(double d) {
@@ -126,7 +126,7 @@ public final class DecimalSupporter {
 
 	/**
 	 * 
-	 * @param price
+	 * @param l
 	 * @return
 	 */
 	public final static double longToDouble4(long l) {
@@ -135,7 +135,7 @@ public final class DecimalSupporter {
 
 	/**
 	 * 
-	 * @param price
+	 * @param d
 	 * @return
 	 */
 	public final static long doubleToLong6(double d) {
@@ -144,7 +144,7 @@ public final class DecimalSupporter {
 
 	/**
 	 * 
-	 * @param price
+	 * @param l
 	 * @return
 	 */
 	public final static double longToDouble6(long l) {
@@ -153,7 +153,7 @@ public final class DecimalSupporter {
 
 	/**
 	 * 
-	 * @param price
+	 * @param d
 	 * @return
 	 */
 	public final static long doubleToLong8(double d) {
@@ -162,7 +162,7 @@ public final class DecimalSupporter {
 
 	/**
 	 * 
-	 * @param price
+	 * @param l
 	 * @return
 	 */
 	public final static double longToDouble8(long l) {

@@ -1,8 +1,13 @@
 package io.mercury.common.param;
 
+import static io.mercury.common.collections.ImmutableSets.newImmutableSet;
 import static io.mercury.common.util.Assertor.nonEmptyMap;
 import static io.mercury.common.util.Assertor.nonNull;
 import static io.mercury.common.util.Assertor.requiredLength;
+import static java.lang.Boolean.parseBoolean;
+import static java.lang.Double.parseDouble;
+import static java.lang.Integer.parseInt;
+import static java.lang.Long.parseLong;
 import static java.lang.System.out;
 
 import java.util.Map;
@@ -16,7 +21,6 @@ import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.collections.api.set.ImmutableSet;
 import org.slf4j.Logger;
 
-import io.mercury.common.collections.ImmutableSets;
 import io.mercury.common.collections.MutableMaps;
 import io.mercury.common.param.Params.ParamKey;
 
@@ -45,7 +49,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 				mutableMap.put(key, map.get(key.getParamName()).toString());
 		}
 		this.params = mutableMap.toImmutable();
-		this.keys = ImmutableSets.newImmutableSet(keys);
+		this.keys = newImmutableSet(keys);
 	}
 
 	/**
@@ -67,7 +71,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 				mutableMap.put(key, prop.get(key.getParamName()).toString());
 		}
 		this.params = mutableMap.toImmutable();
-		this.keys = ImmutableSets.newImmutableSet(keys);
+		this.keys = newImmutableSet(keys);
 	}
 
 	/**
@@ -82,7 +86,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 		if (key.getValueType() != ValueType.BOOLEAN)
 			throw new IllegalArgumentException(
 					"Key -> " + key + " ValueType is not BOOLEAN, valueType==" + key.getValueType());
-		return Boolean.parseBoolean(nonNull(params.get(key), key.getParamName()));
+		return parseBoolean(nonNull(params.get(key), key.getParamName()));
 	}
 
 	/**
@@ -98,7 +102,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 		if (key.getValueType() != ValueType.INT)
 			throw new IllegalArgumentException(
 					"Key -> " + key + " ValueType is not [INT]. valueType==" + key.getValueType());
-		return Integer.parseInt(nonNull(params.get(key), key.getParamName()));
+		return parseInt(nonNull(params.get(key), key.getParamName()));
 	}
 
 	/**
@@ -114,7 +118,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 		if (key.getValueType() != ValueType.LONG)
 			throw new IllegalArgumentException(
 					"Key -> " + key + " ValueType is not [LONG]. valueType==" + key.getValueType());
-		return Long.parseLong(nonNull(params.get(key), key.getParamName()));
+		return parseLong(nonNull(params.get(key), key.getParamName()));
 	}
 
 	/**
@@ -130,7 +134,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 		if (key.getValueType() != ValueType.DOUBLE)
 			throw new IllegalArgumentException(
 					"Key -> " + key + " ValueType is not [DOUBLE], valueType==" + key.getValueType());
-		return Double.parseDouble(nonNull(params.get(key), key.getParamName()));
+		return parseDouble(nonNull(params.get(key), key.getParamName()));
 	}
 
 	/**

@@ -19,7 +19,7 @@ package io.mercury.common.character;
  * @author yellow013
  *
  */
-public interface ControlCharacter {
+public interface ASCII {
 
 	/**
 	 * Null
