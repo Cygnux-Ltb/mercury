@@ -12,7 +12,7 @@ import com.rabbitmq.client.GetResponse;
 
 import io.mercury.common.character.Charsets;
 import io.mercury.common.collections.MutableLists;
-import io.mercury.common.concurrent.queue.McQueue;
+import io.mercury.common.concurrent.queue.MultiConsumerQueue;
 import io.mercury.common.concurrent.queue.QueueStyle;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.spec.BytesDeserializer;
@@ -23,7 +23,7 @@ import io.mercury.transport.rabbitmq.declare.AmqpExchange;
 import io.mercury.transport.rabbitmq.declare.QueueDefinition;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 
-public class RabbitMqBuffer<E> implements McQueue<E>, Closeable {
+public class RabbitMqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqBuffer.class);
 

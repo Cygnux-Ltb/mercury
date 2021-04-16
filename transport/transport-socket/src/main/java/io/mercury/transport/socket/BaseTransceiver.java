@@ -1,14 +1,14 @@
 package io.mercury.transport.socket;
 
 import io.mercury.common.annotation.lang.AbstractFunction;
-import io.mercury.common.concurrent.queue.ScQueue;
+import io.mercury.common.concurrent.queue.SingleConsumerQueue;
 import io.mercury.transport.api.Sender;
 
 public abstract class BaseTransceiver<T> implements Transceiver<T> {
 
 	private final Sender<T> sender;
 
-	private final ScQueue<T> queue;
+	private final SingleConsumerQueue<T> queue;
 
 	protected BaseTransceiver() {
 		this.queue = initSendQueue();
@@ -17,9 +17,9 @@ public abstract class BaseTransceiver<T> implements Transceiver<T> {
 
 	private class InnerSender implements Sender<T> {
 
-		private ScQueue<T> queue;
+		private SingleConsumerQueue<T> queue;
 
-		private InnerSender(ScQueue<T> queue) {
+		private InnerSender(SingleConsumerQueue<T> queue) {
 			this.queue = queue;
 		}
 
@@ -61,6 +61,6 @@ public abstract class BaseTransceiver<T> implements Transceiver<T> {
 	}
 
 	@AbstractFunction
-	protected abstract ScQueue<T> initSendQueue();
+	protected abstract SingleConsumerQueue<T> initSendQueue();
 
 }

@@ -21,6 +21,12 @@
 			<groupId>io.mercury</groupId>
 			<artifactId>transport-api</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>io.mercury</groupId>
+			<artifactId>commons-concurrent</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>net.openhft</groupId>

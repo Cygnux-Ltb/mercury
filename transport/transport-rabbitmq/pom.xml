@@ -26,6 +26,12 @@
 			<groupId>io.mercury</groupId>
 			<artifactId>transport-api</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>io.mercury</groupId>
+			<artifactId>commons-concurrent</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>io.mercury</groupId>
@@ -37,7 +43,7 @@
 		<dependency>
 			<groupId>com.rabbitmq</groupId>
 			<artifactId>amqp-client</artifactId>
-			<version>5.11.0</version>
+			<version>5.12.0</version>
 		</dependency>
 	</dependencies>
 

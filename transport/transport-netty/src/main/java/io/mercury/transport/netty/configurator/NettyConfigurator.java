@@ -96,13 +96,13 @@ public final class NettyConfigurator implements TransportConfigurator {
 		return connectionInfo;
 	}
 
-	private transient String toStringCache;
+	private transient String strCache;
 
 	@Override
 	public String toString() {
-		if (toStringCache == null)
-			this.toStringCache = JsonWrapper.toJson(this);
-		return toStringCache;
+		if (strCache == null)
+			this.strCache = JsonWrapper.toJson(this);
+		return strCache;
 	}
 
 	public static class Builder {
@@ -119,7 +119,6 @@ public final class NettyConfigurator implements TransportConfigurator {
 		private ShutdownEvent shutdownEvent;
 
 		private Builder(String host, int port) {
-			super();
 			this.host = host;
 			this.port = port;
 		}
