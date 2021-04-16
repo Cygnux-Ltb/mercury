@@ -5,12 +5,13 @@
  */
 package io.mercury.serialization.avro.msg;
 
-import java.util.Optional;
-
-import org.apache.avro.message.BinaryMessageDecoder;
-import org.apache.avro.message.BinaryMessageEncoder;
-import org.apache.avro.message.SchemaStore;
+import org.apache.avro.generic.GenericArray;
 import org.apache.avro.specific.SpecificData;
+import org.apache.avro.util.Utf8;
+import org.apache.avro.message.BinaryMessageEncoder;
+import org.apache.avro.message.BinaryMessageDecoder;
+import org.apache.avro.message.SchemaStore;
+import java.util.Optional;
 @org.apache.avro.specific.AvroGenerated
 public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   private static final long serialVersionUID = 390609394271803188L;
@@ -110,6 +111,7 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
   }
 
   // Used by DatumReader.  Applications should not call.
+  @SuppressWarnings(value="unchecked")
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
     case 0: sequence = (java.lang.Long)value$; break;
@@ -543,6 +545,7 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public AvroBinaryMsg build() {
       try {
         AvroBinaryMsg record = new AvroBinaryMsg();
