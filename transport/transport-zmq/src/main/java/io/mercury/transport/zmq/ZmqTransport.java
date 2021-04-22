@@ -113,7 +113,7 @@ abstract class ZmqTransport implements Transport, Closeable {
 		}
 
 		@Override
-		public String getConfiguratorInfo() {
+		public String getCfgInfo() {
 			return toString();
 		}
 

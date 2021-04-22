@@ -62,7 +62,7 @@ public class ZmqFanout extends ZmqTransport implements Receiver, Closeable {
 
 	@Override
 	public void reconnect() {
-		throw new UnsupportedOperationException("ZmqPipeline unsupport reconnect");
+		throw new UnsupportedOperationException("ZmqFanout unsupport reconnect");
 	}
 
 	/**

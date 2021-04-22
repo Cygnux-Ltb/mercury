@@ -62,7 +62,7 @@ public class ZmqFanin extends ZmqTransport implements Subscriber, Closeable {
 
 	@Override
 	public void reconnect() {
-		throw new UnsupportedOperationException("ZmqPipeline unsupport reconnect");
+		throw new UnsupportedOperationException("ZmqFanin unsupport reconnect");
 	}
 
 	/**
