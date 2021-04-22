@@ -125,7 +125,7 @@ public final class RabbitConnection implements TransportConfigurator {
 	 * 
 	 */
 	@Override
-	public String getConfiguratorInfo() {
+	public String getCfgInfo() {
 		return toString();
 	}
 
@@ -235,7 +235,7 @@ public final class RabbitConnection implements TransportConfigurator {
 
 		RabbitConnection configuration = configuration("localhost", 5672, "admin", "admin", "report").build();
 		System.out.println(configuration);
-		System.out.println(configuration.getConfiguratorInfo());
+		System.out.println(configuration.getCfgInfo());
 
 	}
 

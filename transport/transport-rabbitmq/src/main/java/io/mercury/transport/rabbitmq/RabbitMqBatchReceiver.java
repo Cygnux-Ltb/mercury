@@ -83,7 +83,7 @@ public class RabbitMqBatchReceiver<T> extends RabbitMqTransport implements Recei
 	}
 
 	private void queueDeclare() {
-		this.receiverName = "receiver::" + rabbitConnection.getConfiguratorInfo() + "$" + receiveQueue;
+		this.receiverName = "receiver::" + rabbitConnection.getCfgInfo() + "$" + receiveQueue;
 		try {
 			channel.queueDeclare(receiveQueue, durable, exclusive, autoDelete, null);
 		} catch (IOException e) {

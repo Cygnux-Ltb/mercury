@@ -98,7 +98,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 		} catch (DeclareException e) {
 			// 在定义Exchange和进行绑定时抛出任何异常都需要终止程序
 			log.error("Exchange declare throw exception -> connection configurator info : {}, " + "error message : {}",
-					rabbitConnection.getConfiguratorInfo(), e.getMessage(), e);
+					rabbitConnection.getCfgInfo(), e.getMessage(), e);
 			destroy();
 			throw new DeclareRuntimeException(e);
 		}
