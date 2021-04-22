@@ -99,18 +99,6 @@ public class NacosReader {
 		}
 	}
 
-	private static String getSaved0(ConfigService service, String group, String dataId) throws NacosReadException {
-		try {
-			String saved = service.getConfig(dataId, group, 10000);
-			if (StringUtil.isNullOrEmpty(saved)) {
-				throw new NacosReadException("Read nacos saved is null or empty");
-			}
-			return saved;
-		} catch (NacosException e) {
-			throw new NacosReadException("ConfigService.getConfig call error", e);
-		}
-	}
-
 	private static Properties getProperties0(ConfigService service, String group, String dataId)
 			throws NacosReadException {
 		String saved = getSaved0(service, group, dataId);
@@ -118,6 +106,18 @@ public class NacosReader {
 			return PropertiesUtil.loadProperties(saved);
 		} catch (IOException e) {
 			throw new NacosReadException(e);
+		}
+	}
+
+	private static String getSaved0(ConfigService service, String group, String dataId) throws NacosReadException {
+		try {
+			String saved = service.getConfig(dataId, group, 100000);
+			if (StringUtil.isNullOrEmpty(saved)) {
+				throw new NacosReadException("Read nacos saved is null or empty");
+			}
+			return saved;
+		} catch (NacosException e) {
+			throw new NacosReadException("ConfigService.getConfig call error", e);
 		}
 	}
 

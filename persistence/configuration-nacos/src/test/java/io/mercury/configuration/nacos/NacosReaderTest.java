@@ -16,7 +16,7 @@ public class NacosReaderTest {
 
 	@Test
 	public void test() {
-		Properties properties = NacosReader.getProperties("http://127.0.0.1:8848", "test", "test");
+		Properties properties = NacosReader.getProperties("http://101.132.32.183:8848", "own", "simnow");
 		PropertiesUtil.showProperties(properties);
 	}
 
