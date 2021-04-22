@@ -87,7 +87,7 @@ public final class NettyConfigurator implements TransportConfigurator {
 	}
 
 	@Override
-	public String getConfiguratorInfo() {
+	public String getCfgInfo() {
 		return toString();
 	}
 

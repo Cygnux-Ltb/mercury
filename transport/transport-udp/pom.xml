@@ -23,16 +23,23 @@
 		<!-- Efficient reliable UDP unicast, UDP multicast, and IPC transport protocol. -->
 		<dependency>
 			<groupId>io.aeron</groupId>
-			<artifactId>aeron-all</artifactId>
+			<artifactId>aeron-archive</artifactId>
+			<version>${aeron.version}</version>
+		</dependency>
+
+		<!-- Efficient reliable UDP unicast, UDP multicast, and IPC transport protocol. -->
+		<dependency>
+			<groupId>io.aeron</groupId>
+			<artifactId>aeron-cluster</artifactId>
 			<version>${aeron.version}</version>
 		</dependency>
 
 		<!-- High performance primitives and utility library. -->
-		 <dependency>
+		<dependency>
 			<groupId>org.agrona</groupId>
 			<artifactId>agrona</artifactId>
 			<version>1.9.0</version>
-		</dependency> 
+		</dependency>
 
 		<!-- HdrHistogram supports the recording and analyzing sampled data value 
 			counts across a configurable integer value range with configurable value 
