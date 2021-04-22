@@ -36,7 +36,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 	// final save path
 	private final File savePath;
 
-	private final String configuratorInfo;
+	private final String cfgInfo;
 
 	// extended use
 	private Builder<K, V> builder;
@@ -56,7 +56,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 		this.rootPath = builder.rootPath;
 		this.folder = builder.folder;
 		this.savePath = new File(rootPath + FixedFolder + folder);
-		this.configuratorInfo = "[SaveTo->" + savePath.getAbsolutePath() + "]:[KeyType==" + keyClass.getSimpleName()
+		this.cfgInfo = "[SaveTo->" + savePath.getAbsolutePath() + "]:[KeyType==" + keyClass.getSimpleName()
 				+ ",ValueType==" + valueClass.getSimpleName() + "]";
 	}
 
@@ -132,8 +132,8 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 	}
 
 	@Override
-	public String getConfiguratorInfo() {
-		return configuratorInfo;
+	public String getCfgInfo() {
+		return cfgInfo;
 	}
 
 	public Class<K> keyClass() {
@@ -315,7 +315,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 		ChronicleMapConfigurator<String, Long> configurator = ChronicleMapConfigurator
 				.newBuilder(String.class, Long.class, SysProperties.USER_HOME, "/user").build();
 
-		System.out.println(configurator.getConfiguratorInfo());
+		System.out.println(configurator.getCfgInfo());
 
 	}
 
