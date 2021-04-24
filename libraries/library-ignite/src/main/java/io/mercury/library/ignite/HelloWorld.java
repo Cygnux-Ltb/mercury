@@ -19,24 +19,20 @@ public class HelloWorld {
 
 	public static void main(String[] args) throws IgniteException {
 		// Preparing IgniteConfiguration using Java APIs
-		IgniteConfiguration cfg = new IgniteConfiguration();
-
-		// The node will be started as a client node.
-		cfg.setClientMode(true);
-
-		// Classes of custom Java logic will be transferred over the wire from this app.
-		cfg.setPeerClassLoadingEnabled(true);
-
-		// Setting up an IP Finder to ensure the client can locate the servers.
-		TcpDiscoveryMulticastIpFinder ipFinder = new TcpDiscoveryMulticastIpFinder();
-		ipFinder.setAddresses(Collections.singletonList("127.0.0.1:47500..47509"));
-		cfg.setDiscoverySpi(new TcpDiscoverySpi().setIpFinder(ipFinder));
+		IgniteConfiguration cfg = new IgniteConfiguration()
+				// The node will be started as a client node.
+				.setClientMode(true)
+				// Classes of custom Java logic will be transferred over the wire from this APP.
+				.setPeerClassLoadingEnabled(true)
+				// Setting up an IP Finder to ensure the client can locate the servers.
+				.setDiscoverySpi(new TcpDiscoverySpi().setIpFinder(new TcpDiscoveryMulticastIpFinder()
+						.setAddresses(Collections.singletonList("127.0.0.1:47500..47509"))));
 
 		// Starting the node
-		Ignite ignite = Ignition.start(cfg);
+		final Ignite ignite = Ignition.start(cfg);
 
 		// Create an IgniteCache and put some values in it.
-		IgniteCache<Integer, String> cache = ignite.getOrCreateCache("myCache");
+		final IgniteCache<Integer, String> cache = ignite.getOrCreateCache("myCache");
 		cache.put(1, "Hello");
 		cache.put(2, "World!");
 
@@ -63,7 +59,7 @@ public class HelloWorld {
 		private static final long serialVersionUID = -2816115717453185083L;
 
 		@IgniteInstanceResource
-		Ignite ignite;
+		private Ignite ignite;
 
 		@Override
 		public void run() {

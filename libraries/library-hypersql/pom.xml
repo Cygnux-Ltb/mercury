@@ -10,8 +10,8 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>library-hsqldb</artifactId>
-	<name>library-hsqldb</name>
+	<artifactId>library-hypersql</artifactId>
+	<name>library-hypersql</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

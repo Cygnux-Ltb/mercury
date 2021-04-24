@@ -18,7 +18,7 @@
 		<module>library-arangodb</module>
 		<module>library-cassandra</module>
 		<module>library-cryption</module>
-		<module>library-hsqldb</module>
+		<module>library-hypersql</module>
 		<module>library-ignite</module>
 		<module>library-janusgraph</module>
 		<module>library-jmx</module>

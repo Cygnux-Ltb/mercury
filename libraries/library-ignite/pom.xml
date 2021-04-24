@@ -24,6 +24,18 @@
 			<artifactId>annotations</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>io.mercury</groupId>
+			<artifactId>commons-concurrent</artifactId>
+			<version>${mercury.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.200</version>
+		</dependency>
+
 		<!-- Java-based middleware for in-memory processing of big data in a distributed 
 			environment. -->
 		<dependency>
@@ -41,6 +53,7 @@
 			<groupId>org.apache.ignite</groupId>
 			<artifactId>ignite-spring</artifactId>
 			<version>${ignite.version}</version>
+			<scope>runtime</scope>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
