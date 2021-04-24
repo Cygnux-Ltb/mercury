@@ -3,6 +3,8 @@ package io.mercury.common.util;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 public final class Assertor {
 
 	private Assertor() {
@@ -98,13 +100,27 @@ public final class Assertor {
 	 * 
 	 * @param <T>
 	 * @param t
+	 * @return
+	 * @throws NullPointerException
+	 */
+	public static <T> T nonNull(T t) throws NullPointerException {
+		return nonNull(t, "");
+	}
+
+	/**
+	 * 
+	 * @param <T>
+	 * @param t
 	 * @param objName
 	 * @return
 	 * @throws NullPointerException
 	 */
-	public static <T> T nonNull(T t, String objName) throws NullPointerException {
+	public static <T> T nonNull(T t, @Nonnull String objName) throws NullPointerException {
 		if (t == null)
-			throw new NullPointerException(objName + " can not be null");
+			if (StringUtil.isNullOrEmpty(objName))
+				throw new NullPointerException("param cannot be null");
+			else
+				throw new NullPointerException("param [" + objName + "] cannot be null");
 		return t;
 	}
 
