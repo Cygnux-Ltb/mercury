@@ -45,6 +45,7 @@ public final class H2Util {
 	}
 
 	private H2Util() {
+		
 	}
 
 	public static void main(String[] args) {
