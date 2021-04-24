@@ -57,15 +57,15 @@ public final class AvroBinaryDeserializer<T extends SpecificRecord> implements B
 		byte[] allBytes;
 		if (remainingBytes != null) {
 			log.warn("Incomplete bytes encountered from previous packet, now trying to concat");
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream(remainingBytes.length + bytes.length);
+			ByteArrayOutputStream os = new ByteArrayOutputStream(remainingBytes.length + bytes.length);
 			try {
-				outputStream.write(remainingBytes);
-				outputStream.write(bytes);
+				os.write(remainingBytes);
+				os.write(bytes);
 			} catch (IOException e) {
 				log.error(e.getMessage(), e);
 				throw new RuntimeException("Error concat incomplete bytes -> " + e.getMessage());
 			}
-			allBytes = outputStream.toByteArray();
+			allBytes = os.toByteArray();
 		} else {
 			allBytes = bytes;
 		}
