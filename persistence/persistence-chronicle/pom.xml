@@ -103,7 +103,6 @@
 			<version>${chronicle-algorithms.version}</version>
 		</dependency>
 
-
 		<!-- ######################################################### -->
 		<!-- chronicle-queue Java library for persisted low latency messaging, 
 			Microsecond messaging that stores everything to disk -->
@@ -112,7 +111,6 @@
 			<artifactId>chronicle-queue</artifactId>
 			<version>${chronicle-queue.version}</version>
 		</dependency>
-
 
 		<!-- ######################################################### -->
 		<!-- chronicle-map off-heap and high performance map framework, Replicate 
