@@ -11,8 +11,9 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.NotThreadSafe;
+import javax.annotation.concurrent.ThreadSafe;
 
+import org.apache.avro.Schema;
 import org.apache.avro.io.BinaryDecoder;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.DecoderFactory;
@@ -23,17 +24,22 @@ import org.slf4j.Logger;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.spec.ByteBufferDeserializer;
 
-@NotThreadSafe
+@ThreadSafe
 public final class AvroBinaryDeserializer<T extends SpecificRecord> implements ByteBufferDeserializer<T> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(AvroBinaryDeserializer.class);
 
-	private BinaryDecoder decoder;
+	private final DatumReader<T> reader;
 
-	private DatumReader<T> reader;
+	private final ThreadLocal<BinaryDecoder> decoder = new ThreadLocal<>();
 
 	public AvroBinaryDeserializer(Class<T> clazz) {
 		this.reader = new SpecificDatumReader<>(clazz);
+	}
+
+	public AvroBinaryDeserializer(Schema schema) {
+		this.reader = new SpecificDatumReader<>(schema);
+		
 	}
 
 	@Override

@@ -14,4 +14,5 @@ public interface UselessProtocol {
 	public interface Callback extends UselessProtocol {
 		public static final org.apache.avro.Protocol PROTOCOL = io.mercury.serialization.avro.msg.UselessProtocol.PROTOCOL;
 	}
+	
 }
