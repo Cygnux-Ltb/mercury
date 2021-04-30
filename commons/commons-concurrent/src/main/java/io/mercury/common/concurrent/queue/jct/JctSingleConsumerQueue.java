@@ -40,6 +40,9 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 	// waiting strategy
 	private final WaitingStrategy strategy;
 
+	// sleep millis
+	private final long sleepMillis;
+
 	/**
 	 * Single Producer Single Consumer Queue
 	 * 
@@ -78,13 +81,14 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 		return new Builder(QueueStyle.MPSC).setQueueName(queueName);
 	}
 
-	protected JctSingleConsumerQueue(Processor<E> processor, int capacity, WaitingStrategy strategy) {
+	protected JctSingleConsumerQueue(Processor<E> processor, int capacity, WaitingStrategy strategy, long sleepMillis) {
 		super(processor);
 		this.queue = createQueue(capacity);
 		this.strategy = strategy;
+		this.sleepMillis = sleepMillis;
 		this.consumer = () -> {
 			try {
-				while (isRunning.get() || !queue.isEmpty()) {
+				while (isRunning() || !queue.isEmpty()) {
 					@SpinLock
 					E e = queue.poll();
 					if (e != null)
@@ -107,10 +111,10 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 	 */
 	private void waiting() {
 		switch (strategy) {
-		case SpinWaiting:
+		case Spin:
 			break;
-		case SleepWaiting:
-			Threads.sleepIgnoreInterrupts(10);
+		case Sleep:
+			Threads.sleepIgnoreInterrupts(sleepMillis);
 			break;
 		default:
 			break;
@@ -121,11 +125,11 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 	@SpinLock
 	public boolean enqueue(E e) {
 		if (isClosed.get()) {
-			log.error("Queue -> {}, enqueue failure, This queue is closed", queueName);
+			log.error("Queue -> {} : enqueue failure, This queue is closed", queueName);
 			return false;
 		}
 		if (e == null) {
-			log.error("Queue -> {}, enqueue element is null", queueName);
+			log.error("Queue -> {} : enqueue element is null", queueName);
 			return false;
 		}
 		while (!queue.offer(e))
@@ -134,13 +138,13 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 	}
 
 	@Override
-	protected void startProcessThread() {
-		if (isRunning.compareAndSet(false, true)) {
-			Threads.startNewMaxPriorityThread(queueName + "-ProcessThread", consumer);
-		} else {
-			log.error("Queue -> {}, Error call, This queue is started", queueName);
-			return;
-		}
+	protected void start0() {
+		Threads.startNewMaxPriorityThread(queueName + "-ProcessThread", consumer);
+		log.info("Queue -> {}, Error call, This queue is started", queueName);
+	}
+
+	@Override
+	protected void stop0() throws Exception {
 	}
 
 	@Override
@@ -161,9 +165,9 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 
 		private static final Logger log = CommonLoggerFactory.getLogger(JctSpscQueue.class);
 
-		private JctSpscQueue(String queueName, int capacity, StartMode mode, WaitingStrategy strategy,
+		private JctSpscQueue(String queueName, int capacity, StartMode mode, WaitingStrategy strategy, long sleepMillis,
 				Processor<E> processor) {
-			super(processor, Math.max(capacity, 16), strategy);
+			super(processor, Math.max(capacity, 16), strategy, sleepMillis);
 			super.queueName = StringUtil.isNullOrEmpty(queueName) ? "JctSpscQueue-" + Threads.currentThreadName()
 					: queueName;
 			switch (mode) {
@@ -201,9 +205,9 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 
 		private static final Logger log = CommonLoggerFactory.getLogger(JctMpscQueue.class);
 
-		private JctMpscQueue(String queueName, int capacity, StartMode mode, WaitingStrategy strategy,
+		private JctMpscQueue(String queueName, int capacity, StartMode mode, WaitingStrategy strategy, long sleepMillis,
 				Processor<E> processor) {
-			super(processor, Math.max(capacity, 16), strategy);
+			super(processor, Math.max(capacity, 16), strategy, sleepMillis);
 			super.queueName = StringUtil.isNullOrEmpty(queueName) ? "JctMpscQueue-" + Threads.currentThreadName()
 					: queueName;
 			switch (mode) {
@@ -238,7 +242,8 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 		private final QueueStyle style;
 		private String queueName = null;
 		private StartMode mode = StartMode.Auto;
-		private WaitingStrategy strategy = WaitingStrategy.SpinWaiting;
+		private WaitingStrategy strategy = WaitingStrategy.Spin;
+		private long sleepMillis = 4;
 		private int capacity = 32;
 
 		private Builder(QueueStyle style) {
@@ -255,8 +260,15 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 			return this;
 		}
 
-		public Builder setWaitingStrategy(WaitingStrategy strategy) {
-			this.strategy = strategy;
+		public Builder useSpinStrategy() {
+			this.strategy = WaitingStrategy.Spin;
+			return this;
+		}
+
+		public Builder useSleepStrategy(long sleepMillis) {
+			this.strategy = WaitingStrategy.Sleep;
+			if (sleepMillis > 0)
+				this.sleepMillis = sleepMillis;
 			return this;
 		}
 
@@ -268,9 +280,9 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 		public final <E> JctSingleConsumerQueue<E> buildWithProcessor(Processor<E> processor) {
 			switch (style) {
 			case SPSC:
-				return new JctSpscQueue<>(queueName, capacity, mode, strategy, processor);
+				return new JctSpscQueue<>(queueName, capacity, mode, strategy, sleepMillis, processor);
 			case MPSC:
-				return new JctMpscQueue<>(queueName, capacity, mode, strategy, processor);
+				return new JctMpscQueue<>(queueName, capacity, mode, strategy, sleepMillis, processor);
 			default:
 				throw new IllegalArgumentException("Error enum item");
 			}

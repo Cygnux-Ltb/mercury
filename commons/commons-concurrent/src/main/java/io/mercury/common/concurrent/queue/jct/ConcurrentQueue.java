@@ -25,7 +25,7 @@ public final class ConcurrentQueue<E> implements MultiConsumerQueue<E> {
 		this.queue = new MpmcArrayQueue<>(Math.max(capacity.value(), 64));
 		this.queueName = StringUtil.isNullOrEmpty(queueName) ? "ConcurrentQueue-" + Threads.currentThreadName()
 				: queueName;
-		this.strategy = strategy == null ? WaitingStrategy.SleepWaiting : strategy;
+		this.strategy = strategy == null ? WaitingStrategy.Sleep : strategy;
 	}
 
 	@Override
@@ -54,9 +54,9 @@ public final class ConcurrentQueue<E> implements MultiConsumerQueue<E> {
 
 	private void waiting() {
 		switch (strategy) {
-		case SpinWaiting:
+		case Spin:
 			break;
-		case SleepWaiting:
+		case Sleep:
 			Threads.sleep(10);
 			break;
 		default:

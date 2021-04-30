@@ -1,7 +1,5 @@
 package io.mercury.common.disruptor;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.slf4j.Logger;
 
 import com.lmax.disruptor.EventTranslatorOneArg;
@@ -27,11 +25,9 @@ public class SpscQueue<T> extends SingleConsumerQueue<T> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(SpscQueue.class);
 
-	private Disruptor<LoadContainer<T>> disruptor;
+	private final Disruptor<LoadContainer<T>> disruptor;
 
-	private LoadContainerEventProducer producer;
-
-	private AtomicBoolean isStop = new AtomicBoolean(false);
+	private final LoadContainerEventProducer producer;
 
 	public SpscQueue(String queueName, Capacity bufferSize) {
 		this(queueName, bufferSize, false, null);
@@ -61,7 +57,7 @@ public class SpscQueue<T> extends SingleConsumerQueue<T> {
 				ProducerType.SINGLE,
 				// Waiting策略
 				WaitStrategyFactory.getStrategy(option));
-		this.disruptor.handleEventsWith((event, sequence, endOfBatch) -> callProcessor(event.unloading()));
+		this.disruptor.handleEventsWith((event, sequence, endOfBatch) -> this.callProcessor(event.unloading()));
 		this.producer = new LoadContainerEventProducer(disruptor.getRingBuffer());
 		if (autoRun)
 			start();
@@ -94,7 +90,7 @@ public class SpscQueue<T> extends SingleConsumerQueue<T> {
 	@Override
 	public boolean enqueue(T t) {
 		try {
-			if (isStop.get())
+			if (!isRunning())
 				return false;
 			producer.onEvent(t);
 			return true;
@@ -105,17 +101,16 @@ public class SpscQueue<T> extends SingleConsumerQueue<T> {
 	}
 
 	@Override
-	protected void startProcessThread() {
+	protected void start0() {
 		disruptor.start();
 	}
 
 	@Override
-	public void stop() {
-		isStop.set(true);
+	protected void stop0() {
 		while (disruptor.getBufferSize() != 0)
 			Threads.sleep(1);
 		disruptor.shutdown();
-		log.info("Call stop() success, disruptor is shutdown.");
+		log.info("Call shutdown() function success, disruptor is shutdown.");
 	}
 
 	public static void main(String[] args) {

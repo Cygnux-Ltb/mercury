@@ -7,7 +7,9 @@ import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 
 public class Pipeliner {
+
 	public static void main(String[] args) {
+
 		Disruptor<PipelinerEvent> disruptor = new Disruptor<PipelinerEvent>(PipelinerEvent.FACTORY, 1024,
 				DaemonThreadFactory.INSTANCE);
 
@@ -28,6 +30,7 @@ public class Pipeliner {
 	}
 
 	private static class ParallelHandler implements EventHandler<PipelinerEvent> {
+
 		private final int ordinal;
 		private final int totalHandlers;
 
@@ -50,6 +53,7 @@ public class Pipeliner {
 
 		@Override
 		public void onEvent(PipelinerEvent event, long sequence, boolean endOfBatch) throws Exception {
+			System.out.println(event);
 			if (event.input != lastEvent + 1 || event.result == null) {
 				System.out.println("Error: " + event);
 			}

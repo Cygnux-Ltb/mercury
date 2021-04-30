@@ -2,6 +2,6 @@ package io.mercury.common.concurrent.queue;
 
 public enum WaitingStrategy {
 
-	SpinWaiting, SleepWaiting, Blocking
+	Spin, Sleep, Blocking
 
 }

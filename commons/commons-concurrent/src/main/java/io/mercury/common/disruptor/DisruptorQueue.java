@@ -1,6 +1,6 @@
 package io.mercury.common.disruptor;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 
@@ -10,12 +10,12 @@ import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 
 import io.mercury.common.collections.Capacity;
-import io.mercury.common.collections.queue.LoadContainer;
 import io.mercury.common.concurrent.queue.QueueStyle;
 import io.mercury.common.concurrent.queue.SingleConsumerQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
+import io.mercury.common.util.StringUtil;
 
 /**
  * 
@@ -27,30 +27,33 @@ public class DisruptorQueue<T> extends SingleConsumerQueue<T> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(DisruptorQueue.class);
 
-	private Disruptor<LoadContainer<T>> disruptor;
+	private final Disruptor<T> disruptor;
 
-	private LoadContainerEventProducer producer;
+	private final LoadContainerEventProducer producer;
 
-	private AtomicBoolean isStop = new AtomicBoolean(false);
-
-	public DisruptorQueue(String queueName, Capacity bufferSize, Processor<T> processor) {
-		this(queueName, bufferSize, false, processor);
+	public DisruptorQueue(Capacity bufferSize, Supplier<T> eventFactory, Processor<T> processor) {
+		this("", bufferSize, false, eventFactory, processor);
 	}
 
-	public DisruptorQueue(String queueName, Capacity bufferSize, boolean autoRun, Processor<T> processor) {
-		this(queueName, bufferSize, autoRun, processor, WaitStrategyOption.BusySpin);
+	public DisruptorQueue(String queueName, Capacity bufferSize, Supplier<T> eventFactory, Processor<T> processor) {
+		this(queueName, bufferSize, false, eventFactory, processor);
 	}
 
-	public DisruptorQueue(String queueName, Capacity bufferSize, boolean autoRun, Processor<T> processor,
-			WaitStrategyOption option) {
+	public DisruptorQueue(String queueName, Capacity bufferSize, boolean autoRun, Supplier<T> eventFactory,
+			Processor<T> processor) {
+		this(queueName, bufferSize, autoRun, eventFactory, processor, WaitStrategyOption.BusySpin);
+	}
+
+	public DisruptorQueue(String queueName, Capacity bufferSize, boolean autoRun, Supplier<T> eventFactory,
+			Processor<T> processor, WaitStrategyOption option) {
 		super(processor);
-		if (queueName != null)
+		if (StringUtil.nonEmpty(queueName))
 			super.queueName = queueName;
 		// if (queueSize == 0 || queueSize % 2 != 0)
 		// throw new IllegalArgumentException("queueSize set error...");
 		this.disruptor = new Disruptor<>(
 				// 实现EventFactory<LoadContainer<>>的Lambda
-				LoadContainer::new,
+				() -> eventFactory.get(),
 				// 队列容量
 				bufferSize.value(),
 				// 实现ThreadFactory的Lambda
@@ -61,7 +64,7 @@ public class DisruptorQueue<T> extends SingleConsumerQueue<T> {
 				ProducerType.SINGLE,
 				// Waiting策略
 				WaitStrategyFactory.getStrategy(option));
-		this.disruptor.handleEventsWith((event, sequence, endOfBatch) -> callProcessor(event.unloading()));
+		this.disruptor.handleEventsWith((event, sequence, endOfBatch) -> callProcessor(event));
 		this.producer = new LoadContainerEventProducer(disruptor.getRingBuffer());
 		if (autoRun)
 			start();
@@ -78,11 +81,11 @@ public class DisruptorQueue<T> extends SingleConsumerQueue<T> {
 
 	private class LoadContainerEventProducer {
 
-		private final RingBuffer<LoadContainer<T>> ringBuffer;
+		private final RingBuffer<T> ringBuffer;
 
-		private EventTranslatorOneArg<LoadContainer<T>, T> eventTranslator = (event, sequence, t) -> event.loading(t);
+		private EventTranslatorOneArg<T, T> eventTranslator = (event, sequence, t) -> event = t;
 
-		private LoadContainerEventProducer(RingBuffer<LoadContainer<T>> ringBuffer) {
+		private LoadContainerEventProducer(RingBuffer<T> ringBuffer) {
 			this.ringBuffer = ringBuffer;
 		}
 
@@ -94,7 +97,7 @@ public class DisruptorQueue<T> extends SingleConsumerQueue<T> {
 	@Override
 	public boolean enqueue(T t) {
 		try {
-			if (isStop.get())
+			if (isClosed.get())
 				return false;
 			producer.onEvent(t);
 			return true;
@@ -105,22 +108,21 @@ public class DisruptorQueue<T> extends SingleConsumerQueue<T> {
 	}
 
 	@Override
-	protected void startProcessThread() {
+	protected void start0() {
 		disruptor.start();
 	}
 
 	@Override
-	public void stop() {
-		isStop.set(true);
+	protected void stop0() {
 		while (disruptor.getBufferSize() != 0)
 			Threads.sleep(1);
 		disruptor.shutdown();
-		log.info("Call stop() success, disruptor is shutdown.");
+		log.info("Call stop0() function success, disruptor is shutdown");
 	}
 
 	public static void main(String[] args) {
 
-		DisruptorQueue<Integer> queue = new DisruptorQueue<>("Test-Queue", Capacity.L06_SIZE, true,
+		DisruptorQueue<Integer> queue = new DisruptorQueue<>("Test-Queue", Capacity.L06_SIZE, true, null,
 				(integer) -> System.out.println(integer));
 
 		Threads.startNewThread(() -> {

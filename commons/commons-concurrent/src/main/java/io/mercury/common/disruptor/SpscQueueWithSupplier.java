@@ -21,13 +21,13 @@ public class SpscQueueWithSupplier<T> extends SingleConsumerQueue<T> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(SpscQueueWithSupplier.class);
 
-	private Disruptor<T> disruptor;
+	private final Disruptor<T> disruptor;
 
-	private LoadContainerEventProducer producer;
+	private final LoadContainerEventProducer producer;
 
-	private AtomicBoolean isStop = new AtomicBoolean(false);
+	private final AtomicBoolean isStop = new AtomicBoolean(false);
 
-	public SpscQueueWithSupplier(Capacity capacity, boolean autoRun, WaitStrategyOption option, Supplier<T> supplier,
+	public SpscQueueWithSupplier(Capacity capacity, boolean autoStart, WaitStrategyOption option, Supplier<T> supplier,
 			Processor<T> processor) {
 		super(processor);
 		// if (queueSize == 0 || queueSize % 2 != 0)
@@ -47,7 +47,7 @@ public class SpscQueueWithSupplier<T> extends SingleConsumerQueue<T> {
 				WaitStrategyFactory.getStrategy(option));
 		this.disruptor.handleEventsWith((event, sequence, endOfBatch) -> tryCallProcessor(event));
 		this.producer = new LoadContainerEventProducer(disruptor.getRingBuffer());
-		if (autoRun)
+		if (autoStart)
 			start();
 	}
 
@@ -90,17 +90,16 @@ public class SpscQueueWithSupplier<T> extends SingleConsumerQueue<T> {
 	}
 
 	@Override
-	protected void startProcessThread() {
+	protected void start0() {
 		disruptor.start();
 	}
 
 	@Override
-	public void stop() {
-		isStop.set(true);
+	protected void stop0() {
 		while (disruptor.getBufferSize() != 0)
-			Threads.sleep(10);
+			Threads.sleep(1);
 		disruptor.shutdown();
-		log.info("Call stop() success, disruptor is shutdown.");
+		log.info("Call stop0() function success, disruptor is shutdown.");
 	}
 
 	@Override
