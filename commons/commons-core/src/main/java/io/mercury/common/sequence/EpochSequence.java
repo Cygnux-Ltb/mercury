@@ -22,12 +22,6 @@ import io.mercury.common.util.BitOperator;
  * 
  * </pre>
  * 
- * <pre>
- * |-0-|-1-|-2-|-3-|-4-|-5-|-6-|-7-|
- * |-0-|-1-|-2-|-3-|-4-|-5-|-6-|-7-|
- * |-0-|-1-|-2-|-3-|-4-|-5-|-6-|-7-|
- * </pre>
- * 
  * @author yellow013
  *
  */
@@ -106,7 +100,8 @@ public final class EpochSequence {
 		}
 		// 更新最后一次生成ID的时间截
 		lastEpochMillis = currentEpochMillis;
-		return // 计算最终的序列
+		// 返回最终的序列
+		return
 		// 时间戳左移至高位
 		(currentEpochMillis << IncrBits)
 				// 自增位
