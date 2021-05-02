@@ -15,9 +15,9 @@ import org.apache.avro.specific.SpecificData;
 @org.apache.avro.specific.AvroGenerated
 public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		implements org.apache.avro.specific.SpecificRecord {
-	private static final long serialVersionUID = -8177591751516628354L;
+	private static final long serialVersionUID = 1607191125005432873L;
 	public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse(
-			"{\"type\":\"record\",\"name\":\"Envelope\",\"namespace\":\"io.mercury.serialization.avro.msg\",\"fields\":[{\"name\":\"code\",\"type\":\"int\"},{\"name\":\"version\",\"type\":\"int\"},{\"name\":\"contentType\",\"type\":{\"type\":\"enum\",\"name\":\"ContentType\",\"symbols\":[\"OBJECT\",\"LIST\",\"STRING\",\"INT\",\"LONG\",\"DOUBLE\"]}}]}");
+			"{\"type\":\"record\",\"name\":\"Envelope\",\"namespace\":\"io.mercury.serialization.avro.msg\",\"fields\":[{\"name\":\"code\",\"type\":\"int\"},{\"name\":\"version\",\"type\":\"int\"},{\"name\":\"contentType\",\"type\":{\"type\":\"enum\",\"name\":\"ContentType\",\"symbols\":[\"OBJECT\",\"LIST\",\"MAP\",\"STRING\",\"INT\",\"LONG\",\"DOUBLE\"]}}]}");
 
 	public static org.apache.avro.Schema getClassSchema() {
 		return SCHEMA$;

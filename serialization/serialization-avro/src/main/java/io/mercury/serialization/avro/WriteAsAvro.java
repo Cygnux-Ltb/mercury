@@ -2,47 +2,52 @@ package io.mercury.serialization.avro;
 
 import java.io.File;
 
+import org.apache.avro.file.CodecFactory;
 import org.apache.avro.file.DataFileWriter;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.specific.SpecificDatumWriter;
 
+import io.mercury.common.sys.SysProperties;
 import io.mercury.serialization.avro.msg.AvroTextMsg;
+import io.mercury.serialization.avro.msg.ContentType;
+import io.mercury.serialization.avro.msg.Envelope;
 
 public class WriteAsAvro {
 
-    public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception {
+		int sequence = 0;
 
-        AvroTextMsg ual1 = new AvroTextMsg();
+		Envelope envelope = new Envelope();
+		envelope.setCode(1);
+		envelope.setVersion(1);
+		envelope.setContentType(ContentType.STRING);
+		AvroTextMsg msg0 = new AvroTextMsg();
+		msg0.setEnvelope(envelope);
+		msg0.setEpoch(System.currentTimeMillis());
+		msg0.setSequence(++sequence);
+		msg0.setContent("TEXT0");
 
-        ual1.setContent("login");
-        ual1.setGender(1);
-        ual1.setIpAddress("192.168.1.1");
-        ual1.setProvience("henan");
-        ual1.setUserName("lily");
+		AvroTextMsg msg1 = AvroTextMsg.newBuilder().setEnvelope(envelope).setEpoch(System.currentTimeMillis())
+				.setSequence(++sequence).setContent("TEXT1").build();
 
-        UserActionLog ual2 = UserActionLog.newBuilder().setActionType("logout").setGender(0).setIpAddress("192.168.1.2")
-                .setProvience("hebie").setUserName("jim").build();
+		// 把两条记录写入到文件中 (序列化)
+		// DatumWriter是一个接口,需要用它的实现类创建对象
+		// 如果创建了实例化对象, 则使用SpecificDatumWriter来创建对象
+		// 如果没有创建实例化对象, 则使用GenericDatumWriter来创建对象
+		DatumWriter<AvroTextMsg> writer = new SpecificDatumWriter<AvroTextMsg>();
+		DataFileWriter<AvroTextMsg> fileWriter = new DataFileWriter<AvroTextMsg>(writer);
 
-        // 把两条记录写入到文件中（序列化）
-        // 把两条记录写入到文件中（序列化）
-        // DatumWriter 是一个 接口，需要用它的实现类创建对象
-        // 如果创建了实例化对象，则使用  SpecificDatumWriter  来创建对象
-        // 如果没有创建实例化对象，则使用 GenericDatumWriter 来创建对象
-        DatumWriter<UserActionLog> writer = new SpecificDatumWriter<UserActionLog>();
-        DataFileWriter<UserActionLog> fileWriter = new DataFileWriter<UserActionLog>(writer);
+		// 创建序列化文件, 文件会创建到项目的根目录下
+		fileWriter.create(AvroTextMsg.getClassSchema(), new File(SysProperties.USER_HOME_FILE, "test.avro"));
+		fileWriter.setCodec(CodecFactory.snappyCodec());
+		
+		// 写入内容
+		fileWriter.append(msg0);
+		fileWriter.append(msg1);
 
-        // 创建序列化文件,文件会创建到项目的根目录下
-        fileWriter.create(UserActionLog.getClassSchema(), new File("userlogaction.avro"));
+		fileWriter.flush();
+		fileWriter.close();
 
-        // 写入内容
-        fileWriter.append(ual1);
-        fileWriter.append(ual2);
+	}
 
-        fileWriter.flush();
-        fileWriter.close();
-
-    }
-	
-	
-	
 }

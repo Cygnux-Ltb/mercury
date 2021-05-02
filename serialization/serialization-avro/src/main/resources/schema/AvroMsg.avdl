@@ -4,6 +4,7 @@ protocol UselessProtocol {
 	enum ContentType {
 		OBJECT,
 		LIST,
+		MAP,
 		STRING,
 		INT,
 		LONG,

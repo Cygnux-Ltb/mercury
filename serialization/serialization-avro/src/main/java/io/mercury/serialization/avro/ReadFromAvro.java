@@ -6,24 +6,30 @@ import org.apache.avro.file.DataFileReader;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.specific.SpecificDatumReader;
 
+import io.mercury.common.sys.SysProperties;
+import io.mercury.serialization.avro.msg.AvroTextMsg;
+
 public class ReadFromAvro {
 
 	public static void main(String[] args) throws Exception {
 
-		File file = new File("userlogaction.avro");
+		File file = new File(SysProperties.USER_HOME_FILE, "test.avro");
 
-		DatumReader<UserActionLog> reader = new SpecificDatumReader<UserActionLog>();
+		file.createNewFile();
 
-		DataFileReader<UserActionLog> fileReader = new DataFileReader<UserActionLog>(file, reader);
+		final DatumReader<AvroTextMsg> reader = new SpecificDatumReader<AvroTextMsg>();
 
-		UserActionLog readUserActionLog = null;
+		final DataFileReader<AvroTextMsg> msgReader = new DataFileReader<AvroTextMsg>(file, reader);
 
-		while (fileReader.hasNext()) {
+		AvroTextMsg msg = null;
 
-			readUserActionLog = fileReader.next();
-			System.out.println(readUserActionLog);
+		while (msgReader.hasNext()) {
+
+			msg = msgReader.next();
+			System.out.println(msg);
 		}
-		fileReader.close();
+
+		msgReader.close();
 	}
 
 }
