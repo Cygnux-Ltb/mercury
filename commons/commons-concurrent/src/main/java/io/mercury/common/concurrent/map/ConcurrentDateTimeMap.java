@@ -10,7 +10,7 @@ import java.util.function.Function;
 import java.util.function.ToLongFunction;
 
 import javax.annotation.Nonnull;
-import javax.annotation.concurrent.NotThreadSafe;
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.eclipse.collections.api.list.MutableList;
 import org.jctools.maps.NonBlockingHashMapLong;
@@ -18,7 +18,7 @@ import org.jctools.maps.NonBlockingHashMapLong;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.datetime.DateTimeUtil;
 
-@NotThreadSafe
+@ThreadSafe
 public class ConcurrentDateTimeMap<K extends Temporal, V> {
 
 	private final ToLongFunction<K> keyFunc;
