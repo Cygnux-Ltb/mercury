@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentMap;
 import org.jctools.maps.NonBlockingHashMap;
 import org.jctools.maps.NonBlockingHashMapLong;
 
-public final class ConcurrentMaps {
+public final class JctConcurrentMaps {
 
 	/**
 	 * 
