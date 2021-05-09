@@ -24,7 +24,9 @@ public class ReadFromAvro {
 		AvroTextMsg msg = null;
 
 		while (msgReader.hasNext()) {
-
+			// Reuse user object by passing it to next(). This saves us from
+			// allocating and garbage collecting many objects for files with
+			// many items.
 			msg = msgReader.next();
 			System.out.println(msg);
 		}

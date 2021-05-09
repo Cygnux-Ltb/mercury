@@ -3,62 +3,69 @@ package io.mercury.serialization.avro;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.concurrent.ConcurrentMap;
 
-import javax.annotation.concurrent.NotThreadSafe;
+import javax.annotation.concurrent.ThreadSafe;
 
 import org.apache.avro.io.BinaryEncoder;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecord;
-import org.apache.commons.compress.utils.IOUtils;
 import org.slf4j.Logger;
 
+import io.mercury.common.annotation.lang.ThreadSafeVariable;
+import io.mercury.common.concurrent.map.JctConcurrentMaps;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.spec.ByteBufferSerializer;
 
-@NotThreadSafe
+@ThreadSafe
 public final class AvroBinarySerializer<T extends SpecificRecord> implements ByteBufferSerializer<T> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(AvroBinarySerializer.class);
 
-	private BinaryEncoder encoder;
+	@ThreadSafeVariable
+	private final DatumWriter<T> writer;
 
-	private ByteArrayOutputStream outputStream;
+	private final ConcurrentMap<Long, BinaryEncoder> encoderMap = JctConcurrentMaps.newNonBlockingLongMap(16);
 
-	private DatumWriter<T> writer;
+	private final ConcurrentMap<Long, ByteArrayOutputStream> streamMap = JctConcurrentMaps.newNonBlockingLongMap(16);
+
+	private final int bufferSize;
 
 	/**
 	 * Use default ByteArrayOutputStream size
 	 */
-	public AvroBinarySerializer(Class<T> recordClass) {
-		this(recordClass, 8192);
+	public AvroBinarySerializer(Class<T> clazz) {
+		this(clazz, 8192);
 	}
 
 	/**
 	 * 
-	 * @param recordClass : object type
-	 * @param size        : size is inner ByteArrayOutputStream size
+	 * @param clazz      : object type
+	 * @param bufferSize : size is inner ByteArrayOutputStream size
 	 */
-	public AvroBinarySerializer(Class<T> recordClass, int size) {
-		this.writer = new SpecificDatumWriter<>(recordClass);
-		this.outputStream = new ByteArrayOutputStream(size);
+	public AvroBinarySerializer(Class<T> clazz, int bufferSize) {
+		this.writer = new SpecificDatumWriter<>(clazz);
+		this.bufferSize = bufferSize;
 	}
 
 	@Override
 	public ByteBuffer serialization(T obj) {
 		try {
-			// TODO 对象可重用
-			encoder = EncoderFactory.get().binaryEncoder(outputStream, encoder);
+			final long threadId = Thread.currentThread().getId();
+			final ByteArrayOutputStream outputStream = streamMap.putIfAbsent(threadId,
+					new ByteArrayOutputStream(bufferSize));
+			final BinaryEncoder encoder = encoderMap.putIfAbsent(threadId,
+					EncoderFactory.get().binaryEncoder(outputStream, null));
 			writer.write(obj, encoder);
 			encoder.flush();
-			ByteBuffer wrap = ByteBuffer.wrap(outputStream.toByteArray());
+			ByteBuffer buffer = ByteBuffer.wrap(outputStream.toByteArray());
 			outputStream.reset();
-			return wrap;
+			return buffer;
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
-			IOUtils.closeQuietly(outputStream);
-			throw new RuntimeException("AvroBytesSerializer serialization exception -> " + e.getMessage());
+			throw new RuntimeException("AvroBytesSerializer serialization exception -> " + e.getMessage(), e);
 		}
 	}
 

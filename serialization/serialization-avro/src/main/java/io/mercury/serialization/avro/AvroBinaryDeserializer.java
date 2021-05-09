@@ -1,5 +1,7 @@
 package io.mercury.serialization.avro;
 
+import static io.mercury.common.concurrent.map.JctConcurrentMaps.newNonBlockingLongMap;
+
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
@@ -21,7 +23,6 @@ import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
 
 import io.mercury.common.annotation.lang.ThreadSafeVariable;
-import io.mercury.common.concurrent.map.ConcurrentMaps;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.spec.BytesDeserializer;
 
@@ -33,7 +34,7 @@ public final class AvroBinaryDeserializer<T extends SpecificRecord> implements B
 	@ThreadSafeVariable
 	private final DatumReader<T> reader;
 
-	private final ConcurrentMap<Long, BinaryDecoder> decoders = ConcurrentMaps.newNonBlockingLongMap(16);
+	private final ConcurrentMap<Long, BinaryDecoder> decoders = newNonBlockingLongMap(16);
 
 	public AvroBinaryDeserializer(Class<T> clazz) {
 		this.reader = new SpecificDatumReader<>(clazz);
@@ -49,6 +50,12 @@ public final class AvroBinaryDeserializer<T extends SpecificRecord> implements B
 		}
 	}
 
+	/**
+	 * 根据线程ID获取Decoder
+	 * 
+	 * @param source
+	 * @return
+	 */
 	private BinaryDecoder getDecoder(byte[] source) {
 		final long threadId = Thread.currentThread().getId();
 		BinaryDecoder decoder = decoders.get(threadId);
@@ -83,12 +90,12 @@ public final class AvroBinaryDeserializer<T extends SpecificRecord> implements B
 			offset = 0;
 			BinaryDecoder decoder = getDecoder(allBytes);// Comment for testing
 
-			InputStream inputStream = decoder.inputStream();
-
-			while (inputStream.available() != 0) {
-				T t = reader.read(null, decoder);
-				resultList.add(t);
-				offset = countSize - inputStream.available();
+			try (final InputStream inputStream = decoder.inputStream()) {
+				while (inputStream.available() != 0) {
+					T t = reader.read(null, decoder);
+					resultList.add(t);
+					offset = countSize - inputStream.available();
+				}
 			}
 		} catch (EOFException e) {
 			remainingBytes = Arrays.copyOfRange(allBytes, offset, allBytes.length);

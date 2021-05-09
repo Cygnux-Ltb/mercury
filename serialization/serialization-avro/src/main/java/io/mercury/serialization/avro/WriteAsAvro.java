@@ -30,6 +30,10 @@ public class WriteAsAvro {
 		AvroTextMsg msg1 = AvroTextMsg.newBuilder().setEnvelope(envelope).setEpoch(System.currentTimeMillis())
 				.setSequence(++sequence).setContent("TEXT1").build();
 
+		// Serializing
+
+		// Now let's serialize our Users to disk.
+
 		// 把两条记录写入到文件中 (序列化)
 		// DatumWriter是一个接口,需要用它的实现类创建对象
 		// 如果创建了实例化对象, 则使用SpecificDatumWriter来创建对象
@@ -40,7 +44,7 @@ public class WriteAsAvro {
 		// 创建序列化文件, 文件会创建到项目的根目录下
 		fileWriter.create(AvroTextMsg.getClassSchema(), new File(SysProperties.USER_HOME_FILE, "test.avro"));
 		fileWriter.setCodec(CodecFactory.snappyCodec());
-		
+
 		// 写入内容
 		fileWriter.append(msg0);
 		fileWriter.append(msg1);
