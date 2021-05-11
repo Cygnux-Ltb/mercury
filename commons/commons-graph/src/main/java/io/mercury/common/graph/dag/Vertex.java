@@ -23,8 +23,9 @@ import java.util.List;
 import lombok.Getter;
 
 /**
+ * 
  * @author <a href="michal.maczka@dimatics.com">Michal Maczka</a>
- * @version $Id$
+ * 
  */
 public class Vertex implements Cloneable, Serializable {
 	/**

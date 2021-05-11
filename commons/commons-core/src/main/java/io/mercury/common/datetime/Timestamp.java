@@ -17,13 +17,19 @@ import io.mercury.common.util.Assertor;
  */
 public final class Timestamp implements Comparable<Timestamp> {
 
-	// Epoch Milliseconds
+	/*
+	 * Epoch Milliseconds
+	 */
 	private final long epochMillis;
 
-	// java.time.Instant
+	/*
+	 * java.time.Instant
+	 */
 	private Instant instant;
 
-	// java.time.ZonedDateTime
+	/*
+	 * java.time.ZonedDateTime
+	 */
 	private ZonedDateTime zonedDateTime;
 
 	/**
@@ -98,7 +104,8 @@ public final class Timestamp implements Comparable<Timestamp> {
 	 * 根据Epoch毫秒数生成Instant
 	 */
 	private void newInstantOfEpochMillis() {
-		this.instant = Instant.ofEpochMilli(epochMillis);
+		if (instant == null)
+			this.instant = Instant.ofEpochMilli(epochMillis);
 	}
 
 	/**
@@ -106,8 +113,7 @@ public final class Timestamp implements Comparable<Timestamp> {
 	 * @return
 	 */
 	public Instant getInstant() {
-		if (instant == null)
-			newInstantOfEpochMillis();
+		newInstantOfEpochMillis();
 		return instant;
 	}
 
@@ -118,8 +124,7 @@ public final class Timestamp implements Comparable<Timestamp> {
 	 * @return
 	 */
 	public ZonedDateTime resetAndGetDateTimeOf(ZoneId zoneId) {
-		if (instant == null)
-			newInstantOfEpochMillis();
+		newInstantOfEpochMillis();
 		this.zonedDateTime = ZonedDateTime.ofInstant(instant, zoneId);
 		return zonedDateTime;
 	}
@@ -142,25 +147,25 @@ public final class Timestamp implements Comparable<Timestamp> {
 	/**
 	 * To String constant
 	 */
-	private static final String str0 = "{\"epochMillis\" : ";
-	private static final String str1 = ", \"instant\" : ";
-	private static final String str2 = ", \"zonedDateTime\" : ";
-	private static final String str3 = "}";
+	private static final String field0 = "{\"epochMillis\" : ";
+	private static final String field1 = ", \"instant\" : ";
+	private static final String field2 = ", \"zonedDateTime\" : ";
+	private static final String end = "}";
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder(90);
-		builder.append(str0);
+		builder.append(field0);
 		builder.append(epochMillis);
 		if (instant != null) {
-			builder.append(str1);
+			builder.append(field1);
 			builder.append(toText(instant));
 		}
 		if (zonedDateTime != null) {
-			builder.append(str2);
+			builder.append(field2);
 			builder.append(toText(zonedDateTime));
 		}
-		builder.append(str3);
+		builder.append(end);
 		return builder.toString();
 	}
 
