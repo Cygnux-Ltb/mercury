@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 public final class JsonMsg {
 
 	private long sequence;
+	private long epoch;
 	private int envelope;
 	private int version;
 	private ContentType contentType;
@@ -22,6 +23,10 @@ public final class JsonMsg {
 
 	public long getSequence() {
 		return sequence;
+	}
+
+	public long getEpoch() {
+		return epoch;
 	}
 
 	public int getEnvelope() {
@@ -76,7 +81,9 @@ public final class JsonMsg {
 
 	public static enum ContentType {
 
-		INT, LONG, DOUBLE, OBJECT, LIST
+		INT, LONG, DOUBLE, STRING,
+
+		OBJECT, LIST, MAP,
 
 	}
 

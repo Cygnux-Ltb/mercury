@@ -28,14 +28,14 @@
 		<dependency>
 			<groupId>com.esotericsoftware</groupId>
 			<artifactId>kryo</artifactId>
-			<version>5.1.0</version>
+			<version>5.1.1</version>
 		</dependency>
 
 		<!-- A library for instantiating Java objects -->
 		<dependency>
 			<groupId>org.objenesis</groupId>
 			<artifactId>objenesis</artifactId>
-			<version>3.1</version>
+			<version>3.2</version>
 		</dependency>
 
 		<!-- High performance Java reflection using code generation -->

@@ -138,7 +138,7 @@ public final class JsonParser {
 	public static final <T> MutableList<T> toMutableList(@Nonnull String json) throws JsonParseException {
 		try {
 			return newFastList(
-					// List接口, 转换为MutableList
+					// List convert to MutableList
 					Mapper.readValue(json, new TypeReference<List<T>>() {
 					}));
 		} catch (Exception e) {
@@ -158,7 +158,7 @@ public final class JsonParser {
 		try {
 			List<T> list = Mapper.readValue(json, TypeFactory.constructCollectionLikeType(List.class, clazz));
 			return newFastList(
-					// List接口, 转换为MutableList
+					// List convert to MutableList
 					list);
 		} catch (Exception e) {
 			throw new JsonParseException(json, e);
@@ -174,7 +174,7 @@ public final class JsonParser {
 	public static final <T> ImmutableList<T> toImmutableList(@Nonnull String json) throws JsonParseException {
 		try {
 			return newImmutableList(
-					// List接口, 转换为MutableList
+					// List convert to MutableList
 					Mapper.readValue(json, new TypeReference<List<T>>() {
 					}));
 		} catch (Exception e) {
@@ -194,7 +194,7 @@ public final class JsonParser {
 		try {
 			List<T> list = Mapper.readValue(json, TypeFactory.constructCollectionLikeType(List.class, clazz));
 			return newImmutableList(
-					// List接口, 转换为MutableList
+					// List convert to MutableList
 					list);
 		} catch (Exception e) {
 			throw new JsonParseException(json, e);
@@ -242,7 +242,7 @@ public final class JsonParser {
 	public static final <K, V> MutableMap<K, V> toMutableMap(@Nonnull String json) throws JsonParseException {
 		try {
 			return newUnifiedMap(
-					// Map接口, 转换为MutableMap
+					// Map convert to MutableMap
 					Mapper.readValue(json, new TypeReference<Map<K, V>>() {
 					}));
 		} catch (Exception e) {
@@ -259,7 +259,7 @@ public final class JsonParser {
 	public static final <K, V> ImmutableMap<K, V> toImmutableMap(@Nonnull String json) throws JsonParseException {
 		try {
 			return newImmutableMap(
-					// JSONObject实现Map接口, 转换为ImmutableMap
+					// Map convert to ImmutableMap
 					Mapper.readValue(json, new TypeReference<Map<K, V>>() {
 					}));
 		} catch (Exception e) {
@@ -280,12 +280,12 @@ public final class JsonParser {
 		private static final long serialVersionUID = 9000408863460789219L;
 
 		public JsonParseException(String json, Throwable throwable) {
-			super("Parse JSON -> " + json + " | Throw exception -> [" + throwable.getClass().getSimpleName() + "]",
+			super("Parsing JSON -> " + json + " | Throw exception -> [" + throwable.getClass().getName() + "]",
 					throwable);
 		}
 
 		public JsonParseException(Throwable throwable) {
-			super("Parse JSON throw exception -> [" + throwable.getClass().getSimpleName() + "]", throwable);
+			super("Parsing JSON throw exception -> [" + throwable.getClass().getName() + "]", throwable);
 		}
 
 		public JsonParseException(String message) {
