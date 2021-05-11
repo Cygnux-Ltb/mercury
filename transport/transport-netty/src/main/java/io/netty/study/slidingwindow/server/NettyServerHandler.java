@@ -1,11 +1,10 @@
 package io.netty.study.slidingwindow.server;
 
-import com.alibaba.fastjson.JSON;
-
 import io.mercury.common.collections.window.DuplicateKeyException;
 import io.mercury.common.collections.window.OfferTimeoutException;
 import io.mercury.common.collections.window.Window;
 import io.mercury.common.collections.window.WindowFuture;
+import io.mercury.serialization.json.JsonParser;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -66,7 +65,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object obj) throws Exception {
 		System.out.println("第" + count + "次" + ",服务端接受的消息:" + obj);
-		Message msg = JSON.parseObject(obj.toString(), Message.class);
+		Message msg = JsonParser.toObject(obj.toString(), Message.class);
 		String cmd = msg.getCmd();
 		// 如果是心跳命令，则发送给客户端
 		if (CMD_HEART.equals(cmd)) {

@@ -1,6 +1,6 @@
 package io.netty.study.slidingwindow.pojo;
 
-import com.alibaba.fastjson.JSONObject;
+import io.mercury.serialization.json.JsonWrapper;
 
 /**
  * @Title: Message
@@ -44,7 +44,7 @@ public class Message {
 	 */
 	@Override
 	public String toString() {
-		return JSONObject.toJSONString(this);
+		return JsonWrapper.toJson(this);
 	}
 
 }
