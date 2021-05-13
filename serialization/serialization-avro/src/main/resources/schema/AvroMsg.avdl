@@ -17,16 +17,16 @@ protocol UselessProtocol {
 	}
 
 	record AvroBinaryMsg {
+		Envelope envelope;
 		long sequence;
 		long epoch;
-		Envelope envelope;
 		bytes content;
 	}
 
 	record AvroTextMsg {
+		Envelope envelope;
 		long sequence;
 		long epoch;
-		Envelope envelope;
 		string content;
 	}
 
