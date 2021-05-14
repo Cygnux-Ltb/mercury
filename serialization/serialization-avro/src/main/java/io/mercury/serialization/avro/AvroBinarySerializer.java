@@ -34,7 +34,7 @@ public final class AvroBinarySerializer<T extends SpecificRecord> implements Byt
 	private final int bufferSize;
 
 	/**
-	 * Use default ByteArrayOutputStream size
+	 * Use default ByteArrayOutputStream size : 8192
 	 */
 	public AvroBinarySerializer(Class<T> clazz) {
 		this(clazz, 8192);

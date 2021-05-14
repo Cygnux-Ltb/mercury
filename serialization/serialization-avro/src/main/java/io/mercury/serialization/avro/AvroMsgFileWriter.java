@@ -2,6 +2,8 @@ package io.mercury.serialization.avro;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.concurrent.ConcurrentMap;
 
 import org.apache.avro.file.CodecFactory;
 import org.apache.avro.file.DataFileWriter;
@@ -9,13 +11,15 @@ import org.apache.avro.io.DatumWriter;
 import org.apache.avro.specific.SpecificDatumWriter;
 
 import io.mercury.common.sys.SysProperties;
+import io.mercury.common.util.Assertor;
 import io.mercury.serialization.avro.msg.AvroTextMsg;
 import io.mercury.serialization.avro.msg.ContentType;
 import io.mercury.serialization.avro.msg.Envelope;
 
 public final class AvroMsgFileWriter {
 
-	public void append(AvroTextMsg... msgs) throws IOException {
+	public void append(final File saveFile, Collection<AvroTextMsg> msgs) throws IOException {
+		Assertor.nonNull(saveFile, "saveFile");
 		int sequence = 0;
 
 		Envelope envelope = new Envelope();
