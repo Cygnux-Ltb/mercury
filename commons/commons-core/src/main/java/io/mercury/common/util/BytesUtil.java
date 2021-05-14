@@ -86,7 +86,7 @@ public final class BytesUtil {
 	 * @param value
 	 * @return
 	 */
-	public static byte[] toByteArray(short value) {
+	public static byte[] toBytes(short value) {
 		byte[] buf = new byte[2];
 		buf[0] = (byte) ((value >>> 8) & 0xFF);
 		buf[1] = (byte) (value & 0xFF);
@@ -98,7 +98,7 @@ public final class BytesUtil {
 	 * @param value
 	 * @return
 	 */
-	public static byte[] toByteArray(int value) {
+	public static byte[] toBytes(int value) {
 		byte[] buf = new byte[4];
 		buf[0] = (byte) ((value >>> 24) & 0xFF);
 		buf[1] = (byte) ((value >>> 16) & 0xFF);
@@ -112,7 +112,7 @@ public final class BytesUtil {
 	 * @param value
 	 * @return
 	 */
-	public static byte[] toByteArray(long value) {
+	public static byte[] toBytes(long value) {
 		byte[] buf = new byte[8];
 		buf[0] = (byte) ((value >>> 56) & 0xFF);
 		buf[1] = (byte) ((value >>> 48) & 0xFF);
