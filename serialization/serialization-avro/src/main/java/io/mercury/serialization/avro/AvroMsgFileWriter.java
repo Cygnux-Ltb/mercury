@@ -1,40 +1,40 @@
 package io.mercury.serialization.avro;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.concurrent.ConcurrentMap;
+import java.util.Iterator;
 
+import javax.annotation.concurrent.NotThreadSafe;
+
+import org.apache.avro.Schema;
 import org.apache.avro.file.CodecFactory;
 import org.apache.avro.file.DataFileWriter;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.specific.SpecificDatumWriter;
+import org.apache.avro.specific.SpecificRecord;
 
-import io.mercury.common.sys.SysProperties;
+import io.mercury.common.file.FileUtil;
 import io.mercury.common.util.Assertor;
-import io.mercury.serialization.avro.msg.AvroTextMsg;
-import io.mercury.serialization.avro.msg.ContentType;
-import io.mercury.serialization.avro.msg.Envelope;
 
-public final class AvroMsgFileWriter {
+@NotThreadSafe
+public final class AvroMsgFileWriter<T extends SpecificRecord> implements Closeable {
 
-	public void append(final File saveFile, Collection<AvroTextMsg> msgs) throws IOException {
+	private final Schema schema;
+
+	private final DatumWriter<T> datumWriter;
+	private final DataFileWriter<T> fileWriter;
+
+	public AvroMsgFileWriter(T record) {
+		this.schema = record.getSchema();
+		this.datumWriter = new SpecificDatumWriter<>(schema);
+		this.fileWriter = new DataFileWriter<>(datumWriter);
+	}
+
+	public void append(final File saveFile, Collection<T> records) throws IOException {
 		Assertor.nonNull(saveFile, "saveFile");
-		int sequence = 0;
-
-		Envelope envelope = new Envelope();
-		envelope.setCode(1);
-		envelope.setVersion(1);
-		envelope.setContentType(ContentType.STRING);
-		AvroTextMsg msg0 = new AvroTextMsg();
-		msg0.setEnvelope(envelope);
-		msg0.setEpoch(System.currentTimeMillis());
-		msg0.setSequence(++sequence);
-		msg0.setContent("TEXT0");
-
-		AvroTextMsg msg1 = AvroTextMsg.newBuilder().setEnvelope(envelope).setEpoch(System.currentTimeMillis())
-				.setSequence(++sequence).setContent("TEXT1").build();
-
+		
 		// Serializing
 
 		// Now let's serialize our Users to disk.
@@ -43,20 +43,23 @@ public final class AvroMsgFileWriter {
 		// DatumWriter是一个接口,需要用它的实现类创建对象
 		// 如果创建了实例化对象, 则使用SpecificDatumWriter来创建对象
 		// 如果没有创建实例化对象, 则使用GenericDatumWriter来创建对象
-		DatumWriter<AvroTextMsg> writer = new SpecificDatumWriter<AvroTextMsg>();
-		DataFileWriter<AvroTextMsg> fileWriter = new DataFileWriter<AvroTextMsg>(writer);
 
 		// 创建序列化文件, 文件会创建到项目的根目录下
-		fileWriter.create(AvroTextMsg.getClassSchema(), new File(SysProperties.USER_HOME_FILE, "test.avro"));
+		fileWriter.create(schema, saveFile);
 		fileWriter.setCodec(CodecFactory.snappyCodec());
 
-		// 写入内容
-		fileWriter.append(msg0);
-		fileWriter.append(msg1);
-
+		if (records != null && !records.isEmpty()) {
+			Iterator<T> iterator = records.iterator();
+			while (iterator.hasNext())
+				// write record
+				fileWriter.append(iterator.next());
+		}
 		fileWriter.flush();
-		fileWriter.close();
+	}
 
+	@Override
+	public void close() throws IOException {
+		fileWriter.close();
 	}
 
 }
