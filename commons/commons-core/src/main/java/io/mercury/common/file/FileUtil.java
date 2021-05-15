@@ -3,6 +3,7 @@ package io.mercury.common.file;
 import static io.mercury.common.sys.SysProperties.JAVA_IO_TMPDIR;
 import static io.mercury.common.sys.SysProperties.USER_HOME;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -10,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.FileAlreadyExistsException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -18,6 +20,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 
@@ -233,6 +236,11 @@ public final class FileUtil {
 	 * This method is slightly different than the JDK File.listFiles() version since
 	 * it throws an error if the directory does not exist or is not a directory.
 	 * Also, this method only finds files and will skip including directories.
+	 * 
+	 * @param dir
+	 * @param filter
+	 * @return
+	 * @throws FileNotFoundException
 	 */
 	public static File[] findFiles(File dir, FileFilter filter) throws FileNotFoundException {
 		if (!dir.exists()) {
@@ -252,19 +260,19 @@ public final class FileUtil {
 		// were any files returned?
 		if (allFiles != null && allFiles.length > 0) {
 			// loop thru every file in the dir
-			for (File f : allFiles) {
+			for (File file : allFiles) {
 				// only match files, not a directory
-				if (f.isFile()) {
+				if (file.isFile()) {
 					// delegate matching to provided file matcher
-					if (filter.accept(f)) {
-						files.add(f);
+					if (filter.accept(file)) {
+						files.add(file);
 					}
 				}
 			}
 		}
 
 		// based on filesystem, order of files not guaranteed -- sort now
-		File[] r = files.toArray(new File[0]);
+		File[] r = files.toArray(new File[files.size()]);
 		Arrays.sort(r);
 		return r;
 	}
@@ -340,8 +348,8 @@ public final class FileUtil {
 	/**
 	 * Copy the source file to the target file.
 	 * 
-	 * @param sourceFile The source file to copy from
-	 * @param targetFile The target file to copy to
+	 * @param source The source file to copy from
+	 * @param target The target file to copy to
 	 * @throws FileAlreadyExistsException Thrown if the target file already exists.
 	 *                                    This exception is a subclass of
 	 *                                    IOException, so catching an IOException is
@@ -349,16 +357,16 @@ public final class FileUtil {
 	 *                                    specific reason.
 	 * @throws IOException                Thrown if an error during the copy
 	 */
-	public static void copy(File sourceFile, File targetFile) throws FileAlreadyExistsException, IOException {
-		copy(sourceFile, targetFile, false);
+	public static void copy(File source, File target) throws FileAlreadyExistsException, IOException {
+		copy(source, target, false);
 	}
 
 	/**
 	 * Copy the source file to the target file while optionally permitting an
 	 * overwrite to occur in case the target file already exists.
 	 * 
-	 * @param sourceFile The source file to copy from
-	 * @param targetFile The target file to copy to
+	 * @param source The source file to copy from
+	 * @param target The target file to copy to
 	 * @return True if an overwrite occurred, otherwise false.
 	 * @throws FileAlreadyExistsException Thrown if the target file already exists
 	 *                                    and an overwrite is not permitted. This
@@ -367,39 +375,35 @@ public final class FileUtil {
 	 *                                    don't care about this specific reason.
 	 * @throws IOException                Thrown if an error during the copy
 	 */
-	public static boolean copy(File sourceFile, File targetFile, boolean overwrite)
+	public static void copy(File source, File target, boolean overwrite)
 			throws FileAlreadyExistsException, IOException {
-		boolean overwriteOccurred = false;
-
-		// check if the targetFile already exists
-		if (targetFile.exists()) {
+		// check if the target file already exists
+		if (target.exists()) {
 			// if overwrite is not allowed, throw an exception
-			if (!overwrite) {
-				throw new FileAlreadyExistsException("Target file " + targetFile + " already exists");
-			} else {
-				// set the flag that it occurred
-				overwriteOccurred = true;
-			}
+			if (!overwrite)
+				throw new FileAlreadyExistsException("Target file : [" + target.getName() + "] already exists");
 		}
-
 		// proceed with copy
-		FileInputStream fis = new FileInputStream(sourceFile);
-		FileOutputStream fos = new FileOutputStream(targetFile);
-		fis.getChannel().transferTo(0, sourceFile.length(), fos.getChannel());
-		fis.close();
-		fos.flush();
-		fos.close();
-
-		return overwriteOccurred;
+		try (final FileInputStream fis = new FileInputStream(source);
+				final FileOutputStream fos = new FileOutputStream(target)) {
+			fis.getChannel().transferTo(0, source.length(), fos.getChannel());
+			fos.flush();
+		}
 	}
 
 	/**
-	 * public static boolean copy(Set<File> sources, File toDir) throws IOException
-	 * { boolean completeSuccess = true; int index = 0; for (File source : sources)
-	 * { File target = new File(toDir, source.getName()); try { copy(source,
-	 * target); } catch (IOException ioe) { completeSuccess = false;
-	 * ioe.printStackTrace(); } index++; } return completeSuccess; }
+	 * 
+	 * @param sources
+	 * @param dir
+	 * @throws IOException
 	 */
+	public static void copy(@Nonnull Set<File> sources, File dir) throws FileAlreadyExistsException, IOException {
+		Assertor.nonNull(sources, "sources");
+		for (File source : sources) {
+			File target = new File(dir, source.getName());
+			copy(source, target);
+		}
+	}
 
 	/**
 	 * Copy the contents of is to os.
@@ -410,17 +414,33 @@ public final class FileUtil {
 	 * @param close If true, is is closed after the copy.
 	 * @throws IOException
 	 */
+
+	public static final void copy(InputStream is, OutputStream os, byte[] buf, boolean close) throws IOException {
+		int len;
+		if (buf == null) {
+			buf = new byte[4096];
+		}
+		while ((len = is.read(buf)) > 0) {
+			os.write(buf, 0, len);
+		}
+		os.flush();
+		if (close) {
+			is.close();
+		}
+	}
+
 	/**
-	 * public static final void copy(InputStream is, OutputStream os, byte[] buf,
-	 * boolean close) throws IOException { int len; if (buf == null) { buf = new
-	 * byte[4096]; } while ((len = is.read(buf)) > 0) { os.write(buf, 0, len); }
-	 * os.flush(); if (close) { is.close(); } }
 	 * 
-	 * 
-	 * public static void flush(byte[] data, File toFile) throws IOException {
-	 * FileOutputStream fos = new FileOutputStream(toFile); fos.write(data);
-	 * fos.flush(); fos.close(); }
+	 * @param data
+	 * @param file
+	 * @throws IOException
 	 */
+	public static void flush(byte[] data, File file) throws IOException {
+		try (FileOutputStream fos = new FileOutputStream(file)) {
+			fos.write(data);
+			fos.flush();
+		}
+	}
 
 	/**
 	 * Read <CODE>f</CODE> and return as byte[]
@@ -429,10 +449,11 @@ public final class FileUtil {
 	 * @throws IOException
 	 * @return bytes from <CODE>f</CODE>
 	 */
-	/**
-	 * public static final byte[] load(File f) throws IOException { FileInputStream
-	 * fis = new FileInputStream(f); return load(fis, true); }
-	 */
+
+	public static final byte[] load(File f) throws IOException {
+		FileInputStream fis = new FileInputStream(f);
+		return load(fis, true);
+	}
 
 	/**
 	 * Copy the contents of is to the returned byte array.
@@ -441,11 +462,13 @@ public final class FileUtil {
 	 * @param close If true, is is closed after the copy.
 	 * @throws IOException
 	 */
-	/**
-	 * public static final byte[] load(InputStream is, boolean close) throws
-	 * IOException { final ByteArrayOutputStream os = new ByteArrayOutputStream();
-	 * copy(is, os, null, close); return os.toByteArray(); }
-	 */
+
+	public static final byte[] load(InputStream is, boolean close) throws IOException {
+		try (final ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+			copy(is, os, null, close);
+			return os.toByteArray();
+		}
+	}
 
 	/**
 	 * Class to compare Files by their embedded DateTimes.
@@ -453,7 +476,7 @@ public final class FileUtil {
 	public static class FileNameDateTimeComparator implements Comparator<File> {
 
 		private TemporalPattern pattern;
-		private ZoneId zone;
+		private ZoneId zoneId;
 
 		/**
 		 * Creates a default instance where the pattern is "yyyy-MM-dd" and the default
@@ -470,16 +493,16 @@ public final class FileUtil {
 				this.pattern = pattern;
 			}
 			if (zone == null) {
-				this.zone = ZoneOffset.UTC;
+				this.zoneId = ZoneOffset.UTC;
 			} else {
-				this.zone = zone;
+				this.zoneId = zone;
 			}
 		}
 
 		public int compare(File f1, File f2) {
 			// extract datetimes from both files
-			ZonedDateTime dt1 = ZonedDateTime.of(LocalDateTime.parse(f1.getName(), pattern.getFormatter()), zone);
-			ZonedDateTime dt2 = ZonedDateTime.of(LocalDateTime.parse(f2.getName(), pattern.getFormatter()), zone);
+			ZonedDateTime dt1 = ZonedDateTime.of(LocalDateTime.parse(f1.getName(), pattern.getFormatter()), zoneId);
+			ZonedDateTime dt2 = ZonedDateTime.of(LocalDateTime.parse(f2.getName(), pattern.getFormatter()), zoneId);
 			// compare these two
 			return dt1.compareTo(dt2);
 		}
