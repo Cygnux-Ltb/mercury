@@ -11,6 +11,11 @@
 
 	<inceptionYear>2015</inceptionYear>
 	<url>https://github.com/yellow013/mercury.git</url>
+	<developers>
+		<developer>
+			<name>yellow013</name>
+		</developer>
+	</developers>
 
 	<name>mercury</name>
 	<packaging>pom</packaging>
