@@ -45,7 +45,7 @@ public class AvroJsonSerializer<T extends SpecificRecord> implements StringSeria
 		try {
 			// TODO 对象可重用
 			encoder = EncoderFactory.get().jsonEncoder(obj.getSchema(), outputStream);
-			
+
 			writer.write(obj, encoder);
 			encoder.flush();
 			byte[] bytes = outputStream.toByteArray();

@@ -13,9 +13,7 @@ public class ReadFromAvro {
 
 	public static void main(String[] args) throws Exception {
 
-		File file = new File(SysProperties.USER_HOME_FILE, "test.avro");
-
-		file.createNewFile();
+		File file = new File(SysProperties.USER_HOME_FILE, "test");
 
 		final DatumReader<AvroTextMsg> reader = new SpecificDatumReader<AvroTextMsg>();
 
