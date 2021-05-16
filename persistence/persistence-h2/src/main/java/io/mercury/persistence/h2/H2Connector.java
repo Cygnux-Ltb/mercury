@@ -29,7 +29,7 @@ public class H2Connector {
 	private final String url;
 
 	/**
-	 * private/私有<br>
+	 * memory private mode<br>
 	 * <br>
 	 * 被开启的数据库是私有的(private). URL为"jdbc:h2:mem:". <br>
 	 * 在同一个虚拟机中开启两个连接意味着打开两个不同的(private)数据库.
@@ -41,7 +41,7 @@ public class H2Connector {
 	}
 
 	/**
-	 * named/命名<br>
+	 * memory named mode<br>
 	 * <br>
 	 * 其他应用可以通过使用命令来访问, 有时需要到同一个内存数据库的多个连接. <br>
 	 * 在这个场景中, 数据库URL必须包含一个名字. 例如："jdbc:h2:mem:example". <br>
@@ -52,6 +52,7 @@ public class H2Connector {
 	 * 为了让内存数据库的数据在虚拟机运行时始终存在, 请使用"jdbc:h2:mem:example;DB_CLOSE_DELAY=-1"
 	 * 
 	 * @param named
+	 * 
 	 * @return H2Connector
 	 */
 	public static final H2Connector mem(@Nonnull String named) {
@@ -74,7 +75,8 @@ public class H2Connector {
 	 * jdbc:h2:file:/data/sample
 	 * 
 	 * @param dbFile
-	 * @return
+	 * 
+	 * @return H2Connector
 	 */
 	public static final H2Connector file(@Nonnull File dbFile) {
 		FileUtil.mkdir(dbFile);
