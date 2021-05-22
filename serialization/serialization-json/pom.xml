@@ -56,6 +56,14 @@
 			<artifactId>jackson-datatype-jdk8</artifactId>
 		</dependency>
 
+		<!-- Add-on module for Jackson (http://jackson.codehaus.org) to support 
+			introspection of method/constructor parameter names, without having to add 
+			explicit property name annotation. -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-parameter-names</artifactId>
+		</dependency>
+
 		<!-- Add-on datatype-support module for Jackson (https://github.com/FasterXML/jackson) 
 			that handles eclipse-collections (https://www.eclipse.org/collections/) types -->
 		<dependency>
