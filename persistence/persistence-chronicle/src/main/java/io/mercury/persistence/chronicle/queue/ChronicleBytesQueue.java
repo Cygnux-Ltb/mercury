@@ -163,7 +163,7 @@ public class ChronicleBytesQueue
 			ByteBuffer buffer = ByteBuffer.allocate(512);
 			for (;;) {
 				try {
-					writer.append(buffer.put(String.valueOf(Randoms.randomLong()).getBytes()));
+					writer.append(buffer.put(String.valueOf(Randoms.nextLong()).getBytes()));
 					buffer.clear();
 					Threads.sleep(100);
 				} catch (Exception e) {

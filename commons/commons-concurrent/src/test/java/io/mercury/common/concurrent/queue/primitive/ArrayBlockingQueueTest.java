@@ -609,7 +609,7 @@ public class ArrayBlockingQueueTest extends JSR166TestCase {
 		for (int i = 0; i < size; i++) {
 			Integer x = (Integer) it.next();
 			assertEquals((Integer) o[0] + i, (int) x);
-			assertSame(o[i], x);
+			assertSame((Integer) o[i], x);
 		}
 	}
 

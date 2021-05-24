@@ -22,6 +22,7 @@ import org.reflections.util.ConfigurationBuilder;
  * @author yellow013
  *
  */
+
 public final class AmqpProxyReflection {
 
 	private static final AmqpProxyReflection instance = new AmqpProxyReflection();
@@ -33,16 +34,16 @@ public final class AmqpProxyReflection {
 		return instance;
 	}
 
-	private AtomicBoolean isInit = new AtomicBoolean(false);
+	private final AtomicBoolean isInit = new AtomicBoolean(false);
 
 	private ImmutableMap<Class<Annotation>, ImmutableSet<Method>> implTypes;
 
-	public <A extends Annotation> ImmutableSet<Method> scanPackage(String scanPackage, Class<A> annotationType) {
+	public <A extends Annotation> ImmutableSet<Method> scanPackage(String scanPackage, Class<A> annotation) {
 		Reflections reflections = new Reflections(new ConfigurationBuilder()
 				.setUrls(ClasspathHelper.forPackage(scanPackage)).setScanners(new SubTypesScanner(),
 						new MethodAnnotationsScanner(), new MethodParameterScanner(), new TypeAnnotationsScanner()));
 
-		ImmutableSet<Method> immutableSet = newImmutableSet(reflections.getMethodsAnnotatedWith(annotationType));
+		ImmutableSet<Method> immutableSet = newImmutableSet(reflections.getMethodsAnnotatedWith(annotation));
 		immutableSet.each(this::assertionProxyeedMethod);
 
 		return immutableSet;

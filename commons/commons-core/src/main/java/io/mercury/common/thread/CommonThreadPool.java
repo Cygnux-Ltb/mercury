@@ -70,6 +70,10 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
 		}
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public static ThreadPoolBuilder newBuilder() {
 		return new ThreadPoolBuilder();
 	}
@@ -83,7 +87,7 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
 
 	@Override
 	protected void afterExecute(Runnable runnable, Throwable throwable) {
-		log.debug("Throwable -> {}, execute after", throwable.getMessage());
+		log.debug("Throwable -> {}, execute after", throwable != null ? throwable.getMessage() : "none");
 		if (hasAfterHandle)
 			afterHandler.accept(runnable, throwable);
 	}

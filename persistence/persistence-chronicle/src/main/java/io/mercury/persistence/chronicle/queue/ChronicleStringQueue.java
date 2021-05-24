@@ -103,7 +103,7 @@ public class ChronicleStringQueue
 		new Thread(() -> {
 			for (;;) {
 				try {
-					writer.append(String.valueOf(Randoms.randomLong()));
+					writer.append(String.valueOf(Randoms.nextLong()));
 					Threads.sleep(100);
 				} catch (Exception e) {
 					e.printStackTrace();
