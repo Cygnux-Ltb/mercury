@@ -15,7 +15,7 @@
 	<name>transport-udp</name>
 
 	<properties>
-		<aeron.version>1.32.0</aeron.version>
+		<aeron.version>1.33.1</aeron.version>
 	</properties>
 
 	<dependencies>
