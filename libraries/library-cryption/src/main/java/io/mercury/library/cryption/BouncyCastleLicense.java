@@ -1,9 +1,9 @@
 package io.mercury.library.cryption;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import org.slf4j.Logger;
 import org.bouncycastle.LICENSE;
+import org.slf4j.Logger;
 
 public class BouncyCastleLicense {
 
@@ -18,7 +18,7 @@ public class BouncyCastleLicense {
 	 * 
 	 * @param log
 	 */
-	public static final void showLicense(@Nonnull Logger log) {
+	public static final void showLicense(@Nullable Logger log) {
 		if (log != null) {
 			log.info(LICENSE.licenseText);
 		} else {
