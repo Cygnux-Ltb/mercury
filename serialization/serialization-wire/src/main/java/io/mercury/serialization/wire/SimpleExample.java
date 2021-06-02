@@ -81,6 +81,7 @@ public class SimpleExample {
 
 		// to obtain the underlying ByteBuffer to write to a Channel
 		ByteBuffer byteBuffer = binaryBytes.underlyingObject();
+		
 		byteBuffer.position(0);
 		byteBuffer.limit(binaryBytes.length());
 

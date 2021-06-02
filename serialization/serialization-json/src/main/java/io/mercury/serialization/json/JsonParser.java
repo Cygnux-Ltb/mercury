@@ -270,7 +270,6 @@ public final class JsonParser {
 	/**
 	 * 
 	 * @author yellow013
-	 *
 	 */
 	public static final class JsonParseException extends RuntimeException {
 
@@ -309,7 +308,6 @@ public final class JsonParser {
 			System.out.println(obj.getKey().getClass());
 			System.out.println(obj.getValue().getClass());
 		});
-
 	}
 
 }

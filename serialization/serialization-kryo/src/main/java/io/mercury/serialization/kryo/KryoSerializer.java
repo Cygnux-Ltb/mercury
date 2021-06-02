@@ -1,14 +1,14 @@
 package io.mercury.serialization.kryo;
 
 import java.io.ByteArrayOutputStream;
+import java.nio.ByteBuffer;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Output;
 
 import io.mercury.common.serialization.Serializer;
-import io.netty.buffer.ByteBuf;
 
-public class KryoSerializer<T> implements Serializer<T, ByteBuf> {
+public class KryoSerializer<T> implements Serializer<T, ByteBuffer> {
 
 	private final Kryo kryo;
 	private final Output output;
@@ -24,12 +24,9 @@ public class KryoSerializer<T> implements Serializer<T, ByteBuf> {
 	}
 
 	@Override
-	public ByteBuf serialization(T source) {
-
+	public ByteBuffer serialization(T source) {
 		kryo.writeObject(output, source);
-
-		// TODO Auto-generated method stub
-		return null;
+		return ByteBuffer.wrap(output.toBytes());
 	}
 
 }

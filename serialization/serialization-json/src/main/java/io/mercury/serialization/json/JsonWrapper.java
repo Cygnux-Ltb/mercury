@@ -1,6 +1,6 @@
 package io.mercury.serialization.json;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,7 +25,7 @@ public final class JsonWrapper {
 	 * @param obj
 	 * @return
 	 */
-	public static final String toJson(@Nonnull Object obj) {
+	public static final String toJson(@Nullable Object obj) {
 		return obj == null ? "null" : Gson.toJson(obj);
 	}
 
@@ -34,7 +34,7 @@ public final class JsonWrapper {
 	 * @param obj
 	 * @return
 	 */
-	public static final String toJsonHasNulls(@Nonnull Object obj) {
+	public static final String toJsonHasNulls(@Nullable Object obj) {
 		return obj == null ? "null" : GsonHasNulls.toJson(obj);
 	}
 
@@ -43,7 +43,7 @@ public final class JsonWrapper {
 	 * @param obj
 	 * @return
 	 */
-	public static final String toPrettyJson(@Nonnull Object obj) {
+	public static final String toPrettyJson(@Nullable Object obj) {
 		return obj == null ? "null" : GsonPrettyPrinting.toJson(obj);
 	}
 
@@ -52,7 +52,7 @@ public final class JsonWrapper {
 	 * @param obj
 	 * @return
 	 */
-	public static final String toPrettyJsonHasNulls(@Nonnull Object obj) {
+	public static final String toPrettyJsonHasNulls(@Nullable Object obj) {
 		return obj == null ? "null" : GsonPrettyPrintingHasNulls.toJson(obj);
 	}
 

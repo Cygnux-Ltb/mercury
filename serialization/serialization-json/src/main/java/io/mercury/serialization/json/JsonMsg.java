@@ -76,7 +76,7 @@ public final class JsonMsg {
 
 	@Override
 	public String toString() {
-		return JsonWrapper.toJson(this);
+		return toJson();
 	}
 
 	public static enum ContentType {
