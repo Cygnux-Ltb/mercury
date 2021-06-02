@@ -1,6 +1,6 @@
 package io.mercury.common.sequence;
 
-import java.util.Random;
+import java.security.SecureRandom;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.concurrent.ThreadSafe;
@@ -52,8 +52,9 @@ public final class LocalSerial {
 	public static void main(String[] args) {
 
 		AtomicLong atomicLong = new AtomicLong(50);
-		Random random = new Random(2);
 
+		SecureRandom random = new SecureRandom();
+		
 		Threads.startNewThread(() -> {
 			if (atomicLong.get() < 0) {
 				return;

@@ -17,17 +17,22 @@ import io.mercury.common.util.Assertor;
  */
 public final class Timestamp implements Comparable<Timestamp> {
 
-	/*
+	/**
 	 * Epoch Milliseconds
 	 */
 	private final long epochMillis;
 
-	/*
+	/**
+	 * Nano Sequence is use {@link System.nanoTime()}
+	 */
+	private final long nanoSequence;
+
+	/**
 	 * java.time.Instant
 	 */
 	private Instant instant;
 
-	/*
+	/**
 	 * java.time.ZonedDateTime
 	 */
 	private ZonedDateTime zonedDateTime;
@@ -38,6 +43,7 @@ public final class Timestamp implements Comparable<Timestamp> {
 	 */
 	private Timestamp(long epochMillis) {
 		this.epochMillis = epochMillis;
+		this.nanoSequence = System.nanoTime();
 	}
 
 	/**
@@ -101,11 +107,11 @@ public final class Timestamp implements Comparable<Timestamp> {
 	}
 
 	/**
-	 * 根据Epoch毫秒数生成Instant
+	 * 
+	 * @return
 	 */
-	private void newInstantOfEpochMillis() {
-		if (instant == null)
-			this.instant = Instant.ofEpochMilli(epochMillis);
+	public long getNanoSequence() {
+		return nanoSequence;
 	}
 
 	/**
@@ -115,6 +121,24 @@ public final class Timestamp implements Comparable<Timestamp> {
 	public Instant getInstant() {
 		newInstantOfEpochMillis();
 		return instant;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public ZonedDateTime getZonedDateTime() {
+		if (zonedDateTime == null)
+			return resetAndGetDateTimeOf(TimeZone.SYS_DEFAULT);
+		return zonedDateTime;
+	}
+
+	/**
+	 * 根据Epoch毫秒数生成Instant
+	 */
+	private void newInstantOfEpochMillis() {
+		if (instant == null)
+			this.instant = Instant.ofEpochMilli(epochMillis);
 	}
 
 	/**
@@ -129,40 +153,27 @@ public final class Timestamp implements Comparable<Timestamp> {
 		return zonedDateTime;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
-	public ZonedDateTime getZonedDateTime() {
-		if (zonedDateTime == null)
-			return resetAndGetDateTimeOf(TimeZone.SYS_DEFAULT);
-		return zonedDateTime;
-	}
-
 	@Override
 	public int compareTo(Timestamp o) {
 		return epochMillis < o.epochMillis ? -1 : epochMillis > o.epochMillis ? 1 : 0;
 	}
 
-	/**
-	 * To String constant
-	 */
-	private static final String field0 = "{\"epochMillis\" : ";
-	private static final String field1 = ", \"instant\" : ";
-	private static final String field2 = ", \"zonedDateTime\" : ";
+	private static final String epochMillisField = "{\"epochMillis\" : ";
+	private static final String instantField = ", \"instant\" : ";
+	private static final String zonedDateTimeField = ", \"zonedDateTime\" : ";
 	private static final String end = "}";
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder(90);
-		builder.append(field0);
+		builder.append(epochMillisField);
 		builder.append(epochMillis);
 		if (instant != null) {
-			builder.append(field1);
+			builder.append(instantField);
 			builder.append(toText(instant));
 		}
 		if (zonedDateTime != null) {
-			builder.append(field2);
+			builder.append(zonedDateTimeField);
 			builder.append(toText(zonedDateTime));
 		}
 		builder.append(end);

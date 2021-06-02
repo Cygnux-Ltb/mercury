@@ -1,4 +1,4 @@
-package io.mercury.common.group;
+package io.mercury.common.collections.group;
 
 import static io.mercury.common.collections.ImmutableLists.newImmutableList;
 import static io.mercury.common.collections.MutableMaps.newConcurrentHashMap;

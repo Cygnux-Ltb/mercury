@@ -20,7 +20,7 @@ import io.mercury.common.thread.Threads;
  * 具备过期特性的累加计数器, 可以清除某个特定delta<br>
  * 用于计算单位时间窗口的閥值, 最初设计用于限制单位时间的订单总量<br>
  * 累加值失效有两种情况, 调用remove对value进行修正, 或在过期后自动失效<br>
- * 采用惰性求值, 只在获取值的时候排除已过期的值<br>
+ * 采用惰性求值, 只在获取当前最新值时排除已过期的值<br>
  * 未进行堆外缓存, 仅在当前JVM进程内有效, JVM重启后, 计数器归零
  * 
  * TODO 增加强一致性, 使用自旋锁
@@ -43,10 +43,19 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
 	// 有效时间的纳秒数
 	private final long expireNanos;
 
+	/**
+	 * 
+	 * @param expireTime
+	 */
 	public ExpirableCounter(Duration expireTime) {
 		this(expireTime, Capacity.L12_SIZE);
 	}
 
+	/**
+	 * 
+	 * @param expireTime
+	 * @param capacity
+	 */
 	public ExpirableCounter(Duration expireTime, Capacity capacity) {
 		this.expireNanos = expireTime.toNanos();
 		this.timeToTag = newLongLongHashMap(capacity);
@@ -84,8 +93,9 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
 			if (time < baseline) {
 				clear(time);
 				iterator.remove();
-			} else
+			} else {
 				break;
+			}
 		}
 		return value;
 	}
@@ -102,7 +112,7 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
 	 * 
 	 */
 	@Override
-	public ExpirableCounter deltaRemove(long tag) {
+	public ExpirableCounter removeDelta(long tag) {
 		long delta = tagToDelta.get(tag);
 		if (delta == 0)
 			return this;
@@ -115,7 +125,7 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
 	 * 
 	 */
 	@Override
-	public ExpirableCounter deltaAdd(long tag, long delta) {
+	public ExpirableCounter addDelta(long tag, long delta) {
 		long savedDelta = tagToDelta.get(tag);
 		if (savedDelta == 0)
 			return this;

@@ -1,4 +1,4 @@
-package io.mercury.common.group;
+package io.mercury.common.collections.group;
 
 import java.io.Serializable;
 

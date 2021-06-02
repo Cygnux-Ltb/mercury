@@ -81,15 +81,17 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
 	@Override
 	protected void beforeExecute(Thread thread, Runnable runnable) {
 		log.debug("Thread name -> {}, execute before", thread.getName());
-		if (hasBeforeHandle)
+		if (hasBeforeHandle) {
 			beforeHandler.accept(thread, runnable);
+		}
 	}
 
 	@Override
 	protected void afterExecute(Runnable runnable, Throwable throwable) {
 		log.debug("Throwable -> {}, execute after", throwable != null ? throwable.getMessage() : "none");
-		if (hasAfterHandle)
+		if (hasAfterHandle) {
 			afterHandler.accept(runnable, throwable);
+		}
 	}
 
 	@Override
@@ -108,7 +110,7 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
 		private long keepAliveTime = 60;
 		private TimeUnit timeUnit = TimeUnit.SECONDS;
 		private BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>();
-		private ThreadFactory threadFactory;
+		private ThreadFactory factory;
 		private RejectedExecutionHandler rejectedHandler;
 
 		private BiConsumer<Thread, Runnable> beforeHandler;
@@ -140,7 +142,7 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
 		}
 
 		public ThreadPoolBuilder setThreadFactory(ThreadFactory threadFactory) {
-			this.threadFactory = threadFactory;
+			this.factory = threadFactory;
 			return this;
 		}
 
@@ -166,14 +168,14 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
 		public ThreadPoolExecutor build(String threadPoolName) {
 			threadPoolName = isNullOrEmpty(threadPoolName) ? "CommonThreadPool-" + ThreadSafeRandoms.randomUnsignedInt()
 					: threadPoolName;
-			if (threadFactory != null && rejectedHandler != null) {
-				return new CommonThreadPool(threadPoolName, this, threadFactory, rejectedHandler, beforeHandler,
+			if (factory != null && rejectedHandler != null) {
+				return new CommonThreadPool(threadPoolName, this, factory, rejectedHandler, beforeHandler,
 						afterHandler);
 			}
-			if (threadFactory != null && rejectedHandler == null) {
-				return new CommonThreadPool(threadPoolName, this, threadFactory, beforeHandler, afterHandler);
+			if (factory != null && rejectedHandler == null) {
+				return new CommonThreadPool(threadPoolName, this, factory, beforeHandler, afterHandler);
 			}
-			if (threadFactory == null && rejectedHandler != null) {
+			if (factory == null && rejectedHandler != null) {
 				return new CommonThreadPool(threadPoolName, this, rejectedHandler, beforeHandler, afterHandler);
 			} else {
 				return new CommonThreadPool(threadPoolName, this, beforeHandler, afterHandler);
