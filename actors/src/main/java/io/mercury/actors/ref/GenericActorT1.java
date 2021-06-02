@@ -12,7 +12,7 @@ public abstract class GenericActorT1<T> extends CommonActor {
 
 	@Override
 	public final Receive createReceive() {
-		return baseReceiveBuilder()
+		return commonReceiveBuilder()
 				// match type
 				.match(type, this::onEvent)
 				// build

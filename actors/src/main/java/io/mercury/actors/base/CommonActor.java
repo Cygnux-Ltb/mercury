@@ -16,11 +16,11 @@ public abstract class CommonActor extends AbstractActor {
 		log.info("Created Actor -> {}", self);
 	}
 
-	protected final ReceiveBuilder baseReceiveBuilder() {
-		return receiveBuilder().matchAny(this::baseHandleUnknown);
+	protected final ReceiveBuilder commonReceiveBuilder() {
+		return receiveBuilder().matchAny(this::commonHandleUnknown);
 	}
 
-	private final void baseHandleUnknown(Object obj) {
+	private final void commonHandleUnknown(Object obj) {
 		log.error("Received unmatched message -> class==[{}] obj -> {}", obj.getClass().getName(), obj);
 		handleUnknown(obj);
 	}
