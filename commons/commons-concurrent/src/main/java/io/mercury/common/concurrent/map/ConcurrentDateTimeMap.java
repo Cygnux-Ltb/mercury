@@ -206,7 +206,7 @@ public class ConcurrentDateTimeMap<K extends Temporal, V> {
 	 * @param endPoint
 	 * @return
 	 */
-	public MutableList<V> scan(@Nonnull K startPoint, @Nonnull K endPoint) {
+	public synchronized MutableList<V> scan(@Nonnull K startPoint, @Nonnull K endPoint) {
 		MutableList<V> list = MutableLists.newFastList(32);
 		if (!hasNextKey.test(startPoint, endPoint))
 			return result(list, get(endPoint));

@@ -17,7 +17,7 @@ import io.mercury.common.collections.MutableSets;
  * @param <T>
  */
 @ThreadSafe
-public final class DeduplicationCounter<T extends Comparable<T>> {
+public final class DeduplicateCounter<T extends Comparable<T>> {
 
 	private MutableSet<T> deRepeatSet = MutableSets.newUnifiedSet(Capacity.L06_SIZE);
 
@@ -26,11 +26,11 @@ public final class DeduplicationCounter<T extends Comparable<T>> {
 
 	private volatile boolean isArchived = false;
 
-	public DeduplicationCounter() {
+	public DeduplicateCounter() {
 		this(0);
 	}
 
-	public DeduplicationCounter(int initCount) {
+	public DeduplicateCounter(int initCount) {
 		this.initCount = initCount;
 	}
 
@@ -40,7 +40,7 @@ public final class DeduplicationCounter<T extends Comparable<T>> {
 	 * @return
 	 */
 	@LockHeld
-	public synchronized DeduplicationCounter<T> add(T t) {
+	public synchronized DeduplicateCounter<T> add(T t) {
 		if (deRepeatSet.add(t))
 			count = deRepeatSet.size();
 		return this;
@@ -52,7 +52,7 @@ public final class DeduplicationCounter<T extends Comparable<T>> {
 	 * @return
 	 */
 	@LockHeld
-	public synchronized DeduplicationCounter<T> subtract(T t) {
+	public synchronized DeduplicateCounter<T> subtract(T t) {
 		if (deRepeatSet.remove(t))
 			count = deRepeatSet.size();
 		return this;
@@ -64,7 +64,7 @@ public final class DeduplicationCounter<T extends Comparable<T>> {
 	 * @return
 	 */
 	@LockHeld
-	public synchronized DeduplicationCounter<T> clear() {
+	public synchronized DeduplicateCounter<T> clear() {
 		deRepeatSet.clear();
 		count = 0;
 		return this;
@@ -105,7 +105,7 @@ public final class DeduplicationCounter<T extends Comparable<T>> {
 
 	public static void main(String[] args) {
 
-		DeduplicationCounter<String> deRepeatCounter = new DeduplicationCounter<String>(100);
+		DeduplicateCounter<String> deRepeatCounter = new DeduplicateCounter<String>(100);
 		System.out.println(deRepeatCounter.add("").add("fsdaf").add("dsfsad").add("").add("aaa").add("aaa").count());
 
 	}

@@ -18,16 +18,16 @@ import io.mercury.common.collections.MutableMaps;
  */
 
 @ThreadSafe
-public final class DeduplicationCounterGroup<T extends Comparable<T>> {
+public final class DeduplicateCounterGroup<T extends Comparable<T>> {
 
-	private DeduplicationCounter<T> counter = new DeduplicationCounter<>();
-	private MutableIntObjectMap<DeduplicationCounter<T>> groupCounterMap = MutableMaps.newIntObjectHashMap();
+	private DeduplicateCounter<T> counter = new DeduplicateCounter<>();
+	private MutableIntObjectMap<DeduplicateCounter<T>> groupCounterMap = MutableMaps.newIntObjectHashMap();
 
 	/**
 	 * 
 	 * @return
 	 */
-	public DeduplicationCounter<T> getCounter() {
+	public DeduplicateCounter<T> getCounter() {
 		return counter;
 	}
 
@@ -37,10 +37,10 @@ public final class DeduplicationCounterGroup<T extends Comparable<T>> {
 	 * @return
 	 */
 	@LockHeld
-	public synchronized DeduplicationCounter<T> getCounterByGroup(int groupId) {
-		DeduplicationCounter<T> counter = groupCounterMap.get(groupId);
+	public synchronized DeduplicateCounter<T> getCounterByGroup(int groupId) {
+		DeduplicateCounter<T> counter = groupCounterMap.get(groupId);
 		if (counter == null) {
-			counter = new DeduplicationCounter<>();
+			counter = new DeduplicateCounter<>();
 			groupCounterMap.put(groupId, counter);
 		}
 		return counter;
