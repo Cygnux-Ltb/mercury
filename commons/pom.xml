@@ -20,7 +20,6 @@
 		<module>commons-concurrent</module>
 		<module>commons-core</module>
 		<module>commons-graph</module>
-		<module>commons-jmh</module>
 		<module>commons-log</module>
 		<module>commons-reflect</module>
 	</modules>
