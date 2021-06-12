@@ -40,7 +40,7 @@ public final class RabbitConnection implements TransportConfigurator {
 	@Getter
 	private final String virtualHost;
 
-	// SSL上下文
+	// SSL
 	@Getter
 	private final SSLContext sslContext;
 

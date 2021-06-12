@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
-import io.mercury.transport.rabbitmq.configurator.RmqPublisherConfigurator;
+import io.mercury.transport.rabbitmq.configurator.RabbitPublisherCfg;
 import io.mercury.transport.rabbitmq.declare.AmqpQueue;
 import io.mercury.transport.rabbitmq.declare.ExchangeDefinition;
 
@@ -14,7 +14,7 @@ public class RabbitMqPublisherTest {
 
 		RabbitConnection connection = RabbitConnection.configuration("10.0.64.201", 5672, "root", "root2018").build();
 
-		RmqPublisherConfigurator configurator = RmqPublisherConfigurator
+		RabbitPublisherCfg configurator = RabbitPublisherCfg
 				.configuration(connection, ExchangeDefinition.fanout("TEST_DIR")
 						.bindingQueue(Arrays.asList(AmqpQueue.named("TEST_D1")), Arrays.asList("K1", "K2")))
 				.setDefaultRoutingKey("K1").build();

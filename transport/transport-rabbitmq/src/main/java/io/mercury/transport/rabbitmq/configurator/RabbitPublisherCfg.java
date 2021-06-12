@@ -2,7 +2,6 @@ package io.mercury.transport.rabbitmq.configurator;
 
 import static com.rabbitmq.client.MessageProperties.PERSISTENT_BASIC;
 import static io.mercury.common.util.Assertor.nonNull;
-import static io.mercury.transport.rabbitmq.configurator.PublishConfirmOptions.defaultOption;
 
 import java.util.function.Supplier;
 
@@ -22,7 +21,7 @@ import lombok.experimental.Accessors;
  * @author yellow013
  * 
  */
-public final class RmqPublisherConfigurator extends RabbitConfigurator {
+public final class RabbitPublisherCfg extends RabbitConfigurator {
 
 	// 发布者ExchangeDeclare
 	@Getter
@@ -48,7 +47,7 @@ public final class RmqPublisherConfigurator extends RabbitConfigurator {
 	 * 
 	 * @param builder
 	 */
-	private RmqPublisherConfigurator(Builder builder) {
+	private RabbitPublisherCfg(Builder builder) {
 		super(builder.connection);
 		this.publishExchange = builder.publishExchange;
 		this.defaultRoutingKey = builder.defaultRoutingKey;
@@ -172,7 +171,7 @@ public final class RmqPublisherConfigurator extends RabbitConfigurator {
 
 		// 发布确认选项
 		@Setter
-		private PublishConfirmOptions confirmOptions = defaultOption();
+		private PublishConfirmOptions confirmOptions = PublishConfirmOptions.defaultOption();
 
 		/**
 		 * 
@@ -218,8 +217,55 @@ public final class RmqPublisherConfigurator extends RabbitConfigurator {
 		 * 
 		 * @return
 		 */
-		public RmqPublisherConfigurator build() {
-			return new RmqPublisherConfigurator(this);
+		public RabbitPublisherCfg build() {
+			return new RabbitPublisherCfg(this);
+		}
+
+	}
+
+	@Accessors(chain = true)
+	public static final class PublishConfirmOptions {
+
+		// 是否执行发布确认, 默认false
+		@Getter
+		@Setter
+		private boolean confirm = false;
+
+		// 发布确认超时毫秒数, 默认5000毫秒
+		@Getter
+		@Setter
+		private long confirmTimeout = 5000;
+
+		// 发布确认重试次数, 默认3次
+		@Getter
+		@Setter
+		private int confirmRetry = 3;
+
+		/**
+		 * 使用默认参数
+		 * 
+		 * @return
+		 */
+		public static final PublishConfirmOptions defaultOption() {
+			return new PublishConfirmOptions();
+		}
+
+		/**
+		 * 指定具体参数
+		 * 
+		 * @return
+		 */
+		public static final PublishConfirmOptions withOption(boolean confirm, long confirmTimeout, int confirmRetry) {
+			return new PublishConfirmOptions(confirm, confirmTimeout, confirmRetry);
+		}
+
+		private PublishConfirmOptions() {
+		}
+
+		private PublishConfirmOptions(boolean confirm, long confirmTimeout, int confirmRetry) {
+			this.confirm = confirm;
+			this.confirmTimeout = confirmTimeout;
+			this.confirmRetry = confirmRetry;
 		}
 
 	}

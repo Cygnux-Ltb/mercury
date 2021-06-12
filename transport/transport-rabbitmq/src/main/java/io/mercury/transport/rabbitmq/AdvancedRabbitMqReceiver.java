@@ -26,7 +26,7 @@ import io.mercury.transport.api.Receiver;
 import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.exception.ConnectionBreakException;
 import io.mercury.transport.exception.ReceiverStartException;
-import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfigurator;
+import io.mercury.transport.rabbitmq.configurator.RabbitReceiverCfg;
 import io.mercury.transport.rabbitmq.declare.ExchangeDefinition;
 import io.mercury.transport.rabbitmq.declare.QueueDefinition;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
@@ -113,7 +113,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @param consumer
 	 * @return
 	 */
-	public static AdvancedRabbitMqReceiver<byte[]> create(@Nonnull RmqReceiverConfigurator configurator,
+	public static AdvancedRabbitMqReceiver<byte[]> create(@Nonnull RabbitReceiverCfg configurator,
 			@Nonnull Consumer<byte[]> consumer) {
 		Assertor.nonNull(configurator, "configurator");
 		Assertor.nonNull(consumer, "consumer");
@@ -127,7 +127,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @param consumer
 	 * @return
 	 */
-	public static AdvancedRabbitMqReceiver<byte[]> create(String tag, @Nonnull RmqReceiverConfigurator configurator,
+	public static AdvancedRabbitMqReceiver<byte[]> create(String tag, @Nonnull RabbitReceiverCfg configurator,
 			@Nonnull Consumer<byte[]> consumer) {
 		Assertor.nonNull(configurator, "configurator");
 		Assertor.nonNull(consumer, "consumer");
@@ -143,7 +143,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @param consumer
 	 * @return
 	 */
-	public static <T> AdvancedRabbitMqReceiver<T> create(String tag, @Nonnull RmqReceiverConfigurator cfg,
+	public static <T> AdvancedRabbitMqReceiver<T> create(String tag, @Nonnull RabbitReceiverCfg cfg,
 			@Nonnull BytesDeserializer<T> deserializer, @Nonnull Consumer<T> consumer) {
 		Assertor.nonNull(cfg, "cfg");
 		Assertor.nonNull(deserializer, "deserializer");
@@ -157,7 +157,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @param selfAckConsumer
 	 * @return
 	 */
-	public static AdvancedRabbitMqReceiver<byte[]> createWithSelfAck(@Nonnull RmqReceiverConfigurator cfg,
+	public static AdvancedRabbitMqReceiver<byte[]> createWithSelfAck(@Nonnull RabbitReceiverCfg cfg,
 			@Nonnull SelfAckConsumer<byte[]> selfAckConsumer) {
 		Assertor.nonNull(cfg, "cfg");
 		Assertor.nonNull(selfAckConsumer, "selfAckConsumer");
@@ -171,7 +171,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @param selfAckConsumer
 	 * @return
 	 */
-	public static AdvancedRabbitMqReceiver<byte[]> createWithSelfAck(String tag, @Nonnull RmqReceiverConfigurator cfg,
+	public static AdvancedRabbitMqReceiver<byte[]> createWithSelfAck(String tag, @Nonnull RabbitReceiverCfg cfg,
 			@Nonnull SelfAckConsumer<byte[]> selfAckConsumer) {
 		Assertor.nonNull(cfg, "cfg");
 		Assertor.nonNull(selfAckConsumer, "selfAckConsumer");
@@ -187,7 +187,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @param selfAckConsumer
 	 * @return
 	 */
-	public static <T> AdvancedRabbitMqReceiver<T> createWithSelfAck(String tag, @Nonnull RmqReceiverConfigurator cfg,
+	public static <T> AdvancedRabbitMqReceiver<T> createWithSelfAck(String tag, @Nonnull RabbitReceiverCfg cfg,
 			@Nonnull BytesDeserializer<T> deserializer, @Nonnull SelfAckConsumer<T> selfAckConsumer) {
 		Assertor.nonNull(cfg, "configurator");
 		Assertor.nonNull(deserializer, "deserializer");
@@ -203,7 +203,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @param consumer
 	 * @param selfAckConsumer
 	 */
-	private AdvancedRabbitMqReceiver(String tag, @Nonnull RmqReceiverConfigurator cfg,
+	private AdvancedRabbitMqReceiver(String tag, @Nonnull RabbitReceiverCfg cfg,
 			@Nonnull BytesDeserializer<T> deserializer, @Nullable Consumer<T> consumer,
 			@Nullable SelfAckConsumer<T> selfAckConsumer) {
 		super(nonEmpty(tag) ? tag : "receiver-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());

@@ -31,7 +31,7 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.spec.BytesDeserializer;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Receiver;
-import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfigurator;
+import io.mercury.transport.rabbitmq.configurator.RabbitReceiverCfg;
 
 /**
  * @author yellow013
@@ -60,7 +60,7 @@ public class RabbitMqBatchReceiver<T> extends RabbitMqTransport implements Recei
 
 	private BatchProcessConsumer<T> consumer;
 
-	public RabbitMqBatchReceiver(String tag, @Nonnull RmqReceiverConfigurator cfg, long autoFlushInterval,
+	public RabbitMqBatchReceiver(String tag, @Nonnull RabbitReceiverCfg cfg, long autoFlushInterval,
 			BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent) {
 		super(nonEmpty(tag) ? tag : "batch-receiver-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
 		this.receiveQueue = cfg.getReceiveQueue().getQueueName();
@@ -70,7 +70,7 @@ public class RabbitMqBatchReceiver<T> extends RabbitMqTransport implements Recei
 				batchHandler, deserializer, refreshNowEvent, null);
 	}
 
-	public RabbitMqBatchReceiver(String tag, @Nonnull RmqReceiverConfigurator configurator, long autoFlushInterval,
+	public RabbitMqBatchReceiver(String tag, @Nonnull RabbitReceiverCfg configurator, long autoFlushInterval,
 			BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent,
 			Predicate<T> filter) {
 		super(nonEmpty(tag) ? tag : "batch-receiver-" + DateTimeUtil.datetimeOfMillisecond(),

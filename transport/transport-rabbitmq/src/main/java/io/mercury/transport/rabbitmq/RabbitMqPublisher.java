@@ -23,7 +23,7 @@ import io.mercury.transport.api.Publisher;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.exception.PublishFailedException;
 import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
-import io.mercury.transport.rabbitmq.configurator.RmqPublisherConfigurator;
+import io.mercury.transport.rabbitmq.configurator.RabbitPublisherCfg;
 import io.mercury.transport.rabbitmq.declare.ExchangeDefinition;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 import io.mercury.transport.rabbitmq.exception.DeclareRuntimeException;
@@ -58,7 +58,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 	 * 
 	 * @param cfg
 	 */
-	public RabbitMqPublisher(@Nonnull RmqPublisherConfigurator cfg) {
+	public RabbitMqPublisher(@Nonnull RabbitPublisherCfg cfg) {
 		this(null, cfg);
 	}
 
@@ -69,7 +69,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 	 * @param ackCallback
 	 * @param noAckCallback
 	 */
-	public RabbitMqPublisher(String tag, @Nonnull RmqPublisherConfigurator cfg) {
+	public RabbitMqPublisher(String tag, @Nonnull RabbitPublisherCfg cfg) {
 		super(nonEmpty(tag) ? tag : "publisher-" + datetimeOfMillisecond(), cfg.getConnection());
 		Assertor.nonNull(cfg.getPublishExchange(), "exchangeRelation");
 		this.publishExchange = cfg.getPublishExchange();
@@ -261,7 +261,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 		ExchangeDefinition fanoutExchange = ExchangeDefinition.fanout("fanout-test");
 
 		try (RabbitMqPublisher publisher = new RabbitMqPublisher(
-				RmqPublisherConfigurator.configuration(connectionConfigurator0, fanoutExchange).build())) {
+				RabbitPublisherCfg.configuration(connectionConfigurator0, fanoutExchange).build())) {
 			Threads.startNewThread(() -> {
 				int count = 0;
 				while (true) {

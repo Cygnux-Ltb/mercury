@@ -26,7 +26,7 @@ import io.mercury.transport.api.Sender;
 import io.mercury.transport.exception.InitializeFailureException;
 import io.mercury.transport.exception.PublishFailedException;
 import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
-import io.mercury.transport.rabbitmq.configurator.RmqPublisherConfigurator;
+import io.mercury.transport.rabbitmq.configurator.RabbitPublisherCfg;
 import io.mercury.transport.rabbitmq.declare.ExchangeDefinition;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 import io.mercury.transport.rabbitmq.exception.DeclareRuntimeException;
@@ -85,7 +85,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param serializer
 	 * @return
 	 */
-	public final static <T> AdvancedRabbitMqPublisher<T> create(@Nonnull RmqPublisherConfigurator cfg,
+	public final static <T> AdvancedRabbitMqPublisher<T> create(@Nonnull RabbitPublisherCfg cfg,
 			@Nonnull BytesSerializer<T> serializer) {
 		return new AdvancedRabbitMqPublisher<>(null, cfg, serializer, null, null);
 	}
@@ -98,7 +98,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param serializer
 	 * @return
 	 */
-	public final static <T> AdvancedRabbitMqPublisher<T> create(String tag, @Nonnull RmqPublisherConfigurator cfg,
+	public final static <T> AdvancedRabbitMqPublisher<T> create(String tag, @Nonnull RabbitPublisherCfg cfg,
 			@Nonnull BytesSerializer<T> serializer) {
 		return new AdvancedRabbitMqPublisher<>(tag, cfg, serializer, null, null);
 	}
@@ -113,7 +113,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param noAckCallback
 	 * @return
 	 */
-	public final static <T> AdvancedRabbitMqPublisher<T> create(String tag, @Nonnull RmqPublisherConfigurator cfg,
+	public final static <T> AdvancedRabbitMqPublisher<T> create(String tag, @Nonnull RabbitPublisherCfg cfg,
 			@Nonnull BytesSerializer<T> serializer, @Nonnull AckCallback ackCallback,
 			@Nonnull NoAckCallback noAckCallback) {
 		return new AdvancedRabbitMqPublisher<>(tag, cfg, serializer, ackCallback, noAckCallback);
@@ -124,7 +124,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param cfg
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<byte[]> createWithBytes(@Nonnull RmqPublisherConfigurator cfg) {
+	public final static AdvancedRabbitMqPublisher<byte[]> createWithBytes(@Nonnull RabbitPublisherCfg cfg) {
 		return createWithBytes(null, cfg, null, null);
 	}
 
@@ -135,7 +135,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @return
 	 */
 	public final static AdvancedRabbitMqPublisher<byte[]> createWithBytes(String tag,
-			@Nonnull RmqPublisherConfigurator cfg) {
+			@Nonnull RabbitPublisherCfg cfg) {
 		return createWithBytes(tag, cfg, null, null);
 	}
 
@@ -148,7 +148,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @return
 	 */
 	public final static AdvancedRabbitMqPublisher<byte[]> createWithBytes(String tag,
-			@Nonnull RmqPublisherConfigurator cfg, @Nonnull AckCallback ackCallback,
+			@Nonnull RabbitPublisherCfg cfg, @Nonnull AckCallback ackCallback,
 			@Nonnull NoAckCallback noAckCallback) {
 		return new AdvancedRabbitMqPublisher<>(tag, cfg, msg -> msg, ackCallback, noAckCallback);
 	}
@@ -158,7 +158,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param cfg
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<String> createWithString(@Nonnull RmqPublisherConfigurator cfg) {
+	public final static AdvancedRabbitMqPublisher<String> createWithString(@Nonnull RabbitPublisherCfg cfg) {
 		return createWithString(null, cfg, Charsets.UTF8, null, null);
 	}
 
@@ -168,7 +168,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param charset
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<String> createWithString(@Nonnull RmqPublisherConfigurator cfg,
+	public final static AdvancedRabbitMqPublisher<String> createWithString(@Nonnull RabbitPublisherCfg cfg,
 			@Nonnull Charset charset) {
 		return createWithString(null, cfg, charset, null, null);
 	}
@@ -180,7 +180,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @return
 	 */
 	public final static AdvancedRabbitMqPublisher<String> createWithString(String tag,
-			@Nonnull RmqPublisherConfigurator cfg) {
+			@Nonnull RabbitPublisherCfg cfg) {
 		return createWithString(tag, cfg, Charsets.UTF8, null, null);
 	}
 
@@ -192,7 +192,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @return
 	 */
 	public final static AdvancedRabbitMqPublisher<String> createWithString(String tag,
-			@Nonnull RmqPublisherConfigurator configurator, @Nonnull Charset charset) {
+			@Nonnull RabbitPublisherCfg configurator, @Nonnull Charset charset) {
 		return createWithString(tag, configurator, charset, null, null);
 	}
 
@@ -206,7 +206,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @return
 	 */
 	public final static AdvancedRabbitMqPublisher<String> createWithString(String tag,
-			@Nonnull RmqPublisherConfigurator configurator, @Nonnull Charset charset, @Nonnull AckCallback ackCallback,
+			@Nonnull RabbitPublisherCfg configurator, @Nonnull Charset charset, @Nonnull AckCallback ackCallback,
 			@Nonnull NoAckCallback noAckCallback) {
 		return new AdvancedRabbitMqPublisher<>(tag, configurator, msg -> msg.getBytes(charset), ackCallback,
 				noAckCallback);
@@ -220,7 +220,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param ackCallback   ACK成功回调
 	 * @param noAckCallback ACK未成功回调
 	 */
-	private AdvancedRabbitMqPublisher(String tag, @Nonnull RmqPublisherConfigurator cfg,
+	private AdvancedRabbitMqPublisher(String tag, @Nonnull RabbitPublisherCfg cfg,
 			@Nonnull BytesSerializer<T> serializer, AckCallback ackCallback, NoAckCallback noAckCallback) {
 		super(nonEmpty(tag) ? tag : "publisher-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
 		Assertor.nonNull(cfg.getPublishExchange(), "exchangeRelation");
@@ -468,7 +468,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 		ExchangeDefinition fanoutExchange = ExchangeDefinition.fanout("fanout-test");
 
 		try (AdvancedRabbitMqPublisher<String> publisher = AdvancedRabbitMqPublisher
-				.createWithString(RmqPublisherConfigurator.configuration(connection, fanoutExchange).build())) {
+				.createWithString(RabbitPublisherCfg.configuration(connection, fanoutExchange).build())) {
 			Threads.startNewThread(() -> {
 				int count = 0;
 				while (true) {

@@ -25,7 +25,7 @@ import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.exception.ConnectionBreakException;
 import io.mercury.transport.exception.ReceiverStartException;
 import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
-import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfigurator;
+import io.mercury.transport.rabbitmq.configurator.RabbitReceiverCfg;
 import io.mercury.transport.rabbitmq.declare.ExchangeDefinition;
 import io.mercury.transport.rabbitmq.declare.QueueDefinition;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
@@ -100,7 +100,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 	 * @param consumer
 	 * @return
 	 */
-	public static final RabbitMqReceiver<byte[]> create(@Nonnull RmqReceiverConfigurator cfg,
+	public static final RabbitMqReceiver<byte[]> create(@Nonnull RabbitReceiverCfg cfg,
 			@Nonnull Consumer<byte[]> consumer) {
 		return create(null, cfg, consumer);
 	}
@@ -112,7 +112,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 	 * @param consumer
 	 * @return
 	 */
-	public static final RabbitMqReceiver<byte[]> create(String tag, @Nonnull RmqReceiverConfigurator cfg,
+	public static final RabbitMqReceiver<byte[]> create(String tag, @Nonnull RabbitReceiverCfg cfg,
 			@Nonnull Consumer<byte[]> consumer) {
 		return create(tag, cfg, msg -> msg, consumer);
 	}
@@ -125,7 +125,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 	 * @param consumer
 	 * @return
 	 */
-	public static final <T> RabbitMqReceiver<T> create(@Nonnull RmqReceiverConfigurator cfg,
+	public static final <T> RabbitMqReceiver<T> create(@Nonnull RabbitReceiverCfg cfg,
 			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
 		return create(null, cfg, deserializer, consumer);
 	}
@@ -139,7 +139,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 	 * @param consumer
 	 * @return
 	 */
-	public static final <T> RabbitMqReceiver<T> create(String tag, @Nonnull RmqReceiverConfigurator cfg,
+	public static final <T> RabbitMqReceiver<T> create(String tag, @Nonnull RabbitReceiverCfg cfg,
 			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
 		return new RabbitMqReceiver<T>(tag, cfg, deserializer, consumer);
 	}
@@ -151,7 +151,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 	 * @param deserializer
 	 * @param callback
 	 */
-	private RabbitMqReceiver(String tag, @Nonnull RmqReceiverConfigurator cfg,
+	private RabbitMqReceiver(String tag, @Nonnull RabbitReceiverCfg cfg,
 			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
 		super(nonEmpty(tag) ? tag : "receiver-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
 		this.receiveQueue = cfg.getReceiveQueue();
@@ -398,7 +398,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 
 	public static void main(String[] args) {
 		RabbitMqReceiver<byte[]> receiver = RabbitMqReceiver.create("test",
-				RmqReceiverConfigurator
+				RabbitReceiverCfg
 						.configuration(RabbitConnection.configuration("127.0.0.1", 5672, "user", "u_pass").build(),
 								QueueDefinition.named("TEST"))
 						.build(),
