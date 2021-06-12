@@ -33,6 +33,11 @@
 			<artifactId>serialization-json</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>io.mercury</groupId>
+			<artifactId>serialization-avro</artifactId>
+		</dependency>
+
 		<!-- JeroMq : Pure Java implementation of libzmq -->
 		<dependency>
 			<groupId>org.zeromq</groupId>
