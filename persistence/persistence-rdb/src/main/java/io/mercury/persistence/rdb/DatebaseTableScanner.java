@@ -3,6 +3,8 @@ package io.mercury.persistence.rdb;
 import java.sql.Connection;
 
 public final class DatebaseTableScanner {
+	
+	
 
 	private DatebaseTableScanner() {
 	}

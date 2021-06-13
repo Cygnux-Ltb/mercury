@@ -64,14 +64,15 @@ public final class AvroFileWriter<T extends SpecificRecord> implements Closeable
 		}
 
 		// 如果文件存在则追加, 否则创建新文件
-		if (saveFile.exists()) {
+		if (saveFile.exists())
 			fileWriter.appendTo(saveFile);
-		} else {
+		else
 			fileWriter.create(schema, saveFile);
-		}
-		if (codec != null) {
+
+		// 设置Codec
+		if (codec != null) 
 			fileWriter.setCodec(codec);
-		}
+		
 		// Serializing
 		if (records != null && !records.isEmpty()) {
 			Iterator<T> iterator = records.iterator();

@@ -23,7 +23,7 @@ public class SimpleExample {
 	static {
 		CommonLogConfigurator.setLogLevel(LogLevel.ERROR);
 	}
-	
+
 	public static void main(String[] args) {
 
 		/**
@@ -54,10 +54,8 @@ public class SimpleExample {
 		/**
 		 * So now you can write to the wire with a simple document.
 		 */
-		textWire.write(() -> "message").text("Hello World")
-				.write(() -> "number").int64(1234567890L)
-				.write(() -> "code").asEnum(TimeUnit.SECONDS)
-				.write(() -> "price").float64(10.50);
+		textWire.write(() -> "message").text("Hello World").write(() -> "number").int64(1234567890L).write(() -> "code")
+				.asEnum(TimeUnit.SECONDS).write(() -> "price").float64(10.50);
 		System.out.println(textBytes);
 		System.out.println(textWire1);
 
@@ -73,7 +71,8 @@ public class SimpleExample {
 		 */
 
 		// the same code as for text wire
-		binaryWire.write(() -> "message").text("Hello World")
+		binaryWire
+				.write(() -> "message").text("Hello World")
 				.write(() -> "number").int64(1234567890L)
 				.write(() -> "code").asEnum(TimeUnit.SECONDS)
 				.write(() -> "price").float64(10.50);
@@ -81,9 +80,12 @@ public class SimpleExample {
 
 		// to obtain the underlying ByteBuffer to write to a Channel
 		ByteBuffer byteBuffer = binaryBytes.underlyingObject();
-		
-		byteBuffer.position(0);
-		byteBuffer.limit(binaryBytes.length());
+		if (byteBuffer != null) {
+			byteBuffer.position(0);
+			byteBuffer.limit(binaryBytes.length());
+		}
+
+		System.out.println(byteBuffer);
 
 //		prints
 //
@@ -99,10 +101,8 @@ public class SimpleExample {
 		 */
 
 		// the same code as for text wire
-		rawWire.write(() -> "message").text("Hello World")
-				.write(() -> "number").int64(1234567890L)
-				.write(() -> "code").asEnum(TimeUnit.SECONDS)
-				.write(() -> "price").float64(10.50);
+		rawWire.write(() -> "message").text("Hello World").write(() -> "number").int64(1234567890L).write(() -> "code")
+				.asEnum(TimeUnit.SECONDS).write(() -> "price").float64(10.50);
 		System.out.println(rawBytes.toHexString());
 
 //		prints in RawWire

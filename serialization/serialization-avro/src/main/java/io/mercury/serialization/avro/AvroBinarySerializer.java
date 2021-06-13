@@ -1,5 +1,7 @@
 package io.mercury.serialization.avro;
 
+import static io.mercury.common.concurrent.map.JctConcurrentMaps.newNonBlockingLongMap;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -15,7 +17,6 @@ import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
 
 import io.mercury.common.annotation.lang.ThreadSafeVariable;
-import io.mercury.common.concurrent.map.JctConcurrentMaps;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.spec.ByteBufferSerializer;
 
@@ -27,9 +28,9 @@ public final class AvroBinarySerializer<T extends SpecificRecord> implements Byt
 	@ThreadSafeVariable
 	private final DatumWriter<T> writer;
 
-	private final ConcurrentMap<Long, BinaryEncoder> encoderMap = JctConcurrentMaps.newNonBlockingLongMap(16);
+	private final ConcurrentMap<Long, BinaryEncoder> encoderMap = newNonBlockingLongMap(16);
 
-	private final ConcurrentMap<Long, ByteArrayOutputStream> streamMap = JctConcurrentMaps.newNonBlockingLongMap(16);
+	private final ConcurrentMap<Long, ByteArrayOutputStream> streamMap = newNonBlockingLongMap(16);
 
 	private final int bufferSize;
 
