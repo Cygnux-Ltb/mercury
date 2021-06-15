@@ -108,7 +108,9 @@ public final class SequenceBarrierTest {
 		});
 
 		t.start();
-		latch.await(3, TimeUnit.SECONDS);
+		boolean await = latch.await(3, TimeUnit.SECONDS);
+		assertTrue(await);
+		
 		sequenceBarrier.alert();
 		t.join();
 

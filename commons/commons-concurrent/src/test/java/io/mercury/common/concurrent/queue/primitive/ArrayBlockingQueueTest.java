@@ -609,7 +609,7 @@ public class ArrayBlockingQueueTest extends JSR166TestCase {
 		for (int i = 0; i < size; i++) {
 			Integer x = (Integer) it.next();
 			assertEquals((Integer) o[0] + i, (int) x);
-			assertSame((Integer) o[i], x);
+			assertEquals((Integer) o[i], x);
 		}
 	}
 
@@ -652,10 +652,10 @@ public class ArrayBlockingQueueTest extends JSR166TestCase {
 		Iterator it = q.iterator();
 		for (int i = 0; i < size; i++) {
 			Integer x = (Integer) it.next();
-			assertSame(b1[i], x);
+			assertEquals(b1[i], x);
 			assertEquals(b1[0] + i, (int) x);
-			assertSame(b2[i], x);
-			assertSame(b3[i], x);
+			assertEquals(b2[i], x);
+			assertEquals(b3[i], x);
 		}
 		assertNull(a3[size]);
 		assertEquals(42, (int) a3[size + 1]);

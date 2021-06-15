@@ -258,7 +258,8 @@ public final class BatchEventProcessorTest {
 
 		Thread thread = new Thread(batchEventProcessor);
 		thread.start();
-		latch.await(2, TimeUnit.SECONDS);
+		boolean await = latch.await(2, TimeUnit.SECONDS);
+		assertTrue(await);
 
 		ringBuffer.publish(ringBuffer.next());
 		ringBuffer.publish(ringBuffer.next());

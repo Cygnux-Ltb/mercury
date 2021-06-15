@@ -45,7 +45,7 @@ public class PerfLongAdaptiveRadixTreeMap {
 		ART_REMOVE, ART_FOREACH, ART_FOREACH_DESC, ART_HIGHER, ART_LOWER
 	}
 
-	private Random rand;
+	private Random rand = new Random(1);
 	private LongAdaptiveRadixTreeMap<Long> art;
 	private TreeMap<Long, Long> bst;
 	private Map<Benchmark, List<Long>> times = new HashMap<>();
@@ -56,8 +56,6 @@ public class PerfLongAdaptiveRadixTreeMap {
 
 	@Test
 	public void shouldLoadManyItems() {
-
-		rand = new Random(1);
 
 		final UnaryOperator<Integer> stepFunction = i -> 1
 				+ rand.nextInt((int) Math.min(Integer.MAX_VALUE, 1L + (Long.highestOneBit(i) >> 8)));
