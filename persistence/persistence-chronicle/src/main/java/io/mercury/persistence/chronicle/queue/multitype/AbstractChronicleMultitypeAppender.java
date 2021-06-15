@@ -107,18 +107,20 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN>
 			logger.error("Supplier is null, Thread exit");
 			return;
 		}
-		if (envelope == null) {
+		if (envelope != null) {
+			for (;;) {
+				if (isClose) {
+					logger.info("Chronicle queue is closed, {} Thread exit", appenderName);
+					break;
+				} else {
+					IN t = dataSupplier.get();
+					if (t != null)
+						append(envelope, t);
+				}
+			}
+		} else {
 			logger.error("Default envelope is null, Thread exit");
 			return;
-		}
-		for (;;) {
-			if (isClose) {
-				logger.info("Chronicle queue is closed, {} Thread exit", appenderName);
-				break;
-			} else {
-				IN t = dataSupplier.get();
-				append(envelope, t);
-			}
 		}
 	}
 
