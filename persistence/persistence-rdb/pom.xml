@@ -27,8 +27,8 @@
 
 		<!-- Java(TM) Persistence API -->
 		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>javax.persistence-api</artifactId>
+			<groupId>jakarta.persistence</groupId>
+			<artifactId>jakarta.persistence-api</artifactId>
 		</dependency>
 
 		<!-- The Apache Commons DbUtils package is a set of Java utility classes 

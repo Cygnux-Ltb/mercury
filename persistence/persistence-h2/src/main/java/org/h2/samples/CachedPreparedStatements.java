@@ -44,11 +44,7 @@ public class CachedPreparedStatements {
 	}
 
 	private PreparedStatement prepare(String sql) throws SQLException {
-		PreparedStatement prep = prepared.get(sql);
-		if (prep == null) {
-			prep = conn.prepareStatement(sql);
-			prepared.put(sql, prep);
-		}
+		PreparedStatement prep = prepared.putIfAbsent(sql, conn.prepareStatement(sql));
 		return prep;
 	}
 

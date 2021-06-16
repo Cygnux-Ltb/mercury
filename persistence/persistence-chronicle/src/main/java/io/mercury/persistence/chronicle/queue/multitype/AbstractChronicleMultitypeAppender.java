@@ -2,8 +2,8 @@ package io.mercury.persistence.chronicle.queue.multitype;
 
 import java.util.function.Supplier;
 
-import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -89,7 +89,7 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN>
 	@AbstractFunction
 	protected abstract void append0(@Nonnull E envelope, @Nonnull IN t);
 
-	@CheckForNull
+	@Nullable
 	private E envelope;
 
 	/**
