@@ -61,6 +61,16 @@ public final class DateTimeUtil {
 	}
 
 	/**
+	 * 根据指定 Date 返回 primitive int 表示的 yyyyMMdd
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public final static int date(@Nonnull Date date) {
+		return date(toLocalDate(date));
+	}
+
+	/**
 	 * 返回 primitive int 表示的 yyyyMM
 	 * 
 	 * @param date
@@ -319,6 +329,16 @@ public final class DateTimeUtil {
 	 */
 	public final static LocalDate toLocalDate(int date) {
 		return LocalDate.of(date / 10000, (date % 10000) / 100, date % 100);
+	}
+
+	/**
+	 * Date to LocalDate
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public final static LocalDate toLocalDate(Date date) {
+		return LocalDateTime.ofInstant(date.toInstant(), TimeZone.SYS_DEFAULT).toLocalDate();
 	}
 
 	/**
