@@ -50,18 +50,18 @@ public class ChronicleMapKeeper<K, V> extends AbstractKeeper<String, ChronicleMa
 		// 构建器
 		ChronicleMapBuilder<K, V> builder = ChronicleMapBuilder
 				// 设置KeyClass, ValueClass
-				.of(cfg.keyClass(), cfg.valueClass())
+				.of(cfg.getKeyClass(), cfg.getValueClass())
 				// 设置put函数是否返回null
-				.putReturnsNull(cfg.putReturnsNull())
+				.putReturnsNull(cfg.isPutReturnsNull())
 				// 设置remove函数是否返回null
-				.removeReturnsNull(cfg.removeReturnsNull())
+				.removeReturnsNull(cfg.isRemoveReturnsNull())
 				// 设置名称
 				.name(cfg.getCfgInfo())
 				// 设置条目总数
-				.entries(cfg.entries());
+				.entries(cfg.getEntries());
 		// 设置块大小
-		if (cfg.actualChunkSize() > 0)
-			builder.actualChunkSize(cfg.actualChunkSize());
+		if (cfg.getActualChunkSize() > 0)
+			builder.actualChunkSize(cfg.getActualChunkSize());
 
 		// 设置关闭操作
 		// builder.setPreShutdownAction(null);
@@ -69,14 +69,14 @@ public class ChronicleMapKeeper<K, V> extends AbstractKeeper<String, ChronicleMa
 		// builder.checksumEntries(false);
 
 		// 基于Key值设置平均长度
-		if (cfg.averageKey() != null)
-			builder.averageKey(cfg.averageKey());
+		if (cfg.getAverageKey() != null)
+			builder.averageKey(cfg.getAverageKey());
 		// 基于Value值设置平均长度
-		if (cfg.averageValue() != null)
-			builder.averageValue(cfg.averageValue());
+		if (cfg.getAverageValue() != null)
+			builder.averageValue(cfg.getAverageValue());
 		// 持久化选项
-		if (cfg.persistent()) {
-			File persistentFile = new File(cfg.savePath(), filename);
+		if (cfg.isPersistent()) {
+			File persistentFile = new File(cfg.getSavePath(), filename);
 			try {
 				if (!persistentFile.exists()) {
 					// 创建文件目录
@@ -86,7 +86,7 @@ public class ChronicleMapKeeper<K, V> extends AbstractKeeper<String, ChronicleMa
 					return builder.createPersistedTo(persistentFile);
 				} else {
 					// Is recover data
-					if (cfg.recover())
+					if (cfg.isRecover())
 						return builder.createOrRecoverPersistedTo(persistentFile);
 					else
 						return builder.createPersistedTo(persistentFile);

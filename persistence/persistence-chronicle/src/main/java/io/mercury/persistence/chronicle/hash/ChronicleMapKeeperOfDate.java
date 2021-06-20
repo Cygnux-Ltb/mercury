@@ -14,7 +14,7 @@ public final class ChronicleMapKeeperOfDate<K, V> extends ChronicleMapKeeper<K, 
 	}
 
 	public ChronicleMap<K, V> acquire(LocalDate date) throws ChronicleIOException {
-		return super.acquire(String.valueOf(DateTimeUtil.date(Assertor.nonNull(date, "date"))));
+		return super.acquire(Integer.toString(DateTimeUtil.date(Assertor.nonNull(date, "date"))));
 	}
 
 }

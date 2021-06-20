@@ -6,14 +6,14 @@ import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.persistence.chronicle.exception.ChronicleIOException;
 import net.openhft.chronicle.set.ChronicleSet;
 
-public final class ChronicleSetKeeperOfDate<K> extends ChronicleSetKeeper<K> {
+public final class ChronicleSetKeeperOfDate<E> extends ChronicleSetKeeper<E> {
 
-	public ChronicleSetKeeperOfDate(ChronicleSetConfigurator<K> cfg) {
+	public ChronicleSetKeeperOfDate(ChronicleSetConfigurator<E> cfg) {
 		super(cfg);
 	}
 
-	public ChronicleSet<K> acquire(LocalDate date) throws ChronicleIOException {
-		return super.acquire(String.valueOf(DateTimeUtil.date(date)));
+	public ChronicleSet<E> acquire(LocalDate date) throws ChronicleIOException {
+		return super.acquire(Integer.toString(DateTimeUtil.date(date)));
 	}
 
 }

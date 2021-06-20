@@ -80,7 +80,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 			// 创建存储路径
 			savePath.mkdirs();
 		}
-		SingleChronicleQueueBuilder builder = SingleChronicleQueueBuilder.single(savePath)
+		final SingleChronicleQueueBuilder builder = SingleChronicleQueueBuilder.single(savePath)
 				// 文件滚动周期
 				.rollCycle(fileCycle.getRollCycle())
 				// 是否只读

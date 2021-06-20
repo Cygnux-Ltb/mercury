@@ -37,7 +37,7 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 		// 定义最小过期时间为两小时
 		final long minExpireMillis = 2 * 60 * 60 * 1000;
 		this.expireMillis = millis < minExpireMillis ? minExpireMillis : millis;
-		this.savePath = cfg.savePath();
+		this.savePath = cfg.getSavePath();
 		// LRU记录构建器
 		final ChronicleMapBuilder<String, Long> builder = ChronicleMapBuilder
 				// 设置KeyClass, ValueClass
@@ -52,7 +52,7 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 				.name(cfg.getCfgInfo() + "-last-used-log")
 				// 设置LRU记录条目总数, 最小65536条
 				.entries(fileTotal < 65536 ? 65536 : fileTotal);
-		File persistentFile = new File(cfg.savePath(), ".last-used-log");
+		File persistentFile = new File(cfg.getSavePath(), ".last-used-log");
 		try {
 			if (!persistentFile.exists()) {
 				// 创建文件目录
@@ -63,7 +63,7 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 				this.lastUsedLog = builder.createPersistedTo(persistentFile);
 			} else {
 				// Is recover data
-				if (cfg.recover())
+				if (cfg.isRecover())
 					this.lastUsedLog = builder.createOrRecoverPersistedTo(persistentFile);
 				else
 					this.lastUsedLog = builder.createPersistedTo(persistentFile);
@@ -71,7 +71,7 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 		} catch (IOException e) {
 			throw new ChronicleIOException(e);
 		}
-		this.cleanupThread = Threads.startNewThread("Keeper-{" + cfg.getCfgInfo() + "}-Cleanup-Thread",
+		this.cleanupThread = Threads.startNewThread("Keeper-<" + cfg.getCfgInfo() + ">-Cleanup-Thread",
 				this::cleanupFunc);
 	}
 
@@ -116,7 +116,7 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 		try {
 			cleanupThread.interrupt();
 		} catch (SecurityException e) {
-
+			// TODO log ignored
 		}
 	}
 

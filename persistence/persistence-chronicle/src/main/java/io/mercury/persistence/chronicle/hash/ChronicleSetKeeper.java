@@ -13,29 +13,28 @@ import net.openhft.chronicle.set.ChronicleSet;
 import net.openhft.chronicle.set.ChronicleSetBuilder;
 
 @ThreadSafe
-public class ChronicleSetKeeper<K> extends AbstractKeeper<String, ChronicleSet<K>> {
+public class ChronicleSetKeeper<E> extends AbstractKeeper<String, ChronicleSet<E>> {
 
-	private ChronicleSetConfigurator<K> configurator;
+	private ChronicleSetConfigurator<E> cfg;
 
-	public ChronicleSetKeeper(@Nonnull ChronicleSetConfigurator<K> cfg) {
-		this.configurator = Assertor.nonNull(cfg, "cfg");
+	public ChronicleSetKeeper(@Nonnull ChronicleSetConfigurator<E> cfg) {
+		this.cfg = Assertor.nonNull(cfg, "cfg");
 	}
 
 	@Override
-	public ChronicleSet<K> acquire(String filename) throws ChronicleIOException {
+	public ChronicleSet<E> acquire(String filename) throws ChronicleIOException {
 		return super.acquire(filename);
 	}
 
 	@Override
-	protected ChronicleSet<K> createWithKey(String filename) {
-		ChronicleSetBuilder<K> builder = ChronicleSetBuilder.of(configurator.keyClass())
-				.entries(configurator.entries());
-		if (configurator.actualChunkSize() > 0)
-			builder.actualChunkSize(configurator.actualChunkSize());
-		if (configurator.averageKey() != null)
-			builder.averageKey(configurator.averageKey());
-		if (configurator.persistent()) {
-			File persistedFile = new File(configurator.savePath(), filename);
+	protected ChronicleSet<E> createWithKey(String filename) {
+		ChronicleSetBuilder<E> builder = ChronicleSetBuilder.of(cfg.getElementClass()).entries(cfg.getEntries());
+		if (cfg.getActualChunkSize() > 0)
+			builder.actualChunkSize(cfg.getActualChunkSize());
+		if (cfg.getAverageElement() != null)
+			builder.averageKey(cfg.getAverageElement());
+		if (cfg.isPersistent()) {
+			File persistedFile = new File(cfg.getSavePath(), filename);
 			try {
 				if (!persistedFile.exists()) {
 					File parentFile = persistedFile.getParentFile();
@@ -43,7 +42,7 @@ public class ChronicleSetKeeper<K> extends AbstractKeeper<String, ChronicleSet<K
 						parentFile.mkdirs();
 					return builder.createPersistedTo(persistedFile);
 				} else {
-					if (configurator.recover())
+					if (cfg.isRecover())
 						return builder.createOrRecoverPersistedTo(persistedFile);
 					else
 						return builder.createPersistedTo(persistedFile);
