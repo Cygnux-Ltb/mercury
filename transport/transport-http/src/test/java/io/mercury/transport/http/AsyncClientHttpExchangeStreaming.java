@@ -50,75 +50,66 @@ import org.apache.hc.core5.util.Timeout;
  */
 public class AsyncClientHttpExchangeStreaming {
 
-    public static void main(final String[] args) throws Exception {
+	public static void main(final String[] args) throws Exception {
 
-        final IOReactorConfig ioReactorConfig = IOReactorConfig.custom()
-                .setSoTimeout(Timeout.ofSeconds(5))
-                .build();
+		final IOReactorConfig ioReactorConfig = IOReactorConfig.custom().setSoTimeout(Timeout.ofSeconds(5)).build();
 
-        final CloseableHttpAsyncClient client = HttpAsyncClients.custom()
-                .setIOReactorConfig(ioReactorConfig)
-                .build();
+		final CloseableHttpAsyncClient client = HttpAsyncClients.custom().setIOReactorConfig(ioReactorConfig).build();
 
-        client.start();
+		client.start();
 
-        final HttpHost target = new HttpHost("httpbin.org");
-        final String[] requestUris = new String[] {"/", "/ip", "/user-agent", "/headers"};
+		final HttpHost target = new HttpHost("httpbin.org");
+		final String[] requestUris = new String[] { "/", "/ip", "/user-agent", "/headers" };
 
-        for (final String requestUri: requestUris) {
+		for (final String requestUri : requestUris) {
 
-            final BasicHttpRequest request = BasicRequestBuilder.get()
-                    .setHttpHost(target)
-                    .setPath(requestUri)
-                    .build();
+			final BasicHttpRequest request = BasicRequestBuilder.get().setHttpHost(target).setPath(requestUri).build();
 
-            System.out.println("Executing request " + request);
-            final Future<Void> future = client.execute(
-                    new BasicRequestProducer(request, null),
-                    new AbstractCharResponseConsumer<Void>() {
+			System.out.println("Executing request " + request);
+			final Future<Void> future = client.execute(new BasicRequestProducer(request, null),
+					new AbstractCharResponseConsumer<Void>() {
 
-                        @Override
-                        protected void start(
-                                final HttpResponse response,
-                                final ContentType contentType) throws HttpException, IOException {
-                            System.out.println(request + "->" + new StatusLine(response));
-                        }
+						@Override
+						protected void start(final HttpResponse response, final ContentType contentType)
+								throws HttpException, IOException {
+							System.out.println(request + "->" + new StatusLine(response));
+						}
 
-                        @Override
-                        protected int capacityIncrement() {
-                            return Integer.MAX_VALUE;
-                        }
+						@Override
+						protected int capacityIncrement() {
+							return Integer.MAX_VALUE;
+						}
 
-                        @Override
-                        protected void data(final CharBuffer data, final boolean endOfStream) throws IOException {
-                            while (data.hasRemaining()) {
-                                System.out.print(data.get());
-                            }
-                            if (endOfStream) {
-                                System.out.println();
-                            }
-                        }
+						@Override
+						protected void data(final CharBuffer data, final boolean endOfStream) throws IOException {
+							while (data.hasRemaining()) {
+								System.out.print(data.get());
+							}
+							if (endOfStream) {
+								System.out.println();
+							}
+						}
 
-                        @Override
-                        protected Void buildResult() throws IOException {
-                            return null;
-                        }
+						@Override
+						protected Void buildResult() throws IOException {
+							return null;
+						}
 
-                        @Override
-                        public void failed(final Exception cause) {
-                            System.out.println(request + "->" + cause);
-                        }
+						@Override
+						public void failed(final Exception cause) {
+							System.out.println(request + "->" + cause);
+						}
 
-                        @Override
-                        public void releaseResources() {
-                        }
+						@Override
+						public void releaseResources() {
+						}
 
-                    }, null);
-            future.get();
-        }
+					}, null);
+			future.get();
+		}
 
-        System.out.println("Shutting down");
-        client.close(CloseMode.GRACEFUL);
-    }
+		System.out.println("Shutting down");
+		client.close(CloseMode.GRACEFUL);
+	}
 
 }

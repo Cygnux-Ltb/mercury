@@ -52,111 +52,102 @@ import org.apache.hc.core5.reactor.IOReactorConfig;
 import org.apache.hc.core5.util.Timeout;
 
 /**
- * This example demonstrates handling of HTTP/2 message exchanges pushed by the server.
+ * This example demonstrates handling of HTTP/2 message exchanges pushed by the
+ * server.
  */
 public class AsyncClientH2ServerPush {
 
-    public static void main(final String[] args) throws Exception {
+	public static void main(final String[] args) throws Exception {
 
-        final IOReactorConfig ioReactorConfig = IOReactorConfig.custom()
-                .setSoTimeout(Timeout.ofSeconds(5))
-                .build();
+		final IOReactorConfig ioReactorConfig = IOReactorConfig.custom().setSoTimeout(Timeout.ofSeconds(5)).build();
 
-        final H2Config h2Config = H2Config.custom()
-                .setPushEnabled(true)
-                .build();
+		final H2Config h2Config = H2Config.custom().setPushEnabled(true).build();
 
-        final CloseableHttpAsyncClient client = HttpAsyncClients.custom()
-                .setIOReactorConfig(ioReactorConfig)
-                .setVersionPolicy(HttpVersionPolicy.FORCE_HTTP_2)
-                .setH2Config(h2Config)
-                .build();
+		final CloseableHttpAsyncClient client = HttpAsyncClients.custom().setIOReactorConfig(ioReactorConfig)
+				.setVersionPolicy(HttpVersionPolicy.FORCE_HTTP_2).setH2Config(h2Config).build();
 
-        client.start();
+		client.start();
 
-        client.register("*", new Supplier<AsyncPushConsumer>() {
+		client.register("*", new Supplier<AsyncPushConsumer>() {
 
-            @Override
-            public AsyncPushConsumer get() {
-                return new AbstractBinPushConsumer() {
+			@Override
+			public AsyncPushConsumer get() {
+				return new AbstractBinPushConsumer() {
 
-                    @Override
-                    protected void start(
-                            final HttpRequest promise,
-                            final HttpResponse response,
-                            final ContentType contentType) throws HttpException, IOException {
-                        System.out.println(promise.getPath() + " (push)->" + new StatusLine(response));
-                    }
+					@Override
+					protected void start(final HttpRequest promise, final HttpResponse response,
+							final ContentType contentType) throws HttpException, IOException {
+						System.out.println(promise.getPath() + " (push)->" + new StatusLine(response));
+					}
 
-                    @Override
-                    protected int capacityIncrement() {
-                        return Integer.MAX_VALUE;
-                    }
+					@Override
+					protected int capacityIncrement() {
+						return Integer.MAX_VALUE;
+					}
 
-                    @Override
-                    protected void data(final ByteBuffer data, final boolean endOfStream) throws IOException {
-                    }
+					@Override
+					protected void data(final ByteBuffer data, final boolean endOfStream) throws IOException {
+					}
 
-                    @Override
-                    protected void completed() {
-                    }
+					@Override
+					protected void completed() {
+					}
 
-                    @Override
-                    public void failed(final Exception cause) {
-                        System.out.println("(push)->" + cause);
-                    }
+					@Override
+					public void failed(final Exception cause) {
+						System.out.println("(push)->" + cause);
+					}
 
-                    @Override
-                    public void releaseResources() {
-                    }
+					@Override
+					public void releaseResources() {
+					}
 
-                };
-            }
+				};
+			}
 
-        });
+		});
 
-        final BasicHttpRequest request = BasicRequestBuilder.get("https://nghttp2.org/httpbin/").build();
+		final BasicHttpRequest request = BasicRequestBuilder.get("https://nghttp2.org/httpbin/").build();
 
-        System.out.println("Executing request " + request);
-        final Future<Void> future = client.execute(
-                new BasicRequestProducer(request, null),
-                new AbstractCharResponseConsumer<Void>() {
+		System.out.println("Executing request " + request);
+		final Future<Void> future = client.execute(new BasicRequestProducer(request, null),
+				new AbstractCharResponseConsumer<Void>() {
 
-                    @Override
-                    protected void start(
-                            final HttpResponse response,
-                            final ContentType contentType) throws HttpException, IOException {
-                        System.out.println(request + "->" + new StatusLine(response));
-                    }
+					@Override
+					protected void start(final HttpResponse response, final ContentType contentType)
+							throws HttpException, IOException {
+						System.out.println(request + "->" + new StatusLine(response));
+					}
 
-                    @Override
-                    protected int capacityIncrement() {
-                        return Integer.MAX_VALUE;
-                    }
+					@Override
+					protected int capacityIncrement() {
+						return Integer.MAX_VALUE;
+					}
 
-                    @Override
-                    protected void data(final CharBuffer data, final boolean endOfStream) throws IOException {
-                    }
+					@Override
+					protected void data(final CharBuffer data, final boolean endOfStream) throws IOException {
+					}
 
-                    @Override
-                    protected Void buildResult() throws IOException {
-                        return null;
-                    }
+					@Override
+					protected Void buildResult() throws IOException {
+						return null;
+					}
 
-                    @Override
-                    public void failed(final Exception cause) {
-                        System.out.println(request + "->" + cause);
-                    }
+					@Override
+					public void failed(final Exception cause) {
+						System.out.println(request + "->" + cause);
+					}
 
-                    @Override
-                    public void releaseResources() {
-                    }
+					@Override
+					public void releaseResources() {
+					}
 
-                }, null);
-        future.get();
+				}, null);
 
-        System.out.println("Shutting down");
-        client.close(CloseMode.GRACEFUL);
-    }
+		future.get();
+
+		System.out.println("Shutting down");
+		client.close(CloseMode.GRACEFUL);
+	}
 
 }

@@ -62,95 +62,91 @@ import org.apache.hc.core5.util.Timeout;
  */
 public class AsyncClientH2FullDuplexExchange {
 
-    public static void main(final String[] args) throws Exception {
+	public static void main(final String[] args) throws Exception {
 
-        final IOReactorConfig ioReactorConfig = IOReactorConfig.custom()
-                .setSoTimeout(Timeout.ofSeconds(5))
-                .build();
+		final IOReactorConfig ioReactorConfig = IOReactorConfig.custom().setSoTimeout(Timeout.ofSeconds(5)).build();
 
-        final MinimalHttpAsyncClient client = HttpAsyncClients.createMinimal(
-                HttpVersionPolicy.FORCE_HTTP_2, H2Config.DEFAULT, null, ioReactorConfig);
+		final MinimalHttpAsyncClient client = HttpAsyncClients.createMinimal(HttpVersionPolicy.FORCE_HTTP_2,
+				H2Config.DEFAULT, null, ioReactorConfig);
 
-        client.start();
+		client.start();
 
-        final BasicHttpRequest request = BasicRequestBuilder.post("https://nghttp2.org/httpbin/post").build();
-        final BasicRequestProducer requestProducer = new BasicRequestProducer(request,
-                new BasicAsyncEntityProducer("stuff", ContentType.TEXT_PLAIN));
-        final BasicResponseConsumer<String> responseConsumer = new BasicResponseConsumer<>(
-                new StringAsyncEntityConsumer());
+		final BasicHttpRequest request = BasicRequestBuilder.post("https://nghttp2.org/httpbin/post").build();
+		final BasicRequestProducer requestProducer = new BasicRequestProducer(request,
+				new BasicAsyncEntityProducer("stuff", ContentType.TEXT_PLAIN));
+		final BasicResponseConsumer<String> responseConsumer = new BasicResponseConsumer<>(
+				new StringAsyncEntityConsumer());
 
-        System.out.println("Executing request " + request);
-        final CountDownLatch latch = new CountDownLatch(1);
-        client.execute(new AsyncClientExchangeHandler() {
+		System.out.println("Executing request " + request);
+		final CountDownLatch latch = new CountDownLatch(1);
+		client.execute(new AsyncClientExchangeHandler() {
 
-            @Override
-            public void releaseResources() {
-                requestProducer.releaseResources();
-                responseConsumer.releaseResources();
-                latch.countDown();
-            }
+			@Override
+			public void releaseResources() {
+				requestProducer.releaseResources();
+				responseConsumer.releaseResources();
+				latch.countDown();
+			}
 
-            @Override
-            public void cancel() {
-                System.out.println(request + " cancelled");
-            }
+			@Override
+			public void cancel() {
+				System.out.println(request + " cancelled");
+			}
 
-            @Override
-            public void failed(final Exception cause) {
-                System.out.println(request + "->" + cause);
-            }
+			@Override
+			public void failed(final Exception cause) {
+				System.out.println(request + "->" + cause);
+			}
 
-            @Override
-            public void produceRequest(final RequestChannel channel, final HttpContext context) throws HttpException, IOException {
-                requestProducer.sendRequest(channel, context);
-            }
+			@Override
+			public void produceRequest(final RequestChannel channel, final HttpContext context)
+					throws HttpException, IOException {
+				requestProducer.sendRequest(channel, context);
+			}
 
-            @Override
-            public int available() {
-                return requestProducer.available();
-            }
+			@Override
+			public int available() {
+				return requestProducer.available();
+			}
 
-            @Override
-            public void produce(final DataStreamChannel channel) throws IOException {
-                requestProducer.produce(channel);
-            }
+			@Override
+			public void produce(final DataStreamChannel channel) throws IOException {
+				requestProducer.produce(channel);
+			}
 
-            @Override
-            public void consumeInformation(
-                    final HttpResponse response,
-                    final HttpContext context) throws HttpException, IOException {
-                System.out.println(request + "->" + new StatusLine(response));
-            }
+			@Override
+			public void consumeInformation(final HttpResponse response, final HttpContext context)
+					throws HttpException, IOException {
+				System.out.println(request + "->" + new StatusLine(response));
+			}
 
-            @Override
-            public void consumeResponse(
-                    final HttpResponse response,
-                    final EntityDetails entityDetails,
-                    final HttpContext context) throws HttpException, IOException {
-                System.out.println(request + "->" + new StatusLine(response));
-                responseConsumer.consumeResponse(response, entityDetails, context, null);
-            }
+			@Override
+			public void consumeResponse(final HttpResponse response, final EntityDetails entityDetails,
+					final HttpContext context) throws HttpException, IOException {
+				System.out.println(request + "->" + new StatusLine(response));
+				responseConsumer.consumeResponse(response, entityDetails, context, null);
+			}
 
-            @Override
-            public void updateCapacity(final CapacityChannel capacityChannel) throws IOException {
-                responseConsumer.updateCapacity(capacityChannel);
-            }
+			@Override
+			public void updateCapacity(final CapacityChannel capacityChannel) throws IOException {
+				responseConsumer.updateCapacity(capacityChannel);
+			}
 
-            @Override
-            public void consume(final ByteBuffer src) throws IOException {
-                responseConsumer.consume(src);
-            }
+			@Override
+			public void consume(final ByteBuffer src) throws IOException {
+				responseConsumer.consume(src);
+			}
 
-            @Override
-            public void streamEnd(final List<? extends Header> trailers) throws HttpException, IOException {
-                responseConsumer.streamEnd(trailers);
-            }
+			@Override
+			public void streamEnd(final List<? extends Header> trailers) throws HttpException, IOException {
+				responseConsumer.streamEnd(trailers);
+			}
 
-        });
-        latch.await(1, TimeUnit.MINUTES);
+		});
+		latch.await(1, TimeUnit.MINUTES);
 
-        System.out.println("Shutting down");
-        client.close(CloseMode.GRACEFUL);
-    }
+		System.out.println("Shutting down");
+		client.close(CloseMode.GRACEFUL);
+	}
 
 }

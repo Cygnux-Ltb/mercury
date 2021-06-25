@@ -58,88 +58,71 @@ import org.apache.hc.core5.ssl.TrustStrategy;
  */
 public class AsyncClientCustomSSL {
 
-    public static void main(final String[] args) throws Exception {
-        // Trust standard CA and those trusted by our custom strategy
-        final SSLContext sslcontext = SSLContexts.custom()
-                .loadTrustMaterial(new TrustStrategy() {
+	public static void main(final String[] args) throws Exception {
+		// Trust standard CA and those trusted by our custom strategy
+		final SSLContext sslcontext = SSLContexts.custom().loadTrustMaterial(new TrustStrategy() {
 
-                    @Override
-                    public boolean isTrusted(
-                            final X509Certificate[] chain,
-                            final String authType) throws CertificateException {
-                        final X509Certificate cert = chain[0];
-                        return "CN=httpbin.org".equalsIgnoreCase(cert.getSubjectDN().getName());
-                    }
+			@Override
+			public boolean isTrusted(final X509Certificate[] chain, final String authType) throws CertificateException {
+				final X509Certificate cert = chain[0];
+				return "CN=httpbin.org".equalsIgnoreCase(cert.getSubjectDN().getName());
+			}
 
-                })
-                .build();
-        final TlsStrategy tlsStrategy = ClientTlsStrategyBuilder.create()
-                .setSslContext(sslcontext)
-                // IMPORTANT uncomment the following method when running Java 9 or older
-                // in order for ALPN support to work and avoid the illegal reflective
-                // access operation warning
-                /*
-                .setTlsDetailsFactory(new Factory<SSLEngine, TlsDetails>() {
+		}).build();
+		final TlsStrategy tlsStrategy = ClientTlsStrategyBuilder.create().setSslContext(sslcontext)
+				// IMPORTANT uncomment the following method when running Java 9 or older
+				// in order for ALPN support to work and avoid the illegal reflective
+				// access operation warning
+				/*
+				 * .setTlsDetailsFactory(new Factory<SSLEngine, TlsDetails>() {
+				 * 
+				 * @Override public TlsDetails create(final SSLEngine sslEngine) { return new
+				 * TlsDetails(sslEngine.getSession(), sslEngine.getApplicationProtocol()); } })
+				 */
+				.build();
 
-                    @Override
-                    public TlsDetails create(final SSLEngine sslEngine) {
-                        return new TlsDetails(sslEngine.getSession(), sslEngine.getApplicationProtocol());
-                    }
-                })
-                */
-                .build();
+		final PoolingAsyncClientConnectionManager cm = PoolingAsyncClientConnectionManagerBuilder.create()
+				.setTlsStrategy(tlsStrategy).build();
+		try (final CloseableHttpAsyncClient client = HttpAsyncClients.custom().setConnectionManager(cm).build()) {
 
-        final PoolingAsyncClientConnectionManager cm = PoolingAsyncClientConnectionManagerBuilder.create()
-                .setTlsStrategy(tlsStrategy)
-                .build();
-        try (final CloseableHttpAsyncClient client = HttpAsyncClients.custom()
-                .setConnectionManager(cm)
-                .build()) {
+			client.start();
 
-            client.start();
+			final HttpHost target = new HttpHost("https", "httpbin.org");
+			final HttpClientContext clientContext = HttpClientContext.create();
 
-            final HttpHost target = new HttpHost("https", "httpbin.org");
-            final HttpClientContext clientContext = HttpClientContext.create();
+			final SimpleHttpRequest request = SimpleRequestBuilder.get().setHttpHost(target).setPath("/").build();
 
-            final SimpleHttpRequest request = SimpleRequestBuilder.get()
-                    .setHttpHost(target)
-                    .setPath("/")
-                    .build();
+			System.out.println("Executing request " + request);
+			final Future<SimpleHttpResponse> future = client.execute(SimpleRequestProducer.create(request),
+					SimpleResponseConsumer.create(), clientContext, new FutureCallback<SimpleHttpResponse>() {
 
-            System.out.println("Executing request " + request);
-            final Future<SimpleHttpResponse> future = client.execute(
-                    SimpleRequestProducer.create(request),
-                    SimpleResponseConsumer.create(),
-                    clientContext,
-                    new FutureCallback<SimpleHttpResponse>() {
+						@Override
+						public void completed(final SimpleHttpResponse response) {
+							System.out.println(request + "->" + new StatusLine(response));
+							final SSLSession sslSession = clientContext.getSSLSession();
+							if (sslSession != null) {
+								System.out.println("SSL protocol " + sslSession.getProtocol());
+								System.out.println("SSL cipher suite " + sslSession.getCipherSuite());
+							}
+							System.out.println(response.getBody());
+						}
 
-                        @Override
-                        public void completed(final SimpleHttpResponse response) {
-                            System.out.println(request + "->" + new StatusLine(response));
-                            final SSLSession sslSession = clientContext.getSSLSession();
-                            if (sslSession != null) {
-                                System.out.println("SSL protocol " + sslSession.getProtocol());
-                                System.out.println("SSL cipher suite " + sslSession.getCipherSuite());
-                            }
-                            System.out.println(response.getBody());
-                        }
+						@Override
+						public void failed(final Exception ex) {
+							System.out.println(request + "->" + ex);
+						}
 
-                        @Override
-                        public void failed(final Exception ex) {
-                            System.out.println(request + "->" + ex);
-                        }
+						@Override
+						public void cancelled() {
+							System.out.println(request + " cancelled");
+						}
 
-                        @Override
-                        public void cancelled() {
-                            System.out.println(request + " cancelled");
-                        }
+					});
+			future.get();
 
-                    });
-            future.get();
-
-            System.out.println("Shutting down");
-            client.close(CloseMode.GRACEFUL);
-        }
-    }
+			System.out.println("Shutting down");
+			client.close(CloseMode.GRACEFUL);
+		}
+	}
 
 }

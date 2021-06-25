@@ -43,51 +43,48 @@ import org.apache.hc.core5.http.message.StatusLine;
 import org.apache.hc.core5.io.CloseMode;
 
 /**
- * A simple example that uses HttpClient to execute an HTTP request against
- * a target site that requires user authentication.
+ * A simple example that uses HttpClient to execute an HTTP request against a
+ * target site that requires user authentication.
  */
 public class AsyncClientAuthentication {
 
-    public static void main(final String[] args) throws Exception {
-        final BasicCredentialsProvider credsProvider = new BasicCredentialsProvider();
-        credsProvider.setCredentials(
-                new AuthScope("httpbin.org", 80),
-                new UsernamePasswordCredentials("user", "passwd".toCharArray()));
-        final CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom()
-                .setDefaultCredentialsProvider(credsProvider)
-                .build();
-        httpclient.start();
+	public static void main(final String[] args) throws Exception {
 
-        final SimpleHttpRequest request = SimpleRequestBuilder.get("http://httpbin.org/basic-auth/user/passwd")
-                .build();
+		final BasicCredentialsProvider credsProvider = new BasicCredentialsProvider();
+		credsProvider.setCredentials(new AuthScope("httpbin.org", 80),
+				new UsernamePasswordCredentials("user", "passwd".toCharArray()));
+		final CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom()
+				.setDefaultCredentialsProvider(credsProvider).build();
+		httpclient.start();
 
-        System.out.println("Executing request " + request);
-        final Future<SimpleHttpResponse> future = httpclient.execute(
-                SimpleRequestProducer.create(request),
-                SimpleResponseConsumer.create(),
-                new FutureCallback<SimpleHttpResponse>() {
+		final SimpleHttpRequest request = SimpleRequestBuilder.get("http://httpbin.org/basic-auth/user/passwd").build();
 
-                    @Override
-                    public void completed(final SimpleHttpResponse response) {
-                        System.out.println(request + "->" + new StatusLine(response));
-                        System.out.println(response.getBody());
-                    }
+		System.out.println("Executing request " + request);
+		final Future<SimpleHttpResponse> future = httpclient.execute(SimpleRequestProducer.create(request),
+				SimpleResponseConsumer.create(), new FutureCallback<SimpleHttpResponse>() {
 
-                    @Override
-                    public void failed(final Exception ex) {
-                        System.out.println(request + "->" + ex);
-                    }
+					@Override
+					public void completed(final SimpleHttpResponse response) {
+						System.out.println(request + "->" + new StatusLine(response));
+						System.out.println(response.getBody());
+					}
 
-                    @Override
-                    public void cancelled() {
-                        System.out.println(request + " cancelled");
-                    }
+					@Override
+					public void failed(final Exception ex) {
+						System.out.println(request + "->" + ex);
+					}
 
-                });
-        future.get();
+					@Override
+					public void cancelled() {
+						System.out.println(request + " cancelled");
+					}
 
-        System.out.println("Shutting down");
-        httpclient.close(CloseMode.GRACEFUL);
+				});
 
-    }
+		future.get();
+
+		System.out.println("Shutting down");
+		httpclient.close(CloseMode.GRACEFUL);
+
+	}
 }

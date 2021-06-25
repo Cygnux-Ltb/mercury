@@ -52,50 +52,41 @@ import org.apache.hc.core5.ssl.TrustStrategy;
  */
 public class ClientCustomSSL {
 
-    public final static void main(final String[] args) throws Exception {
-        // Trust standard CA and those trusted by our custom strategy
-        final SSLContext sslcontext = SSLContexts.custom()
-                .loadTrustMaterial(new TrustStrategy() {
+	public final static void main(final String[] args) throws Exception {
+		// Trust standard CA and those trusted by our custom strategy
+		final SSLContext sslcontext = SSLContexts.custom().loadTrustMaterial(new TrustStrategy() {
 
-                    @Override
-                    public boolean isTrusted(
-                            final X509Certificate[] chain,
-                            final String authType) throws CertificateException {
-                        final X509Certificate cert = chain[0];
-                        return "CN=httpbin.org".equalsIgnoreCase(cert.getSubjectDN().getName());
-                    }
+			@Override
+			public boolean isTrusted(final X509Certificate[] chain, final String authType) throws CertificateException {
+				final X509Certificate cert = chain[0];
+				return "CN=httpbin.org".equalsIgnoreCase(cert.getSubjectDN().getName());
+			}
 
-                })
-                .build();
-        // Allow TLSv1.2 protocol only
-        final SSLConnectionSocketFactory sslSocketFactory = SSLConnectionSocketFactoryBuilder.create()
-                .setSslContext(sslcontext)
-                .setTlsVersions(TLS.V_1_2)
-                .build();
-        final HttpClientConnectionManager cm = PoolingHttpClientConnectionManagerBuilder.create()
-                .setSSLSocketFactory(sslSocketFactory)
-                .build();
-        try (CloseableHttpClient httpclient = HttpClients.custom()
-                .setConnectionManager(cm)
-                .build()) {
+		}).build();
+		// Allow TLSv1.2 protocol only
+		final SSLConnectionSocketFactory sslSocketFactory = SSLConnectionSocketFactoryBuilder.create()
+				.setSslContext(sslcontext).setTlsVersions(TLS.V_1_2).build();
+		final HttpClientConnectionManager cm = PoolingHttpClientConnectionManagerBuilder.create()
+				.setSSLSocketFactory(sslSocketFactory).build();
+		try (CloseableHttpClient httpclient = HttpClients.custom().setConnectionManager(cm).build()) {
 
-            final HttpGet httpget = new HttpGet("https://httpbin.org/");
+			final HttpGet httpget = new HttpGet("https://httpbin.org/");
 
-            System.out.println("Executing request " + httpget.getMethod() + " " + httpget.getUri());
+			System.out.println("Executing request " + httpget.getMethod() + " " + httpget.getUri());
 
-            final HttpClientContext clientContext = HttpClientContext.create();
-            try (CloseableHttpResponse response = httpclient.execute(httpget, clientContext)) {
-                System.out.println("----------------------------------------");
-                System.out.println(response.getCode() + " " + response.getReasonPhrase());
-                System.out.println(EntityUtils.toString(response.getEntity()));
+			final HttpClientContext clientContext = HttpClientContext.create();
+			try (CloseableHttpResponse response = httpclient.execute(httpget, clientContext)) {
+				System.out.println("----------------------------------------");
+				System.out.println(response.getCode() + " " + response.getReasonPhrase());
+				System.out.println(EntityUtils.toString(response.getEntity()));
 
-                final SSLSession sslSession = clientContext.getSSLSession();
-                if (sslSession != null) {
-                    System.out.println("SSL protocol " + sslSession.getProtocol());
-                    System.out.println("SSL cipher suite " + sslSession.getCipherSuite());
-                }
-            }
-        }
-    }
+				final SSLSession sslSession = clientContext.getSSLSession();
+				if (sslSession != null) {
+					System.out.println("SSL protocol " + sslSession.getProtocol());
+					System.out.println("SSL cipher suite " + sslSession.getCipherSuite());
+				}
+			}
+		}
+	}
 
 }

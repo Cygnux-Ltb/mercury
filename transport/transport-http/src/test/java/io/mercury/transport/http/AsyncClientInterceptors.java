@@ -62,97 +62,86 @@ import org.apache.hc.core5.reactor.IOReactorConfig;
 import org.apache.hc.core5.util.Timeout;
 
 /**
- * This example demonstrates how to insert custom request interceptor and an execution interceptor
- * to the request execution chain.
+ * This example demonstrates how to insert custom request interceptor and an
+ * execution interceptor to the request execution chain.
  */
 public class AsyncClientInterceptors {
 
-    public static void main(final String[] args) throws Exception {
+	public static void main(final String[] args) throws Exception {
 
-        final IOReactorConfig ioReactorConfig = IOReactorConfig.custom()
-                .setSoTimeout(Timeout.ofSeconds(5))
-                .build();
+		final IOReactorConfig ioReactorConfig = IOReactorConfig.custom().setSoTimeout(Timeout.ofSeconds(5)).build();
 
-        final CloseableHttpAsyncClient client = HttpAsyncClients.custom()
-                .setIOReactorConfig(ioReactorConfig)
+		final CloseableHttpAsyncClient client = HttpAsyncClients.custom().setIOReactorConfig(ioReactorConfig)
 
-                // Add a simple request ID to each outgoing request
+				// Add a simple request ID to each outgoing request
 
-                .addRequestInterceptorFirst(new HttpRequestInterceptor() {
+				.addRequestInterceptorFirst(new HttpRequestInterceptor() {
 
-                    private final AtomicLong count = new AtomicLong(0);
+					private final AtomicLong count = new AtomicLong(0);
 
-                    @Override
-                    public void process(
-                            final HttpRequest request,
-                            final EntityDetails entity,
-                            final HttpContext context) throws HttpException, IOException {
-                        request.setHeader("request-id", Long.toString(count.incrementAndGet()));
-                    }
-                })
+					@Override
+					public void process(final HttpRequest request, final EntityDetails entity,
+							final HttpContext context) throws HttpException, IOException {
+						request.setHeader("request-id", Long.toString(count.incrementAndGet()));
+					}
+				})
 
-                // Simulate a 404 response for some requests without passing the message down to the backend
+				// Simulate a 404 response for some requests without passing the message down to
+				// the backend
 
-                .addExecInterceptorAfter(ChainElement.PROTOCOL.name(), "custom", new AsyncExecChainHandler() {
+				.addExecInterceptorAfter(ChainElement.PROTOCOL.name(), "custom", new AsyncExecChainHandler() {
 
-                    @Override
-                    public void execute(
-                            final HttpRequest request,
-                            final AsyncEntityProducer requestEntityProducer,
-                            final AsyncExecChain.Scope scope,
-                            final AsyncExecChain chain,
-                            final AsyncExecCallback asyncExecCallback) throws HttpException, IOException {
-                        final Header idHeader = request.getFirstHeader("request-id");
-                        if (idHeader != null && "13".equalsIgnoreCase(idHeader.getValue())) {
-                            final HttpResponse response = new BasicHttpResponse(HttpStatus.SC_NOT_FOUND, "Oppsie");
-                            final ByteBuffer content = ByteBuffer.wrap("bad luck".getBytes(StandardCharsets.US_ASCII));
-                            final AsyncDataConsumer asyncDataConsumer = asyncExecCallback.handleResponse(
-                                    response,
-                                    new BasicEntityDetails(content.remaining(), ContentType.TEXT_PLAIN));
-                            asyncDataConsumer.consume(content);
-                            asyncDataConsumer.streamEnd(null);
-                        } else {
-                            chain.proceed(request, requestEntityProducer, scope, asyncExecCallback);
-                        }
-                    }
+					@Override
+					public void execute(final HttpRequest request, final AsyncEntityProducer requestEntityProducer,
+							final AsyncExecChain.Scope scope, final AsyncExecChain chain,
+							final AsyncExecCallback asyncExecCallback) throws HttpException, IOException {
+						final Header idHeader = request.getFirstHeader("request-id");
+						if (idHeader != null && "13".equalsIgnoreCase(idHeader.getValue())) {
+							final HttpResponse response = new BasicHttpResponse(HttpStatus.SC_NOT_FOUND, "Oppsie");
+							final ByteBuffer content = ByteBuffer.wrap("bad luck".getBytes(StandardCharsets.US_ASCII));
+							final AsyncDataConsumer asyncDataConsumer = asyncExecCallback.handleResponse(response,
+									new BasicEntityDetails(content.remaining(), ContentType.TEXT_PLAIN));
+							asyncDataConsumer.consume(content);
+							asyncDataConsumer.streamEnd(null);
+						} else {
+							chain.proceed(request, requestEntityProducer, scope, asyncExecCallback);
+						}
+					}
 
-                })
+				})
 
-                .build();
+				.build();
 
-        client.start();
+		client.start();
 
-        final String requestUri = "http://httpbin.org/get";
-        for (int i = 0; i < 20; i++) {
-            final SimpleHttpRequest request = SimpleRequestBuilder.get(requestUri).build();
-            System.out.println("Executing request " + request);
-            final Future<SimpleHttpResponse> future = client.execute(
-                    request,
-                    new FutureCallback<SimpleHttpResponse>() {
+		final String requestUri = "http://httpbin.org/get";
+		for (int i = 0; i < 20; i++) {
+			final SimpleHttpRequest request = SimpleRequestBuilder.get(requestUri).build();
+			System.out.println("Executing request " + request);
+			final Future<SimpleHttpResponse> future = client.execute(request, new FutureCallback<SimpleHttpResponse>() {
 
-                        @Override
-                        public void completed(final SimpleHttpResponse response) {
-                            System.out.println(request + "->" + new StatusLine(response));
-                            System.out.println(response.getBody());
-                        }
+				@Override
+				public void completed(final SimpleHttpResponse response) {
+					System.out.println(request + "->" + new StatusLine(response));
+					System.out.println(response.getBody());
+				}
 
-                        @Override
-                        public void failed(final Exception ex) {
-                            System.out.println(request + "->" + ex);
-                        }
+				@Override
+				public void failed(final Exception ex) {
+					System.out.println(request + "->" + ex);
+				}
 
-                        @Override
-                        public void cancelled() {
-                            System.out.println(request + " cancelled");
-                        }
+				@Override
+				public void cancelled() {
+					System.out.println(request + " cancelled");
+				}
 
-                    });
-            future.get();
-        }
+			});
+			future.get();
+		}
 
-        System.out.println("Shutting down");
-        client.close(CloseMode.GRACEFUL);
-    }
+		System.out.println("Shutting down");
+		client.close(CloseMode.GRACEFUL);
+	}
 
 }
-

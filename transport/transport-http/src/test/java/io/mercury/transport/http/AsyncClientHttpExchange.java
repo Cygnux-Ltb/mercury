@@ -47,55 +47,47 @@ import org.apache.hc.core5.util.Timeout;
  */
 public class AsyncClientHttpExchange {
 
-    public static void main(final String[] args) throws Exception {
+	public static void main(final String[] args) throws Exception {
 
-        final IOReactorConfig ioReactorConfig = IOReactorConfig.custom()
-                .setSoTimeout(Timeout.ofSeconds(5))
-                .build();
+		final IOReactorConfig ioReactorConfig = IOReactorConfig.custom().setSoTimeout(Timeout.ofSeconds(5)).build();
 
-        final CloseableHttpAsyncClient client = HttpAsyncClients.custom()
-                .setIOReactorConfig(ioReactorConfig)
-                .build();
+		final CloseableHttpAsyncClient client = HttpAsyncClients.custom().setIOReactorConfig(ioReactorConfig).build();
 
-        client.start();
+		client.start();
 
-        final HttpHost target = new HttpHost("httpbin.org");
-        final String[] requestUris = new String[] {"/", "/ip", "/user-agent", "/headers"};
+		final HttpHost target = new HttpHost("httpbin.org");
+		final String[] requestUris = new String[] { "/", "/ip", "/user-agent", "/headers" };
 
-        for (final String requestUri: requestUris) {
-            final SimpleHttpRequest request = SimpleRequestBuilder.get()
-                    .setHttpHost(target)
-                    .setPath(requestUri)
-                    .build();
+		for (final String requestUri : requestUris) {
+			final SimpleHttpRequest request = SimpleRequestBuilder.get().setHttpHost(target).setPath(requestUri)
+					.build();
 
-            System.out.println("Executing request " + request);
-            final Future<SimpleHttpResponse> future = client.execute(
-                    SimpleRequestProducer.create(request),
-                    SimpleResponseConsumer.create(),
-                    new FutureCallback<SimpleHttpResponse>() {
+			System.out.println("Executing request " + request);
+			final Future<SimpleHttpResponse> future = client.execute(SimpleRequestProducer.create(request),
+					SimpleResponseConsumer.create(), new FutureCallback<SimpleHttpResponse>() {
 
-                        @Override
-                        public void completed(final SimpleHttpResponse response) {
-                            System.out.println(request + "->" + new StatusLine(response));
-                            System.out.println(response.getBody());
-                        }
+						@Override
+						public void completed(final SimpleHttpResponse response) {
+							System.out.println(request + "->" + new StatusLine(response));
+							System.out.println(response.getBody());
+						}
 
-                        @Override
-                        public void failed(final Exception ex) {
-                            System.out.println(request + "->" + ex);
-                        }
+						@Override
+						public void failed(final Exception ex) {
+							System.out.println(request + "->" + ex);
+						}
 
-                        @Override
-                        public void cancelled() {
-                            System.out.println(request + " cancelled");
-                        }
+						@Override
+						public void cancelled() {
+							System.out.println(request + " cancelled");
+						}
 
-                    });
-            future.get();
-        }
+					});
+			future.get();
+		}
 
-        System.out.println("Shutting down");
-        client.close(CloseMode.GRACEFUL);
-    }
+		System.out.println("Shutting down");
+		client.close(CloseMode.GRACEFUL);
+	}
 
 }

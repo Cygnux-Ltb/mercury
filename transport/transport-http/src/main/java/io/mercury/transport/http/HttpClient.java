@@ -3,11 +3,13 @@ package io.mercury.transport.http;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.classic.methods.HttpPut;
 import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
@@ -27,7 +29,7 @@ public final class HttpClient {
 
 	private static final CloseableHttpClient HC = HttpClients.createDefault();
 
-	public final static String httpGet(@Nonnull String url) throws HttpStatusException {
+	public final static String httpGet(@Nonnull String url) throws IOException {
 		final HttpGet httpGet = new HttpGet(url);
 		try (CloseableHttpResponse rsp = HC.execute(httpGet)) {
 			int code = rsp.getCode();
@@ -48,24 +50,37 @@ public final class HttpClient {
 			}
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			log.error("");
-			return "";
+			throw e;
+
 		}
 	}
 
-	public final static String httpPost() throws IOException {
+	public final static String httpPut(@Nonnull String url, Map<String, Object> params) throws IOException {
 
-		// The underlying HTTP connection is still held by the response object
-		// to allow the response content to be streamed directly from the network
-		// socket.
-		// In order to ensure correct deallocation of system resources
-		// the user MUST call CloseableHttpResponse#close() from a finally clause.
-		// Please note that if response content is not fully consumed the underlying
-		// connection cannot be safely re-used and will be shut down and discarded
-		// by the connection manager.
+		HttpPut httpPut = new HttpPut(url);
 
-		HttpPost httpPost = new HttpPost("http://httpbin.org/post");
+		List<NameValuePair> nvps = new ArrayList<>();
+		nvps.add(new BasicNameValuePair("username", "vip"));
+		nvps.add(new BasicNameValuePair("password", "secret"));
+		httpPut.setEntity(new UrlEncodedFormEntity(nvps));
+
+		try (CloseableHttpResponse response2 = HC.execute(httpPut)) {
+			System.out.println(response2.getCode() + " " + response2.getReasonPhrase());
+			HttpEntity entity2 = response2.getEntity();
+			EntityUtils.consume(entity2);
+		}
+		return "";
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	public final static String httpPost(@Nonnull String url, Map<String, Object> params) throws IOException {
+
+		HttpPost httpPost = new HttpPost(url);
 		List<NameValuePair> nvps = new ArrayList<>();
 		nvps.add(new BasicNameValuePair("username", "vip"));
 		nvps.add(new BasicNameValuePair("password", "secret"));
@@ -74,11 +89,13 @@ public final class HttpClient {
 		try (CloseableHttpResponse response2 = HC.execute(httpPost)) {
 			System.out.println(response2.getCode() + " " + response2.getReasonPhrase());
 			HttpEntity entity2 = response2.getEntity();
-			// do something useful with the response body
-			// and ensure it is fully consumed
 			EntityUtils.consume(entity2);
 		}
 		return "";
+	}
+
+	public static void main(String[] args) {
+
 	}
 
 }

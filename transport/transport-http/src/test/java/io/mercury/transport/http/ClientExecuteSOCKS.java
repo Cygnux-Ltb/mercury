@@ -53,61 +53,54 @@ import org.apache.hc.core5.util.TimeValue;
  */
 public class ClientExecuteSOCKS {
 
-    public static void main(final String[] args)throws Exception {
-        final Registry<ConnectionSocketFactory> reg = RegistryBuilder.<ConnectionSocketFactory>create()
-                .register("http", new MyConnectionSocketFactory())
-                .build();
-        final PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(reg);
-        try (final CloseableHttpClient httpclient = HttpClients.custom()
-                .setConnectionManager(cm)
-                .build()) {
-            final InetSocketAddress socksaddr = new InetSocketAddress("mysockshost", 1234);
-            final HttpClientContext context = HttpClientContext.create();
-            context.setAttribute("socks.address", socksaddr);
+	public static void main(final String[] args) throws Exception {
+		final Registry<ConnectionSocketFactory> reg = RegistryBuilder.<ConnectionSocketFactory>create()
+				.register("http", new MyConnectionSocketFactory()).build();
+		final PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(reg);
+		try (final CloseableHttpClient httpclient = HttpClients.custom().setConnectionManager(cm).build()) {
+			final InetSocketAddress socksaddr = new InetSocketAddress("mysockshost", 1234);
+			final HttpClientContext context = HttpClientContext.create();
+			context.setAttribute("socks.address", socksaddr);
 
-            final HttpHost target = new HttpHost("http", "httpbin.org", 80);
-            final HttpGet request = new HttpGet("/get");
+			final HttpHost target = new HttpHost("http", "httpbin.org", 80);
+			final HttpGet request = new HttpGet("/get");
 
-            System.out.println("Executing request " + request.getMethod() + " " + request.getUri() +
-                    " via SOCKS proxy " + socksaddr);
-            try (final CloseableHttpResponse response = httpclient.execute(target, request, context)) {
-                System.out.println("----------------------------------------");
-                System.out.println(response.getCode() + " " + response.getReasonPhrase());
-                System.out.println(EntityUtils.toString(response.getEntity()));
-            }
-        }
-    }
+			System.out.println("Executing request " + request.getMethod() + " " + request.getUri() + " via SOCKS proxy "
+					+ socksaddr);
+			try (final CloseableHttpResponse response = httpclient.execute(target, request, context)) {
+				System.out.println("----------------------------------------");
+				System.out.println(response.getCode() + " " + response.getReasonPhrase());
+				System.out.println(EntityUtils.toString(response.getEntity()));
+			}
+		}
+	}
 
-    static class MyConnectionSocketFactory implements ConnectionSocketFactory {
+	static class MyConnectionSocketFactory implements ConnectionSocketFactory {
 
-        @Override
-        public Socket createSocket(final HttpContext context) throws IOException {
-            final InetSocketAddress socksaddr = (InetSocketAddress) context.getAttribute("socks.address");
-            final Proxy proxy = new Proxy(Proxy.Type.SOCKS, socksaddr);
-            return new Socket(proxy);
-        }
+		@Override
+		public Socket createSocket(final HttpContext context) throws IOException {
+			final InetSocketAddress socksaddr = (InetSocketAddress) context.getAttribute("socks.address");
+			final Proxy proxy = new Proxy(Proxy.Type.SOCKS, socksaddr);
+			return new Socket(proxy);
+		}
 
-        @Override
-        public Socket connectSocket(
-                final TimeValue connectTimeout,
-                final Socket socket,
-                final HttpHost host,
-                final InetSocketAddress remoteAddress,
-                final InetSocketAddress localAddress,
-                final HttpContext context) throws IOException {
-            final Socket sock;
-            if (socket != null) {
-                sock = socket;
-            } else {
-                sock = createSocket(context);
-            }
-            if (localAddress != null) {
-                sock.bind(localAddress);
-            }
-            sock.connect(remoteAddress, connectTimeout != null ? connectTimeout.toMillisecondsIntBound() : 0);
-            return sock;
-        }
+		@Override
+		public Socket connectSocket(final TimeValue connectTimeout, final Socket socket, final HttpHost host,
+				final InetSocketAddress remoteAddress, final InetSocketAddress localAddress, final HttpContext context)
+				throws IOException {
+			final Socket sock;
+			if (socket != null) {
+				sock = socket;
+			} else {
+				sock = createSocket(context);
+			}
+			if (localAddress != null) {
+				sock.bind(localAddress);
+			}
+			sock.connect(remoteAddress, connectTimeout != null ? connectTimeout.toMillisecondsIntBound() : 0);
+			return sock;
+		}
 
-    }
+	}
 
 }

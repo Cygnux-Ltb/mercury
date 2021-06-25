@@ -44,37 +44,34 @@ import org.apache.hc.core5.http.io.entity.EntityUtils;
  */
 public class ClientMultipartFormPost {
 
-    public static void main(final String[] args) throws Exception {
-        if (args.length != 1)  {
-            System.out.println("File path not given");
-            System.exit(1);
-        }
-        try (final CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            final HttpPost httppost = new HttpPost("http://localhost:8080" +
-                    "/servlets-examples/servlet/RequestInfoExample");
+	public static void main(final String[] args) throws Exception {
+		if (args.length != 1) {
+			System.out.println("File path not given");
+			System.exit(1);
+		}
+		try (final CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			final HttpPost httppost = new HttpPost(
+					"http://localhost:8080" + "/servlets-examples/servlet/RequestInfoExample");
 
-            final FileBody bin = new FileBody(new File(args[0]));
-            final StringBody comment = new StringBody("A binary file of some kind", ContentType.TEXT_PLAIN);
+			final FileBody bin = new FileBody(new File(args[0]));
+			final StringBody comment = new StringBody("A binary file of some kind", ContentType.TEXT_PLAIN);
 
-            final HttpEntity reqEntity = MultipartEntityBuilder.create()
-                    .addPart("bin", bin)
-                    .addPart("comment", comment)
-                    .build();
+			final HttpEntity reqEntity = MultipartEntityBuilder.create().addPart("bin", bin).addPart("comment", comment)
+					.build();
 
+			httppost.setEntity(reqEntity);
 
-            httppost.setEntity(reqEntity);
-
-            System.out.println("executing request " + httppost);
-            try (final CloseableHttpResponse response = httpclient.execute(httppost)) {
-                System.out.println("----------------------------------------");
-                System.out.println(response);
-                final HttpEntity resEntity = response.getEntity();
-                if (resEntity != null) {
-                    System.out.println("Response content length: " + resEntity.getContentLength());
-                }
-                EntityUtils.consume(resEntity);
-            }
-        }
-    }
+			System.out.println("executing request " + httppost);
+			try (final CloseableHttpResponse response = httpclient.execute(httppost)) {
+				System.out.println("----------------------------------------");
+				System.out.println(response);
+				final HttpEntity resEntity = response.getEntity();
+				if (resEntity != null) {
+					System.out.println("Response content length: " + resEntity.getContentLength());
+				}
+				EntityUtils.consume(resEntity);
+			}
+		}
+	}
 
 }

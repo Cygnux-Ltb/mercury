@@ -53,73 +53,60 @@ import org.apache.hc.core5.reactor.IOReactorConfig;
 import org.apache.hc.core5.util.Timeout;
 
 /**
- * This example demonstrates how to use a custom execution interceptor
- * to add trailers to all outgoing request enclosing an entity.
+ * This example demonstrates how to use a custom execution interceptor to add
+ * trailers to all outgoing request enclosing an entity.
  */
 public class AsyncClientMessageTrailers {
 
-    public final static void main(final String[] args) throws Exception {
+	public final static void main(final String[] args) throws Exception {
 
-        final IOReactorConfig ioReactorConfig = IOReactorConfig.custom()
-                .setSoTimeout(Timeout.ofSeconds(5))
-                .build();
+		final IOReactorConfig ioReactorConfig = IOReactorConfig.custom().setSoTimeout(Timeout.ofSeconds(5)).build();
 
-        final CloseableHttpAsyncClient client = HttpAsyncClients.custom()
-                .setIOReactorConfig(ioReactorConfig)
-                .addExecInterceptorAfter(ChainElement.PROTOCOL.name(), "custom", new AsyncExecChainHandler() {
+		final CloseableHttpAsyncClient client = HttpAsyncClients.custom().setIOReactorConfig(ioReactorConfig)
+				.addExecInterceptorAfter(ChainElement.PROTOCOL.name(), "custom", new AsyncExecChainHandler() {
 
-                    @Override
-                    public void execute(
-                            final HttpRequest request,
-                            final AsyncEntityProducer entityProducer,
-                            final AsyncExecChain.Scope scope,
-                            final AsyncExecChain chain,
-                            final AsyncExecCallback asyncExecCallback) throws HttpException, IOException {
-                        // Send MD5 hash in a trailer by decorating the original entity producer
-                        chain.proceed(
-                                request,
-                                entityProducer != null ? new DigestingEntityProducer("MD5", entityProducer) : null,
-                                scope,
-                                asyncExecCallback);
-                    }
+					@Override
+					public void execute(final HttpRequest request, final AsyncEntityProducer entityProducer,
+							final AsyncExecChain.Scope scope, final AsyncExecChain chain,
+							final AsyncExecCallback asyncExecCallback) throws HttpException, IOException {
+						// Send MD5 hash in a trailer by decorating the original entity producer
+						chain.proceed(request,
+								entityProducer != null ? new DigestingEntityProducer("MD5", entityProducer) : null,
+								scope, asyncExecCallback);
+					}
 
-                })
-                .build();
+				}).build();
 
-        client.start();
+		client.start();
 
-        final SimpleHttpRequest request = SimpleRequestBuilder.post("http://httpbin.org/post")
-                .setBody("some stuff", ContentType.TEXT_PLAIN)
-                .build();
+		final SimpleHttpRequest request = SimpleRequestBuilder.post("http://httpbin.org/post")
+				.setBody("some stuff", ContentType.TEXT_PLAIN).build();
 
-        System.out.println("Executing request " + request);
-        final Future<SimpleHttpResponse> future = client.execute(
-                SimpleRequestProducer.create(request),
-                SimpleResponseConsumer.create(),
-                new FutureCallback<SimpleHttpResponse>() {
+		System.out.println("Executing request " + request);
+		final Future<SimpleHttpResponse> future = client.execute(SimpleRequestProducer.create(request),
+				SimpleResponseConsumer.create(), new FutureCallback<SimpleHttpResponse>() {
 
-                    @Override
-                    public void completed(final SimpleHttpResponse response) {
-                        System.out.println(request + "->" + new StatusLine(response));
-                        System.out.println(response.getBody());
-                    }
+					@Override
+					public void completed(final SimpleHttpResponse response) {
+						System.out.println(request + "->" + new StatusLine(response));
+						System.out.println(response.getBody());
+					}
 
-                    @Override
-                    public void failed(final Exception ex) {
-                        System.out.println(request + "->" + ex);
-                    }
+					@Override
+					public void failed(final Exception ex) {
+						System.out.println(request + "->" + ex);
+					}
 
-                    @Override
-                    public void cancelled() {
-                        System.out.println(request + " cancelled");
-                    }
+					@Override
+					public void cancelled() {
+						System.out.println(request + " cancelled");
+					}
 
-                });
-        future.get();
+				});
+		future.get();
 
-        System.out.println("Shutting down");
-        client.close(CloseMode.GRACEFUL);
-    }
+		System.out.println("Shutting down");
+		client.close(CloseMode.GRACEFUL);
+	}
 
 }
-

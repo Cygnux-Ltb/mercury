@@ -46,50 +46,45 @@ import org.apache.hc.core5.http.io.support.ClassicRequestBuilder;
  */
 public class ClientFormLogin {
 
-    public static void main(final String[] args) throws Exception {
-        final BasicCookieStore cookieStore = new BasicCookieStore();
-        try (final CloseableHttpClient httpclient = HttpClients.custom()
-                .setDefaultCookieStore(cookieStore)
-                .build()) {
-            final HttpGet httpget = new HttpGet("https://someportal/");
-            try (final CloseableHttpResponse response1 = httpclient.execute(httpget)) {
-                final HttpEntity entity = response1.getEntity();
+	public static void main(final String[] args) throws Exception {
+		final BasicCookieStore cookieStore = new BasicCookieStore();
+		try (final CloseableHttpClient httpclient = HttpClients.custom().setDefaultCookieStore(cookieStore).build()) {
+			final HttpGet httpget = new HttpGet("https://someportal/");
+			try (final CloseableHttpResponse response1 = httpclient.execute(httpget)) {
+				final HttpEntity entity = response1.getEntity();
 
-                System.out.println("Login form get: " + response1.getCode() + " " + response1.getReasonPhrase());
-                EntityUtils.consume(entity);
+				System.out.println("Login form get: " + response1.getCode() + " " + response1.getReasonPhrase());
+				EntityUtils.consume(entity);
 
-                System.out.println("Initial set of cookies:");
-                final List<Cookie> cookies = cookieStore.getCookies();
-                if (cookies.isEmpty()) {
-                    System.out.println("None");
-                } else {
-                    for (int i = 0; i < cookies.size(); i++) {
-                        System.out.println("- " + cookies.get(i));
-                    }
-                }
-            }
+				System.out.println("Initial set of cookies:");
+				final List<Cookie> cookies = cookieStore.getCookies();
+				if (cookies.isEmpty()) {
+					System.out.println("None");
+				} else {
+					for (int i = 0; i < cookies.size(); i++) {
+						System.out.println("- " + cookies.get(i));
+					}
+				}
+			}
 
-            final ClassicHttpRequest login = ClassicRequestBuilder.post()
-                    .setUri(new URI("https://someportal/"))
-                    .addParameter("IDToken1", "username")
-                    .addParameter("IDToken2", "password")
-                    .build();
-            try (final CloseableHttpResponse response2 = httpclient.execute(login)) {
-                final HttpEntity entity = response2.getEntity();
+			final ClassicHttpRequest login = ClassicRequestBuilder.post().setUri(new URI("https://someportal/"))
+					.addParameter("IDToken1", "username").addParameter("IDToken2", "password").build();
+			try (final CloseableHttpResponse response2 = httpclient.execute(login)) {
+				final HttpEntity entity = response2.getEntity();
 
-                System.out.println("Login form get: " + response2.getCode() + " " + response2.getReasonPhrase());
-                EntityUtils.consume(entity);
+				System.out.println("Login form get: " + response2.getCode() + " " + response2.getReasonPhrase());
+				EntityUtils.consume(entity);
 
-                System.out.println("Post logon cookies:");
-                final List<Cookie> cookies = cookieStore.getCookies();
-                if (cookies.isEmpty()) {
-                    System.out.println("None");
-                } else {
-                    for (int i = 0; i < cookies.size(); i++) {
-                        System.out.println("- " + cookies.get(i));
-                    }
-                }
-            }
-        }
-    }
+				System.out.println("Post logon cookies:");
+				final List<Cookie> cookies = cookieStore.getCookies();
+				if (cookies.isEmpty()) {
+					System.out.println("None");
+				} else {
+					for (int i = 0; i < cookies.size(); i++) {
+						System.out.println("- " + cookies.get(i));
+					}
+				}
+			}
+		}
+	}
 }

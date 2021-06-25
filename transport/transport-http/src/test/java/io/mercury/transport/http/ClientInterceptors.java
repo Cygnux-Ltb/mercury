@@ -52,65 +52,61 @@ import org.apache.hc.core5.http.message.BasicClassicHttpResponse;
 import org.apache.hc.core5.http.protocol.HttpContext;
 
 /**
- * This example demonstrates how to insert custom request interceptor and an execution interceptor
- * to the request execution chain.
+ * This example demonstrates how to insert custom request interceptor and an
+ * execution interceptor to the request execution chain.
  */
 public class ClientInterceptors {
 
-    public static void main(final String[] args) throws Exception {
-        try (final CloseableHttpClient httpclient = HttpClients.custom()
+	public static void main(final String[] args) throws Exception {
+		try (final CloseableHttpClient httpclient = HttpClients.custom()
 
-                // Add a simple request ID to each outgoing request
+				// Add a simple request ID to each outgoing request
 
-                .addRequestInterceptorFirst(new HttpRequestInterceptor() {
+				.addRequestInterceptorFirst(new HttpRequestInterceptor() {
 
-                    private final AtomicLong count = new AtomicLong(0);
+					private final AtomicLong count = new AtomicLong(0);
 
-                    @Override
-                    public void process(
-                            final HttpRequest request,
-                            final EntityDetails entity,
-                            final HttpContext context) throws HttpException, IOException {
-                        request.setHeader("request-id", Long.toString(count.incrementAndGet()));
-                    }
-                })
+					@Override
+					public void process(final HttpRequest request, final EntityDetails entity,
+							final HttpContext context) throws HttpException, IOException {
+						request.setHeader("request-id", Long.toString(count.incrementAndGet()));
+					}
+				})
 
-                // Simulate a 404 response for some requests without passing the message down to the backend
+				// Simulate a 404 response for some requests without passing the message down to
+				// the backend
 
-                .addExecInterceptorAfter(ChainElement.PROTOCOL.name(), "custom", new ExecChainHandler() {
+				.addExecInterceptorAfter(ChainElement.PROTOCOL.name(), "custom", new ExecChainHandler() {
 
-                    @Override
-                    public ClassicHttpResponse execute(
-                            final ClassicHttpRequest request,
-                            final ExecChain.Scope scope,
-                            final ExecChain chain) throws IOException, HttpException {
+					@Override
+					public ClassicHttpResponse execute(final ClassicHttpRequest request, final ExecChain.Scope scope,
+							final ExecChain chain) throws IOException, HttpException {
 
-                        final Header idHeader = request.getFirstHeader("request-id");
-                        if (idHeader != null && "13".equalsIgnoreCase(idHeader.getValue())) {
-                            final ClassicHttpResponse response = new BasicClassicHttpResponse(HttpStatus.SC_NOT_FOUND, "Oppsie");
-                            response.setEntity(new StringEntity("bad luck", ContentType.TEXT_PLAIN));
-                            return response;
-                        } else {
-                            return chain.proceed(request, scope);
-                        }
-                    }
+						final Header idHeader = request.getFirstHeader("request-id");
+						if (idHeader != null && "13".equalsIgnoreCase(idHeader.getValue())) {
+							final ClassicHttpResponse response = new BasicClassicHttpResponse(HttpStatus.SC_NOT_FOUND,
+									"Oppsie");
+							response.setEntity(new StringEntity("bad luck", ContentType.TEXT_PLAIN));
+							return response;
+						} else {
+							return chain.proceed(request, scope);
+						}
+					}
 
-                })
-                .build()) {
+				}).build()) {
 
-            for (int i = 0; i < 20; i++) {
-                final HttpGet httpget = new HttpGet("http://httpbin.org/get");
+			for (int i = 0; i < 20; i++) {
+				final HttpGet httpget = new HttpGet("http://httpbin.org/get");
 
-                System.out.println("Executing request " + httpget.getMethod() + " " + httpget.getUri());
+				System.out.println("Executing request " + httpget.getMethod() + " " + httpget.getUri());
 
-                try (final CloseableHttpResponse response = httpclient.execute(httpget)) {
-                    System.out.println("----------------------------------------");
-                    System.out.println(response.getCode() + " " + response.getReasonPhrase());
-                    System.out.println(EntityUtils.toString(response.getEntity()));
-                }
-            }
-        }
-    }
+				try (final CloseableHttpResponse response = httpclient.execute(httpget)) {
+					System.out.println("----------------------------------------");
+					System.out.println(response.getCode() + " " + response.getReasonPhrase());
+					System.out.println(EntityUtils.toString(response.getEntity()));
+				}
+			}
+		}
+	}
 
 }
-

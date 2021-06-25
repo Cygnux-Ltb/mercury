@@ -39,13 +39,13 @@ import javax.net.ssl.SSLContext;
 import org.apache.hc.client5.http.DnsResolver;
 import org.apache.hc.client5.http.HttpRoute;
 import org.apache.hc.client5.http.SystemDefaultDnsResolver;
-import org.apache.hc.client5.http.auth.StandardAuthScheme;
 import org.apache.hc.client5.http.auth.CredentialsProvider;
+import org.apache.hc.client5.http.auth.StandardAuthScheme;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.cookie.BasicCookieStore;
-import org.apache.hc.client5.http.cookie.StandardCookieSpec;
 import org.apache.hc.client5.http.cookie.CookieStore;
+import org.apache.hc.client5.http.cookie.StandardCookieSpec;
 import org.apache.hc.client5.http.impl.auth.BasicCredentialsProvider;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
@@ -87,171 +87,156 @@ import org.apache.hc.core5.util.TimeValue;
 import org.apache.hc.core5.util.Timeout;
 
 /**
- * This example demonstrates how to customize and configure the most common aspects
- * of HTTP request execution and connection management.
+ * This example demonstrates how to customize and configure the most common
+ * aspects of HTTP request execution and connection management.
  */
 public class ClientConfiguration {
 
-    public final static void main(final String[] args) throws Exception {
+	public final static void main(final String[] args) throws Exception {
 
-        // Use custom message parser / writer to customize the way HTTP
-        // messages are parsed from and written out to the data stream.
-        final HttpMessageParserFactory<ClassicHttpResponse> responseParserFactory = new DefaultHttpResponseParserFactory() {
+		// Use custom message parser / writer to customize the way HTTP
+		// messages are parsed from and written out to the data stream.
+		final HttpMessageParserFactory<ClassicHttpResponse> responseParserFactory = new DefaultHttpResponseParserFactory() {
 
-            @Override
-            public HttpMessageParser<ClassicHttpResponse> create(final Http1Config h1Config) {
-                final LineParser lineParser = new BasicLineParser() {
+			@Override
+			public HttpMessageParser<ClassicHttpResponse> create(final Http1Config h1Config) {
+				final LineParser lineParser = new BasicLineParser() {
 
-                    @Override
-                    public Header parseHeader(final CharArrayBuffer buffer) {
-                        try {
-                            return super.parseHeader(buffer);
-                        } catch (final ParseException ex) {
-                            return new BasicHeader(buffer.toString(), null);
-                        }
-                    }
+					@Override
+					public Header parseHeader(final CharArrayBuffer buffer) {
+						try {
+							return super.parseHeader(buffer);
+						} catch (final ParseException ex) {
+							return new BasicHeader(buffer.toString(), null);
+						}
+					}
 
-                };
-                return new DefaultHttpResponseParser(lineParser, DefaultClassicHttpResponseFactory.INSTANCE, h1Config);
-            }
+				};
+				return new DefaultHttpResponseParser(lineParser, DefaultClassicHttpResponseFactory.INSTANCE, h1Config);
+			}
 
-        };
-        final HttpMessageWriterFactory<ClassicHttpRequest> requestWriterFactory = new DefaultHttpRequestWriterFactory();
+		};
+		final HttpMessageWriterFactory<ClassicHttpRequest> requestWriterFactory = new DefaultHttpRequestWriterFactory();
 
-        // Create HTTP/1.1 protocol configuration
-        final Http1Config h1Config = Http1Config.custom()
-                .setMaxHeaderCount(200)
-                .setMaxLineLength(2000)
-                .build();
-        // Create connection configuration
-        final CharCodingConfig connectionConfig = CharCodingConfig.custom()
-                .setMalformedInputAction(CodingErrorAction.IGNORE)
-                .setUnmappableInputAction(CodingErrorAction.IGNORE)
-                .setCharset(StandardCharsets.UTF_8)
-                .build();
+		// Create HTTP/1.1 protocol configuration
+		final Http1Config h1Config = Http1Config.custom().setMaxHeaderCount(200).setMaxLineLength(2000).build();
 
-        // Use a custom connection factory to customize the process of
-        // initialization of outgoing HTTP connections. Beside standard connection
-        // configuration parameters HTTP connection factory can define message
-        // parser / writer routines to be employed by individual connections.
-        final HttpConnectionFactory<ManagedHttpClientConnection> connFactory = new ManagedHttpClientConnectionFactory(
-                h1Config, connectionConfig, requestWriterFactory, responseParserFactory);
+		// Create connection configuration
+		final CharCodingConfig connectionConfig = CharCodingConfig.custom()
+				.setMalformedInputAction(CodingErrorAction.IGNORE).setUnmappableInputAction(CodingErrorAction.IGNORE)
+				.setCharset(StandardCharsets.UTF_8).build();
 
-        // Client HTTP connection objects when fully initialized can be bound to
-        // an arbitrary network socket. The process of network socket initialization,
-        // its connection to a remote address and binding to a local one is controlled
-        // by a connection socket factory.
+		// Use a custom connection factory to customize the process of
+		// initialization of outgoing HTTP connections. Beside standard connection
+		// configuration parameters HTTP connection factory can define message
+		// parser / writer routines to be employed by individual connections.
+		@SuppressWarnings("unused")
+		final HttpConnectionFactory<ManagedHttpClientConnection> connFactory = new ManagedHttpClientConnectionFactory(
+				h1Config, connectionConfig, requestWriterFactory, responseParserFactory);
 
-        // SSL context for secure connections can be created either based on
-        // system or application specific properties.
-        final SSLContext sslcontext = SSLContexts.createSystemDefault();
+		// Client HTTP connection objects when fully initialized can be bound to
+		// an arbitrary network socket. The process of network socket initialization,
+		// its connection to a remote address and binding to a local one is controlled
+		// by a connection socket factory.
 
-        // Create a registry of custom connection socket factories for supported
-        // protocol schemes.
-        final Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
-            .register("http", PlainConnectionSocketFactory.INSTANCE)
-            .register("https", new SSLConnectionSocketFactory(sslcontext))
-            .build();
+		// SSL context for secure connections can be created either based on
+		// system or application specific properties.
+		final SSLContext sslcontext = SSLContexts.createSystemDefault();
 
-        // Use custom DNS resolver to override the system DNS resolution.
-        final DnsResolver dnsResolver = new SystemDefaultDnsResolver() {
+		// Create a registry of custom connection socket factories for supported
+		// protocol schemes.
+		final Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder
+				.<ConnectionSocketFactory>create().register("http", PlainConnectionSocketFactory.INSTANCE)
+				.register("https", new SSLConnectionSocketFactory(sslcontext)).build();
 
-            @Override
-            public InetAddress[] resolve(final String host) throws UnknownHostException {
-                if (host.equalsIgnoreCase("myhost")) {
-                    return new InetAddress[] { InetAddress.getByAddress(new byte[] {127, 0, 0, 1}) };
-                } else {
-                    return super.resolve(host);
-                }
-            }
+		// Use custom DNS resolver to override the system DNS resolution.
+		final DnsResolver dnsResolver = new SystemDefaultDnsResolver() {
 
-        };
+			@Override
+			public InetAddress[] resolve(final String host) throws UnknownHostException {
+				if (host.equalsIgnoreCase("myhost")) {
+					return new InetAddress[] { InetAddress.getByAddress(new byte[] { 127, 0, 0, 1 }) };
+				} else {
+					return super.resolve(host);
+				}
+			}
 
-        // Create a connection manager with custom configuration.
-        final PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(
-                socketFactoryRegistry, PoolConcurrencyPolicy.STRICT, PoolReusePolicy.LIFO, TimeValue.ofMinutes(5),
-                null, dnsResolver, null);
+		};
 
-        // Create socket configuration
-        final SocketConfig socketConfig = SocketConfig.custom()
-            .setTcpNoDelay(true)
-            .build();
-        // Configure the connection manager to use socket configuration either
-        // by default or for a specific host.
-        connManager.setDefaultSocketConfig(socketConfig);
-        // Validate connections after 1 sec of inactivity
-        connManager.setValidateAfterInactivity(TimeValue.ofSeconds(10));
+		// Create a connection manager with custom configuration.
+		final PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(
+				socketFactoryRegistry, PoolConcurrencyPolicy.STRICT, PoolReusePolicy.LIFO, TimeValue.ofMinutes(5), null,
+				dnsResolver, null);
 
-        // Configure total max or per route limits for persistent connections
-        // that can be kept in the pool or leased by the connection manager.
-        connManager.setMaxTotal(100);
-        connManager.setDefaultMaxPerRoute(10);
-        connManager.setMaxPerRoute(new HttpRoute(new HttpHost("somehost", 80)), 20);
+		// Create socket configuration
+		final SocketConfig socketConfig = SocketConfig.custom().setTcpNoDelay(true).build();
+		// Configure the connection manager to use socket configuration either
+		// by default or for a specific host.
+		connManager.setDefaultSocketConfig(socketConfig);
+		// Validate connections after 1 sec of inactivity
+		connManager.setValidateAfterInactivity(TimeValue.ofSeconds(10));
 
-        // Use custom cookie store if necessary.
-        final CookieStore cookieStore = new BasicCookieStore();
-        // Use custom credentials provider if necessary.
-        final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        // Create global request configuration
-        final RequestConfig defaultRequestConfig = RequestConfig.custom()
-            .setCookieSpec(StandardCookieSpec.STRICT)
-            .setExpectContinueEnabled(true)
-            .setTargetPreferredAuthSchemes(Arrays.asList(StandardAuthScheme.NTLM, StandardAuthScheme.DIGEST))
-            .setProxyPreferredAuthSchemes(Collections.singletonList(StandardAuthScheme.BASIC))
-            .build();
+		// Configure total max or per route limits for persistent connections
+		// that can be kept in the pool or leased by the connection manager.
+		connManager.setMaxTotal(100);
+		connManager.setDefaultMaxPerRoute(10);
+		connManager.setMaxPerRoute(new HttpRoute(new HttpHost("somehost", 80)), 20);
 
-        // Create an HttpClient with the given custom dependencies and configuration.
+		// Use custom cookie store if necessary.
+		final CookieStore cookieStore = new BasicCookieStore();
+		// Use custom credentials provider if necessary.
+		final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+		// Create global request configuration
+		final RequestConfig defaultRequestConfig = RequestConfig.custom().setCookieSpec(StandardCookieSpec.STRICT)
+				.setExpectContinueEnabled(true)
+				.setTargetPreferredAuthSchemes(Arrays.asList(StandardAuthScheme.NTLM, StandardAuthScheme.DIGEST))
+				.setProxyPreferredAuthSchemes(Collections.singletonList(StandardAuthScheme.BASIC)).build();
 
-        try (final CloseableHttpClient httpclient = HttpClients.custom()
-                .setConnectionManager(connManager)
-                .setDefaultCookieStore(cookieStore)
-                .setDefaultCredentialsProvider(credentialsProvider)
-                .setProxy(new HttpHost("myproxy", 8080))
-                .setDefaultRequestConfig(defaultRequestConfig)
-                .build()) {
-            final HttpGet httpget = new HttpGet("http://httpbin.org/get");
-            // Request configuration can be overridden at the request level.
-            // They will take precedence over the one set at the client level.
-            final RequestConfig requestConfig = RequestConfig.copy(defaultRequestConfig)
-                    .setConnectionRequestTimeout(Timeout.ofSeconds(5))
-                    .setConnectTimeout(Timeout.ofSeconds(5))
-                    .setProxy(new HttpHost("myotherproxy", 8080))
-                    .build();
-            httpget.setConfig(requestConfig);
+		// Create an HttpClient with the given custom dependencies and configuration.
 
-            // Execution context can be customized locally.
-            final HttpClientContext context = HttpClientContext.create();
-            // Contextual attributes set the local context level will take
-            // precedence over those set at the client level.
-            context.setCookieStore(cookieStore);
-            context.setCredentialsProvider(credentialsProvider);
+		try (final CloseableHttpClient httpclient = HttpClients.custom().setConnectionManager(connManager)
+				.setDefaultCookieStore(cookieStore).setDefaultCredentialsProvider(credentialsProvider)
+				.setProxy(new HttpHost("myproxy", 8080)).setDefaultRequestConfig(defaultRequestConfig).build()) {
+			final HttpGet httpget = new HttpGet("http://httpbin.org/get");
+			// Request configuration can be overridden at the request level.
+			// They will take precedence over the one set at the client level.
+			final RequestConfig requestConfig = RequestConfig.copy(defaultRequestConfig)
+					.setConnectionRequestTimeout(Timeout.ofSeconds(5)).setConnectTimeout(Timeout.ofSeconds(5))
+					.setProxy(new HttpHost("myotherproxy", 8080)).build();
+			httpget.setConfig(requestConfig);
 
-            System.out.println("Executing request " + httpget.getMethod() + " " + httpget.getUri());
-            try (final CloseableHttpResponse response = httpclient.execute(httpget, context)) {
-                System.out.println("----------------------------------------");
-                System.out.println(response.getCode() + " " + response.getReasonPhrase());
-                System.out.println(EntityUtils.toString(response.getEntity()));
+			// Execution context can be customized locally.
+			final HttpClientContext context = HttpClientContext.create();
+			// Contextual attributes set the local context level will take
+			// precedence over those set at the client level.
+			context.setCookieStore(cookieStore);
+			context.setCredentialsProvider(credentialsProvider);
 
-                // Once the request has been executed the local context can
-                // be used to examine updated state and various objects affected
-                // by the request execution.
+			System.out.println("Executing request " + httpget.getMethod() + " " + httpget.getUri());
+			try (final CloseableHttpResponse response = httpclient.execute(httpget, context)) {
+				System.out.println("----------------------------------------");
+				System.out.println(response.getCode() + " " + response.getReasonPhrase());
+				System.out.println(EntityUtils.toString(response.getEntity()));
 
-                // Last executed request
-                context.getRequest();
-                // Execution route
-                context.getHttpRoute();
-                // Auth exchanges
-                context.getAuthExchanges();
-                // Cookie origin
-                context.getCookieOrigin();
-                // Cookie spec used
-                context.getCookieSpec();
-                // User security token
-                context.getUserToken();
+				// Once the request has been executed the local context can
+				// be used to examine updated state and various objects affected
+				// by the request execution.
 
-            }
-        }
-    }
+				// Last executed request
+				context.getRequest();
+				// Execution route
+				context.getHttpRoute();
+				// Auth exchanges
+				context.getAuthExchanges();
+				// Cookie origin
+				context.getCookieOrigin();
+				// Cookie spec used
+				context.getCookieSpec();
+				// User security token
+				context.getUserToken();
+
+			}
+		}
+	}
 
 }
-

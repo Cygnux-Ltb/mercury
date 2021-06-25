@@ -40,12 +40,6 @@
 			</exclusions>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.httpcomponents.core5</groupId>
-			<artifactId>httpcore5-reactive</artifactId>
-			<version>5.1.1</version>
-		</dependency>
-
 		<!-- jsoup is a Java library for working with real-world HTML. It provides 
 			a very convenient API for extracting and manipulating data, using the best 
 			of DOM, CSS, and jquery-like methods. jsoup implements the WHATWG HTML5 specification, 
