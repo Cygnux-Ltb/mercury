@@ -34,7 +34,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 
 	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqPublisher.class);
 
-	// 发布消息使用的[ExchangeDeclare]
+	// 发布消息使用的[ExchangeDefinition]
 	private final ExchangeDefinition publishExchange;
 	// 发布消息使用的[Exchange]
 	private final String exchangeName;

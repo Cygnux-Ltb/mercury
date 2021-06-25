@@ -84,6 +84,10 @@ public final class RabbitMqChannel extends RabbitMqTransport {
 		this.channel = channel;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public Channel internalChannel() {
 		return channel;
 	}
