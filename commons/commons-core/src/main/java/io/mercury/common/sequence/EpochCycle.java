@@ -43,8 +43,8 @@ public final class EpochCycle {
 	 * 
 	 * @return
 	 */
-	public final long getCycle() {
-		return getCycle(currentTimeMillis());
+	public final long toCycle() {
+		return toCycle(currentTimeMillis());
 	}
 
 	/**
@@ -52,11 +52,16 @@ public final class EpochCycle {
 	 * @param epochMillis
 	 * @return
 	 */
-	public final long getCycle(long epochMillis) {
-		return epochMillis < 0 ? 0 : epochMillis / cycleMillis;
+	public final long toCycle(long epochMillis) {
+		return epochMillis < 0 ? 0 : (epochMillis / cycleMillis);
 	}
 
-	public final long parseEpochMillis(long cycle) {
+	/**
+	 * 
+	 * @param cycle
+	 * @return
+	 */
+	public final long toEpochMillis(long cycle) {
 		return cycle * cycleMillis;
 	}
 

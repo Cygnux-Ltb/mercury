@@ -18,6 +18,7 @@ package io.mercury.common.collections.art;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,7 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Random;
 import java.util.TreeMap;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -45,7 +45,7 @@ public class PerfLongAdaptiveRadixTreeMap {
 		ART_REMOVE, ART_FOREACH, ART_FOREACH_DESC, ART_HIGHER, ART_LOWER
 	}
 
-	private Random rand = new Random(1);
+	private SecureRandom rand = new SecureRandom();
 	private LongAdaptiveRadixTreeMap<Long> art;
 	private TreeMap<Long, Long> bst;
 	private Map<Benchmark, List<Long>> times = new HashMap<>();
@@ -328,7 +328,7 @@ public class PerfLongAdaptiveRadixTreeMap {
 			long artLowerTimeNsAvg = getBenchmarkNs.apply(Benchmark.ART_LOWER);
 
 			// remove 1/2 oldest results
-			if (iter % 2 == 1) {
+			if (iter % 2 != 0) {
 				times.values().forEach(v -> v.remove(0));
 			}
 

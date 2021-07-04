@@ -314,7 +314,7 @@ public final class EpochTime {
 		System.out.println(micros(now, offset));
 		System.out.println(hour());
 
-		Charset.availableCharsets().entrySet().stream().forEach(entity -> System.out.println(entity));
+		Charset.availableCharsets().entrySet().stream().forEach(System.out::println);
 
 	}
 

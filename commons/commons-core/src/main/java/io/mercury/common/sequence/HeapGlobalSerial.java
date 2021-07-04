@@ -2,11 +2,11 @@ package io.mercury.common.sequence;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-public final class JvmGlobalSerial {
+public final class HeapGlobalSerial {
 
-	private static final AtomicLong GlobalSerial = new AtomicLong(0L);
+	private static final AtomicLong ATOMIC = new AtomicLong(0L);
 
-	private JvmGlobalSerial() {
+	private HeapGlobalSerial() {
 	}
 
 	/**
@@ -14,7 +14,7 @@ public final class JvmGlobalSerial {
 	 * @return
 	 */
 	public static final long next() {
-		return GlobalSerial.incrementAndGet();
+		return ATOMIC.incrementAndGet();
 	}
 
 }
