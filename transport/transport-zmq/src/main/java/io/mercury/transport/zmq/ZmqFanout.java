@@ -57,7 +57,6 @@ public class ZmqFanout extends ZmqTransport implements Receiver, Closeable {
 			if (sent != null)
 				socket.send(sent);
 		}
-		return;
 	}
 
 	@Override
@@ -98,7 +97,7 @@ public class ZmqFanout extends ZmqTransport implements Receiver, Closeable {
 		 * @param port
 		 * @return
 		 */
-		public final static ZmqFanoutConfigurator tcp(String addr, int port) {
+		public final static ZmqFanoutConfigurator tcp(@Nonnull String addr, int port) {
 			return new ZmqFanoutConfigurator(ZmqAddress.tcp(addr, port));
 		}
 
@@ -108,7 +107,7 @@ public class ZmqFanout extends ZmqTransport implements Receiver, Closeable {
 		 * @param addr
 		 * @return
 		 */
-		public final static ZmqFanoutConfigurator ipc(String addr) {
+		public final static ZmqFanoutConfigurator ipc(@Nonnull String addr) {
 			return new ZmqFanoutConfigurator(ZmqAddress.ipc(addr));
 		}
 
