@@ -84,10 +84,10 @@
 			<version>${eclipse-collections.version}</version>
 		</dependency>
 
-		<!-- commons logger -->
+		<!-- commons log4j2 logger -->
 		<dependency>
 			<groupId>io.mercury</groupId>
-			<artifactId>commons-log</artifactId>
+			<artifactId>commons-log4j2</artifactId>
 		</dependency>
 
 		<!-- <dependency> <groupId>org.codehaus.plexus</groupId> <artifactId>plexus-utils</artifactId> 

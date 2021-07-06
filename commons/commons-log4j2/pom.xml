@@ -11,7 +11,7 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>commons-log</artifactId>
+	<artifactId>commons-log4j2</artifactId>
 	<name>commons-log</name>
 
 	<properties>
