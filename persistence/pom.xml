@@ -111,7 +111,7 @@
 			<dependency>
 				<groupId>org.lz4</groupId>
 				<artifactId>lz4-java</artifactId>
-				<version>1.7.1</version>
+				<version>1.8.0</version>
 			</dependency>
 
 			<!-- snappy-java: A fast compression/decompression library -->
@@ -126,7 +126,7 @@
 			<dependency>
 				<groupId>net.openhft</groupId>
 				<artifactId>zero-allocation-hashing</artifactId>
-				<version>0.12</version>
+				<version>0.15</version>
 			</dependency>
 
 			<!-- Netty/Buffer -->
