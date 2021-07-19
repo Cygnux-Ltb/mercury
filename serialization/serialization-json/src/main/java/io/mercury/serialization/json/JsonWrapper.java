@@ -5,6 +5,8 @@ import javax.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import io.mercury.common.serialization.JsonSerializable;
+
 public final class JsonWrapper {
 
 	// 普通JSON序列化
@@ -26,7 +28,11 @@ public final class JsonWrapper {
 	 * @return
 	 */
 	public static final String toJson(@Nullable Object obj) {
-		return obj == null ? "null" : Gson.toJson(obj);
+		if (obj == null)
+			return "null";
+		if (obj instanceof JsonSerializable)
+			return ((JsonSerializable) obj).toJson();
+		return Gson.toJson(obj);
 	}
 
 	/**
@@ -35,7 +41,11 @@ public final class JsonWrapper {
 	 * @return
 	 */
 	public static final String toJsonHasNulls(@Nullable Object obj) {
-		return obj == null ? "null" : GsonHasNulls.toJson(obj);
+		if (obj == null)
+			return "null";
+		if (obj instanceof JsonSerializable)
+			return ((JsonSerializable) obj).toJson();
+		return GsonHasNulls.toJson(obj);
 	}
 
 	/**
@@ -44,7 +54,11 @@ public final class JsonWrapper {
 	 * @return
 	 */
 	public static final String toPrettyJson(@Nullable Object obj) {
-		return obj == null ? "null" : GsonPrettyPrinting.toJson(obj);
+		if (obj == null)
+			return "null";
+		if (obj instanceof JsonSerializable)
+			return ((JsonSerializable) obj).toJson();
+		return GsonPrettyPrinting.toJson(obj);
 	}
 
 	/**
@@ -53,7 +67,11 @@ public final class JsonWrapper {
 	 * @return
 	 */
 	public static final String toPrettyJsonHasNulls(@Nullable Object obj) {
-		return obj == null ? "null" : GsonPrettyPrintingHasNulls.toJson(obj);
+		if (obj == null)
+			return "null";
+		if (obj instanceof JsonSerializable)
+			return ((JsonSerializable) obj).toJson();
+		return GsonPrettyPrintingHasNulls.toJson(obj);
 	}
 
 }
