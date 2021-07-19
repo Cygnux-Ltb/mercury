@@ -59,7 +59,6 @@
 
 
 	<dependencies>
-
 		<!-- #################### Log dependency #################### -->
 		<!-- ### Use slf4j API + log4j2 Implement + slf4j Adaptor ### -->
 		<!-- The slf4j API -->

@@ -2,12 +2,14 @@ package io.mercury.common.datetime;
 
 import static io.mercury.common.util.StringUtil.toText;
 import static java.lang.System.currentTimeMillis;
+import static java.lang.System.nanoTime;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import io.mercury.common.serialization.JsonSerializable;
 import io.mercury.common.util.Assertor;
 
 /**
@@ -15,7 +17,7 @@ import io.mercury.common.util.Assertor;
  * @author yellow013
  *
  */
-public final class Timestamp implements Comparable<Timestamp> {
+public final class Timestamp implements Comparable<Timestamp>, JsonSerializable {
 
 	/**
 	 * Epoch Milliseconds
@@ -43,7 +45,7 @@ public final class Timestamp implements Comparable<Timestamp> {
 	 */
 	private Timestamp(long epochMillis) {
 		this.epochMillis = epochMillis;
-		this.nanoSequence = System.nanoTime();
+		this.nanoSequence = nanoTime();
 	}
 
 	/**
@@ -178,6 +180,11 @@ public final class Timestamp implements Comparable<Timestamp> {
 		}
 		builder.append(end);
 		return builder.toString();
+	}
+
+	@Override
+	public String toJson() {
+		return toString();
 	}
 
 	public static void main(String[] args) {
