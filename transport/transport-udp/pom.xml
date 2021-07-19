@@ -15,7 +15,7 @@
 	<name>transport-udp</name>
 
 	<properties>
-		<aeron.version>1.33.1</aeron.version>
+		<aeron.version>1.34.0</aeron.version>
 	</properties>
 
 	<dependencies>
@@ -38,7 +38,7 @@
 		<dependency>
 			<groupId>org.agrona</groupId>
 			<artifactId>agrona</artifactId>
-			<version>1.9.0</version>
+			<version>1.11.0</version>
 		</dependency>
 
 		<!-- HdrHistogram supports the recording and analyzing sampled data value 
