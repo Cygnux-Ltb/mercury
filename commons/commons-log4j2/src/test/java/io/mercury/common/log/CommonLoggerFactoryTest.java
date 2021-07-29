@@ -9,16 +9,20 @@ import io.mercury.common.log.CommonLogConfigurator.LogLevel;
 
 public class CommonLoggerFactoryTest {
 
+	static {
+		System.out.println(System.getProperty("user.home"));
+		CommonLogConfigurator.setFilename("new");
+		CommonLogConfigurator.setLogLevel(LogLevel.ERROR);
+	}
+
 	private static final Logger log = CommonLoggerFactory.getLogger(CommonLoggerFactory.class);
 
 	@Test
 	public void test() {
 
-		System.out.println(System.getProperty("user.home"));
-		CommonLogConfigurator.setFilename("new");
-		CommonLogConfigurator.setLogLevel(LogLevel.ERROR);
+		Exception e = new NullPointerException("test null point");
 
-		log.error("this is error");
+		log.error("this is error", e);
 		log.warn("this is warn");
 		log.info("this is info");
 		log.debug("this is debug");
