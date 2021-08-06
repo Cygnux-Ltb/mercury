@@ -28,11 +28,7 @@ public final class JsonWrapper {
 	 * @return
 	 */
 	public static final String toJson(@Nullable Object obj) {
-		if (obj == null)
-			return "null";
-		if (obj instanceof JsonSerializable)
-			return ((JsonSerializable) obj).toJson();
-		return Gson.toJson(obj);
+		return toJson0(Gson, obj);
 	}
 
 	/**
@@ -41,11 +37,7 @@ public final class JsonWrapper {
 	 * @return
 	 */
 	public static final String toJsonHasNulls(@Nullable Object obj) {
-		if (obj == null)
-			return "null";
-		if (obj instanceof JsonSerializable)
-			return ((JsonSerializable) obj).toJson();
-		return GsonHasNulls.toJson(obj);
+		return toJson0(GsonHasNulls, obj);
 	}
 
 	/**
@@ -54,11 +46,7 @@ public final class JsonWrapper {
 	 * @return
 	 */
 	public static final String toPrettyJson(@Nullable Object obj) {
-		if (obj == null)
-			return "null";
-		if (obj instanceof JsonSerializable)
-			return ((JsonSerializable) obj).toJson();
-		return GsonPrettyPrinting.toJson(obj);
+		return toJson0(GsonPrettyPrinting, obj);
 	}
 
 	/**
@@ -67,11 +55,15 @@ public final class JsonWrapper {
 	 * @return
 	 */
 	public static final String toPrettyJsonHasNulls(@Nullable Object obj) {
+		return toJson0(GsonPrettyPrintingHasNulls, obj);
+	}
+
+	private static final String toJson0(final Gson gson, final Object obj) {
 		if (obj == null)
 			return "null";
 		if (obj instanceof JsonSerializable)
 			return ((JsonSerializable) obj).toJson();
-		return GsonPrettyPrintingHasNulls.toJson(obj);
+		return gson.toJson(obj);
 	}
 
 }

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonSyntaxException;
 
 public final class JsonParser {
 
@@ -38,7 +39,7 @@ public final class JsonParser {
 	 * @param json
 	 * @return
 	 */
-	public static JsonElement parseJson(@Nonnull String json) {
+	public static JsonElement parseJson(@Nonnull final String json) throws JsonSyntaxException {
 		return parseString(json);
 	}
 
@@ -47,7 +48,7 @@ public final class JsonParser {
 	 * @param json
 	 * @return
 	 */
-	public static boolean isJsonArray(@Nonnull String json) {
+	public static boolean isJsonArray(@Nonnull final String json) throws JsonSyntaxException {
 		return parseString(json).isJsonArray();
 	}
 
@@ -56,7 +57,7 @@ public final class JsonParser {
 	 * @param json
 	 * @return
 	 */
-	public static boolean isJsonObject(@Nonnull String json) {
+	public static boolean isJsonObject(@Nonnull final String json) throws JsonSyntaxException {
 		return parseString(json).isJsonObject();
 	}
 
@@ -68,7 +69,7 @@ public final class JsonParser {
 	 * @throws JsonParseException
 	 */
 	@Nullable
-	public static final <T> T toObject(@Nonnull String json) throws JsonParseException {
+	public static final <T> T toObject(@Nonnull final String json) throws JsonParseException {
 		try {
 			if (json == null)
 				return null;
@@ -83,16 +84,16 @@ public final class JsonParser {
 	 * 
 	 * @param <T>
 	 * @param json
-	 * @param clazz
+	 * @param type
 	 * @return
 	 * @throws JsonParseException
 	 */
 	@Nullable
-	public static final <T> T toObject(@Nonnull String json, @Nonnull Class<T> clazz) throws JsonParseException {
+	public static final <T> T toObject(@Nonnull final String json, @Nonnull Class<T> type) throws JsonParseException {
 		try {
-			if (json == null || clazz == null)
+			if (json == null || type == null)
 				return null;
-			return Mapper.readValue(json, clazz);
+			return Mapper.readValue(json, type);
 		} catch (Exception e) {
 			throw new JsonParseException(json, e);
 		}
@@ -185,14 +186,14 @@ public final class JsonParser {
 	/**
 	 * 
 	 * @param json
-	 * @param clazz
+	 * @param type
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final <T> ImmutableList<T> toImmutableList(@Nonnull String json, @Nonnull Class<T> clazz)
+	public static final <T> ImmutableList<T> toImmutableList(@Nonnull String json, @Nonnull Class<T> type)
 			throws JsonParseException {
 		try {
-			List<T> list = Mapper.readValue(json, TypeFactory.constructCollectionLikeType(List.class, clazz));
+			final List<T> list = Mapper.readValue(json, TypeFactory.constructCollectionLikeType(List.class, type));
 			return newImmutableList(
 					// List convert to MutableList
 					list);
@@ -207,7 +208,7 @@ public final class JsonParser {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final <K, V> Map<K, V> toMap(@Nonnull String json) throws JsonParseException {
+	public static final <K, V> Map<K, V> toMap(@Nonnull final String json) throws JsonParseException {
 		try {
 			return Mapper.readValue(json, new TypeReference<Map<K, V>>() {
 			});
@@ -219,15 +220,15 @@ public final class JsonParser {
 	/**
 	 * 
 	 * @param json
-	 * @param keyClass
-	 * @param valueClass
+	 * @param keyType
+	 * @param valueType
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final <K, V> Map<K, V> toMap(@Nonnull String json, @Nonnull Class<K> keyClass,
-			@Nonnull Class<V> valueClass) throws JsonParseException {
+	public static final <K, V> Map<K, V> toMap(@Nonnull final String json, @Nonnull Class<K> keyType,
+			@Nonnull Class<V> valueType) throws JsonParseException {
 		try {
-			return Mapper.readValue(json, TypeFactory.constructMapLikeType(Map.class, keyClass, valueClass));
+			return Mapper.readValue(json, TypeFactory.constructMapLikeType(Map.class, keyType, valueType));
 		} catch (Exception e) {
 			throw new JsonParseException(json, e);
 		}
@@ -239,7 +240,7 @@ public final class JsonParser {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final <K, V> MutableMap<K, V> toMutableMap(@Nonnull String json) throws JsonParseException {
+	public static final <K, V> MutableMap<K, V> toMutableMap(@Nonnull final String json) throws JsonParseException {
 		try {
 			return newUnifiedMap(
 					// Map convert to MutableMap

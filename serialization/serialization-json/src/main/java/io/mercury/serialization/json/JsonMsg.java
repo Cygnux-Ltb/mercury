@@ -2,7 +2,9 @@ package io.mercury.serialization.json;
 
 import javax.annotation.Nullable;
 
-public final class JsonMsg {
+import io.mercury.common.serialization.JsonSerializable;
+
+public final class JsonMsg implements JsonSerializable {
 
 	private long sequence;
 	private long epoch;
@@ -70,6 +72,7 @@ public final class JsonMsg {
 		return this;
 	}
 
+	@Override
 	public String toJson() {
 		return JsonWrapper.toJson(this);
 	}
