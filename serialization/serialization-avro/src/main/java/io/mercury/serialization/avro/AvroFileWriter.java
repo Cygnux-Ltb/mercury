@@ -15,6 +15,7 @@ import org.apache.avro.file.DataFileWriter;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecord;
+import org.apache.commons.collections4.CollectionUtils;
 
 import io.mercury.common.util.Assertor;
 
@@ -62,19 +63,18 @@ public final class AvroFileWriter<T extends SpecificRecord> implements Closeable
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
-
 		// 如果文件存在则追加, 否则创建新文件
-		if (saveFile.exists())
+		if (saveFile.exists()) {
 			fileWriter.appendTo(saveFile);
-		else
+		} else {
 			fileWriter.create(schema, saveFile);
-
+		}
 		// 设置Codec
-		if (codec != null) 
+		if (codec != null) {
 			fileWriter.setCodec(codec);
-		
+		}
 		// Serializing
-		if (records != null && !records.isEmpty()) {
+		if (CollectionUtils.isNotEmpty(records)) {
 			Iterator<T> iterator = records.iterator();
 			while (iterator.hasNext()) {
 				// write record
