@@ -150,7 +150,7 @@
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-compress</artifactId>
-				<version>1.20</version>
+				<version>1.21</version>
 			</dependency>
 
 			<!-- Java ports and bindings of the LZ4 compression algorithm and the 
@@ -158,7 +158,7 @@
 			<dependency>
 				<groupId>org.lz4</groupId>
 				<artifactId>lz4-java</artifactId>
-				<version>1.7.1</version>
+				<version>1.8.0</version>
 			</dependency>
 
 			<!-- snappy-java: A fast compression/decompression library -->
