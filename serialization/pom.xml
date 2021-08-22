@@ -26,7 +26,7 @@
 
 	<properties>
 		<jackson.version>2.12.4</jackson.version>
-		<netty.version>4.1.65.Final</netty.version>
+		<netty.version>4.1.67.Final</netty.version>
 	</properties>
 
 	<build>
