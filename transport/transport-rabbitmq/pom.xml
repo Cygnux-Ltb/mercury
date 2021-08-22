@@ -30,7 +30,6 @@
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>commons-concurrent</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
@@ -43,7 +42,7 @@
 		<dependency>
 			<groupId>com.rabbitmq</groupId>
 			<artifactId>amqp-client</artifactId>
-			<version>5.12.0</version>
+			<version>5.13.0</version>
 		</dependency>
 	</dependencies>
 

@@ -19,6 +19,7 @@
 	<modules>
 		<module>transport-api</module>
 		<module>transport-http</module>
+		<module>transport-nanomsg</module>
 		<module>transport-netty</module>
 		<module>transport-rabbitmq</module>
 		<module>transport-socket</module>
@@ -27,7 +28,7 @@
 	</modules>
 
 	<properties>
-		<netty.version>4.1.65.Final</netty.version>
+		<netty.version>4.1.67.Final</netty.version>
 	</properties>
 
 	<build>
@@ -58,6 +59,11 @@
 			<dependency>
 				<groupId>io.mercury</groupId>
 				<artifactId>transport-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.mercury</groupId>
+				<artifactId>commons-concurrent</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
