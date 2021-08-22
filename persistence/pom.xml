@@ -27,7 +27,7 @@
 
 	<properties>
 		<jackson.version>2.12.4</jackson.version>
-		<netty.version>4.1.65.Final</netty.version>
+		<netty.version>4.1.67.Final</netty.version>
 	</properties>
 
 	<build>
@@ -93,7 +93,7 @@
 			<dependency>
 				<groupId>com.zaxxer</groupId>
 				<artifactId>HikariCP</artifactId>
-				<version>4.0.3</version>
+				<version>5.0.0</version>
 			</dependency>
 
 			<!-- Apache Commons Compress software defines an API for working with 
