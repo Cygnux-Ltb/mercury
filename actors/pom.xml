@@ -16,7 +16,7 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<akka.version>2.6.15</akka.version>
+		<akka.version>2.6.16</akka.version>
 		<avro.version>1.10.2</avro.version>
 	</properties>
 
