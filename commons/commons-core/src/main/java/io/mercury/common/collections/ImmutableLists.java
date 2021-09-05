@@ -1,5 +1,7 @@
 package io.mercury.common.collections;
 
+import javax.annotation.Nullable;
+
 import org.eclipse.collections.api.factory.list.ImmutableListFactory;
 import org.eclipse.collections.api.factory.list.primitive.ImmutableIntListFactory;
 import org.eclipse.collections.api.factory.list.primitive.ImmutableLongListFactory;
@@ -98,6 +100,30 @@ public final class ImmutableLists {
 		if (ArrayUtil.isNullOrEmpty(values))
 			return ImmutableListFactoryImpl.INSTANCE.empty();
 		return ImmutableListFactoryImpl.INSTANCE.with(values);
+	}
+
+	/**
+	 * 
+	 * @param <E>
+	 * @param list
+	 * @return
+	 */
+	public static final <E> boolean isNullOrEmpty(@Nullable ImmutableList<E> list) {
+		if (list == null || list.isEmpty())
+			return true;
+		return false;
+	}
+
+	/**
+	 * 
+	 * @param <E>
+	 * @param list
+	 * @return
+	 */
+	public static final <E> boolean notNullAndEmpty(@Nullable ImmutableList<E> list) {
+		if (list != null && !list.isEmpty())
+			return true;
+		return false;
 	}
 
 }
