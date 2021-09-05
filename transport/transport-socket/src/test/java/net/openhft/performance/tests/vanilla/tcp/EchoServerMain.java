@@ -34,76 +34,80 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author peter.lawrey
  */
 public class EchoServerMain {
-    public static void main(@NotNull String... args) throws IOException {
-        int port = args.length < 1 ? EchoClientMain.PORT : Integer.parseInt(args[0]);
-        ChronicleServerSocketChannel ssc = ChronicleServerSocketFactory.open();
-        ssc.bind(new InetSocketAddress(port));
-        System.out.println("listening on " + ssc);
 
-        @NotNull AtomicReference<ChronicleSocketChannel> nextSocket = new AtomicReference<>();
+	public static void main(@NotNull String... args) throws IOException {
+		int port = args.length < 1 ? EchoClientMain.PORT : Integer.parseInt(args[0]);
+		ChronicleServerSocketChannel ssc = ChronicleServerSocketFactory.open();
+		ssc.bind(new InetSocketAddress(port));
+		System.out.println("listening on " + ssc);
 
-        new Thread(() -> {
-            Affinity.acquireCore();
-            System.out.println("Running on CPU " + Affinity.getCpu());
+		@NotNull
+		AtomicReference<ChronicleSocketChannel> nextSocket = new AtomicReference<>();
 
-            ByteBuffer bb = ByteBuffer.allocateDirect(32 * 1024);
-            ByteBuffer bb2 = ByteBuffer.allocateDirect(32 * 1024);
-            @NotNull List<ChronicleSocketChannel> sockets = new ArrayList<>();
-            for (; ; ) {
-                if (sockets.isEmpty())
-                    Thread.yield();
-                ChronicleSocketChannel sc = nextSocket.getAndSet(null);
-                if (sc != null) {
+		new Thread(() -> {
+			Affinity.acquireCore();
+			System.out.println("Running on CPU " + Affinity.getCpu());
+
+			ByteBuffer bb = ByteBuffer.allocateDirect(32 * 1024);
+			ByteBuffer bb2 = ByteBuffer.allocateDirect(32 * 1024);
+			@NotNull
+			List<ChronicleSocketChannel> sockets = new ArrayList<>();
+			for (;;) {
+				if (sockets.isEmpty())
+					Thread.yield();
+				ChronicleSocketChannel sc = nextSocket.getAndSet(null);
+				if (sc != null) {
 //                    System.out.println("Connected " + sc);
-                    sockets.add(sc);
-                }
-                for (int i = 0; i < sockets.size(); i++) {
-                    ChronicleSocketChannel socket = sockets.get(i);
-                    try {
-                        // simulate copying the data.
-                        // obviously faster if you don't touch the data but no real service would do that.
-                        bb.clear();
-                        int len = socket.read(bb);
-                        if (len < 0) {
-                            System.out.println("... closed " + socket + " on read");
-                            socket.close();
-                            sockets.remove(i--);
-                            continue;
-                        } else if (len == 0) {
-                            continue;
-                        }
-                        bb.flip();
-                        bb2.clear();
-                        bb2.put(bb);
-                        bb2.flip();
-                        // make sure there is enough space to do a full read the next time.
+					sockets.add(sc);
+				}
+				for (int i = 0; i < sockets.size(); i++) {
+					ChronicleSocketChannel socket = sockets.get(i);
+					try {
+						// simulate copying the data.
+						// obviously faster if you don't touch the data but no real service would do
+						// that.
+						bb.clear();
+						int len = socket.read(bb);
+						if (len < 0) {
+							System.out.println("... closed " + socket + " on read");
+							socket.close();
+							sockets.remove(i--);
+							continue;
+						} else if (len == 0) {
+							continue;
+						}
+						bb.flip();
+						bb2.clear();
+						bb2.put(bb);
+						bb2.flip();
+						// make sure there is enough space to do a full read the next time.
 
-                        while ((len = socket.write(bb2)) > 0) {
-                            // busy wait
-                        }
-                        if (len < 0) {
-                            System.out.println("... closed " + socket + " on write");
-                            socket.close();
-                            sockets.remove(i--);
-                            continue;
-                        }
-                    } catch (IOException ioe) {
-                        System.out.println("... closed " + socket + " on " + ioe);
-                        socket.close();
-                        sockets.remove(i--);
+						while ((len = socket.write(bb2)) > 0) {
+							// busy wait
+						}
+						if (len < 0) {
+							System.out.println("... closed " + socket + " on write");
+							socket.close();
+							sockets.remove(i--);
+							continue;
+						}
+					} catch (IOException ioe) {
+						System.out.println("... closed " + socket + " on " + ioe);
+						socket.close();
+						sockets.remove(i--);
 
-                    }
-                }
-            }
-        }).start();
+					}
+				}
+			}
+		}).start();
 
-        while (true) {
-            final ChronicleSocketChannel socket = ssc.accept();
-            socket.socket().setTcpNoDelay(true);
-            socket.configureBlocking(false);
-            while (!nextSocket.compareAndSet(null, socket)) {
-                // busy wait.
-            }
-        }
-    }
+		while (true) {
+			final ChronicleSocketChannel socket = ssc.accept();
+			socket.socket().setTcpNoDelay(true);
+			socket.configureBlocking(false);
+			while (!nextSocket.compareAndSet(null, socket)) {
+				// busy wait.
+			}
+		}
+	}
 }
