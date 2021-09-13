@@ -6,7 +6,7 @@ import io.mercury.common.annotation.thread.AsyncFunction;
 import io.mercury.transport.exception.ConnectionBreakException;
 import io.mercury.transport.exception.ReceiverStartException;
 
-public interface Receiver extends Transport, Closeable, Runnable {
+public interface Receiver extends Transport, Closeable, Runnable, FaninModule {
 
 	/**
 	 * Start receive
@@ -23,6 +23,14 @@ public interface Receiver extends Transport, Closeable, Runnable {
 	 * @throws ReceiverStartException
 	 */
 	void reconnect() throws ConnectionBreakException, ReceiverStartException;
+
+	/**
+	 * 
+	 * @return
+	 */
+	default String getReceiverName() {
+		return getName();
+	}
 
 	@Override
 	default void run() {

@@ -4,7 +4,7 @@ import java.io.Closeable;
 
 import io.mercury.transport.exception.PublishFailedException;
 
-public interface Publisher<T> extends Transport, Closeable {
+public interface Publisher<T> extends Transport, Closeable, FanoutModule {
 
 	/**
 	 * Publish to default location
@@ -27,6 +27,8 @@ public interface Publisher<T> extends Transport, Closeable {
 	 * 
 	 * @return
 	 */
-	String getPublisherName();
+	default String getPublisherName() {
+		return getName();
+	}
 
 }
