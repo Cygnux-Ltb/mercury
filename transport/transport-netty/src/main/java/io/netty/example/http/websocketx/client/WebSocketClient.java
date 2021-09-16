@@ -97,37 +97,37 @@ public final class WebSocketClient {
 			final WebSocketClientHandler handler = new WebSocketClientHandler(WebSocketClientHandshakerFactory
 					.newHandshaker(uri, WebSocketVersion.V13, null, true, new DefaultHttpHeaders()));
 
-			Bootstrap b = new Bootstrap();
-			b.group(group).channel(NioSocketChannel.class).handler(new ChannelInitializer<SocketChannel>() {
+			Bootstrap bootstrap = new Bootstrap();
+			bootstrap.group(group).channel(NioSocketChannel.class).handler(new ChannelInitializer<SocketChannel>() {
 				@Override
-				protected void initChannel(SocketChannel ch) {
-					ChannelPipeline p = ch.pipeline();
+				protected void initChannel(SocketChannel channel) {
+					ChannelPipeline pipeline = channel.pipeline();
 					if (sslCtx != null) {
-						p.addLast(sslCtx.newHandler(ch.alloc(), host, port));
+						pipeline.addLast(sslCtx.newHandler(channel.alloc(), host, port));
 					}
-					p.addLast(new HttpClientCodec(), new HttpObjectAggregator(8192),
+					pipeline.addLast(new HttpClientCodec(), new HttpObjectAggregator(8192),
 							WebSocketClientCompressionHandler.INSTANCE, handler);
 				}
 			});
 
-			Channel ch = b.connect(uri.getHost(), port).sync().channel();
+			Channel channel = bootstrap.connect(uri.getHost(), port).sync().channel();
 			handler.handshakeFuture().sync();
-			
+
 			BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
 			while (true) {
 				String msg = console.readLine();
 				if (msg == null) {
 					break;
 				} else if ("bye".equals(msg.toLowerCase())) {
-					ch.writeAndFlush(new CloseWebSocketFrame());
-					ch.closeFuture().sync();
+					channel.writeAndFlush(new CloseWebSocketFrame());
+					channel.closeFuture().sync();
 					break;
 				} else if ("ping".equals(msg.toLowerCase())) {
 					WebSocketFrame frame = new PingWebSocketFrame(Unpooled.wrappedBuffer(new byte[] { 8, 1, 8, 1 }));
-					ch.writeAndFlush(frame);
+					channel.writeAndFlush(frame);
 				} else {
 					WebSocketFrame frame = new TextWebSocketFrame(msg);
-					ch.writeAndFlush(frame);
+					channel.writeAndFlush(frame);
 				}
 			}
 		} finally {

@@ -4,7 +4,7 @@ import java.io.Closeable;
 
 import io.mercury.common.annotation.thread.AsyncFunction;
 
-public interface Subscriber extends Transport, Closeable {
+public interface Subscriber extends Transport, Closeable, FaninModule {
 
 	/**
 	 * Start subscribe

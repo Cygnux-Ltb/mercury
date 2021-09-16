@@ -50,9 +50,8 @@ public final class HttpClient {
 			}
 
 		} catch (IOException e) {
-			log.error("");
+			log.error("", e);
 			throw e;
-
 		}
 	}
 
