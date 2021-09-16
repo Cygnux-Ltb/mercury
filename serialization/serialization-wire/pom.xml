@@ -38,6 +38,12 @@
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-core</artifactId>
 			<version>${chronicle-core.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- ####### chronicle-bytes ####### -->
@@ -48,6 +54,12 @@
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-bytes</artifactId>
 			<version>${chronicle-bytes.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- ####### chronicle-threads ####### -->
@@ -59,6 +71,12 @@
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-threads</artifactId>
 			<version>${chronicle-threads.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- ####### chronicle-wire ####### -->
@@ -67,6 +85,12 @@
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-wire</artifactId>
 			<version>${chronicle-wire.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 	</dependencies>
