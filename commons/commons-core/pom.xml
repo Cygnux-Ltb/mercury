@@ -85,11 +85,11 @@
 		</dependency>
 
 		<!-- google mug -->
-		<!-- <dependency>
+		<dependency>
 			<groupId>com.google.mug</groupId>
 			<artifactId>mug</artifactId>
 			<version>5.5</version>
-		</dependency> -->
+		</dependency>
 
 		<!-- commons log4j2 logger -->
 		<dependency>
@@ -101,14 +101,14 @@
 			<version>3.3.0</version> </dependency> -->
 
 		<!-- ####### Unit test mock tool ####### -->
-		<!-- EasyMock pro an easy way to create Mock Objects for interfaces and 
-			classes generating them on the fly. -->
+		<!-- Mockito mock objects library core API and implementation -->
 		<dependency>
-			<groupId>org.easymock</groupId>
-			<artifactId>easymock</artifactId>
-			<version>4.3</version>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>3.12.4</version>
 			<scope>test</scope>
 		</dependency>
+		
 	</dependencies>
 
 </project>
