@@ -11,19 +11,21 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 /**
- * 实现 Echo 协议, 返回所有收到的数据. <br>
+ * 实现 ECHO 协议, 返回所有收到的数据. <br>
  * <br>
- * DiscardServer 实现用于启动服务端的 DiscardServerHandler
+ * EchoServer 实现用于启动服务端的 EchoServer
+ * 
+ * @author yellow013
  */
-public class DiscardServer {
+public class EchoServer {
 
 	private int port;
 
-	public DiscardServer(int port) {
+	public EchoServer(int port) {
 		this.port = port;
 	}
 
-	public void run() throws Exception {
+	public void startup() throws Exception {
 		EventLoopGroup bossGroup = new NioEventLoopGroup(); // (1)
 		/*
 		 * 1) NioEventLoopGroup 是用来处理 I/O 操作的多线程事件循环器, Netty 提供了许多不同的 EventLoopGroup
@@ -54,7 +56,7 @@ public class DiscardServer {
 						 * 
 						 * ChannelInitializer 是一个特殊的处理类, 他的目的是帮助使用者配置一个新的 Channel.
 						 * 
-						 * 也许你想通过增加一些处理类比如DiscardServerHandler 来配置一个新的 Channel 或者其对应的ChannelPipeline
+						 * 也许你想通过增加一些处理类比如 EchoServerHandler 来配置一个新的 Channel 或者其对应的ChannelPipeline
 						 * 来实现你的网络程序.
 						 * 
 						 * 当你的程序变的复杂时，可能你会增加更多的处理类到 pipline 上, 然后提取这些匿名类到最顶层的类上.
@@ -62,13 +64,13 @@ public class DiscardServer {
 
 						@Override
 						public void initChannel(SocketChannel ch) throws Exception {
-							ch.pipeline().addLast(new DiscardServerHandler());
+							ch.pipeline().addLast(new EchoServerHandler());
 						}
 					}).option(ChannelOption.SO_BACKLOG, 128) // (5)
 					/*
 					 * 5) 你可以设置这里指定的 Channel 实现的配置参数.
 					 * 
-					 * 我们正在写一个 TCP/IP 的服务端, 因此我们被允许设置 socket 的参数选项比如tcpNoDelay 和 keepAlive.
+					 * 我们正在写一个 TCP/IP 的服务端, 因此我们被允许设置 socket 的参数选项比如 tcpNoDelay 和 keepAlive.
 					 * 
 					 * 请参考 ChannelOption 和详细的 ChannelConfig 实现的接口文档以此可以对ChannelOption 的有一个大概的认识.
 					 */
@@ -85,10 +87,15 @@ public class DiscardServer {
 			/*
 			 * 7) 绑定端口然后启动服务.
 			 * 
-			 * 当然现在你可以多次调用 bind() 方法(基于不同绑定地址).
+			 * 可以多次调用 bind() (基于不同绑定地址).
 			 */
 
-			future.channel().closeFuture().sync(); // 等待服务器 socket 关闭. 在这个例子中, 这不会发生. 但你可以优雅地关闭你的服务器.
+			future.channel().closeFuture().sync(); // (8)
+			/*
+			 * 等待服务器 socket 关闭.
+			 * 
+			 * 在这个例子中, 这不会发生. 但你可以优雅地关闭你的服务器.
+			 */
 		} finally {
 			workerGroup.shutdownGracefully();
 			bossGroup.shutdownGracefully();
@@ -102,6 +109,6 @@ public class DiscardServer {
 		} else {
 			port = 8080;
 		}
-		new DiscardServer(port).run();
+		new EchoServer(port).startup();
 	}
 }
