@@ -1,6 +1,5 @@
 package io.mercury.transport.netty.guide;
 
-import io.mercury.common.character.Charsets;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
@@ -13,22 +12,15 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-/**
- * 实现 ECHO 协议, 返回所有收到的数据. <br>
- * <br>
- * EchoServer 实现用于启动服务端的 EchoServer
- * 
- * @author yellow013
- */
-public class EchoServer {
+public class TimeServer {
 
-	private int port;
+	private final int port;
 
-	private EchoServer(int port) {
+	private TimeServer(int port) {
 		this.port = port;
 	}
 
-	public void startup() throws InterruptedException {
+	public void startup() throws Exception {
 		EventLoopGroup bossGroup = new NioEventLoopGroup(); // (*)
 		/*
 		 * NioEventLoopGroup 是用来处理 I/O 操作的多线程事件循环器, Netty 提供了许多不同的 EventLoopGroup
@@ -53,6 +45,7 @@ public class EchoServer {
 					/*
 					 * 指定使用 NioServerSocketChannel 类来举例说明一个新的 Channel 如何接收进来的连接.
 					 */
+
 					.childHandler(new ChannelInitializer<SocketChannel>() { // (*)
 						/*
 						 * 这里的事件处理类经常会被用来处理一个最近的已经接收的 Channel.
@@ -64,10 +57,10 @@ public class EchoServer {
 						 * 
 						 * 当你的程序变的复杂时，可能你会增加更多的处理类到 pipline 上, 然后提取这些匿名类到最顶层的类上.
 						 */
-
+						
 						@Override
 						public void initChannel(SocketChannel ch) throws Exception {
-							ch.pipeline().addLast(new EchoServerHandler());
+							ch.pipeline().addLast(new TimeServerHandler());
 						}
 					}).option(ChannelOption.SO_BACKLOG, 128) // (*)
 					/*
@@ -106,85 +99,73 @@ public class EchoServer {
 	}
 
 	/**
-	 * 实现 ECHO 协议, 返回所有收到的数据. <br>
+	 * 在这个部分被实现的协议是 TIME 协议. <br>
 	 * <br>
-	 * Handler(处理器) 实现，Handler 是由 Netty 生成用来处理 I/O 事件.
+	 * 和之前的例子不同的是在不接受任何请求时他会发送一个含32位的整数的消息, 并且一旦消息发送就会立即关闭连接.<br>
+	 * <br>
+	 * 这个例子中, 你学习如何构建和发送一个消息, 然后在完成时关闭连接.<br>
+	 * <br>
+	 * 忽略任何接收到的数据，而只是在连接被创建发送一个消息，覆盖 channelActive() 方法.
 	 * 
 	 * @author yellow013
+	 *
 	 */
-	private class EchoServerHandler extends ChannelInboundHandlerAdapter { // (*)
-		/*
-		 * EchoServerHandler 继承自 ChannelInboundHandlerAdapter.
-		 * 
-		 * 这个类实现了 ChannelInboundHandler 接口, ChannelInboundHandler 提供了许多事件处理的接口方法,
-		 * 然后你可以覆盖这些方法.
-		 * 
-		 * 现在仅仅只需要继承 ChannelInboundHandlerAdapter 类而不是你自己去实现接口方法.
-		 */
+	private class TimeServerHandler extends ChannelInboundHandlerAdapter {
 
 		@Override
-		public void channelRead(ChannelHandlerContext ctx, Object msg) { // (*)
+		public void channelActive(final ChannelHandlerContext ctx) { // (*)
 			/*
-			 * 覆盖 chanelRead() 事件处理方法.
+			 * channelActive() 方法将会在连接被建立并且准备进行通信时被调用.
 			 * 
-			 * 每当从客户端收到新的数据时, 这个方法会在收到消息时被调用, 这个例子中, 收到的消息的类型是 ByteBuf
+			 * 因此让我们在这个方法里完成一个代表当前时间的32位整数消息的构建工作.
 			 */
-			ByteBuf buf = ((ByteBuf) msg);
-			System.out.println(buf);
-			System.out.println(buf.toString(Charsets.UTF8)); // 输出接收到的字符
-
-			ctx.write(buf); // (*)
+			final ByteBuf time = ctx.alloc().buffer(4); // (*)
 			/*
-			 * ChannelHandlerContext 对象提供了许多操作, 使你能够触发各种各样的 I/O 事件和操作.
+			 * 为了发送一个新的消息, 我们需要分配一个包含这个消息的新的缓冲.
 			 * 
-			 * 这里我们调用了 write(Object) 方法来逐字地把接受到的消息写入.
+			 * 因为我们需要写入一个32位的整数, 因此我们需要一个至少有4个字节的 ByteBuf.
 			 * 
-			 * 请注意不同于 DISCARD 的例子我们并没有释放接受到的消息, 这是因为当写入的时候 Netty 已经帮我们释放了.
+			 * 通过 ChannelHandlerContext.alloc() 得到一个当前的ByteBufAllocator, 然后分配一个新的缓冲.
+			 */
+			time.writeInt((int) (System.currentTimeMillis() / 1000L + 2208988800L));
+
+			final ChannelFuture cf = ctx.writeAndFlush(time); // (*)
+			/*
+			 * 和往常一样我们需要编写一个构建好的消息.
+			 * 
+			 * ByteBuf 有两个指针, 一个对应读操作一个对应写操作.
+			 * 
+			 * 当你向 ByteBuf 里写入数据的时候写指针的索引就会增加, 同时读指针的索引没有变化.
+			 * 
+			 * 读指针索引和写指针索引分别代表了消息的开始和结束.
+			 * 
+			 * ChannelHandlerContext.write() 和 writeAndFlush() 方法会返回一个 ChannelFuture 对象.
+			 * 
+			 * 一个 ChannelFuture 代表了一个还没有发生的 I/O 操作.
+			 * 
+			 * 这意味着任何一个请求操作都不会马上被执行, 因为在 Netty 里所有的操作都是异步的.
 			 */
 
-			ctx.flush(); // (*)
+			cf.addListener(future -> {
+				assert cf == future;
+				ctx.close();
+			}); // (*)
 			/*
-			 * ctx.write(Object) 方法不会使消息写入到通道上, 他被缓冲在了内部, 你需要调用 ctx.flush() 方法来把缓冲区中数据强行输出.
+			 * 在返回的 ChannelFuture 上增加一个 ChannelFutureListener.
 			 * 
-			 * 或者你可以用更简洁的 cxt.writeAndFlush(msg) 以达到同样的目的.
+			 * 这里我们构建了一个匿名的 ChannelFutureListener 类用来在操作完成时关闭 Channel.
 			 */
 		}
 
-		/**
-		 * 连接激活事件
-		 */
 		@Override
-		public void channelActive(ChannelHandlerContext ctx) throws Exception {
-			System.out.println("call channelActive");
-			super.channelActive(ctx);
-		}
-
-		/**
-		 * 连接断开事件
-		 */
-		@Override
-		public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-			System.out.println("call channelInactive");
-			super.channelInactive(ctx);
-		}
-
-		@Override
-		public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) { // (*)
-			/*
-			 * exceptionCaught() 事件处理方法是当出现 Throwable 对象才会被调用, 即当 Netty 由于 IO
-			 * 错误或者处理器在处理事件时抛出的异常时.
-			 * 
-			 * 在大部分情况下, 捕获的异常应该被记录下来并且把关联的 channel 给关闭掉.
-			 * 
-			 * 然而这个方法的处理方式会在遇到不同异常的情况下有不同的实现, 比如你可能想在关闭连接之前发送一个错误码的响应消息.
-			 */
-			cause.printStackTrace(); // 当出现异常就关闭连接
+		public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+			cause.printStackTrace();
 			ctx.close();
 		}
 	}
 
 	public static void main(String[] args) throws Exception {
-		new EchoServer(8080).startup();
+		new TimeServer(8080).startup();
 	}
 
 }

@@ -47,8 +47,9 @@ public class NettyClient extends NettyTransport implements TransportClient {
 	public void connect() {
 		try {
 			// Start the client.
-			// Connect a Channel to the remote peer.
-			bootstrap.connect(configurator.getHost(), configurator.getPort()).sync()
+			bootstrap.connect(configurator.getHost(), configurator.getPort())
+					// Connect a Channel to the remote peer.
+					.sync()
 					// Wait until the connection is closed.
 					// Returns a channel where the I/O operation associated with this future takes
 					// place.
