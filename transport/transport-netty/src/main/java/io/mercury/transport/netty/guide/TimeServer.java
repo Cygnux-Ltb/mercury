@@ -57,7 +57,7 @@ public class TimeServer {
 						 * 
 						 * 当你的程序变的复杂时，可能你会增加更多的处理类到 pipline 上, 然后提取这些匿名类到最顶层的类上.
 						 */
-						
+
 						@Override
 						public void initChannel(SocketChannel ch) throws Exception {
 							ch.pipeline().addLast(new TimeServerHandler());
@@ -119,7 +119,7 @@ public class TimeServer {
 			 * 
 			 * 因此让我们在这个方法里完成一个代表当前时间的32位整数消息的构建工作.
 			 */
-			final ByteBuf time = ctx.alloc().buffer(4); // (*)
+			final ByteBuf buf = ctx.alloc().buffer(8); // (*)
 			/*
 			 * 为了发送一个新的消息, 我们需要分配一个包含这个消息的新的缓冲.
 			 * 
@@ -127,9 +127,9 @@ public class TimeServer {
 			 * 
 			 * 通过 ChannelHandlerContext.alloc() 得到一个当前的ByteBufAllocator, 然后分配一个新的缓冲.
 			 */
-			time.writeInt((int) (System.currentTimeMillis() / 1000L + 2208988800L));
+			buf.writeLong(System.currentTimeMillis());
 
-			final ChannelFuture cf = ctx.writeAndFlush(time); // (*)
+			final ChannelFuture cf = ctx.writeAndFlush(buf); // (*)
 			/*
 			 * 和往常一样我们需要编写一个构建好的消息.
 			 * 
