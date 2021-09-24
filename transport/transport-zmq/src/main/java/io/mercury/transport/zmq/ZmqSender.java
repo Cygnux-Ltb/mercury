@@ -14,15 +14,12 @@ import io.mercury.common.serialization.spec.BytesSerializer;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.zmq.cfg.ZmqAddress;
 import io.mercury.transport.zmq.exception.ZmqConnectionException;
-import lombok.Getter;
 
 @NotThreadSafe
 public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 
-	@Getter
 	private final String name;
 
-	@Getter
 	private final ZmqSenderConfigurator cfg;
 
 	private final BytesSerializer<T> ser;
@@ -43,8 +40,17 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 	}
 
 	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
 	protected SocketType getSocketType() {
 		return SocketType.REQ;
+	}
+
+	public ZmqSenderConfigurator getCfg() {
+		return cfg;
 	}
 
 	@Override

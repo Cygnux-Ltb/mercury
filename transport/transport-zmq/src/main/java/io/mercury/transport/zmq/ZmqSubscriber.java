@@ -17,9 +17,6 @@ import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.configurator.TcpKeepAlive;
 import io.mercury.transport.zmq.cfg.ZmqAddress;
 import io.mercury.transport.zmq.exception.ZmqConnectionException;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 /**
  * 
@@ -31,10 +28,8 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber, Clo
 	/**
 	 * topics
 	 */
-	@Getter
 	private final String[] topics;
 
-	@Getter
 	private final String name;
 
 	/**
@@ -60,6 +55,11 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber, Clo
 			socket.subscribe(topic.getBytes(Charsets.UTF8));
 		}
 		this.name = "Zmq::Sub$" + builder.addr.getAddr() + "/" + StringUtil.toString(topics);
+	}
+	
+	@Override
+	public String getName() {
+		return name;
 	}
 
 	/**
@@ -103,21 +103,16 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber, Clo
 	 * @author yellow013
 	 *
 	 */
-	@Accessors(chain = true)
 	public static class Builder {
 
 		private final ZmqAddress addr;
 
 		private String[] topics = new String[] { "" };
 
-		@Setter
 		private int ioThreads = 1;
 
-		@Setter
-		private TcpKeepAlive tcpKeepAliveOption = TcpKeepAlive.enable()
-				.setKeepAliveCount(10).setKeepAliveIdle(30).setKeepAliveInterval(30);
-
-		private BiConsumer<byte[], byte[]> consumer;
+		private TcpKeepAlive tcpKeepAliveOption = TcpKeepAlive.enable().setKeepAliveCount(10).setKeepAliveIdle(30)
+				.setKeepAliveInterval(30);
 
 		private Builder(ZmqAddress addr) {
 			this.addr = addr;
@@ -127,6 +122,18 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber, Clo
 			this.topics = topics;
 			return this;
 		}
+
+		public Builder setIoThreads(int ioThreads) {
+			this.ioThreads = ioThreads;
+			return this;
+		}
+
+		public Builder setTcpKeepAliveOption(TcpKeepAlive tcpKeepAliveOption) {
+			this.tcpKeepAliveOption = tcpKeepAliveOption;
+			return this;
+		}
+
+		private BiConsumer<byte[], byte[]> consumer;
 
 		/**
 		 * 在构建时定义如何处理接收到的Topic和Content

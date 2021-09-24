@@ -15,14 +15,11 @@ import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Receiver;
 import io.mercury.transport.zmq.cfg.ZmqAddress;
 import io.mercury.transport.zmq.exception.ZmqConnectionException;
-import lombok.Getter;
 
 public class ZmqFanout extends ZmqTransport implements Receiver, Closeable {
 
-	@Getter
 	private final String name;
 
-	@Getter
 	private final ZmqFanoutConfigurator cfg;
 
 	private final Function<byte[], byte[]> pipeline;
@@ -42,6 +39,15 @@ public class ZmqFanout extends ZmqTransport implements Receiver, Closeable {
 		}
 		setTcpKeepAlive(cfg.getTcpKeepAlive());
 		this.name = "Zmq::Fanout$" + cfg.getAddr();
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	public ZmqFanoutConfigurator getCfg() {
+		return cfg;
 	}
 
 	@Override

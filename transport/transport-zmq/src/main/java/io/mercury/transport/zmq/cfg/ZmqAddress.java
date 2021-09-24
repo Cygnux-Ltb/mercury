@@ -1,15 +1,16 @@
 package io.mercury.transport.zmq.cfg;
 
-import static lombok.AccessLevel.PRIVATE;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor(access = PRIVATE)
 public final class ZmqAddress {
 
-	@Getter
 	private final String addr;
+
+	private ZmqAddress(String addr) {
+		this.addr = addr;
+	}
+
+	public String getAddr() {
+		return addr;
+	}
 
 	@Override
 	public String toString() {

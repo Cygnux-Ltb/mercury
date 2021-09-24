@@ -17,20 +17,15 @@ import io.mercury.common.thread.Threads;
 import io.mercury.transport.api.Publisher;
 import io.mercury.transport.zmq.cfg.ZmqAddress;
 import io.mercury.transport.zmq.exception.ZmqConnectionException;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>, Closeable {
 
 	// default topic
-	@Getter
+
 	private final String defaultTopic;
 
-	@Getter
 	private final String name;
 
-	@Getter
 	private final ZmqPubConfigurator cfg;
 
 	private final BytesSerializer<T> ser;
@@ -55,6 +50,15 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>,
 		}
 		setTcpKeepAlive(cfg.getTcpKeepAlive());
 		this.name = "Zmq::Pub$" + cfg.getConnectionInfo();
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	public ZmqPubConfigurator getCfg() {
+		return cfg;
 	}
 
 	/**
@@ -122,13 +126,19 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>,
 	 */
 	public static final class ZmqPubConfigurator extends ZmqConfigurator<ZmqPubConfigurator> {
 
-		@Getter
-		@Setter
-		@Accessors(chain = true)
 		private String defaultTopic = "";
 
 		private ZmqPubConfigurator(ZmqAddress addr) {
 			super(addr);
+		}
+
+		public String getDefaultTopic() {
+			return defaultTopic;
+		}
+
+		public ZmqPubConfigurator setDefaultTopic(String defaultTopic) {
+			this.defaultTopic = defaultTopic;
+			return this;
 		}
 
 		@Override

@@ -16,8 +16,6 @@ import io.mercury.transport.api.Transport;
 import io.mercury.transport.configurator.TcpKeepAlive;
 import io.mercury.transport.configurator.TransportConfigurator;
 import io.mercury.transport.zmq.cfg.ZmqAddress;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 abstract class ZmqTransport implements Transport, Closeable {
 
@@ -25,10 +23,8 @@ abstract class ZmqTransport implements Transport, Closeable {
 	protected ZContext ctx;
 
 	// ZMQ.Socket
-	@Getter
 	protected ZMQ.Socket socket;
 
-	@Getter
 	protected final ZmqAddress addr;
 
 	// 组件运行状态, 初始为已开始运行
@@ -85,17 +81,29 @@ abstract class ZmqTransport implements Transport, Closeable {
 		return ctx.isClosed();
 	}
 
-	@RequiredArgsConstructor
 	public static abstract class ZmqConfigurator<T extends ZmqConfigurator<T>> implements TransportConfigurator {
 
-		@Getter
 		private final ZmqAddress addr;
 
-		@Getter
 		private int ioThreads = 1;
 
-		@Getter
 		private TcpKeepAlive tcpKeepAlive = null;
+
+		protected ZmqConfigurator(ZmqAddress addr) {
+			this.addr = addr;
+		}
+
+		public ZmqAddress getAddr() {
+			return addr;
+		}
+
+		public int getIoThreads() {
+			return ioThreads;
+		}
+
+		public TcpKeepAlive getTcpKeepAlive() {
+			return tcpKeepAlive;
+		}
 
 		public T setIoThreads(int ioThreads) {
 			this.ioThreads = ioThreads;
