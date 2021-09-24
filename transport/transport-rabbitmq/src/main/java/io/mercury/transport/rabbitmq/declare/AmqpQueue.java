@@ -7,36 +7,27 @@ import javax.annotation.Nonnull;
 import io.mercury.common.collections.MapUtil;
 import io.mercury.common.util.Assertor;
 import io.mercury.serialization.json.JsonWrapper;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
-@Accessors(chain = true)
 public final class AmqpQueue {
 
 	// 队列名称
-	@Getter
-	private String name;
+	private final String name;
 
 	// 是否持久化
-	@Getter
-	@Setter
 	private boolean durable = true;
 
 	// 连接独占此队列
-	@Getter
-	@Setter
 	private boolean exclusive = false;
 
 	// channel关闭后自动删除队列
-	@Getter
-	@Setter
 	private boolean autoDelete = false;
 
 	// 队列参数
-	@Getter
-	@Setter
 	private Map<String, Object> args = null;
+
+	private AmqpQueue(String name) {
+		this.name = name;
+	}
 
 	/**
 	 * 定义队列
@@ -49,8 +40,44 @@ public final class AmqpQueue {
 		return new AmqpQueue(name);
 	}
 
-	private AmqpQueue(String name) {
-		this.name = name;
+	public AmqpQueue setDurable(boolean durable) {
+		this.durable = durable;
+		return this;
+	}
+
+	public AmqpQueue setExclusive(boolean exclusive) {
+		this.exclusive = exclusive;
+		return this;
+	}
+
+	public AmqpQueue setAutoDelete(boolean autoDelete) {
+		this.autoDelete = autoDelete;
+		return this;
+	}
+
+	public AmqpQueue setArgs(Map<String, Object> args) {
+		this.args = args;
+		return this;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public boolean isDurable() {
+		return durable;
+	}
+
+	public boolean isExclusive() {
+		return exclusive;
+	}
+
+	public boolean isAutoDelete() {
+		return autoDelete;
+	}
+
+	public Map<String, Object> getArgs() {
+		return args;
 	}
 
 	@Override
@@ -59,8 +86,11 @@ public final class AmqpQueue {
 	}
 
 	public boolean isIdempotent(AmqpQueue another) {
-		return name.equals(another.name) && durable == another.durable && exclusive == another.exclusive
-				&& autoDelete == another.autoDelete && MapUtil.isEquals(args, another.args);
+		return name.equals(another.name) 
+				&& durable == another.durable 
+				&& exclusive == another.exclusive
+				&& autoDelete == another.autoDelete 
+				&& MapUtil.isEquals(args, another.args);
 	}
 
 }

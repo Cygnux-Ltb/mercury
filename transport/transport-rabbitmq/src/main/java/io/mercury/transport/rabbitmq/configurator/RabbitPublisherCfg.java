@@ -12,9 +12,6 @@ import com.rabbitmq.client.AMQP.BasicProperties;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rabbitmq.declare.AmqpQueue;
 import io.mercury.transport.rabbitmq.declare.ExchangeDefinition;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 /**
  * 
@@ -24,23 +21,18 @@ import lombok.experimental.Accessors;
 public final class RabbitPublisherCfg extends RabbitConfigurator {
 
 	// 发布者ExchangeDeclare
-	@Getter
 	private final ExchangeDefinition publishExchange;
 
 	// 消息发布RoutingKey
-	@Getter
 	private final String defaultRoutingKey;
 
 	// 消息发布参数
-	@Getter
 	private final BasicProperties defaultMsgProps;
 
 	// 消息参数提供者
-	@Getter
 	private final Supplier<BasicProperties> msgPropsSupplier;
 
 	// 发布确认选项
-	@Getter
 	private final PublishConfirmOptions confirmOptions;
 
 	/**
@@ -54,6 +46,26 @@ public final class RabbitPublisherCfg extends RabbitConfigurator {
 		this.defaultMsgProps = builder.defaultMsgProps;
 		this.msgPropsSupplier = builder.msgPropsSupplier;
 		this.confirmOptions = builder.confirmOptions;
+	}
+
+	public ExchangeDefinition getPublishExchange() {
+		return publishExchange;
+	}
+
+	public String getDefaultRoutingKey() {
+		return defaultRoutingKey;
+	}
+
+	public BasicProperties getDefaultMsgProps() {
+		return defaultMsgProps;
+	}
+
+	public Supplier<BasicProperties> getMsgPropsSupplier() {
+		return msgPropsSupplier;
+	}
+
+	public PublishConfirmOptions getConfirmOptions() {
+		return confirmOptions;
 	}
 
 	/**
@@ -149,7 +161,6 @@ public final class RabbitPublisherCfg extends RabbitConfigurator {
 		return toStringCache;
 	}
 
-	@Accessors(chain = true)
 	public static class Builder {
 
 		// 连接配置
@@ -158,20 +169,16 @@ public final class RabbitPublisherCfg extends RabbitConfigurator {
 		private final ExchangeDefinition publishExchange;
 
 		// 消息发布RoutingKey, 默认为空字符串
-		@Setter
 		private String defaultRoutingKey = "";
 
 		// 默认消息发布参数
-		@Setter
 		private BasicProperties defaultMsgProps = PERSISTENT_BASIC;
 
 		// 默认消息发布参数提供者
-		@Setter
 		private Supplier<BasicProperties> msgPropsSupplier = null;
 
 		// 发布确认选项
-		@Setter
-		private PublishConfirmOptions confirmOptions = PublishConfirmOptions.defaultOption();
+		private PublishConfirmOptions confirmOptions = PublishConfirmOptions.withDefault();
 
 		/**
 		 * 
@@ -181,6 +188,26 @@ public final class RabbitPublisherCfg extends RabbitConfigurator {
 		private Builder(RabbitConnection connection, ExchangeDefinition publishExchange) {
 			this.connection = connection;
 			this.publishExchange = publishExchange;
+		}
+
+		public Builder setDefaultRoutingKey(String defaultRoutingKey) {
+			this.defaultRoutingKey = defaultRoutingKey;
+			return this;
+		}
+
+		public Builder setDefaultMsgProps(BasicProperties defaultMsgProps) {
+			this.defaultMsgProps = defaultMsgProps;
+			return this;
+		}
+
+		public Builder setMsgPropsSupplier(Supplier<BasicProperties> msgPropsSupplier) {
+			this.msgPropsSupplier = msgPropsSupplier;
+			return this;
+		}
+
+		public Builder setConfirmOptions(PublishConfirmOptions confirmOptions) {
+			this.confirmOptions = confirmOptions;
+			return this;
 		}
 
 		/**
@@ -223,41 +250,21 @@ public final class RabbitPublisherCfg extends RabbitConfigurator {
 
 	}
 
-	@Accessors(chain = true)
+	/**
+	 * 
+	 * @author yellow013
+	 *
+	 */
 	public static final class PublishConfirmOptions {
 
 		// 是否执行发布确认, 默认false
-		@Getter
-		@Setter
 		private boolean confirm = false;
 
 		// 发布确认超时毫秒数, 默认5000毫秒
-		@Getter
-		@Setter
 		private long confirmTimeout = 5000;
 
 		// 发布确认重试次数, 默认3次
-		@Getter
-		@Setter
 		private int confirmRetry = 3;
-
-		/**
-		 * 使用默认参数
-		 * 
-		 * @return
-		 */
-		public static final PublishConfirmOptions defaultOption() {
-			return new PublishConfirmOptions();
-		}
-
-		/**
-		 * 指定具体参数
-		 * 
-		 * @return
-		 */
-		public static final PublishConfirmOptions withOption(boolean confirm, long confirmTimeout, int confirmRetry) {
-			return new PublishConfirmOptions(confirm, confirmTimeout, confirmRetry);
-		}
 
 		private PublishConfirmOptions() {
 		}
@@ -266,6 +273,51 @@ public final class RabbitPublisherCfg extends RabbitConfigurator {
 			this.confirm = confirm;
 			this.confirmTimeout = confirmTimeout;
 			this.confirmRetry = confirmRetry;
+		}
+
+		public PublishConfirmOptions setConfirm(boolean confirm) {
+			this.confirm = confirm;
+			return this;
+		}
+
+		public PublishConfirmOptions setConfirmTimeout(long confirmTimeout) {
+			this.confirmTimeout = confirmTimeout;
+			return this;
+		}
+
+		public PublishConfirmOptions setConfirmRetry(int confirmRetry) {
+			this.confirmRetry = confirmRetry;
+			return this;
+		}
+
+		public boolean isConfirm() {
+			return confirm;
+		}
+
+		public long getConfirmTimeout() {
+			return confirmTimeout;
+		}
+
+		public int getConfirmRetry() {
+			return confirmRetry;
+		}
+
+		/**
+		 * 使用默认参数
+		 * 
+		 * @return
+		 */
+		public static final PublishConfirmOptions withDefault() {
+			return new PublishConfirmOptions();
+		}
+
+		/**
+		 * 指定具体参数
+		 * 
+		 * @return
+		 */
+		public static final PublishConfirmOptions with(boolean confirm, long confirmTimeout, int confirmRetry) {
+			return new PublishConfirmOptions(confirm, confirmTimeout, confirmRetry);
 		}
 
 	}

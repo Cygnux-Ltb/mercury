@@ -245,7 +245,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @throws DeclareRuntimeException
 	 */
 	private void declareQueue() throws DeclareRuntimeException {
-		RabbitMqDeclarator operator = RabbitMqDeclarator.newWith(channel);
+		RabbitMqOperator operator = RabbitMqOperator.newWith(channel);
 		try {
 			this.receiveQueue.declare(operator);
 		} catch (DeclareException e) {
@@ -265,7 +265,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 		}
 	}
 
-	private void declareErrMsgExchange(RabbitMqDeclarator operator) {
+	private void declareErrMsgExchange(RabbitMqOperator operator) {
 		try {
 			this.errMsgExchange.declare(operator);
 		} catch (DeclareException e) {
@@ -280,7 +280,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 		this.hasErrMsgExchange = true;
 	}
 
-	private void declareErrMsgQueueName(RabbitMqDeclarator operator) {
+	private void declareErrMsgQueueName(RabbitMqOperator operator) {
 		try {
 			this.errMsgQueue.declare(operator);
 		} catch (DeclareException e) {

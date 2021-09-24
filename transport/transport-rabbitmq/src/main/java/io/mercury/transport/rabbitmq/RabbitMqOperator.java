@@ -17,7 +17,7 @@ import io.mercury.transport.rabbitmq.declare.AmqpExchange;
 import io.mercury.transport.rabbitmq.declare.AmqpQueue;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 
-public final class RabbitMqDeclarator extends RabbitMqTransport {
+public final class RabbitMqOperator extends RabbitMqTransport {
 
 	/**
 	 * Create OperationalChannel of host, port, username and password
@@ -30,7 +30,7 @@ public final class RabbitMqDeclarator extends RabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqDeclarator newWith(String host, int port, String username, String password) {
+	public static RabbitMqOperator newWith(String host, int port, String username, String password) {
 		return newWith(RabbitConnection.configuration(host, port, username, password).build());
 	}
 
@@ -46,7 +46,7 @@ public final class RabbitMqDeclarator extends RabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqDeclarator newWith(String host, int port, String username, String password,
+	public static RabbitMqOperator newWith(String host, int port, String username, String password,
 			String virtualHost) {
 		return newWith(RabbitConnection.configuration(host, port, username, password, virtualHost).build());
 	}
@@ -59,8 +59,8 @@ public final class RabbitMqDeclarator extends RabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqDeclarator newWith(RabbitConnection connection) {
-		return new RabbitMqDeclarator(connection);
+	public static RabbitMqOperator newWith(RabbitConnection connection) {
+		return new RabbitMqOperator(connection);
 	}
 
 	/**
@@ -69,16 +69,16 @@ public final class RabbitMqDeclarator extends RabbitMqTransport {
 	 * @param channel
 	 * @return
 	 */
-	public static RabbitMqDeclarator newWith(Channel channel) {
-		return new RabbitMqDeclarator(channel);
+	public static RabbitMqOperator newWith(Channel channel) {
+		return new RabbitMqOperator(channel);
 	}
 
-	private RabbitMqDeclarator(RabbitConnection connection) {
+	private RabbitMqOperator(RabbitConnection connection) {
 		super("declarator-" + DateTimeUtil.datetimeOfMillisecond(), connection);
 		createConnection();
 	}
 
-	private RabbitMqDeclarator(Channel channel) {
+	private RabbitMqOperator(Channel channel) {
 		super("declarator-with-channel-" + channel.getChannelNumber());
 		this.channel = channel;
 	}
@@ -401,7 +401,7 @@ public final class RabbitMqDeclarator extends RabbitMqTransport {
 
 	public static void main(String[] args) {
 		try {
-			RabbitMqDeclarator declarator = newWith("127.0.0.1", 5672, "guest", "guest");
+			RabbitMqOperator declarator = newWith("127.0.0.1", 5672, "guest", "guest");
 			System.out.println(declarator.isConnected());
 			try {
 				declarator.declareFanoutExchange("MarketData", true, false, false, null);

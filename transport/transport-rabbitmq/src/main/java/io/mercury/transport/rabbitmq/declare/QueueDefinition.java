@@ -8,9 +8,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.util.Assertor;
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.rabbitmq.RabbitMqDeclarator;
+import io.mercury.transport.rabbitmq.RabbitMqOperator;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
-import lombok.Getter;
 
 /**
  * 定义Queue和其他实体绑定关系
@@ -23,7 +22,7 @@ public final class QueueDefinition extends Relationship {
 	/**
 	 * queue
 	 */
-	@Getter
+
 	private final AmqpQueue queue;
 
 	/**
@@ -50,13 +49,17 @@ public final class QueueDefinition extends Relationship {
 	}
 
 	@Override
-	protected void declare0(RabbitMqDeclarator declarator) {
+	protected void declare0(RabbitMqOperator declarator) {
 		try {
 			declarator.declareQueue(queue);
 		} catch (DeclareException e) {
 			log.error("Declare Queue failure -> {}", queue);
 			throw new RuntimeException(e);
 		}
+	}
+
+	public AmqpQueue getQueue() {
+		return queue;
 	}
 
 	/**

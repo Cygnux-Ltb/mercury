@@ -172,7 +172,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 	}
 
 	private void declare() {
-		RabbitMqDeclarator operator = RabbitMqDeclarator.newWith(channel);
+		RabbitMqOperator operator = RabbitMqOperator.newWith(channel);
 		try {
 			this.receiveQueue.declare(operator);
 		} catch (DeclareException e) {
@@ -192,7 +192,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 		}
 	}
 
-	private void declareErrMsgExchange(RabbitMqDeclarator declarator) {
+	private void declareErrMsgExchange(RabbitMqOperator declarator) {
 		try {
 			this.errMsgExchange.declare(declarator);
 		} catch (DeclareException e) {
@@ -207,7 +207,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 		this.hasErrMsgExchange = true;
 	}
 
-	private void declareErrMsgQueueName(RabbitMqDeclarator declarator) {
+	private void declareErrMsgQueueName(RabbitMqOperator declarator) {
 		try {
 			this.errMsgQueue.declare(declarator);
 		} catch (DeclareException e) {

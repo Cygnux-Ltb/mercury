@@ -14,66 +14,49 @@ import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringUtil;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.configurator.TransportConfigurator;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 public final class RabbitConnection implements TransportConfigurator {
 
 	// 连接地址
-	@Getter
 	private final String host;
 
 	// 端口号
-	@Getter
 	private final int port;
 
 	// 用户名
-	@Getter
 	private final String username;
 
 	// 密码
-	@Getter
 	private final String password;
 
 	// 虚拟主机
-	@Getter
 	private final String virtualHost;
 
 	// SSL
-	@Getter
 	private final SSLContext sslContext;
 
 	// 连接超时时间
-	@Getter
 	private final int connectionTimeout;
 
 	// 自动恢复连接
-	@Getter
 	private final boolean automaticRecovery;
 
 	// 重试连接间隔
-	@Getter
 	private final long recoveryInterval;
 
 	// 握手通信超时时间
-	@Getter
 	private final int handshakeTimeout;
 
 	// 关闭超时时间
-	@Getter
 	private final int shutdownTimeout;
 
 	// 请求心跳超时时间
-	@Getter
 	private final int requestedHeartbeat;
 
 	// 停机处理回调函数
-	@Getter
 	private final transient ShutdownEvent shutdownEvent;
 
 	// 配置连接信息
-	@Getter
 	private final String connectionInfo;
 
 	private RabbitConnection(Builder builder) {
@@ -121,9 +104,66 @@ public final class RabbitConnection implements TransportConfigurator {
 		return new Builder(host, port, username, password, virtualHost);
 	}
 
-	/**
-	 * 
-	 */
+	public String getHost() {
+		return host;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public String getVirtualHost() {
+		return virtualHost;
+	}
+
+	public SSLContext getSslContext() {
+		return sslContext;
+	}
+
+	public int getConnectionTimeout() {
+		return connectionTimeout;
+	}
+
+	public boolean isAutomaticRecovery() {
+		return automaticRecovery;
+	}
+
+	public long getRecoveryInterval() {
+		return recoveryInterval;
+	}
+
+	public int getHandshakeTimeout() {
+		return handshakeTimeout;
+	}
+
+	public int getShutdownTimeout() {
+		return shutdownTimeout;
+	}
+
+	public int getRequestedHeartbeat() {
+		return requestedHeartbeat;
+	}
+
+	public ShutdownEvent getShutdownEvent() {
+		return shutdownEvent;
+	}
+
+	public String getConnectionInfo() {
+		return connectionInfo;
+	}
+
+	public String getToStringCache() {
+		return toStringCache;
+	}
+
 	@Override
 	public String getCfgInfo() {
 		return toString();
@@ -163,7 +203,6 @@ public final class RabbitConnection implements TransportConfigurator {
 		return factory;
 	}
 
-	@Accessors(chain = true)
 	public static class Builder {
 		// 连接地址
 		private final String host;
@@ -177,35 +216,27 @@ public final class RabbitConnection implements TransportConfigurator {
 		private String virtualHost = "/";
 
 		// SSL上下文
-		@Setter
 		private SSLContext sslContext;
 
 		// 连接超时时间
-		@Setter
 		private int connectionTimeout = 60 * 1000;
 
 		// 自动恢复连接
-		@Setter
 		private boolean automaticRecovery = true;
 
 		// 重试连接间隔(毫秒)
-		@Setter
 		private long recoveryInterval = 10 * 1000;
 
 		// 握手通信超时时间(毫秒)
-		@Setter
 		private int handshakeTimeout = 10 * 1000;
 
 		// 关闭超时时间(毫秒)
-		@Setter
 		private int shutdownTimeout = 10 * 1000;
 
 		// 请求心跳超时时间(秒)
-		@Setter
 		private int requestedHeartbeat = 20;
 
 		// 停机处理回调函数
-		@Setter
 		private ShutdownEvent shutdownEvent;
 
 		private Builder(String host, int port, String username, String password) {
@@ -223,6 +254,46 @@ public final class RabbitConnection implements TransportConfigurator {
 			this.password = password;
 			if (StringUtil.nonEmpty(virtualHost) && !virtualHost.equals("/"))
 				this.virtualHost = virtualHost;
+		}
+
+		public Builder setSslContext(SSLContext sslContext) {
+			this.sslContext = sslContext;
+			return this;
+		}
+
+		public Builder setConnectionTimeout(int connectionTimeout) {
+			this.connectionTimeout = connectionTimeout;
+			return this;
+		}
+
+		public Builder setAutomaticRecovery(boolean automaticRecovery) {
+			this.automaticRecovery = automaticRecovery;
+			return this;
+		}
+
+		public Builder setRecoveryInterval(long recoveryInterval) {
+			this.recoveryInterval = recoveryInterval;
+			return this;
+		}
+
+		public Builder setHandshakeTimeout(int handshakeTimeout) {
+			this.handshakeTimeout = handshakeTimeout;
+			return this;
+		}
+
+		public Builder setShutdownTimeout(int shutdownTimeout) {
+			this.shutdownTimeout = shutdownTimeout;
+			return this;
+		}
+
+		public Builder setRequestedHeartbeat(int requestedHeartbeat) {
+			this.requestedHeartbeat = requestedHeartbeat;
+			return this;
+		}
+
+		public Builder setShutdownEvent(ShutdownEvent shutdownEvent) {
+			this.shutdownEvent = shutdownEvent;
+			return this;
 		}
 
 		public RabbitConnection build() {

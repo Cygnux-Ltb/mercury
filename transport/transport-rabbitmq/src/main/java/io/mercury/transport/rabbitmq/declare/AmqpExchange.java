@@ -7,11 +7,7 @@ import javax.annotation.Nonnull;
 import io.mercury.common.collections.MapUtil;
 import io.mercury.common.util.Assertor;
 import io.mercury.serialization.json.JsonWrapper;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
-@Accessors(chain = true)
 public final class AmqpExchange {
 
 	/**
@@ -20,32 +16,32 @@ public final class AmqpExchange {
 	public static final AmqpExchange Anonymous = new AmqpExchange(ExchangeType.Anonymous, "");
 
 	// 交换器名称
-	@Getter
-	private String name;
+	private final String name;
 
 	// 交换器类型
-	@Getter
-	private ExchangeType type;
+	private final ExchangeType type;
 
 	// 是否持久化
-	@Getter
-	@Setter
 	private boolean durable = true;
 
 	// 没有使用时自动删除
-	@Getter
-	@Setter
 	private boolean autoDelete = false;
 
 	// 是否为内部Exchange
-	@Getter
-	@Setter
 	private boolean internal = false;
 
 	// 交换器参数
-	@Getter
-	@Setter
 	private Map<String, Object> args = null;
+
+	/**
+	 * 
+	 * @param type
+	 * @param name
+	 */
+	private AmqpExchange(ExchangeType type, String name) {
+		this.type = type;
+		this.name = name;
+	}
 
 	/**
 	 * 定义<b> [FANOUT] </b>交换器
@@ -80,14 +76,48 @@ public final class AmqpExchange {
 		return new AmqpExchange(ExchangeType.Topic, name);
 	}
 
-	/**
-	 * 
-	 * @param type
-	 * @param name
-	 */
-	private AmqpExchange(ExchangeType type, String name) {
-		this.type = type;
-		this.name = name;
+	public AmqpExchange setDurable(boolean durable) {
+		this.durable = durable;
+		return this;
+	}
+
+	public AmqpExchange setAutoDelete(boolean autoDelete) {
+		this.autoDelete = autoDelete;
+		return this;
+	}
+
+	public AmqpExchange setInternal(boolean internal) {
+		this.internal = internal;
+		return this;
+	}
+
+	public AmqpExchange setArgs(Map<String, Object> args) {
+		this.args = args;
+		return this;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public ExchangeType getType() {
+		return type;
+	}
+
+	public boolean isDurable() {
+		return durable;
+	}
+
+	public boolean isAutoDelete() {
+		return autoDelete;
+	}
+
+	public boolean isInternal() {
+		return internal;
+	}
+
+	public Map<String, Object> getArgs() {
+		return args;
 	}
 
 	@Override

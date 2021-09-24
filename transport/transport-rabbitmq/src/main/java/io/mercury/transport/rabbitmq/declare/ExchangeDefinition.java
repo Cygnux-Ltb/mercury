@@ -11,9 +11,8 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import io.mercury.common.util.Assertor;
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.rabbitmq.RabbitMqDeclarator;
+import io.mercury.transport.rabbitmq.RabbitMqOperator;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
-import lombok.Getter;
 
 /**
  * 定义Exchange和其他实体绑定关系
@@ -26,8 +25,15 @@ public final class ExchangeDefinition extends Relationship {
 	public final static ExchangeDefinition Anonymous = new ExchangeDefinition(AmqpExchange.Anonymous);
 
 	// exchange
-	@Getter
 	private final AmqpExchange exchange;
+
+	/**
+	 * 
+	 * @param exchange
+	 */
+	private ExchangeDefinition(AmqpExchange exchange) {
+		this.exchange = exchange;
+	}
 
 	/**
 	 * 
@@ -66,16 +72,8 @@ public final class ExchangeDefinition extends Relationship {
 		return new ExchangeDefinition(exchange);
 	}
 
-	/**
-	 * 
-	 * @param exchange
-	 */
-	private ExchangeDefinition(AmqpExchange exchange) {
-		this.exchange = exchange;
-	}
-
 	@Override
-	protected void declare0(RabbitMqDeclarator operator) {
+	protected void declare0(RabbitMqOperator operator) {
 		try {
 			operator.declareExchange(exchange);
 		} catch (DeclareException e) {
@@ -121,7 +119,7 @@ public final class ExchangeDefinition extends Relationship {
 		exchange.setInternal(internal);
 		return this;
 	}
-	
+
 	/**
 	 * 
 	 * @param args

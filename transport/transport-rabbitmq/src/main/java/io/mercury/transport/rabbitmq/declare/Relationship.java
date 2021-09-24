@@ -9,10 +9,8 @@ import io.mercury.common.annotation.lang.AbstractFunction;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
-import io.mercury.transport.rabbitmq.RabbitMqDeclarator;
+import io.mercury.transport.rabbitmq.RabbitMqOperator;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 
 public abstract class Relationship {
 
@@ -25,11 +23,11 @@ public abstract class Relationship {
 	 * @param operator
 	 * @throws DeclareException
 	 */
-	public void declare(@Nonnull RabbitMqDeclarator declarator) throws DeclareException {
-		Assertor.nonNull(declarator, "declarator");
-		declare0(declarator);
+	public void declare(@Nonnull RabbitMqOperator operator) throws DeclareException {
+		Assertor.nonNull(operator, "operator");
+		declare0(operator);
 		for (Binding binding : bindings) {
-			declareBinding(declarator, binding);
+			declareBinding(operator, binding);
 		}
 	}
 
@@ -39,7 +37,7 @@ public abstract class Relationship {
 	 * @param binding
 	 * @throws DeclareException
 	 */
-	private void declareBinding(RabbitMqDeclarator declarator, Binding binding) throws DeclareException {
+	private void declareBinding(RabbitMqOperator declarator, Binding binding) throws DeclareException {
 		AmqpExchange source = binding.source;
 		try {
 			declarator.declareExchange(source);
@@ -87,9 +85,8 @@ public abstract class Relationship {
 	}
 
 	@AbstractFunction
-	protected abstract void declare0(RabbitMqDeclarator operator);
+	protected abstract void declare0(RabbitMqOperator operator);
 
-	@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 	public final class Binding {
 
 		private final AmqpExchange source;
@@ -134,6 +131,23 @@ public abstract class Relationship {
 		 */
 		Binding(AmqpExchange source, AmqpQueue destQueue, String routingKey) {
 			this(source, null, destQueue, routingKey, DestType.Queue);
+		}
+
+		/**
+		 * 
+		 * @param source
+		 * @param destExchange
+		 * @param destQueue
+		 * @param routingKey
+		 * @param destType
+		 */
+		Binding(AmqpExchange source, AmqpExchange destExchange, AmqpQueue destQueue, String routingKey,
+				DestType destType) {
+			this.source = source;
+			this.destExchange = destExchange;
+			this.destQueue = destQueue;
+			this.routingKey = routingKey;
+			this.destType = destType;
 		}
 
 	}
