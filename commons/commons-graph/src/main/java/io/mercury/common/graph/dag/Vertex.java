@@ -20,8 +20,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Getter;
-
 /**
  * 
  * @author <a href="michal.maczka@dimatics.com">Michal Maczka</a>
@@ -37,14 +35,23 @@ public class Vertex implements Cloneable, Serializable {
 	// Fields
 	// ------------------------------------------------------------
 
-	@Getter
 	private final String label;
 
-	@Getter
 	private List<Vertex> children = new ArrayList<Vertex>();
 
-	@Getter
 	private List<Vertex> parents = new ArrayList<Vertex>();
+
+	public String getLabel() {
+		return label;
+	}
+
+	public List<Vertex> getChildren() {
+		return children;
+	}
+
+	public List<Vertex> getParents() {
+		return parents;
+	}
 
 	// ------------------------------------------------------------
 	// Constructors
