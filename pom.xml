@@ -74,11 +74,11 @@
 			</dependency>
 			<!-- Spice up your java: Automatic Resource Management, automatic generation 
 				of getters, setters, equals, hashCode and toString, and more! -->
-			<dependency>
+			<!-- <dependency>
 				<groupId>org.projectlombok</groupId>
 				<artifactId>lombok</artifactId>
 				<version>${lombok.version}</version>
-			</dependency>
+			</dependency> -->
 		</dependencies>
 	</dependencyManagement>
 
