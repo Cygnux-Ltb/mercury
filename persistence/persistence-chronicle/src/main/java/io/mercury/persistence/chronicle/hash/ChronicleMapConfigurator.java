@@ -12,45 +12,84 @@ import io.mercury.common.config.Configurator;
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.sys.SysProperties;
 import io.mercury.common.util.Assertor;
-import lombok.Getter;
 
 @Immutable
 public final class ChronicleMapConfigurator<K, V> implements Configurator {
 
-	@Getter
 	private final Class<K> keyClass;
-	@Getter
+
 	private final Class<V> valueClass;
 
-	@Getter
 	private final K averageKey;
-	@Getter
 	private final V averageValue;
 
-	@Getter
 	private final boolean putReturnsNull;
-	@Getter
 	private final boolean removeReturnsNull;
-	@Getter
 	private final boolean recover;
-	@Getter
 	private final boolean persistent;
 
-	@Getter
 	private final long entries;
-	@Getter
 	private final int actualChunkSize;
 
-	@Getter
 	private final String rootPath;
-	@Getter
 	private final String folder;
 
 	// final save path
-	@Getter
 	private final File savePath;
 
 	private final String cfgInfo;
+
+	public Class<K> getKeyClass() {
+		return keyClass;
+	}
+
+	public Class<V> getValueClass() {
+		return valueClass;
+	}
+
+	public K getAverageKey() {
+		return averageKey;
+	}
+
+	public V getAverageValue() {
+		return averageValue;
+	}
+
+	public boolean isPutReturnsNull() {
+		return putReturnsNull;
+	}
+
+	public boolean isRemoveReturnsNull() {
+		return removeReturnsNull;
+	}
+
+	public boolean isRecover() {
+		return recover;
+	}
+
+	public boolean isPersistent() {
+		return persistent;
+	}
+
+	public long getEntries() {
+		return entries;
+	}
+
+	public int getActualChunkSize() {
+		return actualChunkSize;
+	}
+
+	public String getRootPath() {
+		return rootPath;
+	}
+
+	public String getFolder() {
+		return folder;
+	}
+
+	public File getSavePath() {
+		return savePath;
+	}
 
 	// extended use
 	private Builder<K, V> builder;

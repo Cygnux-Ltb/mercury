@@ -11,35 +11,61 @@ import io.mercury.common.config.Configurator;
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.sys.SysProperties;
 import io.mercury.common.util.Assertor;
-import lombok.Getter;
 
 public final class ChronicleSetConfigurator<E> implements Configurator {
 
-	@Getter
 	private final Class<E> elementClass;
-	@Getter
 	private final E averageElement;
 
-	@Getter
 	private final boolean recover;
-	@Getter
 	private final boolean persistent;
 
-	@Getter
 	private final long entries;
-	@Getter
 	private final int actualChunkSize;
 
-	@Getter
 	private final String rootPath;
-	@Getter
 	private final String folder;
 
 	// final save path
-	@Getter
 	private final File savePath;
 
 	private final String cfgInfo;
+
+	public Class<E> getElementClass() {
+		return elementClass;
+	}
+
+	public E getAverageElement() {
+		return averageElement;
+	}
+
+	public boolean isRecover() {
+		return recover;
+	}
+
+	public boolean isPersistent() {
+		return persistent;
+	}
+
+	public long getEntries() {
+		return entries;
+	}
+
+	public int getActualChunkSize() {
+		return actualChunkSize;
+	}
+
+	public String getRootPath() {
+		return rootPath;
+	}
+
+	public String getFolder() {
+		return folder;
+	}
+
+	public File getSavePath() {
+		return savePath;
+	}
 
 	private ChronicleSetConfigurator(Builder<E> builder) {
 		this.elementClass = builder.elementClass;
