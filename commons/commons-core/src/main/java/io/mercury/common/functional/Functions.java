@@ -25,19 +25,19 @@ public final class Functions {
 	 * @param defSupplier  : default return value supplier...
 	 * @return
 	 */
-	public final static <R> R fun(@Nonnull final Supplier<R> fun, @Nullable final Function<R, R> afterSuccess,
+	public final static <R> R exec(@Nonnull final Supplier<R> fun, @Nullable final Function<R, R> afterSuccess,
 			@Nullable final Consumer<Exception> afterFailure, @Nonnull final Supplier<R> defSupplier) {
 		try {
 			R r = fun.get();
 			if (afterSuccess != null)
 				r = afterSuccess.apply(r);
-			if (r == null)
+			if (r == null && defSupplier != null)
 				return defSupplier.get();
 			return r;
 		} catch (Exception e) {
 			if (afterFailure != null)
 				afterFailure.accept(e);
-			return defSupplier.get();
+			return defSupplier != null ? defSupplier.get() : null;
 		}
 	}
 
@@ -49,9 +49,9 @@ public final class Functions {
 	 * @param afterFailure
 	 * @return
 	 */
-	public final static <T> List<T> listFun(@Nonnull final Supplier<List<T>> fun,
+	public final static <T> List<T> exec(@Nonnull final Supplier<List<T>> fun,
 			@Nullable final Function<List<T>, List<T>> afterSuccess, @Nullable final Consumer<Exception> afterFailure) {
-		return fun(fun, afterSuccess, afterFailure, FastList::new);
+		return exec(fun, afterSuccess, afterFailure, FastList::new);
 	}
 
 	/**
@@ -62,8 +62,8 @@ public final class Functions {
 	 * @param afterFailure : After the boolean function fails...
 	 * @return
 	 */
-	public final static <R> boolean booleanFun(@Nonnull final Supplier<R> fun,
-			@Nonnull final BooleanFunction<R> afterSuccess, @Nullable final BooleanFunction<Exception> afterFailure) {
+	public final static <R> boolean exec(@Nonnull final Supplier<R> fun, @Nonnull final BooleanFunction<R> afterSuccess,
+			@Nullable final BooleanFunction<Exception> afterFailure) {
 		try {
 			return afterSuccess.booleanValueOf(fun.get());
 		} catch (Exception e) {
