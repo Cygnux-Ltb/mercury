@@ -14,7 +14,7 @@
 	<name>library-ignite</name>
 
 	<properties>
-		<ignite.version>2.10.0</ignite.version>
+		<ignite.version>2.11.0</ignite.version>
 	</properties>
 
 	<dependencies>
