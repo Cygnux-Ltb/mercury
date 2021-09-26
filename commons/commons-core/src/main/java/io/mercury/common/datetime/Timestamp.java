@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import javax.annotation.Nonnull;
+
 import io.mercury.common.serialization.JsonSerializable;
 import io.mercury.common.util.Assertor;
 
@@ -25,9 +27,9 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 	private final long epochMillis;
 
 	/**
-	 * Nano Sequence is use {@link System.nanoTime()}
+	 * sysNanoTime is use {@link System.nanoTime()}
 	 */
-	private final long nanoSequence;
+	private final long sysNanoTime;
 
 	/**
 	 * java.time.Instant
@@ -45,7 +47,7 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 	 */
 	private Timestamp(long epochMillis) {
 		this.epochMillis = epochMillis;
-		this.nanoSequence = nanoTime();
+		this.sysNanoTime = nanoTime();
 	}
 
 	/**
@@ -63,6 +65,18 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 	 */
 	public static Timestamp newWithEpochMillis(long epochMillis) {
 		return new Timestamp(epochMillis);
+	}
+
+	/**
+	 * 
+	 * @param instant
+	 * @return
+	 */
+	public static Timestamp newWithInstant(@Nonnull Instant instant) {
+		Assertor.nonNull(instant, "instant");
+		Timestamp timestamp = new Timestamp(instant.toEpochMilli());
+		timestamp.instant = instant;
+		return timestamp;
 	}
 
 	/**
@@ -112,8 +126,8 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 	 * 
 	 * @return
 	 */
-	public long getNanoSequence() {
-		return nanoSequence;
+	public long getSysNanoTime() {
+		return sysNanoTime;
 	}
 
 	/**

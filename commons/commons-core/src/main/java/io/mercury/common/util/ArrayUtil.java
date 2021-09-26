@@ -8,6 +8,17 @@ public final class ArrayUtil {
 
 	/**
 	 * 
+	 * @param length
+	 * @return
+	 */
+	public static boolean illegalLength(int length) {
+		if (length < 1)
+			return false;
+		return true;
+	}
+
+	/**
+	 * 
 	 * @param booleans
 	 * @return
 	 */

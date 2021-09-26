@@ -55,7 +55,7 @@ public final class EpochTime {
 	 * @return
 	 */
 	public static final long day(@Nonnull LocalDateTime dateTime) {
-		return day(dateTime.toLocalDate());
+		return dateTime.toLocalDate().toEpochDay();
 	}
 
 	/**
@@ -64,7 +64,7 @@ public final class EpochTime {
 	 * @return
 	 */
 	public static final long day(@Nonnull ZonedDateTime dateTime) {
-		return day(dateTime.toLocalDate());
+		return dateTime.toLocalDate().toEpochDay();
 	}
 
 	/**
