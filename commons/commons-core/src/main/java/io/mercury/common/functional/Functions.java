@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.eclipse.collections.api.block.function.primitive.BooleanFunction;
+import org.eclipse.collections.api.block.function.primitive.IntFunction;
 import org.eclipse.collections.impl.list.mutable.FastList;
 
 public final class Functions {
@@ -57,19 +58,38 @@ public final class Functions {
 	/**
 	 * 
 	 * @param <R>
-	 * @param fun          : Parameterless function to be executed
+	 * @param func         : Parameterless function to be executed
 	 * @param afterSuccess : After the boolean function succeeds...
 	 * @param afterFailure : After the boolean function fails...
 	 * @return
 	 */
-	public final static <R> boolean exec(@Nonnull final Supplier<R> fun, @Nonnull final BooleanFunction<R> afterSuccess,
-			@Nullable final BooleanFunction<Exception> afterFailure) {
+	public final static <R> boolean exec(@Nonnull final Supplier<R> func,
+			@Nonnull final BooleanFunction<R> afterSuccess, @Nullable final BooleanFunction<Exception> afterFailure) {
 		try {
-			return afterSuccess.booleanValueOf(fun.get());
+			return afterSuccess.booleanValueOf(func.get());
 		} catch (Exception e) {
 			if (afterFailure != null)
 				return afterFailure.booleanValueOf(e);
 			return false;
+		}
+	}
+
+	/**
+	 * 
+	 * @param <R>
+	 * @param func         : Parameterless function to be executed
+	 * @param afterSuccess : After the int function succeeds...
+	 * @param afterFailure : After the int function fails...
+	 * @return
+	 */
+	public final static <R> int exec(@Nonnull final Supplier<R> func, @Nonnull final IntFunction<R> afterSuccess,
+			@Nullable final IntFunction<Exception> afterFailure) {
+		try {
+			return afterSuccess.intValueOf(func.get());
+		} catch (Exception e) {
+			if (afterFailure != null)
+				return afterFailure.intValueOf(e);
+			return -1;
 		}
 	}
 

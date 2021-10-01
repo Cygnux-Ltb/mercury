@@ -81,31 +81,31 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 
 	/**
 	 * 
-	 * @param localDateTime
+	 * @param datetime
 	 * @return
 	 */
-	public static Timestamp newWithDateTime(LocalDateTime localDateTime) {
-		Assertor.nonNull(localDateTime, "localDateTime");
-		return newWithZonedDateTime(ZonedDateTime.of(localDateTime, TimeZone.SYS_DEFAULT));
+	public static Timestamp newWithDateTime(@Nonnull LocalDateTime datetime) {
+		Assertor.nonNull(datetime, "datetime");
+		return newWithDateTime(ZonedDateTime.of(datetime, TimeZone.SYS_DEFAULT));
 	}
 
 	/**
 	 * 
-	 * @param localDateTime
+	 * @param datetime
 	 * @param zoneId
 	 * @return
 	 */
-	public static Timestamp newWithDateTime(LocalDateTime localDateTime, ZoneId zoneId) {
-		Assertor.nonNull(localDateTime, "localDateTime");
+	public static Timestamp newWithDateTime(@Nonnull LocalDateTime datetime, @Nonnull ZoneId zoneId) {
+		Assertor.nonNull(datetime, "datetime");
 		Assertor.nonNull(zoneId, "zoneId");
-		return newWithZonedDateTime(ZonedDateTime.of(localDateTime, zoneId));
+		return newWithDateTime(ZonedDateTime.of(datetime, zoneId));
 	}
 
 	/**
 	 * 
 	 * @return
 	 */
-	public static Timestamp newWithZonedDateTime(ZonedDateTime zonedDateTime) {
+	public static Timestamp newWithDateTime(@Nonnull ZonedDateTime zonedDateTime) {
 		Assertor.nonNull(zonedDateTime, "zonedDateTime");
 		final Instant instant = zonedDateTime.toInstant();
 		Timestamp timestamp = new Timestamp(instant.toEpochMilli());
@@ -171,7 +171,9 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 
 	@Override
 	public int compareTo(Timestamp o) {
-		return epochMillis < o.epochMillis ? -1 : epochMillis > o.epochMillis ? 1 : 0;
+		return epochMillis < o.epochMillis ? -1
+				: epochMillis > o.epochMillis ? 1
+						: sysNanoTime < o.sysNanoTime ? -1 : sysNanoTime > sysNanoTime ? 1 : 0;
 	}
 
 	private static final String epochMillisField = "{\"epochMillis\" : ";
