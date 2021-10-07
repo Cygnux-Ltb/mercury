@@ -63,7 +63,7 @@ public final class Functions {
 	 * @param afterFailure : After the boolean function fails...
 	 * @return
 	 */
-	public final static <R> boolean exec(@Nonnull final Supplier<R> func,
+	public final static <R> boolean execBool(@Nonnull final Supplier<R> func,
 			@Nonnull final BooleanFunction<R> afterSuccess, @Nullable final BooleanFunction<Exception> afterFailure) {
 		try {
 			return afterSuccess.booleanValueOf(func.get());
@@ -82,7 +82,7 @@ public final class Functions {
 	 * @param afterFailure : After the int function fails...
 	 * @return
 	 */
-	public final static <R> int exec(@Nonnull final Supplier<R> func, @Nonnull final IntFunction<R> afterSuccess,
+	public final static <R> int execInt(@Nonnull final Supplier<R> func, @Nonnull final IntFunction<R> afterSuccess,
 			@Nullable final IntFunction<Exception> afterFailure) {
 		try {
 			return afterSuccess.intValueOf(func.get());

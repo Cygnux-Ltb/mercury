@@ -8,7 +8,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.eclipse.collections.api.list.primitive.MutableLongList;
 
 import io.mercury.common.collections.MutableLists;
-import io.mercury.common.datetime.EpochTime;
+import io.mercury.common.datetime.EpochUtil;
 import io.mercury.common.util.BitFormatter;
 import io.mercury.common.util.BitOperator;
 
@@ -89,15 +89,14 @@ public final class EpochSequence {
 		if (currentEpochMillis == lastEpochMillis) {
 			incr = (incr + 1) & IncrMask;
 			// 毫秒内序列溢出
-			if (incr == 0L) {
+			if (incr == 0L)
 				// 阻塞到下一个毫秒, 获得新的时间戳
 				currentEpochMillis = nextMillis(lastEpochMillis);
-			}
 		}
 		// 时间戳改变, 毫秒内序列重置
-		else {
+		else
 			incr = 0L;
-		}
+
 		// 更新最后一次生成ID的时间截
 		lastEpochMillis = currentEpochMillis;
 		// 返回最终的序列
@@ -150,7 +149,7 @@ public final class EpochSequence {
 		System.out.println("========================================");
 		System.out.println();
 
-		long epochMillis = EpochTime.millis();
+		long epochMillis = EpochUtil.getEpochMillis();
 		System.out.println("epoch millis binary: ");
 		System.out.println(longBinaryFormat(epochMillis));
 		long lmEpochMillis = epochMillis << 16;

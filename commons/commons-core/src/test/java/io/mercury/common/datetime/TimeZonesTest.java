@@ -15,15 +15,15 @@ public class TimeZonesTest {
 
 		System.out.println(standardOffset);
 
-		System.out.println(TimeZone.SYS_DEFAULT_OFFSET);
-		System.out.println(TimeZone.CST_OFFSET);
-		System.out.println(TimeZone.JST_OFFSET);
+		System.out.println(TimeZone.SYS_DEFAULT);
+		System.out.println(TimeZone.CST);
+		System.out.println(TimeZone.JST);
 
 		ZoneOffset ofHours = ZoneOffset.ofHours(8);
 
-		System.out.println(TimeZone.SYS_DEFAULT_OFFSET.equals(ofHours));
+		System.out.println(TimeZone.SYS_DEFAULT.equals(ofHours));
 
-		System.out.println(TimeZone.SYS_DEFAULT_OFFSET.equals(standardOffset));
+		System.out.println(TimeZone.SYS_DEFAULT.equals(standardOffset));
 
 		ZoneId.getAvailableZoneIds().forEach(System.out::println);
 

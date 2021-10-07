@@ -1,5 +1,7 @@
 package io.mercury.common.sequence;
 
+import static java.lang.System.nanoTime;
+
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
@@ -22,7 +24,7 @@ public final class SysNanoSeq {
 	 * @return
 	 */
 	public static long millis() {
-		return System.nanoTime() / 1000_000;
+		return nanoTime() / 1000_000;
 	}
 
 	/**
@@ -30,7 +32,7 @@ public final class SysNanoSeq {
 	 * @return
 	 */
 	public static long micros() {
-		return System.nanoTime() / 1000;
+		return nanoTime() / 1000;
 	}
 
 	/**
@@ -38,7 +40,7 @@ public final class SysNanoSeq {
 	 * @return
 	 */
 	public static long nanos() {
-		return System.nanoTime();
+		return nanoTime();
 	}
 
 	public static void main(String[] args) {

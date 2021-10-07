@@ -11,7 +11,7 @@ import java.time.ZonedDateTime;
 
 import javax.annotation.Nonnull;
 
-import io.mercury.common.datetime.EpochTime;
+import io.mercury.common.datetime.EpochUtil;
 import io.mercury.common.datetime.TimeZone;
 import io.mercury.common.util.BitFormatter;
 import io.mercury.common.util.BitOperator;
@@ -109,7 +109,7 @@ public final class SnowflakeAlgorithm {
 	 * @param zoneId
 	 */
 	public SnowflakeAlgorithm(int ownerId, @Nonnull LocalDate baseline, @Nonnull ZoneId zoneId) {
-		this(ownerId, baseline == null ? EpochTime.ZeroPoint
+		this(ownerId, baseline == null ? EpochUtil.ZeroPoint
 				: ZonedDateTime.of(baseline, LocalTime.MIN, zoneId == null ? TimeZone.UTC : zoneId));
 	}
 
@@ -121,7 +121,7 @@ public final class SnowflakeAlgorithm {
 		if (ownerId < 0 || ownerId >= 1024)
 			throw new IllegalArgumentException("ownerId must be [greater than 0] and [less than or equal 1024]");
 		this.ownerId = ownerId;
-		this.baseline = baseline.isBefore(EpochTime.ZeroPoint) ? 0 : baseline.toInstant().toEpochMilli();
+		this.baseline = baseline.isBefore(EpochUtil.ZeroPoint) ? 0 : baseline.toInstant().toEpochMilli();
 	}
 
 	/**
