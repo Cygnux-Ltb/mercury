@@ -10,8 +10,6 @@ public interface Envelope {
 
 	int getCode();
 
-	default int getVersion() {
-		return 1;
-	}
+	int getVersion();
 
 }

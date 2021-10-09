@@ -24,6 +24,7 @@
 		<eclipse-collections.version>10.4.0</eclipse-collections.version>
 	</properties>
 
+
 	<dependencies>
 		<!-- JSR305 Annotations for Find bugs -->
 		<dependency>
@@ -90,8 +91,8 @@
 			<artifactId>commons-log4j2</artifactId>
 		</dependency>
 
-	<!-- <dependency> <groupId>org.codehaus.plexus</groupId> <artifactId>plexus-utils</artifactId> 
-		<version>3.3.0</version> </dependency> --> 
+		<!-- <dependency> <groupId>org.codehaus.plexus</groupId> <artifactId>plexus-utils</artifactId> 
+			<version>3.3.0</version> </dependency> -->
 
 		<!-- ####### Unit test mock tool ####### -->
 		<!-- Mockito mock objects library core API and implementation -->
@@ -101,7 +102,7 @@
 			<version>3.12.4</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 	</dependencies>
 
 </project>
