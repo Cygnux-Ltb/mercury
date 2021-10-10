@@ -36,6 +36,7 @@
 		<junit.version>4.13.2</junit.version>
 		<lombok.version>1.18.20</lombok.version>
 		<mercury.version>1.0-SNAPSHOT</mercury.version>
+		<jackson.version>2.12.5</jackson.version>
 	</properties>
 
 	<build>
