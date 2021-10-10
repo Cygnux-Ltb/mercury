@@ -22,8 +22,8 @@
 		<module>library-ignite</module>
 		<module>library-janusgraph</module>
 		<module>library-jmx</module>
+		<module>library-nacos</module>
 		<module>library-redis</module>
-		<module>library-sqlite</module>
 	</modules>
 
 	<dependencies>
@@ -42,13 +42,6 @@
 				<version>${project.version}</version>
 			</dependency>
 
-			<!-- Java(TM) Persistence API -->
-			<dependency>
-				<groupId>javax.persistence</groupId>
-				<artifactId>javax.persistence-api</artifactId>
-				<version>2.2</version>
-			</dependency>
-
 			<!-- A set of annotations used for code inspection support and code documentation -->
 			<dependency>
 				<groupId>org.jetbrains</groupId>
@@ -56,20 +49,6 @@
 				<version>19.0.0</version>
 			</dependency>
 
-			<!-- The Apache Commons DbUtils package is a set of Java utility classes 
-				for easing JDBC development. -->
-			<dependency>
-				<groupId>commons-dbutils</groupId>
-				<artifactId>commons-dbutils</artifactId>
-				<version>1.7</version>
-			</dependency>
-
-			<!-- Ultimate JDBC Connection Pool -->
-			<dependency>
-				<groupId>com.zaxxer</groupId>
-				<artifactId>HikariCP</artifactId>
-				<version>5.0.0</version>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
