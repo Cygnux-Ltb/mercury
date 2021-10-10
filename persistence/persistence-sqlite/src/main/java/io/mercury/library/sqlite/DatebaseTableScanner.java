@@ -1,4 +1,4 @@
-package io.mercury.persistence.rdb;
+package io.mercury.library.sqlite;
 
 import java.sql.Connection;
 

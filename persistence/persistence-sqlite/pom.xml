@@ -6,12 +6,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>io.mercury</groupId>
-		<artifactId>libraries</artifactId>
+		<artifactId>persistence</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>library-sqlite</artifactId>
-	<name>library-sqlite</name>
+	<artifactId>persistence-sqlite</artifactId>
+	<name>persistence-sqlite</name>
 
 	<dependencies>
 		<dependency>
@@ -21,8 +21,8 @@
 
 		<!-- Java(TM) Persistence API -->
 		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>javax.persistence-api</artifactId>
+			<groupId>jakarta.persistence</groupId>
+			<artifactId>jakarta.persistence-api</artifactId>
 		</dependency>
 
 		<!-- The Apache Commons DbUtils package is a set of Java utility classes 
