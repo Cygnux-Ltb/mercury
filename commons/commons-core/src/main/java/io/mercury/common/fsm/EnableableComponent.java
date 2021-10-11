@@ -7,21 +7,21 @@ import javax.annotation.concurrent.ThreadSafe;
 @ThreadSafe
 public abstract class EnableableComponent implements Enableable {
 
-	private AtomicBoolean isEnable = new AtomicBoolean(false);
+	private AtomicBoolean enabled = new AtomicBoolean(false);
 
 	@Override
 	public boolean isEnabled() {
-		return isEnable.get();
+		return enabled.get();
 	}
 
 	@Override
 	public boolean enable() {
-		return isEnable.compareAndSet(false, true);
+		return enabled.compareAndSet(false, true);
 	}
 
 	@Override
 	public boolean disable() {
-		return isEnable.compareAndSet(true, false);
+		return enabled.compareAndSet(true, false);
 	}
 
 }
