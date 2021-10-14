@@ -16,27 +16,38 @@ public interface TimeZone {
 	/**
 	 * ZoneOffset from runtime
 	 */
-	ZoneOffset SYS_DEFAULT = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault()).getOffset();
+	ZoneOffset SYS_DEFAULT = getZoneOffset(ZoneId.systemDefault());
 
 	/**
 	 * Chinese Standard Time ZoneOffset
 	 */
-	ZoneOffset CST = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.of("Asia/Shanghai")).getOffset();
+	ZoneOffset CST = getZoneOffset(ZoneId.of("Asia/Shanghai"));
 
 	/**
 	 * Taiwan Standard Time ZoneOffset
 	 */
-	ZoneOffset TST = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.of("Asia/Taipei")).getOffset();
+	ZoneOffset TST = getZoneOffset(ZoneId.of("Asia/Taipei"));
 
 	/**
 	 * Japan Standard Time ZoneOffset
 	 */
-	ZoneOffset JST = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.of("Asia/Tokyo")).getOffset();
+	ZoneOffset JST = getZoneOffset(ZoneId.of("Asia/Tokyo"));
 
 	/**
 	 * North America Chicago Time ZoneOffset
 	 */
-	ZoneOffset NA_CHICAGO = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.of("America/Chicago")).getOffset();
+	ZoneOffset NA_CHICAGO = getZoneOffset(ZoneId.of("America/Chicago"));
+
+	/**
+	 * 
+	 * @param zoneId
+	 * @return
+	 */
+	public static ZoneOffset getZoneOffset(ZoneId zoneId) {
+		if (zoneId instanceof ZoneOffset)
+			return (ZoneOffset) zoneId;
+		return ZonedDateTime.ofInstant(Instant.EPOCH, zoneId).getOffset();
+	}
 
 	/**
 	 * Show System Available ZoneIds

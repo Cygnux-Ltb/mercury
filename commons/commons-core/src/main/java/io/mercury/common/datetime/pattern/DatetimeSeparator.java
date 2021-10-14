@@ -11,6 +11,5 @@ public interface DatetimeSeparator {
 
 	String LINE = "-";
 	String BLANK = " ";
-	String TIME = "T";
 
 }
