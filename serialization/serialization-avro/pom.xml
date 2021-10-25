@@ -14,7 +14,6 @@
 	<name>serialization-avro</name>
 
 	<properties>
-		<avro.version>1.10.2</avro.version>
 	</properties>
 
 	<build>

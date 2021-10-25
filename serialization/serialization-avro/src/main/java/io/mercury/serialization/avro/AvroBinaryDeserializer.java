@@ -22,9 +22,9 @@ import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
 
-import io.mercury.common.annotation.lang.ThreadSafeVariable;
+import io.mercury.common.annotation.thread.ThreadSafeVariable;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.spec.BytesDeserializer;
+import io.mercury.common.serialization.BytesDeserializer;
 
 @ThreadSafe
 public final class AvroBinaryDeserializer<T extends SpecificRecord> implements BytesDeserializer<T> {

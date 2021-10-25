@@ -15,10 +15,10 @@ import org.slf4j.Logger;
 
 import io.mercury.common.character.Charsets;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.spec.StringSerializer;
+import io.mercury.common.serialization.JsonSerializer;
 
 @NotThreadSafe
-public class AvroJsonSerializer<T extends SpecificRecord> implements StringSerializer<T> {
+public class AvroJsonSerializer<T extends SpecificRecord> implements JsonSerializer<T> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(AvroJsonSerializer.class);
 

@@ -13,10 +13,10 @@ import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
 
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.spec.StringDeserializer;
+import io.mercury.common.serialization.JsonDeserializer;
 
 @NotThreadSafe
-public final class AvroJsonDeserializer<T extends SpecificRecord> implements StringDeserializer<T> {
+public final class AvroJsonDeserializer<T extends SpecificRecord> implements JsonDeserializer<T> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(AvroJsonDeserializer.class);
 

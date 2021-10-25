@@ -16,9 +16,9 @@ import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
 
-import io.mercury.common.annotation.lang.ThreadSafeVariable;
+import io.mercury.common.annotation.thread.ThreadSafeVariable;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.spec.ByteBufferSerializer;
+import io.mercury.common.serialization.ByteBufferSerializer;
 
 @ThreadSafe
 public final class AvroBinarySerializer<T extends SpecificRecord> implements ByteBufferSerializer<T> {
