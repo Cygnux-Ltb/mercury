@@ -6,7 +6,7 @@ import org.jctools.queues.MpscArrayQueue;
 import org.jctools.queues.SpscArrayQueue;
 import org.slf4j.Logger;
 
-import io.mercury.common.annotation.lang.AbstractFunction;
+import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.annotation.thread.SpinLock;
 import io.mercury.common.concurrent.queue.QueueStyle;
 import io.mercury.common.concurrent.queue.QueueWorkingException;
