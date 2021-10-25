@@ -9,9 +9,9 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.annotation.lang.AbstractFunction;
+import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.codec.Envelope;
-import io.mercury.common.serialization.Serializer;
+import io.mercury.common.serialization.api.Serializer;
 import io.mercury.persistence.chronicle.exception.ChronicleAppendException;
 import io.mercury.persistence.chronicle.queue.multitype.AbstractChronicleMultitypeQueue.CloseableChronicleAccessor;
 import net.openhft.chronicle.queue.ExcerptAppender;

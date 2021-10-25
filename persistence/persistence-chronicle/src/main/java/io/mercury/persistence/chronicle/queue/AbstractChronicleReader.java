@@ -19,7 +19,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.annotation.lang.AbstractFunction;
+import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.datetime.TimeConst;
 import io.mercury.persistence.chronicle.exception.ChronicleReadException;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleQueue.CloseableChronicleAccessor;

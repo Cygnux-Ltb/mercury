@@ -21,7 +21,7 @@ import javax.annotation.concurrent.Immutable;
 import org.eclipse.collections.api.map.ConcurrentMutableMap;
 import org.slf4j.Logger;
 
-import io.mercury.common.annotation.lang.AbstractFunction;
+import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.codec.Envelope;
 import io.mercury.common.collections.MutableMaps;
 import io.mercury.common.log.CommonLoggerFactory;
