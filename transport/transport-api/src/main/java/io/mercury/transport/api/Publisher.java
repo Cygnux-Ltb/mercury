@@ -1,10 +1,8 @@
 package io.mercury.transport.api;
 
-import java.io.Closeable;
-
 import io.mercury.transport.exception.PublishFailedException;
 
-public interface Publisher<T> extends Transport, Closeable, FanoutModule {
+public interface Publisher<T> extends Transport {
 
 	/**
 	 * Publish to default location

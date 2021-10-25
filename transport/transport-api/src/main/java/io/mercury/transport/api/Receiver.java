@@ -1,12 +1,10 @@
 package io.mercury.transport.api;
 
-import java.io.Closeable;
-
 import io.mercury.common.annotation.thread.AsyncFunction;
 import io.mercury.transport.exception.ConnectionBreakException;
 import io.mercury.transport.exception.ReceiverStartException;
 
-public interface Receiver extends Transport, Closeable, Runnable, FaninModule {
+public interface Receiver extends Transport, Runnable {
 
 	/**
 	 * Start receive

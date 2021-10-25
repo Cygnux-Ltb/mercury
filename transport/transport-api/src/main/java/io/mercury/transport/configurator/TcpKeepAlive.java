@@ -1,6 +1,10 @@
 package io.mercury.transport.configurator;
 
-public final class TcpKeepAlive {
+import io.mercury.common.annotation.OnlyOverrideEquals;
+import io.mercury.common.serialization.JsonDeserializable;
+
+@OnlyOverrideEquals
+public final class TcpKeepAlive implements JsonDeserializable<TcpKeepAlive> {
 
 	private final KeepAlive keepAlive;
 	private int keepAliveCount;
@@ -42,6 +46,24 @@ public final class TcpKeepAlive {
 		return this;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || !(obj instanceof TcpKeepAlive)) {
+			return super.equals(obj);
+		} else {
+			TcpKeepAlive o = (TcpKeepAlive) obj;
+			if (!this.keepAlive.equals(o.getKeepAlive()))
+				return false;
+			if (this.keepAliveCount != o.getKeepAliveCount())
+				return false;
+			if (this.keepAliveIdle != o.getKeepAliveIdle())
+				return false;
+			if (this.keepAliveInterval != o.getKeepAliveInterval())
+				return false;
+			return true;
+		}
+	}
+
 	/**
 	 * 
 	 * @return
@@ -62,13 +84,13 @@ public final class TcpKeepAlive {
 	 * 
 	 * @return
 	 */
-	public static final TcpKeepAlive sysDefault() {
-		return new TcpKeepAlive(KeepAlive.SysDefault);
+	public static final TcpKeepAlive withDefault() {
+		return new TcpKeepAlive(KeepAlive.Default);
 	}
 
 	public static enum KeepAlive {
 
-		Enable(1), Disable(0), SysDefault(-1)
+		Enable(1), Disable(0), Default(-1)
 
 		;
 
@@ -82,6 +104,11 @@ public final class TcpKeepAlive {
 			return code;
 		}
 
+	}
+
+	@Override
+	public TcpKeepAlive fromJson(String json) {
+		return null;
 	}
 
 }

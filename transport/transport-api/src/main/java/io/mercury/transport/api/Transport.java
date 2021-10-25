@@ -1,23 +1,50 @@
 package io.mercury.transport.api;
 
-public interface Transport {
+import java.io.Closeable;
+import java.io.IOException;
+
+public interface Transport extends Closeable {
 
 	/**
 	 * 
-	 * @return
+	 * @return Name
 	 */
 	String getName();
 
 	/**
 	 * 
-	 * @return
+	 * @return Start Time
+	 */
+	long getStartTime();
+
+	/**
+	 * 
+	 * @return End Time
+	 */
+	long getEndTime();
+
+	/**
+	 * 
+	 * @return Running Duration
+	 */
+	long getRunningDuration();
+
+	/**
+	 * 
+	 * @return Is connected
 	 */
 	boolean isConnected();
 
 	/**
 	 * 
-	 * @return
+	 * @return Is destroy
 	 */
-	boolean destroy();
+	boolean closeIgnoreException();
+
+	@Override
+	default void close() throws IOException {
+		if (!closeIgnoreException())
+			throw new IOException("Close function failed");
+	}
 
 }
