@@ -5,7 +5,7 @@ import javax.annotation.Nonnull;
 import org.eclipse.collections.api.list.MutableList;
 import org.slf4j.Logger;
 
-import io.mercury.common.annotation.lang.AbstractFunction;
+import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;

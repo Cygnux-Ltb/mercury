@@ -99,7 +99,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 			// 在定义Exchange和进行绑定时抛出任何异常都需要终止程序
 			log.error("Exchange declare throw exception -> connection configurator info : {}, " + "error message : {}",
 					rabbitConnection.getCfgInfo(), e.getMessage(), e);
-			destroy();
+			closeIgnoreException();
 			throw new DeclareRuntimeException(e);
 		}
 
@@ -134,7 +134,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 		// 调用isConnected(), 检查channel和connection是否打开, 如果没有打开, 先销毁连接, 再重新创建连接.
 		while (!isConnected()) {
 			log.error("Detect connection isConnected() == false, retry {}", (++retry));
-			destroy();
+			closeIgnoreException();
 			Threads.sleep(rabbitConnection.getRecoveryInterval());
 			createConnection();
 		}
@@ -144,7 +144,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 			} catch (IOException e) {
 				log.error("Func publish isConfirm==[true] throw IOException -> {}, msg==[{}]", e.getMessage(),
 						StringUtil.toString(msg), e);
-				destroy();
+				closeIgnoreException();
 				throw new PublishFailedException(e);
 			} catch (NoAckException e) {
 				log.error("Func publish isConfirm==[true] throw NoConfirmException -> {}, msg==[{}]", e.getMessage(),
@@ -157,7 +157,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 			} catch (IOException e) {
 				log.error("Func publish isConfirm==[false] throw IOException -> {}, msg==[{}]", e.getMessage(),
 						StringUtil.toString(msg), e);
-				destroy();
+				closeIgnoreException();
 				throw new PublishFailedException(e);
 			}
 		}
@@ -238,9 +238,9 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<by
 	}
 
 	@Override
-	public boolean destroy() {
-		log.info("Call func destroy() from Publisher name==[{}]", publisherName);
-		return super.destroy();
+	public boolean closeIgnoreException() {
+		log.info("Call func closeIgnoreException() from Publisher name==[{}]", publisherName);
+		return super.closeIgnoreException();
 	}
 
 	@Override

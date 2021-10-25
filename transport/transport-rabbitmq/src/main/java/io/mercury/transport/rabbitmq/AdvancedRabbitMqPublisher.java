@@ -18,7 +18,7 @@ import com.rabbitmq.client.ConfirmCallback;
 import io.mercury.common.character.Charsets;
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.spec.BytesSerializer;
+import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Publisher;
@@ -134,8 +134,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param cfg
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<byte[]> createWithBytes(String tag,
-			@Nonnull RabbitPublisherCfg cfg) {
+	public final static AdvancedRabbitMqPublisher<byte[]> createWithBytes(String tag, @Nonnull RabbitPublisherCfg cfg) {
 		return createWithBytes(tag, cfg, null, null);
 	}
 
@@ -147,9 +146,8 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param noAckCallback
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<byte[]> createWithBytes(String tag,
-			@Nonnull RabbitPublisherCfg cfg, @Nonnull AckCallback ackCallback,
-			@Nonnull NoAckCallback noAckCallback) {
+	public final static AdvancedRabbitMqPublisher<byte[]> createWithBytes(String tag, @Nonnull RabbitPublisherCfg cfg,
+			@Nonnull AckCallback ackCallback, @Nonnull NoAckCallback noAckCallback) {
 		return new AdvancedRabbitMqPublisher<>(tag, cfg, msg -> msg, ackCallback, noAckCallback);
 	}
 
@@ -222,7 +220,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 */
 	private AdvancedRabbitMqPublisher(String tag, @Nonnull RabbitPublisherCfg cfg,
 			@Nonnull BytesSerializer<T> serializer, AckCallback ackCallback, NoAckCallback noAckCallback) {
-		super(nonEmpty(tag) ? tag : "publisher-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
+		super(nonEmpty(tag) ? tag : "adv-publisher-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
 		Assertor.nonNull(cfg.getPublishExchange(), "exchangeRelation");
 		this.publishExchange = cfg.getPublishExchange();
 		this.exchangeName = publishExchange.getExchangeName();
@@ -271,6 +269,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 						"Enables publisher acknowledgements failure, From publisher -> {}" + publisherName, ioe);
 			}
 		}
+		newStartTime();
 	}
 
 	/**
@@ -290,7 +289,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 			// 在定义Exchange和进行绑定时抛出任何异常都需要终止程序
 			log.error("Exchange declare throw exception -> connection configurator info : {}, " + "error message : {}",
 					rabbitConnection.getCfgInfo(), e.getMessage(), e);
-			destroy();
+			closeIgnoreException();
 			throw new DeclareRuntimeException(e);
 		}
 
@@ -325,7 +324,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 		// 调用isConnected(), 检查channel和connection是否打开, 如果没有打开, 先销毁连接, 再重新创建连接.
 		while (!isConnected()) {
 			log.error("Detect connection isConnected() == false, retry {}", (++retry));
-			destroy();
+			closeIgnoreException();
 			Threads.sleep(rabbitConnection.getRecoveryInterval());
 			createConnection();
 		}
@@ -335,7 +334,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 			} catch (IOException e) {
 				log.error("Function publish throw IOException -> {}, isConfirm==[true], msg==[{}]", e.getMessage(), msg,
 						e);
-				destroy();
+				closeIgnoreException();
 				throw new PublishFailedException(e);
 			} catch (MsgConfirmFailureException e) {
 				log.error("Function publish throw NoConfirmException -> {}, isConfirm==[true], msg==[{}]",
@@ -348,7 +347,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 			} catch (IOException e) {
 				log.error("Function publish throw IOException -> {}, isConfirm==[false], msg==[{}]", e.getMessage(),
 						msg, e);
-				destroy();
+				closeIgnoreException();
 				throw new PublishFailedException(e);
 			}
 		}
@@ -436,9 +435,9 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	}
 
 	@Override
-	public boolean destroy() {
+	public boolean closeIgnoreException() {
 		log.info("Call method destroy() from Publisher name==[{}]", publisherName);
-		return super.destroy();
+		return super.closeIgnoreException();
 	}
 
 	@Override

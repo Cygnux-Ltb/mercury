@@ -179,7 +179,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 			log.error("Queue declare throw exception -> connection configurator info : {}, error message : {}",
 					rabbitConnection.getCfgInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
-			destroy();
+			closeIgnoreException();
 			throw new DeclareRuntimeException(e);
 		}
 		if (errMsgExchange != null && errMsgQueue != null) {
@@ -200,7 +200,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 					"ErrorMsgExchange declare throw exception -> connection configurator info : {}, error message : {}",
 					rabbitConnection.getCfgInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
-			destroy();
+			closeIgnoreException();
 			throw new DeclareRuntimeException(e);
 		}
 		this.errMsgExchangeName = errMsgExchange.getExchangeName();
@@ -214,7 +214,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 			log.error("ErrorMsgQueue declare throw exception -> connection configurator info : {}, error message : {}",
 					rabbitConnection.getCfgInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
-			destroy();
+			closeIgnoreException();
 			throw new DeclareRuntimeException(e);
 		}
 		this.errMsgQueueName = errMsgQueue.getQueueName();
@@ -321,7 +321,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 			log.error("Exception handling -> Reject Msg [{}]", StringUtil.toString(body));
 			channel.basicReject(envelope.getDeliveryTag(), true);
 			log.error("Exception handling -> Reject Msg finished");
-			destroy();
+			closeIgnoreException();
 			log.error("RabbitMqReceiver: [{}] already closed", receiverName);
 			throw new MsgHandleException(
 					"The message could not handle, and could not delivered to the error dump address."
@@ -380,9 +380,9 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 	}
 
 	@Override
-	public boolean destroy() {
-		log.info("Call function destroy() from Receiver name==[{}]", receiverName);
-		return super.destroy();
+	public boolean closeIgnoreException() {
+		log.info("Call function closeIgnoreException() from Receiver name==[{}]", receiverName);
+		return super.closeIgnoreException();
 	}
 
 	@Override

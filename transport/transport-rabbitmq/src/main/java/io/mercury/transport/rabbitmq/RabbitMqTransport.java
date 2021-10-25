@@ -22,9 +22,10 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringUtil;
 import io.mercury.transport.api.Transport;
+import io.mercury.transport.api.TransportComponent;
 import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
 
-public abstract class RabbitMqTransport implements Transport, Closeable {
+public abstract class RabbitMqTransport extends TransportComponent implements Transport, Closeable {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqTransport.class);
 
@@ -162,15 +163,16 @@ public abstract class RabbitMqTransport implements Transport, Closeable {
 	}
 
 	@Override
-	public boolean destroy() {
+	public boolean closeIgnoreException() {
 		log.info("Function -> destroy() from AbstractRabbitMqTransport tag==[{}]", tag);
 		closeConnection();
+		newEndTime();
 		return true;
 	}
 
 	@Override
 	public void close() throws IOException {
-		destroy();
+		closeIgnoreException();
 	}
 
 	@Override

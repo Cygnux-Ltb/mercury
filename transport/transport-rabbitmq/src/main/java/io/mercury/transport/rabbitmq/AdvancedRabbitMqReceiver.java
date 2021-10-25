@@ -19,7 +19,7 @@ import com.rabbitmq.client.Envelope;
 import io.mercury.common.codec.DecodeException;
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.spec.BytesDeserializer;
+import io.mercury.common.serialization.BytesDeserializer;
 import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringUtil;
 import io.mercury.transport.api.Receiver;
@@ -206,7 +206,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	private AdvancedRabbitMqReceiver(String tag, @Nonnull RabbitReceiverCfg cfg,
 			@Nonnull BytesDeserializer<T> deserializer, @Nullable Consumer<T> consumer,
 			@Nullable SelfAckConsumer<T> selfAckConsumer) {
-		super(nonEmpty(tag) ? tag : "receiver-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
+		super(nonEmpty(tag) ? tag : "adv-receiver-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
 		if (consumer == null && selfAckConsumer == null) {
 			throw new NullPointerException("[Consumer] and [SelfAckConsumer] cannot all be null");
 		}
@@ -230,6 +230,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 		if (selfAckConsumer != null) {
 			createAckDelegate();
 		}
+		newStartTime();
 	}
 
 	/**
@@ -252,7 +253,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 			log.error("Queue declare throw exception -> connection info : {}, error message : {}",
 					rabbitConnection.getCfgInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
-			destroy();
+			closeIgnoreException();
 			throw new DeclareRuntimeException(e);
 		}
 		if (errMsgExchange != null && errMsgQueue != null) {
@@ -273,7 +274,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 					"ErrorMsgExchange declare throw exception -> connection configurator info : {}, error message : {}",
 					rabbitConnection.getCfgInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
-			destroy();
+			closeIgnoreException();
 			throw new DeclareRuntimeException(e);
 		}
 		this.errMsgExchangeName = errMsgExchange.getExchangeName();
@@ -287,7 +288,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 			log.error("ErrorMsgQueue declare throw exception -> connection configurator info : {}, error message : {}",
 					rabbitConnection.getCfgInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
-			destroy();
+			closeIgnoreException();
 			throw new DeclareRuntimeException(e);
 		}
 		this.errMsgQueueName = errMsgQueue.getQueueName();
@@ -502,7 +503,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 			log.error("Exception handling -> Reject Msg [{}]", StringUtil.toString(body));
 			channel.basicReject(envelope.getDeliveryTag(), true);
 			log.error("Exception handling -> Reject Msg finished");
-			destroy();
+			closeIgnoreException();
 			log.error("RabbitMqReceiver: [{}] already closed", receiverName);
 			throw new MsgHandleException(
 					"The message could not handle, and could not delivered to the error dump address."
@@ -561,9 +562,9 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	}
 
 	@Override
-	public boolean destroy() {
+	public boolean closeIgnoreException() {
 		log.info("Call function destroy() from Receiver name==[{}]", receiverName);
-		return super.destroy();
+		return super.closeIgnoreException();
 	}
 
 	@Override

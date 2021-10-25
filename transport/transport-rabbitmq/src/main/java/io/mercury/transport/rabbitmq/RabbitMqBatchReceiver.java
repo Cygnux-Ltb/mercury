@@ -28,7 +28,7 @@ import com.rabbitmq.client.Envelope;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.spec.BytesDeserializer;
+import io.mercury.common.serialization.BytesDeserializer;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Receiver;
 import io.mercury.transport.rabbitmq.configurator.RabbitReceiverCfg;
@@ -90,7 +90,7 @@ public class RabbitMqBatchReceiver<T> extends RabbitMqTransport implements Recei
 			log.error(
 					"Function channel.queueDeclare(queue==[{}], durable==[{]}, exclusive==[{}], autoDelete==[{}], arguments==null) IOException message -> {}",
 					receiveQueue, durable, exclusive, autoDelete, e.getMessage(), e);
-			destroy();
+			closeIgnoreException();
 		}
 	}
 
@@ -114,7 +114,7 @@ public class RabbitMqBatchReceiver<T> extends RabbitMqTransport implements Recei
 	}
 
 	@Override
-	public boolean destroy() {
+	public boolean closeIgnoreException() {
 		log.info("Call method RabbitMqReceiver.destroy()");
 		closeConnection();
 		return true;
