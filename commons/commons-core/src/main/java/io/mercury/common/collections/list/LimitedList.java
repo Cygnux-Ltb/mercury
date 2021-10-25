@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.eclipse.collections.impl.list.mutable.FastList;
 
-import io.mercury.common.annotation.lang.AbstractFunction;
+import io.mercury.common.annotation.AbstractFunction;
 
 public abstract class LimitedList<L extends List<E>, E> extends LimitedContainer<E> {
 

@@ -1,4 +1,4 @@
-package io.mercury.common.annotation.lang;
+package io.mercury.common.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

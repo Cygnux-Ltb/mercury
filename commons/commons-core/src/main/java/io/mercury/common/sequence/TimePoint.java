@@ -12,7 +12,7 @@ import io.mercury.common.util.Assertor;
  */
 public class TimePoint implements Serial<TimePoint> {
 
-	private final ZonedDateTime timePoint;
+	private final ZonedDateTime datetime;
 
 	private final long epochSecond;
 
@@ -22,12 +22,12 @@ public class TimePoint implements Serial<TimePoint> {
 
 	/**
 	 * 
-	 * @param timePoint
+	 * @param datetime
 	 * @param repeat
 	 */
-	protected TimePoint(ZonedDateTime timePoint, int repeat) {
-		this.timePoint = timePoint;
-		this.epochSecond = timePoint.toEpochSecond();
+	protected TimePoint(ZonedDateTime datetime, int repeat) {
+		this.datetime = datetime;
+		this.epochSecond = datetime.toEpochSecond();
 		this.repeat = repeat;
 		this.serialId = (epochSecond * 1000L) + repeat;
 	}
@@ -35,12 +35,12 @@ public class TimePoint implements Serial<TimePoint> {
 	/**
 	 * 根据固定时间创建新序列
 	 * 
-	 * @param timePoint
+	 * @param datetime
 	 * @return
 	 */
-	public static TimePoint newWith(ZonedDateTime timePoint) {
-		Assertor.nonNull(timePoint, "datetime");
-		return new TimePoint(timePoint, 0);
+	public static TimePoint with(ZonedDateTime datetime) {
+		Assertor.nonNull(datetime, "datetime");
+		return new TimePoint(datetime, 0);
 	}
 
 	/**
@@ -49,13 +49,13 @@ public class TimePoint implements Serial<TimePoint> {
 	 * @param previous
 	 * @return
 	 */
-	public static TimePoint newWith(TimePoint previous) {
+	public static TimePoint with(TimePoint previous) {
 		Assertor.nonNull(previous, "previous");
-		return new TimePoint(previous.timePoint, previous.repeat + 1);
+		return new TimePoint(previous.datetime, previous.repeat + 1);
 	}
 
-	public ZonedDateTime getTimePoint() {
-		return timePoint;
+	public ZonedDateTime getDatetime() {
+		return datetime;
 	}
 
 	public long getEpochSecond() {
@@ -78,13 +78,13 @@ public class TimePoint implements Serial<TimePoint> {
 		long epochSecond = now.toEpochSecond();
 		System.out.println(epochSecond);
 
-		TimePoint timeStarted0 = TimePoint.newWith(now);
-		System.out.println(timeStarted0.getTimePoint());
+		TimePoint timeStarted0 = TimePoint.with(now);
+		System.out.println(timeStarted0.getDatetime());
 		System.out.println(timeStarted0.getEpochSecond());
 		System.out.println(timeStarted0.getSerialId());
 
-		TimePoint timeStarted1 = TimePoint.newWith(timeStarted0);
-		System.out.println(timeStarted1.getTimePoint());
+		TimePoint timeStarted1 = TimePoint.with(timeStarted0);
+		System.out.println(timeStarted1.getDatetime());
 		System.out.println(timeStarted1.getEpochSecond());
 		System.out.println(timeStarted1.getSerialId());
 

@@ -235,4 +235,17 @@ public final class MutableSets {
 		return newTreeSortedSet();
 	}
 
+	/**
+	 * 
+	 * @param <E>
+	 * @param set
+	 * @param elements
+	 */
+	public static final <E> void addElements(MutableSet<E> set, E[] elements) {
+		if (set == null || elements == null || elements.length == 0)
+			return;
+		for (int i = 0; i < elements.length; i++)
+			set.add(elements[i]);
+	}
+
 }

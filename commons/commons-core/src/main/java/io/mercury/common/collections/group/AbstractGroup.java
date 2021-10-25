@@ -9,7 +9,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.map.ConcurrentMutableMap;
 
-import io.mercury.common.annotation.lang.AbstractFunction;
+import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.collections.Capacity;
 
 /**
