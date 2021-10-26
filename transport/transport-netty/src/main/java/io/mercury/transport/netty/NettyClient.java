@@ -40,7 +40,6 @@ public class NettyClient extends NettyTransport implements TransportClient {
 				}).option(ChannelOption.SO_KEEPALIVE, configurator.keepAlive())
 				.option(ChannelOption.TCP_NODELAY, configurator.tcpNoDelay());
 		log.info("{} : Init-BootStrap.connect -> {}", tag, configurator.getConnectionInfo());
-
 	}
 
 	@Override
@@ -62,7 +61,7 @@ public class NettyClient extends NettyTransport implements TransportClient {
 					.sync();
 		} catch (InterruptedException e) {
 			log.error("NettyClient method connection() -> {}", e.getMessage(), e);
-			destroy();
+			closeIgnoreException();
 		}
 	}
 
@@ -72,10 +71,12 @@ public class NettyClient extends NettyTransport implements TransportClient {
 	}
 
 	@Override
-	public boolean destroy() {
+	public boolean closeIgnoreException() {
 		log.info("NettyClient call method destroy().");
 		workerGroup.shutdownGracefully();
+		newEndTime();
 		return true;
 	}
+
 
 }

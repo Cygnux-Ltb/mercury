@@ -13,9 +13,10 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Receiver;
+import io.mercury.transport.api.TransportComponent;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
 
-public class SocketReceiver implements Receiver {
+public class SocketReceiver extends TransportComponent implements Receiver {
 
 	private SocketConfigurator configurator;
 	private Consumer<byte[]> callback;
@@ -55,7 +56,7 @@ public class SocketReceiver implements Receiver {
 	}
 
 	@Override
-	public boolean destroy() {
+	public boolean closeIgnoreException() {
 		this.isRun.set(false);
 		try {
 			if (socket != null)
@@ -107,8 +108,7 @@ public class SocketReceiver implements Receiver {
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
-
-					destroy();
+					closeIgnoreException();
 				}
 			}
 			if (inputStream != null) {
@@ -144,7 +144,7 @@ public class SocketReceiver implements Receiver {
 
 	@Override
 	public void close() throws IOException {
-		destroy();
+		closeIgnoreException();
 	}
 
 }

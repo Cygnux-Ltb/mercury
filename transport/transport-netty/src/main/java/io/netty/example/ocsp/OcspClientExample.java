@@ -62,6 +62,7 @@ import io.netty.util.concurrent.Promise;
  * The client connects to an HTTPS server that has OCSP stapling enabled and
  * then uses BC to parse and validate it.
  */
+@SuppressWarnings("deprecation")
 public class OcspClientExample {
 	public static void main(String[] args) throws Exception {
 		if (!OpenSsl.isAvailable()) {

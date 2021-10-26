@@ -28,13 +28,13 @@ final class PingSender implements EventHandler {
 	}
 
 	@Override
-	public boolean action() throws InvalidEventHandlerException, InterruptedException {
+	public boolean action() throws InvalidEventHandlerException {
 		if (lastPublish < System.currentTimeMillis() - 5000L) {
 
 			nc.get().wireOutPublisher().put(null, wireOut -> {
 				wireOut.writeDocument(true, d -> d.write(CoreFields.cid).int64(cid));
 				wireOut.writeDocument(false, d -> d.writeEventName("ping").int32(counter++));
-				
+
 			});
 			lastPublish = System.currentTimeMillis();
 		}

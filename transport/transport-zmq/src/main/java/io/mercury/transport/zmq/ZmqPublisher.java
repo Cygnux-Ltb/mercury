@@ -1,7 +1,6 @@
 package io.mercury.transport.zmq;
 
 import java.io.Closeable;
-import java.nio.charset.Charset;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -10,23 +9,17 @@ import org.slf4j.Logger;
 import org.zeromq.SocketType;
 import org.zeromq.ZMQ;
 
-import io.mercury.common.character.Charsets;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.serialization.spec.BytesSerializer;
+import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.common.thread.Threads;
 import io.mercury.transport.api.Publisher;
-import io.mercury.transport.zmq.cfg.ZmqAddress;
-import io.mercury.transport.zmq.exception.ZmqConnectionException;
+import io.mercury.transport.zmq.exception.ZmqBindException;
 
 public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>, Closeable {
 
 	// default topic
 
-	private final String defaultTopic;
-
-	private final String name;
-
-	private final ZmqPubConfigurator cfg;
+	private final String topic;
 
 	private final BytesSerializer<T> ser;
 
@@ -37,68 +30,30 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>,
 	 * @param cfg
 	 * @param ser
 	 */
-	private ZmqPublisher(@Nonnull ZmqPubConfigurator cfg, @Nonnull BytesSerializer<T> ser) {
-		super(cfg.getAddr(), cfg.getIoThreads());
-		this.cfg = cfg;
+	ZmqPublisher(@Nonnull String topic, @Nonnull ZmqConfigurator cfg, @Nonnull BytesSerializer<T> ser) {
+		super(cfg);
+		this.topic = topic;
 		this.ser = ser;
-		this.defaultTopic = cfg.getDefaultTopic();
-		if (socket.bind(addr.getAddr())) {
+		String addr = cfg.getAddr();
+		if (zSocket.bind(addr)) {
 			log.info("bound addr -> {}", addr);
 		} else {
 			log.error("unable to bind -> {}", addr);
-			throw new ZmqConnectionException(addr);
+			throw new ZmqBindException(addr);
 		}
 		setTcpKeepAlive(cfg.getTcpKeepAlive());
-		this.name = "Zmq::Pub$" + cfg.getConnectionInfo();
+		newStartTime();
+		this.name = "ZMQ::PUB$" + addr + "/" + topic;
 	}
 
 	@Override
-	public String getName() {
-		return name;
-	}
-
-	public ZmqPubConfigurator getCfg() {
-		return cfg;
-	}
-
-	/**
-	 * 
-	 * @param cfg
-	 * @return
-	 */
-	public static ZmqPublisher<String> create(@Nonnull ZmqPubConfigurator cfg) {
-		return create(cfg, Charsets.UTF8);
-	}
-
-	/**
-	 * 
-	 * @param cfg
-	 * @param charset
-	 * @return
-	 */
-	public static ZmqPublisher<String> create(@Nonnull ZmqPubConfigurator cfg, Charset charset) {
-		return new ZmqPublisher<>(cfg, str -> str.getBytes(charset));
-	}
-
-	/**
-	 * 
-	 * @param <T>
-	 * @param cfg
-	 * @param ser
-	 * @return
-	 */
-	public static <T> ZmqPublisher<T> create(@Nonnull ZmqPubConfigurator cfg, @Nonnull BytesSerializer<T> ser) {
-		return new ZmqPublisher<>(cfg, ser);
-	}
-
-	@Override
-	protected SocketType getSocketType() {
+	public SocketType getSocketType() {
 		return SocketType.PUB;
 	}
 
 	@Override
 	public void publish(T msg) {
-		publish(defaultTopic, msg);
+		publish(topic, msg);
 	}
 
 	@Override
@@ -106,85 +61,18 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>,
 		if (isRunning.get()) {
 			byte[] bytes = ser.serialization(msg);
 			if (bytes != null && bytes.length > 0) {
-				socket.sendMore(target);
-				socket.send(bytes, ZMQ.NOBLOCK);
+				zSocket.sendMore(target);
+				zSocket.send(bytes, ZMQ.NOBLOCK);
 			}
 		} else {
 			log.warn("ZmqPublisher -> [{}] already closed", name);
 		}
 	}
 
-	@Override
-	public String getPublisherName() {
-		return name;
-	}
-
-	/**
-	 * 
-	 * @author yellow013
-	 *
-	 */
-	public static final class ZmqPubConfigurator extends ZmqConfigurator<ZmqPubConfigurator> {
-
-		private String defaultTopic = "";
-
-		private ZmqPubConfigurator(ZmqAddress addr) {
-			super(addr);
-		}
-
-		public String getDefaultTopic() {
-			return defaultTopic;
-		}
-
-		public ZmqPubConfigurator setDefaultTopic(String defaultTopic) {
-			this.defaultTopic = defaultTopic;
-			return this;
-		}
-
-		@Override
-		protected ZmqPubConfigurator returnSelf() {
-			return this;
-		}
-
-		/**
-		 * 创建TCP协议连接
-		 * 
-		 * @param port
-		 * @return
-		 */
-		public final static ZmqPubConfigurator tcp(int port) {
-			return new ZmqPubConfigurator(ZmqAddress.tcp(port));
-		}
-
-		/**
-		 * 创建TCP协议连接
-		 * 
-		 * @param addr
-		 * @param port
-		 * @return
-		 */
-		public final static ZmqPubConfigurator tcp(String addr, int port) {
-			return new ZmqPubConfigurator(ZmqAddress.tcp(addr, port));
-		}
-
-		/**
-		 * 创建IPC协议连接
-		 * 
-		 * @param addr
-		 * @return
-		 */
-		public final static ZmqPubConfigurator ipc(String addr) {
-			return new ZmqPubConfigurator(ZmqAddress.ipc(addr));
-		}
-
-	}
-
 	public static void main(String[] args) {
 
-		ZmqPubConfigurator configurator = ZmqPubConfigurator.tcp("127.0.0.1", 13001).setDefaultTopic("command")
-				.setIoThreads(2);
-
-		try (ZmqPublisher<String> publisher = ZmqPublisher.create(configurator)) {
+		try (ZmqPublisher<String> publisher = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(2)
+				.buildStringPublisher("commond")) {
 			Random random = new Random();
 
 			for (;;) {

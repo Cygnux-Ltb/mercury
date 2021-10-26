@@ -66,12 +66,12 @@ public class NettyServer extends NettyTransport implements TransportServer {
 					.sync();
 		} catch (InterruptedException e) {
 			log.error("NettyServer method startup() -> {}", e.getMessage(), e);
-			destroy();
+			closeIgnoreException();
 		}
 	}
 
 	@Override
-	public boolean destroy() {
+	public boolean closeIgnoreException() {
 		log.info("NettyServer call method destroy().");
 		workerGroup.shutdownGracefully();
 		bossGroup.shutdownGracefully();
@@ -87,7 +87,7 @@ public class NettyServer extends NettyTransport implements TransportServer {
 
 		NettyConfigurator configurator = NettyConfigurator.builder("192.168.1.138", 7901).build();
 
-		NettyServer nettyServer = new NettyServer("LocalTest", configurator, new GeneralNettyHandler() {
+		try (NettyServer nettyServer = new NettyServer("LocalTest", configurator, new GeneralNettyHandler() {
 
 			@Override
 			public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
@@ -100,9 +100,9 @@ public class NettyServer extends NettyTransport implements TransportServer {
 				System.out.println(new String(recvBytes));
 			}
 
-		});
-
-		nettyServer.startup();
+		})) {
+			nettyServer.startup();
+		}
 
 	}
 

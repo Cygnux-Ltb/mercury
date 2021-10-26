@@ -5,11 +5,12 @@ import org.slf4j.Logger;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.sequence.SysNanoSeq;
 import io.mercury.transport.api.Sender;
+import io.mercury.transport.api.TransportComponent;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 
-public class NettySender implements Sender<byte[]> {
+public class NettySender extends TransportComponent implements Sender<byte[]> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(NettySender.class);
 
@@ -33,10 +34,11 @@ public class NettySender implements Sender<byte[]> {
 	}
 
 	@Override
-	public boolean destroy() {
+	public boolean closeIgnoreException() {
 		// byteBuf.release();
 		context.disconnect();
 		context.close();
+		newEndTime();
 		return true;
 	}
 

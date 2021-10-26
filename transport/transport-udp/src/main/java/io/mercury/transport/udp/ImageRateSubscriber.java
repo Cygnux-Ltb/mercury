@@ -34,7 +34,6 @@ class ImageRateSubscriberLhsPadding {
 	byte p048, p049, p050, p051, p052, p053, p054, p055, p056, p057, p058, p059, p060, p061, p062, p063;
 }
 
-@SuppressWarnings("restriction")
 class ImageRateSubscriberValues extends ImageRateSubscriberLhsPadding {
 	static final long TOTAL_BYTES_OFFSET;
 
@@ -115,7 +114,6 @@ public final class ImageRateSubscriber extends ImageRateSubscriberRhsPadding imp
 		System.out.format("Subscriber poll failure ratio: %f%n", failureRatio);
 	}
 
-	@SuppressWarnings("restriction")
 	private void onFragment(final DirectBuffer buffer, final int offset, final int length, final Header header) {
 		UNSAFE.putOrderedLong(this, TOTAL_BYTES_OFFSET, totalBytes + length);
 	}

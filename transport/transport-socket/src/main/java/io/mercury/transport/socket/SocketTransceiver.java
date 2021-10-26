@@ -51,11 +51,13 @@ public final class SocketTransceiver extends BaseTransceiver<String> {
 		}
 	}
 
+	@Override
 	public boolean isConnected() {
 		return false;
 	}
 
-	public boolean destroy() {
+	@Override
+	public boolean closeIgnoreException() {
 		this.isReceiving.set(false);
 		try {
 			if (writer != null) {
@@ -103,7 +105,7 @@ public final class SocketTransceiver extends BaseTransceiver<String> {
 					callback.accept(bytes);
 				} catch (IOException e) {
 					e.printStackTrace();
-					destroy();
+					closeIgnoreException();
 				}
 			}
 			if (inputStream != null) {
@@ -128,7 +130,7 @@ public final class SocketTransceiver extends BaseTransceiver<String> {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			destroy();
+			closeIgnoreException();
 		}
 	}
 
@@ -146,7 +148,7 @@ public final class SocketTransceiver extends BaseTransceiver<String> {
 
 	@Override
 	public void close() throws IOException {
-		destroy();
+		closeIgnoreException();
 	}
 
 }

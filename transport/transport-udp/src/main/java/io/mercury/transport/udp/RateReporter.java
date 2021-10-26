@@ -26,7 +26,6 @@ class RateReporterLhsPadding {
 	byte p048, p049, p050, p051, p052, p053, p054, p055, p056, p057, p058, p059, p060, p061, p062, p063;
 }
 
-@SuppressWarnings("restriction")
 class RateReporterValues extends RateReporterLhsPadding {
 
 	static final long TOTAL_BYTES_OFFSET;
@@ -132,7 +131,6 @@ public final class RateReporter extends RateReporterRhsPadding implements Runnab
 	 *
 	 * @param length received, sent, etc.
 	 */
-	@SuppressWarnings("restriction")
 	public void onMessage(final long length) {
 		UNSAFE.putOrderedLong(this, TOTAL_BYTES_OFFSET, totalBytes + length);
 		UNSAFE.putOrderedLong(this, TOTAL_MESSAGES_OFFSET, totalMessages + 1);

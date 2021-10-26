@@ -12,9 +12,10 @@ import io.mercury.common.concurrent.queue.jct.JctSingleConsumerQueue;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Sender;
+import io.mercury.transport.api.TransportComponent;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
 
-public final class SocketSender implements Sender<byte[]> {
+public final class SocketSender extends TransportComponent implements Sender<byte[]> {
 
 	private SocketConfigurator configurator;
 
@@ -45,7 +46,7 @@ public final class SocketSender implements Sender<byte[]> {
 	}
 
 	@Override
-	public boolean destroy() {
+	public boolean closeIgnoreException() {
 		this.isRun.set(false);
 		try {
 			outputStream.close();
@@ -78,17 +79,18 @@ public final class SocketSender implements Sender<byte[]> {
 			}
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
-			destroy();
+			closeIgnoreException();
 		}
 	}
 
 	private SingleConsumerQueue<byte[]> innerQueue = JctSingleConsumerQueue.multiProducer(getName() + "-InnerQueue")
 			.setCapacity(512).buildWithProcessor(bytes -> processSendQueue(bytes));
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		SocketConfigurator configurator = SocketConfigurator.builder().host("192.168.1.138").port(7901).build();
-		SocketSender sender = new SocketSender(configurator);
-		sender.sent("hello".getBytes());
+		try (SocketSender sender = new SocketSender(configurator)) {
+			sender.sent("hello".getBytes());
+		}
 	}
 
 }

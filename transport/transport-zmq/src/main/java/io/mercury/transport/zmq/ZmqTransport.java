@@ -9,40 +9,42 @@ import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
-import io.mercury.common.annotation.lang.AbstractFunction;
+import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.serialization.json.JsonWrapper;
+import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Transport;
+import io.mercury.transport.api.TransportComponent;
 import io.mercury.transport.configurator.TcpKeepAlive;
-import io.mercury.transport.configurator.TransportConfigurator;
-import io.mercury.transport.zmq.cfg.ZmqAddress;
 
-abstract class ZmqTransport implements Transport, Closeable {
+abstract class ZmqTransport extends TransportComponent implements Transport, Closeable {
 
-	// ZContext
-	protected ZContext ctx;
-
-	// ZMQ.Socket
-	protected ZMQ.Socket socket;
-
-	protected final ZmqAddress addr;
+	protected final ZmqConfigurator cfg;
 
 	// 组件运行状态, 初始为已开始运行
-	protected AtomicBoolean isRunning = new AtomicBoolean(true);
+	protected final AtomicBoolean isRunning = new AtomicBoolean(true);
+
+	// ZContext
+	protected ZContext zCtx;
+
+	// ZMQ.Socket
+	protected ZMQ.Socket zSocket;
+
+	protected String name;
 
 	private static final Logger log = CommonLoggerFactory.getLogger(ZmqTransport.class);
 
-	protected ZmqTransport(ZmqAddress addr, int ioThreads) {
-		this.ctx = new ZContext(ioThreads);
-		this.addr = addr;
-		log.info("zmq context initialized, ioThreads=={}", ioThreads);
+	protected ZmqTransport(final ZmqConfigurator cfg) {
+		Assertor.nonNull(cfg, "cfg");
+		this.cfg = cfg;
+		this.zCtx = new ZContext(cfg.getIoThreads());
+		log.info("zmq context initialized, ioThreads=={}", cfg.getIoThreads());
 		SocketType type = getSocketType();
-		this.socket = ctx.createSocket(type);
-		log.info("zmq socket created with type -> {}", type);
+		this.zSocket = zCtx.createSocket(type);
+		log.info("ZMQ socket created with type -> {}", type);
 	}
 
 	@AbstractFunction
-	protected abstract SocketType getSocketType();
+	public abstract SocketType getSocketType();
 
 	/**
 	 * 设置TcpKeepAlive, 由子类调用
@@ -53,89 +55,42 @@ abstract class ZmqTransport implements Transport, Closeable {
 	protected ZMQ.Socket setTcpKeepAlive(TcpKeepAlive tcpKeepAlive) {
 		if (tcpKeepAlive != null) {
 			log.info("setting zmq socket tcp keep alive");
-			socket.setTCPKeepAlive(tcpKeepAlive.getKeepAlive().getCode());
-			socket.setTCPKeepAliveCount(tcpKeepAlive.getKeepAliveCount());
-			socket.setTCPKeepAliveIdle(tcpKeepAlive.getKeepAliveIdle());
-			socket.setTCPKeepAliveInterval(tcpKeepAlive.getKeepAliveInterval());
+			zSocket.setTCPKeepAlive(tcpKeepAlive.getKeepAlive().getCode());
+			zSocket.setTCPKeepAliveCount(tcpKeepAlive.getKeepAliveCount());
+			zSocket.setTCPKeepAliveIdle(tcpKeepAlive.getKeepAliveIdle());
+			zSocket.setTCPKeepAliveInterval(tcpKeepAlive.getKeepAliveInterval());
 		}
-		return socket;
+		return zSocket;
+	}
+
+	public ZmqConfigurator getCfg() {
+		return cfg;
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 
 	@Override
 	public boolean isConnected() {
-		return !ctx.isClosed();
+		return !zCtx.isClosed();
 	}
 
 	@Override
 	public void close() throws IOException {
-		destroy();
+		closeIgnoreException();
 	}
 
 	@Override
-	public boolean destroy() {
+	public boolean closeIgnoreException() {
 		if (isRunning.compareAndSet(true, false)) {
-			socket.close();
-			ctx.close();
+			zSocket.close();
+			zCtx.close();
 		}
-		log.info("zmq transport destroy");
-		return ctx.isClosed();
-	}
-
-	public static abstract class ZmqConfigurator<T extends ZmqConfigurator<T>> implements TransportConfigurator {
-
-		private final ZmqAddress addr;
-
-		private int ioThreads = 1;
-
-		private TcpKeepAlive tcpKeepAlive = null;
-
-		protected ZmqConfigurator(ZmqAddress addr) {
-			this.addr = addr;
-		}
-
-		public ZmqAddress getAddr() {
-			return addr;
-		}
-
-		public int getIoThreads() {
-			return ioThreads;
-		}
-
-		public TcpKeepAlive getTcpKeepAlive() {
-			return tcpKeepAlive;
-		}
-
-		public T setIoThreads(int ioThreads) {
-			this.ioThreads = ioThreads;
-			return returnSelf();
-		}
-
-		public T setTcpKeepAlive(TcpKeepAlive tcpKeepAlive) {
-			this.tcpKeepAlive = tcpKeepAlive;
-			return returnSelf();
-		}
-
-		@Override
-		public String getConnectionInfo() {
-			return addr.getAddr();
-		}
-
-		@Override
-		public String getCfgInfo() {
-			return toString();
-		}
-
-		protected abstract T returnSelf();
-
-		private transient String strCache;
-
-		@Override
-		public String toString() {
-			if (strCache == null)
-				this.strCache = JsonWrapper.toJson(this);
-			return strCache;
-		}
-
+		log.info("zmq transport close");
+		newEndTime();
+		return zCtx.isClosed();
 	}
 
 }
