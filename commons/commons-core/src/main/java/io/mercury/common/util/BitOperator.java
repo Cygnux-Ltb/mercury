@@ -2,8 +2,6 @@ package io.mercury.common.util;
 
 import static io.mercury.common.util.BitFormatter.longBinaryFormat;
 
-import java.nio.ByteBuffer;
-
 import javax.annotation.Nonnull;
 
 public final class BitOperator {
@@ -221,21 +219,21 @@ public final class BitOperator {
 	 * 
 	 * @param buffer
 	 */
-	@SuppressWarnings("restriction")
-	public static boolean cleanDirectMemory(final ByteBuffer buffer) throws RuntimeException {
-		if (buffer.isDirect()) {
-			if (buffer instanceof sun.nio.ch.DirectBuffer) {
-				try {
-					((sun.nio.ch.DirectBuffer) buffer).cleaner().clean();
-				} catch (Exception e) {
-					throw new RuntimeException("call '((sun.nio.ch.DirectBuffer) buffer).cleaner().clean()' exception",
-							e);
-				}
-				return true;
-			}
-		}
-		return false;
-	}
+//	@SuppressWarnings("restriction")
+//	public static boolean cleanDirectMemory(final ByteBuffer buffer) throws RuntimeException {
+//		if (buffer.isDirect()) {
+//			if (buffer instanceof sun.nio.ch.DirectBuffer) {
+//				try {
+//					((sun.nio.ch.DirectBuffer) buffer).cleaner().clean();
+//				} catch (Exception e) {
+//					throw new RuntimeException("call '((sun.nio.ch.DirectBuffer) buffer).cleaner().clean()' exception",
+//							e);
+//				}
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 
 	public static void main(String[] args) {
 

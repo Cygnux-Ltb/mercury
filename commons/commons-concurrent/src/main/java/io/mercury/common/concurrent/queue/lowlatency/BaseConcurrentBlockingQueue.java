@@ -26,7 +26,6 @@ import java.util.concurrent.TimeoutException;
  * @since 1.1
  */
 
-@SuppressWarnings("restriction")
 public abstract class BaseConcurrentBlockingQueue {
 
 	private static final long READ_LOCATION_OFFSET;
