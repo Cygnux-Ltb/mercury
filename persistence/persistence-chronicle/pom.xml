@@ -17,15 +17,16 @@
 
 	<properties>
 		<!-- v chronicle storage basic v -->
-		<chronicle-core.version>2.20.127.1</chronicle-core.version>
-		<chronicle-bytes.version>2.20.111</chronicle-bytes.version>
-		<chronicle-threads.version>2.20.111</chronicle-threads.version>
-		<chronicle-wire.version>2.20.117</chronicle-wire.version>
+		<chronicle-core.version>2.21.92</chronicle-core.version>
+		<chronicle-bytes.version>2.21.90</chronicle-bytes.version>
+		<chronicle-threads.version>2.21.86</chronicle-threads.version>
+		<chronicle-wire.version>2.21.93</chronicle-wire.version>
+		<chronicle-analytics.version>2.21.2</chronicle-analytics.version>
 		<!-- ^ chronicle storage basic ^ -->
-		<chronicle-values.version>2.20.80</chronicle-values.version>
-		<chronicle-algorithms.version>2.20.80</chronicle-algorithms.version>
-		<chronicle-queue.version>5.20.123</chronicle-queue.version>
-		<chronicle-map.version>3.20.84.1</chronicle-map.version>
+		<chronicle-values.version>2.21.82</chronicle-values.version>
+		<chronicle-algorithms.version>2.21.82</chronicle-algorithms.version>
+		<chronicle-queue.version>5.21.93</chronicle-queue.version>
+		<chronicle-map.version>3.21.86</chronicle-map.version>
 	</properties>
 
 	<dependencies>
@@ -45,6 +46,9 @@
 			<artifactId>serialization-avro</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+
+
 
 		<!-- ####### chronicle-core ####### -->
 		<!-- Low level access to native memory, JVM and OS. -->
@@ -81,6 +85,13 @@
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle-wire</artifactId>
 			<version>${chronicle-wire.version}</version>
+		</dependency>
+
+		<!-- Chronicle-Analytics -->
+		<dependency>
+			<groupId>net.openhft</groupId>
+			<artifactId>chronicle-analytics</artifactId>
+			<version>${chronicle-analytics.version}</version>
 		</dependency>
 
 		<!-- ####### chronicle-values ####### -->
