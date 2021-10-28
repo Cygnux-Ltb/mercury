@@ -21,12 +21,5 @@ public interface Publisher<T> extends Transport {
 	 */
 	void publish(String target, T msg) throws PublishFailedException;
 
-	/**
-	 * 
-	 * @return
-	 */
-	default String getPublisherName() {
-		return getName();
-	}
 
 }

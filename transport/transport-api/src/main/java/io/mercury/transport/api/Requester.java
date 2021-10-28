@@ -10,12 +10,4 @@ public interface Requester<T> extends Transport {
 	 */
 	T request() throws RequestException;
 
-	/**
-	 * 
-	 * @return
-	 */
-	default String getRequesterName() {
-		return getName();
-	}
-
 }

@@ -22,14 +22,6 @@ public interface Receiver extends Transport, Runnable {
 	 */
 	void reconnect() throws ConnectionBreakException, ReceiverStartException;
 
-	/**
-	 * 
-	 * @return
-	 */
-	default String getReceiverName() {
-		return getName();
-	}
-
 	@Override
 	default void run() {
 		receive();

@@ -7,8 +7,4 @@ public interface TransportServer extends Transport {
 	 */
 	void startup();
 
-	default String getServerName() {
-		return getName();
-	}
-
 }
