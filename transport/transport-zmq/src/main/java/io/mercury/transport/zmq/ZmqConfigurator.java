@@ -27,8 +27,6 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 
 	private TcpKeepAlive tcpKeepAlive;
 
-	private String tag = "";
-
 	private ZmqConfigurator(String addr) {
 		this.addr = addr;
 	}
@@ -43,10 +41,6 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 
 	public TcpKeepAlive getTcpKeepAlive() {
 		return tcpKeepAlive;
-	}
-
-	public String getTag() {
-		return tag;
 	}
 
 	/**
@@ -68,8 +62,7 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @return
 	 */
 	public static ZmqConfigurator tcp(String addr, int port) {
-		if (port < 2048 || port > 65536)
-			throw new IllegalArgumentException("port ");
+		Assertor.atWithinRange(port, 4096, 65536, "port");
 		if (!addr.startsWith("tcp://")) {
 			addr = "tcp://" + addr;
 		}
@@ -97,11 +90,6 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 
 	public ZmqConfigurator tcpKeepAlive(TcpKeepAlive tcpKeepAlive) {
 		this.tcpKeepAlive = tcpKeepAlive;
-		return this;
-	}
-
-	public ZmqConfigurator tag(String tag) {
-		this.tag = tag;
 		return this;
 	}
 
@@ -250,8 +238,6 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 				return false;
 			if (this.ioThreads != o.getIoThreads())
 				return false;
-			if (!this.tag.equals(o.getTag()))
-				return false;
 			if (!this.tcpKeepAlive.equals(o.getTcpKeepAlive()))
 				return false;
 			return true;
@@ -268,7 +254,7 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	}
 
 	public static void main(String[] args) {
-		System.out.println(ZmqConfigurator.tcp("192.168.1.1", 5551).ioThreads(3).tag("TEST")
+		System.out.println(ZmqConfigurator.tcp("192.168.1.1", 5551).ioThreads(3)
 				.tcpKeepAlive(TcpKeepAlive.withDefault()).toString());
 
 		System.out.println(ZMQ.getFullVersion() + "\n" + ZMQ.getMajorVersion() + "\n" + ZMQ.getMinorVersion() + "\n"

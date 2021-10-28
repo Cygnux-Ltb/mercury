@@ -62,7 +62,7 @@ public final class ZmqSubscriber extends ZmqTransport implements Receiver, Subsc
 	}
 
 	@Override
-	public SocketType getSocketType() {
+	protected SocketType getSocketType() {
 		return SocketType.SUB;
 	}
 

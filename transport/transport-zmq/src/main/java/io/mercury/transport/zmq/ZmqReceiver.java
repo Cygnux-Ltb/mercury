@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.zeromq.SocketType;
 
 import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
 import io.mercury.transport.api.Receiver;
 import io.mercury.transport.zmq.exception.ZmqBindException;
@@ -36,7 +37,7 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 	}
 
 	@Override
-	public SocketType getSocketType() {
+	protected SocketType getSocketType() {
 		return SocketType.REP;
 	}
 
@@ -60,7 +61,7 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 			System.out.println(new String(byteMsg));
 			return null;
 		})) {
-			Threads.sleep(15000);
+			SleepSupport.sleep(15000);
 			Threads.startNewThread(() -> receiver.receive());
 		} catch (IOException e) {
 			e.printStackTrace();

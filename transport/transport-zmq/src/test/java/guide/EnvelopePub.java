@@ -4,7 +4,7 @@ import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ.Socket;
 
-import io.mercury.common.thread.Threads;
+import io.mercury.common.thread.SleepSupport;
 
 /**
  * Pubsub envelope publisher
@@ -26,7 +26,7 @@ public class EnvelopePub {
 				publisher.send("We B would like to see this");
 				publisher.sendMore("C");
 				publisher.send("We C would like to see this");
-				Threads.sleep(500);
+				SleepSupport.sleep(500);
 			}
 		}
 	}

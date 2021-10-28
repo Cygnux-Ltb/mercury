@@ -44,7 +44,7 @@ abstract class ZmqTransport extends TransportComponent implements Transport, Clo
 	}
 
 	@AbstractFunction
-	public abstract SocketType getSocketType();
+	protected abstract SocketType getSocketType();
 
 	/**
 	 * 设置TcpKeepAlive, 由子类调用

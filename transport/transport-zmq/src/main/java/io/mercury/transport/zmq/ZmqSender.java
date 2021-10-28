@@ -36,7 +36,7 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 	}
 
 	@Override
-	public SocketType getSocketType() {
+	protected SocketType getSocketType() {
 		return SocketType.REQ;
 	}
 

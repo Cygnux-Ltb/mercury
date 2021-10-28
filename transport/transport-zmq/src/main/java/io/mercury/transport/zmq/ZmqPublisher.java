@@ -11,7 +11,7 @@ import org.zeromq.ZMQ;
 
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.BytesSerializer;
-import io.mercury.common.thread.Threads;
+import io.mercury.common.thread.SleepSupport;
 import io.mercury.transport.api.Publisher;
 import io.mercury.transport.zmq.exception.ZmqBindException;
 
@@ -47,7 +47,7 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>,
 	}
 
 	@Override
-	public SocketType getSocketType() {
+	protected SocketType getSocketType() {
 		return SocketType.PUB;
 	}
 
@@ -77,7 +77,7 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>,
 
 			for (;;) {
 				publisher.publish(String.valueOf(random.nextInt()));
-				Threads.sleep(1000);
+				SleepSupport.sleep(1000);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

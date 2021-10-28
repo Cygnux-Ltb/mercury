@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.zeromq.SocketType;
 
 import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
 import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.zmq.exception.ZmqConnectionException;
@@ -40,7 +41,7 @@ public class ZmqFanin extends ZmqTransport implements Subscriber, Closeable {
 	}
 
 	@Override
-	public SocketType getSocketType() {
+	protected SocketType getSocketType() {
 		return SocketType.REP;
 	}
 
@@ -69,7 +70,7 @@ public class ZmqFanin extends ZmqTransport implements Subscriber, Closeable {
 			System.out.println(new String(bytes));
 			return null;
 		})) {
-			Threads.sleep(15000);
+			SleepSupport.sleep(15000);
 			Threads.startNewThread(() -> receiver.subscribe());
 		} catch (IOException e) {
 			e.printStackTrace();
