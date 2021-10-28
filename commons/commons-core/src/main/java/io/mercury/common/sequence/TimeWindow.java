@@ -18,7 +18,7 @@ import io.mercury.common.collections.MutableLists;
 import io.mercury.common.util.Assertor;
 
 /**
- * 时间周期序列
+ * 时间窗口序列
  * 
  * @author yellow013
  */
@@ -30,6 +30,8 @@ public class TimeWindow implements Serial<TimeWindow> {
 
 	private final LocalDateTime end;
 
+	// TODO UNUSED
+	@Deprecated
 	private final ZoneOffset offset;
 
 	private final Duration duration;
@@ -184,6 +186,7 @@ public class TimeWindow implements Serial<TimeWindow> {
 		return end;
 	}
 
+	@Deprecated
 	public ZoneOffset getOffset() {
 		return offset;
 	}

@@ -6,7 +6,7 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.log.CommonLogConfigurator;
+import io.mercury.common.log.LogConfigurator;
 import io.mercury.common.log.CommonLoggerFactory;
 
 /**
@@ -45,7 +45,7 @@ public final class SysNanoSeq {
 
 	public static void main(String[] args) {
 
-		CommonLogConfigurator.setFilename("test-log");
+		LogConfigurator.setLogFilename("test-log");
 		Logger log = CommonLoggerFactory.getLogger(SysNanoSeq.class);
 
 		for (int i = 0; i < 20; i++) {

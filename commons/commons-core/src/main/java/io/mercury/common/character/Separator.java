@@ -17,17 +17,4 @@ public interface Separator {
 	 */
 	String PATH_SEPARATOR = System.getProperty("path.separator");
 
-	public static void main(String[] args) {
-
-		System.out.println(LINE_SEPARATOR);
-		System.out.println(LINE_SEPARATOR.length());
-
-		System.out.println(FILE_SEPARATOR);
-		System.out.println(FILE_SEPARATOR.length());
-
-		System.out.println(PATH_SEPARATOR);
-		System.out.println(PATH_SEPARATOR.length());
-
-	}
-
 }

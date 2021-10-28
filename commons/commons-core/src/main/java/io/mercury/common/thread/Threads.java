@@ -1,13 +1,13 @@
 package io.mercury.common.thread;
 
+import static java.lang.Thread.MAX_PRIORITY;
+import static java.lang.Thread.MIN_PRIORITY;
+
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.Nonnull;
 
 import org.slf4j.Logger;
 
@@ -30,49 +30,49 @@ public final class Threads {
 
 	/**
 	 * 
-	 * @param runnable
+	 * @param r
 	 * @return
 	 */
-	public static final Thread newThread(Runnable runnable) {
-		return new Thread(runnable);
+	public static final Thread newThread(Runnable r) {
+		return new Thread(r);
 	}
 
 	/**
 	 * 
-	 * @param runnable
-	 * @param threadName
+	 * @param r
+	 * @param name
 	 * @return
 	 */
-	public static final Thread newThread(String threadName, Runnable runnable) {
-		return new Thread(runnable, threadName);
+	public static final Thread newThread(String name, Runnable r) {
+		return new Thread(r, name);
 	}
 
 	/**
 	 * 
-	 * @param runnable
+	 * @param r
 	 * @return
 	 */
-	public static final Thread newMaxPriorityThread(Runnable runnable) {
-		return setThreadPriority(new Thread(runnable), Thread.MAX_PRIORITY);
+	public static final Thread newMaxPriorityThread(Runnable r) {
+		return setThreadPriority(new Thread(r), MAX_PRIORITY);
 	}
 
 	/**
 	 * 
-	 * @param runnable
-	 * @param threadName
+	 * @param r
+	 * @param name
 	 * @return
 	 */
-	public static final Thread newMaxPriorityThread(String threadName, Runnable runnable) {
-		return setThreadPriority(new Thread(runnable, threadName), Thread.MAX_PRIORITY);
+	public static final Thread newMaxPriorityThread(String name, Runnable r) {
+		return setThreadPriority(new Thread(r, name), MAX_PRIORITY);
 	}
 
 	/**
 	 * 
-	 * @param runnable
+	 * @param r
 	 * @return
 	 */
-	public static final Thread newMinPriorityThread(Runnable runnable) {
-		return setThreadPriority(new Thread(runnable), Thread.MIN_PRIORITY);
+	public static final Thread newMinPriorityThread(Runnable r) {
+		return setThreadPriority(new Thread(r), MIN_PRIORITY);
 	}
 
 	/**
@@ -82,7 +82,7 @@ public final class Threads {
 	 * @return
 	 */
 	public static final Thread newMinPriorityThread(String threadName, Runnable runnable) {
-		return setThreadPriority(new Thread(runnable, threadName), Thread.MIN_PRIORITY);
+		return setThreadPriority(new Thread(runnable, threadName), MIN_PRIORITY);
 	}
 
 	/**
@@ -98,21 +98,21 @@ public final class Threads {
 
 	/**
 	 * 
-	 * @param runnable
+	 * @param r
 	 * @return
 	 */
-	public static final Thread startNewThread(Runnable runnable) {
-		return startThread(newThread(runnable));
+	public static final Thread startNewThread(Runnable r) {
+		return startThread(newThread(r));
 	}
 
 	/**
 	 * 
-	 * @param runnable
-	 * @param threadName
+	 * @param r
+	 * @param name
 	 * @return
 	 */
-	public static final Thread startNewThread(String threadName, Runnable runnable) {
-		return startThread(new Thread(runnable, threadName));
+	public static final Thread startNewThread(String name, Runnable r) {
+		return startThread(new Thread(r, name));
 	}
 
 	/**
@@ -161,93 +161,6 @@ public final class Threads {
 	private static final Thread startThread(Thread thread) {
 		thread.start();
 		return thread;
-	}
-
-	/**
-	 * 
-	 * @param millis
-	 */
-	public static final void sleepIgnoreInterrupts(long millis) {
-		try {
-			Thread.sleep(millis);
-		} catch (InterruptedException e) {
-			log.error("Threads::sleepIgnoreInterrupts(millis==[{}]) throw InterruptedException -> {}", millis,
-					e.getMessage(), e);
-		}
-	}
-
-	/**
-	 * 
-	 * @param millis
-	 * @param nanos
-	 */
-	public static final void sleepIgnoreInterrupts(long millis, int nanos) {
-		try {
-			Thread.sleep(millis, nanos);
-		} catch (InterruptedException e) {
-			log.error("Threads::sleepIgnoreInterrupts(millis==[{}]) throw InterruptedException -> {}", millis,
-					e.getMessage(), e);
-		}
-	}
-
-	/**
-	 * 
-	 * @param timeUnit
-	 * @param time
-	 */
-	public static final void sleepIgnoreInterrupts(@Nonnull TimeUnit timeUnit, long time) {
-		try {
-			timeUnit.sleep(time);
-		} catch (InterruptedException e) {
-			log.error("Threads::sleep(time==[{}], timeUnit==[{}]) throw InterruptedException -> {}", time, timeUnit,
-					e.getMessage(), e);
-		}
-	}
-
-	/**
-	 * 
-	 * @param millis
-	 * @throws RuntimeInterruptedException
-	 */
-	public static final void sleep(long millis) throws RuntimeInterruptedException {
-		try {
-			Thread.sleep(millis);
-		} catch (InterruptedException e) {
-			log.error("Threads::sleep(millis==[{}]) throw InterruptedException -> {}", millis, e.getMessage(), e);
-			throw new RuntimeInterruptedException(e);
-		}
-	}
-
-	/**
-	 * 
-	 * @param millis
-	 * @param nanos
-	 * @throws RuntimeInterruptedException
-	 */
-	public static final void sleep(long millis, int nanos) throws RuntimeInterruptedException {
-		try {
-			Thread.sleep(millis, nanos);
-		} catch (InterruptedException e) {
-			log.error("Threads::sleep(millis==[{}], nanos==[{}]) throw InterruptedException -> {}", millis, nanos,
-					e.getMessage(), e);
-			throw new RuntimeInterruptedException(e);
-		}
-	}
-
-	/**
-	 * 
-	 * @param timeUnit
-	 * @param time
-	 * @throws RuntimeInterruptedException
-	 */
-	public static final void sleep(@Nonnull TimeUnit timeUnit, long time) throws RuntimeInterruptedException {
-		try {
-			timeUnit.sleep(time);
-		} catch (InterruptedException e) {
-			log.error("Threads::sleep(time==[{}], timeUnit==[{}]) throw InterruptedException -> {}", time, timeUnit,
-					e.getMessage(), e);
-			throw new RuntimeInterruptedException(e);
-		}
 	}
 
 	/**
@@ -302,17 +215,17 @@ public final class Threads {
 	 * 
 	 * @return An array of all threads currently running in the JVM.
 	 */
-	static public Thread[] getAllThreads() {
+	public static Thread[] getAllThreads() {
 		final ThreadGroup root = getRootThreadGroup();
-		final ThreadMXBean thbean = ManagementFactory.getThreadMXBean();
-		int nAlloc = thbean.getThreadCount();
+		final ThreadMXBean mxBean = ManagementFactory.getThreadMXBean();
+		int count = mxBean.getThreadCount();
 		int n = 0;
 		Thread[] threads;
 		do {
-			nAlloc *= 2;
-			threads = new Thread[nAlloc];
+			count *= 2;
+			threads = new Thread[count];
 			n = root.enumerate(threads, true);
-		} while (n == nAlloc);
+		} while (n == count);
 		return Arrays.copyOf(threads, n);
 	}
 
@@ -361,7 +274,7 @@ public final class Threads {
 	public static void main(String[] args) {
 		System.out.println(currentThreadName());
 		startNewThread("Test0", () -> System.out.println(currentThreadName()));
-		sleep(2000);
+		SleepSupport.sleep(2000);
 	}
 
 }

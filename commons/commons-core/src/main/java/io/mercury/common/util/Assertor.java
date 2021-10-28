@@ -78,7 +78,8 @@ public final class Assertor {
 	public static int atWithinRange(int i, int min, int max, String objName) throws IllegalArgumentException {
 		if (i >= min && i <= max)
 			return i;
-		throw new IllegalArgumentException(objName + " must in the range of [" + min + "] to [" + max + "]");
+		throw new IllegalArgumentException(
+				"argument : [" + objName + "] must in the range of [" + min + "] to [" + max + "]");
 	}
 
 	/**

@@ -13,7 +13,7 @@ import org.eclipse.collections.api.map.primitive.MutableLongLongMap;
 
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.thread.Threads;
+import io.mercury.common.thread.SleepSupport;
 
 /**
  * 
@@ -140,12 +140,12 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
 
 		for (int i = 0; i < 20; i++) {
 			counter.add(i, 10);
-			Threads.sleep(500);
+			SleepSupport.sleep(500);
 		}
 
 		for (int i = 0; i < 20; i++) {
 			System.out.println(counter.getValue());
-			Threads.sleep(2000);
+			SleepSupport.sleep(2000);
 		}
 
 		MutableLongLongMap map = MutableMaps.newLongLongHashMap(Capacity.L10_SIZE);
