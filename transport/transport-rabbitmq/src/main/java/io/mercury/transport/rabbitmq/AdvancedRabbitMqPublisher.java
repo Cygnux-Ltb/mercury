@@ -19,6 +19,7 @@ import io.mercury.common.character.Charsets;
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.BytesSerializer;
+import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Publisher;
@@ -325,7 +326,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 		while (!isConnected()) {
 			log.error("Detect connection isConnected() == false, retry {}", (++retry));
 			closeIgnoreException();
-			Threads.sleep(rabbitConnection.getRecoveryInterval());
+			SleepSupport.sleep(rabbitConnection.getRecoveryInterval());
 			createConnection();
 		}
 		if (confirm) {
@@ -441,7 +442,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	}
 
 	@Override
-	public String getPublisherName() {
+	public String getName() {
 		return publisherName;
 	}
 
@@ -471,7 +472,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 			Threads.startNewThread(() -> {
 				int count = 0;
 				while (true) {
-					Threads.sleep(5000);
+					SleepSupport.sleep(5000);
 					publisher.publish(String.valueOf(++count));
 					System.out.println(count);
 				}

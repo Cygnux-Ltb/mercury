@@ -1,8 +1,5 @@
 package io.mercury.transport.rabbitmq.configurator;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.net.ssl.SSLContext;
@@ -156,12 +153,9 @@ public final class RabbitConnection implements TransportConfigurator {
 		return shutdownEvent;
 	}
 
+	@Override
 	public String getConnectionInfo() {
 		return connectionInfo;
-	}
-
-	public String getToStringCache() {
-		return toStringCache;
 	}
 
 	@Override
@@ -169,16 +163,13 @@ public final class RabbitConnection implements TransportConfigurator {
 		return toString();
 	}
 
-	private transient String toStringCache;
+	private transient String strCache;
 
 	@Override
 	public String toString() {
-		if (toStringCache == null) {
-			Map<String, Object> map = new HashMap<>();
-			map.put("connection", this);
-			toStringCache = JsonWrapper.toJson(map);
-		}
-		return toStringCache;
+		if (strCache == null)
+			strCache = JsonWrapper.toJsonHasNulls(this);
+		return strCache;
 	}
 
 	/**

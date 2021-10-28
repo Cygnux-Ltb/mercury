@@ -1,6 +1,6 @@
 package io.mercury.transport.rabbitmq;
 
-import static io.mercury.common.thread.Threads.sleep;
+import static io.mercury.common.thread.SleepSupport.sleep;
 
 import java.io.Closeable;
 import java.io.IOException;
