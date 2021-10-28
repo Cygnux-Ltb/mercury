@@ -44,8 +44,12 @@ public abstract class SingleConsumerQueue<E> implements Queue<E> {
 		this.processor = processor;
 	}
 
-	protected boolean isRunning() {
+	public boolean isRunning() {
 		return isRunning.get();
+	}
+
+	public boolean isClosed() {
+		return isClosed.get();
 	}
 
 	public void start() {
@@ -58,7 +62,7 @@ public abstract class SingleConsumerQueue<E> implements Queue<E> {
 				throw new RuntimeException("start0 function have exception", e);
 			}
 		} else {
-			log.info("Queue -> {}, Error call, This queue is started", queueName);
+			log.warn("Error call, Queue -> [{}] already started", queueName);
 		}
 	}
 
@@ -75,7 +79,7 @@ public abstract class SingleConsumerQueue<E> implements Queue<E> {
 				throw new RuntimeException("stop0 function have exception", e);
 			}
 		} else {
-
+			log.warn("Error call, Queue -> [{}] already stopped", queueName);
 		}
 	}
 

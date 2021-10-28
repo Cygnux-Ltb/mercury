@@ -36,6 +36,7 @@ public class ArrayBlockingQueueTest extends JSR166TestCase {
 	/**
 	 * Returns a new queue of given size containing consecutive Integers 0 ... n.
 	 */
+	@SuppressWarnings("deprecation")
 	private ConcurrentBlockingQueue<Integer> populatedQueue(int n) {
 		ConcurrentBlockingQueue<Integer> q = new ConcurrentBlockingQueue<Integer>(n);
 		assertTrue(q.isEmpty());
@@ -160,7 +161,8 @@ public class ArrayBlockingQueueTest extends JSR166TestCase {
 		for (int i = 0; i < SIZE; ++i) {
 			assertEquals(SIZE - i, q.remainingCapacity());
 			assertEquals(i, q.size());
-			q.add(new Integer(i));
+			//q.add(new Integer(i));
+			q.add((i));
 		}
 	}
 
@@ -176,6 +178,7 @@ public class ArrayBlockingQueueTest extends JSR166TestCase {
 	/**
 	 * add succeeds if not full; throws ISE if full
 	 */
+	@SuppressWarnings("deprecation")
 	public void testAdd() {
 		try {
 			ConcurrentBlockingQueue q = new ConcurrentBlockingQueue(SIZE);
@@ -205,6 +208,7 @@ public class ArrayBlockingQueueTest extends JSR166TestCase {
 	 * addAll of a collection with any null elements throws NPE after possibly
 	 * adding some elements
 	 */
+	@SuppressWarnings("deprecation")
 	public void testAddAll3() {
 		try {
 			ConcurrentBlockingQueue q = new ConcurrentBlockingQueue(SIZE);
@@ -220,6 +224,7 @@ public class ArrayBlockingQueueTest extends JSR166TestCase {
 	/**
 	 * addAll throws ISE if not enough room
 	 */
+	@SuppressWarnings("deprecation")
 	public void testAddAll4() {
 		try {
 			ConcurrentBlockingQueue q = new ConcurrentBlockingQueue(1);
@@ -235,6 +240,7 @@ public class ArrayBlockingQueueTest extends JSR166TestCase {
 	/**
 	 * Queue contains all elements, in traversal order, of successful addAll
 	 */
+	@SuppressWarnings("deprecation")
 	public void testAddAll5() {
 		Integer[] empty = new Integer[0];
 		Integer[] ints = new Integer[SIZE];
@@ -250,6 +256,7 @@ public class ArrayBlockingQueueTest extends JSR166TestCase {
 	/**
 	 * all elements successfully put are contained
 	 */
+	@SuppressWarnings("deprecation")
 	public void testPut() throws InterruptedException {
 		ConcurrentBlockingQueue q = new ConcurrentBlockingQueue(SIZE);
 		for (int i = 0; i < SIZE; ++i) {
@@ -527,6 +534,7 @@ public class ArrayBlockingQueueTest extends JSR166TestCase {
 	/**
 	 * contains(x) reports true when elements added but not yet removed
 	 */
+	@SuppressWarnings("deprecation")
 	public void testContains() {
 		ConcurrentBlockingQueue q = populatedQueue(SIZE);
 		for (int i = 0; i < SIZE; ++i) {
@@ -555,6 +563,7 @@ public class ArrayBlockingQueueTest extends JSR166TestCase {
 	/**
 	 * containsAll(c) is true when c contains a subset of elements
 	 */
+	@SuppressWarnings("deprecation")
 	public void testContainsAll() {
 		ConcurrentBlockingQueue q = populatedQueue(SIZE);
 		ConcurrentBlockingQueue p = new ConcurrentBlockingQueue(SIZE);
@@ -852,6 +861,7 @@ public class ArrayBlockingQueueTest extends JSR166TestCase {
 	/**
 	 * drainTo(c) empties queue into another collection c
 	 */
+	@SuppressWarnings("deprecation")
 	public void testDrainTo() {
 		ConcurrentBlockingQueue q = populatedQueue(SIZE);
 		ArrayList l = new ArrayList();
@@ -876,6 +886,7 @@ public class ArrayBlockingQueueTest extends JSR166TestCase {
 	/**
 	 * drainTo empties full queue, unblocking a waiting put.
 	 */
+	@SuppressWarnings("deprecation")
 	public void testDrainToWithActivePut() throws InterruptedException {
 		final ConcurrentBlockingQueue q = populatedQueue(SIZE);
 		Thread t = new Thread(new CheckedRunnable() {
@@ -897,6 +908,7 @@ public class ArrayBlockingQueueTest extends JSR166TestCase {
 	/**
 	 * drainTo(c, n) empties first min(n, size) elements of queue into c
 	 */
+	@SuppressWarnings("deprecation")
 	public void testDrainToN() {
 		ConcurrentBlockingQueue q = new ConcurrentBlockingQueue(SIZE * 2);
 		for (int i = 0; i < SIZE + 2; ++i) {

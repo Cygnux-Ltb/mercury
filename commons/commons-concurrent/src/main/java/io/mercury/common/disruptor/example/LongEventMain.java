@@ -8,13 +8,10 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 
 public class LongEventMain {
 
-	
-
 	public static void main(String[] args) throws Exception {
 		int bufferSize = 1024;
 
-		Disruptor<LongEvent> disruptor = new Disruptor<>(LongEvent.EventFactory, bufferSize,
-				DaemonThreadFactory.INSTANCE);
+		Disruptor<LongEvent> disruptor = new Disruptor<>(LongEvent::new, bufferSize, DaemonThreadFactory.INSTANCE);
 
 		disruptor.handleEventsWith(LongEvent::handleEvent);
 		disruptor.start();
@@ -25,7 +22,7 @@ public class LongEventMain {
 		for (long l = 0; true; l++) {
 			bb.putLong(0, l);
 			// ringBuffer.publishEvent((event, sequence) -> event.set(bb.getLong(0)));
-			ringBuffer.publishEvent((event, sequence, buffer) -> event.set(buffer.getLong(0)), bb);
+			ringBuffer.publishEvent(LongEvent::translate, bb);
 			Thread.sleep(500);
 		}
 	}

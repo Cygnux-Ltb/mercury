@@ -15,6 +15,7 @@ import io.mercury.common.concurrent.queue.StartMode;
 import io.mercury.common.concurrent.queue.WaitingStrategy;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringUtil;
 
@@ -114,7 +115,7 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 		case Spin:
 			break;
 		case Sleep:
-			Threads.sleepIgnoreInterrupts(sleepMillis);
+			SleepSupport.sleepIgnoreInterrupts(sleepMillis);
 			break;
 		default:
 			break;

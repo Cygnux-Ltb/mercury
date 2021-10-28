@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 
+import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
@@ -14,6 +15,7 @@ import io.mercury.common.concurrent.queue.QueueStyle;
 import io.mercury.common.concurrent.queue.SingleConsumerQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringUtil;
 
@@ -23,7 +25,7 @@ import io.mercury.common.util.StringUtil;
  *
  * @param <T>
  */
-public class DisruptorQueue<T> extends SingleConsumerQueue<T> {
+public class DisruptorQueue<T extends RingBufferEvent<T>> extends SingleConsumerQueue<T> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(DisruptorQueue.class);
 
@@ -58,21 +60,21 @@ public class DisruptorQueue<T> extends SingleConsumerQueue<T> {
 				bufferSize.value(),
 				// 实现ThreadFactory的Lambda
 				(Runnable runnable) -> Threads
-						.newMaxPriorityThread("DisruptorQueue-" + super.queueName + "-WorkingThread", runnable),
+						.newMaxPriorityThread("disruptor-" + super.queueName + "-WorkingThread", runnable),
 				// DaemonThreadFactory.INSTANCE,
 				// 生产者策略, 使用单生产者
 				ProducerType.SINGLE,
 				// Waiting策略
 				WaitStrategyFactory.getStrategy(option));
-		this.disruptor.handleEventsWith((event, sequence, endOfBatch) -> callProcessor(event));
+		this.disruptor.handleEventsWith(this::callProcessor);
 		this.producer = new LoadContainerEventProducer(disruptor.getRingBuffer());
 		if (autoRun)
 			start();
 	}
 
-	private void callProcessor(T t) {
+	private void callProcessor(T event, long sequence, boolean endOfBatch) {
 		try {
-			processor.process(t);
+			processor.process(event);
 		} catch (Exception e) {
 			log.error("processor.process(t) throw exception -> [{}]", e.getMessage(), e);
 			throw new RuntimeException(e);
@@ -115,7 +117,7 @@ public class DisruptorQueue<T> extends SingleConsumerQueue<T> {
 	@Override
 	protected void stop0() {
 		while (disruptor.getBufferSize() != 0)
-			Threads.sleep(1);
+			SleepSupport.sleep(1);
 		disruptor.shutdown();
 		log.info("Call stop0() function success, disruptor is shutdown");
 	}
@@ -131,7 +133,7 @@ public class DisruptorQueue<T> extends SingleConsumerQueue<T> {
 				queue.enqueue(++i);
 		});
 
-		Threads.sleep(10000);
+		SleepSupport.sleep(10000);
 
 		queue.stop();
 

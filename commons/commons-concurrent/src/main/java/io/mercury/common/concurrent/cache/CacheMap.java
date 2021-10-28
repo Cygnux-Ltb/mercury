@@ -80,7 +80,7 @@ public class CacheMap<K, V> {
 			return this;
 		}
 
-		public <K, V> CacheMap<K, V> buildWith(@Nonnull Function<K, V> refresher) {
+		public <K, V> CacheMap<K, V> build(@Nonnull Function<K, V> refresher) {
 			return new CacheMap<>(this, refresher);
 		}
 

@@ -15,6 +15,7 @@ import io.mercury.common.concurrent.queue.QueueStyle;
 import io.mercury.common.concurrent.queue.SingleConsumerQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
 
 public class SpscQueueWithSupplier<T> extends SingleConsumerQueue<T> {
@@ -97,7 +98,7 @@ public class SpscQueueWithSupplier<T> extends SingleConsumerQueue<T> {
 	@Override
 	protected void stop0() {
 		while (disruptor.getBufferSize() != 0)
-			Threads.sleep(1);
+			SleepSupport.sleep(1);
 		disruptor.shutdown();
 		log.info("Call stop0() function success, disruptor is shutdown.");
 	}
@@ -126,11 +127,11 @@ public class SpscQueueWithSupplier<T> extends SingleConsumerQueue<T> {
 			int i = 0;
 			for (;;) {
 				queue.enqueue(++i);
-				Threads.sleep(5000);
+				SleepSupport.sleep(5000);
 			}
 		});
 
-		Threads.sleep(10000);
+		SleepSupport.sleep(10000);
 
 	}
 

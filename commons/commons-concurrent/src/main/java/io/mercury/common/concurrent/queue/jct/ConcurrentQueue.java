@@ -9,6 +9,7 @@ import io.mercury.common.collections.Capacity;
 import io.mercury.common.concurrent.queue.MultiConsumerQueue;
 import io.mercury.common.concurrent.queue.QueueStyle;
 import io.mercury.common.concurrent.queue.WaitingStrategy;
+import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringUtil;
 
@@ -57,7 +58,7 @@ public final class ConcurrentQueue<E> implements MultiConsumerQueue<E> {
 		case Spin:
 			break;
 		case Sleep:
-			Threads.sleep(10);
+			SleepSupport.sleep(10);
 			break;
 		default:
 			break;

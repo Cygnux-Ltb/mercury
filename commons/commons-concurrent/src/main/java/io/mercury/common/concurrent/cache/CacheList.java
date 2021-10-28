@@ -1,11 +1,12 @@
 package io.mercury.common.concurrent.cache;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.concurrent.ThreadSafe;
+
+import org.eclipse.collections.api.list.ImmutableList;
 
 /**
  * 
@@ -18,7 +19,7 @@ public final class CacheList<T> {
 
 	private final AtomicReference<Saved> savedRef;
 
-	private final Supplier<List<T>> refresher;
+	private final Supplier<ImmutableList<T>> refresher;
 
 	/**
 	 * 
@@ -28,9 +29,9 @@ public final class CacheList<T> {
 	private final class Saved {
 
 		private volatile boolean available;
-		private volatile List<T> value;
+		private volatile ImmutableList<T> value;
 
-		private Saved(boolean available, List<T> value) {
+		private Saved(boolean available, ImmutableList<T> value) {
 			this.available = available;
 			this.value = value;
 		}
@@ -41,7 +42,7 @@ public final class CacheList<T> {
 	 * 
 	 * @param refresher
 	 */
-	public CacheList(Supplier<List<T>> refresher) {
+	public CacheList(Supplier<ImmutableList<T>> refresher) {
 		if (refresher == null)
 			throw new IllegalArgumentException("refresher is can't null...");
 		this.refresher = refresher;
@@ -53,7 +54,7 @@ public final class CacheList<T> {
 	 * @return
 	 */
 	@CheckForNull
-	public List<T> get() {
+	public ImmutableList<T> get() {
 		return extractValue(savedRef.get());
 	}
 
@@ -62,7 +63,7 @@ public final class CacheList<T> {
 	 * @param saved
 	 * @return
 	 */
-	private final List<T> extractValue(Saved saved) {
+	private final ImmutableList<T> extractValue(Saved saved) {
 		if (saved.available) {
 			return saved.value;
 		} else {

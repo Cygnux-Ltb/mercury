@@ -18,7 +18,6 @@ public class LongEvent {
 		return value;
 	}
 
-	public static final EventFactory<LongEvent> EventFactory = LongEvent::new;
 
 	public static final EventHandler<LongEvent> EventHandler = (event, sequence, endOfBatch) -> {
 		System.out.println("event value -> " + event.getValue());
