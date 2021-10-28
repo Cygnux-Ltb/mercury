@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import akka.actor.typed.ActorSystem;
 import io.mercury.actors.example.msg.SayHello;
-import io.mercury.common.log.CommonLogConfigurator;
-import io.mercury.common.log.CommonLogConfigurator.LogLevel;
+import io.mercury.common.log.LogConfigurator;
+import io.mercury.common.log.LogConfigurator.LogLevel;
 
 /**
  * 
@@ -16,8 +16,8 @@ public class AkkaQuickstart {
 
 	public static void main(String[] args) {
 
-		CommonLogConfigurator.setFilename("actor-test");
-		CommonLogConfigurator.setLogLevel(LogLevel.INFO);
+		LogConfigurator.setLogFilename("actor-test");
+		LogConfigurator.setLogLevel(LogLevel.INFO);
 
 		// #actor-system
 		final ActorSystem<SayHello> greeterMain = ActorSystem.create(GreeterMain.create(), "hello-akka");
