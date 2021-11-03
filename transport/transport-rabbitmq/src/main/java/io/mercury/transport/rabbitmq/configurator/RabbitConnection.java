@@ -6,11 +6,11 @@ import javax.net.ssl.SSLContext;
 
 import com.rabbitmq.client.ConnectionFactory;
 
-import io.mercury.common.functional.ShutdownEvent;
 import io.mercury.common.util.Assertor;
-import io.mercury.common.util.StringUtil;
+import io.mercury.common.util.StringSupport;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.configurator.TransportConfigurator;
+import io.mercury.transport.rabbitmq.RabbitMqTransport.ShutdownSignalHandler;
 
 public final class RabbitConnection implements TransportConfigurator {
 
@@ -51,7 +51,7 @@ public final class RabbitConnection implements TransportConfigurator {
 	private final int requestedHeartbeat;
 
 	// 停机处理回调函数
-	private final transient ShutdownEvent shutdownEvent;
+	private final transient ShutdownSignalHandler shutdownSignalHandler;
 
 	// 配置连接信息
 	private final String connectionInfo;
@@ -69,7 +69,7 @@ public final class RabbitConnection implements TransportConfigurator {
 		this.handshakeTimeout = builder.handshakeTimeout;
 		this.shutdownTimeout = builder.shutdownTimeout;
 		this.requestedHeartbeat = builder.requestedHeartbeat;
-		this.shutdownEvent = builder.shutdownEvent;
+		this.shutdownSignalHandler = builder.shutdownSignalHandler;
 		this.connectionInfo = username + "@" + host + ":" + port
 				+ (virtualHost.equals("/") ? virtualHost : "/" + virtualHost);
 	}
@@ -149,8 +149,8 @@ public final class RabbitConnection implements TransportConfigurator {
 		return requestedHeartbeat;
 	}
 
-	public ShutdownEvent getShutdownEvent() {
-		return shutdownEvent;
+	public ShutdownSignalHandler getShutdownSignalHandler() {
+		return shutdownSignalHandler;
 	}
 
 	@Override
@@ -228,7 +228,7 @@ public final class RabbitConnection implements TransportConfigurator {
 		private int requestedHeartbeat = 20;
 
 		// 停机处理回调函数
-		private ShutdownEvent shutdownEvent;
+		private ShutdownSignalHandler shutdownSignalHandler;
 
 		private Builder(String host, int port, String username, String password) {
 			this(host, port, username, password, "/");
@@ -243,7 +243,7 @@ public final class RabbitConnection implements TransportConfigurator {
 			this.port = port;
 			this.username = username;
 			this.password = password;
-			if (StringUtil.nonEmpty(virtualHost) && !virtualHost.equals("/"))
+			if (StringSupport.nonEmpty(virtualHost) && !virtualHost.equals("/"))
 				this.virtualHost = virtualHost;
 		}
 
@@ -282,8 +282,8 @@ public final class RabbitConnection implements TransportConfigurator {
 			return this;
 		}
 
-		public Builder setShutdownEvent(ShutdownEvent shutdownEvent) {
-			this.shutdownEvent = shutdownEvent;
+		public Builder setShutdownSignalHandler(ShutdownSignalHandler shutdownSignalHandler) {
+			this.shutdownSignalHandler = shutdownSignalHandler;
 			return this;
 		}
 

@@ -1,6 +1,6 @@
 package io.mercury.transport.rabbitmq;
 
-import static io.mercury.common.util.StringUtil.nonEmpty;
+import static io.mercury.common.util.StringSupport.nonEmpty;
 
 import java.io.IOException;
 import java.util.Collection;

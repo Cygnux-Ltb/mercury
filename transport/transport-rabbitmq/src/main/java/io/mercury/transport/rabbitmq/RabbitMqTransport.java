@@ -17,10 +17,10 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Method;
 import com.rabbitmq.client.ShutdownSignalException;
 
-import io.mercury.common.functional.ShutdownEvent;
+import io.mercury.common.functional.ExceptionHandler;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
-import io.mercury.common.util.StringUtil;
+import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Transport;
 import io.mercury.transport.api.TransportComponent;
 import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
@@ -38,7 +38,7 @@ public abstract class RabbitMqTransport extends TransportComponent implements Tr
 	protected RabbitConnection rabbitConnection;
 
 	// 停机事件, 在监听到ShutdownSignalException时调用
-	protected ShutdownEvent shutdownEvent;
+	protected ShutdownSignalHandler shutdownSignalHandler;
 
 	// 组件标签
 	protected final String tag;
@@ -62,7 +62,7 @@ public abstract class RabbitMqTransport extends TransportComponent implements Tr
 		Assertor.nonNull(rabbitConnection, "rabbitConnection");
 		this.tag = tag;
 		this.rabbitConnection = rabbitConnection;
-		this.shutdownEvent = rabbitConnection.getShutdownEvent();
+		this.shutdownSignalHandler = rabbitConnection.getShutdownSignalHandler();
 	}
 
 	/**
@@ -112,8 +112,8 @@ public abstract class RabbitMqTransport extends TransportComponent implements Tr
 		} else {
 			log.error("connection id -> {}, not normal shutdown", connection.getId());
 			// 如果回调函数不为null, 则执行此函数
-			if (shutdownEvent != null)
-				shutdownEvent.accept(sig);
+			if (shutdownSignalHandler != null)
+				shutdownSignalHandler.accept(sig);
 		}
 	}
 
@@ -122,11 +122,11 @@ public abstract class RabbitMqTransport extends TransportComponent implements Tr
 		if (reason instanceof AMQP.Channel.Close) {
 			AMQP.Channel.Close channelClose = (AMQP.Channel.Close) reason;
 			return channelClose.getReplyCode() == AMQP.REPLY_SUCCESS
-					&& StringUtil.isEquals(channelClose.getReplyText(), "OK");
+					&& StringSupport.isEquals(channelClose.getReplyText(), "OK");
 		} else if (reason instanceof AMQP.Connection.Close) {
 			AMQP.Connection.Close connectionClose = (AMQP.Connection.Close) reason;
 			return connectionClose.getReplyCode() == AMQP.REPLY_SUCCESS
-					&& StringUtil.isEquals(connectionClose.getReplyText(), "OK");
+					&& StringSupport.isEquals(connectionClose.getReplyText(), "OK");
 		} else
 			return false;
 	}
@@ -178,6 +178,11 @@ public abstract class RabbitMqTransport extends TransportComponent implements Tr
 	@Override
 	public String getName() {
 		return tag;
+	}
+
+	@FunctionalInterface
+	public static interface ShutdownSignalHandler extends ExceptionHandler<ShutdownSignalException> {
+
 	}
 
 }

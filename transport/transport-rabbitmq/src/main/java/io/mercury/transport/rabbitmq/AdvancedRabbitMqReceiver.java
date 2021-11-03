@@ -1,6 +1,6 @@
 package io.mercury.transport.rabbitmq;
 
-import static io.mercury.common.util.StringUtil.nonEmpty;
+import static io.mercury.common.util.StringSupport.nonEmpty;
 
 import java.io.IOException;
 import java.util.Map;
@@ -21,7 +21,7 @@ import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.BytesDeserializer;
 import io.mercury.common.util.Assertor;
-import io.mercury.common.util.StringUtil;
+import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Receiver;
 import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.exception.ConnectionBreakException;
@@ -382,7 +382,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 										new Message<>(envelope, properties, t));
 							} catch (Exception e) {
 								log.error("SelfAckConsumer accept msg==[{}] throw Exception -> {}",
-										StringUtil.toString(body), e.getMessage(), e);
+										StringSupport.toString(body), e.getMessage(), e);
 								dumpUnprocessableMsg(e, consumerTag, envelope, properties, body);
 							}
 							if (!autoAck) {
@@ -449,7 +449,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 								}
 								consumer.accept(t);
 							} catch (Exception e) {
-								log.error("Consumer accept msg==[{}] throw Exception -> {}", StringUtil.toString(body),
+								log.error("Consumer accept msg==[{}] throw Exception -> {}", StringSupport.toString(body),
 										e.getMessage(), e);
 								dumpUnprocessableMsg(e, consumerTag, envelope, delivery.getProperties(), body);
 							}
@@ -500,7 +500,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 			log.error("Exception handling -> Sent to ErrMsgQueue finished");
 		} else {
 			// Reject message and close connection.
-			log.error("Exception handling -> Reject Msg [{}]", StringUtil.toString(body));
+			log.error("Exception handling -> Reject Msg [{}]", StringSupport.toString(body));
 			channel.basicReject(envelope.getDeliveryTag(), true);
 			log.error("Exception handling -> Reject Msg finished");
 			closeIgnoreException();

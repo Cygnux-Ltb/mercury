@@ -1,6 +1,6 @@
 package io.mercury.transport.rabbitmq;
 
-import static io.mercury.common.util.StringUtil.nonEmpty;
+import static io.mercury.common.util.StringSupport.nonEmpty;
 
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -19,7 +19,7 @@ import io.mercury.common.codec.DecodeException;
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
-import io.mercury.common.util.StringUtil;
+import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Receiver;
 import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.exception.ConnectionBreakException;
@@ -274,7 +274,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 								consumer.accept(apply);
 								log.debug("Callback handleDelivery() end");
 							} catch (Exception e) {
-								log.error("Consumer accept msg==[{}] throw Exception -> {}", StringUtil.toString(body),
+								log.error("Consumer accept msg==[{}] throw Exception -> {}", StringSupport.toString(body),
 										e.getMessage(), e);
 								dumpUnprocessableMsg(e, consumerTag, envelope, properties, body);
 							}
@@ -318,7 +318,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 			log.error("Exception handling -> Sent to ErrMsgQueue finished");
 		} else {
 			// Reject message and close connection.
-			log.error("Exception handling -> Reject Msg [{}]", StringUtil.toString(body));
+			log.error("Exception handling -> Reject Msg [{}]", StringSupport.toString(body));
 			channel.basicReject(envelope.getDeliveryTag(), true);
 			log.error("Exception handling -> Reject Msg finished");
 			closeIgnoreException();
