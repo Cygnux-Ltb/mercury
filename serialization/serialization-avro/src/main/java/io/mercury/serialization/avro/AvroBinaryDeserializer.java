@@ -1,6 +1,6 @@
 package io.mercury.serialization.avro;
 
-import static io.mercury.common.concurrent.map.JctConcurrentMaps.newNonBlockingLongMap;
+import static io.mercury.common.concurrent.map.JctMaps.newNonBlockingLongMap;
 
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;

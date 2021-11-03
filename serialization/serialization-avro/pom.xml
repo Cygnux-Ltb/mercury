@@ -115,18 +115,6 @@
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
 
-		<!-- Support for reading and writing AVRO-encoded data via Jackson abstractions -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.dataformat</groupId>
-			<artifactId>jackson-dataformat-avro</artifactId>
-			<version>${jackson.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.avro</groupId>
-					<artifactId>avro</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 	</dependencies>
 
 </project>
