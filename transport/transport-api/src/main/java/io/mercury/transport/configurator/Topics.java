@@ -4,7 +4,7 @@ import org.eclipse.collections.api.block.procedure.Procedure;
 import org.eclipse.collections.api.set.MutableSet;
 
 import io.mercury.common.collections.MutableSets;
-import io.mercury.common.util.StringUtil;
+import io.mercury.common.util.StringSupport;
 
 public class Topics {
 
@@ -40,7 +40,7 @@ public class Topics {
 	@Override
 	public String toString() {
 		if (cache == null)
-			this.cache = StringUtil.toString(topics);
+			this.cache = StringSupport.toString(topics);
 		return cache;
 	}
 

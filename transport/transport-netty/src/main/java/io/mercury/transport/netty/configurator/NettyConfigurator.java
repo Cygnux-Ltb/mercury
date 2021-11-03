@@ -2,7 +2,6 @@ package io.mercury.transport.netty.configurator;
 
 import java.util.concurrent.TimeUnit;
 
-import io.mercury.common.functional.ShutdownEvent;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.configurator.TransportConfigurator;
 
@@ -21,11 +20,6 @@ public final class NettyConfigurator implements TransportConfigurator {
 	/**
 	 * 
 	 */
-	private final ShutdownEvent shutdownEvent;
-
-	/**
-	 * 
-	 */
 	private final String connectionInfo;
 
 	private NettyConfigurator(Builder builder) {
@@ -38,7 +32,6 @@ public final class NettyConfigurator implements TransportConfigurator {
 		this.sendIntervalTimeUnit = builder.sendIntervalTimeUnit;
 		this.writeByteBufSize = builder.writeByteBufSize;
 		this.separator = builder.separator;
-		this.shutdownEvent = builder.shutdownEvent;
 		this.connectionInfo = host + ":" + port;
 	}
 
@@ -82,10 +75,6 @@ public final class NettyConfigurator implements TransportConfigurator {
 		return separator;
 	}
 
-	public ShutdownEvent shutdownEvent() {
-		return shutdownEvent;
-	}
-
 	@Override
 	public String getCfgInfo() {
 		return toString();
@@ -116,7 +105,6 @@ public final class NettyConfigurator implements TransportConfigurator {
 		private TimeUnit sendIntervalTimeUnit;
 		private int writeByteBufSize = 1024 * 8;
 		private char separator = ';';
-		private ShutdownEvent shutdownEvent;
 
 		private Builder(String host, int port) {
 			this.host = host;
@@ -151,11 +139,6 @@ public final class NettyConfigurator implements TransportConfigurator {
 
 		public Builder separator(char separator) {
 			this.separator = separator;
-			return this;
-		}
-
-		public Builder shutdownEvent(ShutdownEvent shutdownEvent) {
-			this.shutdownEvent = shutdownEvent;
 			return this;
 		}
 

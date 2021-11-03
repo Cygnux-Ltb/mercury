@@ -13,6 +13,7 @@ import org.apache.commons.io.IOUtils;
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.concurrent.queue.SingleConsumerQueue;
 import io.mercury.common.disruptor.SpscQueue;
+import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
 
@@ -97,7 +98,7 @@ public final class SocketTransceiver extends BaseTransceiver<String> {
 					inputStream = socket.getInputStream();
 					int available = inputStream.available();
 					if (available == 0) {
-						Threads.sleep(configurator.receiveInterval());
+						SleepSupport.sleep(configurator.receiveInterval());
 						continue;
 					}
 					byte[] bytes = new byte[available];

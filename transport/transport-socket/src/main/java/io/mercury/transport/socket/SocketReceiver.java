@@ -10,6 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 
 import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Receiver;
@@ -95,7 +96,7 @@ public class SocketReceiver extends TransportComponent implements Receiver {
 				try {
 					int available = inputStream.available();
 					if (available == 0) {
-						Threads.sleep(configurator.receiveInterval());
+						SleepSupport.sleep(configurator.receiveInterval());
 						continue;
 					}
 					byte[] bytes = new byte[available];
