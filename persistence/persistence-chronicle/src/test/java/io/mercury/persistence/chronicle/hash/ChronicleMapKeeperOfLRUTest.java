@@ -4,17 +4,17 @@ import java.io.IOException;
 import java.time.Duration;
 
 import io.mercury.common.datetime.EpochUtil;
-import io.mercury.common.log.CommonLogConfigurator;
-import io.mercury.common.log.CommonLogConfigurator.LogLevel;
+import io.mercury.common.log.LogConfigurator;
+import io.mercury.common.log.LogConfigurator.LogLevel;
 import io.mercury.common.sys.SysProperties;
-import io.mercury.common.thread.Threads;
+import io.mercury.common.thread.SleepSupport;
 import io.mercury.persistence.chronicle.hash.ChronicleMapConfigurator.Builder;
 import net.openhft.chronicle.map.ChronicleMap;
 
 public class ChronicleMapKeeperOfLRUTest {
 
 	static {
-		CommonLogConfigurator.setLogLevel(LogLevel.INFO);
+		LogConfigurator.setLogLevel(LogLevel.INFO);
 	}
 
 	public static void main(String[] args) {
@@ -32,7 +32,7 @@ public class ChronicleMapKeeperOfLRUTest {
 				long filename = millis / fileCycle;
 				ChronicleMap<Long, String> acquire = mapKeeper.acquire(Long.toString(filename));
 				acquire.put(++l, Long.toString(l));
-				Threads.sleep(1000);
+				SleepSupport.sleep(1000);
 				if (l == 300)
 					break;
 			}

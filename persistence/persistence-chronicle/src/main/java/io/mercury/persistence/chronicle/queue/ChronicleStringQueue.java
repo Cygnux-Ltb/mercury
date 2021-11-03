@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 
 import io.mercury.common.number.Randoms;
 import io.mercury.common.sequence.EpochSequence;
-import io.mercury.common.thread.Threads;
+import io.mercury.common.thread.SleepSupport;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleReader.ReaderParam;
 import io.mercury.persistence.chronicle.queue.ChronicleStringQueue.ChronicleStringAppender;
 import io.mercury.persistence.chronicle.queue.ChronicleStringQueue.ChronicleStringReader;
@@ -104,7 +104,7 @@ public class ChronicleStringQueue
 			for (;;) {
 				try {
 					writer.append(String.valueOf(Randoms.nextLong()));
-					Threads.sleep(100);
+					SleepSupport.sleep(100);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

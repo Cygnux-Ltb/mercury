@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 
 import io.mercury.common.number.Randoms;
 import io.mercury.common.sequence.EpochSequence;
-import io.mercury.common.thread.Threads;
+import io.mercury.common.thread.SleepSupport;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleReader.ReaderParam;
 import io.mercury.persistence.chronicle.queue.ChronicleBytesQueue.ChronicleBytesAppender;
 import io.mercury.persistence.chronicle.queue.ChronicleBytesQueue.ChronicleBytesReader;
@@ -165,7 +165,7 @@ public class ChronicleBytesQueue
 				try {
 					writer.append(buffer.put(String.valueOf(Randoms.nextLong()).getBytes()));
 					buffer.clear();
-					Threads.sleep(100);
+					SleepSupport.sleep(100);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

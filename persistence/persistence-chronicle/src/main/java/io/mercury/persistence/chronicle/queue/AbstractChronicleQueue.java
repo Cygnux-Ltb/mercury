@@ -27,9 +27,10 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.sys.SysProperties;
 import io.mercury.common.thread.RuntimeInterruptedException;
 import io.mercury.common.thread.ShutdownHooks;
+import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.Assertor;
-import io.mercury.common.util.StringUtil;
+import io.mercury.common.util.StringSupport;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleReader.ReaderParam;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueue;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
@@ -137,11 +138,11 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 			this.fileClearThread = Threads.startNewThread(queueName + "-FileClearThread", () -> {
 				do {
 					try {
-						Threads.sleep(TimeUnit.SECONDS, delay);
+						SleepSupport.sleep(TimeUnit.SECONDS, delay);
 					} catch (RuntimeInterruptedException e) {
 						logger.info("Last execution fileClearTask");
 						fileClearTask();
-						logger.info("Thread -> {} quit now", Threads.currentThreadName());
+						logger.info("Thread -> {} quit now", Threads.getCurrentThreadName());
 					}
 					if (isClearRunning.get()) {
 						fileClearTask();
@@ -247,7 +248,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 		if (fileClearThread != null) {
 			fileClearThread.interrupt();
 			while (fileClearThread.getState() != State.TERMINATED)
-				Threads.sleep(5);
+				SleepSupport.sleep(5);
 		}
 	}
 
@@ -455,12 +456,12 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 		}
 
 		public B rootPath(@Nonnull String rootPath) {
-			this.rootPath = StringUtil.fixPath(rootPath);
+			this.rootPath = StringSupport.fixPath(rootPath);
 			return self();
 		}
 
 		public B folder(@Nonnull String folder) {
-			this.folder = StringUtil.fixPath(folder);
+			this.folder = StringSupport.fixPath(folder);
 			return self();
 		}
 
@@ -469,7 +470,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 		}
 
 		public B topic(@Nonnull String topic, @Nullable String... subtopics) {
-			this.folder = StringUtil.fixPath(topic);
+			this.folder = StringSupport.fixPath(topic);
 			return self();
 		}
 
