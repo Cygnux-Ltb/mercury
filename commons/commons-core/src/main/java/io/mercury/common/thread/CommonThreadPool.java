@@ -1,6 +1,6 @@
 package io.mercury.common.thread;
 
-import static io.mercury.common.util.StringUtil.isNullOrEmpty;
+import static io.mercury.common.util.StringSupport.isNullOrEmpty;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;

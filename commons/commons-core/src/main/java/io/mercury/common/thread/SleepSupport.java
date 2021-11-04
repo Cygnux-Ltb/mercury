@@ -36,7 +36,6 @@ public final class SleepSupport {
 	 * @param millis
 	 */
 	public static final void sleepIgnoreInterrupts(long millis) {
-
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
