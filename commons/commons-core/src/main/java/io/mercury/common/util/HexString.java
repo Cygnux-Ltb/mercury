@@ -36,7 +36,7 @@ public final class HexString {
 	 *                                  number of characters) is passed
 	 */
 	public static HexString valueOf(String hex) {
-		return StringUtil.isNullOrEmpty(hex) ? EMPTY : createHexString(hex);
+		return StringSupport.isNullOrEmpty(hex) ? EMPTY : createHexString(hex);
 	}
 
 	private static HexString createHexString(String hex) throws IllegalArgumentException {

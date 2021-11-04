@@ -8,6 +8,13 @@ import java.util.function.Consumer;
  *
  */
 @FunctionalInterface
-public interface ShutdownEvent extends Consumer<Throwable> {
+public interface ExceptionHandler<E extends Exception> extends Consumer<E> {
+
+	void handle(E e);
+
+	@Override
+	default void accept(E e) {
+		handle(e);
+	}
 
 }

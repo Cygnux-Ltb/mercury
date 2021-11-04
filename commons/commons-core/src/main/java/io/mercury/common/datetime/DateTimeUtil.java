@@ -15,7 +15,7 @@ import io.mercury.common.datetime.pattern.TemporalPattern;
 import io.mercury.common.datetime.pattern.spec.DatePattern;
 import io.mercury.common.datetime.pattern.spec.DateTimePattern;
 import io.mercury.common.datetime.pattern.spec.TimePattern;
-import io.mercury.common.util.StringUtil;
+import io.mercury.common.util.StringSupport;
 
 @ThreadSafe
 public final class DateTimeUtil {
@@ -407,7 +407,7 @@ public final class DateTimeUtil {
 	private static void checkFormatParam(TemporalPattern pattern, String str) {
 		if (pattern == null)
 			throw new IllegalArgumentException("pattern cannot null");
-		if (StringUtil.isNullOrEmpty(str))
+		if (StringSupport.isNullOrEmpty(str))
 			throw new IllegalArgumentException("str cannot null or empty.");
 		if (str.length() != pattern.getPattern().length())
 			throw new IllegalArgumentException("str and pattern length no match.");

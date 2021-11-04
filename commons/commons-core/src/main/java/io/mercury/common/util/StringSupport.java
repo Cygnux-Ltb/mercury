@@ -11,27 +11,88 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import io.mercury.common.character.Charsets;
 import io.mercury.common.character.Separator;
 
-public final class StringUtil {
+public final class StringSupport {
 
-	public static interface StringConst {
+	public static final String CONST_NULL = "null";
 
-		String NULL = "null";
+	public static final String CONST_EMPTY = "";
 
-		String EMPTY = "";
-
-	}
-
-	private StringUtil() {
+	private StringSupport() {
 	}
 
 	/**
+	 * 
+	 * @param int
+	 * @return
+	 */
+	@Nonnull
+	public static final String toString(int i) {
+		return Integer.toString(i);
+	}
+
+	/**
+	 * 
+	 * @param int array
+	 * @return
+	 */
+	@Nonnull
+	public static final String toString(@Nullable int[] is) {
+		return is == null ? CONST_NULL : is.toString();
+	}
+
+	/**
+	 * 
+	 * @param long
+	 * @return
+	 */
+	@Nonnull
+	public static final String toString(long l) {
+		return Long.toString(l);
+	}
+
+	/**
+	 * 
+	 * @param long array
+	 * @return
+	 */
+	@Nonnull
+	public static final String toString(@Nullable long[] ls) {
+		return ls == null ? CONST_NULL : ls.toString();
+	}
+
+	/**
+	 * 
+	 * @param double
+	 * @return
+	 */
+	@Nonnull
+	public static final String toString(@Nullable double d) {
+		return Double.toString(d);
+	}
+
+	/**
+	 * 
+	 * @param double array
+	 * @return
+	 */
+	@Nonnull
+	public static final String toString(@Nullable double[] ds) {
+		if (ds == null)
+			return "";
+		return ds == null ? CONST_NULL : ds.toString();
+	}
+
+	/**
+	 * call toString() method
 	 * 
 	 * @param obj
 	 * @return
 	 */
 	@Nonnull
 	public static final String toString(@Nullable Object obj) {
-		return obj == null ? StringConst.NULL : obj.toString();
+		if (obj == null)
+			return CONST_NULL;
+		return obj.toString();
 	}
 
 	/**
@@ -42,7 +103,7 @@ public final class StringUtil {
 	@Nonnull
 	public static final String toString(@Nullable Object... objs) {
 		if (objs == null)
-			return StringConst.EMPTY;
+			return CONST_EMPTY;
 		StringBuilder sb = new StringBuilder(objs.length * 16).append('[');
 		for (int i = 0, j = objs.length - 1; i < objs.length; i++) {
 			sb.append(toString(objs[i]));
@@ -60,7 +121,7 @@ public final class StringUtil {
 	@Nonnull
 	public static final String toString(@Nullable String... strs) {
 		if (strs == null)
-			return StringConst.EMPTY;
+			return CONST_EMPTY;
 		StringBuilder sb = new StringBuilder(strs.length * 16).append('[');
 		for (int i = 0, j = strs.length - 1; i < strs.length; i++) {
 			sb.append(toString(strs[i]));
@@ -72,33 +133,33 @@ public final class StringUtil {
 
 	/**
 	 * 
-	 * @param bytes
+	 * @param bs
 	 * @return
 	 */
 	@Nonnull
-	public static final String toString(@Nonnull byte... bytes) {
-		return toString(Charsets.UTF8, bytes);
+	public static final String toString(@Nonnull byte[] bs) {
+		return toString(Charsets.UTF8, bs);
 	}
 
 	/**
 	 * 
 	 * @param charset
-	 * @param bytes
+	 * @param bs
 	 * @return
 	 */
 	@Nonnull
-	public static final String toString(@Nonnull Charset charset, @Nonnull byte... bytes) {
-		return bytes == null ? StringConst.NULL : new String(bytes, charset == null ? Charsets.UTF8 : charset);
+	public static final String toString(@Nonnull Charset charset, @Nonnull byte[] bs) {
+		return bs == null ? CONST_NULL : new String(bs, charset == null ? Charsets.UTF8 : charset);
 	}
 
 	/**
 	 * 
-	 * @param chars
+	 * @param cs
 	 * @return
 	 */
 	@Nonnull
-	public static final String toString(@Nonnull char... chars) {
-		return chars == null ? StringConst.NULL : new String(chars);
+	public static final String toString(@Nonnull char[] cs) {
+		return cs == null ? CONST_NULL : new String(cs);
 	}
 
 	/**
@@ -122,7 +183,7 @@ public final class StringUtil {
 	 */
 	@Nonnull
 	public static final String toStringShortPrefixStyle(Object obj) {
-		return obj == null ? StringConst.NULL
+		return obj == null ? CONST_NULL
 				: ToStringBuilder.reflectionToString(obj, ToStringStyle.SHORT_PREFIX_STYLE, false);
 	}
 
@@ -137,8 +198,7 @@ public final class StringUtil {
 	 */
 	@Nonnull
 	public static final String toStringJsonStyle(Object obj) {
-		return obj == null ? StringConst.NULL
-				: ToStringBuilder.reflectionToString(obj, ToStringStyle.JSON_STYLE, false);
+		return obj == null ? CONST_NULL : ToStringBuilder.reflectionToString(obj, ToStringStyle.JSON_STYLE, false);
 	}
 
 	/**
@@ -285,7 +345,7 @@ public final class StringUtil {
 	@Nonnull
 	public static final String removeNonDigits(String str) {
 		if (isNullOrEmpty(str))
-			return StringConst.EMPTY;
+			return CONST_EMPTY;
 		StringBuilder builder = new StringBuilder(str.length());
 		for (int i = 0; i < str.length(); i++) {
 			char c = str.charAt(i);
@@ -304,7 +364,7 @@ public final class StringUtil {
 	@Nonnull
 	public static final String removeNonAlphabet(String str) {
 		if (isNullOrEmpty(str))
-			return StringConst.EMPTY;
+			return CONST_EMPTY;
 		StringBuilder builder = new StringBuilder(str.length());
 		for (int i = 0; i < str.length(); i++) {
 			char c = str.charAt(i);
@@ -321,7 +381,7 @@ public final class StringUtil {
 	 * @return
 	 */
 	public static final String removeSplitChar(String str) {
-		return isNullOrEmpty(str) ? StringConst.EMPTY
+		return isNullOrEmpty(str) ? CONST_EMPTY
 				: str.replace(".", "").replace("-", "").replace("_", "").replace("/", "").replace("\\", "");
 	}
 
@@ -455,7 +515,7 @@ public final class StringUtil {
 	 */
 	public static final String concatenateStr(int capacity, char symbol, String... strs) {
 		if (strs == null || strs.length == 0)
-			return StringConst.EMPTY;
+			return CONST_EMPTY;
 		StringBuilder builder = new StringBuilder(capacity);
 		for (int i = 0; i < strs.length; i++) {
 			builder.append(strs[i]);
@@ -514,6 +574,7 @@ public final class StringUtil {
 
 	public static void main(String[] args) {
 
+		System.out.println(toString(11));
 		System.out.println(fixPath(null));
 		System.out.println(fixPath("ddd"));
 		System.out.println(fixPath("/user/"));

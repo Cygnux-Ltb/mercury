@@ -1,6 +1,6 @@
 package io.mercury.common.file;
 
-import static io.mercury.common.util.StringUtil.notDecimal;
+import static io.mercury.common.util.StringSupport.notDecimal;
 
 import java.io.File;
 import java.io.FileInputStream;

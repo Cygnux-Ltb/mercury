@@ -118,7 +118,7 @@ public final class Assertor {
 	 */
 	public static <T> T nonNull(T t, @Nonnull String objName) throws NullPointerException {
 		if (t == null)
-			if (StringUtil.isNullOrEmpty(objName))
+			if (StringSupport.isNullOrEmpty(objName))
 				throw new NullPointerException("param cannot be null");
 			else
 				throw new NullPointerException("param [" + objName + "] cannot be null");

@@ -25,7 +25,7 @@ public final class DoubleRecorder {
 	private MutableDoubleSet doubleSet;
 
 	public DoubleRecorder(Capacity capacity) {
-		this.doubleCounter = MutableMaps.newDoubleIntHashMap(capacity);
+		this.doubleCounter = MutableMaps.newDoubleIntHashMap(capacity.value());
 		this.doubleSet = MutableSets.newDoubleHashSet(capacity);
 	}
 

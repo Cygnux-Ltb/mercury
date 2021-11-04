@@ -1,7 +1,6 @@
 package io.mercury.common.functional;
 
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -27,7 +26,7 @@ public final class Functions {
 	 * @return
 	 */
 	public final static <R> R exec(@Nonnull final Supplier<R> fun, @Nullable final Function<R, R> afterSuccess,
-			@Nullable final Consumer<Exception> afterFailure, @Nonnull final Supplier<R> defSupplier) {
+			@Nullable final ExceptionHandler<? super Exception> afterFailure, @Nonnull final Supplier<R> defSupplier) {
 		try {
 			R r = fun.get();
 			if (afterSuccess != null)
@@ -51,7 +50,8 @@ public final class Functions {
 	 * @return
 	 */
 	public final static <T> List<T> exec(@Nonnull final Supplier<List<T>> fun,
-			@Nullable final Function<List<T>, List<T>> afterSuccess, @Nullable final Consumer<Exception> afterFailure) {
+			@Nullable final Function<List<T>, List<T>> afterSuccess,
+			@Nullable final ExceptionHandler<? super Exception> afterFailure) {
 		return exec(fun, afterSuccess, afterFailure, FastList::new);
 	}
 

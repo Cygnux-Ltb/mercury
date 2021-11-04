@@ -64,7 +64,7 @@ public final class PropertiesUtil {
 			throws IOException {
 		Assertor.nonNull(text, "text");
 		Assertor.nonNull(charset, "charset");
-		if (StringUtil.nonEmpty(text))
+		if (StringSupport.nonEmpty(text))
 			return loadProperties(new ByteArrayInputStream(text.getBytes(charset)));
 		return new Properties();
 	}
@@ -106,7 +106,7 @@ public final class PropertiesUtil {
 	public static final boolean getBoobleProperty(@Nonnull final Properties props, final String key)
 			throws NumberFormatException {
 		String prop = props.getProperty(key);
-		return StringUtil.isNullOrEmpty(prop) ? false : Boolean.parseBoolean(prop);
+		return StringSupport.isNullOrEmpty(prop) ? false : Boolean.parseBoolean(prop);
 	}
 
 	/**
@@ -119,7 +119,7 @@ public final class PropertiesUtil {
 	public static final int getIntProperty(@Nonnull final Properties props, final String key)
 			throws NumberFormatException {
 		String prop = props.getProperty(key);
-		return StringUtil.isNullOrEmpty(prop) ? 0 : Integer.parseInt(prop);
+		return StringSupport.isNullOrEmpty(prop) ? 0 : Integer.parseInt(prop);
 	}
 
 	/**
@@ -132,7 +132,7 @@ public final class PropertiesUtil {
 	public static final double getDoubleProperty(@Nonnull final Properties props, final String key)
 			throws NumberFormatException {
 		String prop = props.getProperty(key);
-		return StringUtil.isNullOrEmpty(prop) ? 0.0D : Double.parseDouble(prop);
+		return StringSupport.isNullOrEmpty(prop) ? 0.0D : Double.parseDouble(prop);
 	}
 
 	/**

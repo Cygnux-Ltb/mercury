@@ -25,7 +25,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import io.mercury.common.util.HexUtil;
-import io.mercury.common.util.StringUtil;
+import io.mercury.common.util.StringSupport;
 
 /**
  * Utility class to hash strings (such as passwords). <br>
@@ -105,7 +105,7 @@ public final class Hasher {
 	 * @throws NoSuchAlgorithmException
 	 */
 	public String toHashedHexString(String str) throws NoSuchAlgorithmException {
-		return this.toHashedHexString(StringUtil.getAsciiBytes(str));
+		return this.toHashedHexString(StringSupport.getAsciiBytes(str));
 	}
 
 	/**
@@ -140,7 +140,7 @@ public final class Hasher {
 	 * @throws NoSuchAlgorithmException
 	 */
 	public String toHashedBase64String(String str) throws NoSuchAlgorithmException {
-		return this.toHashedBase64String(StringUtil.getAsciiBytes(str));
+		return this.toHashedBase64String(StringSupport.getAsciiBytes(str));
 	}
 
 	/**
