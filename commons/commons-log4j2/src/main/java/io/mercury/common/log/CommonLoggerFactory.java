@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.mercury.common.log.CommonLogConfigurator.LogLevel;
+import io.mercury.common.log.LogConfigurator.LogLevel;
 
 /**
  * 
@@ -29,17 +29,17 @@ public final class CommonLoggerFactory {
 	 */
 	public static final synchronized Logger getLogger(Class<?> clazz) {
 		// 配置日志存储目录, 基于${user.home}
-		String folder = CommonLogConfigurator.getFolder();
+		String folder = LogConfigurator.getFolder();
 		if (folder == null || folder.isEmpty())
-			CommonLogConfigurator.setFolder(DefaultFolder);
+			LogConfigurator.setLogFolder(DefaultFolder);
 		// 配置日志文件名
-		String filename = CommonLogConfigurator.getFilename();
+		String filename = LogConfigurator.getFilename();
 		if (filename == null || filename.isEmpty())
-			CommonLogConfigurator.setFilename(DefaultFileName);
+			LogConfigurator.setLogFilename(DefaultFileName);
 		// 配置日志級別
-		String level = CommonLogConfigurator.getLogLevel();
+		String level = LogConfigurator.getLogLevel();
 		if (level == null || level.isEmpty())
-			CommonLogConfigurator.setLogLevel(DefaultLevel);
+			LogConfigurator.setLogLevel(DefaultLevel);
 		return LoggerFactory.getLogger(clazz);
 	}
 

@@ -5,13 +5,13 @@ package io.mercury.common.log;
  * @author yellow013
  *
  */
-public final class CommonLogConfigurator {
+public final class LogConfigurator {
 
 	/**
 	 * 
 	 * @param folder
 	 */
-	public static synchronized void setFolder(String folder) {
+	public static synchronized void setLogFolder(String folder) {
 		System.setProperty("log4j2.folder", folder);
 	}
 
@@ -19,7 +19,7 @@ public final class CommonLogConfigurator {
 	 * 
 	 * @param filename
 	 */
-	public static synchronized void setFilename(String filename) {
+	public static synchronized void setLogFilename(String filename) {
 		System.setProperty("log4j2.filename", filename);
 	}
 

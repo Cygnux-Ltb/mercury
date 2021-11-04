@@ -5,14 +5,14 @@ import java.time.LocalDateTime;
 import org.junit.Test;
 import org.slf4j.Logger;
 
-import io.mercury.common.log.CommonLogConfigurator.LogLevel;
+import io.mercury.common.log.LogConfigurator.LogLevel;
 
 public class CommonLoggerFactoryTest {
 
 	static {
 		System.out.println(System.getProperty("user.home"));
-		CommonLogConfigurator.setFilename("new");
-		CommonLogConfigurator.setLogLevel(LogLevel.ERROR);
+		LogConfigurator.setLogFilename("new");
+		LogConfigurator.setLogLevel(LogLevel.ERROR);
 	}
 
 	private static final Logger log = CommonLoggerFactory.getLogger(CommonLoggerFactory.class);
