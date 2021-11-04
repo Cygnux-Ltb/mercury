@@ -9,7 +9,7 @@ import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
 
 import io.mercury.common.util.PropertiesUtil;
-import io.mercury.common.util.StringUtil;
+import io.mercury.common.util.StringSupport;
 
 /**
  * NACOS信息读取
@@ -112,7 +112,7 @@ public class NacosReader {
 	private static String getSaved0(ConfigService service, String group, String dataId) throws NacosReadException {
 		try {
 			String saved = service.getConfig(dataId, group, 100000);
-			if (StringUtil.isNullOrEmpty(saved)) {
+			if (StringSupport.isNullOrEmpty(saved)) {
 				throw new NacosReadException("Read nacos saved is null or empty");
 			}
 			return saved;

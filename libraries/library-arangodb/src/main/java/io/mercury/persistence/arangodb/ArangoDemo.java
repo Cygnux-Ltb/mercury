@@ -1,6 +1,6 @@
 package io.mercury.persistence.arangodb;
 
-import static io.mercury.common.util.StringUtil.toStringShortPrefixStyle;
+import static io.mercury.common.util.StringSupport.toStringShortPrefixStyle;
 
 import org.slf4j.Logger;
 
@@ -13,14 +13,14 @@ import com.arangodb.entity.BaseDocument;
 import com.arangodb.model.DBCreateOptions;
 import com.arangodb.velocypack.VPackSlice;
 
-import io.mercury.common.log.CommonLogConfigurator;
-import io.mercury.common.log.CommonLogConfigurator.LogLevel;
+import io.mercury.common.log.LogConfigurator;
+import io.mercury.common.log.LogConfigurator.LogLevel;
 import io.mercury.common.log.CommonLoggerFactory;
 
 public class ArangoDemo {
 
 	static {
-		CommonLogConfigurator.setLogLevel(LogLevel.INFO);
+		LogConfigurator.setLogLevel(LogLevel.INFO);
 	}
 
 	private static final Logger log = CommonLoggerFactory.getLogger(ArangoDemo.class);

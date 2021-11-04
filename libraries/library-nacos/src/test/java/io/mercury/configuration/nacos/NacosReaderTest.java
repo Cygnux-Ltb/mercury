@@ -4,14 +4,14 @@ import java.util.Properties;
 
 import org.junit.Test;
 
-import io.mercury.common.log.CommonLogConfigurator;
-import io.mercury.common.log.CommonLogConfigurator.LogLevel;
+import io.mercury.common.log.LogConfigurator;
+import io.mercury.common.log.LogConfigurator.LogLevel;
 import io.mercury.common.util.PropertiesUtil;
 
 public class NacosReaderTest {
 
 	static {
-		CommonLogConfigurator.setLogLevel(LogLevel.INFO);
+		LogConfigurator.setLogLevel(LogLevel.INFO);
 	}
 
 	@Test
