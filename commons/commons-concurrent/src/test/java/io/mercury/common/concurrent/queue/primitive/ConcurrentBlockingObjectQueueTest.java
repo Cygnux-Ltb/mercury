@@ -12,7 +12,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import io.mercury.common.concurrent.queue.lowlatency.ConcurrentBlockingQueue;
+import io.mercury.common.concurrent.queue.lowlatency.ConcurrentQueue;
 
 /**
  * Created by robaustin on 31/01/2014.
@@ -23,7 +23,7 @@ public class ConcurrentBlockingObjectQueueTest {
     @Test
     public void testTake() throws Exception {
 
-        final ConcurrentBlockingQueue<Integer> queue = new ConcurrentBlockingQueue<Integer>();
+        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<Integer>();
 
         // writer thread
         Executors.newSingleThreadExecutor().execute(new Runnable() {
@@ -67,7 +67,7 @@ public class ConcurrentBlockingObjectQueueTest {
 
     @Test
     public void testRead() throws Exception {
-        final ConcurrentBlockingQueue<Integer> queue = new ConcurrentBlockingQueue<Integer>();
+        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<Integer>();
         queue.put(10);
         final int value = queue.take();
         assertEquals(10, value);
@@ -75,7 +75,7 @@ public class ConcurrentBlockingObjectQueueTest {
 
     @Test
     public void testRead2() throws Exception {
-        final ConcurrentBlockingQueue<Integer> queue = new ConcurrentBlockingQueue<Integer>();
+        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<Integer>();
         queue.put(10);
         queue.put(11);
         final int value = queue.take();
@@ -86,7 +86,7 @@ public class ConcurrentBlockingObjectQueueTest {
 
     @Test
     public void testReadLoop() throws Exception {
-        final ConcurrentBlockingQueue<Integer> queue = new ConcurrentBlockingQueue<Integer>();
+        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<Integer>();
 
         for (int i = 1; i < 50; i++) {
             queue.put(i);
@@ -103,7 +103,7 @@ public class ConcurrentBlockingObjectQueueTest {
     @Test
     public void testWithFasterReader() throws Exception {
 
-        final ConcurrentBlockingQueue<Integer> queue = new ConcurrentBlockingQueue<Integer>();
+        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<Integer>();
         final int max = 100;
         final CountDownLatch countDown = new CountDownLatch(1);
 
@@ -175,7 +175,7 @@ public class ConcurrentBlockingObjectQueueTest {
     @Test
     public void testWithFasterWriter() throws Exception {
 
-        final ConcurrentBlockingQueue<Integer> queue = new ConcurrentBlockingQueue<Integer>();
+        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<Integer>();
         final int max = 200;
         final CountDownLatch countDown = new CountDownLatch(1);
         final AtomicBoolean success = new AtomicBoolean(true);
@@ -247,7 +247,7 @@ public class ConcurrentBlockingObjectQueueTest {
 
     @SuppressWarnings("deprecation")
 	private void testConcurrentBlockingObjectQueue(final int nTimes) throws InterruptedException {
-        final ConcurrentBlockingQueue<Integer> queue = new ConcurrentBlockingQueue<Integer>(1024);
+        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<Integer>(1024);
         final CountDownLatch countDown = new CountDownLatch(1);
 
         final AtomicBoolean success = new AtomicBoolean(true);

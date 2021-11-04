@@ -56,14 +56,6 @@
 			<version>${commons-io.version}</version>
 		</dependency>
 
-		<!-- Guava is a suite of core and expanded libraries that include utility 
-			classes, google's collections, io classes, and much much more. -->
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>${guava.version}</version>
-		</dependency>
-
 		<!-- ##### Eclipse Collections Library ##### -->
 		<!-- Eclipse Collections API -->
 		<dependency>
@@ -82,6 +74,14 @@
 			<groupId>org.eclipse.collections</groupId>
 			<artifactId>eclipse-collections-forkjoin</artifactId>
 			<version>${eclipse-collections.version}</version>
+		</dependency>
+
+		<!-- Guava is a suite of core and expanded libraries that include utility 
+			classes, google's collections, io classes, and much much more. -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
 		</dependency>
 
 		<!-- commons log4j2 logger -->
