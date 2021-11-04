@@ -3,12 +3,14 @@ package io.mercury.common.collections;
 import javax.annotation.Nullable;
 
 import org.eclipse.collections.api.factory.list.ImmutableListFactory;
+import org.eclipse.collections.api.factory.list.primitive.ImmutableDoubleListFactory;
 import org.eclipse.collections.api.factory.list.primitive.ImmutableIntListFactory;
 import org.eclipse.collections.api.factory.list.primitive.ImmutableLongListFactory;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.primitive.ImmutableIntList;
 import org.eclipse.collections.api.list.primitive.ImmutableLongList;
 import org.eclipse.collections.impl.list.immutable.ImmutableListFactoryImpl;
+import org.eclipse.collections.impl.list.immutable.primitive.ImmutableDoubleListFactoryImpl;
 import org.eclipse.collections.impl.list.immutable.primitive.ImmutableIntListFactoryImpl;
 import org.eclipse.collections.impl.list.immutable.primitive.ImmutableLongListFactoryImpl;
 
@@ -20,11 +22,31 @@ public final class ImmutableLists {
 	}
 
 	/**
-	 * 
-	 * @return ImmutableIntListFactory
+	 * @return ImmutableListFactory Instance
+	 */
+	public static final ImmutableListFactory getListFactory() {
+		return ImmutableListFactoryImpl.INSTANCE;
+	}
+
+	/**
+	 * @return ImmutableIntListFactory Instance
 	 */
 	public static final ImmutableIntListFactory getIntListFactory() {
 		return ImmutableIntListFactoryImpl.INSTANCE;
+	}
+
+	/**
+	 * @return ImmutableLongListFactory Instance
+	 */
+	public static final ImmutableLongListFactory getLongListFactory() {
+		return ImmutableLongListFactoryImpl.INSTANCE;
+	}
+
+	/**
+	 * @return ImmutableDoubleListFactory Instance
+	 */
+	public static final ImmutableDoubleListFactory getDoubleListFactory() {
+		return ImmutableDoubleListFactoryImpl.INSTANCE;
 	}
 
 	/**
@@ -40,14 +62,6 @@ public final class ImmutableLists {
 
 	/**
 	 * 
-	 * @return ImmutableLongListFactory
-	 */
-	public static final ImmutableLongListFactory getLongListFactory() {
-		return ImmutableLongListFactoryImpl.INSTANCE;
-	}
-
-	/**
-	 * 
 	 * @param values
 	 * @return ImmutableLongList
 	 */
@@ -55,14 +69,6 @@ public final class ImmutableLists {
 		if (ArrayUtil.isNullOrEmpty(values))
 			return ImmutableLongListFactoryImpl.INSTANCE.empty();
 		return ImmutableLongListFactoryImpl.INSTANCE.with(values);
-	}
-
-	/**
-	 * 
-	 * @return ImmutableListFactory
-	 */
-	public static final ImmutableListFactory getListFactory() {
-		return ImmutableListFactoryImpl.INSTANCE;
 	}
 
 	/**
@@ -121,7 +127,7 @@ public final class ImmutableLists {
 	 * @return
 	 */
 	public static final <E> boolean notNullAndEmpty(@Nullable ImmutableList<E> list) {
-		if (list != null && !list.isEmpty())
+		if (list != null && list.notEmpty())
 			return true;
 		return false;
 	}

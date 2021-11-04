@@ -117,7 +117,7 @@ public final class MutableSets {
 	}
 
 	/**
-	 * object set
+	 * Set
 	 * 
 	 * @param <E>
 	 * @return
@@ -127,7 +127,7 @@ public final class MutableSets {
 	}
 
 	/**
-	 * object set
+	 * Set
 	 * 
 	 * @param <E>
 	 * @param values
@@ -135,16 +135,16 @@ public final class MutableSets {
 	 */
 	@SafeVarargs
 	public static final <E> MutableSet<E> newUnifiedSet(E... values) {
-		UnifiedSet<E> unifiedSet = new UnifiedSet<>();
+		MutableSet<E> set = new UnifiedSet<>();
 		if (ArrayUtil.isNullOrEmpty(values))
-			return unifiedSet;
+			return set;
 		for (E e : values)
-			unifiedSet.add(e);
-		return unifiedSet;
+			set.add(e);
+		return set;
 	}
 
 	/**
-	 * object set
+	 * Set
 	 * 
 	 * @param <E>
 	 * @param capacity
@@ -155,7 +155,7 @@ public final class MutableSets {
 	}
 
 	/**
-	 * set
+	 * Set
 	 * 
 	 * @param <E>
 	 * @param iterator
@@ -170,7 +170,7 @@ public final class MutableSets {
 	}
 
 	/**
-	 * set
+	 * Set
 	 * 
 	 * @param <E>
 	 * @param collection
@@ -183,7 +183,7 @@ public final class MutableSets {
 	}
 
 	/**
-	 * sorted set
+	 * SortedSet
 	 * 
 	 * @param <E>
 	 * @return
@@ -193,7 +193,24 @@ public final class MutableSets {
 	}
 
 	/**
-	 * sorted set
+	 * SortedSet
+	 * 
+	 * @param <E>
+	 * @param values
+	 * @return
+	 */
+	@SafeVarargs
+	public static final <E> MutableSortedSet<E> newTreeSortedSet(E... values) {
+		MutableSortedSet<E> set = new TreeSortedSet<>();
+		if (ArrayUtil.isNullOrEmpty(values))
+			return set;
+		for (E e : values)
+			set.add(e);
+		return set;
+	}
+
+	/**
+	 * SortedSet
 	 * 
 	 * @param <E>
 	 * @param comparator
@@ -206,7 +223,7 @@ public final class MutableSets {
 	}
 
 	/**
-	 * sorted set
+	 * SortedSet
 	 * 
 	 * @param <E>
 	 * @param iterable
@@ -219,7 +236,7 @@ public final class MutableSets {
 	}
 
 	/**
-	 * sorted set
+	 * SortedSet
 	 * 
 	 * @param <E>
 	 * @param comparator
@@ -241,7 +258,8 @@ public final class MutableSets {
 	 * @param set
 	 * @param elements
 	 */
-	public static final <E> void addElements(MutableSet<E> set, E[] elements) {
+	@SafeVarargs
+	public static final <E> void addElements(MutableSet<E> set, E... elements) {
 		if (set == null || elements == null || elements.length == 0)
 			return;
 		for (int i = 0; i < elements.length; i++)

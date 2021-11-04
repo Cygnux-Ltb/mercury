@@ -47,7 +47,7 @@ public abstract class TemporalMap<K extends Temporal, V, T extends TemporalMap<K
 		this.keyFunc = keyFunc;
 		this.nextKeyFunc = nextKeyFunc;
 		this.hasNextKey = hasNextKey;
-		this.savedMap = MutableMaps.newLongObjectHashMap(capacity);
+		this.savedMap = MutableMaps.newLongObjectHashMap(capacity.value());
 	}
 
 	protected abstract T self();

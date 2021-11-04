@@ -1,10 +1,8 @@
 package io.mercury.common.collections.group;
 
-import java.io.Serializable;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
-
-import org.eclipse.collections.api.list.ImmutableList;
 
 /**
  * 
@@ -13,12 +11,25 @@ import org.eclipse.collections.api.list.ImmutableList;
  * @param <K>
  * @param <V>
  */
-public interface Group<K, V> extends Serializable {
+public interface Group<K, V> {
 
 	@Nonnull
-	V acquireMember(@Nonnull K k);
+	V getMember(@Nonnull K k) throws MemberNotExistException;
 
 	@Nonnull
-	ImmutableList<V> getMemberList();
+	Set<K> getKeys();
+
+	public static class MemberNotExistException extends RuntimeException {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -6229705929334610236L;
+
+		public MemberNotExistException(String msg) {
+			super(msg);
+		}
+
+	}
 
 }

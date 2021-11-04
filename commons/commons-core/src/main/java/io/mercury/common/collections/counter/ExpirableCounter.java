@@ -58,8 +58,8 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
 	 */
 	public ExpirableCounter(Duration expireTime, Capacity capacity) {
 		this.expireNanos = expireTime.toNanos();
-		this.timeToTag = newLongLongHashMap(capacity);
-		this.tagToDelta = newLongLongHashMap(capacity);
+		this.timeToTag = newLongLongHashMap(capacity.value());
+		this.tagToDelta = newLongLongHashMap(capacity.value());
 		this.effectiveTimes = newLongArrayList(capacity.value());
 	}
 
@@ -148,7 +148,7 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
 			SleepSupport.sleep(2000);
 		}
 
-		MutableLongLongMap map = MutableMaps.newLongLongHashMap(Capacity.L10_SIZE);
+		MutableLongLongMap map = MutableMaps.newLongLongHashMap(Capacity.L10_SIZE.value());
 		map.put(1, 10);
 		System.out.println(-19 + -15);
 

@@ -10,6 +10,20 @@ public enum Capacity {
 
 	/**
 	 * <pre>
+	 * Size : 1 << 2 == 4
+	 * </pre>
+	 */
+	L02_SIZE(1 << 2),
+
+	/**
+	 * <pre>
+	 * Size : 1 << 3 == 8
+	 * </pre>
+	 */
+	L03_SIZE(1 << 3),
+
+	/**
+	 * <pre>
 	 * Size : 1 << 4 == 16
 	 * </pre>
 	 */
@@ -253,9 +267,7 @@ public enum Capacity {
 		System.out.println(BitFormatter.intBinaryFormat(1 << 30));
 		System.out.println(1 << 31);
 		System.out.println(BitFormatter.intBinaryFormat(1 << 31));
-
 		System.out.println(BitFormatter.intBinaryFormat(Integer.MIN_VALUE << 65));
-
 		System.out.println(Capacity.L09_SIZE.quarter());
 
 	}

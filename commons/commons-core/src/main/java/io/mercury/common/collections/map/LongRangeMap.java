@@ -36,7 +36,7 @@ public final class LongRangeMap<V> {
 	 * @param capacity
 	 */
 	public LongRangeMap(Capacity capacity) {
-		this.savedMap = MutableMaps.newLongObjectHashMap(capacity);
+		this.savedMap = MutableMaps.newLongObjectHashMap(capacity.value());
 		this.savedKey = MutableSets.newLongHashSet(capacity);
 	}
 

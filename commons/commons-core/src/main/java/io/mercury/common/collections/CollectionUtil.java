@@ -16,4 +16,16 @@ public final class CollectionUtil {
 		return false;
 	}
 
+	/**
+	 * 
+	 * @param <E>
+	 * @param coll
+	 * @return
+	 */
+	public static final <E> boolean notEmpty(Collection<E> coll) {
+		if (coll != null && coll.size() > 1)
+			return true;
+		return false;
+	}
+
 }

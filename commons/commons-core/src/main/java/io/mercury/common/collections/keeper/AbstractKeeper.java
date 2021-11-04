@@ -28,7 +28,7 @@ public abstract class AbstractKeeper<K, V> implements Keeper<K, V> {
 	}
 
 	protected AbstractKeeper(Capacity capacity) {
-		this.savedMap = newConcurrentHashMap(capacity);
+		this.savedMap = newConcurrentHashMap(capacity.value());
 	}
 
 	@Nonnull

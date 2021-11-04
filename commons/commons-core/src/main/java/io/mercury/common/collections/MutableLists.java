@@ -202,11 +202,11 @@ public final class MutableLists {
 	/**
 	 * 
 	 * @param <E>
-	 * @param collection
+	 * @param coll
 	 * @return MutableList
 	 */
-	public static final <E> MutableList<E> newFastList(Collection<E> collection) {
-		return new FastList<>(collection);
+	public static final <E> MutableList<E> newFastList(Collection<E> coll) {
+		return new FastList<>(coll);
 	}
 
 	/**

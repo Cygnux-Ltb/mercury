@@ -1,16 +1,15 @@
 package io.mercury.common.collections.group;
 
-import static io.mercury.common.collections.ImmutableLists.newImmutableList;
-import static io.mercury.common.collections.MutableMaps.newConcurrentHashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Supplier;
 
-import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
 
-import org.eclipse.collections.api.list.ImmutableList;
-import org.eclipse.collections.api.map.ConcurrentMutableMap;
+import org.eclipse.collections.api.map.ImmutableMap;
 
-import io.mercury.common.annotation.AbstractFunction;
-import io.mercury.common.collections.Capacity;
+import io.mercury.common.collections.ImmutableMaps;
 
 /**
  * 
@@ -20,27 +19,32 @@ import io.mercury.common.collections.Capacity;
  * @param <V>
  */
 @ThreadSafe
+@Immutable
 public abstract class AbstractGroup<K, V> implements Group<K, V> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8384604279192455942L;
+	protected final ImmutableMap<K, V> savedMap;
 
-	protected final ConcurrentMutableMap<K, V> savedMap = newConcurrentHashMap(Capacity.L04_SIZE);
+	protected final Set<K> keys;
 
-	@Override
-	public V acquireMember(K key) {
-		return savedMap.getIfAbsentPutWithKey(key, this::createMember);
+	public AbstractGroup(Supplier<Map<K, V>> supplier) {
+		var map = supplier.get();
+		if (map == null)
+			throw new IllegalArgumentException("supplier result is null");
+		this.keys = map.keySet();
+		this.savedMap = ImmutableMaps.newImmutableMap(supplier);
 	}
 
 	@Override
-	public ImmutableList<V> getMemberList() {
-		return newImmutableList(savedMap.values());
+	public V getMember(K key) throws MemberNotExistException {
+		var value = savedMap.get(key);
+		if (value == null)
+			throw new MemberNotExistException("key -> [" + key + "] no found value");
+		return value;
 	}
 
-	@Nonnull
-	@AbstractFunction
-	protected abstract V createMember(@Nonnull K key);
+	@Override
+	public Set<K> getKeys() {
+		return keys;
+	}
 
 }

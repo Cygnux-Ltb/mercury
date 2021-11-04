@@ -1,7 +1,5 @@
 package io.mercury.common.collections;
 
-import static io.mercury.common.util.ArrayUtil.isNullOrEmpty;
-
 import javax.annotation.Nonnull;
 
 import org.eclipse.collections.api.factory.set.ImmutableSetFactory;
@@ -20,17 +18,47 @@ import org.eclipse.collections.impl.set.immutable.primitive.ImmutableIntSetFacto
 import org.eclipse.collections.impl.set.immutable.primitive.ImmutableLongSetFactoryImpl;
 import org.eclipse.collections.impl.set.sorted.immutable.ImmutableSortedSetFactoryImpl;
 
+import io.mercury.common.util.ArrayUtil;
+
 public final class ImmutableSets {
 
 	private ImmutableSets() {
 	}
 
 	/**
-	 * 
-	 * @return ImmutableIntSetFactoryInstance
+	 * @return ImmutableSetFactory Instance
 	 */
-	public static final ImmutableIntSetFactory intSetFactory() {
+	public static final ImmutableSetFactory getSetFactory() {
+		return ImmutableSetFactoryImpl.INSTANCE;
+	}
+
+	/**
+	 * @return ImmutableSortedSetFactory Instance
+	 */
+	public static final ImmutableSortedSetFactory getSortedSetFactory() {
+		return ImmutableSortedSetFactoryImpl.INSTANCE;
+	}
+
+	/**
+	 * @return ImmutableIntSetFactory Instance
+	 */
+	public static final ImmutableIntSetFactory getIntSetFactory() {
 		return ImmutableIntSetFactoryImpl.INSTANCE;
+	}
+
+	/**
+	 * @return ImmutableLongSetFactory Instance
+	 */
+	public static final ImmutableLongSetFactory getLongSetFactory() {
+		return ImmutableLongSetFactoryImpl.INSTANCE;
+	}
+
+	/**
+	 * 
+	 * @return ImmutableDoubleSetFactory Instance
+	 */
+	public static final ImmutableDoubleSetFactory getDoubleSetFactory() {
+		return ImmutableDoubleSetFactoryImpl.INSTANCE;
 	}
 
 	/**
@@ -39,17 +67,9 @@ public final class ImmutableSets {
 	 * @return ImmutableIntSet
 	 */
 	public static final ImmutableIntSet newImmutableIntSet(@Nonnull int... values) {
-		if (isNullOrEmpty(values))
+		if (ArrayUtil.isNullOrEmpty(values))
 			return ImmutableIntSetFactoryImpl.INSTANCE.empty();
 		return ImmutableIntSetFactoryImpl.INSTANCE.with(values);
-	}
-
-	/**
-	 * 
-	 * @return ImmutableLongSetFactoryInstance
-	 */
-	public static final ImmutableLongSetFactory longSetFactoryInstance() {
-		return ImmutableLongSetFactoryImpl.INSTANCE;
 	}
 
 	/**
@@ -58,17 +78,9 @@ public final class ImmutableSets {
 	 * @return ImmutableLongSet
 	 */
 	public static final ImmutableLongSet newImmutableLongSet(@Nonnull long... values) {
-		if (isNullOrEmpty(values))
+		if (ArrayUtil.isNullOrEmpty(values))
 			return ImmutableLongSetFactoryImpl.INSTANCE.empty();
 		return ImmutableLongSetFactoryImpl.INSTANCE.with(values);
-	}
-
-	/**
-	 * 
-	 * @return ImmutableDoubleSetFactoryInstance
-	 */
-	public static final ImmutableDoubleSetFactory doubleSetFactory() {
-		return ImmutableDoubleSetFactoryImpl.INSTANCE;
 	}
 
 	/**
@@ -77,17 +89,9 @@ public final class ImmutableSets {
 	 * @return ImmutableDoubleSet
 	 */
 	public static final ImmutableDoubleSet newImmutableDoubleSet(@Nonnull double... values) {
-		if (isNullOrEmpty(values))
+		if (ArrayUtil.isNullOrEmpty(values))
 			return ImmutableDoubleSetFactoryImpl.INSTANCE.empty();
 		return ImmutableDoubleSetFactoryImpl.INSTANCE.with(values);
-	}
-
-	/**
-	 * 
-	 * @return ImmutableSetFactoryInstance
-	 */
-	public static final ImmutableSetFactory objectSetFactory() {
-		return ImmutableSetFactoryImpl.INSTANCE;
 	}
 
 	/**
@@ -115,14 +119,6 @@ public final class ImmutableSets {
 
 	/**
 	 * 
-	 * @return ImmutableSortedSetFactory
-	 */
-	public static final ImmutableSortedSetFactory objSortedSetFactoryInstance() {
-		return ImmutableSortedSetFactoryImpl.INSTANCE;
-	}
-
-	/**
-	 * 
 	 * @param <E>
 	 * @param iterable
 	 * @return ImmutableSortedSet
@@ -141,7 +137,7 @@ public final class ImmutableSets {
 	 */
 	@SafeVarargs
 	public static final <E> ImmutableSortedSet<E> newImmutableSortedSet(@Nonnull E... values) {
-		if (isNullOrEmpty(values))
+		if (ArrayUtil.isNullOrEmpty(values))
 			return ImmutableSortedSetFactoryImpl.INSTANCE.empty();
 		return ImmutableSortedSetFactoryImpl.INSTANCE.with(values);
 	}
