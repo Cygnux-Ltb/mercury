@@ -31,7 +31,7 @@ public final class ConcurrentLongRangeMap<V> {
 	}
 
 	public ConcurrentLongRangeMap(Capacity capacity) {
-		this.savedMap = MutableMaps.newLongObjectHashMap(capacity);
+		this.savedMap = MutableMaps.newLongObjectHashMap(capacity.value());
 		this.savedKey = MutableSets.newLongHashSet(capacity);
 
 	}
