@@ -7,11 +7,11 @@ import org.jctools.queues.MpmcArrayQueue;
 import io.mercury.common.annotation.thread.SpinLock;
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.concurrent.queue.MultiConsumerQueue;
-import io.mercury.common.concurrent.queue.QueueStyle;
+import io.mercury.common.concurrent.queue.QueueType;
 import io.mercury.common.concurrent.queue.WaitingStrategy;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
-import io.mercury.common.util.StringUtil;
+import io.mercury.common.util.StringSupport;
 
 @ThreadSafe
 public final class ConcurrentQueue<E> implements MultiConsumerQueue<E> {
@@ -24,7 +24,7 @@ public final class ConcurrentQueue<E> implements MultiConsumerQueue<E> {
 
 	public ConcurrentQueue(String queueName, Capacity capacity, WaitingStrategy strategy) {
 		this.queue = new MpmcArrayQueue<>(Math.max(capacity.value(), 64));
-		this.queueName = StringUtil.isNullOrEmpty(queueName) ? "ConcurrentQueue-" + Threads.currentThreadName()
+		this.queueName = StringSupport.isNullOrEmpty(queueName) ? "ConcurrentQueue-" + Threads.getCurrentThreadName()
 				: queueName;
 		this.strategy = strategy == null ? WaitingStrategy.Sleep : strategy;
 	}
@@ -71,8 +71,8 @@ public final class ConcurrentQueue<E> implements MultiConsumerQueue<E> {
 	}
 
 	@Override
-	public QueueStyle getQueueStyle() {
-		return QueueStyle.MPMC;
+	public QueueType getQueueType() {
+		return QueueType.MPMC;
 	}
 
 }

@@ -1,14 +1,14 @@
 package io.mercury.common.concurrent.queue.jct.impl;
 
 import static io.mercury.common.number.ThreadSafeRandoms.randomInt;
-import static io.mercury.common.util.StringUtil.isNullOrEmpty;
+import static io.mercury.common.util.StringSupport.isNullOrEmpty;
 
 import javax.annotation.Nonnull;
 
 import org.jctools.queues.SpmcArrayQueue;
 
 import io.mercury.common.concurrent.queue.MultiConsumerQueue;
-import io.mercury.common.concurrent.queue.QueueStyle;
+import io.mercury.common.concurrent.queue.QueueType;
 
 public class JctSpmcQueue<E> implements MultiConsumerQueue<E> {
 
@@ -48,8 +48,8 @@ public class JctSpmcQueue<E> implements MultiConsumerQueue<E> {
 	}
 
 	@Override
-	public QueueStyle getQueueStyle() {
-		return QueueStyle.SPMC;
+	public QueueType getQueueType() {
+		return QueueType.SPMC;
 	}
 
 }

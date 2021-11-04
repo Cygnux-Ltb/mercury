@@ -8,6 +8,6 @@ public interface Queue<E> {
 
 	boolean isEmpty();
 
-	QueueStyle getQueueStyle();
+	QueueType getQueueType();
 
 }

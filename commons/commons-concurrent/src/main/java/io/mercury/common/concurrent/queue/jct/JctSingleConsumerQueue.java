@@ -8,16 +8,15 @@ import org.slf4j.Logger;
 
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.annotation.thread.SpinLock;
-import io.mercury.common.concurrent.queue.QueueStyle;
+import io.mercury.common.concurrent.queue.QueueType;
 import io.mercury.common.concurrent.queue.QueueWorkingException;
-import io.mercury.common.concurrent.queue.SingleConsumerQueue;
-import io.mercury.common.concurrent.queue.StartMode;
+import io.mercury.common.concurrent.queue.AbstractSingleConsumerQueue;
 import io.mercury.common.concurrent.queue.WaitingStrategy;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
-import io.mercury.common.util.StringUtil;
+import io.mercury.common.util.StringSupport;
 
 /**
  * @author yellow013
@@ -27,21 +26,31 @@ import io.mercury.common.util.StringUtil;
  *            Single Consumer Queue
  * 
  */
-public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
+public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQueue<E> implements Runnable {
 
-	// Logger
+	/*
+	 * Logger
+	 */
 	private static final Logger log = CommonLoggerFactory.getLogger(JctSingleConsumerQueue.class);
 
-	// internal queue
+	/*
+	 * internal queue
+	 */
 	protected final Queue<E> queue;
 
-	// consumer runnable
+	/*
+	 * consumer runnable
+	 */
 	protected final Runnable consumer;
 
-	// waiting strategy
+	/*
+	 * waiting strategy
+	 */
 	private final WaitingStrategy strategy;
 
-	// sleep millis
+	/*
+	 * sleep millis
+	 */
 	private final long sleepMillis;
 
 	/**
@@ -50,7 +59,7 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 	 * @return
 	 */
 	public static Builder singleProducer() {
-		return new Builder(QueueStyle.SPSC);
+		return new Builder(QueueType.SPSC);
 	}
 
 	/**
@@ -60,7 +69,7 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 	 * @return
 	 */
 	public static Builder singleProducer(String queueName) {
-		return new Builder(QueueStyle.SPSC).setQueueName(queueName);
+		return new Builder(QueueType.SPSC).setQueueName(queueName);
 	}
 
 	/**
@@ -69,7 +78,7 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 	 * @return
 	 */
 	public static Builder multiProducer() {
-		return new Builder(QueueStyle.MPSC);
+		return new Builder(QueueType.MPSC);
 	}
 
 	/**
@@ -79,7 +88,7 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 	 * @return
 	 */
 	public static Builder multiProducer(String queueName) {
-		return new Builder(QueueStyle.MPSC).setQueueName(queueName);
+		return new Builder(QueueType.MPSC).setQueueName(queueName);
 	}
 
 	protected JctSingleConsumerQueue(Processor<E> processor, int capacity, WaitingStrategy strategy, long sleepMillis) {
@@ -98,10 +107,9 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 						waiting();
 				}
 			} catch (Exception e) {
-				throw new QueueWorkingException(queueName + " process thread throw exception", e);
+				throw new QueueWorkingException(name + " process thread throw exception", e);
 			}
 		};
-
 	}
 
 	@AbstractFunction
@@ -126,11 +134,11 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 	@SpinLock
 	public boolean enqueue(E e) {
 		if (isClosed.get()) {
-			log.error("Queue -> {} : enqueue failure, This queue is closed", queueName);
+			log.error("Queue -> {} : enqueue failure, This queue is closed", name);
 			return false;
 		}
 		if (e == null) {
-			log.error("Queue -> {} : enqueue element is null", queueName);
+			log.error("Queue -> {} : enqueue element is null", name);
 			return false;
 		}
 		while (!queue.offer(e))
@@ -139,9 +147,19 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 	}
 
 	@Override
+	public void run() {
+		consumer.run();
+	}
+
+	@Override
+	protected String getComponentType() {
+		return "JctQueue";
+	}
+
+	@Override
 	protected void start0() {
-		Threads.startNewMaxPriorityThread(queueName + "-ProcessThread", consumer);
-		log.info("Queue -> {}, Error call, This queue is started", queueName);
+		Threads.startNewThread(name + "-ProcessThread", consumer);
+		log.info("Queue -> {}, Error call, This queue is started", name);
 	}
 
 	@Override
@@ -164,21 +182,12 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 	 */
 	private static final class JctSpscQueue<E> extends JctSingleConsumerQueue<E> {
 
-		private static final Logger log = CommonLoggerFactory.getLogger(JctSpscQueue.class);
-
 		private JctSpscQueue(String queueName, int capacity, StartMode mode, WaitingStrategy strategy, long sleepMillis,
 				Processor<E> processor) {
 			super(processor, Math.max(capacity, 16), strategy, sleepMillis);
-			super.queueName = StringUtil.isNullOrEmpty(queueName) ? "JctSpscQueue-" + Threads.currentThreadName()
+			super.name = StringSupport.isNullOrEmpty(queueName) ? "JctSpscQueue-" + Threads.getCurrentThreadName()
 					: queueName;
-			switch (mode) {
-			case Auto:
-				start();
-				break;
-			case Manual:
-				log.info("Queue -> {} :: Run mode is [Manual], wating start...", super.queueName);
-				break;
-			}
+			startWith(mode);
 		}
 
 		@Override
@@ -187,8 +196,8 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 		}
 
 		@Override
-		public QueueStyle getQueueStyle() {
-			return QueueStyle.SPSC;
+		public QueueType getQueueType() {
+			return QueueType.SPSC;
 		}
 
 	}
@@ -204,21 +213,12 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 	 */
 	private static final class JctMpscQueue<E> extends JctSingleConsumerQueue<E> {
 
-		private static final Logger log = CommonLoggerFactory.getLogger(JctMpscQueue.class);
-
 		private JctMpscQueue(String queueName, int capacity, StartMode mode, WaitingStrategy strategy, long sleepMillis,
 				Processor<E> processor) {
 			super(processor, Math.max(capacity, 16), strategy, sleepMillis);
-			super.queueName = StringUtil.isNullOrEmpty(queueName) ? "JctMpscQueue-" + Threads.currentThreadName()
+			super.name = StringSupport.isNullOrEmpty(queueName) ? "JctMpscQueue-" + Threads.getCurrentThreadName()
 					: queueName;
-			switch (mode) {
-			case Auto:
-				start();
-				break;
-			case Manual:
-				log.info("Queue -> {} :: Run mode is [Manual], wating start...", super.queueName);
-				break;
-			}
+			startWith(mode);
 		}
 
 		@Override
@@ -227,8 +227,8 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 		}
 
 		@Override
-		public QueueStyle getQueueStyle() {
-			return QueueStyle.MPSC;
+		public QueueType getQueueType() {
+			return QueueType.MPSC;
 		}
 	}
 
@@ -240,15 +240,15 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 	 */
 	public static class Builder {
 
-		private final QueueStyle style;
+		private final QueueType type;
 		private String queueName = null;
 		private StartMode mode = StartMode.Auto;
 		private WaitingStrategy strategy = WaitingStrategy.Spin;
 		private long sleepMillis = 4;
 		private int capacity = 32;
 
-		private Builder(QueueStyle style) {
-			this.style = style;
+		private Builder(QueueType type) {
+			this.type = type;
 		}
 
 		public Builder setQueueName(String queueName) {
@@ -279,7 +279,7 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 		}
 
 		public final <E> JctSingleConsumerQueue<E> buildWithProcessor(Processor<E> processor) {
-			switch (style) {
+			switch (type) {
 			case SPSC:
 				return new JctSpscQueue<>(queueName, capacity, mode, strategy, sleepMillis, processor);
 			case MPSC:
@@ -288,7 +288,6 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> {
 				throw new IllegalArgumentException("Error enum item");
 			}
 		}
-
 	}
 
 }

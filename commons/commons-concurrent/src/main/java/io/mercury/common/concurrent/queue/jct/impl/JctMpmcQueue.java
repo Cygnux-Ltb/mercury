@@ -3,7 +3,7 @@ package io.mercury.common.concurrent.queue.jct.impl;
 import org.jctools.queues.MpmcArrayQueue;
 
 import io.mercury.common.concurrent.queue.MultiConsumerQueue;
-import io.mercury.common.concurrent.queue.QueueStyle;
+import io.mercury.common.concurrent.queue.QueueType;
 
 public final class JctMpmcQueue<E> implements MultiConsumerQueue<E> {
 
@@ -34,8 +34,8 @@ public final class JctMpmcQueue<E> implements MultiConsumerQueue<E> {
 	}
 
 	@Override
-	public QueueStyle getQueueStyle() {
-		return QueueStyle.MPMC;
+	public QueueType getQueueType() {
+		return QueueType.MPMC;
 	}
 
 }

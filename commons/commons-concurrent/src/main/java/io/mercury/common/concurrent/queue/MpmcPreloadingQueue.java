@@ -98,8 +98,8 @@ public class MpmcPreloadingQueue<E> implements MultiConsumerQueue<E> {
 	}
 
 	@Override
-	public QueueStyle getQueueStyle() {
-		return QueueStyle.MPMC;
+	public QueueType getQueueType() {
+		return QueueType.MPMC;
 	}
 
 }
