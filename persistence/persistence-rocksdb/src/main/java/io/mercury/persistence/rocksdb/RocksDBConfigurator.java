@@ -1,6 +1,6 @@
 package io.mercury.persistence.rocksdb;
 
-import static io.mercury.common.util.StringUtil.fixPath;
+import static io.mercury.common.util.StringSupport.fixPath;
 
 import java.io.File;
 

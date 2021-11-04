@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.sys.SysProperties;
 import io.mercury.common.util.Assertor;
-import io.mercury.common.util.StringUtil;
+import io.mercury.common.util.StringSupport;
 
 public final class H2Util {
 
@@ -28,7 +28,7 @@ public final class H2Util {
 			dbName = dbName + ".db";
 		}
 		mkdirInHome(dir);
-		return JdbcProtocol + StringUtil.fixPath(SysProperties.USER_HOME) + StringUtil.fixPath(dir) + dbName;
+		return JdbcProtocol + StringSupport.fixPath(SysProperties.USER_HOME) + StringSupport.fixPath(dir) + dbName;
 	}
 
 	public static final <T> List<T> query(@Nonnull Connection connection, @Nonnull String sql,
