@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.concurrent.queue.SingleConsumerQueue;
+import io.mercury.common.concurrent.queue.AbstractSingleConsumerQueue;
 import io.mercury.common.concurrent.queue.jct.JctSingleConsumerQueue;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
@@ -83,7 +83,7 @@ public final class SocketSender extends TransportComponent implements Sender<byt
 		}
 	}
 
-	private SingleConsumerQueue<byte[]> innerQueue = JctSingleConsumerQueue.multiProducer(getName() + "-InnerQueue")
+	private AbstractSingleConsumerQueue<byte[]> innerQueue = JctSingleConsumerQueue.multiProducer(getName() + "-InnerQueue")
 			.setCapacity(512).buildWithProcessor(bytes -> processSendQueue(bytes));
 
 	public static void main(String[] args) throws IOException {
