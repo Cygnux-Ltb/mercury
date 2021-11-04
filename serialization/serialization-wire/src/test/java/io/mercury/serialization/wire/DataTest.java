@@ -4,8 +4,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import io.mercury.common.log.CommonLogConfigurator;
-import io.mercury.common.log.CommonLogConfigurator.LogLevel;
+import io.mercury.common.log.LogConfigurator;
+import io.mercury.common.log.LogConfigurator.LogLevel;
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.wire.WireOut;
 import net.openhft.chronicle.wire.YamlWire;
@@ -13,7 +13,7 @@ import net.openhft.chronicle.wire.YamlWire;
 public class DataTest {
 	
 	static {
-		CommonLogConfigurator.setLogLevel(LogLevel.ERROR);
+		LogConfigurator.setLogLevel(LogLevel.ERROR);
 	}
 
 	@Test
