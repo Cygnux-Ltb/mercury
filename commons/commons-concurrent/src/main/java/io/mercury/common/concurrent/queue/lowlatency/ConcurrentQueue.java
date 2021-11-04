@@ -8,6 +8,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import javax.annotation.concurrent.ThreadSafe;
+
 /**
  * A low latency, lock free, Object bounded blocking queue backed by an
  * Object[]. Unlike the other classes in this package thi class implements
@@ -153,7 +155,9 @@ import java.util.concurrent.TimeoutException;
  * @author Rob Austin
  * @since 1.1
  */
-public final class ConcurrentBlockingQueue<E> extends BaseConcurrentBlockingQueue implements BlockingQueue<E> {
+
+@ThreadSafe
+public final class ConcurrentQueue<E> extends AbstractConcurrentQueue implements BlockingQueue<E> {
 
 	// intentionally not volatile, as we are carefully ensuring that the memory
 	// barriers are controlled below by other objects
@@ -163,22 +167,22 @@ public final class ConcurrentBlockingQueue<E> extends BaseConcurrentBlockingQueu
 	/**
 	 * Creates an BlockingQueue with the default capacity of 1024
 	 */
-	public ConcurrentBlockingQueue() {
+	public ConcurrentQueue() {
 
 	}
 
 	/**
 	 * @param capacity Creates an BlockingQueue with the given (fixed) capacity
 	 */
-	public ConcurrentBlockingQueue(int capacity) {
+	public ConcurrentQueue(int capacity) {
 		super(capacity);
 	}
 
-	public ConcurrentBlockingQueue(int capacity, boolean b) {
+	public ConcurrentQueue(int capacity, boolean b) {
 		super(capacity);
 	}
 
-	public ConcurrentBlockingQueue(int capacity, boolean b, Collection<Integer> elements) {
+	public ConcurrentQueue(int capacity, boolean b, Collection<Integer> elements) {
 		super(capacity);
 	}
 

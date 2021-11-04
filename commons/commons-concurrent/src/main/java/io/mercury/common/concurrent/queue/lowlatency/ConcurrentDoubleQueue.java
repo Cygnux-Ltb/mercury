@@ -3,6 +3,8 @@ package io.mercury.common.concurrent.queue.lowlatency;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import javax.annotation.concurrent.ThreadSafe;
+
 /**
  * A low latency, lock free, primitive bounded blocking queue backed by an
  * double[]. This class mimics the interface of
@@ -151,7 +153,9 @@ import java.util.concurrent.TimeoutException;
  * @author Rob Austin
  * @since 1.1
  */
-public final class ConcurrentBlockingDoubleQueue extends BaseConcurrentBlockingQueue {
+
+@ThreadSafe
+public final class ConcurrentDoubleQueue extends AbstractConcurrentQueue {
 
 	// intentionally not volatile, as we are carefully ensuring that the memory
 	// barriers are controlled below by other objects
@@ -160,14 +164,14 @@ public final class ConcurrentBlockingDoubleQueue extends BaseConcurrentBlockingQ
 	/**
 	 * Creates an BlockingQueue with the default capacity of 1024
 	 */
-	public ConcurrentBlockingDoubleQueue() {
+	public ConcurrentDoubleQueue() {
 
 	}
 
 	/**
 	 * @param capacity Creates an BlockingQueue with the given (fixed) capacity
 	 */
-	public ConcurrentBlockingDoubleQueue(int capacity) {
+	public ConcurrentDoubleQueue(int capacity) {
 		super(capacity);
 	}
 

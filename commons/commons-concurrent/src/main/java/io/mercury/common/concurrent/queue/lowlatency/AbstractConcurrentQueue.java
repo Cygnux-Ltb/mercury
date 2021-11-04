@@ -26,7 +26,7 @@ import java.util.concurrent.TimeoutException;
  * @since 1.1
  */
 
-public abstract class BaseConcurrentBlockingQueue {
+public abstract class AbstractConcurrentQueue {
 
 	private static final long READ_LOCATION_OFFSET;
 	private static final long WRITE_LOCATION_OFFSET;
@@ -38,9 +38,9 @@ public abstract class BaseConcurrentBlockingQueue {
 			field.setAccessible(true);
 			Unsafe = (Unsafe) field.get(null);
 			READ_LOCATION_OFFSET = Unsafe
-					.objectFieldOffset(BaseConcurrentBlockingQueue.class.getDeclaredField("readLocation"));
+					.objectFieldOffset(AbstractConcurrentQueue.class.getDeclaredField("readLocation"));
 			WRITE_LOCATION_OFFSET = Unsafe
-					.objectFieldOffset(BaseConcurrentBlockingQueue.class.getDeclaredField("writeLocation"));
+					.objectFieldOffset(AbstractConcurrentQueue.class.getDeclaredField("writeLocation"));
 		} catch (Exception e) {
 			throw new AssertionError(e);
 		}
@@ -66,7 +66,7 @@ public abstract class BaseConcurrentBlockingQueue {
 	/**
 	 * @param capacity Creates an BlockingQueue with the given (fixed) capacity
 	 */
-	public BaseConcurrentBlockingQueue(int capacity) {
+	protected AbstractConcurrentQueue(int capacity) {
 		if (capacity == 0)
 			throw new IllegalArgumentException();
 		this.capacity = capacity + 1;
@@ -75,7 +75,7 @@ public abstract class BaseConcurrentBlockingQueue {
 	/**
 	 * Creates an BlockingQueue with the default capacity of 1024
 	 */
-	public BaseConcurrentBlockingQueue() {
+	protected AbstractConcurrentQueue() {
 		this.capacity = 1024;
 	}
 
@@ -189,7 +189,6 @@ public abstract class BaseConcurrentBlockingQueue {
 		final int nextWriteLocation = (writeLocation + 1 == capacity) ? 0 : writeLocation + 1;
 
 		if (nextWriteLocation == capacity) {
-
 			if (readLocation == 0)
 				throw new IllegalStateException("queue is full");
 
@@ -217,21 +216,16 @@ public abstract class BaseConcurrentBlockingQueue {
 		final int nextWriteLocation = (writeLocation + 1 == capacity) ? 0 : writeLocation + 1;
 
 		if (nextWriteLocation == capacity)
-
 			while (readLocation == 0) {
-
 				if (Thread.interrupted())
 					throw new InterruptedException();
 
 				// // this condition handles the case where writer has caught up with the read,
 				// we will wait for a read, ( which will cause a change on the read location )
 				blockAtAdd();
-
 			}
 		else
-
 			while (nextWriteLocation == readLocation) {
-
 				if (Thread.interrupted())
 					throw new InterruptedException();
 
@@ -240,7 +234,6 @@ public abstract class BaseConcurrentBlockingQueue {
 				// blocks as our backing array is full, we will wait for a read, ( which will
 				// cause a change on the read location )
 				blockAtAdd();
-
 			}
 		return nextWriteLocation;
 	}
@@ -250,23 +243,19 @@ public abstract class BaseConcurrentBlockingQueue {
 	 * @return the next write location
 	 */
 	protected int blockForWriteSpace(int writeLocation) {
-
 		// we want to minimize the number of volatile reads, so we read the
 		// writeLocation just once.
 
 		// sets the nextWriteLocation my moving it on by 1, this may cause it it wrap
 		// back to the start.
 		final int nextWriteLocation = (writeLocation + 1 == capacity) ? 0 : writeLocation + 1;
-
 		if (nextWriteLocation == capacity)
-
 			while (readLocation == 0)
 				// // this condition handles the case where writer has caught up with the read,
 				// we will wait for a read, ( which will cause a change on the read location )
 				blockAtAdd();
 
 		else
-
 			while (nextWriteLocation == readLocation)
 				// this condition handles the case general case where the read is at the start
 				// of the backing array and we are at the end,
