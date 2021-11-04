@@ -9,9 +9,9 @@ import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
 
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.concurrent.queue.SingleConsumerQueue;
+import io.mercury.common.concurrent.queue.AbstractSingleConsumerQueue;
 import io.mercury.common.concurrent.queue.jct.JctSingleConsumerQueue;
-import io.mercury.common.util.StringUtil;
+import io.mercury.common.util.StringSupport;
 
 /**
  * 
@@ -23,15 +23,16 @@ import io.mercury.common.util.StringUtil;
 @ThreadSafe
 public final class AsyncCacheMap<K, V> {
 
-	private final MutableMap<K, V> mutableMap = MutableMaps.newUnifiedMap(Capacity.L08_SIZE);
+	private final MutableMap<K, V> mutableMap = MutableMaps.newUnifiedMap(Capacity.L08_SIZE.value());
 
-	private final MutableLongObjectMap<Consumer<V>> consumerMap = MutableMaps.newLongObjectHashMap(Capacity.L07_SIZE);
+	private final MutableLongObjectMap<Consumer<V>> consumerMap = MutableMaps
+			.newLongObjectHashMap(Capacity.L07_SIZE.value());
 
 	private final String cacheName;
 
-	private final SingleConsumerQueue<ExecEvent> execQueue;
+	private final AbstractSingleConsumerQueue<ExecEvent> execQueue;
 
-	private final SingleConsumerQueue<QueryResult> queryQueue;
+	private final AbstractSingleConsumerQueue<QueryResult> queryQueue;
 
 	// private ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -66,7 +67,7 @@ public final class AsyncCacheMap<K, V> {
 	}
 
 	public AsyncCacheMap(String cacheName) {
-		this.cacheName = StringUtil.isNullOrEmpty(cacheName) ? "AsyncCacheMap-" + hashCode() : cacheName;
+		this.cacheName = StringSupport.isNullOrEmpty(cacheName) ? "AsyncCacheMap-" + hashCode() : cacheName;
 		this.execQueue = JctSingleConsumerQueue.multiProducer(this.cacheName + "-ExecQueue").setCapacity(64)
 				.buildWithProcessor(event -> asyncExec(event));
 		this.queryQueue = JctSingleConsumerQueue.multiProducer(this.cacheName + "-QueryQueue").setCapacity(64)
