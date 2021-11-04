@@ -9,8 +9,8 @@ import com.lmax.disruptor.dsl.ProducerType;
 
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.queue.LoadContainer;
-import io.mercury.common.concurrent.queue.QueueStyle;
-import io.mercury.common.concurrent.queue.SingleConsumerQueue;
+import io.mercury.common.concurrent.queue.QueueType;
+import io.mercury.common.concurrent.queue.AbstractSingleConsumerQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.SleepSupport;
@@ -22,7 +22,7 @@ import io.mercury.common.thread.Threads;
  *
  * @param <T>
  */
-public class SpscQueue<T> extends SingleConsumerQueue<T> {
+public class SpscQueue<T> extends AbstractSingleConsumerQueue<T> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(SpscQueue.class);
 
@@ -42,7 +42,7 @@ public class SpscQueue<T> extends SingleConsumerQueue<T> {
 			WaitStrategyOption option) {
 		super(processor);
 		if (queueName != null)
-			super.queueName = queueName;
+			super.name = queueName;
 		// if (queueSize == 0 || queueSize % 2 != 0)
 		// throw new IllegalArgumentException("queueSize set error...");
 		this.disruptor = new Disruptor<>(
@@ -51,8 +51,7 @@ public class SpscQueue<T> extends SingleConsumerQueue<T> {
 				// 队列容量
 				bufferSize.value(),
 				// 实现ThreadFactory的Lambda
-				(Runnable runnable) -> Threads.newMaxPriorityThread("Disruptor-" + super.queueName + "-WorkingThread",
-						runnable),
+				(Runnable runnable) -> Threads.newMaxPriorityThread(this.name + "-WorkingThread", runnable),
 				// DaemonThreadFactory.INSTANCE,
 				// 生产者策略, 使用单生产者
 				ProducerType.SINGLE,
@@ -136,8 +135,8 @@ public class SpscQueue<T> extends SingleConsumerQueue<T> {
 	}
 
 	@Override
-	public QueueStyle getQueueStyle() {
-		return QueueStyle.SPSC;
+	public QueueType getQueueType() {
+		return QueueType.SPSC;
 	}
 
 }

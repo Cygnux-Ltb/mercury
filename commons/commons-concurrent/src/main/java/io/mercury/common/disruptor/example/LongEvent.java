@@ -2,7 +2,6 @@ package io.mercury.common.disruptor.example;
 
 import java.nio.ByteBuffer;
 
-import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 
 public class LongEvent {
@@ -18,11 +17,10 @@ public class LongEvent {
 		return value;
 	}
 
-
 	public static final EventHandler<LongEvent> EventHandler = (event, sequence, endOfBatch) -> {
 		System.out.println("event value -> " + event.getValue());
 	};
-	
+
 	public static void handleEvent(LongEvent event, long sequence, boolean endOfBatch) {
 		System.out.println(event);
 	}

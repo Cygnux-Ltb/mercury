@@ -6,6 +6,7 @@ import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.BusySpinWaitStrategy;
 import com.lmax.disruptor.LiteBlockingWaitStrategy;
 import com.lmax.disruptor.LiteTimeoutBlockingWaitStrategy;
+import com.lmax.disruptor.PhasedBackoffWaitStrategy;
 import com.lmax.disruptor.SleepingWaitStrategy;
 import com.lmax.disruptor.TimeoutBlockingWaitStrategy;
 import com.lmax.disruptor.WaitStrategy;
@@ -25,15 +26,15 @@ final class WaitStrategyFactory {
 		case LiteBlocking:
 			return new LiteBlockingWaitStrategy();
 		case TimeoutBlocking:
-			return new TimeoutBlockingWaitStrategy(5, TimeUnit.MICROSECONDS);
+			return new TimeoutBlockingWaitStrategy(10, TimeUnit.MICROSECONDS);
 		case LiteTimeoutBlocking:
-			return new LiteTimeoutBlockingWaitStrategy(5, TimeUnit.MICROSECONDS);
+			return new LiteTimeoutBlockingWaitStrategy(10, TimeUnit.MICROSECONDS);
 		case Sleeping:
 			return new SleepingWaitStrategy();
 		case Yielding:
 			return new YieldingWaitStrategy();
 		case PhasedBackoff:
-			throw new UnsupportedOperationException("PhasedBackoffWaitStrategy does not support.");
+			return new PhasedBackoffWaitStrategy(10, 20, TimeUnit.MICROSECONDS, new LiteBlockingWaitStrategy());
 		default:
 			throw new RuntimeException("option -> (" + option + ") does not support.");
 		}

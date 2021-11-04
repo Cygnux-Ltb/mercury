@@ -11,14 +11,14 @@ import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 
 import io.mercury.common.collections.Capacity;
-import io.mercury.common.concurrent.queue.QueueStyle;
-import io.mercury.common.concurrent.queue.SingleConsumerQueue;
+import io.mercury.common.concurrent.queue.QueueType;
+import io.mercury.common.concurrent.queue.AbstractSingleConsumerQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
 
-public class SpscQueueWithSupplier<T> extends SingleConsumerQueue<T> {
+public class SpscQueueWithSupplier<T> extends AbstractSingleConsumerQueue<T> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(SpscQueueWithSupplier.class);
 
@@ -39,8 +39,7 @@ public class SpscQueueWithSupplier<T> extends SingleConsumerQueue<T> {
 				// 队列容量
 				capacity.value(),
 				// 实现ThreadFactory的Lambda
-				(Runnable runnable) -> Threads
-						.newMaxPriorityThread("DisruptorQueue-" + super.queueName + "-WorkingThread", runnable),
+				(Runnable runnable) -> Threads.newMaxPriorityThread(super.name + "-WorkingThread", runnable),
 				// DaemonThreadFactory.INSTANCE,
 				// 生产者策略, 使用单生产者
 				ProducerType.SINGLE,
@@ -105,7 +104,7 @@ public class SpscQueueWithSupplier<T> extends SingleConsumerQueue<T> {
 
 	@Override
 	public String getQueueName() {
-		return queueName;
+		return name;
 	}
 
 	@Override
@@ -114,8 +113,8 @@ public class SpscQueueWithSupplier<T> extends SingleConsumerQueue<T> {
 	}
 
 	@Override
-	public QueueStyle getQueueStyle() {
-		return QueueStyle.SPSC;
+	public QueueType getQueueType() {
+		return QueueType.SPSC;
 	}
 
 	public static void main(String[] args) {
