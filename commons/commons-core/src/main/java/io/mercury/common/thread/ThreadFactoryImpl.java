@@ -3,13 +3,13 @@ package io.mercury.common.thread;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class CommonThreadFactory implements ThreadFactory {
+public class ThreadFactoryImpl implements ThreadFactory {
 
 	private final String name;
 
 	private final AtomicInteger incr = new AtomicInteger();
 
-	public CommonThreadFactory(String name) {
+	public ThreadFactoryImpl(String name) {
 		this.name = name;
 	}
 

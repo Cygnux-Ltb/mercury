@@ -34,7 +34,7 @@ public final class ShutdownHooks {
 	 * 
 	 * @param task
 	 */
-	public static synchronized void addShutdownHookSubTask(Runnable task) {
+	public static synchronized void addSubTask(Runnable task) {
 		INSTANCE.shutdownTasks.add(task);
 	}
 
@@ -48,9 +48,9 @@ public final class ShutdownHooks {
 	}
 
 	public static Thread addShutdownHook(String threadName, Runnable hook) {
-		Thread hookThread = Threads.newThread(threadName, hook);
-		Runtime.getRuntime().addShutdownHook(hookThread);
-		return hookThread;
+		var thread = Threads.newThread(threadName, hook);
+		Runtime.getRuntime().addShutdownHook(thread);
+		return thread;
 	}
 
 	/**
@@ -58,7 +58,7 @@ public final class ShutdownHooks {
 	 * @param closeable
 	 */
 	public static void closeResourcesWhenShutdown(Closeable closeable) {
-		addShutdownHookSubTask(() -> {
+		addSubTask(() -> {
 			try {
 				closeable.close();
 			} catch (IOException e) {
@@ -69,14 +69,14 @@ public final class ShutdownHooks {
 
 	public static void main(String[] args) {
 
-		ShutdownHooks.addShutdownHookSubTask(new Thread(() -> System.out.println("关闭钩子1")));
-		ShutdownHooks.addShutdownHookSubTask(new Thread(() -> System.out.println("关闭钩子2")));
-		ShutdownHooks.addShutdownHookSubTask(new Thread(() -> System.out.println("关闭钩子3")));
-		ShutdownHooks.addShutdownHookSubTask(new Thread(() -> System.out.println("关闭钩子4")));
-		ShutdownHooks.addShutdownHookSubTask(new Thread(() -> System.out.println("关闭钩子5")));
-		ShutdownHooks.addShutdownHookSubTask(new Thread(() -> System.out.println("关闭钩子6")));
-		ShutdownHooks.addShutdownHookSubTask(new Thread(() -> System.out.println("关闭钩子7")));
-		ShutdownHooks.addShutdownHookSubTask(new Thread(() -> System.out.println("关闭钩子8")));
+		ShutdownHooks.addSubTask(new Thread(() -> System.out.println("关闭钩子1")));
+		ShutdownHooks.addSubTask(new Thread(() -> System.out.println("关闭钩子2")));
+		ShutdownHooks.addSubTask(new Thread(() -> System.out.println("关闭钩子3")));
+		ShutdownHooks.addSubTask(new Thread(() -> System.out.println("关闭钩子4")));
+		ShutdownHooks.addSubTask(new Thread(() -> System.out.println("关闭钩子5")));
+		ShutdownHooks.addSubTask(new Thread(() -> System.out.println("关闭钩子6")));
+		ShutdownHooks.addSubTask(new Thread(() -> System.out.println("关闭钩子7")));
+		ShutdownHooks.addSubTask(new Thread(() -> System.out.println("关闭钩子8")));
 
 	}
 

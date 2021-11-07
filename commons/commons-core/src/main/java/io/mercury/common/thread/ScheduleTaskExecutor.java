@@ -243,9 +243,9 @@ public final class ScheduleTaskExecutor {
 	}
 
 	/**
-	 * MultipleThreadExecutor 线程数为: 核心数量 + 核心数量 * 1/2
+	 * MultiThreadExecutor 线程数为: 核心数量 + 核心数量 * 1/2
 	 */
-	private static final ScheduledExecutorService MultipleThreadExecutor = Executors.newScheduledThreadPool(
+	private static final ScheduledExecutorService MultiThreadExecutor = Executors.newScheduledThreadPool(
 			CurrentRuntime.availableProcessors() + CurrentRuntime.availableProcessors() / 2,
 			runnable -> new Thread(runnable, "MultipleThreadScheduledExecutor"));
 
@@ -256,8 +256,8 @@ public final class ScheduleTaskExecutor {
 	 * @param firstTime
 	 * @param runnable
 	 */
-	public static void multipleThreadSchedule(LocalDateTime firstTime, Runnable runnable) {
-		multipleThreadSchedule(Duration.between(LocalDateTime.now(), firstTime).toMillis(), TimeUnit.MILLISECONDS,
+	public static void multiThreadSchedule(LocalDateTime firstTime, Runnable runnable) {
+		multiThreadSchedule(Duration.between(LocalDateTime.now(), firstTime).toMillis(), TimeUnit.MILLISECONDS,
 				runnable);
 	}
 
@@ -269,8 +269,8 @@ public final class ScheduleTaskExecutor {
 	 * @param unit
 	 * @param runnable
 	 */
-	public static void multipleThreadSchedule(long delay, TimeUnit unit, Runnable runnable) {
-		MultipleThreadExecutor.schedule(runnable, delay, unit);
+	public static void multiThreadSchedule(long delay, TimeUnit unit, Runnable runnable) {
+		MultiThreadExecutor.schedule(runnable, delay, unit);
 	}
 
 	/**
@@ -288,9 +288,9 @@ public final class ScheduleTaskExecutor {
 	 * @param unit
 	 * @param runnable
 	 */
-	public static void multipleThreadScheduleWithFixedDelay(LocalDateTime firstTime, long period, TimeUnit unit,
+	public static void multiThreadScheduleWithFixedDelay(LocalDateTime firstTime, long period, TimeUnit unit,
 			Runnable runnable) {
-		multipleThreadScheduleWithFixedDelay(Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+		multiThreadScheduleWithFixedDelay(Duration.between(LocalDateTime.now(), firstTime).toMillis(),
 				unit.toMillis(period), TimeUnit.MILLISECONDS, runnable);
 	}
 
@@ -309,8 +309,8 @@ public final class ScheduleTaskExecutor {
 	 * @param unit
 	 * @param runnable
 	 */
-	public static void multipleThreadScheduleWithFixedDelay(long delay, long period, TimeUnit unit, Runnable runnable) {
-		MultipleThreadExecutor.scheduleWithFixedDelay(runnable, delay, period, unit);
+	public static void multiThreadScheduleWithFixedDelay(long delay, long period, TimeUnit unit, Runnable runnable) {
+		MultiThreadExecutor.scheduleWithFixedDelay(runnable, delay, period, unit);
 	}
 
 	/**
@@ -329,9 +329,9 @@ public final class ScheduleTaskExecutor {
 	 * @param unit
 	 * @param runnable
 	 */
-	public static void multipleThreadScheduleAtFixedRate(LocalDateTime firstTime, long period, TimeUnit unit,
+	public static void multiThreadScheduleAtFixedRate(LocalDateTime firstTime, long period, TimeUnit unit,
 			Runnable runnable) {
-		multipleThreadScheduleAtFixedRate(Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+		multiThreadScheduleAtFixedRate(Duration.between(LocalDateTime.now(), firstTime).toMillis(),
 				unit.toMillis(period), TimeUnit.MILLISECONDS, runnable);
 	}
 
@@ -351,13 +351,13 @@ public final class ScheduleTaskExecutor {
 	 * @param unit
 	 * @param runnable
 	 */
-	public static void multipleThreadScheduleAtFixedRate(long delay, long period, TimeUnit unit, Runnable runnable) {
-		MultipleThreadExecutor.scheduleAtFixedRate(runnable, delay, period, unit);
+	public static void multiThreadScheduleAtFixedRate(long delay, long period, TimeUnit unit, Runnable runnable) {
+		MultiThreadExecutor.scheduleAtFixedRate(runnable, delay, period, unit);
 	}
 
 	public static void main(String[] args) {
 
-		multipleThreadScheduleAtFixedRate(LocalDateTime.of(LocalDate.now(), LocalTime.of(11, 38, 00)), 3,
+		multiThreadScheduleAtFixedRate(LocalDateTime.of(LocalDate.now(), LocalTime.of(11, 38, 00)), 3,
 				TimeUnit.SECONDS, () -> System.out.println(12345));
 
 	}

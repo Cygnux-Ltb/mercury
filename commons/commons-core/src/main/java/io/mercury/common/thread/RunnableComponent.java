@@ -35,13 +35,28 @@ public abstract class RunnableComponent {
 	protected RunnableComponent() {
 	}
 
+	/**
+	 * 
+	 * @return isRunning
+	 */
 	public boolean isRunning() {
 		return isRunning.get();
 	}
 
+	/**
+	 * 
+	 * @return isClosed
+	 */
 	public boolean isClosed() {
 		return isClosed.get();
 	}
+
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	@AbstractFunction
+	protected abstract void start0() throws Exception;
 
 	public void start() {
 		if (isRunning.compareAndSet(false, true)) {
@@ -62,7 +77,7 @@ public abstract class RunnableComponent {
 	 * @throws Exception
 	 */
 	@AbstractFunction
-	protected abstract void start0() throws Exception;
+	protected abstract void stop0() throws Exception;
 
 	public void stop() {
 		this.isRunning.set(false);
@@ -78,17 +93,15 @@ public abstract class RunnableComponent {
 		}
 	}
 
-	/**
-	 * 
-	 * @throws Exception
-	 */
-	@AbstractFunction
-	protected abstract void stop0() throws Exception;
-
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
+	@AbstractFunction
 	protected abstract String getComponentType();
 
 	protected void startWith(StartMode mode) {
@@ -101,13 +114,16 @@ public abstract class RunnableComponent {
 			break;
 		case Delay:
 			// TODO 添加延迟启动逻辑
+			break;
 		}
 	}
 
+	/**
+	 * 
+	 * @author yellow013
+	 */
 	public static enum StartMode {
-
 		Auto, Manual, Delay
-
 	}
 
 }

@@ -1,6 +1,6 @@
 package io.mercury.common.thread;
 
-public class DaemonThreadFactory extends CommonThreadFactory {
+public class DaemonThreadFactory extends ThreadFactoryImpl {
 
 	public DaemonThreadFactory(String name) {
 		super(name);
