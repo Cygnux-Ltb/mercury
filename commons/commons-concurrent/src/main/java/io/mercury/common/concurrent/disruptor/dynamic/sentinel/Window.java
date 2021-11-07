@@ -1,4 +1,4 @@
-package io.mercury.common.disruptor.dynamic.sentinel;
+package io.mercury.common.concurrent.disruptor.dynamic.sentinel;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -16,7 +16,7 @@ public class Window {
 
 	private AtomicInteger consumeCount = new AtomicInteger();
 
-	public void reSet(long secondTime) {
+	public void reset(long secondTime) {
 		this.secondTime = secondTime;
 		this.produceCount.set(0);
 		this.consumeCount.set(0);

@@ -1,4 +1,4 @@
-package io.mercury.common.disruptor;
+package io.mercury.common.concurrent.disruptor;
 
 import org.slf4j.Logger;
 
@@ -22,23 +22,23 @@ import io.mercury.common.thread.Threads;
  *
  * @param <T>
  */
-public class SpscQueue<T> extends AbstractSingleConsumerQueue<T> {
+public class RingQueue<T> extends AbstractSingleConsumerQueue<T> {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(SpscQueue.class);
+	private static final Logger log = CommonLoggerFactory.getLogger(RingQueue.class);
 
 	private final Disruptor<LoadContainer<T>> disruptor;
 
 	private final LoadContainerEventProducer producer;
 
-	public SpscQueue(String queueName, Capacity bufferSize) {
-		this(queueName, bufferSize, false, null);
+	public RingQueue(String queueName, Capacity size) {
+		this(queueName, size, false, null);
 	}
 
-	public SpscQueue(String queueName, Capacity bufferSize, boolean autoRun, Processor<T> processor) {
+	public RingQueue(String queueName, Capacity bufferSize, boolean autoRun, Processor<T> processor) {
 		this(queueName, bufferSize, autoRun, processor, WaitStrategyOption.BusySpin);
 	}
 
-	public SpscQueue(String queueName, Capacity bufferSize, boolean autoRun, Processor<T> processor,
+	public RingQueue(String queueName, Capacity bufferSize, boolean autoRun, Processor<T> processor,
 			WaitStrategyOption option) {
 		super(processor);
 		if (queueName != null)
@@ -76,14 +76,15 @@ public class SpscQueue<T> extends AbstractSingleConsumerQueue<T> {
 
 		private final RingBuffer<LoadContainer<T>> ringBuffer;
 
-		private EventTranslatorOneArg<LoadContainer<T>, T> eventTranslator = (event, sequence, t) -> event.loading(t);
+		private final EventTranslatorOneArg<LoadContainer<T>, T> translator = (container, sequence, t) -> container
+				.loading(t);
 
 		private LoadContainerEventProducer(RingBuffer<LoadContainer<T>> ringBuffer) {
 			this.ringBuffer = ringBuffer;
 		}
 
 		private void onEvent(T t) {
-			ringBuffer.publishEvent(eventTranslator, t);
+			ringBuffer.publishEvent(translator, t);
 		}
 	}
 
@@ -107,15 +108,13 @@ public class SpscQueue<T> extends AbstractSingleConsumerQueue<T> {
 
 	@Override
 	protected void stop0() {
-		while (disruptor.getBufferSize() != 0)
-			SleepSupport.sleep(1);
 		disruptor.shutdown();
 		log.info("Call shutdown() function success, disruptor is shutdown.");
 	}
 
 	public static void main(String[] args) {
 
-		SpscQueue<Integer> queue = new SpscQueue<>("Test-Queue", Capacity.L06_SIZE, true, in -> System.out.println(in));
+		RingQueue<Integer> queue = new RingQueue<>("Test-Queue", Capacity.L06_SIZE, true, in -> System.out.println(in));
 
 		Threads.startNewThread(() -> {
 			int i = 0;

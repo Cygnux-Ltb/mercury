@@ -1,4 +1,4 @@
-package io.mercury.common.disruptor.dynamic.sentinel;
+package io.mercury.common.concurrent.disruptor.dynamic.sentinel;
 
 /**
  * @Author : Rookiex
@@ -8,6 +8,6 @@ package io.mercury.common.disruptor.dynamic.sentinel;
  */
 public interface SentinelListener {
 	
-    void notice(SentinelEvent sentinelEvent);
+    void notice(SentinelEvent event);
     
 }

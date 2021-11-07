@@ -1,7 +1,7 @@
-package io.mercury.common.disruptor.dynamic.strategy;
+package io.mercury.common.concurrent.disruptor.dynamic.strategy;
 
-import io.mercury.common.disruptor.dynamic.DynamicDisruptor;
-import io.mercury.common.disruptor.dynamic.sentinel.SentinelEvent;
+import io.mercury.common.concurrent.disruptor.dynamic.DynamicDisruptor;
+import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelEvent;
 
 /**
  * @Author : Rookiex

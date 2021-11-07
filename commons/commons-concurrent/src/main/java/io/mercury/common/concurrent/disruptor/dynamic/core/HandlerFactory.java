@@ -1,6 +1,6 @@
-package io.mercury.common.disruptor.dynamic.core;
+package io.mercury.common.concurrent.disruptor.dynamic.core;
 
-import io.mercury.common.disruptor.dynamic.sentinel.SentinelClient;
+import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelClient;
 
 /**
  * @Author : Rookiex

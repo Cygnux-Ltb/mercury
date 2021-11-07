@@ -1,4 +1,4 @@
-package io.mercury.common.disruptor.dynamic.core;
+package io.mercury.common.concurrent.disruptor.dynamic.core;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -6,9 +6,9 @@ import com.lmax.disruptor.LifecycleAware;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.WorkHandler;
 
-import io.mercury.common.disruptor.dynamic.sentinel.ConsumeStatusInfo;
-import io.mercury.common.disruptor.dynamic.sentinel.SentinelClient;
-import io.mercury.common.disruptor.dynamic.sentinel.ThreadStatusInfo;
+import io.mercury.common.concurrent.disruptor.dynamic.sentinel.ConsumeStatusInfo;
+import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelClient;
+import io.mercury.common.concurrent.disruptor.dynamic.sentinel.ThreadStatusInfo;
 
 /**
  * @Author : Rookiex

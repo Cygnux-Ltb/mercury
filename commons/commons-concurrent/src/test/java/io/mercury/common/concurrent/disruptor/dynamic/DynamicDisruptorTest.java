@@ -3,7 +3,7 @@ package io.mercury.common.concurrent.disruptor.dynamic;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.mercury.common.disruptor.dynamic.example.ExampleDisruptorServer;
+import io.mercury.common.concurrent.disruptor.dynamic.example.ExampleDisruptorServer;
 
 import java.util.concurrent.CountDownLatch;
 

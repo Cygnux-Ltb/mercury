@@ -1,4 +1,4 @@
-package io.mercury.common.disruptor.dynamic;
+package io.mercury.common.concurrent.disruptor.dynamic;
 
 
 import java.util.concurrent.ExecutorService;
@@ -17,15 +17,15 @@ import com.lmax.disruptor.WorkProcessor;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ExceptionHandlerWrapper;
 
-import io.mercury.common.disruptor.dynamic.core.AbstractSentinelHandler;
-import io.mercury.common.disruptor.dynamic.core.DynamicConsumer;
-import io.mercury.common.disruptor.dynamic.core.HandlerEvent;
-import io.mercury.common.disruptor.dynamic.core.HandlerFactory;
-import io.mercury.common.disruptor.dynamic.sentinel.SentinelClient;
-import io.mercury.common.disruptor.dynamic.sentinel.SentinelEvent;
-import io.mercury.common.disruptor.dynamic.sentinel.SentinelListener;
-import io.mercury.common.disruptor.dynamic.strategy.PIDStrategy;
-import io.mercury.common.disruptor.dynamic.strategy.RegulateStrategy;
+import io.mercury.common.concurrent.disruptor.dynamic.core.AbstractSentinelHandler;
+import io.mercury.common.concurrent.disruptor.dynamic.core.DynamicConsumer;
+import io.mercury.common.concurrent.disruptor.dynamic.core.HandlerEvent;
+import io.mercury.common.concurrent.disruptor.dynamic.core.HandlerFactory;
+import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelClient;
+import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelEvent;
+import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelListener;
+import io.mercury.common.concurrent.disruptor.dynamic.strategy.PIDStrategy;
+import io.mercury.common.concurrent.disruptor.dynamic.strategy.RegulateStrategy;
 
 /**
  * @Author : Rookiex
@@ -85,7 +85,7 @@ public class DynamicDisruptor implements DynamicConsumer, SentinelListener {
 	private AbstractSentinelHandler[] handlers;
 
 	/**
-	 * 和processor,handler一一对应,标识位置上是否空闲,用Atomic封装了cas操作
+	 * 和processor,handler一一对应,标识位置上是否空闲,用Atomic封装了CAS操作
 	 */
 	private AtomicIntegerArray availableArray;
 

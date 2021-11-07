@@ -1,4 +1,4 @@
-package io.mercury.common.disruptor.example;
+package io.mercury.common.concurrent.disruptor.example;
 
 import java.nio.ByteBuffer;
 

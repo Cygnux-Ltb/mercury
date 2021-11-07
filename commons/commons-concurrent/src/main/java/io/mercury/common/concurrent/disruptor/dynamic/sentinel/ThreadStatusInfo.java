@@ -1,4 +1,4 @@
-package io.mercury.common.disruptor.dynamic.sentinel;
+package io.mercury.common.concurrent.disruptor.dynamic.sentinel;
 
 /**
  * @Author : Rookiex

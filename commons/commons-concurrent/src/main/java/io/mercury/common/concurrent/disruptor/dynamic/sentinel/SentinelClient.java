@@ -1,4 +1,4 @@
-package io.mercury.common.disruptor.dynamic.sentinel;
+package io.mercury.common.concurrent.disruptor.dynamic.sentinel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +120,7 @@ public class SentinelClient implements ThreadStatusInfo, ConsumeStatusInfo {
 				if (updateLock.tryLock()) {
 					try {
 						if (time > old.getSecondTime()) {
-							old.reSet(time);
+							old.reset(time);
 							break;
 						}
 					} finally {

@@ -1,4 +1,4 @@
-package io.mercury.common.disruptor;
+package io.mercury.common.concurrent.disruptor;
 
 import java.util.function.Supplier;
 
@@ -14,7 +14,7 @@ public interface RingEvent {
 
 		private int value;
 
-		private RingInt() {
+		public RingInt() {
 		}
 
 		public int getValue() {
@@ -35,7 +35,7 @@ public interface RingEvent {
 
 		private long value;
 
-		private RingLong() {
+		public RingLong() {
 		}
 
 		public long getValue() {
@@ -56,7 +56,7 @@ public interface RingEvent {
 
 		private double value;
 
-		private RingDouble() {
+		public RingDouble() {
 		}
 
 		public double getValue() {

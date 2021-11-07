@@ -1,4 +1,4 @@
-package io.mercury.common.disruptor.dynamic.core;
+package io.mercury.common.concurrent.disruptor.dynamic.core;
 
 /**
  * @Author : Rookiex

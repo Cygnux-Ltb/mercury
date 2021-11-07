@@ -1,4 +1,4 @@
-package io.mercury.common.disruptor;
+package io.mercury.common.concurrent.disruptor;
 
 import static io.mercury.common.thread.Threads.newThreadFactory;
 
@@ -11,8 +11,8 @@ import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 
 import io.mercury.common.concurrent.queue.QueueType;
+import io.mercury.common.concurrent.disruptor.RingEvent.RingInt;
 import io.mercury.common.concurrent.queue.AbstractSingleConsumerQueue;
-import io.mercury.common.disruptor.RingEvent.RingInt;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.SleepSupport;
@@ -27,29 +27,29 @@ import io.mercury.common.util.StringSupport;
  *
  * @param <T>
  */
-public class DisruptorQueue<T extends RingEvent> extends AbstractSingleConsumerQueue<T> {
+public class RingProcessChain<T extends RingEvent> extends AbstractSingleConsumerQueue<T> {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(DisruptorQueue.class);
+	private static final Logger log = CommonLoggerFactory.getLogger(RingProcessChain.class);
 
 	private final Disruptor<T> disruptor;
 
 	private final LoadContainerEventProducer producer;
 
-	public DisruptorQueue(int size, Supplier<T> eventFactory, Processor<T> processor) {
-		this("", size, false, eventFactory, processor);
+	public RingProcessChain(int size, Supplier<T> eventFactory, Processor<T> processor) {
+		this(null, size, false, eventFactory, processor);
 	}
 
-	public DisruptorQueue(String queueName, int size, Supplier<T> eventFactory, Processor<T> processor) {
+	public RingProcessChain(String queueName, int size, Supplier<T> eventFactory, Processor<T> processor) {
 		this(queueName, size, false, eventFactory, processor);
 	}
 
-	public DisruptorQueue(String queueName, int size, boolean autoRun, Supplier<T> eventFactory,
+	public RingProcessChain(String queueName, int size, boolean autoRun, Supplier<T> eventFactory,
 			Processor<T> processor) {
 		this(queueName, size, autoRun, eventFactory, processor, WaitStrategyOption.BusySpin);
 	}
 
-	public DisruptorQueue(String queueName, int size, boolean autoRun, Supplier<T> eventFactory, Processor<T> processor,
-			WaitStrategyOption option) {
+	public RingProcessChain(String queueName, int size, boolean autoRun, Supplier<T> eventFactory,
+			Processor<T> processor, WaitStrategyOption option) {
 		super(processor);
 		if (StringSupport.nonEmpty(queueName))
 			super.name = queueName;
@@ -116,26 +116,25 @@ public class DisruptorQueue<T extends RingEvent> extends AbstractSingleConsumerQ
 
 	@Override
 	protected void stop0() {
-		while (disruptor.getBufferSize() != 0)
-			SleepSupport.sleep(1);
 		disruptor.shutdown();
 		log.info("Disruptor::shutdown() func execution succeed, {} is shutdown", name);
 	}
 
 	public static void main(String[] args) {
 
-		DisruptorQueue<RingInt> queue = new DisruptorQueue<>("Test-Queue", 16, true,
-				RingInt.getEventSupplier(), (integer) -> System.out.println(integer));
+		RingProcessChain<RingInt> queue = new RingProcessChain<>("Test-Queue", 16, true, RingInt.getEventSupplier(),
+				integer -> System.out.println(integer.getValue()));
 
-		Threads.startNewThread(() -> {
+		Thread thread = Threads.startNewThread(() -> {
 			int i = 0;
 			for (;;)
-				queue.enqueue(++i);
+				queue.enqueue(new RingInt().setValue(i));
 		});
 
-		SleepSupport.sleep(8000);
+		SleepSupport.sleep(2000);
 
 		queue.stop();
+		thread.interrupt();
 
 	}
 

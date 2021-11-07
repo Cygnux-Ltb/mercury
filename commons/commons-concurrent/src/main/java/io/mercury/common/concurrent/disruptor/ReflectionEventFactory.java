@@ -1,10 +1,10 @@
-package io.mercury.common.disruptor;
+package io.mercury.common.concurrent.disruptor;
 
 import static io.mercury.common.util.JreReflection.invokeConstructor;
 
 import com.lmax.disruptor.EventFactory;
 
-import io.mercury.common.disruptor.example.LongEvent;
+import io.mercury.common.concurrent.disruptor.example.LongEvent;
 import io.mercury.common.util.JreReflection.RuntimeReflectionException;
 
 /**
@@ -50,7 +50,7 @@ public final class ReflectionEventFactory<T> implements EventFactory<T> {
 
 		newInstance.set(100);
 
-		System.out.println(newInstance.getValue());
+		System.out.println(newInstance.get());
 
 		System.out.println(newInstance.getClass());
 

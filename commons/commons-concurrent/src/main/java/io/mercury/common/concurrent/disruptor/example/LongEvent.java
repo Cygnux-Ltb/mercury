@@ -1,10 +1,12 @@
-package io.mercury.common.disruptor.example;
+package io.mercury.common.concurrent.disruptor.example;
 
 import java.nio.ByteBuffer;
 
 import com.lmax.disruptor.EventHandler;
 
-public class LongEvent {
+import io.mercury.common.concurrent.disruptor.RingEvent;
+
+public class LongEvent implements RingEvent {
 
 	private long value;
 
@@ -13,12 +15,12 @@ public class LongEvent {
 		return this;
 	}
 
-	public long getValue() {
+	public long get() {
 		return value;
 	}
 
 	public static final EventHandler<LongEvent> EventHandler = (event, sequence, endOfBatch) -> {
-		System.out.println("event value -> " + event.getValue());
+		System.out.println("event value -> " + event.get());
 	};
 
 	public static void handleEvent(LongEvent event, long sequence, boolean endOfBatch) {
