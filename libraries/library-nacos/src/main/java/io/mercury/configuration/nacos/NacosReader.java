@@ -103,7 +103,7 @@ public class NacosReader {
 			throws NacosReadException {
 		String saved = getSaved0(service, group, dataId);
 		try {
-			return PropertiesUtil.loadProperties(saved);
+			return PropertiesUtil.load(saved);
 		} catch (IOException e) {
 			throw new NacosReadException(e);
 		}

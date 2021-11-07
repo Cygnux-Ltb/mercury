@@ -11,8 +11,8 @@ import java.util.function.Consumer;
 import org.apache.commons.io.IOUtils;
 
 import io.mercury.common.collections.Capacity;
+import io.mercury.common.concurrent.disruptor.RingQueue;
 import io.mercury.common.concurrent.queue.AbstractSingleConsumerQueue;
-import io.mercury.common.disruptor.SpscQueue;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
@@ -137,7 +137,7 @@ public final class SocketTransceiver extends BaseTransceiver<String> {
 
 	@Override
 	protected AbstractSingleConsumerQueue<String> initSendQueue() {
-		return new SpscQueue<>("socket-queue", Capacity.L07_SIZE, true, (msg) -> {
+		return new RingQueue<>("socket-queue", Capacity.L07_SIZE, true, (msg) -> {
 			processSendQueue(msg);
 		});
 	}
