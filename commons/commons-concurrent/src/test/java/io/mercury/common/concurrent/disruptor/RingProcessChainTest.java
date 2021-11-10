@@ -7,18 +7,18 @@ import java.util.concurrent.atomic.LongAdder;
 import org.junit.Test;
 
 import io.mercury.common.concurrent.disruptor.example.LongEvent;
-import io.mercury.common.thread.RunnableComponent.StartMode;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
+import io.mercury.common.thread.RunnableComponent.StartMode;
 
-public class RingMulticasterTest {
+public class RingProcessChainTest {
 
 	@Test
 	public void test() {
 		var p0 = new LongAdder();
 		var p1 = new LongAdder();
 		var p2 = new LongAdder();
-		var multicaster = new RingMulticaster<LongEvent, Long>("Test-Multicaster", 32, LongEvent.class,
+		var processChain = new RingProcessChain<LongEvent, Long>("Test-Multicaster", 32, LongEvent.class,
 				WaitStrategyOption.LiteBlocking, StartMode.Auto, (LongEvent t, Long l) -> {
 					t.set(l);
 				}, event -> {
@@ -33,7 +33,7 @@ public class RingMulticasterTest {
 				});
 		Thread thread = Threads.startNewThread(() -> {
 			for (long l = 0L; l < 1000; l++)
-				multicaster.publishEvent(l);
+				processChain.publishEvent(l);
 		});
 
 		SleepSupport.sleep(2000);
@@ -47,7 +47,7 @@ public class RingMulticasterTest {
 		System.out.println("p2 - " + p2.intValue());
 		assertEquals(p2.intValue(), 1000L);
 
-		multicaster.stop();
+		processChain.stop();
 		thread.interrupt();
 	}
 

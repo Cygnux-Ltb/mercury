@@ -4,9 +4,7 @@ import java.nio.ByteBuffer;
 
 import com.lmax.disruptor.EventHandler;
 
-import io.mercury.common.concurrent.disruptor.RingEvent;
-
-public class LongEvent implements RingEvent {
+public class LongEvent {
 
 	private long value;
 

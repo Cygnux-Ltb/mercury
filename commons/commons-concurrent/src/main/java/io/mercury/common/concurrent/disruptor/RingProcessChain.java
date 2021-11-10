@@ -1,151 +1,127 @@
 package io.mercury.common.concurrent.disruptor;
 
-import static io.mercury.common.thread.Threads.newThreadFactory;
-
+import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.annotation.Nonnull;
 
 import org.slf4j.Logger;
 
-import com.lmax.disruptor.RingBuffer;
-import com.lmax.disruptor.dsl.Disruptor;
-import com.lmax.disruptor.dsl.ProducerType;
+import com.lmax.disruptor.EventFactory;
+import com.lmax.disruptor.EventHandler;
 
-import io.mercury.common.concurrent.queue.QueueType;
-import io.mercury.common.concurrent.disruptor.RingEvent.RingInt;
-import io.mercury.common.concurrent.queue.AbstractSingleConsumerQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.thread.SleepSupport;
-import io.mercury.common.thread.Threads;
-import io.mercury.common.thread.Threads.ThreadPriority;
-import io.mercury.common.util.BitOperator;
-import io.mercury.common.util.StringSupport;
+import io.mercury.common.util.Assertor;
 
 /**
  * 
  * @author yellow013
  *
- * @param <T>
+ * @param <E>
  */
-public class RingProcessChain<T extends RingEvent> extends AbstractSingleConsumerQueue<T> {
+public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(RingProcessChain.class);
 
-	private final Disruptor<T> disruptor;
-
-	private final LoadContainerEventProducer producer;
-
-	public RingProcessChain(int size, Supplier<T> eventFactory, Processor<T> processor) {
-		this(null, size, false, eventFactory, processor);
+	/**
+	 * 
+	 * @param name
+	 * @param size
+	 * @param eventType
+	 * @param option
+	 * @param mode
+	 * @param publisher
+	 * @param processors
+	 */
+	@SafeVarargs
+	public RingProcessChain(String name, int size, @Nonnull Class<E> eventType, @Nonnull WaitStrategyOption option,
+			@Nonnull StartMode mode, @Nonnull RingEventPublisher<E, I> publisher, @Nonnull Processor<E>... processors) {
+		this(name, size,
+				// 使用反射EventFactory
+				ReflectionEventFactory.with(eventType, log), option, mode, publisher, processors);
 	}
 
-	public RingProcessChain(String queueName, int size, Supplier<T> eventFactory, Processor<T> processor) {
-		this(queueName, size, false, eventFactory, processor);
+	/**
+	 * 
+	 * @param name
+	 * @param size
+	 * @param eventFactory
+	 * @param option
+	 * @param mode
+	 * @param publisher
+	 * @param processors
+	 */
+	@SafeVarargs
+	public RingProcessChain(String name, int size, @Nonnull EventFactory<E> eventFactory,
+			@Nonnull WaitStrategyOption option, @Nonnull StartMode mode, @Nonnull RingEventPublisher<E, I> publisher,
+			@Nonnull Processor<E>... processors) {
+		this(name, size, eventFactory, option, mode, publisher,
+				// 通过实现供应器接口进行类型转换, 对泛型进行明确声明.
+				// 避开可变长参数的数组类型自动推导导致的无法正确识别构造函数的问题
+				new Supplier<List<EventHandler<E>>>() {
+					public List<EventHandler<E>> get() {
+						return Stream.of(Assertor.requiredLength(processors, 1, "processors"))
+								.map(EventHandlerProxy::new).collect(Collectors.toList());
+					}
+				}.get());
+
 	}
 
-	public RingProcessChain(String queueName, int size, boolean autoRun, Supplier<T> eventFactory,
-			Processor<T> processor) {
-		this(queueName, size, autoRun, eventFactory, processor, WaitStrategyOption.BusySpin);
+	/**
+	 * 
+	 * @param name
+	 * @param size
+	 * @param eventType
+	 * @param option
+	 * @param mode
+	 * @param publisher
+	 * @param handlers
+	 */
+	public RingProcessChain(String name, int size, @Nonnull Class<E> eventType, @Nonnull WaitStrategyOption option,
+			@Nonnull StartMode mode, @Nonnull RingEventPublisher<E, I> publisher,
+			@Nonnull List<EventHandler<E>> handlers) {
+		this(name, size,
+				// 使用反射EventFactory
+				ReflectionEventFactory.with(eventType, log), option, mode, publisher, handlers);
 	}
 
-	public RingProcessChain(String queueName, int size, boolean autoRun, Supplier<T> eventFactory,
-			Processor<T> processor, WaitStrategyOption option) {
-		super(processor);
-		if (StringSupport.nonEmpty(queueName))
-			super.name = queueName;
-		// if (queueSize == 0 || queueSize % 2 != 0)
-		// throw new IllegalArgumentException("queueSize set error...");
-		this.disruptor = new Disruptor<>(
-				// 实现EventFactory<LoadContainer<>>的Lambda
-				() -> eventFactory.get(),
-				// 设置队列容量, 最小16
-				size < 16 ? 16 : BitOperator.minPow2(size),
-				// 实现ThreadFactory的Lambda
-				newThreadFactory("Disruptor-" + super.name + "-Worker", ThreadPriority.MAX),
-				// DaemonThreadFactory.INSTANCE,
-				// 生产者策略, 使用单生产者
-				ProducerType.SINGLE,
-				// Waiting策略
-				WaitStrategyFactory.getStrategy(option));
-		this.disruptor.handleEventsWith(this::callProcessor);
-		this.producer = new LoadContainerEventProducer(disruptor.getRingBuffer());
-		if (autoRun)
-			start();
-	}
-
-	private void callProcessor(T event, long sequence, boolean endOfBatch) {
-		try {
-			processor.process(event);
-		} catch (Exception e) {
-			log.error("processor.process(t) throw exception -> [{}]", e.getMessage(), e);
-			throw new RuntimeException(e);
+	/**
+	 * 
+	 * @param name
+	 * @param size
+	 * @param eventFactory
+	 * @param option
+	 * @param mode
+	 * @param publisher
+	 * @param handlers
+	 */
+	public RingProcessChain(String name, int size, @Nonnull EventFactory<E> eventFactory,
+			@Nonnull WaitStrategyOption option, @Nonnull StartMode mode, @Nonnull RingEventPublisher<E, I> publisher,
+			@Nonnull List<EventHandler<E>> handlers) {
+		super(name, size, eventFactory, option,
+				// EventTranslator实现函数, 负责调用处理In对象到Event对象之间的转换
+				(event, sequence, in) -> publisher.accept(event, in));
+		Assertor.requiredLength(handlers, 1, "handlers");
+		// 将处理器以处理链的方式添加进入Disruptor
+		if (handlers.size() == 1) {
+			getDisruptor().handleEventsWith(handlers.get(0));
+		} else {
+			var handlerGroup = getDisruptor().handleEventsWith(handlers.get(0));
+			for (int i = 1; i < handlers.size(); i++)
+				handlerGroup.then(handlers.get(i));
 		}
-	}
-
-	private class LoadContainerEventProducer {
-
-		private final RingBuffer<T> ringBuffer;
-
-		private LoadContainerEventProducer(RingBuffer<T> ringBuffer) {
-			this.ringBuffer = ringBuffer;
-		}
-
-		private void putEvent(final T newEvent) {
-			ringBuffer.publishEvent((event, sequence) -> event = newEvent);
-		}
+		log.info(
+				"Initialize RingProcessChain -> {}, size -> {}, WaitStrategy -> {}, StartMode -> {}, EventHandler count -> {}",
+				super.name, size, option, mode, handlers.size());
+		startWith(mode);
 	}
 
 	@Override
-	public boolean enqueue(T t) {
-		try {
-			if (isClosed.get())
-				return false;
-			producer.putEvent(t);
-			return true;
-		} catch (Exception e) {
-			log.error("producer.onEvent(t) throw exception -> [{}]", e.getMessage(), e);
-			return false;
-		}
-	}
-
-	@Override
-	protected void start0() {
-		disruptor.start();
-		log.info("Disruptor::start() func execution succeed, {} is start", name);
-	}
-
-	@Override
-	protected void stop0() {
-		disruptor.shutdown();
-		log.info("Disruptor::shutdown() func execution succeed, {} is shutdown", name);
-	}
-
-	public static void main(String[] args) {
-
-		RingProcessChain<RingInt> queue = new RingProcessChain<>("Test-Queue", 16, true, RingInt.getEventSupplier(),
-				integer -> System.out.println(integer.getValue()));
-
-		Thread thread = Threads.startNewThread(() -> {
-			int i = 0;
-			for (;;)
-				queue.enqueue(new RingInt().setValue(i));
-		});
-
-		SleepSupport.sleep(2000);
-
-		queue.stop();
-		thread.interrupt();
-
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return false;
-	}
-
-	@Override
-	public QueueType getQueueType() {
-		return QueueType.SPSC;
+	protected String getComponentType() {
+		return "RingProcessChain";
 	}
 
 }

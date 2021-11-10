@@ -1,163 +1,123 @@
 package io.mercury.common.concurrent.disruptor;
 
-import java.util.concurrent.atomic.LongAdder;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.annotation.Nonnull;
 
 import org.slf4j.Logger;
 
+import com.google.common.base.Supplier;
+import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
-import com.lmax.disruptor.EventTranslatorOneArg;
-import com.lmax.disruptor.RingBuffer;
-import com.lmax.disruptor.dsl.Disruptor;
-import com.lmax.disruptor.dsl.ProducerType;
 
-import io.mercury.common.concurrent.disruptor.example.LongEvent;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.thread.RunnableComponent;
-import io.mercury.common.thread.SleepSupport;
-import io.mercury.common.thread.Threads;
-import io.mercury.common.thread.Threads.ThreadPriority;
-import io.mercury.common.util.BitOperator;
-import io.mercury.common.util.StringSupport;
+import io.mercury.common.util.Assertor;
 
-public final class RingMulticaster<T extends RingEvent, A> extends RunnableComponent {
+/**
+ * @author yellow013
+ * 
+ * @param <E> 进行处理的类型
+ * @param <I> 发布的数据类型
+ */
+public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(RingMulticaster.class);
-
-	private final Disruptor<T> disruptor;
-
-	private final EventPublisher publisher;
 
 	/**
 	 * 
 	 * @param name
-	 * @param eventType
 	 * @param size
+	 * @param eventType
 	 * @param option
 	 * @param mode
-	 * @param setter
+	 * @param publisher
 	 * @param processors
 	 */
 	@SafeVarargs
-	public RingMulticaster(String name, Class<T> eventType, int size, WaitStrategyOption option, StartMode mode,
-			RingEventSetter<T, A> setter, Processor<T>... processors) {
-		if (StringSupport.nonEmpty(name))
-			super.name = name;
-		// if (queueSize == 0 || queueSize % 2 != 0)
-		// throw new IllegalArgumentException("queueSize set error...");
-		this.disruptor = new Disruptor<>(
+	public RingMulticaster(String name, int size, @Nonnull Class<E> eventType, @Nonnull WaitStrategyOption option,
+			@Nonnull StartMode mode, @Nonnull RingEventPublisher<E, I> publisher, @Nonnull Processor<E>... processors) {
+		this(name, size,
 				// 使用反射EventFactory
-				ReflectionEventFactory.with(eventType),
-				// 设置队列容量, 最小16
-				size < 16 ? 16 : BitOperator.minPow2(size),
-				// 使用最高优先级线程工厂
-				Threads.newThreadFactory(super.name + "-Worker", ThreadPriority.MAX),
-				// 生产者策略, 使用单生产者
-				ProducerType.SINGLE,
-				// Waiting策略
-				WaitStrategyFactory.getStrategy(option));
-		for (var processor : processors)
-			this.disruptor.handleEventsWith(new EventHandlerProxy(processor));
-		// disruptor.handleExceptionsFor(null)
-		this.publisher = new EventPublisher(disruptor.getRingBuffer(), setter);
-		log.info("initialize disruptor -> {}, size -> {}, WaitStrategy -> {}, StartMode -> {}, Processor count -> {}",
-				super.name, size, option, mode, processors.length);
-		startWith(mode);
+				ReflectionEventFactory.with(eventType, log), option, mode, publisher, processors);
 	}
 
 	/**
-	 * 包装处理器的事件处理代理
 	 * 
-	 * @author yellow013
+	 * @param name
+	 * @param size
+	 * @param eventFactory
+	 * @param option
+	 * @param mode
+	 * @param publisher
+	 * @param processors
 	 */
-	private class EventHandlerProxy implements EventHandler<T> {
-
-		private final Processor<T> processor;
-
-		private EventHandlerProxy(Processor<T> processor) {
-			this.processor = processor;
-		}
-
-		@Override
-		public void onEvent(T event, long sequence, boolean endOfBatch) throws Exception {
-			try {
-				processor.process(event);
-			} catch (Exception e) {
-				log.error("process event -> {} throw exception -> [{}]", event, e.getMessage(), e);
-				throw new RuntimeException(e);
-			}
-		}
+	@SafeVarargs
+	public RingMulticaster(String name, int size, @Nonnull EventFactory<E> eventFactory,
+			@Nonnull WaitStrategyOption option, @Nonnull StartMode mode, @Nonnull RingEventPublisher<E, I> publisher,
+			@Nonnull Processor<E>... processors) {
+		this(name, size, eventFactory, option, mode, publisher,
+				// 通过实现供应器接口进行类型转换, 对泛型进行明确声明.
+				// 避开可变长参数的数组类型自动推导导致的无法正确识别构造函数的问题
+				new Supplier<List<EventHandler<E>>>() {
+					public List<EventHandler<E>> get() {
+						return Stream.of(Assertor.requiredLength(processors, 1, "processors"))
+								.map(EventHandlerProxy::new).collect(Collectors.toList());
+					}
+				}.get());
 
 	}
 
-	private class EventPublisher {
-
-		private final RingBuffer<T> ringBuffer;
-
-		private final EventTranslatorOneArg<T, A> translator;
-
-		private EventPublisher(RingBuffer<T> ringBuffer, RingEventSetter<T, A> setter) {
-			this.ringBuffer = ringBuffer;
-			this.translator = (T event, long sequence, A arg) -> setter.apply(event, arg);
-		}
-
-		private void onEvent(A a) {
-			ringBuffer.publishEvent(translator, a);
-		}
+	/**
+	 * 
+	 * @param name
+	 * @param size
+	 * @param eventType
+	 * @param option
+	 * @param mode
+	 * @param publisher
+	 * @param handlers
+	 */
+	public RingMulticaster(String name, int size, @Nonnull Class<E> eventType, @Nonnull WaitStrategyOption option,
+			@Nonnull StartMode mode, @Nonnull RingEventPublisher<E, I> publisher,
+			@Nonnull List<EventHandler<E>> handlers) {
+		this(name, size,
+				// 使用反射EventFactory
+				ReflectionEventFactory.with(eventType, log), option, mode, publisher, handlers);
 	}
 
-	public boolean publishEvent(A a) {
-		try {
-			if (isClosed.get())
-				return false;
-			publisher.onEvent(a);
-			return true;
-		} catch (Exception e) {
-			log.error("producer.onEvent(t) throw exception -> [{}]", e.getMessage(), e);
-			return false;
-		}
-	}
+	/**
+	 * 
+	 * @param name
+	 * @param size
+	 * @param eventFactory
+	 * @param option
+	 * @param mode
+	 * @param publisher
+	 * @param handlers
+	 */
 
-	@Override
-	protected void start0() {
-		disruptor.start();
-		log.info("Disruptor::start() func execution succeed, {} is start", name);
-	}
-
-	@Override
-	protected void stop0() {
-		disruptor.shutdown();
-		log.info("Disruptor::shutdown() func execution succeed, {} is shutdown", name);
+	@SuppressWarnings("unchecked")
+	public RingMulticaster(String name, int size, @Nonnull EventFactory<E> eventFactory,
+			@Nonnull WaitStrategyOption option, @Nonnull StartMode mode, @Nonnull RingEventPublisher<E, I> publisher,
+			@Nonnull List<EventHandler<E>> handlers) {
+		super(name, size, eventFactory, option,
+				// EventTranslator实现函数, 负责调用处理In对象到Event对象之间的转换
+				(event, sequence, in) -> publisher.accept(event, in));
+		Assertor.requiredLength(handlers, 1, "handlers");
+		// 将处理器添加进Disruptor中, 各个处理器进行并行处理
+		getDisruptor().handleEventsWith(handlers.stream().toArray(length -> new EventHandler[length]));
+		log.info(
+				"Initialize RingMulticaster -> {}, size -> {}, WaitStrategy -> {}, StartMode -> {}, EventHandler count -> {}",
+				super.name, size, option, mode, handlers.size());
+		startWith(mode);
 	}
 
 	@Override
 	protected String getComponentType() {
 		return "RingMulticaster";
-	}
-
-	public static void main(String[] args) {
-		var p0 = new LongAdder();
-		var p1 = new LongAdder();
-		var p2 = new LongAdder();
-		var multicaster = new RingMulticaster<LongEvent, Long>("Test-Multicaster", LongEvent.class, 32,
-				WaitStrategyOption.LiteBlocking, StartMode.Auto, (LongEvent t, Long l) -> {
-					return t.set(l);
-				}, event -> {
-					p0.increment();
-				}, event -> {
-					p1.increment();
-				}, event -> {
-					p2.increment();
-				});
-		Thread thread = Threads.startNewThread(() -> {
-			for (long l = 0L; l < 1000; l++)
-				multicaster.publishEvent(l);
-		});
-
-		SleepSupport.sleep(2000);
-		System.out.println(p0.intValue() + " - " + p1.intValue() + " - " + p2.intValue());
-		multicaster.stop();
-		thread.interrupt();
 	}
 
 }
