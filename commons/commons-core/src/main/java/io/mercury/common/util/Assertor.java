@@ -1,6 +1,7 @@
 package io.mercury.common.util;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -209,6 +210,25 @@ public final class Assertor {
 		if (array.length < requiredLength)
 			throw new IllegalArgumentException(arrayName + " length must be greater than " + requiredLength);
 		return array;
+	}
+
+	/**
+	 * 
+	 * @param <T>
+	 * @param list
+	 * @param requiredLength
+	 * @param listName
+	 * @return
+	 * @throws NullPointerException
+	 * @throws IllegalArgumentException
+	 */
+	public static <T> List<T> requiredLength(List<T> list, int requiredLength, String listName)
+			throws NullPointerException, IllegalArgumentException {
+		if (list == null)
+			throw new NullPointerException(listName + " can not be null");
+		if (list.size() < requiredLength)
+			throw new IllegalArgumentException(listName + " length must be greater than " + requiredLength);
+		return list;
 	}
 
 	/**

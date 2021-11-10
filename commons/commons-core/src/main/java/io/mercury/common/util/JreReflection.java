@@ -57,12 +57,9 @@ public final class JreReflection {
 	 * @param <T>
 	 * @param type
 	 * @return
-	 * @throws NoSuchMethodException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 * @throws InstantiationException
+	 * @throws RuntimeReflectionException
 	 */
-	public static <T> T invokeConstructor(Class<T> type) {
+	public static <T> T invokeConstructor(Class<T> type) throws RuntimeReflectionException {
 		try {
 			return ConstructorUtils.invokeConstructor(type, new Object[] {});
 		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException

@@ -1,8 +1,8 @@
 package io.mercury.common.thread;
 
-public class DaemonThreadFactory extends ThreadFactoryImpl {
+public class MaxPriorityDaemonThreadFactory extends MaxPriorityThreadFactory {
 
-	public DaemonThreadFactory(String name) {
+	public MaxPriorityDaemonThreadFactory(String name) {
 		super(name);
 	}
 
