@@ -42,9 +42,12 @@ public final class ReflectionEventFactory<T> implements EventFactory<T> {
 	 * 
 	 * @param <T>
 	 * @param type
+	 * @param log
 	 * @return
+	 * @throws RuntimeReflectionException
 	 */
-	public static <T> ReflectionEventFactory<T> with(@Nonnull Class<T> type, Logger log) {
+	public static <T> ReflectionEventFactory<T> with(@Nonnull Class<T> type, Logger log)
+			throws RuntimeReflectionException {
 		Assertor.nonNull(type, "type");
 		var factory = new ReflectionEventFactory<>(type);
 		try {
@@ -71,7 +74,7 @@ public final class ReflectionEventFactory<T> implements EventFactory<T> {
 	public static void main(String[] args) {
 
 		ReflectionEventFactory<LongEvent> reflectionEventFactory = new ReflectionEventFactory<>(LongEvent.class);
-		
+
 		LongEvent newInstance = reflectionEventFactory.newInstance();
 		newInstance.set(100);
 
