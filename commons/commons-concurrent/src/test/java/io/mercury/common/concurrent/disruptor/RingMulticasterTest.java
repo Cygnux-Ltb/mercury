@@ -7,7 +7,6 @@ import java.util.concurrent.atomic.LongAdder;
 import org.junit.Test;
 
 import io.mercury.common.concurrent.disruptor.example.LongEvent;
-import io.mercury.common.thread.RunnableComponent.StartMode;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
 
@@ -18,19 +17,19 @@ public class RingMulticasterTest {
 		var p0 = new LongAdder();
 		var p1 = new LongAdder();
 		var p2 = new LongAdder();
-		var multicaster = new RingMulticaster<LongEvent, Long>("Test-Multicaster", 32, LongEvent.class,
-				WaitStrategyOption.LiteBlocking, StartMode.Auto, (LongEvent t, Long l) -> {
-					t.set(l);
-				}, event -> {
-					System.out.println("p0 - " + event.get());
-					p0.increment();
-				}, event -> {
-					System.out.println("p1 - " + event.get());
-					p1.increment();
-				}, event -> {
-					System.out.println("p2 - " + event.get());
-					p2.increment();
-				});
+		var multicaster = RingMulticaster.newBuilder(LongEvent.class, (LongEvent event, Long l) -> {
+			event.set(l);
+		}).setHandler((event, sequence, endOfBatch) -> {
+			System.out.println("sequence -> " + sequence + " p0 - " + event.get() + " : " + endOfBatch);
+			p0.increment();
+		}).setHandler((event, sequence, endOfBatch) -> {
+			System.out.println("sequence -> " + sequence + " p1 - " + event.get() + " : " + endOfBatch);
+			p1.increment();
+		}).setHandler((event, sequence, endOfBatch) -> {
+			System.out.println("sequence -> " + sequence + " p2 - " + event.get() + " : " + endOfBatch);
+			p2.increment();
+		}).name("Test-Multicaster").setWaitStrategy(WaitStrategyOption.LiteBlocking).size(32).create();
+
 		Thread thread = Threads.startNewThread(() -> {
 			for (long l = 0L; l < 1000; l++)
 				multicaster.publishEvent(l);

@@ -51,6 +51,7 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 	 * @param translator
 	 * @param handlers
 	 */
+	
 	@SuppressWarnings("unchecked")
 	public RingMulticaster(String name, int size, @Nonnull EventFactory<E> eventFactory,
 			@Nonnull WaitStrategyOption option, @Nonnull StartMode mode,
@@ -59,7 +60,7 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 		Assertor.requiredLength(handlers, 1, "handlers");
 		// 将处理器添加进Disruptor中, 各个处理器进行并行处理
 		super.disruptor.handleEventsWith(CollectionUtil.toArray(handlers, length -> {
-			return new EventHandler[length];
+			return (EventHandler<E>[]) new EventHandler[length];
 		}));
 		log.info(
 				"Initialize RingMulticaster -> {}, size -> {}, WaitStrategy -> {}, StartMode -> {}, EventHandler count -> {}",
@@ -67,14 +68,6 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 		startWith(mode);
 	}
 
-	/**
-	 * 
-	 * @param <E>
-	 * @param <I>
-	 * @param eventType
-	 * @param publisher
-	 * @return
-	 */
 	public static <E, I> Builder<E, I> newBuilder(@Nonnull Class<E> eventType,
 			@Nonnull RingEventPublisher<E, I> publisher) {
 		return newBuilder(

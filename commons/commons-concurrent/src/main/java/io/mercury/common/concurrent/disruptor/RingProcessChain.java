@@ -41,22 +41,22 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 		var handlers0 = handlersMap.get(keys[0]);
 		if (keys.length == 1) {
 			super.disruptor.handleEventsWith(CollectionUtil.toArray(handlers0, length -> {
-				return new EventHandler[length];
+				return (EventHandler<E>[]) new EventHandler[length];
 			}));
 		} else {
 			var handlerGroup = super.disruptor.handleEventsWith(CollectionUtil.toArray(handlers0, length -> {
-				return new EventHandler[length];
+				return (EventHandler<E>[]) new EventHandler[length];
 			}));
 			for (int i = 1; i < keys.length; i++) {
 				// 将处理器以处理链的方式添加进入Disruptor
 				var handlers = handlersMap.get(keys[i]);
 				handlerGroup.then(CollectionUtil.toArray(handlers, length -> {
-					return new EventHandler[length];
+					return (EventHandler<E>[]) new EventHandler[length];
 				}));
 			}
 		}
 		log.info(
-				"Initialize RingProcessChain -> {}, size -> {}, WaitStrategy -> {}, StartMode -> {}, EventHandler level count -> {}",
+				"Initialize RingProcessChain -> {}, size -> {}, WaitStrategy -> {}, StartMode -> {}, EventHandler china level count -> {}",
 				super.name, size, option, mode, handlersMap.size());
 		startWith(mode);
 	}
@@ -64,6 +64,32 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 	@Override
 	protected String getComponentType() {
 		return "RingProcessChain";
+	}
+
+	public static <E, I> Builder<E, I> newBuilder(@Nonnull Class<E> eventType,
+			@Nonnull RingEventPublisher<E, I> publisher) {
+		return newBuilder(
+				// 使用反射EventFactory
+				ReflectionEventFactory.with(eventType, log), publisher);
+	}
+
+	public static <E, I> Builder<E, I> newBuilder(@Nonnull Class<E> eventType,
+			@Nonnull EventTranslatorOneArg<E, I> translator) {
+		return newBuilder(
+				// 使用反射EventFactory
+				ReflectionEventFactory.with(eventType, log), translator);
+	}
+
+	public static <E, I> Builder<E, I> newBuilder(EventFactory<E> eventFactory,
+			@Nonnull RingEventPublisher<E, I> publisher) {
+		return newBuilder(eventFactory,
+				// EventTranslator实现函数, 负责调用处理In对象到Event对象之间的转换
+				(event, sequence, in) -> publisher.accept(event, in));
+	}
+
+	public static <E, I> Builder<E, I> newBuilder(EventFactory<E> eventFactory,
+			@Nonnull EventTranslatorOneArg<E, I> translator) {
+		return new Builder<>(eventFactory, translator);
 	}
 
 	public static class Builder<E, I> {
