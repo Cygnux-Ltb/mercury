@@ -15,7 +15,9 @@ import org.apache.avro.specific.SpecificData;
 @org.apache.avro.specific.AvroGenerated
 public class AvroTextMsg extends org.apache.avro.specific.SpecificRecordBase
 		implements org.apache.avro.specific.SpecificRecord {
+	
 	private static final long serialVersionUID = -8265012415517208731L;
+
 	public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse(
 			"{\"type\":\"record\",\"name\":\"AvroTextMsg\",\"namespace\":\"io.mercury.serialization.avro.msg\",\"fields\":[{\"name\":\"envelope\",\"type\":{\"type\":\"record\",\"name\":\"Envelope\",\"fields\":[{\"name\":\"code\",\"type\":\"int\"},{\"name\":\"version\",\"type\":\"int\"},{\"name\":\"contentType\",\"type\":{\"type\":\"enum\",\"name\":\"ContentType\",\"symbols\":[\"INT\",\"LONG\",\"DOUBLE\",\"STRING\",\"OBJECT\",\"LIST\",\"MAP\"]}}]}},{\"name\":\"sequence\",\"type\":\"long\"},{\"name\":\"epoch\",\"type\":\"long\"},{\"name\":\"content\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}");
 
@@ -23,7 +25,7 @@ public class AvroTextMsg extends org.apache.avro.specific.SpecificRecordBase
 		return SCHEMA$;
 	}
 
-	private static SpecificData MODEL$ = new SpecificData();
+	private static final SpecificData MODEL$ = new SpecificData();
 
 	private static final BinaryMessageEncoder<AvroTextMsg> ENCODER = new BinaryMessageEncoder<AvroTextMsg>(MODEL$,
 			SCHEMA$);
@@ -321,7 +323,7 @@ public class AvroTextMsg extends org.apache.avro.specific.SpecificRecordBase
 
 		/** Creates a new Builder */
 		private Builder() {
-			super(SCHEMA$);
+			super(SCHEMA$, MODEL$);
 		}
 
 		/**
@@ -359,7 +361,7 @@ public class AvroTextMsg extends org.apache.avro.specific.SpecificRecordBase
 		 * @param other The existing instance to copy.
 		 */
 		private Builder(io.mercury.serialization.avro.msg.AvroTextMsg other) {
-			super(SCHEMA$);
+			super(SCHEMA$, MODEL$);
 			if (isValidValue(fields()[0], other.envelope)) {
 				this.envelope = data().deepCopy(fields()[0].schema(), other.envelope);
 				fieldSetFlags()[0] = true;

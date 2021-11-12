@@ -15,7 +15,9 @@ import org.apache.avro.specific.SpecificData;
 @org.apache.avro.specific.AvroGenerated
 public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		implements org.apache.avro.specific.SpecificRecord {
+	
 	private static final long serialVersionUID = -437770354948209888L;
+
 	public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse(
 			"{\"type\":\"record\",\"name\":\"Envelope\",\"namespace\":\"io.mercury.serialization.avro.msg\",\"fields\":[{\"name\":\"code\",\"type\":\"int\"},{\"name\":\"version\",\"type\":\"int\"},{\"name\":\"contentType\",\"type\":{\"type\":\"enum\",\"name\":\"ContentType\",\"symbols\":[\"INT\",\"LONG\",\"DOUBLE\",\"STRING\",\"OBJECT\",\"LIST\",\"MAP\"]}}]}");
 
@@ -23,7 +25,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		return SCHEMA$;
 	}
 
-	private static SpecificData MODEL$ = new SpecificData();
+	private static final SpecificData MODEL$ = new SpecificData();
 
 	private static final BinaryMessageEncoder<Envelope> ENCODER = new BinaryMessageEncoder<Envelope>(MODEL$, SCHEMA$);
 
@@ -283,7 +285,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 
 		/** Creates a new Builder */
 		private Builder() {
-			super(SCHEMA$);
+			super(SCHEMA$, MODEL$);
 		}
 
 		/**
@@ -313,7 +315,7 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase
 		 * @param other The existing instance to copy.
 		 */
 		private Builder(io.mercury.serialization.avro.msg.Envelope other) {
-			super(SCHEMA$);
+			super(SCHEMA$, MODEL$);
 			if (isValidValue(fields()[0], other.code)) {
 				this.code = data().deepCopy(fields()[0].schema(), other.code);
 				fieldSetFlags()[0] = true;
