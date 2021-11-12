@@ -3,6 +3,7 @@ package io.mercury.transport.configurator;
 import org.eclipse.collections.api.block.procedure.Procedure;
 import org.eclipse.collections.api.set.MutableSet;
 
+import io.mercury.common.collections.CollectionUtil;
 import io.mercury.common.collections.MutableSets;
 import io.mercury.common.util.StringSupport;
 
@@ -11,7 +12,7 @@ public class Topics {
 	private final MutableSet<String> topics = MutableSets.newUnifiedSet();
 
 	private Topics(String[] topics) {
-		MutableSets.addElements(this.topics, topics);
+		CollectionUtil.addAll(this.topics, topics);
 	}
 
 	public static Topics empty() {
@@ -27,7 +28,7 @@ public class Topics {
 	}
 
 	public Topics add(String... topics) {
-		MutableSets.addElements(this.topics, topics);
+		CollectionUtil.addAll(this.topics, topics);
 		return this;
 	}
 

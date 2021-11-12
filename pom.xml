@@ -37,8 +37,8 @@
 		<slf4j.version>1.7.32</slf4j.version>
 		<junit.version>4.13.2</junit.version>
 		<lombok.version>1.18.22</lombok.version>
-		<netty.version>4.1.69.Final</netty.version>
-		<avro.version>1.10.2</avro.version>
+		<netty.version>4.1.70.Final</netty.version>
+		<avro.version>1.11.0</avro.version>
 		<jackson.version>2.12.5</jackson.version>
 		<mercury.version>1.0-SNAPSHOT</mercury.version>
 	</properties>
