@@ -105,7 +105,7 @@ public final class ZmqSubscriber extends ZmqTransport implements Receiver, Subsc
 
 	public static void main(String[] args) {
 		;
-		try (ZmqSubscriber subscriber = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(2).buildSubscriber(
+		try (ZmqSubscriber subscriber = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(2).createSubscriber(
 				Topics.with("command"),
 				(topic, msg) -> System.out.println(new String(topic) + "->" + new String(msg)))) {
 			subscriber.subscribe();

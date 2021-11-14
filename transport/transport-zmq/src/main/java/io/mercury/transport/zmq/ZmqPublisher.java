@@ -72,7 +72,7 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>,
 	public static void main(String[] args) {
 
 		try (ZmqPublisher<String> publisher = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(2)
-				.buildStringPublisher("commond")) {
+				.createStringPublisher("commond")) {
 			Random random = new Random();
 
 			for (;;) {

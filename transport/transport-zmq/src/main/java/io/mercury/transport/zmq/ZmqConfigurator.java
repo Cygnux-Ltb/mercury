@@ -99,8 +99,8 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @param ser
 	 * @return ZmqSender
 	 */
-	public ZmqSender<byte[]> buildSender() {
-		return buildSender(bytes -> bytes);
+	public ZmqSender<byte[]> createSender() {
+		return createSender(bytes -> bytes);
 	}
 
 	/**
@@ -109,7 +109,7 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @param ser
 	 * @return ZmqSender
 	 */
-	public <T> ZmqSender<T> buildSender(@Nonnull BytesSerializer<T> ser) {
+	public <T> ZmqSender<T> createSender(@Nonnull BytesSerializer<T> ser) {
 		Assertor.nonNull(ser, "ser");
 		return new ZmqSender<>(this, ser);
 	}
@@ -119,7 +119,7 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @param handler
 	 * @return receiver
 	 */
-	public ZmqReceiver buildReceiver(@Nonnull Function<byte[], byte[]> handler) {
+	public ZmqReceiver createReceiver(@Nonnull Function<byte[], byte[]> handler) {
 		Assertor.nonNull(handler, "handler");
 		return new ZmqReceiver(this, handler);
 	}
@@ -129,8 +129,8 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @param consumer
 	 * @return
 	 */
-	public ZmqSubscriber buildSubscriber(BiConsumer<byte[], byte[]> consumer) {
-		return buildSubscriber(Topics.with(""), consumer);
+	public ZmqSubscriber createSubscriber(BiConsumer<byte[], byte[]> consumer) {
+		return createSubscriber(Topics.with(""), consumer);
 	}
 
 	/**
@@ -139,7 +139,7 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @param consumer
 	 * @return ZmqSubscriber
 	 */
-	public ZmqSubscriber buildSubscriber(Topics topics, BiConsumer<byte[], byte[]> consumer) {
+	public ZmqSubscriber createSubscriber(Topics topics, BiConsumer<byte[], byte[]> consumer) {
 		Assertor.nonNull(topics, "topics");
 		Assertor.nonNull(consumer, "consumer");
 		return new ZmqSubscriber(topics, this, consumer);
@@ -149,8 +149,8 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * 
 	 * @return
 	 */
-	public ZmqPublisher<byte[]> buildBytesPublisher() {
-		return buildBytesPublisher("");
+	public ZmqPublisher<byte[]> createBytesPublisher() {
+		return createBytesPublisher("");
 	}
 
 	/**
@@ -158,16 +158,16 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @param topic
 	 * @return
 	 */
-	public ZmqPublisher<byte[]> buildBytesPublisher(String topic) {
-		return buildPublisher(topic, bytes -> bytes);
+	public ZmqPublisher<byte[]> createBytesPublisher(String topic) {
+		return createPublisher(topic, bytes -> bytes);
 	}
 
 	/**
 	 * 
 	 * @return
 	 */
-	public ZmqPublisher<String> buildStringPublisher() {
-		return buildStringPublisher("", Charsets.UTF8);
+	public ZmqPublisher<String> createStringPublisher() {
+		return createStringPublisher("", Charsets.UTF8);
 	}
 
 	/**
@@ -175,8 +175,8 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @param topic
 	 * @return
 	 */
-	public ZmqPublisher<String> buildStringPublisher(String topic) {
-		return buildStringPublisher(topic, Charsets.UTF8);
+	public ZmqPublisher<String> createStringPublisher(String topic) {
+		return createStringPublisher(topic, Charsets.UTF8);
 	}
 
 	/**
@@ -184,8 +184,8 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @param encode
 	 * @return
 	 */
-	public ZmqPublisher<String> buildStringPublisher(Charset encode) {
-		return buildStringPublisher("", encode);
+	public ZmqPublisher<String> createStringPublisher(Charset encode) {
+		return createStringPublisher("", encode);
 	}
 
 	/**
@@ -194,8 +194,8 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @param encode
 	 * @return
 	 */
-	public ZmqPublisher<String> buildStringPublisher(String topic, Charset encode) {
-		return buildPublisher(topic, str -> str.getBytes(encode));
+	public ZmqPublisher<String> createStringPublisher(String topic, Charset encode) {
+		return createPublisher(topic, str -> str.getBytes(encode));
 	}
 
 	/**
@@ -204,8 +204,8 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @param ser
 	 * @return
 	 */
-	public <T> ZmqPublisher<T> buildPublisher(BytesSerializer<T> ser) {
-		return buildPublisher("", ser);
+	public <T> ZmqPublisher<T> createPublisher(BytesSerializer<T> ser) {
+		return createPublisher("", ser);
 	}
 
 	/**
@@ -215,7 +215,7 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @param ser
 	 * @return
 	 */
-	public <T> ZmqPublisher<T> buildPublisher(String topic, BytesSerializer<T> ser) {
+	public <T> ZmqPublisher<T> createPublisher(String topic, BytesSerializer<T> ser) {
 		return new ZmqPublisher<>(topic, this, ser);
 	}
 
