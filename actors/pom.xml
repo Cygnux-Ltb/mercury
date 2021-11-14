@@ -16,7 +16,7 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<akka.version>2.6.16</akka.version>
+		<akka.version>2.6.17</akka.version>
 		<avro.version>1.10.2</avro.version>
 	</properties>
 
@@ -87,26 +87,11 @@
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-actor_2.13</artifactId>
 			<version>${akka.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.scala-lang</groupId>
-					<artifactId>scala-library</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
-		<dependency>
-			<groupId>com.typesafe.akka</groupId>
-			<artifactId>akka-remote_2.13</artifactId>
-			<version>${akka.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.scala-lang</groupId>
-					<artifactId>scala-library</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
+		<!-- <dependency> <groupId>com.typesafe.akka</groupId> <artifactId>akka-remote_2.13</artifactId> 
+			<version>${akka.version}</version> </dependency> -->
+			
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-slf4j_2.13</artifactId>
@@ -117,13 +102,6 @@
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-actor-typed_2.13</artifactId>
 			<version>${akka.version}</version>
-		</dependency>
-
-		<!-- Standard library for the Scala Programming Language -->
-		<dependency>
-			<groupId>org.scala-lang</groupId>
-			<artifactId>scala-library</artifactId>
-			<version>2.13.6</version>
 		</dependency>
 
 		<dependency>
