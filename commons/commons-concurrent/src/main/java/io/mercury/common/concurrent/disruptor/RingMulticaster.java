@@ -13,6 +13,7 @@ import com.lmax.disruptor.EventTranslatorOneArg;
 import io.mercury.common.collections.CollectionUtil;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.functional.Processor;
+import io.mercury.common.lang.Throws;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 
@@ -51,7 +52,7 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 	 * @param translator
 	 * @param handlers
 	 */
-	
+
 	@SuppressWarnings("unchecked")
 	public RingMulticaster(String name, int size, @Nonnull EventFactory<E> eventFactory,
 			@Nonnull WaitStrategyOption option, @Nonnull StartMode mode,
@@ -149,6 +150,9 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 		}
 
 		public RingMulticaster<E, I> create() {
+			if (handlers.isEmpty()) {
+				Throws.illegalArgument("handlers");
+			}
 			return new RingMulticaster<>(name, size, eventFactory, option, mode, translator, handlers);
 		}
 

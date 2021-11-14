@@ -1,5 +1,7 @@
 package io.mercury.common.concurrent.disruptor;
 
+import static io.mercury.common.collections.CollectionUtil.toArray;
+
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -11,10 +13,10 @@ import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.EventTranslatorOneArg;
 
-import io.mercury.common.collections.CollectionUtil;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.collections.MutableMaps;
 import io.mercury.common.functional.Processor;
+import io.mercury.common.lang.Throws;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
 
@@ -33,24 +35,21 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 			@Nonnull WaitStrategyOption option, @Nonnull StartMode mode,
 			@Nonnull EventTranslatorOneArg<E, I> translator,
 			@Nonnull MutableIntObjectMap<List<EventHandler<E>>> handlersMap) {
-		super(name, size, eventFactory, option,
-				// EventTranslator实现函数, 负责调用处理In对象到Event对象之间的转换
-				// (event, sequence, in) -> publisher.accept(event, in)
-				translator);
+		super(name, size, eventFactory, option, translator);
 		int[] keys = handlersMap.keySet().toArray();
 		var handlers0 = handlersMap.get(keys[0]);
 		if (keys.length == 1) {
-			super.disruptor.handleEventsWith(CollectionUtil.toArray(handlers0, length -> {
+			super.disruptor.handleEventsWith(toArray(handlers0, length -> {
 				return (EventHandler<E>[]) new EventHandler[length];
 			}));
 		} else {
-			var handlerGroup = super.disruptor.handleEventsWith(CollectionUtil.toArray(handlers0, length -> {
+			var handlerGroup = super.disruptor.handleEventsWith(toArray(handlers0, length -> {
 				return (EventHandler<E>[]) new EventHandler[length];
 			}));
 			for (int i = 1; i < keys.length; i++) {
-				// 将处理器以处理链的方式添加进入Disruptor
+				// 将处理器以处理链的方式添加进Disruptor
 				var handlers = handlersMap.get(keys[i]);
-				handlerGroup.then(CollectionUtil.toArray(handlers, length -> {
+				handlerGroup.then(toArray(handlers, length -> {
 					return (EventHandler<E>[]) new EventHandler[length];
 				}));
 			}
@@ -160,6 +159,9 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 		}
 
 		public RingProcessChain<E, I> create() {
+			if (handlersMap.isEmpty()) {
+				Throws.illegalArgument("handlersMap");
+			}
 			return new RingProcessChain<>(name, size, eventFactory, option, mode, translator, handlersMap);
 		}
 
