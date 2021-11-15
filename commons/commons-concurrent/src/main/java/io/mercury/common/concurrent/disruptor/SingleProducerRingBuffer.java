@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventTranslatorOneArg;
+import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 
@@ -34,9 +35,9 @@ abstract class SingleProducerRingBuffer<E, I> extends RunnableComponent {
 	protected final EventPublisherProxy<E, I> publisherProxy;
 
 	protected SingleProducerRingBuffer(String name, int size, @Nonnull EventFactory<E> eventFactory,
-			@Nonnull WaitStrategyOption option, @Nonnull EventTranslatorOneArg<E, I> translator) {
+			@Nonnull WaitStrategy waitStrategy, @Nonnull EventTranslatorOneArg<E, I> translator) {
 		Assertor.nonNull(eventFactory, "eventFactory");
-		Assertor.nonNull(option, "option");
+		Assertor.nonNull(waitStrategy, "waitStrategy");
 		Assertor.nonNull(translator, "translator");
 		if (StringSupport.nonEmpty(name))
 			super.name = name;
@@ -50,7 +51,7 @@ abstract class SingleProducerRingBuffer<E, I> extends RunnableComponent {
 				// 生产者策略, 使用单生产者
 				ProducerType.SINGLE,
 				// Waiting策略
-				WaitStrategyFactory.getStrategy(option));
+				waitStrategy);
 		this.publisherProxy = new EventPublisherProxy<>(disruptor.getRingBuffer(), translator);
 	}
 

@@ -1,5 +1,9 @@
 package io.mercury.common.concurrent.disruptor;
 
+import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Sleeping;
+import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Yielding;
+import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
+
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -9,6 +13,7 @@ import org.slf4j.Logger;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.EventTranslatorOneArg;
+import com.lmax.disruptor.WaitStrategy;
 
 import io.mercury.common.collections.CollectionUtil;
 import io.mercury.common.collections.MutableLists;
@@ -55,9 +60,9 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 
 	@SuppressWarnings("unchecked")
 	public RingMulticaster(String name, int size, @Nonnull EventFactory<E> eventFactory,
-			@Nonnull WaitStrategyOption option, @Nonnull StartMode mode,
+			@Nonnull WaitStrategy waitStrategy, @Nonnull StartMode mode,
 			@Nonnull EventTranslatorOneArg<E, I> translator, @Nonnull List<EventHandler<E>> handlers) {
-		super(name, size, eventFactory, option, translator);
+		super(name, size, eventFactory, waitStrategy, translator);
 		Assertor.requiredLength(handlers, 1, "handlers");
 		// 将处理器添加进Disruptor中, 各个处理器进行并行处理
 		super.disruptor.handleEventsWith(CollectionUtil.toArray(handlers, length -> {
@@ -65,7 +70,7 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 		}));
 		log.info(
 				"Initialize RingMulticaster -> {}, size -> {}, WaitStrategy -> {}, StartMode -> {}, EventHandler count -> {}",
-				super.name, size, option, mode, handlers.size());
+				super.name, size, waitStrategy, mode, handlers.size());
 		startWith(mode);
 	}
 
@@ -104,7 +109,7 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 
 		private String name;
 		private int size = 64;
-		private WaitStrategyOption option = WaitStrategyOption.BusySpin;
+		private WaitStrategy waitStrategy;
 		private StartMode mode = StartMode.Auto;
 		private final EventFactory<E> eventFactory;
 		private final EventTranslatorOneArg<E, I> translator;
@@ -134,8 +139,8 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 			return this;
 		}
 
-		public Builder<E, I> setWaitStrategy(WaitStrategyOption option) {
-			this.option = option;
+		public Builder<E, I> setWaitStrategy(WaitStrategy waitStrategy) {
+			this.waitStrategy = waitStrategy;
 			return this;
 		}
 
@@ -150,10 +155,11 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 		}
 
 		public RingMulticaster<E, I> create() {
-			if (handlers.isEmpty()) {
+			if (handlers.isEmpty())
 				Throws.illegalArgument("handlers");
-			}
-			return new RingMulticaster<>(name, size, eventFactory, option, mode, translator, handlers);
+			if (waitStrategy == null)
+				waitStrategy = handlers.size() > availableProcessors() ? Sleeping.get() : Yielding.get();
+			return new RingMulticaster<>(name, size, eventFactory, waitStrategy, mode, translator, handlers);
 		}
 
 	}

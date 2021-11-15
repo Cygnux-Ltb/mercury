@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 
 import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 
@@ -34,10 +35,10 @@ public class RingQueue<T> extends AbstractSingleConsumerQueue<T> {
 	}
 
 	public RingQueue(String queueName, int size, boolean startNow, Processor<T> processor) {
-		this(queueName, size, startNow, processor, WaitStrategyOption.LiteBlocking);
+		this(queueName, size, startNow, processor, CommonWaitStrategy.Sleeping.get());
 	}
 
-	public RingQueue(String queueName, int size, boolean startNow, Processor<T> processor, WaitStrategyOption option) {
+	public RingQueue(String queueName, int size, boolean startNow, Processor<T> processor, WaitStrategy waitStrategy) {
 		super(processor);
 		if (queueName != null)
 			super.name = queueName;
@@ -54,7 +55,7 @@ public class RingQueue<T> extends AbstractSingleConsumerQueue<T> {
 				// 生产者策略, 使用单生产者
 				ProducerType.SINGLE,
 				// Waiting策略
-				WaitStrategyFactory.getStrategy(option));
+				waitStrategy);
 		this.disruptor.handleEventsWith((event, sequence, endOfBatch) -> this.callProcessor(event.unloading()));
 		this.producer = new LoadContainerEventProducer(disruptor.getRingBuffer());
 		if (startNow)

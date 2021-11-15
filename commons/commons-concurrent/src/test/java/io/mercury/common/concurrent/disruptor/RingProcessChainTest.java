@@ -1,5 +1,6 @@
 package io.mercury.common.concurrent.disruptor;
 
+import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Yielding;
 import static org.junit.Assert.assertEquals;
 
 import java.util.concurrent.atomic.LongAdder;
@@ -28,7 +29,7 @@ public class RingProcessChainTest {
 		}).setHandler(2, (event, sequence, endOfBatch) -> {
 			System.out.println("sequence -> " + sequence + " p2 - " + event.get() + " : " + endOfBatch);
 			p2.increment();
-		}).name("Test-RingProcessChain").size(32).setWaitStrategy(WaitStrategyOption.LiteBlocking).create();
+		}).name("Test-RingProcessChain").size(32).setWaitStrategy(Yielding.get()).create();
 
 		Thread thread = Threads.startNewThread(() -> {
 			for (long l = 0L; l < 1000; l++)

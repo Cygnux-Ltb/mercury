@@ -1,6 +1,9 @@
 package io.mercury.common.concurrent.disruptor;
 
 import static io.mercury.common.collections.CollectionUtil.toArray;
+import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Sleeping;
+import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Yielding;
+import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
 
 import java.util.List;
 
@@ -12,6 +15,7 @@ import org.slf4j.Logger;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.EventTranslatorOneArg;
+import com.lmax.disruptor.WaitStrategy;
 
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.collections.MutableMaps;
@@ -32,10 +36,10 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 
 	@SuppressWarnings("unchecked")
 	private RingProcessChain(String name, int size, @Nonnull EventFactory<E> eventFactory,
-			@Nonnull WaitStrategyOption option, @Nonnull StartMode mode,
+			@Nonnull WaitStrategy waitStrategy, @Nonnull StartMode mode,
 			@Nonnull EventTranslatorOneArg<E, I> translator,
 			@Nonnull MutableIntObjectMap<List<EventHandler<E>>> handlersMap) {
-		super(name, size, eventFactory, option, translator);
+		super(name, size, eventFactory, waitStrategy, translator);
 		int[] keys = handlersMap.keySet().toArray();
 		var handlers0 = handlersMap.get(keys[0]);
 		if (keys.length == 1) {
@@ -56,7 +60,7 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 		}
 		log.info(
 				"Initialize RingProcessChain -> {}, size -> {}, WaitStrategy -> {}, StartMode -> {}, EventHandler china level count -> {}",
-				super.name, size, option, mode, handlersMap.size());
+				super.name, size, waitStrategy, mode, handlersMap.size());
 		startWith(mode);
 	}
 
@@ -95,8 +99,8 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 
 		private String name;
 		private int size = 64;
-		private WaitStrategyOption option = WaitStrategyOption.BusySpin;
 		private StartMode mode = StartMode.Auto;
+		private WaitStrategy waitStrategy;
 		private final EventFactory<E> eventFactory;
 		private final EventTranslatorOneArg<E, I> translator;
 		private final MutableIntObjectMap<List<EventHandler<E>>> handlersMap = MutableMaps.newIntObjectHashMap();
@@ -143,8 +147,8 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 			return this;
 		}
 
-		public Builder<E, I> setWaitStrategy(WaitStrategyOption option) {
-			this.option = option;
+		public Builder<E, I> setWaitStrategy(WaitStrategy waitStrategy) {
+			this.waitStrategy = waitStrategy;
 			return this;
 		}
 
@@ -159,10 +163,12 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 		}
 
 		public RingProcessChain<E, I> create() {
-			if (handlersMap.isEmpty()) {
+			if (handlersMap.isEmpty())
 				Throws.illegalArgument("handlersMap");
-			}
-			return new RingProcessChain<>(name, size, eventFactory, option, mode, translator, handlersMap);
+			if (waitStrategy == null)
+				waitStrategy = handlersMap.stream().mapToInt(List::size).sum() > availableProcessors() ? Sleeping.get()
+						: Yielding.get();
+			return new RingProcessChain<>(name, size, eventFactory, waitStrategy, mode, translator, handlersMap);
 		}
 
 	}
