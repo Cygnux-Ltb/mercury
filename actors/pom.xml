@@ -17,7 +17,7 @@
 
 	<properties>
 		<akka.version>2.6.17</akka.version>
-		<avro.version>1.10.2</avro.version>
+		<avro.version>1.11.0</avro.version>
 	</properties>
 
 	<build>
@@ -72,12 +72,6 @@
 			<groupId>io.mercury</groupId>
 			<artifactId>serialization-avro</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.reactivex.rxjava3</groupId>
-			<artifactId>rxjava</artifactId>
-			<version>3.1.1</version>
 		</dependency>
 
 		<!-- ####### Akka dependency ####### -->
