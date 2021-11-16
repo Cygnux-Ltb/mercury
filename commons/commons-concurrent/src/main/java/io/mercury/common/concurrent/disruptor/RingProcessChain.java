@@ -40,7 +40,7 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 			@Nonnull EventTranslatorOneArg<E, I> translator,
 			@Nonnull MutableIntObjectMap<List<EventHandler<E>>> handlersMap) {
 		super(name, size, eventFactory, waitStrategy, translator);
-		int[] keys = handlersMap.keySet().toArray();
+		int[] keys = handlersMap.keySet().toSortedArray();
 		var handlers0 = handlersMap.get(keys[0]);
 		if (keys.length == 1) {
 			super.disruptor.handleEventsWith(toArray(handlers0, length -> {
@@ -110,7 +110,7 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 			this.translator = translator;
 		}
 
-		public Builder<E, I> setFirstProcessor(@Nonnull Processor<E> processor) {
+		public Builder<E, I> addFirstProcessor(@Nonnull Processor<E> processor) {
 			Assertor.nonNull(processor, "processor");
 			handlersMap.getIfAbsentPut(0, MutableLists::newFastList).add(
 					// 将Processor实现加载到HandlerProxy中
@@ -118,26 +118,26 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 			return this;
 		}
 
-		public Builder<E, I> setProcessor(int level, @Nonnull Processor<E> processor) {
+		public Builder<E, I> addProcessor(int level, @Nonnull Processor<E> processor) {
 			Assertor.nonNull(processor, "processor");
 			if (level < 1)
-				return setFirstProcessor(processor);
+				return addFirstProcessor(processor);
 			handlersMap.getIfAbsentPut(level, MutableLists::newFastList).add(
 					// 将Processor实现加载到HandlerProxy中
 					new EventHandlerProxy<>(processor, log));
 			return this;
 		}
 
-		public Builder<E, I> setFirstHandler(@Nonnull EventHandler<E> handler) {
+		public Builder<E, I> addFirstHandler(@Nonnull EventHandler<E> handler) {
 			Assertor.nonNull(handler, "handler");
 			handlersMap.getIfAbsentPut(0, MutableLists::newFastList).add(handler);
 			return this;
 		}
 
-		public Builder<E, I> setHandler(int level, @Nonnull EventHandler<E> handler) {
+		public Builder<E, I> addHandler(int level, @Nonnull EventHandler<E> handler) {
 			Assertor.nonNull(handler, "handler");
 			if (level < 1)
-				return setFirstHandler(handler);
+				return addFirstHandler(handler);
 			handlersMap.getIfAbsentPut(level, MutableLists::newFastList).add(handler);
 			return this;
 		}
@@ -145,6 +145,10 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 		public Builder<E, I> name(String name) {
 			this.name = name;
 			return this;
+		}
+
+		public Builder<E, I> setWaitStrategy(CommonWaitStrategy waitStrategy) {
+			return setWaitStrategy(waitStrategy.get());
 		}
 
 		public Builder<E, I> setWaitStrategy(WaitStrategy waitStrategy) {

@@ -20,13 +20,13 @@ public class RingProcessChainTest {
 		var p2 = new LongAdder();
 		var processChain = RingProcessChain.newBuilder(LongEvent.class, (LongEvent t, Long l) -> {
 			t.set(l);
-		}).setFirstHandler((event, sequence, endOfBatch) -> {
+		}).addFirstHandler((event, sequence, endOfBatch) -> {
 			System.out.println("sequence -> " + sequence + " p0 - " + event.get() + " : " + endOfBatch);
 			p0.increment();
-		}).setHandler(1, (event, sequence, endOfBatch) -> {
+		}).addHandler(1, (event, sequence, endOfBatch) -> {
 			System.out.println("sequence -> " + sequence + " p1 - " + event.get() + " : " + endOfBatch);
 			p1.increment();
-		}).setHandler(2, (event, sequence, endOfBatch) -> {
+		}).addHandler(2, (event, sequence, endOfBatch) -> {
 			System.out.println("sequence -> " + sequence + " p2 - " + event.get() + " : " + endOfBatch);
 			p2.increment();
 		}).name("Test-RingProcessChain").size(32).setWaitStrategy(Yielding.get()).create();

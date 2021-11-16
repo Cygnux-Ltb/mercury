@@ -20,13 +20,13 @@ public class RingMulticasterTest {
 		var p2 = new LongAdder();
 		var multicaster = RingMulticaster.newBuilder(LongEvent.class, (LongEvent event, Long l) -> {
 			event.set(l);
-		}).setHandler((event, sequence, endOfBatch) -> {
+		}).addHandler((event, sequence, endOfBatch) -> {
 			System.out.println("sequence -> " + sequence + " p0 - " + event.get() + " : " + endOfBatch);
 			p0.increment();
-		}).setHandler((event, sequence, endOfBatch) -> {
+		}).addHandler((event, sequence, endOfBatch) -> {
 			System.out.println("sequence -> " + sequence + " p1 - " + event.get() + " : " + endOfBatch);
 			p1.increment();
-		}).setHandler((event, sequence, endOfBatch) -> {
+		}).addHandler((event, sequence, endOfBatch) -> {
 			System.out.println("sequence -> " + sequence + " p2 - " + event.get() + " : " + endOfBatch);
 			p2.increment();
 		}).name("Test-Multicaster").setWaitStrategy(Yielding.get()).size(32).create();

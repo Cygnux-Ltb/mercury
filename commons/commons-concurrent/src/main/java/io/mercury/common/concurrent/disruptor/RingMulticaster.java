@@ -88,7 +88,7 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 				ReflectionEventFactory.with(eventType, log), translator);
 	}
 
-	public static <E, I> Builder<E, I> newBuilder(EventFactory<E> eventFactory,
+	public static <E, I> Builder<E, I> newBuilder(@Nonnull EventFactory<E> eventFactory,
 			@Nonnull RingEventPublisher<E, I> publisher) {
 		return newBuilder(eventFactory,
 				// EventTranslator实现函数, 负责调用处理In对象到Event对象之间的转换
@@ -120,7 +120,7 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 			this.translator = translator;
 		}
 
-		public Builder<E, I> setProcessor(@Nonnull Processor<E> processor) {
+		public Builder<E, I> addProcessor(@Nonnull Processor<E> processor) {
 			Assertor.nonNull(processor, "processor");
 			this.handlers.add(
 					// 将Processor实现加载到HandlerProxy中
@@ -128,7 +128,7 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 			return this;
 		}
 
-		public Builder<E, I> setHandler(@Nonnull EventHandler<E> handler) {
+		public Builder<E, I> addHandler(@Nonnull EventHandler<E> handler) {
 			Assertor.nonNull(handler, "handler");
 			this.handlers.add(handler);
 			return this;
@@ -137,6 +137,10 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 		public Builder<E, I> name(String name) {
 			this.name = name;
 			return this;
+		}
+
+		public Builder<E, I> setWaitStrategy(CommonWaitStrategy waitStrategy) {
+			return setWaitStrategy(waitStrategy.get());
 		}
 
 		public Builder<E, I> setWaitStrategy(WaitStrategy waitStrategy) {
