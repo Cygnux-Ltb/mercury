@@ -20,17 +20,17 @@ import io.mercury.common.util.HexUtil;
 /**
  * 
  * 通过将63位正整数long类型拆分为三部分实现唯一序列 <br>
- * 时间戳 | 所有者(可以是某个业务或者分布式系统上的机器) | 自增序列<br>
+ * 时间戳 | 所有者(可以是某个业务ID或者分布式系统上的机器ID) | 自增序列<br>
  * 
  * <pre>
- * 0b|---------------EPOCH TIMESTAMP----------------|--OWNER----|-INCREMENT-|
+ * 0b|---------------EPOCH TIMESTAMP----------------|---OWNER---|--INCREMENT--|
  * 0b01111111 11111111 11111111 11111111 11111111 11_111111 1111_1111 11111111
  * 
  * <pre>
  *
  * @author yellow013
  */
-public final class SnowflakeAlgorithm {
+public final class SnowflakeAlgo {
 
 	/**
 	 * 最小基线时间, UTC 2000-01-01 00:00:00.000
@@ -38,33 +38,33 @@ public final class SnowflakeAlgorithm {
 	public static final ZonedDateTime MinimumBaseline = ZonedDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.MIN,
 			TimeZone.UTC);
 
-	/*
-	 * 所有者ID所占的位数
+	/**
+	 * 所有者在ID中占的位数
 	 */
 	public static final int OwnerIdBits = 10;
 
-	/*
-	 * 序列在ID中占的位数
+	/**
+	 * 序列在ID中的位数
 	 */
 	public static final int SequenceBits = 12;
 
-	/*
-	 * 
+	/**
+	 * Epoch时间戳在ID中占的位数
 	 */
 	public static final int TimestampBits = 41;
 
-	/*
+	/**
 	 * 所有者ID向左移12位
 	 */
 	public static final int OwnerIdLeftShift = SequenceBits;
 
-	/*
+	/**
 	 * 时间截向左移22位(10+12)
 	 */
 	public static final int TimestampLeftShift = OwnerIdBits + SequenceBits;
 
-	/*
-	 * 生成序列的掩码, 4095 (0xffff == 4096 == 0b1111_11111111)
+	/**
+	 * 生成序列的掩码, 4095 (0xffff == 4095 == 0b1111_11111111)
 	 */
 	public static final long SequenceMask = BitOperator.maxValueOfBit(SequenceBits);
 
@@ -89,7 +89,7 @@ public final class SnowflakeAlgorithm {
 	 * 
 	 * @param ownerId
 	 */
-	public SnowflakeAlgorithm(int ownerId) {
+	public SnowflakeAlgo(int ownerId) {
 		this(ownerId, ZonedDateTime.ofInstant(Instant.EPOCH, TimeZone.UTC));
 	}
 
@@ -98,7 +98,7 @@ public final class SnowflakeAlgorithm {
 	 * @param ownerId
 	 * @param baseline
 	 */
-	public SnowflakeAlgorithm(int ownerId, @Nonnull LocalDate baseline) {
+	public SnowflakeAlgo(int ownerId, @Nonnull LocalDate baseline) {
 		this(ownerId, baseline, ZoneOffset.UTC);
 	}
 
@@ -108,7 +108,7 @@ public final class SnowflakeAlgorithm {
 	 * @param baseline
 	 * @param zoneId
 	 */
-	public SnowflakeAlgorithm(int ownerId, @Nonnull LocalDate baseline, @Nonnull ZoneId zoneId) {
+	public SnowflakeAlgo(int ownerId, @Nonnull LocalDate baseline, @Nonnull ZoneId zoneId) {
 		this(ownerId, baseline == null ? EpochUtil.ZeroPoint
 				: ZonedDateTime.of(baseline, LocalTime.MIN, zoneId == null ? TimeZone.UTC : zoneId));
 	}
@@ -117,8 +117,8 @@ public final class SnowflakeAlgorithm {
 	 * 
 	 * @param baseline
 	 */
-	private SnowflakeAlgorithm(int ownerId, ZonedDateTime baseline) {
-		if (ownerId < 0 || ownerId >= 1024)
+	private SnowflakeAlgo(int ownerId, ZonedDateTime baseline) {
+		if (ownerId < 0 || ownerId > BitOperator.maxValueOfBit(OwnerIdBits))
 			throw new IllegalArgumentException("ownerId must be [greater than 0] and [less than or equal 1024]");
 		this.ownerId = ownerId;
 		this.baseline = baseline.isBefore(EpochUtil.ZeroPoint) ? 0 : baseline.toInstant().toEpochMilli();
@@ -167,10 +167,11 @@ public final class SnowflakeAlgorithm {
 	 * 获得下一个ID (该方法是线程安全的)
 	 * 
 	 * @return SnowflakeId
+	 * @throws ClockBackwardException
 	 */
 	public synchronized long next() throws ClockBackwardException {
 		long currentTimestamp = currentTimeMillis();
-		// 如果当前时间小于上一次ID生成的时间戳, 说明系统时钟回退过这个时候应当抛出异常
+		// 如果当前时间小于上一次ID生成的时间戳, 说明发生系统时钟回退, 此时抛出异常
 		if (currentTimestamp < lastTimestamp) {
 			throw new ClockBackwardException(lastTimestamp, currentTimestamp);
 		}
@@ -189,10 +190,10 @@ public final class SnowflakeAlgorithm {
 		}
 		// 更新最后一次生成ID的时间截
 		lastTimestamp = currentTimestamp;
-		// 移位并通过或运算拼接在一起组成64位ID
+		// 移位并通过或运算拼接在一起组成63位ID
 		return // 计算时间戳于基线时间的偏移量, 并将偏移量左移至高位
 		((currentTimestamp - baseline) << TimestampLeftShift)
-				// 所有者ID左移至中间
+				// 所有者ID左移至中间位
 				| (ownerId << OwnerIdLeftShift)
 				// 自增位
 				| sequence;
@@ -217,7 +218,7 @@ public final class SnowflakeAlgorithm {
 		System.out.println(BitFormatter.longBinaryFormat(SequenceMask));
 		System.out.println(BitFormatter.longBinaryFormat(OwnerIdMask));
 
-		SnowflakeAlgorithm algorithm = new SnowflakeAlgorithm(20);
+		SnowflakeAlgo algorithm = new SnowflakeAlgo(20);
 
 		long next = algorithm.next();
 		System.out.println(BitFormatter.longBinaryFormat(next));
@@ -226,7 +227,7 @@ public final class SnowflakeAlgorithm {
 		System.out.println(System.currentTimeMillis());
 		System.out.println(time);
 		System.out.println(BitFormatter.longBinaryFormat(time));
-		System.out.println(SnowflakeAlgorithm.parseOwnerId(next));
+		System.out.println(SnowflakeAlgo.parseOwnerId(next));
 
 		System.out.println(ZonedDateTime.ofInstant(Instant.ofEpochMilli(time), TimeZone.UTC));
 
@@ -239,6 +240,8 @@ public final class SnowflakeAlgorithm {
 		System.out.println(maxOwnerId);
 		System.out.println(BitFormatter.longBinaryFormat(maxOwnerId));
 		System.out.println(HexUtil.toHexString(maxOwnerId));
+
+		System.out.println(BitFormatter.longBinaryFormat(1023L));
 
 	}
 

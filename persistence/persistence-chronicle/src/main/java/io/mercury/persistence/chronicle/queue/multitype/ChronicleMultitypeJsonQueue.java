@@ -77,7 +77,7 @@ public class ChronicleMultitypeJsonQueue<E extends Envelope> extends
 		}
 
 		// 內建JsonMsg对象
-		private JsonMsg jsonMsg = new JsonMsg();
+		private final JsonMsg jsonMsg = new JsonMsg();
 
 		@Override
 		protected void append0(E envelope, String t) {

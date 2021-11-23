@@ -1,5 +1,7 @@
 package io.mercury.common.collections.group;
 
+import static io.mercury.common.collections.ImmutableMaps.newImmutableMap;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -8,8 +10,6 @@ import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.eclipse.collections.api.map.ImmutableMap;
-
-import io.mercury.common.collections.ImmutableMaps;
 
 /**
  * 
@@ -31,7 +31,7 @@ public abstract class AbstractGroup<K, V> implements Group<K, V> {
 		if (map == null)
 			throw new IllegalArgumentException("supplier result is null");
 		this.keys = map.keySet();
-		this.savedMap = ImmutableMaps.newImmutableMap(supplier);
+		this.savedMap = newImmutableMap(supplier);
 	}
 
 	@Override
