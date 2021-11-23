@@ -111,33 +111,39 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 		}
 
 		public Builder<E, I> addFirstProcessor(@Nonnull Processor<E> processor) {
-			Assertor.nonNull(processor, "processor");
-			handlersMap.getIfAbsentPut(0, MutableLists::newFastList).add(
-					// 将Processor实现加载到HandlerProxy中
-					new EventHandlerProxy<>(processor, log));
-			return this;
+			return addProcessor(Integer.MIN_VALUE, processor);
+		}
+
+		public Builder<E, I> addSecondProcessor(@Nonnull Processor<E> processor) {
+			return addProcessor(Integer.MIN_VALUE + 1, processor);
+		}
+
+		public Builder<E, I> addLastProcessor(@Nonnull Processor<E> processor) {
+			return addProcessor(Integer.MAX_VALUE, processor);
 		}
 
 		public Builder<E, I> addProcessor(int level, @Nonnull Processor<E> processor) {
 			Assertor.nonNull(processor, "processor");
-			if (level < 1)
-				return addFirstProcessor(processor);
 			handlersMap.getIfAbsentPut(level, MutableLists::newFastList).add(
-					// 将Processor实现加载到HandlerProxy中
-					new EventHandlerProxy<>(processor, log));
+					// 将Processor实现加载到HandlerWrapper中
+					new EventHandlerWrapper<>(processor, log));
 			return this;
 		}
 
 		public Builder<E, I> addFirstHandler(@Nonnull EventHandler<E> handler) {
-			Assertor.nonNull(handler, "handler");
-			handlersMap.getIfAbsentPut(0, MutableLists::newFastList).add(handler);
-			return this;
+			return addHandler(Integer.MIN_VALUE, handler);
+		}
+
+		public Builder<E, I> addSecondHandler(@Nonnull EventHandler<E> handler) {
+			return addHandler(Integer.MIN_VALUE + 1, handler);
+		}
+
+		public Builder<E, I> addLastHandler(@Nonnull EventHandler<E> handler) {
+			return addHandler(Integer.MAX_VALUE, handler);
 		}
 
 		public Builder<E, I> addHandler(int level, @Nonnull EventHandler<E> handler) {
 			Assertor.nonNull(handler, "handler");
-			if (level < 1)
-				return addFirstHandler(handler);
 			handlersMap.getIfAbsentPut(level, MutableLists::newFastList).add(handler);
 			return this;
 		}

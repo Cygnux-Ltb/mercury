@@ -7,17 +7,17 @@ import com.lmax.disruptor.EventHandler;
 import io.mercury.common.functional.Processor;
 
 /**
- * 包装处理器的事件处理代理
+ * 事件处理器的包装
  * 
  * @author yellow013
  */
-public class EventHandlerProxy<E> implements EventHandler<E> {
+public class EventHandlerWrapper<E> implements EventHandler<E> {
 
 	private final Processor<E> processor;
 
 	private final Logger log;
 
-	public EventHandlerProxy(Processor<E> processor, Logger log) {
+	public EventHandlerWrapper(Processor<E> processor, Logger log) {
 		this.processor = processor;
 		this.log = log;
 	}

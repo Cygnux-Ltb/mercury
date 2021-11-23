@@ -10,23 +10,24 @@ import com.lmax.disruptor.RingBuffer;
  * 
  * @author yellow013
  */
-public class EventPublisherProxy<E, I> {
+public class EventPublisherWrapper<E, I> {
 
 	private final RingBuffer<E> ringBuffer;
 
 	private final EventTranslatorOneArg<E, I> translator;
 
-	public EventPublisherProxy(RingBuffer<E> ringBuffer, EventTranslatorOneArg<E, I> translator) {
+	public EventPublisherWrapper(RingBuffer<E> ringBuffer, EventTranslatorOneArg<E, I> translator) {
 		this.ringBuffer = ringBuffer;
 		this.translator = translator;
 	}
 
-	public static <E, I> EventPublisherProxy<E, I> newInstance(RingBuffer<E> ringBuffer,
+	public static <E, I> EventPublisherWrapper<E, I> newInstance(RingBuffer<E> ringBuffer,
 			EventTranslatorOneArg<E, I> translator) {
-		return new EventPublisherProxy<>(ringBuffer, translator);
+		return new EventPublisherWrapper<>(ringBuffer, translator);
 	}
 
 	public void handle(I in) {
 		ringBuffer.publishEvent(translator, in);
 	}
+
 }

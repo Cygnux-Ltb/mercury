@@ -78,8 +78,9 @@ public enum CommonWaitStrategy implements Supplier<WaitStrategy> {
 			return new SleepingWaitStrategy();
 		case Yielding:
 			return new YieldingWaitStrategy();
+		default:
+			return null;
 		}
-		return null;
 	}
 
 }

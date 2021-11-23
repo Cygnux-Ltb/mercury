@@ -1,5 +1,9 @@
 package io.mercury.common.concurrent.disruptor;
 
+import static io.mercury.common.datetime.pattern.spec.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
+
+import java.time.LocalDateTime;
+
 import javax.annotation.Nonnull;
 
 import org.slf4j.Logger;
@@ -32,7 +36,7 @@ abstract class SingleProducerRingBuffer<E, I> extends RunnableComponent {
 
 	protected final Disruptor<E> disruptor;
 
-	protected final EventPublisherProxy<E, I> publisherProxy;
+	protected final EventPublisherWrapper<E, I> publisherWrapper;
 
 	protected SingleProducerRingBuffer(String name, int size, @Nonnull EventFactory<E> eventFactory,
 			@Nonnull WaitStrategy waitStrategy, @Nonnull EventTranslatorOneArg<E, I> translator) {
@@ -41,6 +45,8 @@ abstract class SingleProducerRingBuffer<E, I> extends RunnableComponent {
 		Assertor.nonNull(translator, "translator");
 		if (StringSupport.nonEmpty(name))
 			super.name = name;
+		else
+			super.name = "SP-RingBuffer-" + YYYYMMDD_L_HHMMSSSSS.format(LocalDateTime.now());
 		this.disruptor = new Disruptor<>(
 				// 事件工厂
 				eventFactory,
@@ -52,7 +58,7 @@ abstract class SingleProducerRingBuffer<E, I> extends RunnableComponent {
 				ProducerType.SINGLE,
 				// Waiting策略
 				waitStrategy);
-		this.publisherProxy = new EventPublisherProxy<>(disruptor.getRingBuffer(), translator);
+		this.publisherWrapper = new EventPublisherWrapper<>(disruptor.getRingBuffer(), translator);
 	}
 
 	@Override
@@ -76,7 +82,7 @@ abstract class SingleProducerRingBuffer<E, I> extends RunnableComponent {
 		try {
 			if (isClosed.get())
 				return false;
-			publisherProxy.handle(in);
+			publisherWrapper.handle(in);
 			return true;
 		} catch (Exception e) {
 			log.error("{} -> EventPublisher::handle(in) func throws exception -> [{}]", name, e.getMessage(), e);

@@ -123,8 +123,8 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 		public Builder<E, I> addProcessor(@Nonnull Processor<E> processor) {
 			Assertor.nonNull(processor, "processor");
 			this.handlers.add(
-					// 将Processor实现加载到HandlerProxy中
-					new EventHandlerProxy<>(processor, log));
+					// 将Processor实现加载到HandlerWrapper中
+					new EventHandlerWrapper<>(processor, log));
 			return this;
 		}
 

@@ -1,6 +1,6 @@
 package io.mercury.common.thread;
 
-import static io.mercury.common.datetime.pattern.spec.DateTimePattern.YYYY_MM_DD_HH_MM_SS_SSS;
+import static io.mercury.common.datetime.pattern.spec.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -30,7 +30,7 @@ public abstract class RunnableComponent {
 	/**
 	 * name
 	 */
-	protected String name = "Component-[" + YYYY_MM_DD_HH_MM_SS_SSS.format(LocalDateTime.now()) + "]";
+	protected String name = "Component-[" + YYYYMMDD_L_HHMMSSSSS.format(LocalDateTime.now()) + "]";
 
 	protected RunnableComponent() {
 	}
