@@ -64,12 +64,6 @@
 
 		<dependency>
 			<groupId>io.mercury</groupId>
-			<artifactId>persistence-rocksdb</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.mercury</groupId>
 			<artifactId>serialization-avro</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -83,9 +77,6 @@
 			<version>${akka.version}</version>
 		</dependency>
 
-		<!-- <dependency> <groupId>com.typesafe.akka</groupId> <artifactId>akka-remote_2.13</artifactId> 
-			<version>${akka.version}</version> </dependency> -->
-			
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-slf4j_2.13</artifactId>
