@@ -31,7 +31,7 @@ public class UserActor extends GenericActorT1<User> {
 	}
 
 	@Override
-	protected void handleUnknown(Object t) {
+	protected void handleUnknown0(Object t) {
 
 	}
 

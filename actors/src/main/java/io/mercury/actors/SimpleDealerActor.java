@@ -1,10 +1,11 @@
 package io.mercury.actors;
 
+import static io.mercury.common.collections.MutableLists.newFastList;
+
 import org.eclipse.collections.api.list.MutableList;
 
 import akka.actor.ActorRef;
 import io.mercury.actors.ref.GenericActorT2;
-import io.mercury.common.collections.MutableLists;
 
 public abstract class SimpleDealerActor<T> extends GenericActorT2<ActorRef, T> {
 
@@ -12,7 +13,7 @@ public abstract class SimpleDealerActor<T> extends GenericActorT2<ActorRef, T> {
 	private int turn = -1;
 
 	protected SimpleDealerActor() {
-		this.registered = MutableLists.newFastList(8);
+		this.registered = newFastList(8);
 	}
 
 	@Override
@@ -21,19 +22,19 @@ public abstract class SimpleDealerActor<T> extends GenericActorT2<ActorRef, T> {
 	}
 
 	@Override
-	protected void onEvent0(ActorRef t0) {
-		registered.add(t0);
+	protected void onEvent0(ActorRef ref) {
+		registered.add(ref);
 	}
 
 	@Override
-	protected void onEvent1(T t1) {
+	protected void onEvent1(T t) {
 		if (registered.isEmpty())
-			handleRegisteredIsEmpty(t1);
+			handleRegisteredIsEmpty(t);
 		else
-			registered.get(nextActorIndex()).forward(t1, getContext());
+			registered.get(nextActorIndex()).forward(t, getContext());
 	}
 
-	private void handleRegisteredIsEmpty(T t1) {
+	private void handleRegisteredIsEmpty(T t) {
 		// TODO
 	}
 

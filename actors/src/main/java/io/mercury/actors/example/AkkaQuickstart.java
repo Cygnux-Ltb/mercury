@@ -30,11 +30,12 @@ public class AkkaQuickstart {
 		try {
 			System.out.println(">>> Press ENTER to exit <<<");
 			System.in.read();
-		} catch (IOException ignored) {
-
+		} catch (IOException e) {
+			e.printStackTrace();
 		} finally {
 			greeterMain.terminate();
 		}
+
 	}
 
 }
