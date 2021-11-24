@@ -149,8 +149,8 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * 
 	 * @return
 	 */
-	public ZmqPublisher<byte[]> createBytesPublisher() {
-		return createBytesPublisher("");
+	public ZmqPublisher<byte[]> createBinaryPublisher() {
+		return createBinaryPublisher("");
 	}
 
 	/**
@@ -158,7 +158,7 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @param topic
 	 * @return
 	 */
-	public ZmqPublisher<byte[]> createBytesPublisher(String topic) {
+	public ZmqPublisher<byte[]> createBinaryPublisher(String topic) {
 		return createPublisher(topic, bytes -> bytes);
 	}
 
@@ -254,11 +254,9 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	}
 
 	public static void main(String[] args) {
-		System.out.println(ZmqConfigurator.tcp("192.168.1.1", 5551).ioThreads(3)
-				.tcpKeepAlive(TcpKeepAlive.withDefault()).toString());
-
-		System.out.println(ZMQ.getFullVersion() + "\n" + ZMQ.getMajorVersion() + "\n" + ZMQ.getMinorVersion() + "\n"
-				+ ZMQ.getPatchVersion() + "\n" + ZMQ.getVersionString());
+		System.out.println(
+				ZmqConfigurator.tcp("192.168.1.1", 5551).ioThreads(3).tcpKeepAlive(TcpKeepAlive.withDefault()));
+		System.out.println(ZmqConfigurator.getZmqVersion());
 	}
 
 	@Override

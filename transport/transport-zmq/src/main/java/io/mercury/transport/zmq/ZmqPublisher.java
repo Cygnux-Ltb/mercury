@@ -13,28 +13,28 @@ import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.transport.api.Publisher;
+import io.mercury.transport.exception.PublishFailedException;
 import io.mercury.transport.zmq.exception.ZmqBindException;
 
-public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>, Closeable {
+public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byte[], T>, Closeable {
 
 	// default topic
-
-	private final String topic;
+	private final byte[] sendMore;
 
 	private final BytesSerializer<T> ser;
 
 	private static final Logger log = CommonLoggerFactory.getLogger(ZmqPublisher.class);
 
 	/**
-	 * 
+	 * @param topic
 	 * @param cfg
 	 * @param ser
 	 */
 	ZmqPublisher(@Nonnull String topic, @Nonnull ZmqConfigurator cfg, @Nonnull BytesSerializer<T> ser) {
 		super(cfg);
-		this.topic = topic;
+		this.sendMore = topic.getBytes(ZMQ.CHARSET);
 		this.ser = ser;
-		String addr = cfg.getAddr();
+		var addr = cfg.getAddr();
 		if (zSocket.bind(addr)) {
 			log.info("bound addr -> {}", addr);
 		} else {
@@ -46,6 +46,10 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>,
 		this.name = "ZMQ::PUB$" + addr + "/" + topic;
 	}
 
+	public BytesSerializer<T> getSerializer() {
+		return ser;
+	}
+
 	@Override
 	protected SocketType getSocketType() {
 		return SocketType.PUB;
@@ -53,28 +57,26 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<T>,
 
 	@Override
 	public void publish(T msg) {
-		publish(topic, msg);
+		publish(sendMore, msg);
 	}
 
 	@Override
-	public void publish(String target, T msg) {
+	public void publish(byte[] target, T msg) throws PublishFailedException {
 		if (isRunning.get()) {
 			byte[] bytes = ser.serialization(msg);
 			if (bytes != null && bytes.length > 0) {
 				zSocket.sendMore(target);
 				zSocket.send(bytes, ZMQ.NOBLOCK);
 			}
-		} else {
+		} else
 			log.warn("ZmqPublisher -> [{}] already closed", name);
-		}
 	}
 
 	public static void main(String[] args) {
 
 		try (ZmqPublisher<String> publisher = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(2)
-				.createStringPublisher("commond")) {
+				.createStringPublisher("test")) {
 			Random random = new Random();
-
 			for (;;) {
 				publisher.publish(String.valueOf(random.nextInt()));
 				SleepSupport.sleep(1000);

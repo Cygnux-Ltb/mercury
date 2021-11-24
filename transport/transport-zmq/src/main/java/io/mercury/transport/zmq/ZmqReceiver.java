@@ -24,7 +24,7 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 	ZmqReceiver(@Nonnull ZmqConfigurator cfg, @Nonnull Function<byte[], byte[]> handler) {
 		super(cfg);
 		this.handler = handler;
-		String addr = cfg.getAddr();
+		var addr = cfg.getAddr();
 		if (zSocket.bind(addr)) {
 			log.info("bound addr -> {}", addr);
 		} else {
@@ -33,7 +33,11 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 		}
 		setTcpKeepAlive(cfg.getTcpKeepAlive());
 		newStartTime();
-		this.name = "Zmq::Fanout$" + cfg.getAddr();
+		this.name = "ZMQ::REP$" + addr;
+	}
+
+	public Function<byte[], byte[]> getHandler() {
+		return handler;
 	}
 
 	@Override
@@ -53,7 +57,7 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 
 	@Override
 	public void reconnect() {
-		throw new UnsupportedOperationException("ZmqFanout unsupport reconnect");
+		throw new UnsupportedOperationException("ZmqReceiver unsupport reconnect function");
 	}
 
 	public static void main(String[] args) {

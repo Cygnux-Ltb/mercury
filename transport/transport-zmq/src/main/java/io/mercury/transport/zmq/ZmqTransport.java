@@ -38,7 +38,7 @@ abstract class ZmqTransport extends TransportComponent implements Transport, Clo
 		this.cfg = cfg;
 		this.zCtx = new ZContext(cfg.getIoThreads());
 		log.info("zmq context initialized, ioThreads=={}", cfg.getIoThreads());
-		SocketType type = getSocketType();
+		var type = getSocketType();
 		this.zSocket = zCtx.createSocket(type);
 		log.info("ZMQ socket created with type -> {}", type);
 	}
@@ -88,8 +88,8 @@ abstract class ZmqTransport extends TransportComponent implements Transport, Clo
 			zSocket.close();
 			zCtx.close();
 		}
-		log.info("zmq transport close");
 		newEndTime();
+		log.info("zmq transport closed");
 		return zCtx.isClosed();
 	}
 

@@ -21,10 +21,14 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(ZmqSender.class);
 
+	/**
+	 * @param cfg
+	 * @param ser
+	 */
 	ZmqSender(@Nonnull ZmqConfigurator cfg, @Nonnull BytesSerializer<T> ser) {
 		super(cfg);
 		this.ser = ser;
-		String addr = cfg.getAddr();
+		var addr = cfg.getAddr();
 		if (zSocket.connect(addr)) {
 			log.info("connected addr -> {}", addr);
 		} else {
@@ -32,7 +36,7 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 			throw new ZmqConnectionException(addr);
 		}
 		newStartTime();
-		this.name = "ZMQ::REQ$" + cfg.getAddr();
+		this.name = "ZMQ::REQ$" + addr;
 	}
 
 	@Override
@@ -52,11 +56,8 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 	public static void main(String[] args) {
 
 		ZmqConfigurator cfg = ZmqConfigurator.tcp("localhost", 5551);
-
 		try (ZmqSender<String> sender = new ZmqSender<String>(cfg, msg -> msg.getBytes())) {
-
 			sender.sent("TEST MSG");
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

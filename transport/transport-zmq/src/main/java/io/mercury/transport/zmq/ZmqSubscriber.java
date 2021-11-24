@@ -7,8 +7,8 @@ import javax.annotation.Nonnull;
 
 import org.slf4j.Logger;
 import org.zeromq.SocketType;
+import org.zeromq.ZMQ;
 
-import io.mercury.common.character.Charsets;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.transport.api.Receiver;
 import io.mercury.transport.api.Subscriber;
@@ -52,7 +52,7 @@ public final class ZmqSubscriber extends ZmqTransport implements Receiver, Subsc
 				// 使用默认TcpKeepAlive配置
 				? TcpKeepAlive.enable().setKeepAliveCount(10).setKeepAliveIdle(30).setKeepAliveInterval(30)
 				: cfg.getTcpKeepAlive());
-		topics.each(topic -> zSocket.subscribe(topic.getBytes(Charsets.UTF8)));
+		topics.each(topic -> zSocket.subscribe(topic.getBytes(ZMQ.CHARSET)));
 		newStartTime();
 		this.name = "ZMQ::SUB$" + addr + "/" + topics;
 	}
@@ -68,9 +68,6 @@ public final class ZmqSubscriber extends ZmqTransport implements Receiver, Subsc
 
 	@Override
 	public void receive() throws ReceiverStartException {
-		if (isRunning.compareAndSet(isConnected(), isConnected())) {
-
-		}
 		while (isRunning.get()) {
 			byte[] topic = zSocket.recv();
 			log.debug("received topic bytes, length: {}", topic.length);
@@ -104,10 +101,9 @@ public final class ZmqSubscriber extends ZmqTransport implements Receiver, Subsc
 	}
 
 	public static void main(String[] args) {
-		;
 		try (ZmqSubscriber subscriber = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(2).createSubscriber(
-				Topics.with("command"),
-				(topic, msg) -> System.out.println(new String(topic) + "->" + new String(msg)))) {
+				Topics.with("test"),
+				(topic, msg) -> System.out.println(new String(topic) + " -> " + new String(msg)))) {
 			subscriber.subscribe();
 		} catch (IOException e) {
 			e.printStackTrace();
