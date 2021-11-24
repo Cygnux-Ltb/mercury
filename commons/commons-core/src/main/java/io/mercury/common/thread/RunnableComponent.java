@@ -1,6 +1,6 @@
 package io.mercury.common.thread;
 
-import static io.mercury.common.datetime.pattern.spec.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
+import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicBoolean;

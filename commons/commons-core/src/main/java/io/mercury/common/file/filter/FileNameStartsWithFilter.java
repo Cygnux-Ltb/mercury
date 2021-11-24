@@ -1,4 +1,4 @@
-package io.mercury.common.file.filefilter;
+package io.mercury.common.file.filter;
 
 /*
  * #%L

@@ -1,7 +1,7 @@
 package io.mercury.common.sequence;
 
 import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
-import static io.mercury.common.datetime.pattern.spec.DateTimePattern.YYYY_MM_DD_HH_MM_SS;
+import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HH_MM_SS;
 
 import java.time.Duration;
 import java.time.LocalDate;
