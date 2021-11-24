@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>org.janusgraph</groupId>
 			<artifactId>janusgraph-core</artifactId>
-			<version>0.5.3</version>
+			<version>0.6.0</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -49,7 +49,7 @@
 		<dependency>
 			<groupId>org.apache.tinkerpop</groupId>
 			<artifactId>gremlin-driver</artifactId>
-			<version>3.5.0</version>
+			<version>3.5.1</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -66,4 +66,5 @@
 			</exclusions>
 		</dependency>
 	</dependencies>
+	
 </project>
