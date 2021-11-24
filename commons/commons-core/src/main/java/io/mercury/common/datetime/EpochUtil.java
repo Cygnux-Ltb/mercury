@@ -14,7 +14,6 @@ import static io.mercury.common.datetime.TimeConst.SECONDS_PER_MINUTE;
 import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
 import static java.lang.System.currentTimeMillis;
 
-import java.nio.charset.Charset;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -30,6 +29,15 @@ public final class EpochUtil {
 	 * EpochTime Zero Point : UTC 1970-01-01 00:00:00.0000
 	 */
 	public static final ZonedDateTime ZeroPoint = ZonedDateTime.ofInstant(Instant.EPOCH, TimeZone.UTC);
+
+	private static final long NANOS_EPOCH_OFFSET;
+
+	static {
+		long millisEpoch = System.currentTimeMillis();
+		long nanosPoint = System.nanoTime();
+		long nanosEpoch = millisEpoch * NANOS_PER_MILLIS;
+		NANOS_EPOCH_OFFSET = nanosEpoch - nanosPoint;
+	}
 
 	/**
 	 * 
@@ -205,13 +213,13 @@ public final class EpochUtil {
 	/**
 	 * 
 	 * @param datetime
-	 * @param zoneOffset
+	 * @param offset
 	 * @return
 	 */
-	public static final long getEpochMillis(@Nonnull LocalDateTime datetime, @Nonnull ZoneOffset zoneOffset) {
+	public static final long getEpochMillis(@Nonnull LocalDateTime datetime, @Nonnull ZoneOffset offset) {
 		return datetime.toLocalDate().toEpochDay() * MILLIS_PER_DAY
 				+ datetime.toLocalTime().toSecondOfDay() * MILLIS_PER_SECONDS + datetime.getNano() / NANOS_PER_MILLIS
-				- zoneOffset.getTotalSeconds() * MILLIS_PER_SECONDS;
+				- offset.getTotalSeconds() * MILLIS_PER_SECONDS;
 	}
 
 	/**
@@ -245,13 +253,20 @@ public final class EpochUtil {
 	/**
 	 * 
 	 * @param datetime
-	 * @param zoneOffset
+	 * @param offset
 	 * @return
 	 */
-	public static final long getEpochMicros(@Nonnull LocalDateTime datetime, @Nonnull ZoneOffset zoneOffset) {
+	public static final long getEpochMicros(@Nonnull LocalDateTime datetime, @Nonnull ZoneOffset offset) {
 		return datetime.toLocalDate().toEpochDay() * MICROS_PER_DAY
 				+ datetime.toLocalTime().toSecondOfDay() * MICROS_PER_SECONDS + datetime.getNano() / NANOS_PER_MICROS
-				- zoneOffset.getTotalSeconds() * MICROS_PER_SECONDS;
+				- offset.getTotalSeconds() * MICROS_PER_SECONDS;
+	}
+
+	/**
+	 * @return
+	 */
+	public static final long getEpochNanos() {
+		return System.nanoTime() + NANOS_EPOCH_OFFSET;
 	}
 
 	/**
@@ -294,26 +309,33 @@ public final class EpochUtil {
 
 	public static void main(String[] args) {
 
-		long epoch = currentTimeMillis();
-		LocalDateTime now = LocalDateTime.now();
-		ZoneOffset offset = ZonedDateTime.now().getOffset();
+//		long epoch = currentTimeMillis();
+//		LocalDateTime now = LocalDateTime.now();
+//		ZoneOffset offset = ZonedDateTime.now().getOffset();
+//
+//		System.out.println(offset.getId() + "-" + offset.getTotalSeconds());
+//		System.out.println(epoch);
+//		System.out.println();
+//		System.out.println(getEpochSeconds(now));
+//		System.out.println(now.toEpochSecond(offset));
+//		System.out.println();
+//		System.out.println(getEpochMillis());
+//		System.out.println(getEpochMillis(now));
+//		System.out.println(getEpochMillis(now, offset));
+//		System.out.println();
+//		System.out.println(getEpochMicros());
+//		System.out.println(getEpochMicros(now));
+//		System.out.println(getEpochMicros(now, offset));
+//		System.out.println(getEpochHours());
 
-		System.out.println(offset.getId() + "-" + offset.getTotalSeconds());
-		System.out.println(epoch);
-		System.out.println();
-		System.out.println(getEpochSeconds(now));
-		System.out.println(now.toEpochSecond(offset));
-		System.out.println();
-		System.out.println(getEpochMillis());
-		System.out.println(getEpochMillis(now));
-		System.out.println(getEpochMillis(now, offset));
-		System.out.println();
-		System.out.println(getEpochMicros());
-		System.out.println(getEpochMicros(now));
-		System.out.println(getEpochMicros(now, offset));
-		System.out.println(getEpochHours());
+		long[] nss = new long[50];
+		long ms = System.currentTimeMillis();
+		for (int i = 0; i < nss.length; i++)
+			nss[i] = getEpochNanos();
 
-		Charset.availableCharsets().entrySet().stream().forEach(System.out::println);
+		System.out.println(ms);
+		for (int i = 0; i < nss.length; i++)
+			System.out.println(nss[i]);
 
 	}
 

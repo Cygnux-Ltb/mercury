@@ -1,6 +1,11 @@
 package io.mercury.common.datetime.pattern;
 
+import static io.mercury.common.datetime.TimeZone.UTC;
+
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.Temporal;
 
@@ -20,21 +25,43 @@ public interface TemporalPattern {
 
 	/**
 	 * 
-	 * @return the new <b> [java.time.format.DateTimeFormatter] </b> object
+	 * @return the new <b> [java.time.format.DateTimeFormatter] </b> instance
 	 */
-	DateTimeFormatter newDateTimeFormatter();
+	default DateTimeFormatter newDateTimeFormatter() {
+		return DateTimeFormatter.ofPattern(getPattern());
+	}
 
 	/**
 	 * 
-	 * @return the new <b> [java.text.SimpleDateFormat.SimpleDateFormat] </b> object
+	 * @return the new <b> [java.text.DateFormat] </b> instance
 	 */
-	SimpleDateFormat newSimpleDateFormat();
+	default DateFormat newDateFormat() {
+		return new SimpleDateFormat(getPattern());
+	}
 
 	/**
 	 * 
 	 * @param temporal
 	 * @return
 	 */
-	String format(Temporal temporal);
+	default String format(Temporal temporal) {
+		return getFormatter().format(temporal);
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	default String now() {
+		return getFormatter().format(LocalDateTime.now());
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	default String nowWithUTC() {
+		return getFormatter().format(ZonedDateTime.now(UTC).toLocalDateTime());
+	}
 
 }

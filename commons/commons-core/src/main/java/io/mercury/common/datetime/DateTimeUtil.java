@@ -11,10 +11,10 @@ import java.util.Date;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
+import io.mercury.common.datetime.pattern.DatePattern;
+import io.mercury.common.datetime.pattern.DateTimePattern;
 import io.mercury.common.datetime.pattern.TemporalPattern;
-import io.mercury.common.datetime.pattern.spec.DatePattern;
-import io.mercury.common.datetime.pattern.spec.DateTimePattern;
-import io.mercury.common.datetime.pattern.spec.TimePattern;
+import io.mercury.common.datetime.pattern.TimePattern;
 import io.mercury.common.util.StringSupport;
 
 @ThreadSafe
@@ -434,21 +434,21 @@ public final class DateTimeUtil {
 
 	/**
 	 * 
-	 * @param startTime
+	 * @param start
 	 * @return
 	 */
-	public final static long durationBySecond(@Nonnull LocalTime startTime) {
-		return durationBySecond(startTime, LocalTime.now());
+	public final static long durationBySecond(@Nonnull LocalTime start) {
+		return durationBySecond(start, LocalTime.now());
 	}
 
 	/**
 	 * 
-	 * @param startTime
-	 * @param endTime
+	 * @param start
+	 * @param end
 	 * @return
 	 */
-	public final static long durationBySecond(@Nonnull LocalTime startTime, @Nonnull LocalTime endTime) {
-		return endTime.toSecondOfDay() - startTime.toSecondOfDay();
+	public final static long durationBySecond(@Nonnull LocalTime start, @Nonnull LocalTime end) {
+		return end.toSecondOfDay() - start.toSecondOfDay();
 	}
 
 	/**
@@ -514,7 +514,7 @@ public final class DateTimeUtil {
 	 * @param pattern
 	 * @return
 	 */
-	public final static String fmtDateTime(@Nonnull DateTimePattern pattern, @Nonnull LocalDateTime datetime) {
+	public final static String formatDateTime(@Nonnull DateTimePattern pattern, @Nonnull LocalDateTime datetime) {
 		return pattern.getFormatter().format(datetime);
 	}
 
@@ -523,7 +523,7 @@ public final class DateTimeUtil {
 	 * @param pattern
 	 * @return
 	 */
-	public final static String fmtDateTime(@Nonnull DateTimePattern pattern) {
+	public final static String formatDateTime(@Nonnull DateTimePattern pattern) {
 		return pattern.getFormatter().format(LocalDateTime.now());
 	}
 

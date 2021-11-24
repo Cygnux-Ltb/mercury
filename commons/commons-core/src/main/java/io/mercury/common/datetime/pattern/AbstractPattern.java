@@ -1,12 +1,6 @@
 package io.mercury.common.datetime.pattern;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.Temporal;
-
-import io.mercury.common.datetime.TimeZone;
 
 /**
  * 
@@ -89,50 +83,6 @@ public abstract class AbstractPattern implements TemporalPattern {
 	@Override
 	public DateTimeFormatter getFormatter() {
 		return formatter;
-	}
-
-	/**
-	 * 
-	 * @return the new <b> [java.time.format.DateTimeFormatter] </b> object
-	 */
-	@Override
-	public DateTimeFormatter newDateTimeFormatter() {
-		return DateTimeFormatter.ofPattern(pattern);
-	}
-
-	/**
-	 * 
-	 * @return the new <b> [java.text.SimpleDateFormat.SimpleDateFormat] </b> object
-	 */
-	@Override
-	public SimpleDateFormat newSimpleDateFormat() {
-		return new SimpleDateFormat(pattern);
-	}
-
-	/**
-	 * 
-	 * @param temporal
-	 * @return
-	 */
-	@Override
-	public String format(Temporal temporal) {
-		return formatter.format(temporal);
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public String now() {
-		return format(LocalDateTime.now());
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public String nowWithUTC() {
-		return format(ZonedDateTime.now(TimeZone.UTC).toLocalDateTime());
 	}
 
 }
