@@ -17,4 +17,14 @@ public interface Separator {
 	 */
 	String PATH_SEPARATOR = System.getProperty("path.separator");
 
+	/**
+	 * char = '-';
+	 */
+	String CHAR_LINE = "-";
+
+	/**
+	 * char = ' ';
+	 */
+	String CHAR_BLANK = " ";
+
 }
