@@ -1,8 +1,17 @@
 package io.mercury.transport.api;
 
+import javax.annotation.Nonnull;
+
 import io.mercury.transport.exception.PublishFailedException;
 
-public interface Publisher<T> extends Transport {
+/**
+ * 
+ * @author yellow013
+ *
+ * @param <T> target type
+ * @param <M> message type
+ */
+public interface Publisher<T, M> extends Transport {
 
 	/**
 	 * Publish to default location
@@ -10,7 +19,7 @@ public interface Publisher<T> extends Transport {
 	 * @param msg
 	 * @throws PublishFailedException
 	 */
-	void publish(T msg) throws PublishFailedException;
+	void publish(@Nonnull M msg) throws PublishFailedException;
 
 	/**
 	 * Publish to target location
@@ -19,7 +28,6 @@ public interface Publisher<T> extends Transport {
 	 * @param msg
 	 * @throws PublishFailedException
 	 */
-	void publish(String target, T msg) throws PublishFailedException;
-
+	void publish(@Nonnull T target, @Nonnull M msg) throws PublishFailedException;
 
 }
