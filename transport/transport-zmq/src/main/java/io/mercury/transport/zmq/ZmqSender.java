@@ -29,9 +29,9 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 		super(cfg);
 		this.ser = ser;
 		var addr = cfg.getAddr();
-		if (zSocket.connect(addr)) {
+		if (zSocket.connect(addr))
 			log.info("connected addr -> {}", addr);
-		} else {
+		else {
 			log.error("unable to connect addr -> {}", addr);
 			throw new ZmqConnectionException(addr);
 		}

@@ -35,9 +35,9 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
 		this.sendMore = topic.getBytes(ZMQ.CHARSET);
 		this.ser = ser;
 		var addr = cfg.getAddr();
-		if (zSocket.bind(addr)) {
+		if (zSocket.bind(addr))
 			log.info("bound addr -> {}", addr);
-		} else {
+		else {
 			log.error("unable to bind -> {}", addr);
 			throw new ZmqBindException(addr);
 		}

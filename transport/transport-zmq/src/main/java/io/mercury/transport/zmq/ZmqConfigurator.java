@@ -219,20 +219,20 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 		return new ZmqPublisher<>(topic, this, ser);
 	}
 
-	private transient String strCache;
+	private transient String cache;
 
 	@Override
 	public String toString() {
-		if (strCache == null)
-			this.strCache = JsonWrapper.toJson(this);
-		return strCache;
+		if (cache == null)
+			this.cache = JsonWrapper.toJson(this);
+		return cache;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof ZmqConfigurator)) {
+		if (obj == null || !(obj instanceof ZmqConfigurator))
 			return super.equals(obj);
-		} else {
+		else {
 			ZmqConfigurator o = (ZmqConfigurator) obj;
 			if (!this.addr.equals(o.getAddr()))
 				return false;

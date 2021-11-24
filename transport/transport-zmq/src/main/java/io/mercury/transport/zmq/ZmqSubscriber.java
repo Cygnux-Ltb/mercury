@@ -42,9 +42,9 @@ public final class ZmqSubscriber extends ZmqTransport implements Receiver, Subsc
 		this.topics = topics;
 		this.consumer = consumer;
 		String addr = cfg.getAddr();
-		if (zSocket.connect(addr)) {
+		if (zSocket.connect(addr))
 			log.info("connected addr -> {}", addr);
-		} else {
+		else {
 			log.error("unable to connect addr -> {}", addr);
 			throw new ZmqConnectionException(addr);
 		}

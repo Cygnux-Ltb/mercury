@@ -25,9 +25,9 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 		super(cfg);
 		this.handler = handler;
 		var addr = cfg.getAddr();
-		if (zSocket.bind(addr)) {
+		if (zSocket.bind(addr)) 
 			log.info("bound addr -> {}", addr);
-		} else {
+		 else {
 			log.error("unable to bind -> {}", addr);
 			throw new ZmqBindException(addr);
 		}

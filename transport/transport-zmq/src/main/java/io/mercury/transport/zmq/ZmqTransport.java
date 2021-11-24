@@ -63,7 +63,7 @@ abstract class ZmqTransport extends TransportComponent implements Transport, Clo
 		return zSocket;
 	}
 
-	public ZmqConfigurator getCfg() {
+	public ZmqConfigurator getConfigurator() {
 		return cfg;
 	}
 
