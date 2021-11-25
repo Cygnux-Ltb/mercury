@@ -47,9 +47,6 @@
 			<version>${project.version}</version>
 		</dependency>
 
-
-
-
 		<!-- ####### chronicle-core ####### -->
 		<!-- Low level access to native memory, JVM and OS. -->
 		<dependency>
