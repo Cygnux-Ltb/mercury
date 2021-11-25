@@ -1,14 +1,15 @@
 package io.mercury.common.datetime;
 
 import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
-import static io.mercury.common.sequence.SysNanoSeq.nanos;
 import static java.lang.System.currentTimeMillis;
+import static java.lang.System.nanoTime;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
 import javax.annotation.Nonnull;
@@ -34,9 +35,9 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 	private final long sysNanoTime;
 
 	/**
-	 * java.time.ZoneId
+	 * java.time.ZoneOffset
 	 */
-	private final ZoneId zoneId;
+	private final ZoneOffset offset;
 
 	/**
 	 * java.time.Instant
@@ -46,22 +47,22 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 	/**
 	 * java.time.ZonedDateTime
 	 */
-	private ZonedDateTime zonedDateTime;
+	private ZonedDateTime datetime;
 
 	/**
 	 * 
 	 * @param epochMillis
 	 * @param zoneId
 	 * @param instant
-	 * @param zonedDateTime
+	 * @param datetime
 	 */
-	private Timestamp(long epochMillis, @Nonnull ZoneId zoneId, @Nullable Instant instant,
-			@Nullable ZonedDateTime zonedDateTime) {
-		this.sysNanoTime = nanos();
+	private Timestamp(long epochMillis, @Nonnull ZoneOffset offset, @Nullable Instant instant,
+			@Nullable ZonedDateTime datetime) {
+		this.sysNanoTime = nanoTime();
 		this.epochMillis = epochMillis;
-		this.zoneId = zoneId;
+		this.offset = offset;
 		this.instant = instant;
-		this.zonedDateTime = zonedDateTime;
+		this.datetime = datetime;
 	}
 
 	/**
@@ -76,8 +77,8 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 	 * 
 	 * @return
 	 */
-	public static Timestamp now(@Nonnull ZoneId zoneId) {
-		return new Timestamp(currentTimeMillis(), zoneId, null, null);
+	public static Timestamp now(@Nonnull ZoneOffset offset) {
+		return new Timestamp(currentTimeMillis(), offset, null, null);
 	}
 
 	/**
@@ -95,8 +96,8 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 	 * @param zoneId
 	 * @return
 	 */
-	public static Timestamp withEpochMillis(long epochMillis, @Nonnull ZoneId zoneId) {
-		return new Timestamp(epochMillis, zoneId, null, null);
+	public static Timestamp withEpochMillis(long epochMillis, @Nonnull ZoneOffset offset) {
+		return new Timestamp(epochMillis, offset, null, null);
 	}
 
 	/**
@@ -114,8 +115,8 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 	 * @param zoneId
 	 * @return
 	 */
-	public static Timestamp withInstant(@Nonnull Instant instant, @Nonnull ZoneId zoneId) {
-		return new Timestamp(instant.toEpochMilli(), zoneId, instant, null);
+	public static Timestamp withInstant(@Nonnull Instant instant, @Nonnull ZoneOffset offset) {
+		return new Timestamp(instant.toEpochMilli(), offset, instant, null);
 	}
 
 	/**
@@ -197,18 +198,18 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 	 * 
 	 * @return
 	 */
-	public ZoneId getZoneId() {
-		return zoneId;
+	public ZoneOffset getOffset() {
+		return offset;
 	}
 
 	/**
 	 * 
 	 * @return
 	 */
-	public ZonedDateTime getZonedDateTime() {
-		if (zonedDateTime == null)
-			this.zonedDateTime = getZonedDateTimeOf(zoneId);
-		return zonedDateTime;
+	public ZonedDateTime getDatetime() {
+		if (datetime == null)
+			this.datetime = getDatetimeWith(offset);
+		return datetime;
 	}
 
 	/**
@@ -217,7 +218,7 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 	 * @param zoneId
 	 * @return
 	 */
-	public ZonedDateTime getZonedDateTimeOf(ZoneId zoneId) {
+	public ZonedDateTime getDatetimeWith(ZoneId zoneId) {
 		newInstantOfEpochMillis();
 		return ZonedDateTime.ofInstant(instant, zoneId);
 	}
@@ -238,9 +239,9 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 	}
 
 	private static final String epochMillisField = "{\"epochMillis\" : ";
-	private static final String zoneIdField = ", \"zoneId\" : ";
+	private static final String offsetField = ", \"offset\" : ";
 	private static final String instantField = ", \"instant\" : ";
-	private static final String zonedDateTimeField = ", \"zonedDateTime\" : ";
+	private static final String datetimeField = ", \"datetime\" : ";
 	private static final String end = "}";
 
 	@Override
@@ -248,15 +249,15 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 		StringBuilder builder = new StringBuilder(90);
 		builder.append(epochMillisField);
 		builder.append(epochMillis);
-		builder.append(zoneIdField);
-		builder.append(zoneId);
+		builder.append(offsetField);
+		builder.append(offset);
 		if (instant != null) {
 			builder.append(instantField);
 			builder.append(instant);
 		}
-		if (zonedDateTime != null) {
-			builder.append(zonedDateTimeField);
-			builder.append(zonedDateTime);
+		if (datetime != null) {
+			builder.append(datetimeField);
+			builder.append(datetime);
 		}
 		builder.append(end);
 		return builder.toString();
@@ -311,11 +312,11 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 		System.out.println(now.getEpochMillis());
 		System.out.println(now.getInstant().getEpochSecond() * 1000000 + now.getInstant().getNano() / 1000);
 		System.out.println(now.getInstant());
-		System.out.println(now.getZonedDateTime());
+		System.out.println(now.getDatetime());
 		System.out.println(now);
 
 		System.out.println(Timestamp.now());
-		System.out.println(Timestamp.withEpochMillis(47237547328L).getZonedDateTimeOf(TimeZone.UTC));
+		System.out.println(Timestamp.withEpochMillis(47237547328L).getDatetimeWith(TimeZone.UTC));
 		System.out.println(Timestamp.withDateTime(LocalDateTime.now(), TimeZone.CST));
 
 	}

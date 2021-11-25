@@ -62,7 +62,7 @@ public class Window<K, R, P> {
 	private static final Logger logger = LoggerFactory.getLogger(Window.class);
 
 	private final int maxSize;
-	private final ConcurrentHashMap<K, DefaultWindowFuture<K, R, P>> futures;
+	private final ConcurrentHashMap<K, WindowFuture<K, R, P>> futures;
 	private final ReentrantLock lock;
 	private final Condition completedCondition;
 	// number of threads waiting to offer a request to be accepted
@@ -127,7 +127,7 @@ public class Window<K, R, P> {
 			throw new IllegalArgumentException("size must be > 0");
 		}
 		this.maxSize = size;
-		this.futures = new ConcurrentHashMap<K, DefaultWindowFuture<K, R, P>>(size * 2);
+		this.futures = new ConcurrentHashMap<K, WindowFuture<K, R, P>>(size * 2);
 		this.lock = new ReentrantLock();
 		this.completedCondition = this.lock.newCondition();
 		this.pendingOffers = new AtomicInteger(0);
@@ -233,7 +233,7 @@ public class Window<K, R, P> {
 	public synchronized void destroy() {
 		try {
 			this.abortPendingOffers();
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 		this.cancelAll();
 		this.listeners.clear();
@@ -249,10 +249,9 @@ public class Window<K, R, P> {
 	 */
 	public synchronized boolean startMonitor() {
 		if (this.executor != null) {
-			if (this.monitorHandle == null) {
-				this.monitorHandle = this.executor.scheduleWithFixedDelay(this.monitor, this.monitorInterval,
-						this.monitorInterval, TimeUnit.MILLISECONDS);
-			}
+			if (this.monitorHandle == null)
+				this.monitorHandle = executor.scheduleWithFixedDelay(monitor, monitorInterval, monitorInterval,
+						TimeUnit.MILLISECONDS);
 			return true;
 		}
 		return false;
@@ -529,13 +528,13 @@ public class Window<K, R, P> {
 		this.lock.lockInterruptibly();
 		try {
 			// try to remove future from window
-			DefaultWindowFuture<K, R, P> future = this.futures.remove(key);
+			WindowFuture<K, R, P> future = this.futures.remove(key);
 			if (future == null) {
 				return null;
 			}
 
 			// set success using helper method (bypasses signalAll and requests.remove(key))
-			future.completeHelper(response, System.currentTimeMillis());
+			((DefaultWindowFuture<K, R, P>) future).completeHelper(response, System.currentTimeMillis());
 
 			// signal that a future is completed
 			this.completedCondition.signalAll();
@@ -573,13 +572,13 @@ public class Window<K, R, P> {
 		this.lock.lockInterruptibly();
 		try {
 			// try to remove future from window
-			DefaultWindowFuture<K, R, P> future = this.futures.remove(key);
+			WindowFuture<K, R, P> future = this.futures.remove(key);
 			if (future == null) {
 				return null;
 			}
 
 			// set failed using helper method (bypasses signalAll and requests.remove(key))
-			future.failedHelper(t, System.currentTimeMillis());
+			((DefaultWindowFuture<K, R, P>) future).failedHelper(t, System.currentTimeMillis());
 
 			// signal that a future is completed
 			this.completedCondition.signalAll();
@@ -613,9 +612,9 @@ public class Window<K, R, P> {
 		this.lock.lock();
 		try {
 			// check every request this window contains and see if it's expired
-			for (DefaultWindowFuture<K, R, P> future : this.futures.values()) {
+			for (WindowFuture<K, R, P> future : this.futures.values()) {
 				failed.add(future);
-				future.failedHelper(t, now);
+				((DefaultWindowFuture<K, R, P>) future).failedHelper(t, now);
 			}
 
 			if (failed.size() > 0) {
@@ -648,13 +647,12 @@ public class Window<K, R, P> {
 		this.lock.lockInterruptibly();
 		try {
 			// try to remove future from window
-			DefaultWindowFuture<K, R, P> future = this.futures.remove(key);
-			if (future == null) {
+			WindowFuture<K, R, P> future = this.futures.remove(key);
+			if (future == null)
 				return null;
-			}
 
 			// set failed using helper method (bypasses signalAll and requests.remove(key))
-			future.cancelHelper(System.currentTimeMillis());
+			((DefaultWindowFuture<K, R, P>) future).cancelHelper(System.currentTimeMillis());
 
 			// signal that a future is completed
 			this.completedCondition.signalAll();
@@ -676,18 +674,17 @@ public class Window<K, R, P> {
 	 *                              "windowLock".
 	 */
 	public List<WindowFuture<K, R, P>> cancelAll() {
-		if (this.futures.size() <= 0) {
+		if (this.futures.size() <= 0)
 			return null;
-		}
 
 		List<WindowFuture<K, R, P>> cancelled = new ArrayList<WindowFuture<K, R, P>>();
 		long now = System.currentTimeMillis();
 		this.lock.lock();
 		try {
 			// check every request this window contains and see if it's expired
-			for (DefaultWindowFuture<K, R, P> future : this.futures.values()) {
+			for (WindowFuture<K, R, P> future : this.futures.values()) {
 				cancelled.add(future);
-				future.cancelHelper(now);
+				((DefaultWindowFuture<K, R, P>) future).cancelHelper(now);
 			}
 
 			if (cancelled.size() > 0) {
@@ -714,19 +711,18 @@ public class Window<K, R, P> {
 	 *                              "windowLock".
 	 */
 	public List<WindowFuture<K, R, P>> cancelAllExpired() {
-		if (this.futures.size() <= 0) {
+		if (this.futures.size() <= 0)
 			return null;
-		}
 
 		List<WindowFuture<K, R, P>> expired = new ArrayList<WindowFuture<K, R, P>>();
 		long now = System.currentTimeMillis();
 		this.lock.lock();
 		try {
 			// check every request this window contains and see if it's expired
-			for (DefaultWindowFuture<K, R, P> future : this.futures.values()) {
+			for (WindowFuture<K, R, P> future : this.futures.values()) {
 				if (future.hasExpireTimestamp() && now >= future.getExpireTimestamp()) {
 					expired.add(future);
-					future.cancelHelper(now);
+					((DefaultWindowFuture<K, R, P>) future).cancelHelper(now);
 				}
 			}
 

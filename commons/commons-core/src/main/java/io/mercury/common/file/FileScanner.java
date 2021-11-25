@@ -63,13 +63,14 @@ public final class FileScanner {
 	}
 
 	public static void main(String[] args) {
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 20; i++) {
 			if (i == 0)
 				System.out.println("00" + 0);
 			else if (i % 2 == 0)
 				System.out.println(i);
 			else
 				System.out.println("PPPP");
+		}
 	}
 
 }

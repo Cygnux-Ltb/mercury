@@ -24,6 +24,8 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.io.IOUtils;
+
 import io.mercury.common.datetime.pattern.DatePattern;
 import io.mercury.common.datetime.pattern.TemporalPattern;
 import io.mercury.common.util.Assertor;
@@ -110,31 +112,21 @@ public final class FileUtil {
 	 */
 	public static boolean equals(File file1, File file2) throws IOException {
 		// file lengths must match
-		if (file1.length() != file2.length()) {
+		if (file1.length() != file2.length())
 			return false;
-		}
 
 		InputStream is1 = null;
 		InputStream is2 = null;
-
 		try {
 			is1 = new FileInputStream(file1);
 			is2 = new FileInputStream(file2);
 			return equals(is1, is2);
 		} finally {
 			// make sure input streams are closed
-			if (is1 != null) {
-				try {
-					is1.close();
-				} catch (Exception e) {
-				}
-			}
-			if (is2 != null) {
-				try {
-					is2.close();
-				} catch (Exception e) {
-				}
-			}
+			if (is1 != null)
+				IOUtils.close(is1);
+			if (is2 != null)
+				IOUtils.close(is2);
 		}
 	}
 
@@ -143,48 +135,40 @@ public final class FileUtil {
 		byte buf1[] = new byte[buffsize];
 		byte buf2[] = new byte[buffsize];
 
-		if (is1 == is2) {
+		if (is1 == is2)
 			return true;
-		}
-		if (is1 == null && is2 == null) {
+		if (is1 == null && is2 == null)
 			return true;
-		}
-		if (is1 == null || is2 == null) {
+		if (is1 == null || is2 == null)
 			return false;
-		}
 
 		int read1 = -1;
 		int read2 = -1;
 
 		do {
 			int offset1 = 0;
-			while (offset1 < buffsize && (read1 = is1.read(buf1, offset1, buffsize - offset1)) >= 0) {
+			while (offset1 < buffsize && (read1 = is1.read(buf1, offset1, buffsize - offset1)) >= 0)
 				offset1 += read1;
-			}
 
 			int offset2 = 0;
-			while (offset2 < buffsize && (read2 = is2.read(buf2, offset2, buffsize - offset2)) >= 0) {
+			while (offset2 < buffsize && (read2 = is2.read(buf2, offset2, buffsize - offset2)) >= 0)
 				offset2 += read2;
-			}
 
-			if (offset1 != offset2) {
+			if (offset1 != offset2)
 				return false;
-			}
 
 			if (offset1 != buffsize) {
 				Arrays.fill(buf1, offset1, buffsize, (byte) 0);
 				Arrays.fill(buf2, offset2, buffsize, (byte) 0);
 			}
 
-			if (!Arrays.equals(buf1, buf2)) {
+			if (!Arrays.equals(buf1, buf2))
 				return false;
-			}
 
 		} while (read1 >= 0 && read2 >= 0);
 
-		if (read1 < 0 && read2 < 0) {
+		if (read1 < 0 && read2 < 0)
 			return true; // both at EOF
-		}
 
 		return false;
 	}
@@ -199,9 +183,8 @@ public final class FileUtil {
 	public static boolean isValidFileExtension(String extension) {
 		for (int i = 0; i < extension.length(); i++) {
 			char c = extension.charAt(i);
-			if (!(Character.isDigit(c) || Character.isLetter(c) || c == '_')) {
+			if (!(Character.isDigit(c) || Character.isLetter(c) || c == '_'))
 				return false;
-			}
 		}
 		return true;
 	}
@@ -218,15 +201,13 @@ public final class FileUtil {
 	 */
 	public static String parseFileExtension(String filename) {
 		// if null, return null
-		if (filename == null) {
+		if (filename == null)
 			return null;
-		}
 		// find position of last period
 		int pos = filename.lastIndexOf('.');
 		// did one exist or have any length?
-		if (pos < 0 || (pos + 1) >= filename.length()) {
+		if (pos < 0 || (pos + 1) >= filename.length())
 			return null;
-		}
 		// parse extension
 		return filename.substring(pos + 1);
 	}
@@ -243,13 +224,10 @@ public final class FileUtil {
 	 * @throws FileNotFoundException
 	 */
 	public static File[] findFiles(File dir, FileFilter filter) throws FileNotFoundException {
-		if (!dir.exists()) {
+		if (!dir.exists())
 			throw new FileNotFoundException("Directory " + dir + " does not exist.");
-		}
-
-		if (!dir.isDirectory()) {
+		if (!dir.isDirectory())
 			throw new FileNotFoundException("File " + dir + " is not a directory.");
-		}
 
 		// being matching process, create array for returning results
 		ArrayList<File> files = new ArrayList<File>();
@@ -264,9 +242,8 @@ public final class FileUtil {
 				// only match files, not a directory
 				if (file.isFile()) {
 					// delegate matching to provided file matcher
-					if (filter.accept(file)) {
+					if (filter.accept(file))
 						files.add(file);
-					}
 				}
 			}
 		}
@@ -417,16 +394,15 @@ public final class FileUtil {
 
 	public static final void copy(InputStream is, OutputStream os, byte[] buf, boolean close) throws IOException {
 		int len;
-		if (buf == null) {
+		if (buf == null)
 			buf = new byte[4096];
-		}
-		while ((len = is.read(buf)) > 0) {
+
+		while ((len = is.read(buf)) > 0)
 			os.write(buf, 0, len);
-		}
+
 		os.flush();
-		if (close) {
-			is.close();
-		}
+		if (close)
+			IOUtils.close(is);
 	}
 
 	/**
@@ -487,24 +463,24 @@ public final class FileUtil {
 		}
 
 		public FileNameDateTimeComparator(TemporalPattern pattern, ZoneId zone) {
-			if (pattern == null) {
+
+			if (pattern == null)
 				this.pattern = DatePattern.YYYY_MM_DD;
-			} else {
+			else
 				this.pattern = pattern;
-			}
-			if (zone == null) {
+
+			if (zone == null)
 				this.zoneId = ZoneOffset.UTC;
-			} else {
+			else
 				this.zoneId = zone;
-			}
 		}
 
 		public int compare(File f1, File f2) {
 			// extract datetimes from both files
-			ZonedDateTime dt1 = ZonedDateTime.of(LocalDateTime.parse(f1.getName(), pattern.getFormatter()), zoneId);
-			ZonedDateTime dt2 = ZonedDateTime.of(LocalDateTime.parse(f2.getName(), pattern.getFormatter()), zoneId);
+			ZonedDateTime zdt1 = ZonedDateTime.of(LocalDateTime.parse(f1.getName(), pattern.getFormatter()), zoneId);
+			ZonedDateTime zdt2 = ZonedDateTime.of(LocalDateTime.parse(f2.getName(), pattern.getFormatter()), zoneId);
 			// compare these two
-			return dt1.compareTo(dt2);
+			return zdt1.compareTo(zdt2);
 		}
 	}
 

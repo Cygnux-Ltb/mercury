@@ -36,18 +36,18 @@ public final class DateTimeUtil {
 	 * @param date
 	 * @return
 	 */
-	public final static int date(@Nonnull LocalDateTime dateTime) {
-		return date(dateTime.toLocalDate());
+	public final static int date(@Nonnull LocalDateTime datetime) {
+		return date(datetime.toLocalDate());
 	}
 
 	/**
 	 * 根据指定 ZonedDateTime 返回 primitive int 表示的 yyyyMMdd
 	 * 
-	 * @param date
+	 * @param datetime
 	 * @return
 	 */
-	public final static int date(@Nonnull ZonedDateTime zonedDateTime) {
-		return date(zonedDateTime.toLocalDate());
+	public final static int date(@Nonnull ZonedDateTime datetime) {
+		return date(datetime.toLocalDate());
 	}
 
 	/**
@@ -83,21 +83,21 @@ public final class DateTimeUtil {
 	/**
 	 * 根据指定 LocalDateTime 返回 primitive int 表示的 yyyyMM
 	 * 
-	 * @param date
+	 * @param datetime
 	 * @return
 	 */
-	public final static int dateOfMonth(@Nonnull LocalDateTime dateTime) {
-		return dateOfMonth(dateTime.toLocalDate());
+	public final static int dateOfMonth(@Nonnull LocalDateTime datetime) {
+		return dateOfMonth(datetime.toLocalDate());
 	}
 
 	/**
 	 * 根据指定 ZonedDateTime 返回 primitive int 表示的 yyyyMM
 	 * 
-	 * @param date
+	 * @param datetime
 	 * @return
 	 */
-	public final static int dateOfMonth(@Nonnull ZonedDateTime zonedDateTime) {
-		return dateOfMonth(zonedDateTime.toLocalDate());
+	public final static int dateOfMonth(@Nonnull ZonedDateTime datetime) {
+		return dateOfMonth(datetime.toLocalDate());
 	}
 
 	/**
@@ -256,11 +256,11 @@ public final class DateTimeUtil {
 	/**
 	 * 根据指定 LocalDateTime 返回 primitive long 表示的 yyyyMMddHH
 	 * 
-	 * @param dateTime
+	 * @param datetime
 	 * @return
 	 */
-	public final static long datetimeOfHour(@Nonnull LocalDateTime dateTime) {
-		return date(dateTime.toLocalDate()) * 100L + timeOfHour(dateTime.toLocalTime());
+	public final static long datetimeOfHour(@Nonnull LocalDateTime datetime) {
+		return date(datetime.toLocalDate()) * 100L + timeOfHour(datetime.toLocalTime());
 	}
 
 	/**
@@ -275,11 +275,11 @@ public final class DateTimeUtil {
 	/**
 	 * 根据指定 LocalDateTime 返回 primitive long 表示的 yyyyMMddHHmm
 	 * 
-	 * @param dateTime
+	 * @param datetime
 	 * @return
 	 */
-	public final static long datetimeOfMinute(@Nonnull LocalDateTime dateTime) {
-		return date(dateTime.toLocalDate()) * 10000L + timeOfMinute(dateTime.toLocalTime());
+	public final static long datetimeOfMinute(@Nonnull LocalDateTime datetime) {
+		return date(datetime.toLocalDate()) * 10000L + timeOfMinute(datetime.toLocalTime());
 	}
 
 	/**
@@ -294,11 +294,11 @@ public final class DateTimeUtil {
 	/**
 	 * 根据指定 LocalDateTime 返回 primitive long 表示的 yyyyMMddHHmmss
 	 * 
-	 * @param dateTime
+	 * @param datetime
 	 * @return
 	 */
-	public final static long datetimeOfSecond(@Nonnull LocalDateTime dateTime) {
-		return date(dateTime.toLocalDate()) * 1000000L + timeOfSecond(dateTime.toLocalTime());
+	public final static long datetimeOfSecond(@Nonnull LocalDateTime datetime) {
+		return date(datetime.toLocalDate()) * 1000000L + timeOfSecond(datetime.toLocalTime());
 	}
 
 	/**
@@ -314,11 +314,11 @@ public final class DateTimeUtil {
 	 * 根据指定 LocalDateTime 返回 primitive long 表示的 yyyyMMddHHmmssSSS<br>
 	 * year 不可超过 922337
 	 * 
-	 * @param dateTime
+	 * @param datetime
 	 * @return
 	 */
-	public final static long datetimeOfMillisecond(@Nonnull LocalDateTime dateTime) {
-		return datetimeOfSecond(dateTime) * 1000L + dateTime.toLocalTime().getNano() / 1000000;
+	public final static long datetimeOfMillisecond(@Nonnull LocalDateTime datetime) {
+		return datetimeOfSecond(datetime) * 1000L + datetime.toLocalTime().getNano() / 1000000;
 	}
 
 	/**
@@ -415,21 +415,21 @@ public final class DateTimeUtil {
 
 	/**
 	 * 
-	 * @param startDate
+	 * @param start
 	 * @return
 	 */
-	public final static long durationByDay(@Nonnull LocalDate startDate) {
-		return durationByDay(startDate, LocalDate.now());
+	public final static long durationByDay(@Nonnull LocalDate start) {
+		return durationByDay(start, LocalDate.now());
 	}
 
 	/**
 	 * 
-	 * @param startDate
-	 * @param endDate
+	 * @param start
+	 * @param end
 	 * @return
 	 */
-	public final static long durationByDay(@Nonnull LocalDate startDate, @Nonnull LocalDate endDate) {
-		return endDate.toEpochDay() - startDate.toEpochDay();
+	public final static long durationByDay(@Nonnull LocalDate start, @Nonnull LocalDate end) {
+		return end.toEpochDay() - start.toEpochDay();
 	}
 
 	/**

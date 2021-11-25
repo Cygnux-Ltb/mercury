@@ -13,6 +13,7 @@ import static io.mercury.common.datetime.TimeConst.SECONDS_PER_HOUR;
 import static io.mercury.common.datetime.TimeConst.SECONDS_PER_MINUTE;
 import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
 import static java.lang.System.currentTimeMillis;
+import static java.lang.System.nanoTime;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -28,15 +29,15 @@ public final class EpochUtil {
 	/**
 	 * EpochTime Zero Point : UTC 1970-01-01 00:00:00.0000
 	 */
-	public static final ZonedDateTime ZeroPoint = ZonedDateTime.ofInstant(Instant.EPOCH, TimeZone.UTC);
+	public static final ZonedDateTime EPOCH_ZERO = ZonedDateTime.ofInstant(Instant.EPOCH, TimeZone.UTC);
 
 	private static final long NANOS_EPOCH_OFFSET;
 
 	static {
-		long millisEpoch = System.currentTimeMillis();
-		long nanosPoint = System.nanoTime();
+		long millisEpoch = currentTimeMillis();
+		long nanosBaseline = nanoTime();
 		long nanosEpoch = millisEpoch * NANOS_PER_MILLIS;
-		NANOS_EPOCH_OFFSET = nanosEpoch - nanosPoint;
+		NANOS_EPOCH_OFFSET = nanosEpoch - nanosBaseline;
 	}
 
 	/**
@@ -67,11 +68,11 @@ public final class EpochUtil {
 
 	/**
 	 * 
-	 * @param dateTime
+	 * @param datetime
 	 * @return
 	 */
-	public static final long getEpochDays(@Nonnull ZonedDateTime dateTime) {
-		return dateTime.toLocalDate().toEpochDay();
+	public static final long getEpochDays(@Nonnull ZonedDateTime datetime) {
+		return datetime.toLocalDate().toEpochDay();
 	}
 
 	/**
@@ -103,11 +104,11 @@ public final class EpochUtil {
 
 	/**
 	 * 
-	 * @param dateTime
+	 * @param datetime
 	 * @return
 	 */
-	public static final long getEpochHours(@Nonnull ZonedDateTime dateTime) {
-		return dateTime.toEpochSecond() / SECONDS_PER_HOUR;
+	public static final long getEpochHours(@Nonnull ZonedDateTime datetime) {
+		return datetime.toEpochSecond() / SECONDS_PER_HOUR;
 	}
 
 	/**
@@ -139,11 +140,11 @@ public final class EpochUtil {
 
 	/**
 	 * 
-	 * @param dateTime
+	 * @param datetime
 	 * @return
 	 */
-	public static final long getEpochMinutes(@Nonnull ZonedDateTime dateTime) {
-		return dateTime.toEpochSecond() / SECONDS_PER_MINUTE;
+	public static final long getEpochMinutes(@Nonnull ZonedDateTime datetime) {
+		return datetime.toEpochSecond() / SECONDS_PER_MINUTE;
 	}
 
 	/**
@@ -175,11 +176,11 @@ public final class EpochUtil {
 
 	/**
 	 * 
-	 * @param dateTime
+	 * @param datetime
 	 * @return
 	 */
-	public static final long getEpochSeconds(@Nonnull ZonedDateTime dateTime) {
-		return dateTime.toEpochSecond();
+	public static final long getEpochSeconds(@Nonnull ZonedDateTime datetime) {
+		return datetime.toEpochSecond();
 	}
 
 	/**
@@ -266,7 +267,7 @@ public final class EpochUtil {
 	 * @return
 	 */
 	public static final long getEpochNanos() {
-		return System.nanoTime() + NANOS_EPOCH_OFFSET;
+		return nanoTime() + NANOS_EPOCH_OFFSET;
 	}
 
 	/**

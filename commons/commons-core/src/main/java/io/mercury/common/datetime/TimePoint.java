@@ -1,7 +1,7 @@
 package io.mercury.common.datetime;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 
 import javax.annotation.Nonnull;
 
@@ -10,7 +10,7 @@ public final class TimePoint implements Comparable<TimePoint> {
 	private final int date;
 	private final int time;
 	private final int nano;
-	private final ZoneId zoneId;
+	private final ZoneOffset offset;
 
 	/**
 	 * 
@@ -19,11 +19,11 @@ public final class TimePoint implements Comparable<TimePoint> {
 	 * @param nano
 	 * @param zoneId
 	 */
-	private TimePoint(int date, int time, int nano, ZoneId zoneId) {
+	private TimePoint(int date, int time, int nano, ZoneOffset offset) {
 		this.date = date;
 		this.time = time;
 		this.nano = nano;
-		this.zoneId = zoneId;
+		this.offset = offset;
 	}
 
 	/**
@@ -49,9 +49,9 @@ public final class TimePoint implements Comparable<TimePoint> {
 	 * @param zoneId
 	 * @return
 	 */
-	public static TimePoint now(@Nonnull LocalDateTime datetime, @Nonnull ZoneId zoneId) {
+	public static TimePoint now(@Nonnull LocalDateTime datetime, @Nonnull ZoneOffset offset) {
 		return new TimePoint(DateTimeUtil.date(datetime.toLocalDate()),
-				DateTimeUtil.timeOfSecond(datetime.toLocalTime()), datetime.getNano(), zoneId);
+				DateTimeUtil.timeOfSecond(datetime.toLocalTime()), datetime.getNano(), offset);
 	}
 
 	/**
@@ -73,38 +73,46 @@ public final class TimePoint implements Comparable<TimePoint> {
 	 * @param zoneId
 	 * @return
 	 */
-	public static TimePoint of(int date, int time, int nano, @Nonnull ZoneId zoneId) {
-		return new TimePoint(date, time, nano, zoneId);
+	public static TimePoint of(int date, int time, int nano, @Nonnull ZoneOffset offset) {
+		return new TimePoint(date, time, nano, offset);
 	}
 
-	@Override
-	public int compareTo(TimePoint o) {
-		return date < o.date ? -1
-				: date > o.date ? 1
-						: time < o.time ? -1 : time > o.time ? 1 : nano < o.nano ? -1 : nano > o.nano ? 1 : 0;
-	}
-
-	public int date() {
+	public int getDate() {
 		return date;
 	}
 
-	public int time() {
+	public int getTime() {
 		return time;
 	}
 
-	public int nano() {
+	public int getNano() {
 		return nano;
 	}
 
-	public ZoneId zoneId() {
-		return zoneId;
+	public ZoneOffset getOffset() {
+		return offset;
+	}
+
+	@Override
+	public int compareTo(@Nonnull TimePoint o) {
+		return o == null ? -1
+				: date < o.date ? -1
+						: date > o.date ? 1
+								: time < o.time ? -1
+										: time > o.time ? 1
+												: nano < o.nano ? -1
+														: nano > o.nano ? 1
+																: offset.getTotalSeconds() < o.offset.getTotalSeconds()
+																		? -1
+																		: offset.getId().equals(o.offset.getId()) ? 0
+																				: 1;
 	}
 
 	public static void main(String[] args) {
 		TimePoint now = TimePoint.now();
-		System.out.println(now.date());
-		System.out.println(now.time());
-		System.out.println(now.nano());
+		System.out.println(now.getDate());
+		System.out.println(now.getTime());
+		System.out.println(now.getNano());
 	}
 
 }

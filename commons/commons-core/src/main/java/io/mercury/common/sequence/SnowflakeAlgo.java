@@ -109,7 +109,7 @@ public final class SnowflakeAlgo {
 	 * @param zoneId
 	 */
 	public SnowflakeAlgo(int ownerId, @Nonnull LocalDate baseline, @Nonnull ZoneId zoneId) {
-		this(ownerId, baseline == null ? EpochUtil.ZeroPoint
+		this(ownerId, baseline == null ? EpochUtil.EPOCH_ZERO
 				: ZonedDateTime.of(baseline, LocalTime.MIN, zoneId == null ? TimeZone.UTC : zoneId));
 	}
 
@@ -121,7 +121,7 @@ public final class SnowflakeAlgo {
 		if (ownerId < 0 || ownerId > BitOperator.maxValueOfBit(OwnerIdBits))
 			throw new IllegalArgumentException("ownerId must be [greater than 0] and [less than or equal 1024]");
 		this.ownerId = ownerId;
-		this.baseline = baseline.isBefore(EpochUtil.ZeroPoint) ? 0 : baseline.toInstant().toEpochMilli();
+		this.baseline = baseline.isBefore(EpochUtil.EPOCH_ZERO) ? 0 : baseline.toInstant().toEpochMilli();
 	}
 
 	/**
