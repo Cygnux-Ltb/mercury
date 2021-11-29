@@ -1,5 +1,6 @@
 package io.mercury.transport.rabbitmq;
 
+import static io.mercury.common.datetime.DateTimeUtil.datetimeOfMillisecond;
 import static io.mercury.common.util.StringSupport.nonEmpty;
 
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
@@ -16,7 +18,6 @@ import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.ConfirmCallback;
 
 import io.mercury.common.character.Charsets;
-import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.common.thread.SleepSupport;
@@ -28,7 +29,7 @@ import io.mercury.transport.exception.InitializeFailureException;
 import io.mercury.transport.exception.PublishFailedException;
 import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
 import io.mercury.transport.rabbitmq.configurator.RabbitPublisherCfg;
-import io.mercury.transport.rabbitmq.declare.ExchangeDefinition;
+import io.mercury.transport.rabbitmq.declare.ExchangeDef;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 import io.mercury.transport.rabbitmq.exception.DeclareRuntimeException;
 import io.mercury.transport.rabbitmq.exception.MsgConfirmFailureException;
@@ -47,7 +48,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	private static final Logger log = CommonLoggerFactory.getLogger(AdvancedRabbitMqPublisher.class);
 
 	// 发布消息使用的[ExchangeDeclare]
-	private final ExchangeDefinition publishExchange;
+	private final ExchangeDef publishExchange;
 
 	// 发布消息使用的[Exchange]
 	private final String exchangeName;
@@ -186,29 +187,28 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	/**
 	 * 
 	 * @param tag
-	 * @param configurator
+	 * @param cfg
 	 * @param charset
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<String> createWithString(String tag,
-			@Nonnull RabbitPublisherCfg configurator, @Nonnull Charset charset) {
-		return createWithString(tag, configurator, charset, null, null);
+	public final static AdvancedRabbitMqPublisher<String> createWithString(String tag, @Nonnull RabbitPublisherCfg cfg,
+			@Nonnull Charset charset) {
+		return createWithString(tag, cfg, charset, null, null);
 	}
 
 	/**
 	 * 
 	 * @param tag
-	 * @param configurator
+	 * @param cfg
 	 * @param charset
 	 * @param ackCallback
 	 * @param noAckCallback
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<String> createWithString(String tag,
-			@Nonnull RabbitPublisherCfg configurator, @Nonnull Charset charset, @Nonnull AckCallback ackCallback,
+	public final static AdvancedRabbitMqPublisher<String> createWithString(@Nullable String tag,
+			@Nonnull RabbitPublisherCfg cfg, @Nonnull Charset charset, @Nonnull AckCallback ackCallback,
 			@Nonnull NoAckCallback noAckCallback) {
-		return new AdvancedRabbitMqPublisher<>(tag, configurator, msg -> msg.getBytes(charset), ackCallback,
-				noAckCallback);
+		return new AdvancedRabbitMqPublisher<>(tag, cfg, msg -> msg.getBytes(charset), ackCallback, noAckCallback);
 	}
 
 	/**
@@ -219,9 +219,10 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param ackCallback   ACK成功回调
 	 * @param noAckCallback ACK未成功回调
 	 */
-	private AdvancedRabbitMqPublisher(String tag, @Nonnull RabbitPublisherCfg cfg,
-			@Nonnull BytesSerializer<T> serializer, AckCallback ackCallback, NoAckCallback noAckCallback) {
-		super(nonEmpty(tag) ? tag : "adv-publisher-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
+	private AdvancedRabbitMqPublisher(@Nullable String tag, @Nonnull RabbitPublisherCfg cfg,
+			@Nonnull BytesSerializer<T> serializer, @Nullable AckCallback ackCallback,
+			@Nullable NoAckCallback noAckCallback) {
+		super(nonEmpty(tag) ? tag : "adv-publisher-" + datetimeOfMillisecond(), cfg.getConnection());
 		Assertor.nonNull(cfg.getPublishExchange(), "exchangeRelation");
 		this.publishExchange = cfg.getPublishExchange();
 		this.exchangeName = publishExchange.getExchangeName();
@@ -245,20 +246,18 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 			// 添加ACK & NoAck回调
 			channel.addConfirmListener(
 					// ACK Callback
-					(long deliveryTag, boolean multiple) -> {
-						if (hasAckCallback) {
+					(deliveryTag, multiple) -> {
+						if (hasAckCallback)
 							ackCallback.handle(deliveryTag, multiple);
-						} else {
+						else
 							log.warn("Undefined AckCallback function. Publisher -> {}", publisherName);
-						}
 					},
 					// NoAck Callback
-					(long deliveryTag, boolean multiple) -> {
-						if (hasNoAckCallback) {
+					(deliveryTag, multiple) -> {
+						if (hasNoAckCallback)
 							ackCallback.handle(deliveryTag, multiple);
-						} else {
+						else
 							log.warn("Undefined NoAckCallback function. Publisher -> {}", publisherName);
-						}
 					});
 			try {
 				// Enables publisher acknowledgements on this channel.
@@ -280,7 +279,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 */
 	private void declareExchange() throws DeclareRuntimeException {
 		try {
-			if (publishExchange == ExchangeDefinition.Anonymous) {
+			if (publishExchange == ExchangeDef.Anonymous) {
 				log.warn("Publisher -> {} use anonymous exchange, Please specify [queue name] "
 						+ "as the [routing key] when publish", tag);
 			} else {
@@ -465,7 +464,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 
 		RabbitConnection connection = RabbitConnection.configuration("127.0.0.1", 5672, "guest", "guest").build();
 
-		ExchangeDefinition fanoutExchange = ExchangeDefinition.fanout("fanout-test");
+		ExchangeDef fanoutExchange = ExchangeDef.fanout("fanout-test");
 
 		try (AdvancedRabbitMqPublisher<String> publisher = AdvancedRabbitMqPublisher
 				.createWithString(RabbitPublisherCfg.configuration(connection, fanoutExchange).build())) {

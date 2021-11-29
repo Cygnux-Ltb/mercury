@@ -1,5 +1,6 @@
 package io.mercury.transport.rabbitmq;
 
+import static io.mercury.common.datetime.DateTimeUtil.datetimeOfMillisecond;
 import static io.mercury.common.util.StringSupport.nonEmpty;
 
 import java.io.IOException;
@@ -17,7 +18,6 @@ import com.rabbitmq.client.ConsumerShutdownSignalCallback;
 import com.rabbitmq.client.Envelope;
 
 import io.mercury.common.codec.DecodeException;
-import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.BytesDeserializer;
 import io.mercury.common.util.Assertor;
@@ -27,8 +27,8 @@ import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.exception.ConnectionBreakException;
 import io.mercury.transport.exception.ReceiverStartException;
 import io.mercury.transport.rabbitmq.configurator.RabbitReceiverCfg;
-import io.mercury.transport.rabbitmq.declare.ExchangeDefinition;
-import io.mercury.transport.rabbitmq.declare.QueueDefinition;
+import io.mercury.transport.rabbitmq.declare.ExchangeDef;
+import io.mercury.transport.rabbitmq.declare.QueueDef;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 import io.mercury.transport.rabbitmq.exception.DeclareRuntimeException;
 import io.mercury.transport.rabbitmq.exception.MsgHandleException;
@@ -54,19 +54,19 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	private final SelfAckConsumer<T> selfAckConsumer;
 
 	// 接受者QueueDeclare
-	private final QueueDefinition receiveQueue;
+	private final QueueDef receiveQueue;
 
 	// 接受者QueueName
 	private final String queueName;
 
 	// 消息无法处理时发送到的错误消息ExchangeDeclare
-	private final ExchangeDefinition errMsgExchange;
+	private final ExchangeDef errMsgExchange;
 
 	// 消息无法处理时发送到的错误消息Exchange使用的RoutingKey
 	private final String errMsgRoutingKey;
 
 	// 消息无法处理时发送到的错误消息QueueDeclare
-	private final QueueDefinition errMsgQueue;
+	private final QueueDef errMsgQueue;
 
 	// 消息无法处理时发送到的错误消息Exchange
 	private String errMsgExchangeName;
@@ -109,29 +109,29 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 
 	/**
 	 * 
-	 * @param configurator
+	 * @param cfg
 	 * @param consumer
 	 * @return
 	 */
-	public static AdvancedRabbitMqReceiver<byte[]> create(@Nonnull RabbitReceiverCfg configurator,
+	public static AdvancedRabbitMqReceiver<byte[]> create(@Nonnull RabbitReceiverCfg cfg,
 			@Nonnull Consumer<byte[]> consumer) {
-		Assertor.nonNull(configurator, "configurator");
+		Assertor.nonNull(cfg, "configurator");
 		Assertor.nonNull(consumer, "consumer");
-		return new AdvancedRabbitMqReceiver<byte[]>(null, configurator, (msg, reuse) -> msg, consumer, null);
+		return new AdvancedRabbitMqReceiver<byte[]>(null, cfg, (msg, reuse) -> msg, consumer, null);
 	}
 
 	/**
 	 * 
 	 * @param tag
-	 * @param configurator
+	 * @param cfg
 	 * @param consumer
 	 * @return
 	 */
-	public static AdvancedRabbitMqReceiver<byte[]> create(String tag, @Nonnull RabbitReceiverCfg configurator,
+	public static AdvancedRabbitMqReceiver<byte[]> create(String tag, @Nonnull RabbitReceiverCfg cfg,
 			@Nonnull Consumer<byte[]> consumer) {
-		Assertor.nonNull(configurator, "configurator");
+		Assertor.nonNull(cfg, "configurator");
 		Assertor.nonNull(consumer, "consumer");
-		return new AdvancedRabbitMqReceiver<byte[]>(tag, configurator, (msg, reuse) -> msg, consumer, null);
+		return new AdvancedRabbitMqReceiver<byte[]>(tag, cfg, (msg, reuse) -> msg, consumer, null);
 	}
 
 	/**
@@ -206,7 +206,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	private AdvancedRabbitMqReceiver(String tag, @Nonnull RabbitReceiverCfg cfg,
 			@Nonnull BytesDeserializer<T> deserializer, @Nullable Consumer<T> consumer,
 			@Nullable SelfAckConsumer<T> selfAckConsumer) {
-		super(nonEmpty(tag) ? tag : "adv-receiver-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
+		super(nonEmpty(tag) ? tag : "adv-receiver-" + datetimeOfMillisecond(), cfg.getConnection());
 		if (consumer == null && selfAckConsumer == null) {
 			throw new NullPointerException("[Consumer] and [SelfAckConsumer] cannot all be null");
 		}
@@ -230,7 +230,6 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 		if (selfAckConsumer != null) {
 			createAckDelegate();
 		}
-		newStartTime();
 	}
 
 	/**
@@ -449,8 +448,8 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 								}
 								consumer.accept(t);
 							} catch (Exception e) {
-								log.error("Consumer accept msg==[{}] throw Exception -> {}", StringSupport.toString(body),
-										e.getMessage(), e);
+								log.error("Consumer accept msg==[{}] throw Exception -> {}",
+										StringSupport.toString(body), e.getMessage(), e);
 								dumpUnprocessableMsg(e, consumerTag, envelope, delivery.getProperties(), body);
 							}
 							if (!autoAck) {
@@ -475,6 +474,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 			// # Set Consume end *****
 			return;
 		}
+		newStartTime();
 	}
 
 	/**
