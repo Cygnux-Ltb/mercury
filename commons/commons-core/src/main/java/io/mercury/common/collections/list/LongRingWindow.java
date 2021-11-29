@@ -1,6 +1,8 @@
 package io.mercury.common.collections.list;
 
+import java.util.LongSummaryStatistics;
 import java.util.function.LongConsumer;
+import java.util.stream.LongStream;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -16,7 +18,7 @@ import org.eclipse.collections.impl.list.mutable.primitive.LongArrayList;
  *
  */
 @NotThreadSafe
-public final class LongSlidingWindow {
+public final class LongRingWindow {
 
 	private final int capacity;
 	private final MutableLongList list;
@@ -27,9 +29,16 @@ public final class LongSlidingWindow {
 	private boolean isEmpty = true;
 	private boolean isFull = false;
 
-	public LongSlidingWindow(int capacity) {
+	public LongRingWindow(int capacity) {
 		this.capacity = capacity;
-		this.list = new LongArrayList(new long[capacity]);
+		this.list = new LongArrayList(capacity);
+	}
+
+	public LongRingWindow(int capacity, long[] values) {
+		this.capacity = capacity;
+		this.list = new LongArrayList(capacity);
+		for (long value : values)
+			add(value);
 	}
 
 	/**
@@ -75,7 +84,7 @@ public final class LongSlidingWindow {
 	 * @param value
 	 * @return
 	 */
-	public LongSlidingWindow add(long value) {
+	public LongRingWindow add(long value) {
 		addTail(value);
 		return this;
 	}
@@ -85,7 +94,7 @@ public final class LongSlidingWindow {
 	 * @param value
 	 */
 	private void addTail(long value) {
-		// 如果尾部索引自增后等于容量, 重置尾部索引为0
+		// 如果tail索引自增后等于容量, 重置索引为0
 		if (++tail == capacity)
 			tail = 0;
 		updateStatus();
@@ -116,7 +125,7 @@ public final class LongSlidingWindow {
 
 	/**
 	 * 
-	 * @return
+	 * @return int
 	 */
 	public int count() {
 		return count;
@@ -124,7 +133,7 @@ public final class LongSlidingWindow {
 
 	/**
 	 * 
-	 * @return
+	 * @return long
 	 */
 	public long sum() {
 		return list.sum();
@@ -132,34 +141,50 @@ public final class LongSlidingWindow {
 
 	/**
 	 * 
-	 * @return
+	 * @return long
 	 */
 	public long max() {
-		return list.max();
+		return list.maxIfEmpty(0L);
 	}
 
 	/**
 	 * 
-	 * @return
+	 * @return long
 	 */
 	public long min() {
-		return list.min();
+		return list.minIfEmpty(0L);
 	}
 
 	/**
 	 * 
-	 * @return
+	 * @return long
 	 */
 	public long average() {
-		return (long) list.average();
+		return (long) list.averageIfEmpty(0L);
 	}
 
 	/**
 	 * 
-	 * @return
+	 * @return long
 	 */
 	public long median() {
-		return (long) list.median();
+		return (long) list.medianIfEmpty(0L);
+	}
+
+	/**
+	 * 
+	 * @return LongSummaryStatistics
+	 */
+	public LongSummaryStatistics summaryStatistics() {
+		return list.summaryStatistics();
+	}
+
+	/**
+	 * 
+	 * @return LongStream
+	 */
+	public LongStream stream() {
+		return list.primitiveStream();
 	}
 
 	/**
@@ -172,7 +197,7 @@ public final class LongSlidingWindow {
 
 	public static void main(String[] args) {
 
-		LongSlidingWindow window = new LongSlidingWindow(10);
+		LongRingWindow window = new LongRingWindow(10);
 
 		for (int i = 1; i < 30; i++) {
 			System.out.println("head -> " + window.head());

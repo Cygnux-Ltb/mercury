@@ -1,13 +1,15 @@
 package io.mercury.common.sequence;
 
+import static io.mercury.common.datetime.TimeConst.NANOS_PER_MICROS;
+import static io.mercury.common.datetime.TimeConst.NANOS_PER_MILLIS;
 import static java.lang.System.nanoTime;
 
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.log.LogConfigurator;
 import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.LogConfigurator;
 
 /**
  * 
@@ -17,39 +19,41 @@ import io.mercury.common.log.CommonLoggerFactory;
  *
  */
 @ThreadSafe
-public final class SysNanoSeq {
+public final class LinearSequence {
 
 	/**
 	 * 
-	 * @return
+	 * 
+	 * 
+	 * @return System.nanoTime() / NANOS_PER_MILLIS
 	 */
-	public static long millis() {
-		return nanoTime() / 1000_000;
+	public static long getMillis() {
+		return nanoTime() / NANOS_PER_MILLIS;
 	}
 
 	/**
 	 * 
-	 * @return
+	 * @return System.nanoTime() / NANOS_PER_MICROS
 	 */
-	public static long micros() {
-		return nanoTime() / 1000;
+	public static long getMicros() {
+		return nanoTime() / NANOS_PER_MICROS;
 	}
 
 	/**
 	 * 
-	 * @return
+	 * @return System.nanoTime()
 	 */
-	public static long nanos() {
+	public static long getNanos() {
 		return nanoTime();
 	}
 
 	public static void main(String[] args) {
 
 		LogConfigurator.setLogFilename("test-log");
-		Logger log = CommonLoggerFactory.getLogger(SysNanoSeq.class);
+		Logger log = CommonLoggerFactory.getLogger(LinearSequence.class);
 
 		for (int i = 0; i < 20; i++) {
-			log.debug(String.valueOf(SysNanoSeq.micros()));
+			log.debug(String.valueOf(LinearSequence.getMicros()));
 		}
 
 	}

@@ -13,7 +13,7 @@
 	<name>commons-di</name>
 
 	<properties>
-		<spring.version>5.3.12</spring.version>
+		<spring.version>5.3.13</spring.version>
 	</properties>
 
 	<dependencies>

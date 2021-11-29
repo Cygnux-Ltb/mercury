@@ -38,17 +38,16 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 	 * @throws NullPointerException
 	 * @throws IllegalArgumentException
 	 */
-	@SafeVarargs
-	public ImmutableParams(@Nonnull Map<?, ?> map, @Nonnull K... keys)
+	public ImmutableParams(@Nonnull Map<?, ?> map, @Nonnull K[] keys)
 			throws NullPointerException, IllegalArgumentException {
 		requiredLength(keys, 1, "keys");
 		nonEmptyMap(map, "map");
-		MutableMap<K, String> mutableMap = MutableMaps.newUnifiedMap();
+		MutableMap<K, String> tempMap = MutableMaps.newUnifiedMap();
 		for (K key : keys) {
 			if (map.containsKey(key.getParamName()))
-				mutableMap.put(key, map.get(key.getParamName()).toString());
+				tempMap.put(key, map.get(key.getParamName()).toString());
 		}
-		this.params = mutableMap.toImmutable();
+		this.params = tempMap.toImmutable();
 		this.keys = newImmutableSet(keys);
 	}
 
@@ -60,17 +59,16 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 	 * @throws NullPointerException
 	 * @throws IllegalArgumentException
 	 */
-	@SafeVarargs
-	public ImmutableParams(@Nonnull Properties prop, @Nonnull K... keys)
+	public ImmutableParams(@Nonnull Properties prop, @Nonnull K[] keys)
 			throws NullPointerException, IllegalArgumentException {
 		requiredLength(keys, 1, "keys");
 		nonNull(prop, "prop");
-		MutableMap<K, String> mutableMap = MutableMaps.newUnifiedMap();
+		MutableMap<K, String> map = MutableMaps.newUnifiedMap();
 		for (K key : keys) {
 			if (prop.containsKey(key.getParamName()))
-				mutableMap.put(key, prop.get(key.getParamName()).toString());
+				map.put(key, prop.get(key.getParamName()).toString());
 		}
-		this.params = mutableMap.toImmutable();
+		this.params = map.toImmutable();
 		this.keys = newImmutableSet(keys);
 	}
 
@@ -85,7 +83,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 	public boolean getBoolean(K key) throws IllegalArgumentException, NullPointerException {
 		if (key.getValueType() != ValueType.BOOLEAN)
 			throw new IllegalArgumentException(
-					"Key -> " + key + " ValueType is not BOOLEAN, valueType==" + key.getValueType());
+					"Key -> [" + key + "], ValueType is not BOOLEAN, valueType==" + key.getValueType());
 		return parseBoolean(nonNull(params.get(key), key.getParamName()));
 	}
 
@@ -101,7 +99,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 	public int getInt(K key) throws IllegalArgumentException, NullPointerException, NumberFormatException {
 		if (key.getValueType() != ValueType.INT)
 			throw new IllegalArgumentException(
-					"Key -> " + key + " ValueType is not [INT]. valueType==" + key.getValueType());
+					"Key -> [" + key + "], ValueType is not [INT]. valueType==" + key.getValueType());
 		return parseInt(nonNull(params.get(key), key.getParamName()));
 	}
 
@@ -117,7 +115,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 	public long getLong(K key) throws IllegalArgumentException, NullPointerException, NumberFormatException {
 		if (key.getValueType() != ValueType.LONG)
 			throw new IllegalArgumentException(
-					"Key -> " + key + " ValueType is not [LONG]. valueType==" + key.getValueType());
+					"Key -> [" + key + "], ValueType is not [LONG]. valueType==" + key.getValueType());
 		return parseLong(nonNull(params.get(key), key.getParamName()));
 	}
 
@@ -133,7 +131,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 	public double getDouble(K key) throws IllegalArgumentException, NullPointerException, NumberFormatException {
 		if (key.getValueType() != ValueType.DOUBLE)
 			throw new IllegalArgumentException(
-					"Key -> " + key + " ValueType is not [DOUBLE], valueType==" + key.getValueType());
+					"Key -> [" + key + "], ValueType is not [DOUBLE], valueType==" + key.getValueType());
 		return parseDouble(nonNull(params.get(key), key.getParamName()));
 	}
 
@@ -148,7 +146,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 	public String getString(K key) throws IllegalArgumentException, NullPointerException {
 		if (key.getValueType() != ValueType.STRING)
 			throw new IllegalArgumentException(
-					"Key -> " + key + " ValueType is not [STRING], paramType==" + key.getValueType());
+					"Key -> [" + key + "] ValueType is not [STRING], paramType==" + key.getValueType());
 		return nonNull(params.get(key), key.getParamName());
 	}
 
