@@ -16,11 +16,10 @@ public final class JsonWrapper {
 	private static final Gson GsonHasNulls = new GsonBuilder().serializeNulls().create();
 
 	// 以较高可视化的格式返回JSON
-	private final static Gson GsonPrettyPrinting = new GsonBuilder().setPrettyPrinting().create();
+	private final static Gson GsonPretty = new GsonBuilder().setPrettyPrinting().create();
 
 	// 以漂亮的格式返回JSON, 包含Null值
-	private static final Gson GsonPrettyPrintingHasNulls = new GsonBuilder().serializeNulls().setPrettyPrinting()
-			.create();
+	private static final Gson GsonPrettyHasNulls = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
 
 	/**
 	 * 
@@ -46,7 +45,7 @@ public final class JsonWrapper {
 	 * @return
 	 */
 	public static final String toPrettyJson(@Nullable Object obj) {
-		return toJson0(GsonPrettyPrinting, obj);
+		return toJson0(GsonPretty, obj);
 	}
 
 	/**
@@ -55,7 +54,7 @@ public final class JsonWrapper {
 	 * @return
 	 */
 	public static final String toPrettyJsonHasNulls(@Nullable Object obj) {
-		return toJson0(GsonPrettyPrintingHasNulls, obj);
+		return toJson0(GsonPrettyHasNulls, obj);
 	}
 
 	private static final String toJson0(final Gson gson, final Object obj) {
