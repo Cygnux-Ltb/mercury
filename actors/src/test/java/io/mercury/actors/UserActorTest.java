@@ -11,7 +11,7 @@ public class UserActorTest {
 
 	public static void main(String[] args) {
 
-		CommonActorSystem actorSystem = CommonActorSystem.newInstance("data-center");
+		CommonActorSystem actorSystem = CommonActorSystem.newSystem("data-center");
 
 		ActorRef userActor1 = actorSystem.actorOf(UserActor.props(), "user1");
 		ActorRef userActor2 = actorSystem.actorOf(UserActor.props(), "user2");

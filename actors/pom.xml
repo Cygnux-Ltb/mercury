@@ -56,18 +56,6 @@
 	</build>
 
 	<dependencies>
-		<dependency>
-			<groupId>io.mercury</groupId>
-			<artifactId>persistence-chronicle</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.mercury</groupId>
-			<artifactId>serialization-avro</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
 		<!-- ####### Akka dependency ####### -->
 		<!-- At the core of Akka: A model for concurrency and distribution without 
 			all the pain of threading primitives. -->
@@ -123,6 +111,18 @@
 			<groupId>org.scala-lang</groupId>
 			<artifactId>scala-library</artifactId>
 			<version>2.13.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.mercury</groupId>
+			<artifactId>persistence-chronicle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.mercury</groupId>
+			<artifactId>serialization-avro</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
