@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 
@@ -112,7 +113,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 	 * @param consumer
 	 * @return
 	 */
-	public static final RabbitMqReceiver<byte[]> create(String tag, @Nonnull RabbitReceiverCfg cfg,
+	public static final RabbitMqReceiver<byte[]> create(@Nullable String tag, @Nonnull RabbitReceiverCfg cfg,
 			@Nonnull Consumer<byte[]> consumer) {
 		return create(tag, cfg, msg -> msg, consumer);
 	}
@@ -139,7 +140,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 	 * @param consumer
 	 * @return
 	 */
-	public static final <T> RabbitMqReceiver<T> create(String tag, @Nonnull RabbitReceiverCfg cfg,
+	public static final <T> RabbitMqReceiver<T> create(@Nullable String tag, @Nonnull RabbitReceiverCfg cfg,
 			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
 		return new RabbitMqReceiver<T>(tag, cfg, deserializer, consumer);
 	}
@@ -151,7 +152,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 	 * @param deserializer
 	 * @param callback
 	 */
-	private RabbitMqReceiver(String tag, @Nonnull RabbitReceiverCfg cfg,
+	private RabbitMqReceiver(@Nullable String tag, @Nonnull RabbitReceiverCfg cfg,
 			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
 		super(nonEmpty(tag) ? tag : "receiver-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
 		this.receiveQueue = cfg.getReceiveQueue();
@@ -192,9 +193,9 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 		}
 	}
 
-	private void declareErrMsgExchange(RabbitMqOperator declarator) {
+	private void declareErrMsgExchange(RabbitMqOperator operator) {
 		try {
-			this.errMsgExchange.declare(declarator);
+			this.errMsgExchange.declare(operator);
 		} catch (DeclareException e) {
 			log.error(
 					"ErrorMsgExchange declare throw exception -> connection configurator info : {}, error message : {}",
@@ -207,9 +208,9 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 		this.hasErrMsgExchange = true;
 	}
 
-	private void declareErrMsgQueueName(RabbitMqOperator declarator) {
+	private void declareErrMsgQueueName(RabbitMqOperator operator) {
 		try {
-			this.errMsgQueue.declare(declarator);
+			this.errMsgQueue.declare(operator);
 		} catch (DeclareException e) {
 			log.error("ErrorMsgQueue declare throw exception -> connection configurator info : {}, error message : {}",
 					rabbitConnection.getCfgInfo(), e.getMessage(), e);
@@ -274,8 +275,8 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 								consumer.accept(apply);
 								log.debug("Callback handleDelivery() end");
 							} catch (Exception e) {
-								log.error("Consumer accept msg==[{}] throw Exception -> {}", StringSupport.toString(body),
-										e.getMessage(), e);
+								log.error("Consumer accept msg==[{}] throw Exception -> {}",
+										StringSupport.toString(body), e.getMessage(), e);
 								dumpUnprocessableMsg(e, consumerTag, envelope, properties, body);
 							}
 							if (!autoAck) {

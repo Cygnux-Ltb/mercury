@@ -8,6 +8,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
@@ -70,7 +71,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<St
 	 * @param ackCallback
 	 * @param noAckCallback
 	 */
-	public RabbitMqPublisher(String tag, @Nonnull RabbitPublisherCfg cfg) {
+	public RabbitMqPublisher(@Nullable String tag, @Nonnull RabbitPublisherCfg cfg) {
 		super(nonEmpty(tag) ? tag : "publisher-" + datetimeOfMillisecond(), cfg.getConnection());
 		Assertor.nonNull(cfg.getPublishExchange(), "exchangeRelation");
 		this.publishExchange = cfg.getPublishExchange();
@@ -89,13 +90,12 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<St
 
 	private void declare() throws DeclareRuntimeException {
 		try {
-			if (publishExchange == ExchangeDef.Anonymous) {
+			if (publishExchange == ExchangeDef.Anonymous)
 				log.warn(
 						"Publisher -> {} use anonymous exchange, Please specify [queue name] as the [routing key] when publish",
 						tag);
-			} else {
+			else
 				this.publishExchange.declare(RabbitMqOperator.newWith(channel));
-			}
 		} catch (DeclareException e) {
 			// 在定义Exchange和进行绑定时抛出任何异常都需要终止程序
 			log.error("Exchange declare throw exception -> connection configurator info : {}, " + "error message : {}",

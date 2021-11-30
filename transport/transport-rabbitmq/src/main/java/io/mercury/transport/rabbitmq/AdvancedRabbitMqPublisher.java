@@ -100,7 +100,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param serializer
 	 * @return
 	 */
-	public final static <T> AdvancedRabbitMqPublisher<T> create(String tag, @Nonnull RabbitPublisherCfg cfg,
+	public final static <T> AdvancedRabbitMqPublisher<T> create(@Nullable String tag, @Nonnull RabbitPublisherCfg cfg,
 			@Nonnull BytesSerializer<T> serializer) {
 		return new AdvancedRabbitMqPublisher<>(tag, cfg, serializer, null, null);
 	}
@@ -115,7 +115,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param noAckCallback
 	 * @return
 	 */
-	public final static <T> AdvancedRabbitMqPublisher<T> create(String tag, @Nonnull RabbitPublisherCfg cfg,
+	public final static <T> AdvancedRabbitMqPublisher<T> create(@Nullable String tag, @Nonnull RabbitPublisherCfg cfg,
 			@Nonnull BytesSerializer<T> serializer, @Nonnull AckCallback ackCallback,
 			@Nonnull NoAckCallback noAckCallback) {
 		return new AdvancedRabbitMqPublisher<>(tag, cfg, serializer, ackCallback, noAckCallback);
@@ -136,7 +136,8 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param cfg
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<byte[]> createWithBytes(String tag, @Nonnull RabbitPublisherCfg cfg) {
+	public final static AdvancedRabbitMqPublisher<byte[]> createWithBytes(@Nullable String tag,
+			@Nonnull RabbitPublisherCfg cfg) {
 		return createWithBytes(tag, cfg, null, null);
 	}
 
@@ -148,8 +149,8 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param noAckCallback
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<byte[]> createWithBytes(String tag, @Nonnull RabbitPublisherCfg cfg,
-			@Nonnull AckCallback ackCallback, @Nonnull NoAckCallback noAckCallback) {
+	public final static AdvancedRabbitMqPublisher<byte[]> createWithBytes(@Nullable String tag,
+			@Nonnull RabbitPublisherCfg cfg, @Nonnull AckCallback ackCallback, @Nonnull NoAckCallback noAckCallback) {
 		return new AdvancedRabbitMqPublisher<>(tag, cfg, msg -> msg, ackCallback, noAckCallback);
 	}
 
@@ -179,7 +180,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param cfg
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<String> createWithString(String tag,
+	public final static AdvancedRabbitMqPublisher<String> createWithString(@Nullable String tag,
 			@Nonnull RabbitPublisherCfg cfg) {
 		return createWithString(tag, cfg, Charsets.UTF8, null, null);
 	}
@@ -191,8 +192,8 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param charset
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<String> createWithString(String tag, @Nonnull RabbitPublisherCfg cfg,
-			@Nonnull Charset charset) {
+	public final static AdvancedRabbitMqPublisher<String> createWithString(@Nullable String tag,
+			@Nonnull RabbitPublisherCfg cfg, @Nonnull Charset charset) {
 		return createWithString(tag, cfg, charset, null, null);
 	}
 

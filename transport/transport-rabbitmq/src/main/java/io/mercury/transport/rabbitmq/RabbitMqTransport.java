@@ -107,9 +107,9 @@ public abstract class RabbitMqTransport extends TransportComponent implements Tr
 	protected void handleShutdownSignal(ShutdownSignalException sig) {
 		// 关闭信号
 		log.info("Shutdown listener message -> {}", sig.getMessage());
-		if (isNormalShutdown(sig)) {
+		if (isNormalShutdown(sig))
 			log.info("connection id -> {}, normal shutdown", connection.getId());
-		} else {
+		else {
 			log.error("connection id -> {}, not normal shutdown", connection.getId());
 			// 如果回调函数不为null, 则执行此函数
 			if (shutdownSignalHandler != null)
