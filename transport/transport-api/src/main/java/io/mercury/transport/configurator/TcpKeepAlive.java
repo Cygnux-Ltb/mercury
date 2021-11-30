@@ -1,10 +1,11 @@
 package io.mercury.transport.configurator;
 
 import io.mercury.common.annotation.OnlyOverrideEquals;
-import io.mercury.common.serialization.JsonDeserializable;
+import io.mercury.common.serialization.JsonSerializable;
+import io.mercury.serialization.json.JsonWrapper;
 
 @OnlyOverrideEquals
-public final class TcpKeepAlive implements JsonDeserializable<TcpKeepAlive> {
+public final class TcpKeepAlive implements JsonSerializable {
 
 	private final KeepAlive keepAlive;
 	private int keepAliveCount;
@@ -23,22 +24,22 @@ public final class TcpKeepAlive implements JsonDeserializable<TcpKeepAlive> {
 		return keepAliveCount;
 	}
 
+	public int getKeepAliveIdle() {
+		return keepAliveIdle;
+	}
+
+	public int getKeepAliveInterval() {
+		return keepAliveInterval;
+	}
+
 	public TcpKeepAlive setKeepAliveCount(int keepAliveCount) {
 		this.keepAliveCount = keepAliveCount;
 		return this;
 	}
 
-	public int getKeepAliveIdle() {
-		return keepAliveIdle;
-	}
-
 	public TcpKeepAlive setKeepAliveIdle(int keepAliveIdle) {
 		this.keepAliveIdle = keepAliveIdle;
 		return this;
-	}
-
-	public int getKeepAliveInterval() {
-		return keepAliveInterval;
 	}
 
 	public TcpKeepAlive setKeepAliveInterval(int keepAliveInterval) {
@@ -90,7 +91,7 @@ public final class TcpKeepAlive implements JsonDeserializable<TcpKeepAlive> {
 
 	public static enum KeepAlive {
 
-		Enable(1), Disable(0), Default(-1)
+		Enable(1), Disable(0), Default(-1),
 
 		;
 
@@ -107,8 +108,8 @@ public final class TcpKeepAlive implements JsonDeserializable<TcpKeepAlive> {
 	}
 
 	@Override
-	public TcpKeepAlive fromJson(String json) {
-		return null;
+	public String toJson() {
+		return JsonWrapper.toJson(this);
 	}
 
 }
