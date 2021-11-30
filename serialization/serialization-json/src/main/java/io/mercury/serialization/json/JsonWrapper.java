@@ -5,8 +5,6 @@ import javax.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import io.mercury.common.serialization.JsonSerializable;
-
 public final class JsonWrapper {
 
 	// 普通JSON序列化
@@ -60,8 +58,6 @@ public final class JsonWrapper {
 	private static final String toJson0(final Gson gson, final Object obj) {
 		if (obj == null)
 			return "null";
-		if (obj instanceof JsonSerializable)
-			return ((JsonSerializable) obj).toJson();
 		return gson.toJson(obj);
 	}
 
