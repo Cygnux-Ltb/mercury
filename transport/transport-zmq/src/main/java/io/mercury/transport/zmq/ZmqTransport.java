@@ -18,28 +18,28 @@ import io.mercury.transport.configurator.TcpKeepAlive;
 
 abstract class ZmqTransport extends TransportComponent implements Transport, Closeable {
 
+	private static final Logger log = CommonLoggerFactory.getLogger(ZmqTransport.class);
+
 	protected final ZmqConfigurator cfg;
 
 	// 组件运行状态, 初始为已开始运行
 	protected final AtomicBoolean isRunning = new AtomicBoolean(true);
 
 	// ZContext
-	protected ZContext zCtx;
+	protected ZContext context;
 
 	// ZMQ.Socket
-	protected ZMQ.Socket zSocket;
+	protected ZMQ.Socket socket;
 
 	protected String name;
-
-	private static final Logger log = CommonLoggerFactory.getLogger(ZmqTransport.class);
 
 	protected ZmqTransport(final ZmqConfigurator cfg) {
 		Assertor.nonNull(cfg, "cfg");
 		this.cfg = cfg;
-		this.zCtx = new ZContext(cfg.getIoThreads());
-		log.info("zmq context initialized, ioThreads=={}", cfg.getIoThreads());
+		this.context = new ZContext(cfg.getIoThreads());
+		log.info("ZMQ context initialized, ioThreads=={}", cfg.getIoThreads());
 		var type = getSocketType();
-		this.zSocket = zCtx.createSocket(type);
+		this.socket = context.createSocket(type);
 		log.info("ZMQ socket created with type -> {}", type);
 	}
 
@@ -52,19 +52,46 @@ abstract class ZmqTransport extends TransportComponent implements Transport, Clo
 	 * @param option
 	 * @return
 	 */
-	protected ZMQ.Socket setTcpKeepAlive(TcpKeepAlive tcpKeepAlive) {
-		if (tcpKeepAlive != null) {
-			log.info("setting zmq socket tcp keep alive");
-			zSocket.setTCPKeepAlive(tcpKeepAlive.getKeepAlive().getCode());
-			zSocket.setTCPKeepAliveCount(tcpKeepAlive.getKeepAliveCount());
-			zSocket.setTCPKeepAliveIdle(tcpKeepAlive.getKeepAliveIdle());
-			zSocket.setTCPKeepAliveInterval(tcpKeepAlive.getKeepAliveInterval());
+	protected ZMQ.Socket setTcpKeepAlive(TcpKeepAlive option) {
+		if (option != null) {
+			log.info("setting ZMQ.Socket TCP KeepAlive with -> {}", option);
+			var keepAlive = option.getKeepAlive();
+			switch (keepAlive) {
+			case Enable:
+				int keepAliveCount = option.getKeepAliveCount();
+				int keepAliveIdle = option.getKeepAliveIdle();
+				int keepAliveInterval = option.getKeepAliveInterval();
+				log.info(
+						"ZMQ.Socket used [Enable] option, KeepAliveCount -> {}, KeepAliveIdle -> {}, KeepAliveInterval -> {}",
+						keepAliveCount, keepAliveIdle, keepAliveInterval);
+				socket.setTCPKeepAlive(keepAlive.getCode());
+				socket.setTCPKeepAliveCount(keepAliveCount);
+				socket.setTCPKeepAliveIdle(keepAliveIdle);
+				socket.setTCPKeepAliveInterval(keepAliveInterval);
+				break;
+			case Disable:
+				socket.setTCPKeepAlive(keepAlive.getCode());
+				log.info("ZMQ.Socket used [Disable] option");
+				break;
+			case Default:
+			default:
+				log.info("ZMQ.Socket used [Default] option");
+				break;
+			}
 		}
-		return zSocket;
+		return socket;
 	}
 
 	public ZmqConfigurator getConfigurator() {
 		return cfg;
+	}
+
+	public ZContext getContext() {
+		return context;
+	}
+
+	public ZMQ.Socket getSocket() {
+		return socket;
 	}
 
 	@Override
@@ -74,7 +101,7 @@ abstract class ZmqTransport extends TransportComponent implements Transport, Clo
 
 	@Override
 	public boolean isConnected() {
-		return !zCtx.isClosed();
+		return !context.isClosed();
 	}
 
 	@Override
@@ -85,12 +112,14 @@ abstract class ZmqTransport extends TransportComponent implements Transport, Clo
 	@Override
 	public boolean closeIgnoreException() {
 		if (isRunning.compareAndSet(true, false)) {
-			zSocket.close();
-			zCtx.close();
+			socket.close();
+			context.close();
+			newEndTime();
+			log.info("ZMQ transport component -> {} closed, Running duration millis -> {}", name, getRunningDuration());
+		} else {
+			log.warn("ZMQ transport component -> {} already closed, Cannot be called again", name);
 		}
-		newEndTime();
-		log.info("zmq transport closed");
-		return zCtx.isClosed();
+		return context.isClosed();
 	}
 
 }

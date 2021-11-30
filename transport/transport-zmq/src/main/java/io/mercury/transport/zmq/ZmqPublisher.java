@@ -21,33 +21,33 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
 	// default topic
 	private final byte[] sendMore;
 
-	private final BytesSerializer<T> ser;
+	private final BytesSerializer<T> serializer;
 
 	private static final Logger log = CommonLoggerFactory.getLogger(ZmqPublisher.class);
 
 	/**
-	 * @param topic
 	 * @param cfg
-	 * @param ser
+	 * @param topic
+	 * @param serializer
 	 */
-	ZmqPublisher(@Nonnull String topic, @Nonnull ZmqConfigurator cfg, @Nonnull BytesSerializer<T> ser) {
+	ZmqPublisher(@Nonnull ZmqConfigurator cfg, @Nonnull String topic, @Nonnull BytesSerializer<T> serializer) {
 		super(cfg);
 		this.sendMore = topic.getBytes(ZMQ.CHARSET);
-		this.ser = ser;
+		this.serializer = serializer;
 		var addr = cfg.getAddr();
-		if (zSocket.bind(addr))
+		if (socket.bind(addr))
 			log.info("bound addr -> {}", addr);
 		else {
 			log.error("unable to bind -> {}", addr);
 			throw new ZmqBindException(addr);
 		}
 		setTcpKeepAlive(cfg.getTcpKeepAlive());
-		newStartTime();
 		this.name = "ZMQ::PUB$" + addr + "/" + topic;
+		newStartTime();
 	}
 
 	public BytesSerializer<T> getSerializer() {
-		return ser;
+		return serializer;
 	}
 
 	@Override
@@ -63,10 +63,10 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
 	@Override
 	public void publish(byte[] target, T msg) throws PublishFailedException {
 		if (isRunning.get()) {
-			byte[] bytes = ser.serialization(msg);
+			byte[] bytes = serializer.serialization(msg);
 			if (bytes != null && bytes.length > 0) {
-				zSocket.sendMore(target);
-				zSocket.send(bytes, ZMQ.NOBLOCK);
+				socket.sendMore(target);
+				socket.send(bytes, ZMQ.NOBLOCK);
 			}
 		} else
 			log.warn("ZmqPublisher -> [{}] already closed", name);
@@ -75,7 +75,7 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
 	public static void main(String[] args) {
 
 		try (ZmqPublisher<String> publisher = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(2)
-				.createStringPublisher("test")) {
+				.newPublisherWithString("test")) {
 			Random random = new Random();
 			for (;;) {
 				publisher.publish(String.valueOf(random.nextInt()));

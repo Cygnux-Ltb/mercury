@@ -29,14 +29,14 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 		super(cfg);
 		this.ser = ser;
 		var addr = cfg.getAddr();
-		if (zSocket.connect(addr))
+		if (socket.connect(addr))
 			log.info("connected addr -> {}", addr);
 		else {
 			log.error("unable to connect addr -> {}", addr);
 			throw new ZmqConnectionException(addr);
 		}
-		newStartTime();
 		this.name = "ZMQ::REQ$" + addr;
+		newStartTime();
 	}
 
 	@Override
@@ -46,10 +46,10 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 
 	@Override
 	public void sent(T msg) {
-		byte[] bytes = ser.serialization(msg);
+		var bytes = ser.serialization(msg);
 		if (bytes != null && bytes.length > 0) {
-			zSocket.send(bytes);
-			zSocket.recv();
+			socket.send(bytes);
+			socket.recv();
 		}
 	}
 

@@ -1,6 +1,7 @@
 package io.mercury.transport.zmq;
 
 import java.nio.charset.Charset;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -14,6 +15,7 @@ import io.mercury.common.config.Configurator;
 import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.common.serialization.JsonDeserializable;
 import io.mercury.common.util.Assertor;
+import io.mercury.serialization.json.JsonParser;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.configurator.TcpKeepAlive;
 import io.mercury.transport.configurator.Topics;
@@ -61,34 +63,58 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @param port
 	 * @return
 	 */
-	public static ZmqConfigurator tcp(String addr, int port) {
+	public static ZmqConfigurator tcp(@Nonnull String addr, int port) {
+		Assertor.nonEmpty(addr, "addr");
 		Assertor.atWithinRange(port, 4096, 65536, "port");
-		if (!addr.startsWith("tcp://")) {
+		if (!addr.startsWith("tcp://"))
 			addr = "tcp://" + addr;
-		}
 		return new ZmqConfigurator(addr + ":" + port);
 	}
 
 	/**
-	 * 创建IPC协议连接
+	 * 使用[ipc]协议连接, 用于进程间通信
 	 * 
 	 * @param addr
 	 * @param port
 	 * @return
 	 */
-	public static ZmqConfigurator ipc(String addr) {
-		if (!addr.startsWith("ipc://")) {
+	public static ZmqConfigurator ipc(@Nonnull String addr) {
+		Assertor.nonEmpty(addr, "addr");
+		if (!addr.startsWith("ipc://"))
 			addr = "ipc://" + addr;
-		}
 		return new ZmqConfigurator(addr);
 	}
 
+	/**
+	 * 使用[inproc]协议连接, 用于线程间通信
+	 * 
+	 * @param addr
+	 * @return
+	 */
+	public static ZmqConfigurator inproc(@Nonnull String addr) {
+		Assertor.nonEmpty(addr, "addr");
+		if (!addr.startsWith("inproc://"))
+			addr = "inproc://" + addr;
+		return new ZmqConfigurator(addr);
+	}
+
+	/**
+	 * 
+	 * @param ioThreads
+	 * @return
+	 */
 	public ZmqConfigurator ioThreads(int ioThreads) {
+		Assertor.greaterThan(ioThreads, 1, "ioThreads");
 		this.ioThreads = ioThreads;
 		return this;
 	}
 
-	public ZmqConfigurator tcpKeepAlive(TcpKeepAlive tcpKeepAlive) {
+	/**
+	 * 
+	 * @param tcpKeepAlive
+	 * @return
+	 */
+	public ZmqConfigurator tcpKeepAlive(@Nonnull TcpKeepAlive tcpKeepAlive) {
 		this.tcpKeepAlive = tcpKeepAlive;
 		return this;
 	}
@@ -99,27 +125,27 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @param ser
 	 * @return ZmqSender
 	 */
-	public ZmqSender<byte[]> createSender() {
-		return createSender(bytes -> bytes);
+	public ZmqSender<byte[]> newSender() {
+		return newSender(bytes -> bytes);
 	}
 
 	/**
 	 * 
 	 * @param <T>
-	 * @param ser
+	 * @param serializer
 	 * @return ZmqSender
 	 */
-	public <T> ZmqSender<T> createSender(@Nonnull BytesSerializer<T> ser) {
-		Assertor.nonNull(ser, "ser");
-		return new ZmqSender<>(this, ser);
+	public <T> ZmqSender<T> newSender(@Nonnull BytesSerializer<T> serializer) {
+		Assertor.nonNull(serializer, "serializer");
+		return new ZmqSender<>(this, serializer);
 	}
 
 	/**
 	 * 
 	 * @param handler
-	 * @return receiver
+	 * @return ZmqReceiver
 	 */
-	public ZmqReceiver createReceiver(@Nonnull Function<byte[], byte[]> handler) {
+	public ZmqReceiver newReceiver(@Nonnull Function<byte[], byte[]> handler) {
 		Assertor.nonNull(handler, "handler");
 		return new ZmqReceiver(this, handler);
 	}
@@ -127,10 +153,10 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	/**
 	 * 
 	 * @param consumer
-	 * @return
+	 * @return ZmqSubscriber
 	 */
-	public ZmqSubscriber createSubscriber(BiConsumer<byte[], byte[]> consumer) {
-		return createSubscriber(Topics.with(""), consumer);
+	public ZmqSubscriber newSubscriber(@Nonnull BiConsumer<byte[], byte[]> consumer) {
+		return newSubscriber(Topics.with(""), consumer);
 	}
 
 	/**
@@ -139,84 +165,86 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @param consumer
 	 * @return ZmqSubscriber
 	 */
-	public ZmqSubscriber createSubscriber(Topics topics, BiConsumer<byte[], byte[]> consumer) {
+	public ZmqSubscriber newSubscriber(@Nonnull Topics topics, @Nonnull BiConsumer<byte[], byte[]> consumer) {
 		Assertor.nonNull(topics, "topics");
 		Assertor.nonNull(consumer, "consumer");
-		return new ZmqSubscriber(topics, this, consumer);
+		return new ZmqSubscriber(this, topics, consumer);
 	}
 
 	/**
 	 * 
-	 * @return
+	 * @return ZmqPublisher
 	 */
-	public ZmqPublisher<byte[]> createBinaryPublisher() {
-		return createBinaryPublisher("");
-	}
-
-	/**
-	 * 
-	 * @param topic
-	 * @return
-	 */
-	public ZmqPublisher<byte[]> createBinaryPublisher(String topic) {
-		return createPublisher(topic, bytes -> bytes);
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public ZmqPublisher<String> createStringPublisher() {
-		return createStringPublisher("", Charsets.UTF8);
+	public ZmqPublisher<byte[]> newPublisherWithBinary() {
+		return newPublisherWithBinary("");
 	}
 
 	/**
 	 * 
 	 * @param topic
-	 * @return
+	 * @return ZmqPublisher
 	 */
-	public ZmqPublisher<String> createStringPublisher(String topic) {
-		return createStringPublisher(topic, Charsets.UTF8);
+	public ZmqPublisher<byte[]> newPublisherWithBinary(@Nonnull String topic) {
+		return newPublisher(topic, bytes -> bytes);
+	}
+
+	/**
+	 * 
+	 * @return ZmqPublisher
+	 */
+	public ZmqPublisher<String> newPublisherWithString() {
+		return newPublisherWithString("", Charsets.UTF8);
+	}
+
+	/**
+	 * 
+	 * @param topic
+	 * @return ZmqPublisher
+	 */
+	public ZmqPublisher<String> newPublisherWithString(@Nonnull String topic) {
+		return newPublisherWithString(topic, Charsets.UTF8);
 	}
 
 	/**
 	 * 
 	 * @param encode
-	 * @return
+	 * @return ZmqPublisher
 	 */
-	public ZmqPublisher<String> createStringPublisher(Charset encode) {
-		return createStringPublisher("", encode);
+	public ZmqPublisher<String> newPublisherWithString(@Nonnull Charset encode) {
+		return newPublisherWithString("", encode);
 	}
 
 	/**
 	 * 
 	 * @param topic
 	 * @param encode
-	 * @return
+	 * @return ZmqPublisher
 	 */
-	public ZmqPublisher<String> createStringPublisher(String topic, Charset encode) {
-		return createPublisher(topic, str -> str.getBytes(encode));
+	public ZmqPublisher<String> newPublisherWithString(@Nonnull String topic, @Nonnull Charset encode) {
+		return newPublisher(topic, str -> str.getBytes(encode));
 	}
 
 	/**
 	 * 
 	 * @param <T>
-	 * @param ser
-	 * @return
+	 * @param serializer
+	 * @return ZmqPublisher
 	 */
-	public <T> ZmqPublisher<T> createPublisher(BytesSerializer<T> ser) {
-		return createPublisher("", ser);
+	public <T> ZmqPublisher<T> newPublisher(@Nonnull BytesSerializer<T> serializer) {
+		return newPublisher("", serializer);
 	}
 
 	/**
 	 * 
 	 * @param <T>
 	 * @param topic
-	 * @param ser
-	 * @return
+	 * @param serializer
+	 * @return ZmqPublisher
 	 */
-	public <T> ZmqPublisher<T> createPublisher(String topic, BytesSerializer<T> ser) {
-		return new ZmqPublisher<>(topic, this, ser);
+	public <T> ZmqPublisher<T> newPublisher(@Nonnull String topic, @Nonnull BytesSerializer<T> serializer) {
+		Assertor.nonNull(topic, "topic");
+		Assertor.nonNull(serializer, "serializer");
+		return new ZmqPublisher<>(this, topic, serializer);
 	}
 
 	private transient String cache;
@@ -261,7 +289,12 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 
 	@Override
 	public ZmqConfigurator fromJson(String json) {
-		return null;
+		Map<String, Object> map = JsonParser.toMap(json);
+		var addr = (String) map.get("addr");
+		int ioThreads = (int) map.get("ioThreads");
+		var tcpKeepAliveJson = (String) map.get("tcpKeepAlive");
+		var tcpKeepAlive = JsonParser.toObject(tcpKeepAliveJson, TcpKeepAlive.class);
+		return new ZmqConfigurator(addr).ioThreads(ioThreads).tcpKeepAlive(tcpKeepAlive);
 	}
 
 }

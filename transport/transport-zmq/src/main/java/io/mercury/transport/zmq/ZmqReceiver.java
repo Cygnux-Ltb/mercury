@@ -25,15 +25,15 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 		super(cfg);
 		this.handler = handler;
 		var addr = cfg.getAddr();
-		if (zSocket.bind(addr)) 
+		if (socket.bind(addr))
 			log.info("bound addr -> {}", addr);
-		 else {
+		else {
 			log.error("unable to bind -> {}", addr);
 			throw new ZmqBindException(addr);
 		}
 		setTcpKeepAlive(cfg.getTcpKeepAlive());
-		newStartTime();
 		this.name = "ZMQ::REP$" + addr;
+		newStartTime();
 	}
 
 	public Function<byte[], byte[]> getHandler() {
@@ -48,10 +48,10 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 	@Override
 	public void receive() {
 		while (isRunning.get()) {
-			byte[] recv = zSocket.recv();
-			byte[] sent = handler.apply(recv);
+			var recv = socket.recv();
+			var sent = handler.apply(recv);
 			if (sent != null)
-				zSocket.send(sent);
+				socket.send(sent);
 		}
 	}
 

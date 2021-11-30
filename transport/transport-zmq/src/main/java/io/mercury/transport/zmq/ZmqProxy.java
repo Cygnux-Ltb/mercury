@@ -7,17 +7,16 @@ public class ZmqProxy<U> extends ZmqTransport  {
 
 	public ZmqProxy(ZmqConfigurator cfg) {
 		super(cfg);
-		boolean proxy = ZMQ.proxy(zSocket, zSocket, zSocket, zSocket);
+		boolean proxy = ZMQ.proxy(socket, socket, socket, socket);
 		// 測試統配符號操作
 	}
-
+	
 	
 	
 
 	
 	protected SocketType getSocketType() {
-		// TODO Auto-generated method stub
-		return null;
+		return SocketType.DEALER;
 	}
 
 

@@ -10,11 +10,9 @@ import org.zeromq.SocketType;
 import org.zeromq.ZMQ;
 
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.transport.api.Receiver;
 import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.configurator.TcpKeepAlive;
 import io.mercury.transport.configurator.Topics;
-import io.mercury.transport.exception.ReceiverStartException;
 import io.mercury.transport.zmq.exception.ZmqConnectionException;
 
 /**
@@ -22,7 +20,7 @@ import io.mercury.transport.zmq.exception.ZmqConnectionException;
  * @author yellow013
  *
  */
-public final class ZmqSubscriber extends ZmqTransport implements Receiver, Subscriber {
+public final class ZmqSubscriber extends ZmqTransport implements Subscriber {
 
 	/**
 	 * topics
@@ -36,13 +34,13 @@ public final class ZmqSubscriber extends ZmqTransport implements Receiver, Subsc
 
 	private static final Logger log = CommonLoggerFactory.getLogger(ZmqSubscriber.class);
 
-	ZmqSubscriber(@Nonnull Topics topics, ZmqConfigurator cfg, BiConsumer<byte[], byte[]> consumer)
+	ZmqSubscriber(@Nonnull ZmqConfigurator cfg, @Nonnull Topics topics, BiConsumer<byte[], byte[]> consumer)
 			throws ZmqConnectionException {
 		super(cfg);
 		this.topics = topics;
 		this.consumer = consumer;
-		String addr = cfg.getAddr();
-		if (zSocket.connect(addr))
+		var addr = cfg.getAddr();
+		if (socket.connect(addr))
 			log.info("connected addr -> {}", addr);
 		else {
 			log.error("unable to connect addr -> {}", addr);
@@ -52,9 +50,9 @@ public final class ZmqSubscriber extends ZmqTransport implements Receiver, Subsc
 				// 使用默认TcpKeepAlive配置
 				? TcpKeepAlive.enable().setKeepAliveCount(10).setKeepAliveIdle(30).setKeepAliveInterval(30)
 				: cfg.getTcpKeepAlive());
-		topics.each(topic -> zSocket.subscribe(topic.getBytes(ZMQ.CHARSET)));
-		newStartTime();
+		topics.each(topic -> socket.subscribe(topic.getBytes(ZMQ.CHARSET)));
 		this.name = "ZMQ::SUB$" + addr + "/" + topics;
+		newStartTime();
 	}
 
 	public Topics getTopics() {
@@ -67,27 +65,15 @@ public final class ZmqSubscriber extends ZmqTransport implements Receiver, Subsc
 	}
 
 	@Override
-	public void receive() throws ReceiverStartException {
-		while (isRunning.get()) {
-			byte[] topic = zSocket.recv();
-			log.debug("received topic bytes, length: {}", topic.length);
-			byte[] msg = zSocket.recv();
-			log.debug("received msg bytes, length: {}", topic.length);
-			consumer.accept(topic, msg);
-		}
-		log.warn("ZmqSubscriber -> [{}] already closed", name);
-	}
-
-	@Override
 	public void subscribe() {
 		while (isRunning.get()) {
-			byte[] topic = zSocket.recv();
-			log.debug("received topic bytes, length: {}", topic.length);
-			byte[] msg = zSocket.recv();
-			log.debug("received msg bytes, length: {}", topic.length);
+			var topic = socket.recv();
+			log.debug("received topic, length: {}", topic.length);
+			var msg = socket.recv();
+			log.debug("received msg, length: {}", topic.length);
 			consumer.accept(topic, msg);
 		}
-		log.warn("ZmqSubscriber -> [{}] already closed", name);
+		log.info("ZmqSubscriber -> [{}] already closed", name);
 	}
 
 	@Override
@@ -101,7 +87,7 @@ public final class ZmqSubscriber extends ZmqTransport implements Receiver, Subsc
 	}
 
 	public static void main(String[] args) {
-		try (ZmqSubscriber subscriber = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(2).createSubscriber(
+		try (ZmqSubscriber subscriber = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(2).newSubscriber(
 				Topics.with("test"),
 				(topic, msg) -> System.out.println(new String(topic) + " -> " + new String(msg)))) {
 			subscriber.subscribe();
