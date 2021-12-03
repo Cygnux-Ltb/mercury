@@ -115,6 +115,7 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @return
 	 */
 	public ZmqConfigurator tcpKeepAlive(@Nonnull TcpKeepAlive tcpKeepAlive) {
+		Assertor.nonNull(tcpKeepAlive, "tcpKeepAlive");
 		this.tcpKeepAlive = tcpKeepAlive;
 		return this;
 	}
@@ -193,7 +194,7 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @return ZmqPublisher
 	 */
 	public ZmqPublisher<String> newPublisherWithString() {
-		return newPublisherWithString("", Charsets.UTF8);
+		return newPublisherWithString("", ZMQ.CHARSET);
 	}
 
 	/**
@@ -202,7 +203,7 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @return ZmqPublisher
 	 */
 	public ZmqPublisher<String> newPublisherWithString(@Nonnull String topic) {
-		return newPublisherWithString(topic, Charsets.UTF8);
+		return newPublisherWithString(topic, ZMQ.CHARSET);
 	}
 
 	/**
@@ -221,6 +222,7 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 	 * @return ZmqPublisher
 	 */
 	public ZmqPublisher<String> newPublisherWithString(@Nonnull String topic, @Nonnull Charset encode) {
+		Assertor.nonNull(encode, "encode");
 		return newPublisher(topic, str -> str.getBytes(encode));
 	}
 

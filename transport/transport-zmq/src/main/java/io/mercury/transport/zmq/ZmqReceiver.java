@@ -12,6 +12,7 @@ import org.zeromq.SocketType;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
+import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Receiver;
 import io.mercury.transport.zmq.exception.ZmqBindException;
 
@@ -23,12 +24,13 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 
 	ZmqReceiver(@Nonnull ZmqConfigurator cfg, @Nonnull Function<byte[], byte[]> handler) {
 		super(cfg);
+		Assertor.nonNull(handler, "handler");
 		this.handler = handler;
 		var addr = cfg.getAddr();
 		if (socket.bind(addr))
-			log.info("bound addr -> {}", addr);
+			log.info("ZmqReceiver bound addr -> {}", addr);
 		else {
-			log.error("unable to bind -> {}", addr);
+			log.error("ZmqReceiver unable to bind -> {}", addr);
 			throw new ZmqBindException(addr);
 		}
 		setTcpKeepAlive(cfg.getTcpKeepAlive());

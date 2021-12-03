@@ -12,6 +12,7 @@ import org.zeromq.ZMQ;
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.util.Assertor;
+import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Transport;
 import io.mercury.transport.api.TransportComponent;
 import io.mercury.transport.configurator.TcpKeepAlive;
@@ -20,6 +21,7 @@ abstract class ZmqTransport extends TransportComponent implements Transport, Clo
 
 	private static final Logger log = CommonLoggerFactory.getLogger(ZmqTransport.class);
 
+	// ZMQ配置器
 	protected final ZmqConfigurator cfg;
 
 	// 组件运行状态, 初始为已开始运行
@@ -31,6 +33,7 @@ abstract class ZmqTransport extends TransportComponent implements Transport, Clo
 	// ZMQ.Socket
 	protected ZMQ.Socket socket;
 
+	// 组件名称
 	protected String name;
 
 	protected ZmqTransport(final ZmqConfigurator cfg) {
@@ -94,6 +97,12 @@ abstract class ZmqTransport extends TransportComponent implements Transport, Clo
 		return socket;
 	}
 
+	public boolean setIdentity(String identity) {
+		if (StringSupport.isNullOrEmpty(identity))
+			return false;
+		return socket.setIdentity(identity.getBytes(ZMQ.CHARSET));
+	}
+
 	@Override
 	public String getName() {
 		return name;
@@ -116,9 +125,8 @@ abstract class ZmqTransport extends TransportComponent implements Transport, Clo
 			context.close();
 			newEndTime();
 			log.info("ZMQ transport component -> {} closed, Running duration millis -> {}", name, getRunningDuration());
-		} else {
+		} else
 			log.warn("ZMQ transport component -> {} already closed, Cannot be called again", name);
-		}
 		return context.isClosed();
 	}
 

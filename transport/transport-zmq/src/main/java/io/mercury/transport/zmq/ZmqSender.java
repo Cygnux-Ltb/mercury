@@ -11,28 +11,30 @@ import org.zeromq.SocketType;
 
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.BytesSerializer;
+import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.zmq.exception.ZmqConnectionException;
 
 @NotThreadSafe
 public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 
-	private final BytesSerializer<T> ser;
+	private final BytesSerializer<T> serializer;
 
 	private static final Logger log = CommonLoggerFactory.getLogger(ZmqSender.class);
 
 	/**
 	 * @param cfg
-	 * @param ser
+	 * @param serializer
 	 */
-	ZmqSender(@Nonnull ZmqConfigurator cfg, @Nonnull BytesSerializer<T> ser) {
+	ZmqSender(@Nonnull ZmqConfigurator cfg, @Nonnull BytesSerializer<T> serializer) {
 		super(cfg);
-		this.ser = ser;
+		Assertor.nonNull(serializer, "serializer");
+		this.serializer = serializer;
 		var addr = cfg.getAddr();
 		if (socket.connect(addr))
-			log.info("connected addr -> {}", addr);
+			log.info("ZmqSender connected addr -> {}", addr);
 		else {
-			log.error("unable to connect addr -> {}", addr);
+			log.error("ZmqSender unable to connect addr -> {}", addr);
 			throw new ZmqConnectionException(addr);
 		}
 		this.name = "ZMQ::REQ$" + addr;
@@ -46,7 +48,7 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 
 	@Override
 	public void sent(T msg) {
-		var bytes = ser.serialization(msg);
+		var bytes = serializer.serialization(msg);
 		if (bytes != null && bytes.length > 0) {
 			socket.send(bytes);
 			socket.recv();

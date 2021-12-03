@@ -12,6 +12,7 @@ import org.zeromq.ZMQ;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.common.thread.SleepSupport;
+import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Publisher;
 import io.mercury.transport.exception.PublishFailedException;
 import io.mercury.transport.zmq.exception.ZmqBindException;
@@ -32,13 +33,15 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
 	 */
 	ZmqPublisher(@Nonnull ZmqConfigurator cfg, @Nonnull String topic, @Nonnull BytesSerializer<T> serializer) {
 		super(cfg);
+		Assertor.nonNull(topic, "topic");
+		Assertor.nonNull(serializer, "serializer");
 		this.sendMore = topic.getBytes(ZMQ.CHARSET);
 		this.serializer = serializer;
 		var addr = cfg.getAddr();
 		if (socket.bind(addr))
-			log.info("bound addr -> {}", addr);
+			log.info("ZmqPublisher bound addr -> {}", addr);
 		else {
-			log.error("unable to bind -> {}", addr);
+			log.error("ZmqPublisher unable to bind -> {}", addr);
 			throw new ZmqBindException(addr);
 		}
 		setTcpKeepAlive(cfg.getTcpKeepAlive());

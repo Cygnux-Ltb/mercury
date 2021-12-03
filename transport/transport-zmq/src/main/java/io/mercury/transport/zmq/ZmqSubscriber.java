@@ -10,6 +10,7 @@ import org.zeromq.SocketType;
 import org.zeromq.ZMQ;
 
 import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.configurator.TcpKeepAlive;
 import io.mercury.transport.configurator.Topics;
@@ -22,32 +23,30 @@ import io.mercury.transport.zmq.exception.ZmqConnectionException;
  */
 public final class ZmqSubscriber extends ZmqTransport implements Subscriber {
 
-	/**
-	 * topics
-	 */
+	// topics
 	private final Topics topics;
 
-	/**
-	 * 订阅消息消费者
-	 */
+	// 订阅消息消费者
 	private final BiConsumer<byte[], byte[]> consumer;
 
 	private static final Logger log = CommonLoggerFactory.getLogger(ZmqSubscriber.class);
 
-	ZmqSubscriber(@Nonnull ZmqConfigurator cfg, @Nonnull Topics topics, BiConsumer<byte[], byte[]> consumer)
+	ZmqSubscriber(@Nonnull ZmqConfigurator cfg, @Nonnull Topics topics, @Nonnull BiConsumer<byte[], byte[]> consumer)
 			throws ZmqConnectionException {
 		super(cfg);
+		Assertor.nonNull(topics, "topics");
+		Assertor.nonNull(consumer, "consumer");
 		this.topics = topics;
 		this.consumer = consumer;
 		var addr = cfg.getAddr();
 		if (socket.connect(addr))
-			log.info("connected addr -> {}", addr);
+			log.info("ZmqSubscriber connected addr -> {}", addr);
 		else {
-			log.error("unable to connect addr -> {}", addr);
+			log.error("ZmqSubscriber unable to connect addr -> {}", addr);
 			throw new ZmqConnectionException(addr);
 		}
 		setTcpKeepAlive(cfg.getTcpKeepAlive() == null
-				// 使用默认TcpKeepAlive配置
+				// 如果TcpKeepAlive为空, 使用默认TcpKeepAlive配置
 				? TcpKeepAlive.enable().setKeepAliveCount(10).setKeepAliveIdle(30).setKeepAliveInterval(30)
 				: cfg.getTcpKeepAlive());
 		topics.each(topic -> socket.subscribe(topic.getBytes(ZMQ.CHARSET)));
