@@ -23,8 +23,6 @@ public final class LinearSequence {
 
 	/**
 	 * 
-	 * 
-	 * 
 	 * @return System.nanoTime() / NANOS_PER_MILLIS
 	 */
 	public static long getMillis() {

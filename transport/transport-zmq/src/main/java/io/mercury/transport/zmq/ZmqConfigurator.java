@@ -10,7 +10,6 @@ import javax.annotation.Nonnull;
 import org.zeromq.ZMQ;
 
 import io.mercury.common.annotation.OnlyOverrideEquals;
-import io.mercury.common.character.Charsets;
 import io.mercury.common.config.Configurator;
 import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.common.serialization.JsonDeserializable;

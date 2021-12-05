@@ -1,5 +1,7 @@
 package io.mercury.common.sequence;
 
+import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HH_MM_SS;
+
 import java.time.ZonedDateTime;
 
 import io.mercury.common.datetime.EpochUtil;
@@ -29,7 +31,7 @@ public class TimePoint implements Serial<TimePoint> {
 		this.datetime = datetime;
 		this.epochSecond = datetime.toEpochSecond();
 		this.repeat = repeat;
-		this.serialId = (epochSecond * 1000L) + repeat;
+		this.serialId = (epochSecond * 10000L) + repeat;
 	}
 
 	/**
@@ -71,6 +73,15 @@ public class TimePoint implements Serial<TimePoint> {
 		return serialId;
 	}
 
+	private transient String cache;
+
+	@Override
+	public String toString() {
+		if (cache == null)
+			cache = epochSecond + " -> " + YYYY_MM_DD_HH_MM_SS.format(datetime) + " / " + repeat;
+		return cache;
+	}
+
 	public static void main(String[] args) {
 
 		ZonedDateTime now = ZonedDateTime.now();
@@ -79,11 +90,13 @@ public class TimePoint implements Serial<TimePoint> {
 		System.out.println(epochSecond);
 
 		TimePoint timeStarted0 = TimePoint.with(now);
+		System.out.println(timeStarted0);
 		System.out.println(timeStarted0.getDatetime());
 		System.out.println(timeStarted0.getEpochSecond());
 		System.out.println(timeStarted0.getSerialId());
 
 		TimePoint timeStarted1 = TimePoint.with(timeStarted0);
+		System.out.println(timeStarted1);
 		System.out.println(timeStarted1.getDatetime());
 		System.out.println(timeStarted1.getEpochSecond());
 		System.out.println(timeStarted1.getSerialId());
