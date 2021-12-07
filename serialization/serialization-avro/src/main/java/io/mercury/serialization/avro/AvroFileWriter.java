@@ -17,7 +17,7 @@ import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecord;
 import org.apache.commons.collections4.CollectionUtils;
 
-import io.mercury.common.util.Assertor;
+import io.mercury.common.lang.Assertor;
 
 @NotThreadSafe
 public final class AvroFileWriter<T extends SpecificRecord> implements Closeable {
