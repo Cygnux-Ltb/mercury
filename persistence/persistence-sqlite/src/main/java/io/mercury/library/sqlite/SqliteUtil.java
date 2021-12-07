@@ -12,9 +12,9 @@ import javax.annotation.Nonnull;
 
 import org.slf4j.Logger;
 
+import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.sys.SysProperties;
-import io.mercury.common.util.Assertor;
 import io.mercury.common.util.StringSupport;
 
 public final class SqliteUtil {

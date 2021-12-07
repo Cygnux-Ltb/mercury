@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
 import io.mercury.common.collections.keeper.AbstractKeeper;
-import io.mercury.common.util.Assertor;
+import io.mercury.common.lang.Assertor;
 import io.mercury.persistence.chronicle.exception.ChronicleIOException;
 import net.openhft.chronicle.set.ChronicleSet;
 import net.openhft.chronicle.set.ChronicleSetBuilder;
@@ -18,7 +18,8 @@ public class ChronicleSetKeeper<E> extends AbstractKeeper<String, ChronicleSet<E
 	private ChronicleSetConfigurator<E> cfg;
 
 	public ChronicleSetKeeper(@Nonnull ChronicleSetConfigurator<E> cfg) {
-		this.cfg = Assertor.nonNull(cfg, "cfg");
+		Assertor.nonNull(cfg, "cfg");
+		this.cfg = cfg;
 	}
 
 	@Override

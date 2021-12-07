@@ -10,8 +10,8 @@ import javax.annotation.concurrent.Immutable;
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.config.Configurator;
 import io.mercury.common.datetime.DateTimeUtil;
+import io.mercury.common.lang.Assertor;
 import io.mercury.common.sys.SysProperties;
-import io.mercury.common.util.Assertor;
 
 @Immutable
 public final class ChronicleMapConfigurator<K, V> implements Configurator {

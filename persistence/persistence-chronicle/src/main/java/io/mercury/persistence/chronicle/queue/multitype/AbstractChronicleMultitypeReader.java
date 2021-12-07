@@ -1,9 +1,9 @@
 package io.mercury.persistence.chronicle.queue.multitype;
 
+import static io.mercury.common.lang.Assertor.greaterThan;
+import static io.mercury.common.lang.Assertor.nonNull;
 import static io.mercury.common.thread.SleepSupport.sleep;
 import static io.mercury.common.thread.Threads.startNewThread;
-import static io.mercury.common.util.Assertor.greaterThan;
-import static io.mercury.common.util.Assertor.nonNull;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -17,8 +17,8 @@
 
 	<properties>
 		<!-- v chronicle storage basic v -->
-		<chronicle-core.version>2.21.93</chronicle-core.version>
-		<chronicle-bytes.version>2.21.91</chronicle-bytes.version>
+		<chronicle-core.version>2.21.94</chronicle-core.version>
+		<chronicle-bytes.version>2.21.92</chronicle-bytes.version>
 		<chronicle-threads.version>2.21.87</chronicle-threads.version>
 		<chronicle-wire.version>2.21.93</chronicle-wire.version>
 		<chronicle-analytics.version>2.21.2</chronicle-analytics.version>
