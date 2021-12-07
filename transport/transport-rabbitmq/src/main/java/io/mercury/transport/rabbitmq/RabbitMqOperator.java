@@ -11,7 +11,7 @@ import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
 
 import io.mercury.common.datetime.DateTimeUtil;
-import io.mercury.common.util.Assertor;
+import io.mercury.common.lang.Assertor;
 import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
 import io.mercury.transport.rabbitmq.declare.AmqpExchange;
 import io.mercury.transport.rabbitmq.declare.AmqpQueue;

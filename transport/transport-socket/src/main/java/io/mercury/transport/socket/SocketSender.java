@@ -9,8 +9,8 @@ import org.slf4j.Logger;
 
 import io.mercury.common.concurrent.queue.AbstractSingleConsumerQueue;
 import io.mercury.common.concurrent.queue.jct.JctSingleConsumerQueue;
+import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.api.TransportComponent;
 import io.mercury.transport.socket.configurator.SocketConfigurator;

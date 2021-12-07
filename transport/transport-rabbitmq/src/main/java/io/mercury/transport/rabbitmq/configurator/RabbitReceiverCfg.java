@@ -1,6 +1,6 @@
 package io.mercury.transport.rabbitmq.configurator;
 
-import static io.mercury.common.util.Assertor.nonNull;
+import static io.mercury.common.lang.Assertor.nonNull;
 
 import javax.annotation.Nonnull;
 

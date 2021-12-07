@@ -7,8 +7,8 @@ import org.slf4j.Logger;
 
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.collections.MutableLists;
+import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.util.Assertor;
 import io.mercury.transport.rabbitmq.RabbitMqOperator;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 

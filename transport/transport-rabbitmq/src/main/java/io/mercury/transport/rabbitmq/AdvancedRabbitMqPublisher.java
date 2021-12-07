@@ -18,11 +18,11 @@ import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.ConfirmCallback;
 
 import io.mercury.common.character.Charsets;
+import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.CommonLoggerFactory;
 import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
-import io.mercury.common.util.Assertor;
 import io.mercury.transport.api.Publisher;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.exception.InitializeFailureException;

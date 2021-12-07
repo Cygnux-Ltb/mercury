@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.commons.collections4.CollectionUtils;
 
 import io.mercury.common.collections.MutableLists;
-import io.mercury.common.util.Assertor;
+import io.mercury.common.lang.Assertor;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rabbitmq.RabbitMqOperator;
 import io.mercury.transport.rabbitmq.exception.DeclareException;

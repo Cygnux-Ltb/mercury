@@ -3,7 +3,7 @@ package io.mercury.transport.netty;
 import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
 
 import io.mercury.common.annotation.AbstractFunction;
-import io.mercury.common.util.Assertor;
+import io.mercury.common.lang.Assertor;
 import io.mercury.transport.api.Transport;
 import io.mercury.transport.api.TransportComponent;
 import io.mercury.transport.netty.configurator.NettyConfigurator;

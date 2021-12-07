@@ -5,7 +5,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import io.mercury.common.collections.MapUtil;
-import io.mercury.common.util.Assertor;
+import io.mercury.common.lang.Assertor;
 import io.mercury.serialization.json.JsonWrapper;
 
 public final class AmqpExchange {

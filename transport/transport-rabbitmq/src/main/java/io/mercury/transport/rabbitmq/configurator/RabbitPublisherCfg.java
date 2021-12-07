@@ -1,7 +1,7 @@
 package io.mercury.transport.rabbitmq.configurator;
 
 import static com.rabbitmq.client.MessageProperties.PERSISTENT_BASIC;
-import static io.mercury.common.util.Assertor.nonNull;
+import static io.mercury.common.lang.Assertor.nonNull;
 
 import java.util.function.Supplier;
 

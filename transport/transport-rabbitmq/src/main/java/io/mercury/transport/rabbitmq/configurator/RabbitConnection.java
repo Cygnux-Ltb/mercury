@@ -6,7 +6,7 @@ import javax.net.ssl.SSLContext;
 
 import com.rabbitmq.client.ConnectionFactory;
 
-import io.mercury.common.util.Assertor;
+import io.mercury.common.lang.Assertor;
 import io.mercury.common.util.StringSupport;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.configurator.TransportConfigurator;
