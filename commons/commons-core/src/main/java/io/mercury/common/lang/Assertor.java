@@ -1,10 +1,12 @@
-package io.mercury.common.util;
+package io.mercury.common.lang;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+
+import io.mercury.common.util.StringSupport;
 
 public final class Assertor {
 

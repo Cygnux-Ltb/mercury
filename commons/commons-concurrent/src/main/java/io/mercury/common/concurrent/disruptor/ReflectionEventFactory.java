@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import com.lmax.disruptor.EventFactory;
 
 import io.mercury.common.concurrent.disruptor.example.LongEvent;
-import io.mercury.common.util.Assertor;
+import io.mercury.common.lang.Assertor;
 import io.mercury.common.util.JreReflection.RuntimeReflectionException;
 
 /**

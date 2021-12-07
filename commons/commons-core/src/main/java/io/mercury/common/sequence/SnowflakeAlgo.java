@@ -234,12 +234,12 @@ public final class SnowflakeAlgo {
 		long maxSequence = BitOperator.maxValueOfBit(SequenceBits);
 		System.out.println(maxSequence);
 		System.out.println(BitFormatter.longBinaryFormat(maxSequence));
-		System.out.println(HexUtil.toHexString(maxSequence));
+		System.out.println(HexUtil.toHex(maxSequence));
 
 		long maxOwnerId = BitOperator.maxValueOfBit(OwnerIdBits);
 		System.out.println(maxOwnerId);
 		System.out.println(BitFormatter.longBinaryFormat(maxOwnerId));
-		System.out.println(HexUtil.toHexString(maxOwnerId));
+		System.out.println(HexUtil.toHex(maxOwnerId));
 
 		System.out.println(BitFormatter.longBinaryFormat(1023L));
 

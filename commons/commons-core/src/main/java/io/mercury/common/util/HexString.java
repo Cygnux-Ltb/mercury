@@ -39,6 +39,12 @@ public final class HexString {
 		return StringSupport.isNullOrEmpty(hex) ? EMPTY : createHexString(hex);
 	}
 
+	/**
+	 * 
+	 * @param hex
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
 	private static HexString createHexString(String hex) throws IllegalArgumentException {
 		// though method is private, leaving checks in place to show intent
 		if (hex == null) {
@@ -64,6 +70,12 @@ public final class HexString {
 		return ArrayUtil.isNullOrEmpty(bytes) ? EMPTY : createHexString(bytes);
 	}
 
+	/**
+	 * 
+	 * @param bytes
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
 	private static HexString createHexString(byte[] bytes) throws IllegalArgumentException {
 		// though method is private, leaving checks in place to show intent
 		if (bytes == null) {
@@ -72,10 +84,15 @@ public final class HexString {
 			throw new IllegalArgumentException("bytes argument cannot be zero length; use HexString.NULL instead");
 		}
 		byte[] copyOfbytes = copyByteArray(bytes);
-		String hex = HexUtil.toHexString(copyOfbytes).toUpperCase();
+		String hex = HexUtil.toHex(copyOfbytes).toUpperCase();
 		return new HexString(copyOfbytes, hex);
 	}
 
+	/**
+	 * 
+	 * @param bytes
+	 * @return
+	 */
 	private static byte[] copyByteArray(byte[] bytes) {
 		return Arrays.copyOf(bytes, bytes.length);
 	}
@@ -106,9 +123,8 @@ public final class HexString {
 		if (other != null && other instanceof HexString) {
 			HexString hexString = (HexString) other;
 			return this.hex.equals(hexString.hex);
-		} else {
+		} else
 			return false;
-		}
 	}
 
 	@Override

@@ -15,7 +15,7 @@ import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
 
 import io.mercury.common.collections.MutableLists;
-import io.mercury.common.util.Assertor;
+import io.mercury.common.lang.Assertor;
 
 /**
  * 时间窗口序列

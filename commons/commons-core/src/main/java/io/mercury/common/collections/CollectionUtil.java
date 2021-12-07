@@ -6,8 +6,8 @@ import java.util.function.IntFunction;
 
 import javax.annotation.Nonnull;
 
+import io.mercury.common.lang.Assertor;
 import io.mercury.common.util.ArrayUtil;
-import io.mercury.common.util.Assertor;
 
 public final class CollectionUtil {
 

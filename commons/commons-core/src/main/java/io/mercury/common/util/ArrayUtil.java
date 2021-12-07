@@ -4,6 +4,8 @@ import static java.lang.System.arraycopy;
 
 import javax.annotation.Nonnull;
 
+import io.mercury.common.lang.Assertor;
+
 public final class ArrayUtil {
 
 	/**

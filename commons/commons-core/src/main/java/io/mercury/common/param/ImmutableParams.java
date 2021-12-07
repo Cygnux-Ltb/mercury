@@ -1,9 +1,9 @@
 package io.mercury.common.param;
 
 import static io.mercury.common.collections.ImmutableSets.newImmutableSet;
-import static io.mercury.common.util.Assertor.nonEmptyMap;
-import static io.mercury.common.util.Assertor.nonNull;
-import static io.mercury.common.util.Assertor.requiredLength;
+import static io.mercury.common.lang.Assertor.nonEmptyMap;
+import static io.mercury.common.lang.Assertor.nonNull;
+import static io.mercury.common.lang.Assertor.requiredLength;
 import static java.lang.Boolean.parseBoolean;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;

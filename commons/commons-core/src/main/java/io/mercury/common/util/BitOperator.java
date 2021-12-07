@@ -4,6 +4,8 @@ import static io.mercury.common.util.BitFormatter.longBinaryFormat;
 
 import javax.annotation.Nonnull;
 
+import io.mercury.common.lang.Assertor;
+
 public final class BitOperator {
 
 	private BitOperator() {

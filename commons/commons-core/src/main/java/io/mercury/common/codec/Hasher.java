@@ -122,7 +122,7 @@ public final class Hasher {
 	 * @throws NoSuchAlgorithmException
 	 */
 	public String toHashedHexString(byte[] bytes) throws NoSuchAlgorithmException {
-		return HexUtil.toHexString(toHashedBytes(bytes));
+		return HexUtil.toHex(toHashedBytes(bytes));
 		// return StringUtil.toHexString(toHashedBytes(bytes));
 	}
 

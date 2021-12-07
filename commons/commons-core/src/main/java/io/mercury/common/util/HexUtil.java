@@ -19,6 +19,8 @@ package io.mercury.common.util;
 
 import javax.annotation.Nonnull;
 
+import io.mercury.common.lang.Assertor;
+
 /**
  * Utility class for encoding and decoding objects to a hex string.
  * 
@@ -34,10 +36,10 @@ public final class HexUtil {
 	 * @param bytes
 	 * @return
 	 */
-	public static String toHexString(byte[] bytes) {
+	public static String toHex(byte[] bytes) {
 		if (bytes == null)
 			return "";
-		return toHexString(bytes, 0, bytes.length);
+		return toHex(bytes, 0, bytes.length);
 	}
 
 	/**
@@ -47,13 +49,13 @@ public final class HexUtil {
 	 * @param length
 	 * @return
 	 */
-	public static String toHexString(byte[] bytes, int offset, int length) {
+	public static String toHex(byte[] bytes, int offset, int length) {
 		if (bytes == null)
 			return "";
-		assertOffsetLengthValid(offset, length, bytes.length);
+		assertOffsetAndLength(offset, length, bytes.length);
 		// each byte is 2 chars in string
 		StringBuilder buffer = new StringBuilder(length * 2 + 2).append("0x");
-		appendHexString(buffer, bytes, offset, length);
+		appendHex(buffer, bytes, offset, length);
 		return buffer.toString();
 	}
 
@@ -64,11 +66,11 @@ public final class HexUtil {
 	 * @param offset
 	 * @param length
 	 */
-	public static void appendHexString(@Nonnull StringBuilder buffer, byte[] bytes, int offset, int length) {
-		assertNonnull(buffer);
+	public static void appendHex(@Nonnull StringBuilder buffer, byte[] bytes, int offset, int length) {
+		Assertor.nonNull(buffer, "buffer");
 		if (bytes == null)
 			return;
-		assertOffsetLengthValid(offset, length, bytes.length);
+		assertOffsetAndLength(offset, length, bytes.length);
 		int end = offset + length;
 		for (int i = offset; i < end; i++) {
 			buffer.append(HEX_TABLE[(bytes[i] & 0xF0) >>> 4]).append(HEX_TABLE[(bytes[i] & 0x0F)]);
@@ -80,11 +82,11 @@ public final class HexUtil {
 	 * @param buffer
 	 * @param bytes
 	 */
-	public static void appendHexString(@Nonnull StringBuilder buffer, byte[] bytes) {
-		assertNonnull(buffer);
+	public static void appendHex(@Nonnull StringBuilder buffer, byte[] bytes) {
+		Assertor.nonNull(buffer, "buffer");
 		if (bytes == null)
 			return;
-		appendHexString(buffer, bytes, 0, bytes.length);
+		appendHex(buffer, bytes, 0, bytes.length);
 	}
 
 	/**
@@ -92,9 +94,9 @@ public final class HexUtil {
 	 * @param value
 	 * @return
 	 */
-	public static String toHexString(byte value) {
+	public static String toHex(byte value) {
 		StringBuilder buffer = new StringBuilder(4).append("0x");
-		appendHexString(buffer, value);
+		appendHex(buffer, value);
 		return buffer.toString();
 	}
 
@@ -103,8 +105,8 @@ public final class HexUtil {
 	 * @param buffer
 	 * @param value
 	 */
-	public static void appendHexString(@Nonnull StringBuilder buffer, byte value) {
-		assertNonnull(buffer);
+	public static void appendHex(@Nonnull StringBuilder buffer, byte value) {
+		Assertor.nonNull(buffer, "buffer");
 		buffer.append(HEX_TABLE[(value & 0xF0) >>> 4]).append(HEX_TABLE[(value & 0x0F)]);
 	}
 
@@ -113,9 +115,9 @@ public final class HexUtil {
 	 * @param value
 	 * @return
 	 */
-	public static String toHexString(short value) {
+	public static String toHex(short value) {
 		StringBuilder buffer = new StringBuilder(6).append("0x");
-		appendHexString(buffer, value);
+		appendHex(buffer, value);
 		return buffer.toString();
 	}
 
@@ -124,8 +126,8 @@ public final class HexUtil {
 	 * @param buffer
 	 * @param value
 	 */
-	public static void appendHexString(@Nonnull StringBuilder buffer, short value) {
-		assertNonnull(buffer);
+	public static void appendHex(@Nonnull StringBuilder buffer, short value) {
+		Assertor.nonNull(buffer, "buffer");
 		buffer.append(HEX_TABLE[(value & 0xF000) >>> 12]).append(HEX_TABLE[(value & 0x0F00) >>> 8])
 				.append(HEX_TABLE[(value & 0x00F0) >>> 4]).append(HEX_TABLE[(value & 0x000F)]);
 	}
@@ -135,9 +137,9 @@ public final class HexUtil {
 	 * @param value
 	 * @return
 	 */
-	public static String toHexString(int value) {
+	public static String toHex(int value) {
 		StringBuilder buffer = new StringBuilder(10).append("0x");
-		appendHexString(buffer, value);
+		appendHex(buffer, value);
 		return buffer.toString();
 	}
 
@@ -146,8 +148,8 @@ public final class HexUtil {
 	 * @param buffer
 	 * @param value
 	 */
-	public static void appendHexString(@Nonnull StringBuilder buffer, int value) {
-		assertNonnull(buffer);
+	public static void appendHex(@Nonnull StringBuilder buffer, int value) {
+		Assertor.nonNull(buffer, "buffer");
 		buffer.append(HEX_TABLE[(value & 0xF000_0000) >>> 28]).append(HEX_TABLE[(value & 0x0F00_0000) >>> 24])
 				.append(HEX_TABLE[(value & 0x00F0_0000) >>> 20]).append(HEX_TABLE[(value & 0x000F_0000) >>> 16])
 				.append(HEX_TABLE[(value & 0x0000_F000) >>> 12]).append(HEX_TABLE[(value & 0x0000_0F00) >>> 8])
@@ -159,9 +161,9 @@ public final class HexUtil {
 	 * @param value
 	 * @return
 	 */
-	public static String toHexString(long value) {
+	public static String toHex(long value) {
 		StringBuilder buffer = new StringBuilder(18).append("0x");
-		appendHexString(buffer, value);
+		appendHex(buffer, value);
 		return buffer.toString();
 	}
 
@@ -170,18 +172,9 @@ public final class HexUtil {
 	 * @param buffer
 	 * @param value
 	 */
-	public static void appendHexString(@Nonnull StringBuilder buffer, long value) {
-		appendHexString(buffer, (int) ((value & 0xFFFF_FFFF_0000_0000L) >>> 32));
-		appendHexString(buffer, (int) (value & 0x0000_0000_FFFF_FFFFL));
-	}
-
-	/**
-	 * 
-	 * @param buffer
-	 */
-	private static void assertNonnull(StringBuilder buffer) {
-		if (buffer == null)
-			throw new NullPointerException("The buffer cannot be null");
+	public static void appendHex(@Nonnull StringBuilder buffer, long value) {
+		appendHex(buffer, (int) ((value & 0xFFFF_FFFF_0000_0000L) >>> 32));
+		appendHex(buffer, (int) (value & 0x0000_0000_FFFF_FFFFL));
 	}
 
 	/**
@@ -190,7 +183,7 @@ public final class HexUtil {
 	 * @param length
 	 * @param arrayLength
 	 */
-	private static void assertOffsetLengthValid(int offset, int length, int arrayLength) {
+	private static void assertOffsetAndLength(int offset, int length, int arrayLength) {
 		if (offset < 0)
 			throw new IllegalArgumentException("The array offset was negative");
 		if (length < 0)
@@ -282,7 +275,7 @@ public final class HexUtil {
 		if (hexString == null) {
 			return null;
 		}
-		assertOffsetLengthValid(offset, length, hexString.length());
+		assertOffsetAndLength(offset, length, hexString.length());
 
 		// a hex string must be in increments of 2
 		if ((length % 2) != 0) {

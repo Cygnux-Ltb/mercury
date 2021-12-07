@@ -5,7 +5,7 @@ import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HH_M
 import java.time.ZonedDateTime;
 
 import io.mercury.common.datetime.EpochUtil;
-import io.mercury.common.util.Assertor;
+import io.mercury.common.lang.Assertor;
 
 /**
  * 时间点序列

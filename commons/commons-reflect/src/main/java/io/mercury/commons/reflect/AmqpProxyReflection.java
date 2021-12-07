@@ -10,10 +10,7 @@ import org.eclipse.collections.api.map.ImmutableMap;
 import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.collections.api.set.ImmutableSet;
 import org.reflections.Reflections;
-import org.reflections.scanners.MethodAnnotationsScanner;
-import org.reflections.scanners.MethodParameterScanner;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.scanners.Scanners;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
@@ -64,9 +61,8 @@ public final class AmqpProxyReflection {
 	 */
 	public final <A extends Annotation> ImmutableSet<Method> scanPackage(String scanPackage, Class<A> annotation) {
 		Reflections reflections = new Reflections(new ConfigurationBuilder()
-				.setUrls(ClasspathHelper.forPackage(scanPackage)).setScanners(new SubTypesScanner(),
-						new MethodAnnotationsScanner(), new MethodParameterScanner(), new TypeAnnotationsScanner()));
-
+				.setUrls(ClasspathHelper.forPackage(scanPackage)).setScanners(Scanners.SubTypes,
+						Scanners.MethodsAnnotated, Scanners.MethodsParameter, Scanners.TypesAnnotated));
 		ImmutableSet<Method> immutableSet = newImmutableSet(reflections.getMethodsAnnotatedWith(annotation));
 		immutableSet.each(this::assertionProxyeedMethod);
 		return immutableSet;
