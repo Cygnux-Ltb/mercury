@@ -33,8 +33,8 @@ public final class JsonWrapper {
 	 * @param obj
 	 * @return
 	 */
-	public static final String toJsonHasNulls(@Nullable Object obj) {
-		return toJson0(GsonHasNulls, obj);
+	public static final String toPrettyJson(@Nullable Object obj) {
+		return toJson0(GsonPretty, obj);
 	}
 
 	/**
@@ -42,8 +42,8 @@ public final class JsonWrapper {
 	 * @param obj
 	 * @return
 	 */
-	public static final String toPrettyJson(@Nullable Object obj) {
-		return toJson0(GsonPretty, obj);
+	public static final String toJsonHasNulls(@Nullable Object obj) {
+		return toJson0(GsonHasNulls, obj);
 	}
 
 	/**
