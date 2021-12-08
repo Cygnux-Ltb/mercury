@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Output;
 
-import io.mercury.common.serialization.api.Serializer;
+import io.mercury.common.serialization.Serializer;
 
 public class KryoSerializer<T> implements Serializer<T, ByteBuffer> {
 

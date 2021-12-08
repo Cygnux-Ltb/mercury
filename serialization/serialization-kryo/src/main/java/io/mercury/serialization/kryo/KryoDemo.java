@@ -21,7 +21,6 @@ public class KryoDemo {
 		Output output = new Output(new FileOutputStream("file.bin"));
 		kryo.writeObject(output, object);
 		output.close();
-
 		Input input = new Input(new FileInputStream("file.bin"));
 		SomeClass object2 = kryo.readObject(input, SomeClass.class);
 
