@@ -45,11 +45,10 @@ public final class FileUtil {
 
 	public static final boolean mkdir(File file) {
 		Assertor.nonNull(file, "file");
-		if (file.isDirectory()) {
+		if (file.isDirectory())
 			return file.mkdirs();
-		} else {
+		else
 			return file.getParentFile().mkdirs();
-		}
 	}
 
 	/**
@@ -203,11 +202,14 @@ public final class FileUtil {
 		// if null, return null
 		if (filename == null)
 			return null;
+
 		// find position of last period
 		int pos = filename.lastIndexOf('.');
+
 		// did one exist or have any length?
 		if (pos < 0 || (pos + 1) >= filename.length())
 			return null;
+
 		// parse extension
 		return filename.substring(pos + 1);
 	}
@@ -463,7 +465,6 @@ public final class FileUtil {
 		}
 
 		public FileNameDateTimeComparator(TemporalPattern pattern, ZoneId zone) {
-
 			if (pattern == null)
 				this.pattern = DatePattern.YYYY_MM_DD;
 			else

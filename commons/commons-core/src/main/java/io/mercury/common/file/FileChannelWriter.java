@@ -1,6 +1,8 @@
 package io.mercury.common.file;
 
+import static io.mercury.common.character.Charsets.UTF8;
 import static io.mercury.common.character.Separator.LINE_SEPARATOR;
+import static io.mercury.common.sys.SysProperties.JAVA_IO_TMPDIR_FILE;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,10 +17,7 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import io.mercury.common.character.Charsets;
-import io.mercury.common.character.Separator;
 import io.mercury.common.serialization.BytesSerializer;
-import io.mercury.common.sys.SysProperties;
 
 /**
  * Use FileChannel
@@ -40,7 +39,7 @@ public final class FileChannelWriter {
 	 */
 	public static final File write(List<String> lines, @Nonnull final File target)
 			throws NullPointerException, IOException {
-		return write(lines, Charsets.UTF8, target, 8192, true);
+		return write(lines, UTF8, target, 8192, true);
 	}
 
 	/**
@@ -54,7 +53,7 @@ public final class FileChannelWriter {
 	 */
 	public static final File write(List<String> lines, @Nonnull File target, boolean append)
 			throws NullPointerException, IOException {
-		return write(lines, Charsets.UTF8, target, 8192, append);
+		return write(lines, UTF8, target, 8192, append);
 	}
 
 	/**
@@ -168,12 +167,12 @@ public final class FileChannelWriter {
 				builder.append(j);
 				builder.append(',');
 			}
-			builder.append(Separator.LINE_SEPARATOR);
+			builder.append(LINE_SEPARATOR);
 			lines.add(builder.toString());
 		}
 
 		try {
-			write(lines, Charsets.UTF8, new File(SysProperties.JAVA_IO_TMPDIR_FILE, "test.csv"), 2048, true);
+			write(lines, UTF8, new File(JAVA_IO_TMPDIR_FILE, "test.csv"), 2048, true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

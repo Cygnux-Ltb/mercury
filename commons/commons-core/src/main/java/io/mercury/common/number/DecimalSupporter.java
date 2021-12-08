@@ -15,7 +15,7 @@ public final class DecimalSupporter {
 	/**
 	 * 
 	 */
-	public static final double DOUBLE_MULTIPLIER_1D = 1.0D;
+	public static final double DOUBLE_MULTIPLIER_1D = 1.0d;
 
 	/**
 	 * 
@@ -25,7 +25,7 @@ public final class DecimalSupporter {
 	/**
 	 * 
 	 */
-	public static final double DOUBLE_MULTIPLIER_10D = 10.0D;
+	public static final double DOUBLE_MULTIPLIER_10D = 10.0d;
 
 	/**
 	 * 
@@ -35,7 +35,7 @@ public final class DecimalSupporter {
 	/**
 	 * 
 	 */
-	public static final double DOUBLE_MULTIPLIER_100D = 100.0D;
+	public static final double DOUBLE_MULTIPLIER_100D = 100.0d;
 
 	/**
 	 * 
@@ -45,7 +45,7 @@ public final class DecimalSupporter {
 	/**
 	 * 
 	 */
-	public static final double DOUBLE_MULTIPLIER_1000D = 1000.0D;
+	public static final double DOUBLE_MULTIPLIER_1000D = 1000.0d;
 
 	/**
 	 * 
@@ -55,7 +55,7 @@ public final class DecimalSupporter {
 	/**
 	 * 
 	 */
-	public static final double DOUBLE_MULTIPLIER_10000D = 10000.0D;
+	public static final double DOUBLE_MULTIPLIER_10000D = 10000.0d;
 
 	/**
 	 * 
@@ -65,7 +65,7 @@ public final class DecimalSupporter {
 	/**
 	 * 
 	 */
-	public static final double DOUBLE_MULTIPLIER_100000D = 100000.0D;
+	public static final double DOUBLE_MULTIPLIER_100000D = 100000.0d;
 
 	/**
 	 * 
@@ -75,7 +75,7 @@ public final class DecimalSupporter {
 	/**
 	 * 
 	 */
-	public static final double DOUBLE_MULTIPLIER_1000000D = 1000000.0D;
+	public static final double DOUBLE_MULTIPLIER_1000000D = 1000000.0d;
 
 	/**
 	 * 
@@ -85,7 +85,7 @@ public final class DecimalSupporter {
 	/**
 	 * 
 	 */
-	public static final double DOUBLE_MULTIPLIER_10000000D = 10000000.0D;
+	public static final double DOUBLE_MULTIPLIER_10000000D = 10000000.0d;
 
 	/**
 	 * 
@@ -95,7 +95,7 @@ public final class DecimalSupporter {
 	/**
 	 * 
 	 */
-	public static final double DOUBLE_MULTIPLIER_100000000D = 100000000.0D;
+	public static final double DOUBLE_MULTIPLIER_100000000D = 100000000.0d;
 
 	/**
 	 * 
