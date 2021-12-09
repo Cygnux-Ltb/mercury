@@ -10,7 +10,6 @@ import javax.annotation.Nonnull;
 import org.zeromq.ZMQ;
 
 import io.mercury.common.annotation.OnlyOverrideEquals;
-import io.mercury.common.config.Configurator;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.common.serialization.JsonDeserializable;
@@ -18,9 +17,10 @@ import io.mercury.serialization.json.JsonParser;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.configurator.TcpKeepAlive;
 import io.mercury.transport.configurator.Topics;
+import io.mercury.transport.configurator.TransportConfigurator;
 
 @OnlyOverrideEquals
-public final class ZmqConfigurator implements Configurator, JsonDeserializable<ZmqConfigurator> {
+public final class ZmqConfigurator implements TransportConfigurator, JsonDeserializable<ZmqConfigurator> {
 
 	private final String addr;
 
@@ -42,6 +42,11 @@ public final class ZmqConfigurator implements Configurator, JsonDeserializable<Z
 
 	public TcpKeepAlive getTcpKeepAlive() {
 		return tcpKeepAlive;
+	}
+
+	@Override
+	public String getConnectionInfo() {
+		return addr;
 	}
 
 	/**

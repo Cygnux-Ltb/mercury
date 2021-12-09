@@ -67,7 +67,7 @@ public class LazyPirateClient {
 						// Old socket is confused; close it and open a new one
 						poller.unregister(client);
 						client.close();
-						;
+						
 						System.out.println("I: reconnecting to server\n");
 						client = ctx.createSocket(SocketType.REQ);
 						client.connect(SERVER_ENDPOINT);

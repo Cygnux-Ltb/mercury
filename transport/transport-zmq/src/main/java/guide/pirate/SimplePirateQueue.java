@@ -48,6 +48,7 @@ public class SimplePirateQueue {
 					ZMsg msg = ZMsg.recvMsg(backend);
 					if (msg == null)
 						break; // Interrupted
+
 					ZFrame address = msg.unwrap();
 					workers.add(address);
 
