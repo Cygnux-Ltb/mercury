@@ -25,7 +25,7 @@ public final class JctMpmcQueue<E> implements MultiConsumerQueue<E> {
 
 	@Override
 	public E dequeue() {
-		return null;
+		return queue.poll();
 	}
 
 	@Override

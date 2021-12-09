@@ -3,6 +3,7 @@ package io.mercury.common.concurrent.disruptor;
 import static io.mercury.common.collections.CollectionUtil.toArray;
 import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Sleeping;
 import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Yielding;
+import static io.mercury.common.concurrent.disruptor.ReflectionEventFactory.newFactory;
 import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
 
 import java.util.List;
@@ -35,11 +36,10 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 	private static final Logger log = CommonLoggerFactory.getLogger(RingProcessChain.class);
 
 	@SuppressWarnings("unchecked")
-	private RingProcessChain(String name, int size, @Nonnull EventFactory<E> eventFactory,
-			@Nonnull WaitStrategy waitStrategy, @Nonnull StartMode mode,
-			@Nonnull EventTranslatorOneArg<E, I> translator,
+	private RingProcessChain(String name, int size, @Nonnull EventFactory<E> factory, @Nonnull WaitStrategy strategy,
+			@Nonnull StartMode mode, @Nonnull EventTranslatorOneArg<E, I> translator,
 			@Nonnull MutableIntObjectMap<List<EventHandler<E>>> handlersMap) {
-		super(name, size, eventFactory, waitStrategy, translator);
+		super(name, size, factory, strategy, translator);
 		int[] keys = handlersMap.keySet().toSortedArray();
 		var handlers0 = handlersMap.get(keys[0]);
 		if (keys.length == 1) {
@@ -60,7 +60,7 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 		}
 		log.info(
 				"Initialize RingProcessChain -> {}, size -> {}, WaitStrategy -> {}, StartMode -> {}, EventHandler china level count -> {}",
-				super.name, size, waitStrategy, mode, handlersMap.size());
+				super.name, size, strategy, mode, handlersMap.size());
 		startWith(mode);
 	}
 
@@ -73,14 +73,14 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 			@Nonnull RingEventPublisher<E, I> publisher) {
 		return newBuilder(
 				// 使用反射EventFactory
-				ReflectionEventFactory.with(eventType, log), publisher);
+				newFactory(eventType, log), publisher);
 	}
 
 	public static <E, I> Builder<E, I> newBuilder(@Nonnull Class<E> eventType,
 			@Nonnull EventTranslatorOneArg<E, I> translator) {
 		return newBuilder(
 				// 使用反射EventFactory
-				ReflectionEventFactory.with(eventType, log), translator);
+				newFactory(eventType, log), translator);
 	}
 
 	public static <E, I> Builder<E, I> newBuilder(EventFactory<E> eventFactory,

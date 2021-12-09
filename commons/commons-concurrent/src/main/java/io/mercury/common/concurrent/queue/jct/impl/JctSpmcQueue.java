@@ -38,8 +38,7 @@ public class JctSpmcQueue<E> implements MultiConsumerQueue<E> {
 
 	@Override
 	public E dequeue() {
-		queue.poll();
-		return null;
+		return queue.poll();
 	}
 
 	@Override

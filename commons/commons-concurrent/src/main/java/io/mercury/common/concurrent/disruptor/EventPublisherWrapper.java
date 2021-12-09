@@ -21,11 +21,6 @@ public class EventPublisherWrapper<E, I> {
 		this.translator = translator;
 	}
 
-	public static <E, I> EventPublisherWrapper<E, I> newInstance(RingBuffer<E> ringBuffer,
-			EventTranslatorOneArg<E, I> translator) {
-		return new EventPublisherWrapper<>(ringBuffer, translator);
-	}
-
 	public void handle(I in) {
 		ringBuffer.publishEvent(translator, in);
 	}

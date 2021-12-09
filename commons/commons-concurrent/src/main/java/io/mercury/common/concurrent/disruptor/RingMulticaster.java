@@ -2,6 +2,7 @@ package io.mercury.common.concurrent.disruptor;
 
 import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Sleeping;
 import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Yielding;
+import static io.mercury.common.concurrent.disruptor.ReflectionEventFactory.newFactory;
 import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
 
 import java.util.List;
@@ -51,18 +52,17 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 	 * 
 	 * @param name
 	 * @param size
-	 * @param eventFactory
+	 * @param factory
 	 * @param option
 	 * @param mode
 	 * @param translator
 	 * @param handlers
 	 */
-
 	@SuppressWarnings("unchecked")
-	public RingMulticaster(String name, int size, @Nonnull EventFactory<E> eventFactory,
-			@Nonnull WaitStrategy waitStrategy, @Nonnull StartMode mode,
-			@Nonnull EventTranslatorOneArg<E, I> translator, @Nonnull List<EventHandler<E>> handlers) {
-		super(name, size, eventFactory, waitStrategy, translator);
+	private RingMulticaster(String name, int size, @Nonnull EventFactory<E> factory, @Nonnull WaitStrategy strategy,
+			@Nonnull StartMode mode, @Nonnull EventTranslatorOneArg<E, I> translator,
+			@Nonnull List<EventHandler<E>> handlers) {
+		super(name, size, factory, strategy, translator);
 		Assertor.requiredLength(handlers, 1, "handlers");
 		// 将处理器添加进Disruptor中, 各个处理器进行并行处理
 		super.disruptor.handleEventsWith(CollectionUtil.toArray(handlers, length -> {
@@ -70,7 +70,7 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 		}));
 		log.info(
 				"Initialize RingMulticaster -> {}, size -> {}, WaitStrategy -> {}, StartMode -> {}, EventHandler count -> {}",
-				super.name, size, waitStrategy, mode, handlers.size());
+				super.name, size, strategy, mode, handlers.size());
 		startWith(mode);
 	}
 
@@ -78,14 +78,14 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 			@Nonnull RingEventPublisher<E, I> publisher) {
 		return newBuilder(
 				// 使用反射EventFactory
-				ReflectionEventFactory.with(eventType, log), publisher);
+				newFactory(eventType, log), publisher);
 	}
 
 	public static <E, I> Builder<E, I> newBuilder(@Nonnull Class<E> eventType,
 			@Nonnull EventTranslatorOneArg<E, I> translator) {
 		return newBuilder(
 				// 使用反射EventFactory
-				ReflectionEventFactory.with(eventType, log), translator);
+				newFactory(eventType, log), translator);
 	}
 
 	public static <E, I> Builder<E, I> newBuilder(@Nonnull EventFactory<E> eventFactory,

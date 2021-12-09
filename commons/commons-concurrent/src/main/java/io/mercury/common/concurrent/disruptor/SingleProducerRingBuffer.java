@@ -30,7 +30,7 @@ import io.mercury.common.util.StringSupport;
  * @param <E> 事件处理类型
  * @param <I> 发布类型
  */
-abstract class SingleProducerRingBuffer<E, I> extends RunnableComponent {
+public abstract class SingleProducerRingBuffer<E, I> extends RunnableComponent {
 
 	private static final Logger log = CommonLoggerFactory.getLogger(SingleProducerRingBuffer.class);
 
@@ -38,10 +38,10 @@ abstract class SingleProducerRingBuffer<E, I> extends RunnableComponent {
 
 	protected final EventPublisherWrapper<E, I> publisherWrapper;
 
-	protected SingleProducerRingBuffer(String name, int size, @Nonnull EventFactory<E> eventFactory,
-			@Nonnull WaitStrategy waitStrategy, @Nonnull EventTranslatorOneArg<E, I> translator) {
-		Assertor.nonNull(eventFactory, "eventFactory");
-		Assertor.nonNull(waitStrategy, "waitStrategy");
+	protected SingleProducerRingBuffer(String name, int size, @Nonnull EventFactory<E> factory,
+			@Nonnull WaitStrategy strategy, @Nonnull EventTranslatorOneArg<E, I> translator) {
+		Assertor.nonNull(factory, "factory");
+		Assertor.nonNull(strategy, "strategy");
 		Assertor.nonNull(translator, "translator");
 		if (StringSupport.nonEmpty(name))
 			super.name = name;
@@ -49,15 +49,15 @@ abstract class SingleProducerRingBuffer<E, I> extends RunnableComponent {
 			super.name = "SP-RingBuffer-" + YYYYMMDD_L_HHMMSSSSS.format(LocalDateTime.now());
 		this.disruptor = new Disruptor<>(
 				// 事件工厂
-				eventFactory,
+				factory,
 				// 调整并设置队列容量
-				regulateSize(size),
+				adjustSize(size),
 				// 使用最高优先级的线程工厂
 				new MaxPriorityThreadFactory(super.name + "-worker"),
 				// 生产者策略, 使用单生产者
 				ProducerType.SINGLE,
 				// Waiting策略
-				waitStrategy);
+				strategy);
 		this.publisherWrapper = new EventPublisherWrapper<>(disruptor.getRingBuffer(), translator);
 	}
 
@@ -96,7 +96,7 @@ abstract class SingleProducerRingBuffer<E, I> extends RunnableComponent {
 	 * @param size
 	 * @return
 	 */
-	private int regulateSize(int size) {
+	private int adjustSize(int size) {
 		return size < 16 ? 16 : size > 65536 ? 65536 : BitOperator.minPow2(size);
 	}
 

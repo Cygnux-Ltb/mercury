@@ -33,9 +33,10 @@ public final class ReflectionEventFactory<T> implements EventFactory<T> {
 	 * @param <T>
 	 * @param type
 	 * @return
+	 * @throws RuntimeReflectionException
 	 */
-	public static <T> ReflectionEventFactory<T> with(@Nonnull Class<T> type) {
-		return with(type, null);
+	public static <T> ReflectionEventFactory<T> newFactory(@Nonnull Class<T> type) throws RuntimeReflectionException {
+		return newFactory(type, null);
 	}
 
 	/**
@@ -46,20 +47,20 @@ public final class ReflectionEventFactory<T> implements EventFactory<T> {
 	 * @return
 	 * @throws RuntimeReflectionException
 	 */
-	public static <T> ReflectionEventFactory<T> with(@Nonnull Class<T> type, Logger log)
+	public static <T> ReflectionEventFactory<T> newFactory(@Nonnull Class<T> type, Logger log)
 			throws RuntimeReflectionException {
 		Assertor.nonNull(type, "type");
 		var factory = new ReflectionEventFactory<>(type);
 		try {
 			factory.newInstance();
+			return factory;
 		} catch (RuntimeReflectionException e) {
 			if (log != null)
-				log.error("Class -> {} : {}", type, e.getMessage(), e);
+				log.error("Class -> {} :: new instance exception -> {}", type, e.getMessage(), e);
 			else
-				System.err.println("Class -> " + type + " : " + e.getMessage());
+				System.err.println("Class -> " + type + " :: new instance exception -> " + e.getMessage());
 			throw e;
 		}
-		return factory;
 	}
 
 	@Override
