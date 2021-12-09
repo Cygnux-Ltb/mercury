@@ -17,12 +17,11 @@ import io.mercury.transport.rabbitmq.exception.DeclareException;
  * @author yellow013
  *
  */
-public final class QueueDef extends Relationship {
+public final class QueueRelationship extends Relationship {
 
 	/**
 	 * queue
 	 */
-
 	private final AmqpQueue queue;
 
 	/**
@@ -30,7 +29,7 @@ public final class QueueDef extends Relationship {
 	 * @param name
 	 * @return
 	 */
-	public static QueueDef named(String name) {
+	public static QueueRelationship named(String name) {
 		return withQueue(AmqpQueue.named(name));
 	}
 
@@ -39,12 +38,12 @@ public final class QueueDef extends Relationship {
 	 * @param queue
 	 * @return
 	 */
-	public static QueueDef withQueue(AmqpQueue queue) {
+	public static QueueRelationship withQueue(AmqpQueue queue) {
 		Assertor.nonNull(queue, "queue");
-		return new QueueDef(queue);
+		return new QueueRelationship(queue);
 	}
 
-	private QueueDef(AmqpQueue queue) {
+	private QueueRelationship(AmqpQueue queue) {
 		this.queue = queue;
 	}
 
@@ -76,7 +75,7 @@ public final class QueueDef extends Relationship {
 	 * @param durable
 	 * @return
 	 */
-	public QueueDef setDurable(boolean durable) {
+	public QueueRelationship setDurable(boolean durable) {
 		queue.setDurable(durable);
 		return this;
 	}
@@ -87,7 +86,7 @@ public final class QueueDef extends Relationship {
 	 * @param autoDelete
 	 * @return
 	 */
-	public QueueDef setAutoDelete(boolean autoDelete) {
+	public QueueRelationship setAutoDelete(boolean autoDelete) {
 		queue.setAutoDelete(autoDelete);
 		return this;
 	}
@@ -98,7 +97,7 @@ public final class QueueDef extends Relationship {
 	 * @param exclusive
 	 * @return
 	 */
-	public QueueDef setExclusive(boolean exclusive) {
+	public QueueRelationship setExclusive(boolean exclusive) {
 		queue.setExclusive(exclusive);
 		return this;
 	}
@@ -108,7 +107,7 @@ public final class QueueDef extends Relationship {
 	 * @param args
 	 * @return
 	 */
-	public QueueDef setArgs(Map<String, Object> args) {
+	public QueueRelationship setArgs(Map<String, Object> args) {
 		queue.setArgs(args);
 		return this;
 	}
@@ -118,7 +117,7 @@ public final class QueueDef extends Relationship {
 	 * @param exchanges
 	 * @return
 	 */
-	public QueueDef binding(AmqpExchange... exchanges) {
+	public QueueRelationship binding(AmqpExchange... exchanges) {
 		return binding(exchanges != null ? MutableLists.newFastList(exchanges) : null, null);
 	}
 
@@ -128,7 +127,7 @@ public final class QueueDef extends Relationship {
 	 * @param routingKeys
 	 * @return
 	 */
-	public QueueDef binding(Collection<AmqpExchange> exchanges, Collection<String> routingKeys) {
+	public QueueRelationship binding(Collection<AmqpExchange> exchanges, Collection<String> routingKeys) {
 		if (exchanges != null) {
 			exchanges.forEach(exchange -> {
 				if (CollectionUtils.isNotEmpty(routingKeys))
@@ -147,7 +146,7 @@ public final class QueueDef extends Relationship {
 
 	public static void main(String[] args) {
 		System.out
-				.println(QueueDef.named("TEST").binding(AmqpExchange.fanout("T0")).binding(AmqpExchange.fanout("T1")));
+				.println(QueueRelationship.named("TEST").binding(AmqpExchange.fanout("T0")).binding(AmqpExchange.fanout("T1")));
 	}
 
 }

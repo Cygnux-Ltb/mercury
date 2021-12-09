@@ -5,8 +5,8 @@ import static io.mercury.common.lang.Assertor.nonNull;
 import javax.annotation.Nonnull;
 
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.rabbitmq.declare.ExchangeDef;
-import io.mercury.transport.rabbitmq.declare.QueueDef;
+import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
+import io.mercury.transport.rabbitmq.declare.QueueRelationship;
 
 /**
  * 
@@ -16,16 +16,16 @@ import io.mercury.transport.rabbitmq.declare.QueueDef;
 public final class RabbitReceiverCfg extends RabbitConfigurator {
 
 	// 接受者QueueDeclare
-	private final QueueDef receiveQueue;
+	private final QueueRelationship receiveQueue;
 
 	// 错误消息ExchangeDeclare
-	private final ExchangeDef errMsgExchange;
+	private final ExchangeRelationship errMsgExchange;
 
 	// 错误消息RoutingKey
 	private final String errMsgRoutingKey;
 
 	// 错误消息QueueDeclare
-	private final QueueDef errMsgQueue;
+	private final QueueRelationship errMsgQueue;
 
 	// 消费者独占队列
 	private final boolean exclusive;
@@ -53,17 +53,17 @@ public final class RabbitReceiverCfg extends RabbitConfigurator {
 	 * @param receiveQueue
 	 * @return
 	 */
-	public static Builder configuration(@Nonnull RabbitConnection connection, @Nonnull QueueDef receiveQueue) {
+	public static Builder configuration(@Nonnull RabbitConnection connection, @Nonnull QueueRelationship receiveQueue) {
 		nonNull(connection, "connection");
 		nonNull(receiveQueue, "receiveQueue");
 		return new Builder(connection, receiveQueue);
 	}
 
-	public QueueDef getReceiveQueue() {
+	public QueueRelationship getReceiveQueue() {
 		return receiveQueue;
 	}
 
-	public ExchangeDef getErrMsgExchange() {
+	public ExchangeRelationship getErrMsgExchange() {
 		return errMsgExchange;
 	}
 
@@ -71,7 +71,7 @@ public final class RabbitReceiverCfg extends RabbitConfigurator {
 		return errMsgRoutingKey;
 	}
 
-	public QueueDef getErrMsgQueue() {
+	public QueueRelationship getErrMsgQueue() {
 		return errMsgQueue;
 	}
 
@@ -101,16 +101,16 @@ public final class RabbitReceiverCfg extends RabbitConfigurator {
 		// 连接配置
 		private final RabbitConnection connection;
 		// 接受者QueueRelationship
-		private final QueueDef receiveQueue;
+		private final QueueRelationship receiveQueue;
 		// 错误消息ExchangeRelationship
 
 		/* v UnProcessable Message v */
 		// 错误消息处理Exchange和关联关系
-		private ExchangeDef errMsgExchange;
+		private ExchangeRelationship errMsgExchange;
 		// 错误消息处理RoutingKey
 		private String errMsgRoutingKey = "";
 		// 错误消息处理QueueRelationship和关联关系
-		private QueueDef errMsgQueue;
+		private QueueRelationship errMsgQueue;
 		/* ^ UnProcessable Message ^ */
 
 		// 接收者是否独占队列
@@ -119,12 +119,12 @@ public final class RabbitReceiverCfg extends RabbitConfigurator {
 		// ACK选项
 		private ReceiveAckOptions ackOptions = ReceiveAckOptions.withDefault();
 
-		private Builder(RabbitConnection connection, QueueDef receiveQueue) {
+		private Builder(RabbitConnection connection, QueueRelationship receiveQueue) {
 			this.connection = connection;
 			this.receiveQueue = receiveQueue;
 		}
 
-		public Builder setErrMsgExchange(ExchangeDef errMsgExchange) {
+		public Builder setErrMsgExchange(ExchangeRelationship errMsgExchange) {
 			this.errMsgExchange = errMsgExchange;
 			return this;
 		}
@@ -134,7 +134,7 @@ public final class RabbitReceiverCfg extends RabbitConfigurator {
 			return this;
 		}
 
-		public Builder setErrMsgQueue(QueueDef errMsgQueue) {
+		public Builder setErrMsgQueue(QueueRelationship errMsgQueue) {
 			this.errMsgQueue = errMsgQueue;
 			return this;
 		}

@@ -11,7 +11,7 @@ import com.rabbitmq.client.AMQP.BasicProperties;
 
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rabbitmq.declare.AmqpQueue;
-import io.mercury.transport.rabbitmq.declare.ExchangeDef;
+import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
 
 /**
  * 
@@ -21,7 +21,7 @@ import io.mercury.transport.rabbitmq.declare.ExchangeDef;
 public final class RabbitPublisherCfg extends RabbitConfigurator {
 
 	// 发布者ExchangeDeclare
-	private final ExchangeDef publishExchange;
+	private final ExchangeRelationship publishExchange;
 
 	// 消息发布RoutingKey
 	private final String defaultRoutingKey;
@@ -48,7 +48,7 @@ public final class RabbitPublisherCfg extends RabbitConfigurator {
 		this.confirmOptions = builder.confirmOptions;
 	}
 
-	public ExchangeDef getPublishExchange() {
+	public ExchangeRelationship getPublishExchange() {
 		return publishExchange;
 	}
 
@@ -104,7 +104,7 @@ public final class RabbitPublisherCfg extends RabbitConfigurator {
 	 * @return
 	 */
 	public static Builder configuration(@Nonnull RabbitConnection connection) {
-		return configuration(connection, ExchangeDef.Anonymous);
+		return configuration(connection, ExchangeRelationship.Anonymous);
 	}
 
 	/**
@@ -119,7 +119,7 @@ public final class RabbitPublisherCfg extends RabbitConfigurator {
 	 * 
 	 */
 	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
-			@Nonnull String password, @Nonnull ExchangeDef publishExchange) {
+			@Nonnull String password, @Nonnull ExchangeRelationship publishExchange) {
 		return configuration(RabbitConnection.configuration(host, port, username, password).build(), publishExchange);
 	}
 
@@ -135,7 +135,7 @@ public final class RabbitPublisherCfg extends RabbitConfigurator {
 	 * @return
 	 */
 	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
-			@Nonnull String password, String virtualHost, @Nonnull ExchangeDef publishExchange) {
+			@Nonnull String password, String virtualHost, @Nonnull ExchangeRelationship publishExchange) {
 		return configuration(RabbitConnection.configuration(host, port, username, password, virtualHost).build(),
 				publishExchange);
 	}
@@ -148,7 +148,7 @@ public final class RabbitPublisherCfg extends RabbitConfigurator {
 	 * @return
 	 */
 	public static Builder configuration(@Nonnull RabbitConnection connection,
-			@Nonnull ExchangeDef publishExchange) {
+			@Nonnull ExchangeRelationship publishExchange) {
 		return new Builder(nonNull(connection, "connection"), nonNull(publishExchange, "publishExchange"));
 	}
 
@@ -166,7 +166,7 @@ public final class RabbitPublisherCfg extends RabbitConfigurator {
 		// 连接配置
 		private final RabbitConnection connection;
 		// 消息发布Exchange和相关绑定
-		private final ExchangeDef publishExchange;
+		private final ExchangeRelationship publishExchange;
 
 		// 消息发布RoutingKey, 默认为空字符串
 		private String defaultRoutingKey = "";
@@ -185,7 +185,7 @@ public final class RabbitPublisherCfg extends RabbitConfigurator {
 		 * @param connection
 		 * @param publishExchange
 		 */
-		private Builder(RabbitConnection connection, ExchangeDef publishExchange) {
+		private Builder(RabbitConnection connection, ExchangeRelationship publishExchange) {
 			this.connection = connection;
 			this.publishExchange = publishExchange;
 		}
@@ -328,7 +328,7 @@ public final class RabbitPublisherCfg extends RabbitConfigurator {
 	 */
 	public static void main(String[] args) {
 		System.out.println(configuration(RabbitConnection.configuration("localhost", 5672, "user0", "userpass").build(),
-				ExchangeDef.direct("TEST").bindingQueue(AmqpQueue.named("TEST_0"))).build());
+				ExchangeRelationship.direct("TEST").bindingQueue(AmqpQueue.named("TEST_0"))).build());
 	}
 
 }

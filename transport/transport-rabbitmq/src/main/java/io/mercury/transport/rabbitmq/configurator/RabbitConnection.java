@@ -163,13 +163,13 @@ public final class RabbitConnection implements TransportConfigurator {
 		return toString();
 	}
 
-	private transient String strCache;
+	private transient String cache;
 
 	@Override
 	public String toString() {
-		if (strCache == null)
-			strCache = JsonWrapper.toJsonHasNulls(this);
-		return strCache;
+		if (cache == null)
+			cache = JsonWrapper.toJsonHasNulls(this);
+		return cache;
 	}
 
 	/**
