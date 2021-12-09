@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- This is persistence pom.xml -->
@@ -19,10 +21,9 @@
 		<module>serialization-json</module>
 		<module>serialization-kryo</module>
 		<module>serialization-protobuf</module>
-		<module>serialization-wire</module>
 		<module>serialization-sbe</module>
-    <module>serialization-api</module>
-  </modules>
+		<module>serialization-wire</module>
+	</modules>
 
 	<properties>
 	</properties>
