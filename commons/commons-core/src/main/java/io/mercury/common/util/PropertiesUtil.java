@@ -80,7 +80,7 @@ public final class PropertiesUtil {
 	 */
 	public static Properties load(@Nonnull final InputStream inputStream) throws IOException {
 		Assertor.nonNull(inputStream, "inputStream");
-		Properties props = new Properties();
+		var props = new Properties();
 		try (final InputStream in = inputStream) {
 			props.load(in);
 		}

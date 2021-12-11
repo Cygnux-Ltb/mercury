@@ -23,8 +23,8 @@ public final class BitFormatter {
 	 * @return
 	 */
 	public static final String charBinary(char c) {
-		String binaryStr = Integer.toBinaryString(c);
-		return highPosFill(Character.SIZE, Character.SIZE - binaryStr.length(), binaryStr);
+		String binary = Integer.toBinaryString(c);
+		return highPosFill(Character.SIZE, Character.SIZE - binary.length(), binary);
 	}
 
 	/**
@@ -44,8 +44,8 @@ public final class BitFormatter {
 	 * @return
 	 */
 	public static final String shortBinary(short s) {
-		String binaryStr = Integer.toBinaryString(s);
-		return highPosFill(Short.SIZE, Short.SIZE - binaryStr.length(), binaryStr);
+		String binary = Integer.toBinaryString(s);
+		return highPosFill(Short.SIZE, Short.SIZE - binary.length(), binary);
 	}
 
 	/**
@@ -65,8 +65,8 @@ public final class BitFormatter {
 	 * @return
 	 */
 	public static final String intBinary(int i) {
-		String binaryStr = Integer.toBinaryString(i);
-		return highPosFill(Integer.SIZE, Integer.SIZE - binaryStr.length(), binaryStr);
+		String binary = Integer.toBinaryString(i);
+		return highPosFill(Integer.SIZE, Integer.SIZE - binary.length(), binary);
 	}
 
 	/**
@@ -86,8 +86,8 @@ public final class BitFormatter {
 	 * @return
 	 */
 	public static final String longBinary(long l) {
-		String binaryStr = Long.toBinaryString(l);
-		return highPosFill(Long.SIZE, Long.SIZE - binaryStr.length(), binaryStr);
+		String binary = Long.toBinaryString(l);
+		return highPosFill(Long.SIZE, Long.SIZE - binary.length(), binary);
 	}
 
 	/**
@@ -110,7 +110,7 @@ public final class BitFormatter {
 	 * @return
 	 */
 	private static final String highPosFill(int sumLen, int blankLen, String binaryStr) {
-		StringBuilder builder = new StringBuilder(sumLen);
+		var builder = new StringBuilder(sumLen);
 		for (int i = 0; i < blankLen; i++)
 			builder.append('0');
 		return builder.append(binaryStr).toString();

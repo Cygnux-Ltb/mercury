@@ -106,9 +106,9 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static boolean[] newOf(@Nonnull boolean[] origin) {
-		boolean[] newArray = new boolean[origin.length];
-		arraycopy(origin, 0, newArray, 0, origin.length);
-		return newArray;
+		var target = new boolean[origin.length];
+		arraycopy(origin, 0, target, 0, origin.length);
+		return target;
 	}
 
 	/**
@@ -117,9 +117,9 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static byte[] newOf(@Nonnull byte[] origin) {
-		byte[] newArray = new byte[origin.length];
-		arraycopy(origin, 0, newArray, 0, origin.length);
-		return newArray;
+		var target = new byte[origin.length];
+		arraycopy(origin, 0, target, 0, origin.length);
+		return target;
 	}
 
 	/**
@@ -128,9 +128,9 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static char[] newOf(@Nonnull char[] origin) {
-		char[] newArray = new char[origin.length];
-		arraycopy(origin, 0, newArray, 0, origin.length);
-		return newArray;
+		var target = new char[origin.length];
+		arraycopy(origin, 0, target, 0, origin.length);
+		return target;
 	}
 
 	/**
@@ -139,9 +139,9 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static int[] newOf(@Nonnull int[] origin) {
-		int[] newArray = new int[origin.length];
-		arraycopy(origin, 0, newArray, 0, origin.length);
-		return newArray;
+		var target = new int[origin.length];
+		arraycopy(origin, 0, target, 0, origin.length);
+		return target;
 	}
 
 	/**
@@ -150,9 +150,9 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static long[] newOf(@Nonnull long[] origin) {
-		long[] newArray = new long[origin.length];
-		arraycopy(origin, 0, newArray, 0, origin.length);
-		return newArray;
+		var target = new long[origin.length];
+		arraycopy(origin, 0, target, 0, origin.length);
+		return target;
 	}
 
 	/**
@@ -161,9 +161,9 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static float[] newOf(@Nonnull float[] origin) {
-		float[] newArray = new float[origin.length];
-		arraycopy(origin, 0, newArray, 0, origin.length);
-		return newArray;
+		var target = new float[origin.length];
+		arraycopy(origin, 0, target, 0, origin.length);
+		return target;
 	}
 
 	/**
@@ -172,9 +172,9 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static double[] newOf(@Nonnull double[] origin) {
-		double[] newArray = new double[origin.length];
-		arraycopy(origin, 0, newArray, 0, origin.length);
-		return newArray;
+		double[] target = new double[origin.length];
+		arraycopy(origin, 0, target, 0, origin.length);
+		return target;
 	}
 
 	/**
@@ -183,9 +183,9 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static String[] newOf(@Nonnull String[] origin) {
-		String[] newArray = new String[origin.length];
-		arraycopy(origin, 0, newArray, 0, origin.length);
-		return newArray;
+		var target = new String[origin.length];
+		arraycopy(origin, 0, target, 0, origin.length);
+		return target;
 	}
 
 	/**
@@ -194,135 +194,135 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static Object[] newOf(@Nonnull Object[] origin) {
-		Object[] newArray = new Object[origin.length];
-		arraycopy(origin, 0, newArray, 0, origin.length);
-		return newArray;
+		var target = new Object[origin.length];
+		arraycopy(origin, 0, target, 0, origin.length);
+		return target;
 	}
 
 	/**
 	 * 
 	 * @param origin
-	 * @param newArray
+	 * @param target
 	 * @return
 	 */
-	public static boolean[] copy(@Nonnull boolean[] origin, @Nonnull boolean[] newArray) {
+	public static boolean[] copy(@Nonnull boolean[] origin, @Nonnull boolean[] target) {
 		Assertor.requiredLength(origin, 1, "origin");
-		if (newArray == null)
-			newArray = new boolean[origin.length];
-		arraycopy(origin, 0, newArray, 0, newArray.length < origin.length ? newArray.length : origin.length);
-		return newArray;
+		if (target == null)
+			target = new boolean[origin.length];
+		arraycopy(origin, 0, target, 0, target.length < origin.length ? target.length : origin.length);
+		return target;
 	}
 
 	/**
 	 * 
 	 * @param origin
-	 * @param newArray
+	 * @param target
 	 * @return
 	 */
-	public static byte[] copy(@Nonnull byte[] origin, @Nonnull byte[] newArray) {
+	public static byte[] copy(@Nonnull byte[] origin, @Nonnull byte[] target) {
 		Assertor.requiredLength(origin, 1, "origin");
-		if (newArray == null)
-			newArray = new byte[origin.length];
-		arraycopy(origin, 0, newArray, 0, newArray.length < origin.length ? newArray.length : origin.length);
-		return newArray;
+		if (target == null)
+			target = new byte[origin.length];
+		arraycopy(origin, 0, target, 0, target.length < origin.length ? target.length : origin.length);
+		return target;
 	}
 
 	/**
 	 * 
 	 * @param origin
-	 * @param newArray
+	 * @param target
 	 * @return
 	 */
-	public static char[] copy(@Nonnull char[] origin, @Nonnull char[] newArray) {
+	public static char[] copy(@Nonnull char[] origin, @Nonnull char[] target) {
 		Assertor.requiredLength(origin, 1, "origin");
-		if (newArray == null)
-			newArray = new char[origin.length];
-		arraycopy(origin, 0, newArray, 0, newArray.length < origin.length ? newArray.length : origin.length);
-		return newArray;
+		if (target == null)
+			target = new char[origin.length];
+		arraycopy(origin, 0, target, 0, target.length < origin.length ? target.length : origin.length);
+		return target;
 	}
 
 	/**
 	 * 
 	 * @param origin
-	 * @param newArray
+	 * @param target
 	 * @return
 	 */
-	public static int[] copy(@Nonnull int[] origin, @Nonnull int[] newArray) {
+	public static int[] copy(@Nonnull int[] origin, @Nonnull int[] target) {
 		Assertor.requiredLength(origin, 1, "origin");
-		if (newArray == null)
-			newArray = new int[origin.length];
-		arraycopy(origin, 0, newArray, 0, newArray.length < origin.length ? newArray.length : origin.length);
-		return newArray;
+		if (target == null)
+			target = new int[origin.length];
+		arraycopy(origin, 0, target, 0, target.length < origin.length ? target.length : origin.length);
+		return target;
 	}
 
 	/**
 	 * 
 	 * @param origin
-	 * @param newArray
+	 * @param target
 	 * @return
 	 */
-	public static long[] copy(@Nonnull long[] origin, @Nonnull long[] newArray) {
+	public static long[] copy(@Nonnull long[] origin, @Nonnull long[] target) {
 		Assertor.requiredLength(origin, 1, "origin");
-		if (newArray == null)
-			newArray = new long[origin.length];
-		arraycopy(origin, 0, newArray, 0, newArray.length < origin.length ? newArray.length : origin.length);
-		return newArray;
+		if (target == null)
+			target = new long[origin.length];
+		arraycopy(origin, 0, target, 0, target.length < origin.length ? target.length : origin.length);
+		return target;
 	}
 
 	/**
 	 * 
 	 * @param origin
-	 * @param newArray
+	 * @param target
 	 * @return
 	 */
-	public static float[] copy(@Nonnull float[] origin, @Nonnull float[] newArray) {
+	public static float[] copy(@Nonnull float[] origin, @Nonnull float[] target) {
 		Assertor.requiredLength(origin, 1, "origin");
-		if (newArray == null)
-			newArray = new float[origin.length];
-		arraycopy(origin, 0, newArray, 0, newArray.length < origin.length ? newArray.length : origin.length);
-		return newArray;
+		if (target == null)
+			target = new float[origin.length];
+		arraycopy(origin, 0, target, 0, target.length < origin.length ? target.length : origin.length);
+		return target;
 	}
 
 	/**
 	 * 
 	 * @param origin
-	 * @param newArray
+	 * @param target
 	 * @return
 	 */
-	public static double[] copy(@Nonnull double[] origin, @Nonnull double[] newArray) {
+	public static double[] copy(@Nonnull double[] origin, @Nonnull double[] target) {
 		Assertor.requiredLength(origin, 1, "origin");
-		if (newArray == null)
-			newArray = new double[origin.length];
-		arraycopy(origin, 0, newArray, 0, newArray.length < origin.length ? newArray.length : origin.length);
-		return newArray;
+		if (target == null)
+			target = new double[origin.length];
+		arraycopy(origin, 0, target, 0, target.length < origin.length ? target.length : origin.length);
+		return target;
 	}
 
 	/**
 	 * 
 	 * @param origin
-	 * @param newArray
+	 * @param target
 	 * @return
 	 */
-	public static String[] copy(@Nonnull String[] origin, @Nonnull String[] newArray) {
+	public static String[] copy(@Nonnull String[] origin, @Nonnull String[] target) {
 		Assertor.requiredLength(origin, 1, "origin");
-		if (newArray == null)
-			newArray = new String[origin.length];
-		arraycopy(origin, 0, newArray, 0, newArray.length < origin.length ? newArray.length : origin.length);
-		return newArray;
+		if (target == null)
+			target = new String[origin.length];
+		arraycopy(origin, 0, target, 0, target.length < origin.length ? target.length : origin.length);
+		return target;
 	}
 
 	/**
 	 * 
 	 * @param origin
-	 * @param newArray
+	 * @param target
 	 * @return
 	 */
-	public static Object[] copy(@Nonnull Object[] origin, @Nonnull Object[] newArray) {
+	public static Object[] copy(@Nonnull Object[] origin, @Nonnull Object[] target) {
 		Assertor.requiredLength(origin, 1, "origin");
-		if (newArray == null)
-			newArray = new Object[origin.length];
-		arraycopy(origin, 0, newArray, 0, newArray.length < origin.length ? newArray.length : origin.length);
-		return newArray;
+		if (target == null)
+			target = new Object[origin.length];
+		arraycopy(origin, 0, target, 0, target.length < origin.length ? target.length : origin.length);
+		return target;
 	}
 
 }

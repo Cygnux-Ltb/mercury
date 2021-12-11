@@ -16,17 +16,17 @@ public final class JreReflection {
 	 * 
 	 * @param <R>
 	 * @param <T>
-	 * @param clazz
-	 * @param object
+	 * @param type
+	 * @param obj
 	 * @param fieldName
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <R, T> R extractField(Class<T> type, T t, String fieldName) {
+	public static <R, T> R extractField(Class<T> type, T obj, String fieldName) {
 		try {
-			final Field field = getField(type, fieldName);
+			var field = getField(type, fieldName);
 			field.setAccessible(true);
-			return (R) field.get(t);
+			return (R) field.get(obj);
 		} catch (NoSuchFieldException | IllegalAccessException e) {
 			throw new IllegalStateException("Can not access field: " + e.getMessage(), e);
 		}
@@ -34,7 +34,7 @@ public final class JreReflection {
 
 	/**
 	 * 
-	 * @param clazz
+	 * @param type
 	 * @param fieldName
 	 * @return
 	 * @throws NoSuchFieldException
@@ -43,7 +43,7 @@ public final class JreReflection {
 		try {
 			return type.getDeclaredField(fieldName);
 		} catch (NoSuchFieldException e) {
-			Class<?> superType = type.getSuperclass();
+			var superType = type.getSuperclass();
 			if (superType == null) {
 				throw e;
 			} else {

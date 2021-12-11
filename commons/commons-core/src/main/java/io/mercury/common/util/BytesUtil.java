@@ -17,9 +17,8 @@ public final class BytesUtil {
 	 * @throws IllegalArgumentException
 	 */
 	public static void checkBytesNotNull(byte[] bytes) throws IllegalArgumentException {
-		if (bytes == null) {
+		if (bytes == null)
 			throw new IllegalArgumentException("Byte array was null");
-		}
 	}
 
 	/**
@@ -35,24 +34,24 @@ public final class BytesUtil {
 	 */
 	public static void checkOffsetLength(int bytesLength, int offset, int length) throws IllegalArgumentException {
 		// offset cannot be negative
-		if (offset < 0) {
+		if (offset < 0)
 			throw new IllegalArgumentException("The byte[] offset parameter cannot be negative");
-		}
+
 		// length cannot be negative either
-		if (length < 0) {
+		if (length < 0)
 			throw new IllegalArgumentException("The byte[] length parameter cannot be negative");
-		}
+
 		// is it a valid offset? Must be < bytes.length if non-zero
 		// if its zero, then the check below will validate if it would cause
 		// a read past the length of the byte array
-		if (offset != 0 && offset >= bytesLength) {
+		if (offset != 0 && offset >= bytesLength)
 			throw new IllegalArgumentException("The byte[] offset (" + offset
 					+ ") must be < the length of the byte[] length (" + bytesLength + ")");
-		}
-		if (offset + length > bytesLength) {
+
+		if (offset + length > bytesLength)
 			throw new IllegalArgumentException("The offset+length (" + (offset + length)
 					+ ") would read past the end of the byte[] (length=" + bytesLength + ")");
-		}
+
 	}
 
 	/**
@@ -66,10 +65,9 @@ public final class BytesUtil {
 			throws IllegalArgumentException {
 		checkBytesNotNull(bytes);
 		checkOffsetLength(bytes.length, offset, length);
-		if (length != expectedLength) {
+		if (length != expectedLength)
 			throw new IllegalArgumentException(
 					"Unexpected length of byte array [expected=" + expectedLength + ", actual=" + length + "]");
-		}
 	}
 
 	/**

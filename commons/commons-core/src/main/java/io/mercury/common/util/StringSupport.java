@@ -1,11 +1,12 @@
 package io.mercury.common.util;
 
+import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
+
 import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import io.mercury.common.character.Charsets;
@@ -173,9 +174,9 @@ public final class StringSupport {
 	}
 
 	/**
-	 * Use : <br>
+	 * Used : <br>
 	 * org.apache.commons.lang3.builder.ToStringBuilder <br>
-	 * .reflectionToString(object, ToStringStyle.SHORT_PREFIX_STYLE, false)
+	 * .reflectionToString(obj, ToStringStyle.SHORT_PREFIX_STYLE, false)
 	 * 
 	 * @param obj
 	 * @return String
@@ -183,14 +184,13 @@ public final class StringSupport {
 	 */
 	@Nonnull
 	public static final String toStringShortPrefixStyle(Object obj) {
-		return obj == null ? CONST_NULL
-				: ToStringBuilder.reflectionToString(obj, ToStringStyle.SHORT_PREFIX_STYLE, false);
+		return toStringWithStyle(obj, ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 
 	/**
-	 * Use : <br>
+	 * Used : <br>
 	 * org.apache.commons.lang3.builder.ToStringBuilder <br>
-	 * .reflectionToString(object, ToStringStyle.JSON_STYLE, false)
+	 * .reflectionToString(obj, ToStringStyle.JSON_STYLE, false)
 	 * 
 	 * @param obj
 	 * @return String
@@ -198,7 +198,21 @@ public final class StringSupport {
 	 */
 	@Nonnull
 	public static final String toStringJsonStyle(Object obj) {
-		return obj == null ? CONST_NULL : ToStringBuilder.reflectionToString(obj, ToStringStyle.JSON_STYLE, false);
+		return toStringWithStyle(obj, ToStringStyle.JSON_STYLE);
+	}
+
+	/**
+	 * Used : <br>
+	 * org.apache.commons.lang3.builder.ToStringBuilder<br>
+	 * .reflectionToString(obj, style, false)
+	 * 
+	 * @param obj
+	 * @param style
+	 * @return
+	 */
+	@Nonnull
+	public static final String toStringWithStyle(Object obj, ToStringStyle style) {
+		return obj == null ? CONST_NULL : reflectionToString(obj, style, false);
 	}
 
 	/**
@@ -258,16 +272,16 @@ public final class StringSupport {
 				|| lastChar == 'f')
 			chars[chars.length - 1] = '0';
 		// 小数点标识
-		boolean decimalPointFlag = false;
+		boolean hasDecimalPoint = false;
 		for (char ch : chars) {
 			// 判断每个字母是否为数字
 			if (!(ch >= '0' && ch <= '9'))
 				// 出现第二个小数点返回false
-				if (decimalPointFlag)
+				if (hasDecimalPoint)
 					return false;
 				// 标识已出现一个小数点
 				else if (ch == '.')
-					decimalPointFlag = true;
+					hasDecimalPoint = true;
 				// 出现其他字符返回false
 				else
 					return false;
@@ -295,19 +309,18 @@ public final class StringSupport {
 			if (str.charAt(0) == '-')
 				offset = 1;
 			// 定义结束位置
-			int endPoint = str.length();
+			int end = str.length();
 			// 获取最后一个字符
-			char lastChar = str.charAt(str.length() - 1);
+			char lc = str.charAt(str.length() - 1);
 			// 判断是否为long double float的写法
-			if (lastChar == 'L' || lastChar == 'l' || lastChar == 'D' || lastChar == 'd' || lastChar == 'F'
-					|| lastChar == 'f')
-				endPoint = str.length() - 1;
+			if (lc == 'L' || lc == 'l' || lc == 'D' || lc == 'd' || lc == 'F' || lc == 'f')
+				end = str.length() - 1;
 			// 如果没有数字可以检查且第一位与最后一位都跳过了检查, 则[offset == endPoint], 此时输入参数不是数字
-			if (offset == endPoint)
+			if (offset == end)
 				return false;
 			// 是否已出现小数点
 			boolean hasDecimalPoint = false;
-			for (; offset < endPoint; offset++) {
+			for (; offset < end; offset++) {
 				// 判断每个字母是否为数字
 				char c = str.charAt(offset);
 				if (!(c >= '0' && c <= '9')) {
@@ -346,13 +359,13 @@ public final class StringSupport {
 	public static final String removeNonDigits(String str) {
 		if (isNullOrEmpty(str))
 			return CONST_EMPTY;
-		StringBuilder builder = new StringBuilder(str.length());
+		var buf = new StringBuilder(str.length());
 		for (int i = 0; i < str.length(); i++) {
 			char c = str.charAt(i);
 			if ('0' <= c && c <= '9')
-				builder.append(c);
+				buf.append(c);
 		}
-		return builder.toString();
+		return buf.toString();
 	}
 
 	/**
@@ -365,13 +378,13 @@ public final class StringSupport {
 	public static final String removeNonAlphabet(String str) {
 		if (isNullOrEmpty(str))
 			return CONST_EMPTY;
-		StringBuilder builder = new StringBuilder(str.length());
+		var buf = new StringBuilder(str.length());
 		for (int i = 0; i < str.length(); i++) {
 			char c = str.charAt(i);
 			if (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z'))
-				builder.append(c);
+				buf.append(c);
 		}
-		return builder.toString();
+		return buf.toString();
 	}
 
 	/**
@@ -423,23 +436,23 @@ public final class StringSupport {
 
 	/**
 	 * 
-	 * @param sourceStr
-	 * @param sourceCharset
+	 * @param str
+	 * @param charset
 	 * @return
 	 */
-	public static final String conversionToUtf8(String sourceStr, Charset sourceCharset) {
-		return conversionTo(sourceStr, sourceCharset, Charsets.UTF8);
+	public static final String conversionToUtf8(String str, Charset charset) {
+		return conversionTo(str, charset, Charsets.UTF8);
 	}
 
 	/**
 	 * 
-	 * @param sourceStr
+	 * @param str
 	 * @param sourceCharset
 	 * @param targetCharset
 	 * @return
 	 */
-	public static final String conversionTo(String sourceStr, Charset sourceCharset, Charset targetCharset) {
-		return sourceStr == null ? sourceStr : new String(sourceStr.getBytes(sourceCharset), targetCharset);
+	public static final String conversionTo(String str, Charset sourceCharset, Charset targetCharset) {
+		return str == null ? str : new String(str.getBytes(sourceCharset), targetCharset);
 	}
 
 	/**
@@ -516,13 +529,13 @@ public final class StringSupport {
 	public static final String concatenateStr(int capacity, char symbol, String... strs) {
 		if (strs == null || strs.length == 0)
 			return CONST_EMPTY;
-		StringBuilder builder = new StringBuilder(capacity);
+		var buf = new StringBuilder(capacity);
 		for (int i = 0; i < strs.length; i++) {
-			builder.append(strs[i]);
+			buf.append(strs[i]);
 			if (i < strs.length - 1)
-				builder.append(symbol);
+				buf.append(symbol);
 		}
-		return builder.toString();
+		return buf.toString();
 	}
 
 	/**
@@ -565,10 +578,9 @@ public final class StringSupport {
 	 * @return
 	 */
 	public static String getAsciiString(byte[] input) {
-		StringBuffer buf = new StringBuffer(input.length);
-		for (byte b : input) {
+		var buf = new StringBuffer(input.length);
+		for (byte b : input)
 			buf.append((char) b);
-		}
 		return buf.toString();
 	}
 

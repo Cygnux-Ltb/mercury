@@ -54,39 +54,39 @@ public final class HexUtil {
 			return "";
 		assertOffsetAndLength(offset, length, bytes.length);
 		// each byte is 2 chars in string
-		StringBuilder buffer = new StringBuilder(length * 2 + 2).append("0x");
-		appendHex(buffer, bytes, offset, length);
-		return buffer.toString();
+		var builder = new StringBuilder(length * 2 + 2).append("0x");
+		appendHex(builder, bytes, offset, length);
+		return builder.toString();
 	}
 
 	/**
 	 * 
-	 * @param buffer
+	 * @param builder
 	 * @param bytes
 	 * @param offset
 	 * @param length
 	 */
-	public static void appendHex(@Nonnull StringBuilder buffer, byte[] bytes, int offset, int length) {
-		Assertor.nonNull(buffer, "buffer");
+	public static void appendHex(@Nonnull StringBuilder builder, byte[] bytes, int offset, int length) {
+		Assertor.nonNull(builder, "builder");
 		if (bytes == null)
 			return;
 		assertOffsetAndLength(offset, length, bytes.length);
 		int end = offset + length;
 		for (int i = offset; i < end; i++) {
-			buffer.append(HEX_TABLE[(bytes[i] & 0xF0) >>> 4]).append(HEX_TABLE[(bytes[i] & 0x0F)]);
+			builder.append(HEX_TABLE[(bytes[i] & 0xF0) >>> 4]).append(HEX_TABLE[(bytes[i] & 0x0F)]);
 		}
 	}
 
 	/**
 	 * 
-	 * @param buffer
+	 * @param builder
 	 * @param bytes
 	 */
-	public static void appendHex(@Nonnull StringBuilder buffer, byte[] bytes) {
-		Assertor.nonNull(buffer, "buffer");
+	public static void appendHex(@Nonnull StringBuilder builder, byte[] bytes) {
+		Assertor.nonNull(builder, "builder");
 		if (bytes == null)
 			return;
-		appendHex(buffer, bytes, 0, bytes.length);
+		appendHex(builder, bytes, 0, bytes.length);
 	}
 
 	/**
@@ -95,19 +95,19 @@ public final class HexUtil {
 	 * @return
 	 */
 	public static String toHex(byte value) {
-		StringBuilder buffer = new StringBuilder(4).append("0x");
-		appendHex(buffer, value);
-		return buffer.toString();
+		var builder = new StringBuilder(4).append("0x");
+		appendHex(builder, value);
+		return builder.toString();
 	}
 
 	/**
 	 * 
-	 * @param buffer
+	 * @param builder
 	 * @param value
 	 */
-	public static void appendHex(@Nonnull StringBuilder buffer, byte value) {
-		Assertor.nonNull(buffer, "buffer");
-		buffer.append(HEX_TABLE[(value & 0xF0) >>> 4]).append(HEX_TABLE[(value & 0x0F)]);
+	public static void appendHex(@Nonnull StringBuilder builder, byte value) {
+		Assertor.nonNull(builder, "builder");
+		builder.append(HEX_TABLE[(value & 0xF0) >>> 4]).append(HEX_TABLE[(value & 0x0F)]);
 	}
 
 	/**
@@ -116,19 +116,19 @@ public final class HexUtil {
 	 * @return
 	 */
 	public static String toHex(short value) {
-		StringBuilder buffer = new StringBuilder(6).append("0x");
-		appendHex(buffer, value);
-		return buffer.toString();
+		var builder = new StringBuilder(6).append("0x");
+		appendHex(builder, value);
+		return builder.toString();
 	}
 
 	/**
 	 * 
-	 * @param buffer
+	 * @param builder
 	 * @param value
 	 */
-	public static void appendHex(@Nonnull StringBuilder buffer, short value) {
-		Assertor.nonNull(buffer, "buffer");
-		buffer.append(HEX_TABLE[(value & 0xF000) >>> 12]).append(HEX_TABLE[(value & 0x0F00) >>> 8])
+	public static void appendHex(@Nonnull StringBuilder builder, short value) {
+		Assertor.nonNull(builder, "builder");
+		builder.append(HEX_TABLE[(value & 0xF000) >>> 12]).append(HEX_TABLE[(value & 0x0F00) >>> 8])
 				.append(HEX_TABLE[(value & 0x00F0) >>> 4]).append(HEX_TABLE[(value & 0x000F)]);
 	}
 
@@ -138,19 +138,19 @@ public final class HexUtil {
 	 * @return
 	 */
 	public static String toHex(int value) {
-		StringBuilder buffer = new StringBuilder(10).append("0x");
-		appendHex(buffer, value);
-		return buffer.toString();
+		var builder = new StringBuilder(10).append("0x");
+		appendHex(builder, value);
+		return builder.toString();
 	}
 
 	/**
 	 * 
-	 * @param buffer
+	 * @param builder
 	 * @param value
 	 */
-	public static void appendHex(@Nonnull StringBuilder buffer, int value) {
-		Assertor.nonNull(buffer, "buffer");
-		buffer.append(HEX_TABLE[(value & 0xF000_0000) >>> 28]).append(HEX_TABLE[(value & 0x0F00_0000) >>> 24])
+	public static void appendHex(@Nonnull StringBuilder builder, int value) {
+		Assertor.nonNull(builder, "builder");
+		builder.append(HEX_TABLE[(value & 0xF000_0000) >>> 28]).append(HEX_TABLE[(value & 0x0F00_0000) >>> 24])
 				.append(HEX_TABLE[(value & 0x00F0_0000) >>> 20]).append(HEX_TABLE[(value & 0x000F_0000) >>> 16])
 				.append(HEX_TABLE[(value & 0x0000_F000) >>> 12]).append(HEX_TABLE[(value & 0x0000_0F00) >>> 8])
 				.append(HEX_TABLE[(value & 0x0000_00F0) >>> 4]).append(HEX_TABLE[(value & 0x0000_000F)]);
@@ -162,19 +162,19 @@ public final class HexUtil {
 	 * @return
 	 */
 	public static String toHex(long value) {
-		StringBuilder buffer = new StringBuilder(18).append("0x");
-		appendHex(buffer, value);
-		return buffer.toString();
+		var builder = new StringBuilder(18).append("0x");
+		appendHex(builder, value);
+		return builder.toString();
 	}
 
 	/**
 	 * 
-	 * @param buffer
+	 * @param builder
 	 * @param value
 	 */
-	public static void appendHex(@Nonnull StringBuilder buffer, long value) {
-		appendHex(buffer, (int) ((value & 0xFFFF_FFFF_0000_0000L) >>> 32));
-		appendHex(buffer, (int) (value & 0x0000_0000_FFFF_FFFFL));
+	public static void appendHex(@Nonnull StringBuilder builder, long value) {
+		appendHex(builder, (int) ((value & 0xFFFF_FFFF_0000_0000L) >>> 32));
+		appendHex(builder, (int) (value & 0x0000_0000_FFFF_FFFFL));
 	}
 
 	/**
@@ -244,14 +244,13 @@ public final class HexUtil {
 
 	/**
 	 * 
-	 * @param hexString
+	 * @param hex
 	 * @return
 	 */
-	public static byte[] toByteArray(CharSequence hexString) {
-		if (hexString == null) {
+	public static byte[] toByteArray(CharSequence hex) {
+		if (hex == null)
 			return null;
-		}
-		return toByteArray(hexString, 0, hexString.length());
+		return toByteArray(hex, 0, hex.length());
 	}
 
 	/**
@@ -261,27 +260,25 @@ public final class HexUtil {
 	 * be an even length of characters. For example, a String of "1234" would return
 	 * the byte array { 0x12, 0x34 }.
 	 * 
-	 * @param hexString The String, StringBuilder, etc. that contains the sequence
-	 *                  of hexidecimal character values.
-	 * @param offset    The offset within the sequence to start from. If the offset
-	 *                  is invalid, will cause an IllegalArgumentException.
-	 * @param length    The length from the offset to convert. If the length is
-	 *                  invalid, will cause an IllegalArgumentException.
+	 * @param hex    The String, StringBuilder, etc. that contains the sequence of
+	 *               hexidecimal character values.
+	 * @param offset The offset within the sequence to start from. If the offset is
+	 *               invalid, will cause an IllegalArgumentException.
+	 * @param length The length from the offset to convert. If the length is
+	 *               invalid, will cause an IllegalArgumentException.
 	 * @return A new byte array representing the sequence of bytes created from the
 	 *         sequence of hexidecimal characters. If the hexString is null, then
 	 *         this method will return null.
 	 */
-	public static byte[] toByteArray(CharSequence hexString, int offset, int length) {
-		if (hexString == null) {
+	public static byte[] toByteArray(CharSequence hex, int offset, int length) {
+		if (hex == null)
 			return null;
-		}
-		assertOffsetAndLength(offset, length, hexString.length());
+		assertOffsetAndLength(offset, length, hex.length());
 
 		// a hex string must be in increments of 2
-		if ((length % 2) != 0) {
+		if ((length % 2) != 0)
 			throw new IllegalArgumentException(
 					"The hex string did not contain an even number of characters [actual=" + length + "]");
-		}
 
 		// convert hex string to byte array
 		byte[] bytes = new byte[length / 2];
@@ -290,8 +287,8 @@ public final class HexUtil {
 		int end = offset + length;
 
 		for (int i = offset; i < end; i += 2) {
-			int highNibble = hexCharToInt(hexString.charAt(i));
-			int lowNibble = hexCharToInt(hexString.charAt(i + 1));
+			int highNibble = hexCharToInt(hex.charAt(i));
+			int lowNibble = hexCharToInt(hex.charAt(i + 1));
 			bytes[j++] = (byte) (((highNibble << 4) & 0xF0) | (lowNibble & 0x0F));
 		}
 		return bytes;

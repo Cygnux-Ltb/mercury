@@ -47,11 +47,10 @@ public final class HexString {
 	 */
 	private static HexString createHexString(String hex) throws IllegalArgumentException {
 		// though method is private, leaving checks in place to show intent
-		if (hex == null) {
+		if (hex == null)
 			throw new IllegalArgumentException("hex string argument cannot be null; use HexString.EMPTY instead");
-		} else if (hex.equals("")) {
+		if (hex.equals(""))
 			throw new IllegalArgumentException("hex string argument cannot be empty; use HexString.EMPTY instead");
-		}
 		byte[] bytes = HexUtil.toByteArray(hex);
 		return new HexString(bytes, hex.toUpperCase());
 	}
@@ -78,11 +77,10 @@ public final class HexString {
 	 */
 	private static HexString createHexString(byte[] bytes) throws IllegalArgumentException {
 		// though method is private, leaving checks in place to show intent
-		if (bytes == null) {
+		if (bytes == null)
 			throw new IllegalArgumentException("bytes argument cannot be null; use HexString.NULL instead");
-		} else if (bytes.length == 0) {
+		if (bytes.length == 0)
 			throw new IllegalArgumentException("bytes argument cannot be zero length; use HexString.NULL instead");
-		}
 		byte[] copyOfbytes = copyByteArray(bytes);
 		String hex = HexUtil.toHex(copyOfbytes).toUpperCase();
 		return new HexString(copyOfbytes, hex);
