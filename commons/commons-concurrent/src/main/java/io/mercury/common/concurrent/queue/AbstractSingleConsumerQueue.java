@@ -1,6 +1,6 @@
 package io.mercury.common.concurrent.queue;
 
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HH_MM_SS_SSS;
+import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
 
 import java.time.LocalDateTime;
 
@@ -23,7 +23,7 @@ public abstract class AbstractSingleConsumerQueue<E> extends RunnableComponent i
 	protected AbstractSingleConsumerQueue(Processor<E> processor) {
 		Assertor.nonNull(processor, "processor");
 		this.processor = processor;
-		this.name = "Queue-" + "[" + YYYY_MM_DD_HH_MM_SS_SSS.format(LocalDateTime.now()) + "]";
+		this.name = "Queue-" + "[" + YYYYMMDD_L_HHMMSSSSS.format(LocalDateTime.now()) + "]";
 	}
 
 	@Override

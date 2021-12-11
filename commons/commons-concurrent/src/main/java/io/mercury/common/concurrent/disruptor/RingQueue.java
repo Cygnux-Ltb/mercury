@@ -1,5 +1,7 @@
 package io.mercury.common.concurrent.disruptor;
 
+import static io.mercury.common.thread.Threads.newMaxPriorityThread;
+
 import org.slf4j.Logger;
 
 import com.lmax.disruptor.EventTranslatorOneArg;
@@ -30,15 +32,15 @@ public class RingQueue<T> extends AbstractSingleConsumerQueue<T> {
 
 	private final LoadContainerEventProducer producer;
 
-	public RingQueue(String queueName, int size) {
-		this(queueName, size, true, null);
+	public RingQueue(String queueName, int size, Processor<T> processor) {
+		this(queueName, size, true, processor);
 	}
 
 	public RingQueue(String queueName, int size, boolean startNow, Processor<T> processor) {
 		this(queueName, size, startNow, processor, CommonWaitStrategy.Sleeping.get());
 	}
 
-	public RingQueue(String queueName, int size, boolean startNow, Processor<T> processor, WaitStrategy waitStrategy) {
+	public RingQueue(String queueName, int size, boolean startNow, Processor<T> processor, WaitStrategy strategy) {
 		super(processor);
 		if (queueName != null)
 			super.name = queueName;
@@ -50,27 +52,32 @@ public class RingQueue<T> extends AbstractSingleConsumerQueue<T> {
 				// 队列容量
 				size,
 				// 实现ThreadFactory的Lambda
-				(Runnable runnable) -> Threads.newMaxPriorityThread(this.name + "-WorkingThread", runnable),
+				(Runnable runnable) -> newMaxPriorityThread(this.name + "-worker", runnable),
 				// DaemonThreadFactory.INSTANCE,
 				// 生产者策略, 使用单生产者
 				ProducerType.SINGLE,
 				// Waiting策略
-				waitStrategy);
-		this.disruptor.handleEventsWith((event, sequence, endOfBatch) -> this.callProcessor(event.unloading()));
+				strategy);
+		this.disruptor.handleEventsWith(this::process);
 		this.producer = new LoadContainerEventProducer(disruptor.getRingBuffer());
 		if (startNow)
 			start();
 	}
 
-	private void callProcessor(T t) {
+	private void process(LoadContainer<T> container, long sequence, boolean endOfBatch) {
 		try {
-			processor.process(t);
+			processor.process(container.unloading());
 		} catch (Exception e) {
 			log.error("processor.process(t) throw exception -> [{}]", e.getMessage(), e);
 			throw new RuntimeException(e);
 		}
 	}
 
+	/**
+	 * LoadContainerEventProducer
+	 * 
+	 * @author yellow013
+	 */
 	private class LoadContainerEventProducer {
 
 		private final RingBuffer<LoadContainer<T>> ringBuffer;

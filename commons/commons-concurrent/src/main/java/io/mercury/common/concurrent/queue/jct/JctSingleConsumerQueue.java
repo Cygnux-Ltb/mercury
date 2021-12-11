@@ -244,7 +244,7 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
 		private String queueName = null;
 		private StartMode mode = StartMode.Auto;
 		private WaitingStrategy strategy = WaitingStrategy.Spin;
-		private long sleepMillis = 4;
+		private long sleepMillis = 5;
 		private int capacity = 32;
 
 		private Builder(QueueType type) {
