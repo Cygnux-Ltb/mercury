@@ -16,7 +16,7 @@
 		<sbe.tool.version>1.25.1</sbe.tool.version>
 	</properties>
 
-	<build>
+	<!-- <build>
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -75,7 +75,7 @@
 				</executions>
 			</plugin>
 		</plugins>
-	</build>
+	</build> -->
 
 	<dependencies>
 		<dependency>
