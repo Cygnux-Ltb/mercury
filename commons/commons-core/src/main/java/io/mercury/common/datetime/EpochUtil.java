@@ -51,7 +51,7 @@ public final class EpochUtil {
 	/**
 	 * 获取 Epoch<b> 纳秒 </b>数
 	 * 
-	 * @return
+	 * @return long
 	 */
 	public static final long getEpochNanos() {
 		return nanoTime() + NANOS_EPOCH_OFFSET;
@@ -60,15 +60,16 @@ public final class EpochUtil {
 	/**
 	 * 获取 Epoch<b> 微秒 </b>数
 	 * 
-	 * @return
+	 * @return long
 	 */
 	public static final long getEpochMicros() {
 		return nanoTime() / NANOS_PER_MICROS + MICROS_EPOCH_OFFSET;
 	}
 
 	/**
+	 * 获取 Epoch<b> 毫秒 </b>数
 	 * 
-	 * @return
+	 * @return long
 	 */
 	public static final long getEpochMillis() {
 		return currentTimeMillis();

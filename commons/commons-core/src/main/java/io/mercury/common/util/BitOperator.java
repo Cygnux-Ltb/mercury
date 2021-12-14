@@ -187,7 +187,7 @@ public final class BitOperator {
 		return !isOdd(l);
 	}
 
-	private static final int MAXIMUM_CAPACITY = 1 << 30;
+	private static final int MAX_CAPACITY = 1 << 30;
 
 	/**
 	 * 返回最接近参数的2的幂
@@ -202,7 +202,7 @@ public final class BitOperator {
 		n |= n >>> 4;
 		n |= n >>> 8;
 		n |= n >>> 16;
-		return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
+		return (n < 0) ? 1 : (n >= MAX_CAPACITY) ? MAX_CAPACITY : n + 1;
 	}
 
 	/**
@@ -217,8 +217,33 @@ public final class BitOperator {
 	}
 
 	/**
+	 * 交换两个变量的值
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	public static void swap(int x, int y) {
+		x ^= y;
+		y ^= x;
+		x ^= y;
+	}
+
+	/**
+	 * 交换两个变量的值
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	public static void swap(long x, long y) {
+		x ^= y;
+		y ^= x;
+		x ^= y;
+	}
+
+	/**
 	 * 清理DirectMemory
 	 * 
+	 * @since 1.8
 	 * @param buffer
 	 */
 //	@SuppressWarnings("restriction")
