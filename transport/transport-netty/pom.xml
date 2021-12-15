@@ -30,11 +30,6 @@
 
 		<dependency>
 			<groupId>io.mercury</groupId>
-			<artifactId>serialization-json</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>io.mercury</groupId>
 			<artifactId>serialization-protobuf</artifactId>
 			<version>${project.version}</version>
 		</dependency>

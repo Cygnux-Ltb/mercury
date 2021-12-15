@@ -24,11 +24,6 @@
 
 		<dependency>
 			<groupId>io.mercury</groupId>
-			<artifactId>serialization-json</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>io.mercury</groupId>
 			<artifactId>serialization-avro</artifactId>
 		</dependency>
 
@@ -38,7 +33,6 @@
 			<artifactId>jeromq</artifactId>
 			<version>0.5.2</version>
 		</dependency>
-
 	</dependencies>
 
 </project>
