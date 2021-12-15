@@ -12,7 +12,7 @@
 	</parent>
 
 	<artifactId>commons-log4j2</artifactId>
-	<name>commons-log</name>
+	<name>commons-log4j2</name>
 
 	<properties>
 		<log4j.version>2.16.0</log4j.version>
