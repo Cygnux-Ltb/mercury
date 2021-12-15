@@ -36,11 +36,9 @@
 		<maven.compiler.source>11</maven.compiler.source>
 		<slf4j.version>1.7.32</slf4j.version>
 		<junit.version>4.13.2</junit.version>
-		<lombok.version>1.18.22</lombok.version>
-		<netty.version>4.1.70.Final</netty.version>
+		<netty.version>4.1.72.Final</netty.version>
 		<avro.version>1.11.0</avro.version>
-		<jackson.version>2.12.5</jackson.version>
-		<mercury.version>1.0-SNAPSHOT</mercury.version>
+		<jackson.version>2.13.0</jackson.version>
 	</properties>
 
 	<build>
@@ -77,13 +75,6 @@
 				<artifactId>jsr305</artifactId>
 				<version>3.0.2</version>
 			</dependency>
-			<!-- Spice up your java: Automatic Resource Management, automatic generation 
-				of getters, setters, equals, hashCode and toString, and more! -->
-			<!-- <dependency>
-				<groupId>org.projectlombok</groupId>
-				<artifactId>lombok</artifactId>
-				<version>${lombok.version}</version>
-			</dependency> -->
 		</dependencies>
 	</dependencyManagement>
 

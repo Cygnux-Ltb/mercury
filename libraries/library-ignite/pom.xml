@@ -27,7 +27,7 @@
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>commons-concurrent</artifactId>
-			<version>${mercury.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
