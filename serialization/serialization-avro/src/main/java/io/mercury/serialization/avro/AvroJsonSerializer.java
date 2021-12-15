@@ -14,13 +14,13 @@ import org.apache.commons.compress.utils.IOUtils;
 import org.slf4j.Logger;
 
 import io.mercury.common.character.Charsets;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.JsonSerializer;
 
 @NotThreadSafe
 public class AvroJsonSerializer<T extends SpecificRecord> implements JsonSerializer<T> {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(AvroJsonSerializer.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(AvroJsonSerializer.class);
 
 	private JsonEncoder encoder;
 

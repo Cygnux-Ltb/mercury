@@ -3,8 +3,8 @@ package io.mercury.serialization.wire;
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
 
-import io.mercury.common.log.LogConfigurator;
-import io.mercury.common.log.LogConfigurator.LogLevel;
+import io.mercury.common.log.Log4j2Configurator;
+import io.mercury.common.log.Log4j2Configurator.LogLevel;
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.core.pool.ClassAliasPool;
 import net.openhft.chronicle.wire.BinaryWire;
@@ -20,7 +20,7 @@ import net.openhft.chronicle.wire.Wire;
 public class Test4 {
 	
 	static {
-		LogConfigurator.setLogLevel(LogLevel.ERROR);
+		Log4j2Configurator.setLogLevel(LogLevel.ERROR);
 	}
 
 	public static void main(String[] args) {

@@ -17,13 +17,13 @@ import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
 
 import io.mercury.common.annotation.thread.ThreadSafeVariable;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.ByteBufferSerializer;
 
 @ThreadSafe
 public final class AvroBinarySerializer<T extends SpecificRecord> implements ByteBufferSerializer<T> {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(AvroBinarySerializer.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(AvroBinarySerializer.class);
 
 	@ThreadSafeVariable
 	private final DatumWriter<T> writer;

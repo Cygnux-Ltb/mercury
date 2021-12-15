@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
-import io.mercury.common.log.LogConfigurator;
-import io.mercury.common.log.LogConfigurator.LogLevel;
+import io.mercury.common.log.Log4j2Configurator;
+import io.mercury.common.log.Log4j2Configurator.LogLevel;
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.core.pool.ClassAliasPool;
 import net.openhft.chronicle.wire.BinaryWire;
@@ -26,7 +26,7 @@ import net.openhft.chronicle.wire.Wires;
 public class Test6 {
 	
 	static {
-		LogConfigurator.setLogLevel(LogLevel.ERROR);
+		Log4j2Configurator.setLogLevel(LogLevel.ERROR);
 	}
 
 	public static void main(String[] args) {

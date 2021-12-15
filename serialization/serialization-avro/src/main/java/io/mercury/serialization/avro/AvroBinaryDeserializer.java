@@ -23,13 +23,13 @@ import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
 
 import io.mercury.common.annotation.thread.ThreadSafeVariable;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.BytesDeserializer;
 
 @ThreadSafe
 public final class AvroBinaryDeserializer<T extends SpecificRecord> implements BytesDeserializer<T> {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(AvroBinaryDeserializer.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(AvroBinaryDeserializer.class);
 
 	@ThreadSafeVariable
 	private final DatumReader<T> reader;
