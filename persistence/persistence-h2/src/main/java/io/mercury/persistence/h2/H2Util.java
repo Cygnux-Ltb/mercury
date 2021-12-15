@@ -13,13 +13,13 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 
 import io.mercury.common.lang.Assertor;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.sys.SysProperties;
 import io.mercury.common.util.StringSupport;
 
 public final class H2Util {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(H2Util.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(H2Util.class);
 
 	public static final String JdbcProtocol = "jdbc:sqlite:";
 

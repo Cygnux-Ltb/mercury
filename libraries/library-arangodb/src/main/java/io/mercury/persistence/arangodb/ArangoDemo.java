@@ -13,17 +13,17 @@ import com.arangodb.entity.BaseDocument;
 import com.arangodb.model.DBCreateOptions;
 import com.arangodb.velocypack.VPackSlice;
 
-import io.mercury.common.log.LogConfigurator;
-import io.mercury.common.log.LogConfigurator.LogLevel;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.log.Log4j2Configurator;
+import io.mercury.common.log.Log4j2Configurator.LogLevel;
 
 public class ArangoDemo {
 
 	static {
-		LogConfigurator.setLogLevel(LogLevel.INFO);
+		Log4j2Configurator.setLogLevel(LogLevel.INFO);
 	}
 
-	private static final Logger log = CommonLoggerFactory.getLogger(ArangoDemo.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(ArangoDemo.class);
 
 	public static void main(final String[] args) {
 

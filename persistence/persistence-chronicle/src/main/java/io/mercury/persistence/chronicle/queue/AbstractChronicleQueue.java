@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.collections.MutableMaps;
 import io.mercury.common.lang.Assertor;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.sys.SysProperties;
 import io.mercury.common.thread.RuntimeInterruptedException;
 import io.mercury.common.thread.ShutdownHooks;
@@ -55,7 +55,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 
 	protected final SingleChronicleQueue internalQueue;
 
-	protected Logger logger = CommonLoggerFactory.getLogger(getClass());;
+	protected Logger logger = Log4j2LoggerFactory.getLogger(getClass());;
 
 	AbstractChronicleQueue(AbstractQueueBuilder<?> builder) {
 		this.rootPath = builder.rootPath;
