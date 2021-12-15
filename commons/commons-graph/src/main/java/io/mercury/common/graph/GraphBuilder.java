@@ -6,11 +6,11 @@ import org.jgrapht.Graph;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.slf4j.Logger;
 
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 
 public final class GraphBuilder {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(GraphBuilder.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(GraphBuilder.class);
 
 	/**
 	 * 

@@ -10,12 +10,12 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 
 import io.mercury.common.annotation.AbstractFunction;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 
 @ThreadSafe
 public abstract class RunnableComponent {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(RunnableComponent.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(RunnableComponent.class);
 
 	/**
 	 * Running flag

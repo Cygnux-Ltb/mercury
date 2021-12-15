@@ -14,7 +14,7 @@ import io.mercury.common.collections.queue.LoadContainer;
 import io.mercury.common.concurrent.queue.AbstractSingleConsumerQueue;
 import io.mercury.common.concurrent.queue.QueueType;
 import io.mercury.common.functional.Processor;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
 
@@ -26,7 +26,7 @@ import io.mercury.common.thread.Threads;
  */
 public class RingQueue<T> extends AbstractSingleConsumerQueue<T> {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(RingQueue.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(RingQueue.class);
 
 	private final Disruptor<LoadContainer<T>> disruptor;
 

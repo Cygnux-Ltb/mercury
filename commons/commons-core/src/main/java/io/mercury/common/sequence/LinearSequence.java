@@ -6,11 +6,6 @@ import static java.lang.System.nanoTime;
 
 import javax.annotation.concurrent.ThreadSafe;
 
-import org.slf4j.Logger;
-
-import io.mercury.common.log.CommonLoggerFactory;
-import io.mercury.common.log.LogConfigurator;
-
 /**
  * 
  * Use the System.nanoTime() native function
@@ -43,17 +38,6 @@ public final class LinearSequence {
 	 */
 	public static long getNanos() {
 		return nanoTime();
-	}
-
-	public static void main(String[] args) {
-
-		LogConfigurator.setLogFilename("test-log");
-		Logger log = CommonLoggerFactory.getLogger(LinearSequence.class);
-
-		for (int i = 0; i < 20; i++) {
-			log.debug(String.valueOf(LinearSequence.getMicros()));
-		}
-
 	}
 
 }

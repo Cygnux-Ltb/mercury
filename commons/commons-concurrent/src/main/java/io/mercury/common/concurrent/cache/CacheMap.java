@@ -14,7 +14,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 
 /**
  * 
@@ -28,7 +28,7 @@ public class CacheMap<K, V> {
 
 	private final LoadingCache<K, V> cache;
 
-	private static final Logger log = CommonLoggerFactory.getLogger(CacheMap.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(CacheMap.class);
 
 	private CacheMap(CacheMapBuilder builder, Function<K, V> refresher) {
 		this.cache = CacheBuilder.newBuilder().maximumSize(builder.maximumSize).expireAfterAccess(builder.duration)

@@ -23,7 +23,7 @@ import io.mercury.common.collections.MutableMaps;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.lang.Throws;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 
 /**
  * 
@@ -33,7 +33,7 @@ import io.mercury.common.log.CommonLoggerFactory;
  */
 public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(RingProcessChain.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(RingProcessChain.class);
 
 	@SuppressWarnings("unchecked")
 	private RingProcessChain(String name, int size, @Nonnull EventFactory<E> factory, @Nonnull WaitStrategy strategy,

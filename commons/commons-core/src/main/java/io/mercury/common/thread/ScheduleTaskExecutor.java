@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.sys.CurrentRuntime;
 
 public final class ScheduleTaskExecutor {
@@ -20,7 +20,7 @@ public final class ScheduleTaskExecutor {
 	private ScheduleTaskExecutor() {
 	}
 
-	private static final Logger log = CommonLoggerFactory.getLogger(ScheduleTaskExecutor.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(ScheduleTaskExecutor.class);
 
 	/**
 	 * 

@@ -11,11 +11,11 @@ import org.slf4j.Logger;
 import io.mercury.common.datetime.TimeZone;
 import io.mercury.common.datetime.pattern.DatePattern;
 import io.mercury.common.datetime.pattern.TemporalPattern;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 
 public class FileNameDateTimeFilter implements FileFilter {
 
-	private static final Logger logger = CommonLoggerFactory.getLogger(FileNameDateTimeFilter.class);
+	private static final Logger logger = Log4j2LoggerFactory.getLogger(FileNameDateTimeFilter.class);
 
 	private TemporalPattern pattern;
 	private ZonedDateTime cutoffDate;

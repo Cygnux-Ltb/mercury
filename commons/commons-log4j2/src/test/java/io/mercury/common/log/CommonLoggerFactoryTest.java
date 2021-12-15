@@ -5,17 +5,17 @@ import java.time.LocalDateTime;
 import org.junit.Test;
 import org.slf4j.Logger;
 
-import io.mercury.common.log.LogConfigurator.LogLevel;
+import io.mercury.common.log.Log4j2Configurator.LogLevel;
 
 public class CommonLoggerFactoryTest {
 
 	static {
 		System.out.println(System.getProperty("user.home"));
-		LogConfigurator.setLogFilename("new");
-		LogConfigurator.setLogLevel(LogLevel.ERROR);
+		Log4j2Configurator.setLogFilename("new");
+		Log4j2Configurator.setLogLevel(LogLevel.ERROR);
 	}
 
-	private static final Logger log = CommonLoggerFactory.getLogger(CommonLoggerFactory.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(Log4j2LoggerFactory.class);
 
 	@Test
 	public void test() {

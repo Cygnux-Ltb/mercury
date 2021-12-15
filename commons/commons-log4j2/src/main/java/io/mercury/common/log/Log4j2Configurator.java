@@ -5,7 +5,7 @@ package io.mercury.common.log;
  * @author yellow013
  *
  */
-public final class LogConfigurator {
+public final class Log4j2Configurator {
 
 	/**
 	 * 

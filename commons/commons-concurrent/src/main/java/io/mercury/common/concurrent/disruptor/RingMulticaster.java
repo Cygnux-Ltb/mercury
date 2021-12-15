@@ -21,7 +21,7 @@ import io.mercury.common.collections.MutableLists;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.lang.Throws;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 
 /**
  * @author yellow013
@@ -31,7 +31,7 @@ import io.mercury.common.log.CommonLoggerFactory;
  */
 public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(RingMulticaster.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(RingMulticaster.class);
 
 //	@SafeVarargs
 //	public RingMulticaster(String name, int size, @Nonnull EventFactory<E> eventFactory,

@@ -15,7 +15,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 
 /**
  * Utility methods for compressing and uncompressing a file.
@@ -23,7 +23,7 @@ import io.mercury.common.log.CommonLoggerFactory;
  */
 public class FileCompressionUtil {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(FileCompressionUtil.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(FileCompressionUtil.class);
 
 	/**
 	 * Enumeration of all supported compression algorithms by this utility.

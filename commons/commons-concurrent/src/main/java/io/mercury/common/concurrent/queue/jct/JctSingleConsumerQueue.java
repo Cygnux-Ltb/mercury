@@ -13,7 +13,7 @@ import io.mercury.common.concurrent.queue.QueueWorkingException;
 import io.mercury.common.concurrent.queue.AbstractSingleConsumerQueue;
 import io.mercury.common.concurrent.queue.WaitingStrategy;
 import io.mercury.common.functional.Processor;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringSupport;
@@ -31,7 +31,7 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
 	/*
 	 * Logger
 	 */
-	private static final Logger log = CommonLoggerFactory.getLogger(JctSingleConsumerQueue.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(JctSingleConsumerQueue.class);
 
 	/*
 	 * internal queue

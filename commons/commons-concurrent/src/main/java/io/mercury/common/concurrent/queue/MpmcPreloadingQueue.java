@@ -10,13 +10,13 @@ import org.slf4j.Logger;
 
 import io.mercury.common.annotation.thread.LockHeld;
 import io.mercury.common.collections.queue.LoadContainer;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 
 @ThreadSafe
 @Deprecated
 public class MpmcPreloadingQueue<E> implements MultiConsumerQueue<E> {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(MpmcPreloadingQueue.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(MpmcPreloadingQueue.class);
 
 	private LoadContainer<E>[] containers;
 

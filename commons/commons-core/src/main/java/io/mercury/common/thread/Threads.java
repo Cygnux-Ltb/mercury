@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 
 import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.util.StringSupport;
 
 public final class Threads {
@@ -59,7 +59,7 @@ public final class Threads {
 		}
 	}
 
-	private static final Logger log = CommonLoggerFactory.getLogger(Threads.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(Threads.class);
 
 	/**
 	 * 
