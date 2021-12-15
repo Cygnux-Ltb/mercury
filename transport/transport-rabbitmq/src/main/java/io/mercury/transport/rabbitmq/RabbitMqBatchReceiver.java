@@ -28,7 +28,7 @@ import com.rabbitmq.client.Envelope;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.lang.Assertor;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.BytesDeserializer;
 import io.mercury.transport.api.Receiver;
 import io.mercury.transport.rabbitmq.configurator.RabbitReceiverCfg;
@@ -41,7 +41,7 @@ import io.mercury.transport.rabbitmq.configurator.RabbitReceiverCfg;
  */
 public class RabbitMqBatchReceiver<T> extends RabbitMqTransport implements Receiver, Runnable {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqBatchReceiver.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(RabbitMqBatchReceiver.class);
 
 	// 接收者名称
 	private String receiverName;
@@ -132,7 +132,7 @@ public class RabbitMqBatchReceiver<T> extends RabbitMqTransport implements Recei
 	 */
 	public static class BatchProcessConsumer<T> extends DefaultConsumer {
 
-		private static final Logger log = CommonLoggerFactory.getLogger(BatchProcessConsumer.class);
+		private static final Logger log = Log4j2LoggerFactory.getLogger(BatchProcessConsumer.class);
 
 		private Channel channel;
 

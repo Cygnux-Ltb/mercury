@@ -11,7 +11,7 @@ import org.zeromq.ZMQ;
 
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.lang.Assertor;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Transport;
 import io.mercury.transport.api.TransportComponent;
@@ -19,7 +19,7 @@ import io.mercury.transport.configurator.TcpKeepAlive;
 
 abstract class ZmqTransport extends TransportComponent implements Transport, Closeable {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(ZmqTransport.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(ZmqTransport.class);
 
 	// ZMQ配置器
 	protected final ZmqConfigurator cfg;

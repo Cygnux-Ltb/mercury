@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.zeromq.SocketType;
 
 import io.mercury.common.lang.Assertor;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.zmq.exception.ZmqConnectionException;
@@ -20,7 +20,7 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 
 	private final BytesSerializer<T> serializer;
 
-	private static final Logger log = CommonLoggerFactory.getLogger(ZmqSender.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(ZmqSender.class);
 
 	/**
 	 * @param cfg

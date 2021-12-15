@@ -21,11 +21,11 @@ import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.jsoup.HttpStatusException;
 import org.slf4j.Logger;
 
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 
 public final class HttpClient {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(HttpClients.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(HttpClients.class);
 
 	private static final CloseableHttpClient HC = HttpClients.createDefault();
 

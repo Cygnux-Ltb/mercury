@@ -2,7 +2,7 @@ package io.mercury.transport.netty;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.transport.api.TransportServer;
 import io.mercury.transport.netty.configurator.NettyConfigurator;
 import io.mercury.transport.netty.handler.GeneralNettyHandler;
@@ -19,7 +19,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class NettyServer extends NettyTransport implements TransportServer {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(NettyServer.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(NettyServer.class);
 
 	private EventLoopGroup bossGroup;
 	private ServerBootstrap bootstrap;

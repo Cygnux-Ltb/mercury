@@ -19,7 +19,7 @@ import com.rabbitmq.client.Envelope;
 
 import io.mercury.common.codec.DecodeException;
 import io.mercury.common.lang.Assertor;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.BytesDeserializer;
 import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Receiver;
@@ -42,7 +42,7 @@ import io.mercury.transport.rabbitmq.exception.MsgHandleException;
  */
 public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Subscriber, Receiver, Runnable {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(AdvancedRabbitMqReceiver.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(AdvancedRabbitMqReceiver.class);
 
 	// 接收消息使用的反序列化器
 	private final BytesDeserializer<T> deserializer;

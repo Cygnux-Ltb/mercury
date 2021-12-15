@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.jsoup.HttpStatusException;
 import org.slf4j.Logger;
 
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.serialization.json.JsonWrapper;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -16,7 +16,7 @@ import okhttp3.ResponseBody;
 
 public final class HttpRequester {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(HttpRequester.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(HttpRequester.class);
 
 	// OkHttpClient
 	private static final OkHttpClient HttpClient = new OkHttpClient();

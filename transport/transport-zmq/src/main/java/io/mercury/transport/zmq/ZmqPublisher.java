@@ -10,7 +10,7 @@ import org.zeromq.SocketType;
 import org.zeromq.ZMQ;
 
 import io.mercury.common.lang.Assertor;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.transport.api.Publisher;
@@ -24,7 +24,7 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
 
 	private final BytesSerializer<T> serializer;
 
-	private static final Logger log = CommonLoggerFactory.getLogger(ZmqPublisher.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(ZmqPublisher.class);
 
 	/**
 	 * @param cfg

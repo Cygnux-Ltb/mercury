@@ -30,8 +30,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.mercury.common.log.LogConfigurator;
-import io.mercury.common.log.LogConfigurator.LogLevel;
+import io.mercury.common.log.Log4j2Configurator;
+import io.mercury.common.log.Log4j2Configurator.LogLevel;
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.core.io.AbstractReferenceCounted;
 import net.openhft.chronicle.core.threads.EventLoop;
@@ -55,9 +55,9 @@ public class SimpleServerAndClientTest extends NetworkTestCommon {
 	private ThreadDump threadDump;
 
 	static {
-		LogConfigurator.setLogFolder("runtime");
-		LogConfigurator.setLogFilename("socket-test");
-		LogConfigurator.setLogLevel(LogLevel.INFO);
+		Log4j2Configurator.setLogFolder("runtime");
+		Log4j2Configurator.setLogFilename("socket-test");
+		Log4j2Configurator.setLogLevel(LogLevel.INFO);
 	}
 
 	@Before

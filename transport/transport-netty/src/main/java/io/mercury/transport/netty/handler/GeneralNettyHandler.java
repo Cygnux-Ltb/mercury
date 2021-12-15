@@ -2,7 +2,7 @@ package io.mercury.transport.netty.handler;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -12,7 +12,7 @@ public abstract class GeneralNettyHandler extends ChannelInboundHandlerAdapter {
 	// buffer size
 	protected int byteBufSize;
 
-	private static final Logger log = CommonLoggerFactory.getLogger(GeneralNettyHandler.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(GeneralNettyHandler.class);
 
 	/**
 	 * Use default bytebufSize;

@@ -14,7 +14,7 @@ import io.mercury.common.character.Charsets;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.concurrent.queue.MultiConsumerQueue;
 import io.mercury.common.concurrent.queue.QueueType;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.BytesDeserializer;
 import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.serialization.json.JsonWrapper;
@@ -25,7 +25,7 @@ import io.mercury.transport.rabbitmq.exception.DeclareException;
 
 public class RabbitMqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(RabbitMqBuffer.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(RabbitMqBuffer.class);
 
 	private RabbitConnection connection;
 	private RabbitMqChannel channel;

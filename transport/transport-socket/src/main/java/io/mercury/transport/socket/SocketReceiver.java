@@ -10,7 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 
 import io.mercury.common.lang.Assertor;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
 import io.mercury.transport.api.Receiver;
@@ -27,7 +27,7 @@ public class SocketReceiver extends TransportComponent implements Receiver {
 	private AtomicBoolean isReceiving = new AtomicBoolean(false);
 	private AtomicBoolean isRun = new AtomicBoolean(false);
 
-	protected static final Logger log = CommonLoggerFactory.getLogger(SocketReceiver.class);
+	protected static final Logger log = Log4j2LoggerFactory.getLogger(SocketReceiver.class);
 
 	/**
 	 * @param configurator

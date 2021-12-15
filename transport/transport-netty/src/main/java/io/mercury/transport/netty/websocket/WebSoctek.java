@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -29,7 +29,7 @@ public class WebSoctek {
 
 	public static void main(String[] args) {
 
-		final Logger log = CommonLoggerFactory.getLogger(WebSoctek.class);
+		final Logger log = Log4j2LoggerFactory.getLogger(WebSoctek.class);
 		final EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
 		try {
 			URI uri = new URI("ws://192.168.50.xx:xx/xx/xx");
@@ -79,7 +79,7 @@ public class WebSoctek {
 	 */
 	public static class MockClientHandler extends SimpleChannelInboundHandler<String> {
 
-		private Logger log = CommonLoggerFactory.getLogger(MockClientHandler.class);
+		private Logger log = Log4j2LoggerFactory.getLogger(MockClientHandler.class);
 
 		private final WebSocketClientHandshaker handshaker;
 

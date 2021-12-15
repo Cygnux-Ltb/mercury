@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.zeromq.SocketType;
 
 import io.mercury.common.lang.Assertor;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
 import io.mercury.transport.api.Receiver;
@@ -20,7 +20,7 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 
 	private final Function<byte[], byte[]> handler;
 
-	private static final Logger log = CommonLoggerFactory.getLogger(ZmqPublisher.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(ZmqPublisher.class);
 
 	ZmqReceiver(@Nonnull ZmqConfigurator cfg, @Nonnull Function<byte[], byte[]> handler) {
 		super(cfg);

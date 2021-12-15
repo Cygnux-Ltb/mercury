@@ -8,13 +8,13 @@ import org.slf4j.Logger;
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.lang.Assertor;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.transport.rabbitmq.RabbitMqOperator;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 
 public abstract class Relationship {
 
-	protected static final Logger log = CommonLoggerFactory.getLogger(Relationship.class);
+	protected static final Logger log = Log4j2LoggerFactory.getLogger(Relationship.class);
 
 	protected final MutableList<Binding> bindings = MutableLists.newFastList();
 

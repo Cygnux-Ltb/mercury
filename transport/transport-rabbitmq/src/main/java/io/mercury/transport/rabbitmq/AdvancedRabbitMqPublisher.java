@@ -19,7 +19,7 @@ import com.rabbitmq.client.ConfirmCallback;
 
 import io.mercury.common.character.Charsets;
 import io.mercury.common.lang.Assertor;
-import io.mercury.common.log.CommonLoggerFactory;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.Threads;
@@ -45,7 +45,7 @@ import io.mercury.transport.rabbitmq.exception.NoAckException;
 @ThreadSafe
 public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements Publisher<String, T>, Sender<T> {
 
-	private static final Logger log = CommonLoggerFactory.getLogger(AdvancedRabbitMqPublisher.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(AdvancedRabbitMqPublisher.class);
 
 	// 发布消息使用的[ExchangeDeclare]
 	private final ExchangeRelationship publishExchange;
