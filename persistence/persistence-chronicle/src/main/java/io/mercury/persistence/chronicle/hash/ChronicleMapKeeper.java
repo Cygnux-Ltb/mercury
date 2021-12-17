@@ -39,7 +39,7 @@ public class ChronicleMapKeeper<K, V> extends AbstractKeeper<String, ChronicleMa
 		synchronized (lock) {
 			if (isClosed) {
 				throw new IllegalStateException(
-						"ChronicleMapKeeper configurator of -> {" + cfg.getCfgInfo() + "} is closed");
+						"ChronicleMapKeeper configurator of -> {" + cfg.getConfigInfo() + "} is closed");
 			}
 			return super.acquire(filename);
 		}
@@ -56,7 +56,7 @@ public class ChronicleMapKeeper<K, V> extends AbstractKeeper<String, ChronicleMa
 				// 设置remove函数是否返回null
 				.removeReturnsNull(cfg.isRemoveReturnsNull())
 				// 设置名称
-				.name(cfg.getCfgInfo())
+				.name(cfg.getConfigInfo())
 				// 设置条目总数
 				.entries(cfg.getEntries());
 		// 设置块大小

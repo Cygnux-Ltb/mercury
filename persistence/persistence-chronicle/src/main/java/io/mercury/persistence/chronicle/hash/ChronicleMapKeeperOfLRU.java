@@ -49,7 +49,7 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 				// 设置remove函数是否返回null
 				.removeReturnsNull(true)
 				// 设置LRU名称
-				.name(cfg.getCfgInfo() + "-last-used-log")
+				.name(cfg.getConfigInfo() + "-last-used-log")
 				// 设置LRU记录条目总数, 最小65536条
 				.entries(fileTotal < 65536 ? 65536 : fileTotal);
 		File persistentFile = new File(cfg.getSavePath(), ".last-used-log");
@@ -71,7 +71,7 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 		} catch (IOException e) {
 			throw new ChronicleIOException(e);
 		}
-		this.cleanupThread = Threads.startNewThread("Keeper-<" + cfg.getCfgInfo() + ">-Cleanup-Thread",
+		this.cleanupThread = Threads.startNewThread("Keeper-<" + cfg.getConfigInfo() + ">-Cleanup-Thread",
 				this::cleanupFunc);
 	}
 

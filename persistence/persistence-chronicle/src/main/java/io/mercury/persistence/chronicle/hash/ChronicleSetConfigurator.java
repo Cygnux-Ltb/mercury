@@ -102,7 +102,7 @@ public final class ChronicleSetConfigurator<E> implements Configurator {
 	}
 
 	@Override
-	public String getCfgInfo() {
+	public String getConfigInfo() {
 		return cfgInfo;
 	}
 

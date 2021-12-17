@@ -185,7 +185,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 	}
 
 	@Override
-	public String getCfgInfo() {
+	public String getConfigInfo() {
 		return cfgInfo;
 	}
 
@@ -323,7 +323,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 		ChronicleMapConfigurator<String, Long> configurator = ChronicleMapConfigurator
 				.newBuilder(String.class, Long.class, SysProperties.USER_HOME, "/user").build();
 
-		System.out.println(configurator.getCfgInfo());
+		System.out.println(configurator.getConfigInfo());
 
 	}
 
