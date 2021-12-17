@@ -90,6 +90,11 @@ public final class SysProperties {
 	public static final File USER_HOME_FILE = new File(USER_HOME + "/");
 
 	/**
+	 * ${user.home}/.config/
+	 */
+	public static final File USER_HOME_CONFIG_FOLDER = new File(USER_HOME_FILE + "/.config/");
+
+	/**
 	 * System.getProperty("user.dir")
 	 */
 	public static final String USER_DIR = System.getProperty("user.dir");

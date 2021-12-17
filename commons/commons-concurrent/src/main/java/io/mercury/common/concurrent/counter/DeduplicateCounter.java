@@ -10,7 +10,7 @@ import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.MutableSets;
 
 /**
- * 去除重复数据的计数器计数器, 使用Set去除重复
+ * 去除重复数据的计数器, 使用Set去除重复
  * 
  * @author yellow013
  *
