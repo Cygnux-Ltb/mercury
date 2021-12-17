@@ -18,7 +18,7 @@ import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
  * @author yellow013
  * 
  */
-public final class RabbitPublisherCfg extends RabbitConfigurator {
+public final class RabbitPublisherConfig extends RabbitConfig {
 
 	// 发布者ExchangeDeclare
 	private final ExchangeRelationship publishExchange;
@@ -39,7 +39,7 @@ public final class RabbitPublisherCfg extends RabbitConfigurator {
 	 * 
 	 * @param builder
 	 */
-	private RabbitPublisherCfg(Builder builder) {
+	private RabbitPublisherConfig(Builder builder) {
 		super(builder.connection);
 		this.publishExchange = builder.publishExchange;
 		this.defaultRoutingKey = builder.defaultRoutingKey;
@@ -244,8 +244,8 @@ public final class RabbitPublisherCfg extends RabbitConfigurator {
 		 * 
 		 * @return
 		 */
-		public RabbitPublisherCfg build() {
-			return new RabbitPublisherCfg(this);
+		public RabbitPublisherConfig build() {
+			return new RabbitPublisherConfig(this);
 		}
 
 	}

@@ -26,7 +26,7 @@ import io.mercury.transport.api.Receiver;
 import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.exception.ConnectionBreakException;
 import io.mercury.transport.exception.ReceiverStartException;
-import io.mercury.transport.rabbitmq.configurator.RabbitReceiverCfg;
+import io.mercury.transport.rabbitmq.configurator.RabbitReceiverConfig;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
 import io.mercury.transport.rabbitmq.declare.QueueRelationship;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
@@ -109,119 +109,119 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 
 	/**
 	 * 
-	 * @param cfg
+	 * @param config
 	 * @param consumer
 	 * @return
 	 */
-	public static AdvancedRabbitMqReceiver<byte[]> create(@Nonnull RabbitReceiverCfg cfg,
+	public static AdvancedRabbitMqReceiver<byte[]> create(@Nonnull RabbitReceiverConfig config,
 			@Nonnull Consumer<byte[]> consumer) {
-		Assertor.nonNull(cfg, "configurator");
+		Assertor.nonNull(config, "config");
 		Assertor.nonNull(consumer, "consumer");
-		return new AdvancedRabbitMqReceiver<byte[]>(null, cfg, (msg, reuse) -> msg, consumer, null);
+		return new AdvancedRabbitMqReceiver<byte[]>(null, config, (msg, reuse) -> msg, consumer, null);
 	}
 
 	/**
 	 * 
 	 * @param tag
-	 * @param cfg
+	 * @param config
 	 * @param consumer
 	 * @return
 	 */
-	public static AdvancedRabbitMqReceiver<byte[]> create(String tag, @Nonnull RabbitReceiverCfg cfg,
+	public static AdvancedRabbitMqReceiver<byte[]> create(String tag, @Nonnull RabbitReceiverConfig config,
 			@Nonnull Consumer<byte[]> consumer) {
-		Assertor.nonNull(cfg, "configurator");
+		Assertor.nonNull(config, "config");
 		Assertor.nonNull(consumer, "consumer");
-		return new AdvancedRabbitMqReceiver<byte[]>(tag, cfg, (msg, reuse) -> msg, consumer, null);
+		return new AdvancedRabbitMqReceiver<byte[]>(tag, config, (msg, reuse) -> msg, consumer, null);
 	}
 
 	/**
 	 * 
 	 * @param <T>
 	 * @param tag
-	 * @param cfg
+	 * @param config
 	 * @param deserializer
 	 * @param consumer
 	 * @return
 	 */
-	public static <T> AdvancedRabbitMqReceiver<T> create(String tag, @Nonnull RabbitReceiverCfg cfg,
+	public static <T> AdvancedRabbitMqReceiver<T> create(String tag, @Nonnull RabbitReceiverConfig config,
 			@Nonnull BytesDeserializer<T> deserializer, @Nonnull Consumer<T> consumer) {
-		Assertor.nonNull(cfg, "cfg");
+		Assertor.nonNull(config, "config");
 		Assertor.nonNull(deserializer, "deserializer");
 		Assertor.nonNull(consumer, "consumer");
-		return new AdvancedRabbitMqReceiver<>(tag, cfg, deserializer, consumer, null);
+		return new AdvancedRabbitMqReceiver<>(tag, config, deserializer, consumer, null);
 	}
 
 	/**
 	 * 
-	 * @param cfg
+	 * @param config
 	 * @param selfAckConsumer
 	 * @return
 	 */
-	public static AdvancedRabbitMqReceiver<byte[]> createWithSelfAck(@Nonnull RabbitReceiverCfg cfg,
+	public static AdvancedRabbitMqReceiver<byte[]> createWithSelfAck(@Nonnull RabbitReceiverConfig config,
 			@Nonnull SelfAckConsumer<byte[]> selfAckConsumer) {
-		Assertor.nonNull(cfg, "cfg");
+		Assertor.nonNull(config, "config");
 		Assertor.nonNull(selfAckConsumer, "selfAckConsumer");
-		return new AdvancedRabbitMqReceiver<>(null, cfg, (msg, reuse) -> msg, null, selfAckConsumer);
+		return new AdvancedRabbitMqReceiver<>(null, config, (msg, reuse) -> msg, null, selfAckConsumer);
 	}
 
 	/**
 	 * 
 	 * @param tag
-	 * @param cfg
+	 * @param config
 	 * @param selfAckConsumer
 	 * @return
 	 */
-	public static AdvancedRabbitMqReceiver<byte[]> createWithSelfAck(String tag, @Nonnull RabbitReceiverCfg cfg,
+	public static AdvancedRabbitMqReceiver<byte[]> createWithSelfAck(String tag, @Nonnull RabbitReceiverConfig config,
 			@Nonnull SelfAckConsumer<byte[]> selfAckConsumer) {
-		Assertor.nonNull(cfg, "cfg");
+		Assertor.nonNull(config, "config");
 		Assertor.nonNull(selfAckConsumer, "selfAckConsumer");
-		return new AdvancedRabbitMqReceiver<>(tag, cfg, (msg, reuse) -> msg, null, selfAckConsumer);
+		return new AdvancedRabbitMqReceiver<>(tag, config, (msg, reuse) -> msg, null, selfAckConsumer);
 	}
 
 	/**
 	 * 
 	 * @param <T>
 	 * @param tag
-	 * @param cfg
+	 * @param config
 	 * @param deserializer
 	 * @param selfAckConsumer
 	 * @return
 	 */
-	public static <T> AdvancedRabbitMqReceiver<T> createWithSelfAck(String tag, @Nonnull RabbitReceiverCfg cfg,
+	public static <T> AdvancedRabbitMqReceiver<T> createWithSelfAck(String tag, @Nonnull RabbitReceiverConfig config,
 			@Nonnull BytesDeserializer<T> deserializer, @Nonnull SelfAckConsumer<T> selfAckConsumer) {
-		Assertor.nonNull(cfg, "configurator");
+		Assertor.nonNull(config, "config");
 		Assertor.nonNull(deserializer, "deserializer");
 		Assertor.nonNull(selfAckConsumer, "selfAckConsumer");
-		return new AdvancedRabbitMqReceiver<>(tag, cfg, deserializer, null, selfAckConsumer);
+		return new AdvancedRabbitMqReceiver<>(tag, config, deserializer, null, selfAckConsumer);
 	}
 
 	/**
 	 * 
 	 * @param tag
-	 * @param cfg
+	 * @param config
 	 * @param deserializer
 	 * @param consumer
 	 * @param selfAckConsumer
 	 */
-	private AdvancedRabbitMqReceiver(String tag, @Nonnull RabbitReceiverCfg cfg,
+	private AdvancedRabbitMqReceiver(String tag, @Nonnull RabbitReceiverConfig config,
 			@Nonnull BytesDeserializer<T> deserializer, @Nullable Consumer<T> consumer,
 			@Nullable SelfAckConsumer<T> selfAckConsumer) {
-		super(nonEmpty(tag) ? tag : "adv-receiver-" + datetimeOfMillisecond(), cfg.getConnection());
+		super(nonEmpty(tag) ? tag : "adv-receiver-" + datetimeOfMillisecond(), config.getConnection());
 		if (consumer == null && selfAckConsumer == null) {
 			throw new NullPointerException("[Consumer] and [SelfAckConsumer] cannot all be null");
 		}
-		this.receiveQueue = cfg.getReceiveQueue();
+		this.receiveQueue = config.getReceiveQueue();
 		this.queueName = receiveQueue.getQueueName();
 		this.deserializer = deserializer;
-		this.errMsgExchange = cfg.getErrMsgExchange();
-		this.errMsgRoutingKey = cfg.getErrMsgRoutingKey();
-		this.errMsgQueue = cfg.getErrMsgQueue();
-		this.autoAck = cfg.getAckOptions().isAutoAck();
-		this.multipleAck = cfg.getAckOptions().isMultipleAck();
-		this.maxAckTotal = cfg.getAckOptions().getMaxAckTotal();
-		this.maxAckReconnection = cfg.getAckOptions().getMaxAckReconnection();
-		this.qos = cfg.getAckOptions().getQos();
-		this.exclusive = cfg.isExclusive();
+		this.errMsgExchange = config.getErrMsgExchange();
+		this.errMsgRoutingKey = config.getErrMsgRoutingKey();
+		this.errMsgQueue = config.getErrMsgQueue();
+		this.autoAck = config.getAckOptions().isAutoAck();
+		this.multipleAck = config.getAckOptions().isMultipleAck();
+		this.maxAckTotal = config.getAckOptions().getMaxAckTotal();
+		this.maxAckReconnection = config.getAckOptions().getMaxAckReconnection();
+		this.qos = config.getAckOptions().getQos();
+		this.exclusive = config.isExclusive();
 		this.consumer = consumer;
 		this.selfAckConsumer = selfAckConsumer;
 		this.receiverName = "receiver::[" + rabbitConnection.getConnectionInfo() + "$" + queueName + "]";
@@ -250,7 +250,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 			this.receiveQueue.declare(operator);
 		} catch (DeclareException e) {
 			log.error("Queue declare throw exception -> connection info : {}, error message : {}",
-					rabbitConnection.getCfgInfo(), e.getMessage(), e);
+					rabbitConnection.getConfigInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			closeIgnoreException();
 			throw new DeclareRuntimeException(e);
@@ -271,7 +271,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 		} catch (DeclareException e) {
 			log.error(
 					"ErrorMsgExchange declare throw exception -> connection configurator info : {}, error message : {}",
-					rabbitConnection.getCfgInfo(), e.getMessage(), e);
+					rabbitConnection.getConfigInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			closeIgnoreException();
 			throw new DeclareRuntimeException(e);
@@ -285,7 +285,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 			this.errMsgQueue.declare(operator);
 		} catch (DeclareException e) {
 			log.error("ErrorMsgQueue declare throw exception -> connection configurator info : {}, error message : {}",
-					rabbitConnection.getCfgInfo(), e.getMessage(), e);
+					rabbitConnection.getConfigInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			closeIgnoreException();
 			throw new DeclareRuntimeException(e);
@@ -304,11 +304,11 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 		receive();
 	}
 
-	private final CancelCallback defCancelCallback = consumerTag -> {
+	private final CancelCallback defaultCancelCallback = consumerTag -> {
 		log.info("CancelCallback receive consumerTag==[{}]", consumerTag);
 	};
 
-	private final ConsumerShutdownSignalCallback defShutdownSignalCallback = (consumerTag, sig) -> {
+	private final ConsumerShutdownSignalCallback defaultShutdownSignalCallback = (consumerTag, sig) -> {
 		log.info("Consumer received ShutdownSignalException, consumerTag==[{}]", consumerTag);
 		handleShutdownSignal(sig);
 	};
@@ -396,9 +396,9 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 							log.debug("Message [{}] handle end", envelope.getDeliveryTag());
 						},
 						// cancelCallback : callback when the consumer is cancelled.
-						defCancelCallback,
+						defaultCancelCallback,
 						// shutdownSignalCallback : callback when the channel/connection is shut down.
-						defShutdownSignalCallback);
+						defaultShutdownSignalCallback);
 			} catch (IOException e) {
 				log.error("Function basicConsume() with SelfAckConsumer throw IOException message -> {}",
 						e.getMessage(), e);
@@ -464,9 +464,9 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 							// 消息处理结束
 						},
 						// cancelCallback : callback when the consumer is cancelled.
-						defCancelCallback,
+						defaultCancelCallback,
 						// shutdownSignalCallback : callback when the channel/connection is shut down.
-						defShutdownSignalCallback);
+						defaultShutdownSignalCallback);
 			} catch (IOException e) {
 				log.error("Function basicConsume() with Consumer throw IOException message -> {}", e.getMessage(), e);
 				throw new ReceiverStartException(e.getMessage(), e);

@@ -13,7 +13,7 @@ import io.mercury.transport.rabbitmq.declare.QueueRelationship;
  * @author yellow013
  *
  */
-public final class RabbitReceiverCfg extends RabbitConfigurator {
+public final class RabbitReceiverConfig extends RabbitConfig {
 
 	// 接受者QueueDeclare
 	private final QueueRelationship receiveQueue;
@@ -37,7 +37,7 @@ public final class RabbitReceiverCfg extends RabbitConfigurator {
 	 * 
 	 * @param builder
 	 */
-	private RabbitReceiverCfg(Builder builder) {
+	private RabbitReceiverConfig(Builder builder) {
 		super(builder.connection);
 		this.receiveQueue = builder.receiveQueue;
 		this.errMsgExchange = builder.errMsgExchange;
@@ -195,8 +195,8 @@ public final class RabbitReceiverCfg extends RabbitConfigurator {
 			return this;
 		}
 
-		public RabbitReceiverCfg build() {
-			return new RabbitReceiverCfg(this);
+		public RabbitReceiverConfig build() {
+			return new RabbitReceiverConfig(this);
 		}
 
 	}

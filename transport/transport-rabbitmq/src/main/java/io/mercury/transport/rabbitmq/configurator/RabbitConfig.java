@@ -5,14 +5,14 @@ package io.mercury.transport.rabbitmq.configurator;
  * @author yellow013
  *
  */
-abstract class RabbitConfigurator {
+abstract class RabbitConfig {
 
 	/**
 	 * 连接配置信息
 	 */
 	private final RabbitConnection connection;
 
-	RabbitConfigurator(RabbitConnection connection) {
+	RabbitConfig(RabbitConnection connection) {
 		this.connection = connection;
 	}
 

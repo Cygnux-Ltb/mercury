@@ -26,7 +26,7 @@ import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.exception.ConnectionBreakException;
 import io.mercury.transport.exception.ReceiverStartException;
 import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
-import io.mercury.transport.rabbitmq.configurator.RabbitReceiverCfg;
+import io.mercury.transport.rabbitmq.configurator.RabbitReceiverConfig;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
 import io.mercury.transport.rabbitmq.declare.QueueRelationship;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
@@ -97,76 +97,76 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 
 	/**
 	 * 
-	 * @param cfg
+	 * @param config
 	 * @param consumer
 	 * @return
 	 */
-	public static final RabbitMqReceiver<byte[]> create(@Nonnull RabbitReceiverCfg cfg,
+	public static final RabbitMqReceiver<byte[]> create(@Nonnull RabbitReceiverConfig config,
 			@Nonnull Consumer<byte[]> consumer) {
-		return create(null, cfg, consumer);
+		return create(null, config, consumer);
 	}
 
 	/**
 	 * 
 	 * @param tag
-	 * @param cfg
+	 * @param config
 	 * @param consumer
 	 * @return
 	 */
-	public static final RabbitMqReceiver<byte[]> create(@Nullable String tag, @Nonnull RabbitReceiverCfg cfg,
+	public static final RabbitMqReceiver<byte[]> create(@Nullable String tag, @Nonnull RabbitReceiverConfig config,
 			@Nonnull Consumer<byte[]> consumer) {
-		return create(tag, cfg, msg -> msg, consumer);
+		return create(tag, config, msg -> msg, consumer);
 	}
 
 	/**
 	 * 
 	 * @param <T>
-	 * @param cfg
+	 * @param config
 	 * @param deserializer
 	 * @param consumer
 	 * @return
 	 */
-	public static final <T> RabbitMqReceiver<T> create(@Nonnull RabbitReceiverCfg cfg,
+	public static final <T> RabbitMqReceiver<T> create(@Nonnull RabbitReceiverConfig config,
 			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
-		return create(null, cfg, deserializer, consumer);
+		return create(null, config, deserializer, consumer);
 	}
 
 	/**
 	 * 
 	 * @param <T>
 	 * @param tag
-	 * @param cfg
+	 * @param config
 	 * @param deserializer
 	 * @param consumer
 	 * @return
 	 */
-	public static final <T> RabbitMqReceiver<T> create(@Nullable String tag, @Nonnull RabbitReceiverCfg cfg,
+	public static final <T> RabbitMqReceiver<T> create(@Nullable String tag, @Nonnull RabbitReceiverConfig config,
 			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
-		return new RabbitMqReceiver<T>(tag, cfg, deserializer, consumer);
+		return new RabbitMqReceiver<T>(tag, config, deserializer, consumer);
 	}
 
 	/**
 	 * 
 	 * @param tag
-	 * @param cfg
+	 * @param config
 	 * @param deserializer
 	 * @param callback
 	 */
-	private RabbitMqReceiver(@Nullable String tag, @Nonnull RabbitReceiverCfg cfg,
+	private RabbitMqReceiver(@Nullable String tag, @Nonnull RabbitReceiverConfig config,
 			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
-		super(nonEmpty(tag) ? tag : "receiver-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
-		this.receiveQueue = cfg.getReceiveQueue();
+		super(nonEmpty(tag) ? tag : "receiver-" + DateTimeUtil.datetimeOfMillisecond(), config.getConnection());
+		this.receiveQueue = config.getReceiveQueue();
 		this.queueName = receiveQueue.getQueueName();
 		this.deserializer = deserializer;
 		this.consumer = consumer;
-		this.errMsgExchange = cfg.getErrMsgExchange();
-		this.errMsgRoutingKey = cfg.getErrMsgRoutingKey();
-		this.errMsgQueue = cfg.getErrMsgQueue();
-		this.autoAck = cfg.getAckOptions().isAutoAck();
-		this.multipleAck = cfg.getAckOptions().isMultipleAck();
-		this.maxAckTotal = cfg.getAckOptions().getMaxAckTotal();
-		this.maxAckReconnection = cfg.getAckOptions().getMaxAckReconnection();
-		this.qos = cfg.getAckOptions().getQos();
+		this.errMsgExchange = config.getErrMsgExchange();
+		this.errMsgRoutingKey = config.getErrMsgRoutingKey();
+		this.errMsgQueue = config.getErrMsgQueue();
+		this.autoAck = config.getAckOptions().isAutoAck();
+		this.multipleAck = config.getAckOptions().isMultipleAck();
+		this.maxAckTotal = config.getAckOptions().getMaxAckTotal();
+		this.maxAckReconnection = config.getAckOptions().getMaxAckReconnection();
+		this.qos = config.getAckOptions().getQos();
 		this.receiverName = "receiver::" + rabbitConnection.getConnectionInfo() + "$" + queueName;
 		createConnection();
 		declare();
@@ -178,7 +178,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 			this.receiveQueue.declare(operator);
 		} catch (DeclareException e) {
 			log.error("Queue declare throw exception -> connection configurator info : {}, error message : {}",
-					rabbitConnection.getCfgInfo(), e.getMessage(), e);
+					rabbitConnection.getConfigInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			closeIgnoreException();
 			throw new DeclareRuntimeException(e);
@@ -199,7 +199,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 		} catch (DeclareException e) {
 			log.error(
 					"ErrorMsgExchange declare throw exception -> connection configurator info : {}, error message : {}",
-					rabbitConnection.getCfgInfo(), e.getMessage(), e);
+					rabbitConnection.getConfigInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			closeIgnoreException();
 			throw new DeclareRuntimeException(e);
@@ -213,7 +213,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 			this.errMsgQueue.declare(operator);
 		} catch (DeclareException e) {
 			log.error("ErrorMsgQueue declare throw exception -> connection configurator info : {}, error message : {}",
-					rabbitConnection.getCfgInfo(), e.getMessage(), e);
+					rabbitConnection.getConfigInfo(), e.getMessage(), e);
 			// 在定义Queue和进行绑定时抛出任何异常都需要终止程序
 			closeIgnoreException();
 			throw new DeclareRuntimeException(e);
@@ -399,7 +399,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 
 	public static void main(String[] args) {
 		RabbitMqReceiver<byte[]> receiver = RabbitMqReceiver.create("test",
-				RabbitReceiverCfg
+				RabbitReceiverConfig
 						.configuration(RabbitConnection.configuration("127.0.0.1", 5672, "user", "u_pass").build(),
 								QueueRelationship.named("TEST"))
 						.build(),

@@ -1,5 +1,10 @@
 package io.mercury.transport.zmq;
 
+import static io.mercury.transport.zmq.ZmqConfigurator.ZmqConfigOption.Addr;
+import static io.mercury.transport.zmq.ZmqConfigurator.ZmqConfigOption.IoThreads;
+import static io.mercury.transport.zmq.ZmqConfigurator.ZmqConfigOption.Port;
+import static io.mercury.transport.zmq.ZmqConfigurator.ZmqConfigOption.Protocol;
+
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -9,12 +14,18 @@ import javax.annotation.Nonnull;
 
 import org.zeromq.ZMQ;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigException;
+
 import io.mercury.common.annotation.OnlyOverrideEquals;
+import io.mercury.common.config.ConfigOption;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.common.serialization.JsonDeserializable;
 import io.mercury.serialization.json.JsonParser;
 import io.mercury.serialization.json.JsonWrapper;
+import io.mercury.transport.IpAddressIllegalException;
+import io.mercury.transport.IpAddressValidator;
 import io.mercury.transport.configurator.TcpKeepAlive;
 import io.mercury.transport.configurator.Topics;
 import io.mercury.transport.configurator.TransportConfigurator;
@@ -28,6 +39,19 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 
 	private TcpKeepAlive tcpKeepAlive;
 
+	/**
+	 * 
+	 * @param protocol
+	 * @param addr
+	 */
+	private ZmqConfigurator(ZmqProtocol protocol, String addr) {
+		this(protocol.reviseAddr(addr));
+	}
+
+	/**
+	 * 
+	 * @param addr
+	 */
 	private ZmqConfigurator(String addr) {
 		this.addr = addr;
 	}
@@ -47,6 +71,54 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	@Override
 	public String getConnectionInfo() {
 		return addr;
+	}
+
+	public static ZmqConfigurator with(@Nonnull Config config) {
+		Assertor.nonNull(config, "config");
+		ZmqProtocol protocol;
+		if (config.hasPath(Protocol.getConfigName()))
+			protocol = ZmqProtocol.ofName(config.getString(Protocol.getConfigName()));
+		else
+			throw new ConfigException.Missing(Protocol.getConfigName());
+
+		ZmqConfigurator configurator = null;
+		switch (protocol) {
+		case TCP:
+			int port;
+			if (config.hasPath(Port.getConfigName()))
+				port = config.getInt(Port.getConfigName());
+			else
+				throw new ConfigException.Missing(Port.getConfigName());
+
+			String tcpAddr;
+			if (config.hasPath(Addr.getConfigName())) {
+				tcpAddr = config.getString(Addr.getConfigName());
+				if (IpAddressValidator.isIpAddress(tcpAddr)) {
+					configurator = ZmqConfigurator.tcp(tcpAddr, port);
+				} else {
+					throw new ConfigException.BadValue(Port.getConfigName(), "illegal IP address",
+							new IpAddressIllegalException(tcpAddr));
+				}
+			} else {
+				// 没有addr配置项, 使用本地地址
+				configurator = ZmqConfigurator.tcp(port);
+			}
+			break;
+		case IPC:
+		case INPROC:
+			// 使用ipc或inproc协议
+			String innerAddr;
+			if (config.hasPath(Addr.getConfigName()))
+				innerAddr = config.getString(Addr.getConfigName());
+			else
+				throw new ConfigException.Missing(Addr.getConfigName());
+			configurator = new ZmqConfigurator(protocol, innerAddr);
+		default:
+			break;
+		}
+		if (config.hasPath(IoThreads.getConfigName()))
+			configurator.ioThreads(config.getInt(IoThreads.getConfigName()));
+		return configurator;
 	}
 
 	/**
@@ -70,9 +142,8 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	public static ZmqConfigurator tcp(@Nonnull String addr, int port) {
 		Assertor.nonEmpty(addr, "addr");
 		Assertor.atWithinRange(port, 4096, 65536, "port");
-		if (!addr.startsWith("tcp://"))
-			addr = "tcp://" + addr;
-		return new ZmqConfigurator(addr + ":" + port);
+		IpAddressValidator.assertIpAddress(addr);
+		return new ZmqConfigurator(ZmqProtocol.TCP, addr + ":" + port);
 	}
 
 	/**
@@ -84,9 +155,7 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	 */
 	public static ZmqConfigurator ipc(@Nonnull String addr) {
 		Assertor.nonEmpty(addr, "addr");
-		if (!addr.startsWith("ipc://"))
-			addr = "ipc://" + addr;
-		return new ZmqConfigurator(addr);
+		return new ZmqConfigurator(ZmqProtocol.IPC, addr);
 	}
 
 	/**
@@ -97,9 +166,7 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	 */
 	public static ZmqConfigurator inproc(@Nonnull String addr) {
 		Assertor.nonEmpty(addr, "addr");
-		if (!addr.startsWith("inproc://"))
-			addr = "inproc://" + addr;
-		return new ZmqConfigurator(addr);
+		return new ZmqConfigurator(ZmqProtocol.INPROC, addr);
 	}
 
 	/**
@@ -108,7 +175,7 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	 * @return
 	 */
 	public ZmqConfigurator ioThreads(int ioThreads) {
-		Assertor.greaterThan(ioThreads, 1, "ioThreads");
+		Assertor.greaterThan(ioThreads, 0, "ioThreads");
 		this.ioThreads = ioThreads;
 		return this;
 	}
@@ -279,18 +346,12 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	}
 
 	@Override
-	public String getCfgInfo() {
+	public String getConfigInfo() {
 		return toString();
 	}
 
 	public static String getZmqVersion() {
 		return ZMQ.getVersionString();
-	}
-
-	public static void main(String[] args) {
-		System.out.println(
-				ZmqConfigurator.tcp("192.168.1.1", 5551).ioThreads(3).tcpKeepAlive(TcpKeepAlive.withDefault()));
-		System.out.println(ZmqConfigurator.getZmqVersion());
 	}
 
 	@Override
@@ -301,6 +362,65 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 		var tcpKeepAliveJson = (String) map.get("tcpKeepAlive");
 		var tcpKeepAlive = JsonParser.toObject(tcpKeepAliveJson, TcpKeepAlive.class);
 		return new ZmqConfigurator(addr).ioThreads(ioThreads).tcpKeepAlive(tcpKeepAlive);
+	}
+
+	/**
+	 * 当前支持的协议类型
+	 * 
+	 * @author yellow013
+	 */
+	public static enum ZmqProtocol {
+
+		TCP("tcp"), IPC("ipc"), INPROC("inproc");
+
+		private final String name;
+		private final String prefix;
+
+		private ZmqProtocol(String name) {
+			this.name = name;
+			this.prefix = name + "://";
+		}
+
+		public String reviseAddr(String addr) {
+			if (!addr.startsWith(prefix))
+				return prefix + addr;
+			return addr;
+		}
+
+		public static ZmqProtocol ofName(String name) {
+			for (var protocol : ZmqProtocol.values())
+				if (protocol.name.equalsIgnoreCase(name))
+					return protocol;
+			throw new IllegalArgumentException("Unsupported protocol type -> " + name);
+		}
+
+	}
+
+	public static enum ZmqConfigOption implements ConfigOption {
+
+		Protocol("zmq.protocol"), Addr("zmq.addr"), Port("zmq.port"), IoThreads("zmq.ioThreads");
+
+		private final String name;
+
+		private ZmqConfigOption(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public String getConfigName() {
+			return name;
+		}
+	}
+
+	public static void main(String[] args) {
+		ZmqConfigurator configurator = ZmqConfigurator.tcp("192.168.1.1", 5551).ioThreads(3)
+				.tcpKeepAlive(TcpKeepAlive.withDefault());
+
+		System.out.println(configurator);
+		System.out.println(ZmqConfigurator.getZmqVersion());
+
+		System.out.println(IpAddressValidator.isIPv4("192.168.1.1"));
+
 	}
 
 }

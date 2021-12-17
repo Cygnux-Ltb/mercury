@@ -25,7 +25,7 @@ import io.mercury.transport.api.Publisher;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.exception.PublishFailedException;
 import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
-import io.mercury.transport.rabbitmq.configurator.RabbitPublisherCfg;
+import io.mercury.transport.rabbitmq.configurator.RabbitPublisherConfig;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 import io.mercury.transport.rabbitmq.exception.DeclareRuntimeException;
@@ -58,30 +58,30 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<St
 
 	/**
 	 * 
-	 * @param cfg
+	 * @param config
 	 */
-	public RabbitMqPublisher(@Nonnull RabbitPublisherCfg cfg) {
-		this(null, cfg);
+	public RabbitMqPublisher(@Nonnull RabbitPublisherConfig config) {
+		this(null, config);
 	}
 
 	/**
 	 * 
 	 * @param tag
-	 * @param cfg
+	 * @param config
 	 * @param ackCallback
 	 * @param noAckCallback
 	 */
-	public RabbitMqPublisher(@Nullable String tag, @Nonnull RabbitPublisherCfg cfg) {
-		super(nonEmpty(tag) ? tag : "publisher-" + datetimeOfMillisecond(), cfg.getConnection());
-		Assertor.nonNull(cfg.getPublishExchange(), "exchangeRelation");
-		this.publishExchange = cfg.getPublishExchange();
+	public RabbitMqPublisher(@Nullable String tag, @Nonnull RabbitPublisherConfig config) {
+		super(nonEmpty(tag) ? tag : "publisher-" + datetimeOfMillisecond(), config.getConnection());
+		Assertor.nonNull(config.getPublishExchange(), "exchangeRelation");
+		this.publishExchange = config.getPublishExchange();
 		this.exchangeName = publishExchange.getExchangeName();
-		this.defaultRoutingKey = cfg.getDefaultRoutingKey();
-		this.defaultMsgProps = cfg.getDefaultMsgProps();
-		this.msgPropsSupplier = cfg.getMsgPropsSupplier();
-		this.confirm = cfg.getConfirmOptions().isConfirm();
-		this.confirmTimeout = cfg.getConfirmOptions().getConfirmTimeout();
-		this.confirmRetry = cfg.getConfirmOptions().getConfirmRetry();
+		this.defaultRoutingKey = config.getDefaultRoutingKey();
+		this.defaultMsgProps = config.getDefaultMsgProps();
+		this.msgPropsSupplier = config.getMsgPropsSupplier();
+		this.confirm = config.getConfirmOptions().isConfirm();
+		this.confirmTimeout = config.getConfirmOptions().getConfirmTimeout();
+		this.confirmRetry = config.getConfirmOptions().getConfirmRetry();
 		this.hasPropsSupplier = msgPropsSupplier != null;
 		this.publisherName = "publisher::" + rabbitConnection.getConnectionInfo() + "$" + exchangeName;
 		createConnection();
@@ -99,7 +99,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<St
 		} catch (DeclareException e) {
 			// 在定义Exchange和进行绑定时抛出任何异常都需要终止程序
 			log.error("Exchange declare throw exception -> connection configurator info : {}, " + "error message : {}",
-					rabbitConnection.getCfgInfo(), e.getMessage(), e);
+					rabbitConnection.getConfigInfo(), e.getMessage(), e);
 			closeIgnoreException();
 			throw new DeclareRuntimeException(e);
 		}
@@ -262,7 +262,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<St
 		ExchangeRelationship fanoutExchange = ExchangeRelationship.fanout("fanout-test");
 
 		try (RabbitMqPublisher publisher = new RabbitMqPublisher(
-				RabbitPublisherCfg.configuration(connectionConfigurator0, fanoutExchange).build())) {
+				RabbitPublisherConfig.configuration(connectionConfigurator0, fanoutExchange).build())) {
 			Threads.startNewThread(() -> {
 				int count = 0;
 				while (true) {

@@ -13,7 +13,6 @@
 
 	<artifactId>transport-http</artifactId>
 	<name>transport-http</name>
-
 	<packaging>jar</packaging>
 
 	<dependencies>
@@ -66,7 +65,7 @@
 		<dependency>
 			<groupId>org.jetbrains.kotlin</groupId>
 			<artifactId>kotlin-stdlib</artifactId>
-			<version>1.5.32</version>
+			<version>1.6.10</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.jetbrains</groupId>
@@ -93,7 +92,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
 	</dependencies>
 
 </project>

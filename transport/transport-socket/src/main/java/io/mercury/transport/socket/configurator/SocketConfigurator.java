@@ -40,7 +40,7 @@ public final class SocketConfigurator implements TransportConfigurator {
 	}
 
 	@Override
-	public String getCfgInfo() {
+	public String getConfigInfo() {
 		return configuratorInfo;
 	}
 	
