@@ -278,7 +278,7 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
 			return this;
 		}
 
-		public final <E> JctSingleConsumerQueue<E> buildWithProcessor(Processor<E> processor) {
+		public final <E> JctSingleConsumerQueue<E> build(Processor<E> processor) {
 			switch (type) {
 			case SPSC:
 				return new JctSpscQueue<>(queueName, capacity, mode, strategy, sleepMillis, processor);
