@@ -1,8 +1,6 @@
 package io.mercury.common.character;
 
 /**
- * 
- * 
  * <pre>
   0    0x00  NUL  Null (空)
   1    0x01  SOH  Start of Heading (报头开始)
@@ -17,9 +15,8 @@ package io.mercury.common.character;
  * </pre>
  * 
  * @author yellow013
- *
  */
-public interface ASCII {
+public interface AsciiCharacter {
 
 	/**
 	 * Null

@@ -3,6 +3,7 @@ package io.mercury.common.param;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
 import java.util.Map;
 import java.util.Set;
@@ -46,11 +47,11 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 
 	/**
 	 * 
-	 * @param initMap
+	 * @param map
 	 */
-	public MutableParams(Map<K, ?> initMap) {
-		if (initMap != null) {
-			initMap.forEach((K key, Object value) -> {
+	public MutableParams(Map<K, ?> map) {
+		if (map != null) {
+			map.forEach((K key, Object value) -> {
 				switch (key.getValueType()) {
 				case BOOLEAN:
 					putParam(key, (boolean) value);
@@ -67,14 +68,17 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 				case STRING:
 					putParam(key, (String) value);
 					break;
-				case DATETIME:
-					putParam(key, (LocalDateTime) value);
-					break;
 				case DATE:
 					putParam(key, (LocalDate) value);
 					break;
 				case TIME:
 					putParam(key, (LocalTime) value);
+					break;
+				case DATETIME:
+					putParam(key, (LocalDateTime) value);
+					break;
+				case ZONED_DATETIME:
+					putParam(key, (ZonedDateTime) value);
 					break;
 				default:
 					throw new IllegalArgumentException("param name -> " + key.getParamName() + " illegal argument");
@@ -153,18 +157,7 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	 * @param key
 	 * @return
 	 */
-	public LocalDateTime getDateTime(K key) {
-		if (key.getValueType() != ValueType.DATETIME)
-			throw new IllegalArgumentException(
-					"Key -> " + key + " paramType is not DATETIME, paramType==" + key.getValueType());
-		return (LocalDateTime) temporalParams.get(key.getParamId());
-	}
-
-	/**
-	 * 
-	 * @param key
-	 * @return
-	 */
+	@Override
 	public LocalDate getDate(K key) {
 		if (key.getValueType() != ValueType.DATE)
 			throw new IllegalArgumentException(
@@ -177,11 +170,31 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	 * @param key
 	 * @return
 	 */
+	@Override
 	public LocalTime getTime(K key) {
 		if (key.getValueType() != ValueType.TIME)
 			throw new IllegalArgumentException(
 					"Key -> " + key + " paramType is not TIME, getParamType==" + key.getValueType());
 		return (LocalTime) temporalParams.get(key.getParamId());
+	}
+
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 */
+	@Override
+	public LocalDateTime getDateTime(K key) {
+		if (key.getValueType() != ValueType.DATETIME)
+			throw new IllegalArgumentException(
+					"Key -> " + key + " paramType is not DATETIME, paramType==" + key.getValueType());
+		return (LocalDateTime) temporalParams.get(key.getParamId());
+	}
+
+	@Override
+	public ZonedDateTime getZonedDateTime(K key) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/**
@@ -239,16 +252,6 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	 * @param key
 	 * @param value
 	 */
-	public void putParam(K key, LocalDateTime value) {
-		keys.add(key);
-		temporalParams.put(key.getParamId(), value);
-	}
-
-	/**
-	 * 
-	 * @param key
-	 * @param value
-	 */
 	public void putParam(K key, LocalDate value) {
 		keys.add(key);
 		temporalParams.put(key.getParamId(), value);
@@ -260,6 +263,26 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
 	 * @param value
 	 */
 	public void putParam(K key, LocalTime value) {
+		keys.add(key);
+		temporalParams.put(key.getParamId(), value);
+	}
+
+	/**
+	 * 
+	 * @param key
+	 * @param value
+	 */
+	public void putParam(K key, LocalDateTime value) {
+		keys.add(key);
+		temporalParams.put(key.getParamId(), value);
+	}
+
+	/**
+	 * 
+	 * @param key
+	 * @param value
+	 */
+	public void putParam(K key, ZonedDateTime value) {
 		keys.add(key);
 		temporalParams.put(key.getParamId(), value);
 	}

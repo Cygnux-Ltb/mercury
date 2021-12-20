@@ -10,6 +10,10 @@ import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 import static java.lang.System.out;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -17,7 +21,6 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import org.eclipse.collections.api.map.ImmutableMap;
-import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.collections.api.set.ImmutableSet;
 import org.slf4j.Logger;
 
@@ -42,12 +45,12 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 			throws NullPointerException, IllegalArgumentException {
 		requiredLength(keys, 1, "keys");
 		nonEmptyMap(map, "map");
-		MutableMap<K, String> tempMap = MutableMaps.newUnifiedMap();
+		var mutableMap = MutableMaps.<K, String>newUnifiedMap();
 		for (K key : keys) {
 			if (map.containsKey(key.getParamName()))
-				tempMap.put(key, map.get(key.getParamName()).toString());
+				mutableMap.put(key, map.get(key.getParamName()).toString());
 		}
-		this.params = tempMap.toImmutable();
+		this.params = mutableMap.toImmutable();
 		this.keys = newImmutableSet(keys);
 	}
 
@@ -63,7 +66,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 			throws NullPointerException, IllegalArgumentException {
 		requiredLength(keys, 1, "keys");
 		nonNull(prop, "prop");
-		MutableMap<K, String> map = MutableMaps.newUnifiedMap();
+		var map = MutableMaps.<K, String>newUnifiedMap();
 		for (K key : keys) {
 			if (prop.containsKey(key.getParamName()))
 				map.put(key, prop.get(key.getParamName()).toString());
@@ -148,6 +151,26 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 			throw new IllegalArgumentException(
 					"Key -> [" + key + "] ValueType is not [STRING], paramType==" + key.getValueType());
 		return nonNull(params.get(key), key.getParamName());
+	}
+
+	@Override
+	public LocalDate getDate(K key) {
+		throw new UnsupportedOperationException("getDate not overloaded");
+	}
+
+	@Override
+	public LocalTime getTime(K key) {
+		throw new UnsupportedOperationException("getTime not overloaded");
+	}
+
+	@Override
+	public LocalDateTime getDateTime(K key) {
+		throw new UnsupportedOperationException("getDateTime not overloaded");
+	}
+
+	@Override
+	public ZonedDateTime getZonedDateTime(K key) {
+		throw new UnsupportedOperationException("getZonedDateTime not overloaded");
 	}
 
 	@Override

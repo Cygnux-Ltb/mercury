@@ -393,15 +393,15 @@ public final class DateTimeUtil {
 	/**
 	 * 
 	 * @param pattern
-	 * @param str
+	 * @param datetime
 	 * @return
 	 * @throws IllegalArgumentException
 	 * @throws DateTimeParseException
 	 */
-	public final static LocalDateTime toLocalDateTime(@Nonnull DateTimePattern pattern, @Nonnull String str)
+	public final static LocalDateTime toLocalDateTime(@Nonnull DateTimePattern pattern, @Nonnull String datetime)
 			throws IllegalArgumentException, DateTimeParseException {
-		checkFormatParam(pattern, str);
-		return LocalDateTime.parse(str, pattern.getFormatter());
+		checkFormatParam(pattern, datetime);
+		return LocalDateTime.parse(datetime, pattern.getFormatter());
 	}
 
 	private static void checkFormatParam(TemporalPattern pattern, String str) {
@@ -411,44 +411,6 @@ public final class DateTimeUtil {
 			throw new IllegalArgumentException("str cannot null or empty.");
 		if (str.length() != pattern.getPattern().length())
 			throw new IllegalArgumentException("str and pattern length no match.");
-	}
-
-	/**
-	 * 
-	 * @param start
-	 * @return
-	 */
-	public final static long durationByDay(@Nonnull LocalDate start) {
-		return durationByDay(start, LocalDate.now());
-	}
-
-	/**
-	 * 
-	 * @param start
-	 * @param end
-	 * @return
-	 */
-	public final static long durationByDay(@Nonnull LocalDate start, @Nonnull LocalDate end) {
-		return end.toEpochDay() - start.toEpochDay();
-	}
-
-	/**
-	 * 
-	 * @param start
-	 * @return
-	 */
-	public final static long durationBySecond(@Nonnull LocalTime start) {
-		return durationBySecond(start, LocalTime.now());
-	}
-
-	/**
-	 * 
-	 * @param start
-	 * @param end
-	 * @return
-	 */
-	public final static long durationBySecond(@Nonnull LocalTime start, @Nonnull LocalTime end) {
-		return end.toSecondOfDay() - start.toSecondOfDay();
 	}
 
 	/**
@@ -475,7 +437,7 @@ public final class DateTimeUtil {
 	 * @param pattern
 	 * @return
 	 */
-	public final static String fmtDate(@Nonnull DatePattern pattern) {
+	public final static String formatDate(@Nonnull DatePattern pattern) {
 		return pattern.getFormatter().format(LocalDate.now());
 	}
 
@@ -485,7 +447,7 @@ public final class DateTimeUtil {
 	 * @param pattern
 	 * @return
 	 */
-	public final static String fmtDate(@Nonnull DatePattern pattern, @Nonnull LocalDate date) {
+	public final static String formatDate(@Nonnull DatePattern pattern, @Nonnull LocalDate date) {
 		return pattern.getFormatter().format(date);
 	}
 
@@ -494,7 +456,7 @@ public final class DateTimeUtil {
 	 * @param pattern
 	 * @return
 	 */
-	public final static String fmtTime(@Nonnull TimePattern pattern) {
+	public final static String formatTime(@Nonnull TimePattern pattern) {
 		return pattern.getFormatter().format(LocalTime.now());
 	}
 
@@ -504,7 +466,7 @@ public final class DateTimeUtil {
 	 * @param pattern
 	 * @return
 	 */
-	public final static String fmtTime(@Nonnull TimePattern pattern, @Nonnull LocalTime time) {
+	public final static String formatTime(@Nonnull TimePattern pattern, @Nonnull LocalTime time) {
 		return pattern.getFormatter().format(time);
 	}
 
@@ -539,7 +501,7 @@ public final class DateTimeUtil {
 	 * 
 	 * @return
 	 */
-	public static LocalDate previousDate() {
+	public static final LocalDate previousDate() {
 		return previousDate(LocalDate.now());
 	}
 
@@ -548,7 +510,7 @@ public final class DateTimeUtil {
 	 * @param date
 	 * @return
 	 */
-	public static LocalDate previousDate(LocalDate date) {
+	public static final LocalDate previousDate(LocalDate date) {
 		return date.minusDays(1);
 	}
 
@@ -556,7 +518,7 @@ public final class DateTimeUtil {
 	 * 
 	 * @return
 	 */
-	public static LocalDate nextDate() {
+	public static final LocalDate nextDate() {
 		return nextDate(LocalDate.now());
 	}
 
@@ -565,7 +527,7 @@ public final class DateTimeUtil {
 	 * @param date
 	 * @return
 	 */
-	public static LocalDate nextDate(LocalDate date) {
+	public static final LocalDate nextDate(LocalDate date) {
 		return date.plusDays(1);
 	}
 

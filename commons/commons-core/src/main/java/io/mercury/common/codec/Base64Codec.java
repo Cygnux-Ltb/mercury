@@ -64,7 +64,7 @@ public class Base64Codec {
 	 * @return The base64-encoded representation of the provided raw data.
 	 */
 	public static String encode(byte[] rawData) {
-		StringBuilder buffer = new StringBuilder(4 * rawData.length / 3);
+		var buffer = new StringBuilder(4 * rawData.length / 3);
 
 		int pos = 0;
 		int iterations = rawData.length / 3;
@@ -108,12 +108,11 @@ public class Base64Codec {
 		// The encoded value must have length that is a multiple of four bytes.
 		int length = encodedData.length();
 
-		if ((length % 4) != 0) {
+		if ((length % 4) != 0)
 			// Message message = ERR_BASE64_DECODE_INVALID_LENGTH.get(encodedData);
 			throw new ParseException("Base64 data was not 4-byte aligned", 0);
-		}
 
-		ByteBuffer buffer = ByteBuffer.allocate(length);
+		var buffer = ByteBuffer.allocate(length);
 		for (int i = 0; i < length; i += 4) {
 			boolean append = true;
 			int value = 0;

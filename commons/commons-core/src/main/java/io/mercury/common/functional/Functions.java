@@ -1,6 +1,7 @@
 package io.mercury.common.functional;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -91,6 +92,36 @@ public final class Functions {
 				return afterFailure.intValueOf(e);
 			return -1;
 		}
+	}
+
+	/**
+	 * 
+	 * @param <R>
+	 * @param isHas
+	 * @param supplier
+	 * @param defaultVal
+	 * @return
+	 */
+	public final static <R> R getOrDefault(@Nonnull BooleanSupplier isHas, @Nonnull Supplier<R> supplier,
+			R defaultVal) {
+		if (isHas.getAsBoolean())
+			return supplier.get();
+		return defaultVal;
+	}
+
+	/**
+	 * 
+	 * @param <R>
+	 * @param isHas
+	 * @param supplier
+	 * @param msg
+	 * @return
+	 */
+	public final static <R> R getOrThrows(@Nonnull BooleanSupplier isHas, @Nonnull Supplier<R> supplier, String msg) {
+		if (isHas.getAsBoolean())
+			return supplier.get();
+		else
+			throw new IllegalArgumentException(msg);
 	}
 
 }

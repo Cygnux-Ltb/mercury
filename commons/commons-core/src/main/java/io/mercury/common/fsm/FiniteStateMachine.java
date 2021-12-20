@@ -4,6 +4,6 @@ public interface FiniteStateMachine {
 
 	State getState();
 
-	State doAction(Action action);
+	State handleSignal(Signal signal);
 
 }
