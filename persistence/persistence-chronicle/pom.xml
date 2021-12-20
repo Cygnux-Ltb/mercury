@@ -32,13 +32,15 @@
 	<dependencies>
 		<dependency>
 			<groupId>io.mercury</groupId>
+			<artifactId>commons-config</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.mercury</groupId>
 			<artifactId>commons-concurrent</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>serialization-json</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>

@@ -19,6 +19,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>io.mercury</groupId>
+			<artifactId>commons-config</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.mercury</groupId>
 			<artifactId>commons-concurrent</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -26,12 +31,6 @@
 			<groupId>io.mercury</groupId>
 			<artifactId>serialization-json</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<!-- configuration library for JVM languages using HOCON files -->
-		<dependency>
-			<groupId>com.typesafe</groupId>
-			<artifactId>config</artifactId>
-			<version>1.4.1</version>
 		</dependency>
 	</dependencies>
 
