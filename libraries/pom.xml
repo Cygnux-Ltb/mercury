@@ -40,6 +40,11 @@
 				<artifactId>commons-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>io.mercury</groupId>
+				<artifactId>commons-config</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
 			<!-- A set of annotations used for code inspection support and code documentation -->
 			<dependency>

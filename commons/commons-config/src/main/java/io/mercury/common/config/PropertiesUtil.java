@@ -1,4 +1,4 @@
-package io.mercury.common.util;
+package io.mercury.common.config;
 
 import static java.lang.Boolean.parseBoolean;
 import static java.lang.Double.parseDouble;
@@ -22,6 +22,8 @@ import org.slf4j.Logger;
 
 import io.mercury.common.character.Charsets;
 import io.mercury.common.lang.Assertor;
+import io.mercury.common.sys.LibraryPathManager;
+import io.mercury.common.util.StringSupport;
 
 public final class PropertiesUtil {
 
@@ -159,6 +161,18 @@ public final class PropertiesUtil {
 				log.info("Property {} : key -> {}, value -> {}", i, entry.getKey(), entry.getValue());
 		}
 
+	}
+
+	public static void main(String[] args) {
+		System.out.println("---old---");
+		PropertiesUtil.showProperties(System.getProperties());
+		try {
+			LibraryPathManager.addLibraryDir("~/java_lib");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("---nwe---");
+		PropertiesUtil.showProperties(System.getProperties());
 	}
 
 }

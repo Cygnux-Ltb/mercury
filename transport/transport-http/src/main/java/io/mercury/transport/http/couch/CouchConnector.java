@@ -6,9 +6,9 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 
+import io.mercury.common.config.PropertiesUtil;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.sys.SysProperties;
-import io.mercury.common.util.PropertiesUtil;
 import io.mercury.serialization.json.JsonParser;
 import io.mercury.transport.http.HttpRequester;
 
