@@ -37,7 +37,6 @@
 		<slf4j.version>1.7.32</slf4j.version>
 		<junit.version>4.13.2</junit.version>
 		<netty.version>4.1.72.Final</netty.version>
-		<avro.version>1.11.0</avro.version>
 		<jackson.version>2.13.0</jackson.version>
 	</properties>
 
