@@ -64,12 +64,14 @@
 			</exclusions>
 		</dependency>
 
+		<!-- A Protocol for Asynchronous Non-Blocking Data Sequence -->
 		<dependency>
 			<groupId>org.reactivestreams</groupId>
 			<artifactId>reactive-streams</artifactId>
 			<version>1.0.3</version>
 		</dependency>
 
+		<!-- Adapter between RxJava and ReactiveStreams -->
 		<dependency>
 			<groupId>io.reactivex</groupId>
 			<artifactId>rxjava-reactive-streams</artifactId>
