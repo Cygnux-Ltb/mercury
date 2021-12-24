@@ -1,6 +1,5 @@
 package io.mercury.transport.zmq;
 
-import java.io.File;
 import java.net.URL;
 
 import org.junit.Test;

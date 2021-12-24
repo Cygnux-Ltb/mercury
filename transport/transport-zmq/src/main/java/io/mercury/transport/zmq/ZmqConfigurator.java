@@ -15,17 +15,17 @@ import javax.annotation.Nonnull;
 import org.zeromq.ZMQ;
 
 import com.typesafe.config.Config;
-import com.typesafe.config.ConfigException;
 
 import io.mercury.common.annotation.OnlyOverrideEquals;
+import io.mercury.common.config.ConfigDelegate;
 import io.mercury.common.config.ConfigOption;
 import io.mercury.common.lang.Assertor;
+import io.mercury.common.net.IpAddressIllegalException;
+import io.mercury.common.net.IpAddressValidator;
 import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.common.serialization.JsonDeserializable;
 import io.mercury.serialization.json.JsonParser;
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.IpAddressIllegalException;
-import io.mercury.transport.IpAddressValidator;
 import io.mercury.transport.configurator.TcpKeepAlive;
 import io.mercury.transport.configurator.Topics;
 import io.mercury.transport.configurator.TransportConfigurator;
@@ -73,32 +73,23 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 		return addr;
 	}
 
+	/**
+	 * 
+	 * @param config
+	 * @return
+	 */
 	public static ZmqConfigurator with(@Nonnull Config config) {
 		Assertor.nonNull(config, "config");
-		ZmqProtocol protocol;
-		if (config.hasPath(Protocol.getConfigName()))
-			protocol = ZmqProtocol.ofName(config.getString(Protocol.getConfigName()));
-		else
-			throw new ConfigException.Missing(Protocol.getConfigName());
-
+		var delegate = new ConfigDelegate<ZmqConfigOption>(config);
+		ZmqProtocol protocol = ZmqProtocol.ofName(delegate.getStringOrThrows(Protocol));
 		ZmqConfigurator configurator = null;
 		switch (protocol) {
 		case TCP:
-			int port;
-			if (config.hasPath(Port.getConfigName()))
-				port = config.getInt(Port.getConfigName());
-			else
-				throw new ConfigException.Missing(Port.getConfigName());
-
-			String tcpAddr;
-			if (config.hasPath(Addr.getConfigName())) {
-				tcpAddr = config.getString(Addr.getConfigName());
-				if (IpAddressValidator.isIpAddress(tcpAddr)) {
-					configurator = ZmqConfigurator.tcp(tcpAddr, port);
-				} else {
-					throw new ConfigException.BadValue(Port.getConfigName(), "illegal IP address",
-							new IpAddressIllegalException(tcpAddr));
-				}
+			int port = delegate.getIntOrThrows(Port);
+			if (delegate.hasOption(Addr)) {
+				String tcpAddr = delegate.getStringOrThrows(Addr);
+				Assertor.isValid(tcpAddr, IpAddressValidator::isIpAddress, new IpAddressIllegalException(tcpAddr));
+				configurator = ZmqConfigurator.tcp(tcpAddr, port);
 			} else {
 				// 没有addr配置项, 使用本地地址
 				configurator = ZmqConfigurator.tcp(port);
@@ -107,17 +98,13 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 		case IPC:
 		case INPROC:
 			// 使用ipc或inproc协议
-			String innerAddr;
-			if (config.hasPath(Addr.getConfigName()))
-				innerAddr = config.getString(Addr.getConfigName());
-			else
-				throw new ConfigException.Missing(Addr.getConfigName());
+			String innerAddr = delegate.getStringOrThrows(Addr);
 			configurator = new ZmqConfigurator(protocol, innerAddr);
 		default:
 			break;
 		}
-		if (config.hasPath(IoThreads.getConfigName()))
-			configurator.ioThreads(config.getInt(IoThreads.getConfigName()));
+		if (delegate.hasOption(IoThreads))
+			configurator.ioThreads(delegate.getInt(IoThreads));
 		return configurator;
 	}
 
