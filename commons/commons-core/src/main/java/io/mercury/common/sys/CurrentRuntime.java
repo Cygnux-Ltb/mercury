@@ -1,7 +1,5 @@
 package io.mercury.common.sys;
 
-import static java.lang.Runtime.getRuntime;
-
 public final class CurrentRuntime {
 
 	/**
@@ -18,7 +16,7 @@ public final class CurrentRuntime {
 	 *         never smaller than one
 	 */
 	public static int availableProcessors() {
-		return getRuntime().availableProcessors();
+		return Runtime.getRuntime().availableProcessors();
 	}
 
 	/**
@@ -30,7 +28,7 @@ public final class CurrentRuntime {
 	 *         for future allocated objects, measured in bytes.
 	 */
 	public static long freeMemory() {
-		return getRuntime().freeMemory();
+		return Runtime.getRuntime().freeMemory();
 	}
 
 	/**
@@ -45,7 +43,7 @@ public final class CurrentRuntime {
 	 *         objects, measured in bytes.
 	 */
 	public static long totalMemory() {
-		return getRuntime().totalMemory();
+		return Runtime.getRuntime().totalMemory();
 	}
 
 	/**
@@ -57,7 +55,7 @@ public final class CurrentRuntime {
 	 *         use, measured in bytes
 	 */
 	public static long maxMemory() {
-		return getRuntime().maxMemory();
+		return Runtime.getRuntime().maxMemory();
 	}
 
 }

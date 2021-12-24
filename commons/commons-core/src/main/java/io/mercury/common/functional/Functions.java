@@ -116,12 +116,14 @@ public final class Functions {
 	 * @param supplier
 	 * @param msg
 	 * @return
+	 * @throws E
 	 */
-	public final static <R> R getOrThrows(@Nonnull BooleanSupplier isHas, @Nonnull Supplier<R> supplier, String msg) {
+	public final static <R, E extends Exception> R getOrThrows(@Nonnull BooleanSupplier isHas,
+			@Nonnull Supplier<R> supplier, E e) throws E {
 		if (isHas.getAsBoolean())
 			return supplier.get();
 		else
-			throw new IllegalArgumentException(msg);
+			throw e;
 	}
 
 }

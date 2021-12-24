@@ -3,6 +3,7 @@ package io.mercury.common.lang;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 
@@ -358,6 +359,22 @@ public final class Assertor {
 		if (array.length < requiredLength)
 			throw new IllegalArgumentException(arrayName + " length must be greater than " + requiredLength);
 		return array;
+	}
+
+	/**
+	 * 
+	 * @param <T>
+	 * @param <E>
+	 * @param t
+	 * @param predicate
+	 * @param e
+	 * @return
+	 * @throws E
+	 */
+	public static <T, E extends Exception> T isValid(T t, Predicate<T> predicate, E e) throws E {
+		if (predicate.test(t))
+			return t;
+		throw e;
 	}
 
 }

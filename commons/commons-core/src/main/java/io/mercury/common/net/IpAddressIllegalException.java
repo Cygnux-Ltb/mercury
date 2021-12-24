@@ -1,4 +1,4 @@
-package io.mercury.transport;
+package io.mercury.common.net;
 
 public class IpAddressIllegalException extends IllegalArgumentException {
 
@@ -8,7 +8,7 @@ public class IpAddressIllegalException extends IllegalArgumentException {
 	private static final long serialVersionUID = 3756639631788771826L;
 
 	public IpAddressIllegalException(String ipAddress) {
-		super(ipAddress);
+		super("illegal IP address -> " + ipAddress);
 	}
 
 }

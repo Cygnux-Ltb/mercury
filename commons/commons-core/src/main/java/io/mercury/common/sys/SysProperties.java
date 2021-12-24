@@ -1,19 +1,10 @@
 package io.mercury.common.sys;
 
-import static org.eclipse.collections.impl.collector.Collectors2.toImmutableMap;
-
 import java.io.File;
 
-import org.eclipse.collections.api.map.ImmutableMap;
 import org.slf4j.Logger;
 
 public final class SysProperties {
-
-	/**
-	 * System.getProperties()
-	 */
-	public static final ImmutableMap<String, String> Properties = System.getProperties().entrySet().stream()
-			.collect(toImmutableMap(entity -> entity.getKey().toString(), entity -> entity.getValue().toString()));
 
 	/**
 	 * 
@@ -21,7 +12,7 @@ public final class SysProperties {
 	 * @return
 	 */
 	public static final String get(String key) {
-		return Properties.get(key);
+		return System.getProperty(key);
 	}
 
 	/**
@@ -132,9 +123,11 @@ public final class SysProperties {
 	 */
 	public static final void showAll(Logger log) {
 		if (log != null) {
-			Properties.forEachKeyValue((key, value) -> log.info("{} -> {}", key, value));
+			System.getProperties().entrySet().stream()
+					.forEach(entry -> log.info("{} -> {}", entry.getKey(), entry.getValue()));
 		} else {
-			Properties.forEachKeyValue((key, value) -> System.out.println(key + " -> " + value));
+			System.getProperties().entrySet().stream()
+					.forEach(entry -> System.out.println(entry.getKey() + " -> " + entry.getValue()));
 		}
 	}
 

@@ -1,4 +1,4 @@
-package io.mercury.transport;
+package io.mercury.common.net;
 
 import java.io.Serializable;
 import java.util.ArrayList;

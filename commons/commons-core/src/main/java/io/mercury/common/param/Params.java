@@ -8,8 +8,6 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.param.Params.ParamKey;
-
 public interface Params<K extends ParamKey> {
 
 	boolean getBoolean(K key);
@@ -98,20 +96,6 @@ public interface Params<K extends ParamKey> {
 				break;
 			}
 		}
-	}
-
-	/**
-	 * 
-	 * @author yellow013
-	 */
-	public static interface ParamKey {
-
-		int getParamId();
-
-		String getParamName();
-
-		ValueType getValueType();
-
 	}
 
 	/**

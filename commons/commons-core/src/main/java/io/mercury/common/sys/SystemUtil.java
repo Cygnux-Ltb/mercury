@@ -1,8 +1,6 @@
 package io.mercury.common.sys;
 
 import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadInfo;
-import java.lang.management.ThreadMXBean;
 import java.lang.reflect.Method;
 
 public final class SystemUtil {
@@ -28,7 +26,7 @@ public final class SystemUtil {
 			final Method currentMethod = processHandleClass.getMethod("current");
 			final Object processHandle = currentMethod.invoke(null);
 			final Method pidMethod = processHandleClass.getMethod("pid");
-			pid = (Long) pidMethod.invoke(processHandle);
+			pid = (long) pidMethod.invoke(processHandle);
 		} catch (final Throwable ignore) {
 			try {
 				final String pidPropertyValue = System.getProperty(SUN_PID_PROP_NAME);
@@ -98,16 +96,16 @@ public final class SystemUtil {
 	 *         traces.
 	 */
 	public static String threadDump() {
-		final StringBuilder sb = new StringBuilder();
-		final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-		for (final ThreadInfo info : threadMXBean.getThreadInfo(threadMXBean.getAllThreadIds(), Integer.MAX_VALUE)) {
-			sb.append('"').append(info.getThreadName()).append("\": ").append(info.getThreadState());
-			for (final StackTraceElement stackTraceElement : info.getStackTrace()) {
-				sb.append("\n    at ").append(stackTraceElement.toString());
+		var builder = new StringBuilder();
+		var threadMXBean = ManagementFactory.getThreadMXBean();
+		for (var threadInfo : threadMXBean.getThreadInfo(threadMXBean.getAllThreadIds(), Integer.MAX_VALUE)) {
+			builder.append('[').append(threadInfo.getThreadName()).append("] : ").append(threadInfo.getThreadState());
+			for (var stackTraceElement : threadInfo.getStackTrace()) {
+				builder.append("\n    at ").append(stackTraceElement.toString());
 			}
-			sb.append("\n\n");
+			builder.append("\n\n");
 		}
-		return sb.toString();
+		return builder.toString();
 	}
 
 	public static void main(String[] args) {
