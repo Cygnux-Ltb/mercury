@@ -101,8 +101,10 @@ public class SimpleExample {
 		 */
 
 		// the same code as for text wire
-		rawWire.write(() -> "message").text("Hello World").write(() -> "number").int64(1234567890L).write(() -> "code")
-				.asEnum(TimeUnit.SECONDS).write(() -> "price").float64(10.50);
+		rawWire.write(() -> "message").text("Hello World")
+				.write(() -> "number").int64(1234567890L)
+				.write(() -> "code").asEnum(TimeUnit.SECONDS)
+				.write(() -> "price").float64(10.50D);
 		System.out.println(rawBytes.toHexString());
 
 //		prints in RawWire

@@ -19,11 +19,10 @@ public class BouncyCastleLicenseTest {
 	 * @param log
 	 */
 	public static final void showLicense(@Nullable Logger log) {
-		if (log != null) {
+		if (log != null)
 			log.info(LICENSE.licenseText);
-		} else {
+		else
 			System.out.println(LICENSE.licenseText);
-		}
 	}
 
 	/**
