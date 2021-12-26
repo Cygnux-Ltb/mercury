@@ -66,7 +66,9 @@ public class ShowProgress implements DatabaseEventListener {
 		}
 		boolean abnormalTermination = true;
 		if (abnormalTermination) {
-			((JdbcConnection) conn).setPowerOffCount(1);
+			@SuppressWarnings("unused")
+			JdbcConnection cn = ((JdbcConnection) conn);
+			//cn.setPowerOffCount(1);
 			try {
 				stat.execute("INSERT INTO TEST VALUES(-1, 'Test' || SPACE(100))");
 			} catch (SQLException e) {
@@ -108,7 +110,7 @@ public class ShowProgress implements DatabaseEventListener {
 	 * @param current the current progress
 	 * @param max     the 100% mark
 	 */
-	@Override
+	
 	public void setProgress(int state, String name, int current, int max) {
 		long time = System.nanoTime();
 		if (time < lastNs + TimeUnit.SECONDS.toNanos(5)) {

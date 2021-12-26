@@ -10,8 +10,8 @@ import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
 public class TranslatorMain {
 
 	public static void main(String[] args) throws InterruptedException {
-		String pathfr = "queue-fr";
-		SingleChronicleQueue queuefr = SingleChronicleQueueBuilder.binary(pathfr).build();
+		String path_fr = "queue-fr";
+		SingleChronicleQueue queuefr = SingleChronicleQueueBuilder.binary(path_fr).build();
 		MessageConsumer messageConsumer = queuefr.acquireAppender().methodWriter(MessageConsumer.class);
 
 		MessageConsumer simpleTranslator = new SimpleTranslator(messageConsumer);

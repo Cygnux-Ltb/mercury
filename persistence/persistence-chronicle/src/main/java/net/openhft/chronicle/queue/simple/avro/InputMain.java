@@ -36,4 +36,5 @@ public class InputMain {
 
 		System.out.println("2 records written.");
 	}
+	
 }

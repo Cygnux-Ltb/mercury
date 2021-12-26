@@ -20,9 +20,8 @@ public class OutputMain {
 
 		while (true) {
 			try (DocumentContext dc = tailer.readingDocument()) {
-				if (dc.wire() == null) {
+				if (dc.wire() == null)
 					break;
-				}
 				GenericRecord user = avro.readFromIS(dc.wire().bytes().inputStream());
 				System.out.println("Read: " + user);
 			}

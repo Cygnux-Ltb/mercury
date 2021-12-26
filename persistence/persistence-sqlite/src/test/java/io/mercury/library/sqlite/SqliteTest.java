@@ -13,7 +13,7 @@ import org.junit.Test;
 /**
  * Unit test for simple App.
  */
-public class SqliteTest {
+public final class SqliteTest {
 
 	private Connection connection;
 	private Statement statement;
@@ -45,8 +45,12 @@ public class SqliteTest {
 
 	@Test
 	public void createTable() throws SQLException {
-		String sql = "CREATE TABLE COMPANY " + "(ID INT PRIMARY KEY NOT NULL," + " NAME TEXT NOT NULL,"
-				+ " AGE INT NOT NULL," + " ADDRESS CHAR(50)," + " SALARY REAL)";
+		String sql = "CREATE TABLE COMPANY "
+				+ "(ID INT PRIMARY KEY NOT NULL," 
+				+ " NAME TEXT NOT NULL,"
+				+ " AGE INT NOT NULL," 
+				+ " ADDRESS CHAR(50)," 
+				+ " SALARY REAL)";
 		statement.executeUpdate(sql);
 	}
 
@@ -118,11 +122,11 @@ public class SqliteTest {
 
 		ResultSet rs = statement.executeQuery("SELECT * FROM COMPANY;");
 		while (rs.next()) {
-			int id = rs.getInt("id");
-			String name = rs.getString("name");
-			int age = rs.getInt("age");
-			String address = rs.getString("address");
-			float salary = rs.getFloat("salary");
+			var id = rs.getInt("id");
+			var name = rs.getString("name");
+			var age = rs.getInt("age");
+			var address = rs.getString("address");
+			var salary = rs.getDouble("salary");
 			System.out.println("ID = " + id);
 			System.out.println("NAME = " + name);
 			System.out.println("AGE = " + age);

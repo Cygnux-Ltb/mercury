@@ -10,19 +10,21 @@ import javax.sql.DataSource;
  */
 public class H2TestBase {
 
-    protected DataSource dataSource;
+	protected DataSource dataSource;
 
-    @Before
-    public void prepareH2() throws Exception {
-        JdbcDataSource ds = new JdbcDataSource();
-        // choose file system or memory to save data files
-        // ds.setURL("jdbc:h2:~/test;MODE=POSTGRESQL;INIT=runscript from './src/test/resources/createTable.sql'");
-        // ds.setURL("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=POSTGRESQL;INIT=runscript from './src/test/resources/createTable.sql'");
-        ds.setURL("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=POSTGRESQL;INIT=runscript from './src/test/resources/createTable.sql'");
+	@Before
+	public void prepareH2() throws Exception {
+		JdbcDataSource ds = new JdbcDataSource();
+		// choose file system or memory to save data files
+		ds.setURL("jdbc:h2:~/test;MODE=POSTGRESQL;INIT=runscript from './src/test/resources/createTable.sql'");
+		ds.setURL(
+				"jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=POSTGRESQL;INIT=runscript from './src/test/resources/createTable.sql'");
+		ds.setURL(
+				"jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=POSTGRESQL;INIT=runscript from './src/test/resources/createTable.sql'");
 
-        ds.setUser("sa");
-        ds.setPassword("");
+		ds.setUser("sa");
+		ds.setPassword("");
 
-        dataSource = ds;
-    }
+		dataSource = ds;
+	}
 }

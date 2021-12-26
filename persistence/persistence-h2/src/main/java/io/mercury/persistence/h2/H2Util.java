@@ -23,14 +23,32 @@ public final class H2Util {
 
 	public static final String JdbcProtocol = "jdbc:sqlite:";
 
+	private H2Util() {
+	}
+
+	/**
+	 * 
+	 * @param dir
+	 * @param dbName
+	 * @return
+	 */
 	public static final String getH2UrlInHome(@Nonnull String dir, @Nonnull String dbName) {
-		if (!dbName.endsWith(".db")) {
+		if (!dbName.endsWith(".db"))
 			dbName = dbName + ".db";
-		}
 		mkdirInHome(dir);
 		return JdbcProtocol + StringSupport.fixPath(SysProperties.USER_HOME) + StringSupport.fixPath(dir) + dbName;
 	}
 
+	/**
+	 * 
+	 * @param <T>
+	 * @param connection
+	 * @param sql
+	 * @param processor
+	 * @param type
+	 * @return
+	 * @throws SQLException
+	 */
 	public static final <T> List<T> query(@Nonnull Connection connection, @Nonnull String sql,
 			@Nonnull ResultSetProcessor processor, @Nonnull Class<T> type) throws SQLException {
 		Assertor.nonNull(connection, "connection");
@@ -44,14 +62,8 @@ public final class H2Util {
 		}
 	}
 
-	private H2Util() {
-		
-	}
-
 	public static void main(String[] args) {
-
 		System.out.println(H2Util.getH2UrlInHome("sqlite-file", "example"));
-
 	}
 
 }
