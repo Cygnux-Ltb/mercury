@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 
 import io.mercury.common.log.Log4j2Configurator.LogLevel;
 
-public class CommonLoggerFactoryTest {
+public class Log4j2LoggerFactoryTest {
 
 	static {
 		System.out.println(System.getProperty("user.home"));

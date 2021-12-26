@@ -61,9 +61,7 @@ public final class Log4j2Configurator {
 	 *
 	 */
 	public static enum LogLevel {
-
 		DEBUG, INFO, WARN, ERROR, FATAL;
-
 	}
 
 }
