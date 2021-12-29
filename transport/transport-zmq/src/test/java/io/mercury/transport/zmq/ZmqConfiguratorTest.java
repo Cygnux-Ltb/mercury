@@ -14,9 +14,9 @@ public class ZmqConfiguratorTest {
 	@Test
 	public void test() {
 
-		System.out.println(ZmqProtocol.INPROC.reviseAddr("test"));
-		System.out.println(ZmqProtocol.TCP.reviseAddr("*:9889"));
-		System.out.println(ZmqProtocol.TCP.reviseAddr("192.168.1.1:7887"));
+		System.out.println(ZmqProtocol.INPROC.fixAddr("test"));
+		System.out.println(ZmqProtocol.TCP.fixAddr("*:9889"));
+		System.out.println(ZmqProtocol.TCP.fixAddr("192.168.1.1:7887"));
 
 		URL url = this.getClass().getResource("zmq-config.conf");
 		System.out.println(url.getFile());

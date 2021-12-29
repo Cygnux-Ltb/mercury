@@ -12,6 +12,7 @@ import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
+import org.slf4j.Logger;
 import org.zeromq.ZMQ;
 
 import com.typesafe.config.Config;
@@ -20,6 +21,7 @@ import io.mercury.common.annotation.OnlyOverrideEquals;
 import io.mercury.common.config.ConfigDelegate;
 import io.mercury.common.config.ConfigOption;
 import io.mercury.common.lang.Assertor;
+import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.net.IpAddressIllegalException;
 import io.mercury.common.net.IpAddressValidator;
 import io.mercury.common.serialization.BytesSerializer;
@@ -33,6 +35,8 @@ import io.mercury.transport.configurator.TransportConfigurator;
 @OnlyOverrideEquals
 public final class ZmqConfigurator implements TransportConfigurator, JsonDeserializable<ZmqConfigurator> {
 
+	private static final Logger log = Log4j2LoggerFactory.getLogger(ZmqConfigurator.class);
+
 	private final String addr;
 
 	private int ioThreads = 1;
@@ -45,7 +49,7 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	 * @param addr
 	 */
 	private ZmqConfigurator(ZmqProtocol protocol, String addr) {
-		this(protocol.reviseAddr(addr));
+		this(protocol.fixAddr(addr));
 	}
 
 	/**
@@ -81,7 +85,7 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	public static ZmqConfigurator with(@Nonnull Config config) {
 		Assertor.nonNull(config, "config");
 		var delegate = new ConfigDelegate<ZmqConfigOption>(config);
-		ZmqProtocol protocol = ZmqProtocol.ofName(delegate.getStringOrThrows(Protocol));
+		ZmqProtocol protocol = ZmqProtocol.of(delegate.getStringOrThrows(Protocol));
 		ZmqConfigurator configurator = null;
 		switch (protocol) {
 		case TCP:
@@ -105,6 +109,7 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 		}
 		if (delegate.hasOption(IoThreads))
 			configurator.ioThreads(delegate.getInt(IoThreads));
+		log.info("created ZmqConfigurator object -> {}", configurator);
 		return configurator;
 	}
 
@@ -368,13 +373,13 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 			this.prefix = name + "://";
 		}
 
-		public String reviseAddr(String addr) {
+		public String fixAddr(String addr) {
 			if (!addr.startsWith(prefix))
 				return prefix + addr;
 			return addr;
 		}
 
-		public static ZmqProtocol ofName(String name) {
+		public static ZmqProtocol of(String name) {
 			for (var protocol : ZmqProtocol.values())
 				if (protocol.name.equalsIgnoreCase(name))
 					return protocol;
