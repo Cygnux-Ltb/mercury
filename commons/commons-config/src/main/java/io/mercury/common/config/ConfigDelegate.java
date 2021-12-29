@@ -1,5 +1,8 @@
 package io.mercury.common.config;
 
+import java.util.function.DoublePredicate;
+import java.util.function.IntPredicate;
+import java.util.function.LongPredicate;
 import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
@@ -179,6 +182,38 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	/**
 	 * 
 	 * @param option
+	 * @param predicate
+	 * @return
+	 * @throws ConfigException.Missing
+	 * @throws ConfigException.BadValue
+	 */
+	public int getIntOrThrows(@Nonnull O option, IntPredicate predicate)
+			throws ConfigException.Missing, ConfigException.BadValue {
+		return getIntOrThrows(option, predicate,
+				new IllegalArgumentException("Illegal argument -> " + option.getConfigName()));
+	}
+
+	/**
+	 * 
+	 * @param option
+	 * @param predicate
+	 * @param exception
+	 * @return
+	 * @throws ConfigException.Missing
+	 * @throws ConfigException.BadValue
+	 */
+	public int getIntOrThrows(@Nonnull O option, IntPredicate predicate, Exception exception)
+			throws ConfigException.Missing, ConfigException.BadValue {
+		var value = getIntOrThrows(option);
+		if (predicate.test(value))
+			return value;
+		else
+			throw new ConfigException.BadValue(option.getConfigName(), "value == " + value, exception);
+	}
+
+	/**
+	 * 
+	 * @param option
 	 * @return
 	 * @throws ConfigException.Missing
 	 */
@@ -190,12 +225,76 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	/**
 	 * 
 	 * @param option
+	 * @param predicate
+	 * @return
+	 * @throws ConfigException.Missing
+	 * @throws ConfigException.BadValue
+	 */
+	public long getLongOrThrows(@Nonnull O option, LongPredicate predicate)
+			throws ConfigException.Missing, ConfigException.BadValue {
+		return getLongOrThrows(option, predicate,
+				new IllegalArgumentException("Illegal argument -> " + option.getConfigName()));
+	}
+
+	/**
+	 * 
+	 * @param option
+	 * @param predicate
+	 * @param exception
+	 * @return
+	 * @throws ConfigException.Missing
+	 * @throws ConfigException.BadValue
+	 */
+	public long getLongOrThrows(@Nonnull O option, LongPredicate predicate, Exception exception)
+			throws ConfigException.Missing, ConfigException.BadValue {
+		var value = getLongOrThrows(option);
+		if (predicate.test(value))
+			return value;
+		else
+			throw new ConfigException.BadValue(option.getConfigName(), "value == " + value, exception);
+	}
+
+	/**
+	 * 
+	 * @param option
 	 * @return
 	 * @throws ConfigException.Missing
 	 */
 	public double getDoubleOrThrows(@Nonnull O option) throws ConfigException.Missing {
 		return Functions.getOrThrows(() -> config.hasPath(option.getConfigName()),
 				() -> config.getDouble(option.getConfigName()), new ConfigException.Missing(option.getConfigName()));
+	}
+
+	/**
+	 * 
+	 * @param option
+	 * @param predicate
+	 * @return
+	 * @throws ConfigException.Missing
+	 * @throws ConfigException.BadValue
+	 */
+	public double getDoubleOrThrows(@Nonnull O option, DoublePredicate predicate)
+			throws ConfigException.Missing, ConfigException.BadValue {
+		return getDoubleOrThrows(option, predicate,
+				new IllegalArgumentException("Illegal argument -> " + option.getConfigName()));
+	}
+
+	/**
+	 * 
+	 * @param option
+	 * @param predicate
+	 * @param exception
+	 * @return
+	 * @throws ConfigException.Missing
+	 * @throws ConfigException.BadValue
+	 */
+	public double getDoubleOrThrows(@Nonnull O option, DoublePredicate predicate, Exception exception)
+			throws ConfigException.Missing, ConfigException.BadValue {
+		var value = getDoubleOrThrows(option);
+		if (predicate.test(value))
+			return value;
+		else
+			throw new ConfigException.BadValue(option.getConfigName(), "value == " + value, exception);
 	}
 
 	/**
@@ -234,11 +333,11 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 */
 	public String getStringOrThrows(@Nonnull O option, Predicate<String> predicate, Exception exception)
 			throws ConfigException.Missing, ConfigException.BadValue {
-		String value = getStringOrThrows(option);
+		var value = getStringOrThrows(option);
 		if (predicate.test(value))
 			return value;
 		else
-			throw new ConfigException.BadValue(option.getConfigName(), value, exception);
+			throw new ConfigException.BadValue(option.getConfigName(), "value == " + value, exception);
 	}
 
 }
