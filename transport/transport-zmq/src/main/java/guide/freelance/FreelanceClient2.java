@@ -9,6 +9,7 @@ import org.zeromq.ZMsg;
 //  Freelance client - Model 2
 //  Uses DEALER socket to blast one or more services
 public class FreelanceClient2 {
+
 	// If not a single service replies within this time, give up
 	private static final int GLOBAL_TIMEOUT = 2500;
 

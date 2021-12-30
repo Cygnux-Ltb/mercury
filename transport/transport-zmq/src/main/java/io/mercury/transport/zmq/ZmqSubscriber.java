@@ -12,8 +12,8 @@ import org.zeromq.ZMQ;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.transport.api.Subscriber;
-import io.mercury.transport.configurator.TcpKeepAlive;
-import io.mercury.transport.configurator.Topics;
+import io.mercury.transport.attr.TcpKeepAlive;
+import io.mercury.transport.attr.Topics;
 import io.mercury.transport.zmq.exception.ZmqConnectionException;
 
 /**

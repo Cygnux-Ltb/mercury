@@ -12,7 +12,7 @@ import org.zeromq.ZMQ;
 import org.zeromq.ZMQException;
 
 public class Interrupt {
-	
+
 	public static void main(String[] args) {
 		// Prepare our context and socket
 		final ZContext context = new ZContext();
@@ -38,18 +38,15 @@ public class Interrupt {
 			}
 		};
 
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			@Override
-			public void run() {
-				System.out.println("W: interrupt received, killing server...");
-				context.close();
-				try {
-					zmqThread.interrupt();
-					zmqThread.join();
-				} catch (InterruptedException e) {
-				}
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			System.out.println("W: interrupt received, killing server...");
+			context.close();
+			try {
+				zmqThread.interrupt();
+				zmqThread.join();
+			} catch (InterruptedException e) {
 			}
-		});
+		}));
 
 		zmqThread.start();
 	}

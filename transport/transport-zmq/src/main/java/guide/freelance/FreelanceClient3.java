@@ -5,6 +5,7 @@ import org.zeromq.ZMsg;
 //  Freelance client - Model 3
 //  Uses flcliapi class to encapsulate Freelance pattern
 public class FreelanceClient3 {
+	
 	public static void main(String[] argv) {
 		// Create new freelance client object
 		FreelanceClientApi client = new FreelanceClientApi();

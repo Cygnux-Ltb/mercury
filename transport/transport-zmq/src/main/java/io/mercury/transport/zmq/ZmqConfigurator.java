@@ -28,9 +28,9 @@ import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.common.serialization.JsonDeserializable;
 import io.mercury.serialization.json.JsonParser;
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.configurator.TcpKeepAlive;
-import io.mercury.transport.configurator.Topics;
-import io.mercury.transport.configurator.TransportConfigurator;
+import io.mercury.transport.TransportConfigurator;
+import io.mercury.transport.attr.TcpKeepAlive;
+import io.mercury.transport.attr.Topics;
 
 @OnlyOverrideEquals
 public final class ZmqConfigurator implements TransportConfigurator, JsonDeserializable<ZmqConfigurator> {
@@ -85,7 +85,7 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	public static ZmqConfigurator with(@Nonnull Config config) {
 		Assertor.nonNull(config, "config");
 		var delegate = new ConfigDelegate<ZmqConfigOption>(config);
-		ZmqProtocol protocol = ZmqProtocol.of(delegate.getStringOrThrows(Protocol));
+		var protocol = ZmqProtocol.of(delegate.getStringOrThrows(Protocol));
 		ZmqConfigurator configurator = null;
 		switch (protocol) {
 		case TCP:
