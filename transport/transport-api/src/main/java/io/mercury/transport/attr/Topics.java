@@ -1,4 +1,4 @@
-package io.mercury.transport.configurator;
+package io.mercury.transport.attr;
 
 import org.eclipse.collections.api.block.procedure.Procedure;
 import org.eclipse.collections.api.set.MutableSet;

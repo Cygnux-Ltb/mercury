@@ -1,4 +1,4 @@
-package io.mercury.transport.configurator;
+package io.mercury.transport.attr;
 
 import io.mercury.common.annotation.OnlyOverrideEquals;
 import io.mercury.common.serialization.JsonSerializable;
