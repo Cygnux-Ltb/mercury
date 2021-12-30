@@ -12,7 +12,6 @@ public final class NetworkProperties {
 			while (networkInterfaces.hasMoreElements()) {
 				var networkInterface = networkInterfaces.nextElement();
 				var mac = networkInterface.getHardwareAddress();
-				
 				if (mac == null)
 					continue;
 				else {

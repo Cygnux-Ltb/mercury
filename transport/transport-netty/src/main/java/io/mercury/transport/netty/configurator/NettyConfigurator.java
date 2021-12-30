@@ -3,7 +3,7 @@ package io.mercury.transport.netty.configurator;
 import java.util.concurrent.TimeUnit;
 
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.configurator.TransportConfigurator;
+import io.mercury.transport.TransportConfigurator;
 
 public final class NettyConfigurator implements TransportConfigurator {
 

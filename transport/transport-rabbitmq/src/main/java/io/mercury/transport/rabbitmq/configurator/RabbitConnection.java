@@ -9,7 +9,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.util.StringSupport;
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.configurator.TransportConfigurator;
+import io.mercury.transport.TransportConfigurator;
 import io.mercury.transport.rabbitmq.RabbitMqTransport.ShutdownSignalHandler;
 
 public final class RabbitConnection implements TransportConfigurator {
