@@ -15,11 +15,11 @@ import io.mercury.common.lang.Assertor;
 
 public final class ConfigDelegate<O extends ConfigOption> {
 
-	private final Config config;
+	private final Config conf;
 
-	public ConfigDelegate(@Nonnull Config config) {
-		Assertor.nonNull(config, "config");
-		this.config = config;
+	public ConfigDelegate(@Nonnull Config conf) {
+		Assertor.nonNull(conf, "conf");
+		this.conf = conf;
 	}
 
 	/**
@@ -29,7 +29,7 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @return
 	 */
 	public boolean hasOption(@Nonnull O option) {
-		return config.hasPath(option.getConfigName());
+		return conf.hasPath(option.getConfigName());
 	}
 
 	/**
@@ -39,7 +39,7 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @return
 	 */
 	public boolean hasOptionOrNull(@Nonnull O option) {
-		return config.hasPathOrNull(option.getConfigName());
+		return conf.hasPathOrNull(option.getConfigName());
 	}
 
 	/**
@@ -61,8 +61,8 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @return
 	 */
 	public boolean getBoolean(@Nonnull O option, boolean defaultVal) {
-		return Functions.getOrDefault(() -> config.hasPath(option.getConfigName()),
-				() -> config.getBoolean(option.getConfigName()), defaultVal);
+		return Functions.getOrDefault(() -> conf.hasPath(option.getConfigName()),
+				() -> conf.getBoolean(option.getConfigName()), defaultVal);
 	}
 
 	/**
@@ -84,8 +84,8 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @return
 	 */
 	public int getInt(@Nonnull O option, int defaultVal) {
-		return Functions.getOrDefault(() -> config.hasPath(option.getConfigName()),
-				() -> config.getInt(option.getConfigName()), defaultVal);
+		return Functions.getOrDefault(() -> conf.hasPath(option.getConfigName()),
+				() -> conf.getInt(option.getConfigName()), defaultVal);
 	}
 
 	/**
@@ -107,8 +107,8 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @return
 	 */
 	public long getLong(@Nonnull O option, long defaultVal) {
-		return Functions.getOrDefault(() -> config.hasPath(option.getConfigName()),
-				() -> config.getLong(option.getConfigName()), defaultVal);
+		return Functions.getOrDefault(() -> conf.hasPath(option.getConfigName()),
+				() -> conf.getLong(option.getConfigName()), defaultVal);
 	}
 
 	/**
@@ -130,8 +130,8 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @return
 	 */
 	public double getDouble(@Nonnull O option, double defaultVal) {
-		return Functions.getOrDefault(() -> config.hasPath(option.getConfigName()),
-				() -> config.getDouble(option.getConfigName()), defaultVal);
+		return Functions.getOrDefault(() -> conf.hasPath(option.getConfigName()),
+				() -> conf.getDouble(option.getConfigName()), defaultVal);
 	}
 
 	/**
@@ -153,8 +153,8 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @return
 	 */
 	public String getString(@Nonnull O option, @Nonnull String defaultVal) {
-		return Functions.getOrDefault(() -> config.hasPath(option.getConfigName()),
-				() -> config.getString(option.getConfigName()), defaultVal);
+		return Functions.getOrDefault(() -> conf.hasPath(option.getConfigName()),
+				() -> conf.getString(option.getConfigName()), defaultVal);
 	}
 
 	/**
@@ -164,8 +164,8 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @throws ConfigException.Missing
 	 */
 	public boolean getBooleanOrThrows(@Nonnull O option) throws ConfigException.Missing {
-		return Functions.getOrThrows(() -> config.hasPath(option.getConfigName()),
-				() -> config.getBoolean(option.getConfigName()), new ConfigException.Missing(option.getConfigName()));
+		return Functions.getOrThrows(() -> conf.hasPath(option.getConfigName()),
+				() -> conf.getBoolean(option.getConfigName()), new ConfigException.Missing(option.getConfigName()));
 	}
 
 	/**
@@ -175,8 +175,8 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @throws ConfigException.Missing
 	 */
 	public int getIntOrThrows(@Nonnull O option) throws ConfigException.Missing {
-		return Functions.getOrThrows(() -> config.hasPath(option.getConfigName()),
-				() -> config.getInt(option.getConfigName()), new ConfigException.Missing(option.getConfigName()));
+		return Functions.getOrThrows(() -> conf.hasPath(option.getConfigName()),
+				() -> conf.getInt(option.getConfigName()), new ConfigException.Missing(option.getConfigName()));
 	}
 
 	/**
@@ -218,8 +218,8 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @throws ConfigException.Missing
 	 */
 	public long getLongOrThrows(@Nonnull O option) throws ConfigException.Missing {
-		return Functions.getOrThrows(() -> config.hasPath(option.getConfigName()),
-				() -> config.getLong(option.getConfigName()), new ConfigException.Missing(option.getConfigName()));
+		return Functions.getOrThrows(() -> conf.hasPath(option.getConfigName()),
+				() -> conf.getLong(option.getConfigName()), new ConfigException.Missing(option.getConfigName()));
 	}
 
 	/**
@@ -261,8 +261,8 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @throws ConfigException.Missing
 	 */
 	public double getDoubleOrThrows(@Nonnull O option) throws ConfigException.Missing {
-		return Functions.getOrThrows(() -> config.hasPath(option.getConfigName()),
-				() -> config.getDouble(option.getConfigName()), new ConfigException.Missing(option.getConfigName()));
+		return Functions.getOrThrows(() -> conf.hasPath(option.getConfigName()),
+				() -> conf.getDouble(option.getConfigName()), new ConfigException.Missing(option.getConfigName()));
 	}
 
 	/**
@@ -304,8 +304,8 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @throws ConfigException.Missing
 	 */
 	public String getStringOrThrows(@Nonnull O option) throws ConfigException.Missing {
-		return Functions.getOrThrows(() -> config.hasPath(option.getConfigName()),
-				() -> config.getString(option.getConfigName()), new ConfigException.Missing(option.getConfigName()));
+		return Functions.getOrThrows(() -> conf.hasPath(option.getConfigName()),
+				() -> conf.getString(option.getConfigName()), new ConfigException.Missing(option.getConfigName()));
 	}
 
 	/**
