@@ -5,9 +5,8 @@ import static io.mercury.common.collections.MutableLists.newFastList;
 import org.eclipse.collections.api.list.MutableList;
 
 import akka.actor.ActorRef;
-import io.mercury.actors.ref.GenericActorT2;
 
-public abstract class SimpleDealerActor<T> extends GenericActorT2<ActorRef, T> {
+public abstract class SimpleDealerActor<T> extends CommonActorT2<ActorRef, T> {
 
 	private MutableList<ActorRef> registered;
 	private int turn = -1;

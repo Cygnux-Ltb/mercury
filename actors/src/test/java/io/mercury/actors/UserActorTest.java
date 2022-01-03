@@ -3,7 +3,6 @@ package io.mercury.actors;
 import akka.actor.ActorRef;
 import akka.actor.ActorSelection;
 import akka.pattern.Patterns;
-import io.mercury.actors.base.CommonActorSystem;
 import io.mercury.common.thread.SleepSupport;
 import scala.concurrent.Future;
 
@@ -11,7 +10,7 @@ public class UserActorTest {
 
 	public static void main(String[] args) {
 
-		CommonActorSystem actorSystem = CommonActorSystem.newSystem("data-center");
+		ActorSystemDelegate actorSystem = ActorSystemDelegate.newSystem("data-center");
 
 		ActorRef userActor1 = actorSystem.actorOf(UserActor.props(), "user1");
 		ActorRef userActor2 = actorSystem.actorOf(UserActor.props(), "user2");

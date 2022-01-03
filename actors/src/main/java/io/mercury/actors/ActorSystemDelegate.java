@@ -1,4 +1,4 @@
-package io.mercury.actors.base;
+package io.mercury.actors;
 
 import akka.actor.ActorPath;
 import akka.actor.ActorRef;
@@ -12,17 +12,17 @@ import io.mercury.common.thread.ShutdownHooks;
 import io.mercury.common.thread.SleepSupport;
 import scala.concurrent.Future;
 
-public final class CommonActorSystem {
+public final class ActorSystemDelegate {
 
 	private final ActorSystem actorSystem;
 
 	private final LoggingAdapter logger;
 
-	public static final CommonActorSystem newSystem(String name) {
-		return new CommonActorSystem(name);
+	public static final ActorSystemDelegate newSystem(String name) {
+		return new ActorSystemDelegate(name);
 	}
 
-	private CommonActorSystem(String name) {
+	private ActorSystemDelegate(String name) {
 		this.actorSystem = ActorSystem.create(name);
 		this.logger = Logging.getLogger(actorSystem, this);
 		// Add ShutdownHook

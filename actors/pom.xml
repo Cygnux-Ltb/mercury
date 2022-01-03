@@ -97,6 +97,12 @@
 
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-cluster-tools_2.13</artifactId>
+			<version>${akka.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-slf4j_2.13</artifactId>
 			<version>${akka.version}</version>
 			<exclusions>

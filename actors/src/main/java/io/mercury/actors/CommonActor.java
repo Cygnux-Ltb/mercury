@@ -1,4 +1,4 @@
-package io.mercury.actors.base;
+package io.mercury.actors;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
