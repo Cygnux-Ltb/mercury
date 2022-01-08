@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentMap;
 import org.jctools.maps.NonBlockingHashMap;
 import org.jctools.maps.NonBlockingHashMapLong;
 
-public final class JctMaps {
+public final class JctConcurrentMaps {
 
 	/**
 	 * 
@@ -24,7 +24,7 @@ public final class JctMaps {
 	 * @param capacity
 	 * @return
 	 */
-	public static <K, V> ConcurrentMap<K, V> newNonBlockingHashMap(final int capacity) {
+	public static <K, V> ConcurrentMap<K, V> newNonBlockingHashMap(int capacity) {
 		return new NonBlockingHashMap<>(capacity);
 	}
 
@@ -43,7 +43,7 @@ public final class JctMaps {
 	 * @param capacity
 	 * @return
 	 */
-	public static <V> ConcurrentMap<Long, V> newNonBlockingLongMap(final int capacity) {
+	public static <V> ConcurrentMap<Long, V> newNonBlockingLongMap(int capacity) {
 		return new NonBlockingHashMapLong<>(capacity);
 	}
 
@@ -53,7 +53,7 @@ public final class JctMaps {
 	 * @param spaceOptimization
 	 * @return
 	 */
-	public static <V> ConcurrentMap<Long, V> newNonBlockingLongMap(final boolean spaceOptimization) {
+	public static <V> ConcurrentMap<Long, V> newNonBlockingLongMap(boolean spaceOptimization) {
 		return new NonBlockingHashMapLong<>(spaceOptimization);
 	}
 
@@ -64,8 +64,7 @@ public final class JctMaps {
 	 * @param spaceOptimization
 	 * @return
 	 */
-	public static <V> ConcurrentMap<Long, V> newNonBlockingLongMap(final int capacity,
-			final boolean spaceOptimization) {
+	public static <V> ConcurrentMap<Long, V> newNonBlockingLongMap(int capacity, boolean spaceOptimization) {
 		return new NonBlockingHashMapLong<>(capacity, spaceOptimization);
 	}
 

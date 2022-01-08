@@ -58,18 +58,18 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
 	 * 
 	 * @return
 	 */
-	public static Builder singleProducer() {
+	public static Builder spscQueue() {
 		return new Builder(QueueType.SPSC);
 	}
 
 	/**
 	 * Single Producer Single Consumer Queue
 	 * 
-	 * @param queueName
+	 * @param name
 	 * @return
 	 */
-	public static Builder singleProducer(String queueName) {
-		return new Builder(QueueType.SPSC).setQueueName(queueName);
+	public static Builder spscQueue(String name) {
+		return new Builder(QueueType.SPSC).setQueueName(name);
 	}
 
 	/**
@@ -77,20 +77,27 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
 	 * 
 	 * @return
 	 */
-	public static Builder multiProducer() {
+	public static Builder mpscQueue() {
 		return new Builder(QueueType.MPSC);
 	}
 
 	/**
 	 * Multiple Producer Single Consumer Queue
 	 * 
-	 * @param queueName
+	 * @param name
 	 * @return
 	 */
-	public static Builder multiProducer(String queueName) {
-		return new Builder(QueueType.MPSC).setQueueName(queueName);
+	public static Builder mpscQueue(String name) {
+		return new Builder(QueueType.MPSC).setQueueName(name);
 	}
 
+	/**
+	 * 
+	 * @param processor
+	 * @param capacity
+	 * @param strategy
+	 * @param sleepMillis
+	 */
 	protected JctSingleConsumerQueue(Processor<E> processor, int capacity, WaitingStrategy strategy, long sleepMillis) {
 		super(processor);
 		this.queue = createQueue(capacity);
@@ -158,8 +165,8 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
 
 	@Override
 	protected void start0() {
-		Threads.startNewThread(name + "-ProcessThread", consumer);
-		log.info("Queue -> {}, Error call, This queue is started", name);
+		Threads.startNewThread(name + "-SubThread", consumer);
+		log.info("Queue -> {}, This queue is already working", name);
 	}
 
 	@Override
