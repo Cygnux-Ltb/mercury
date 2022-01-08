@@ -83,7 +83,7 @@ public final class SocketSender extends TransportComponent implements Sender<byt
 		}
 	}
 
-	private AbstractSingleConsumerQueue<byte[]> innerQueue = JctSingleConsumerQueue.multiProducer(getName() + "-InnerQueue")
+	private AbstractSingleConsumerQueue<byte[]> innerQueue = JctSingleConsumerQueue.mpscQueue(getName() + "-InnerQueue")
 			.setCapacity(512).build(bytes -> processSendQueue(bytes));
 
 	public static void main(String[] args) throws IOException {

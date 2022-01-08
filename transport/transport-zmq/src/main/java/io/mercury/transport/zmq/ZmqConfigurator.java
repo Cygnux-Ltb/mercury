@@ -1,5 +1,6 @@
 package io.mercury.transport.zmq;
 
+import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
 import static io.mercury.transport.zmq.ZmqConfigurator.ZmqConfigOption.Addr;
 import static io.mercury.transport.zmq.ZmqConfigurator.ZmqConfigOption.IoThreads;
 import static io.mercury.transport.zmq.ZmqConfigurator.ZmqConfigOption.Port;
@@ -82,35 +83,45 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	 * @param config
 	 * @return
 	 */
-	public static ZmqConfigurator with(@Nonnull Config config) {
+	public static ZmqConfigurator withConfig(@Nonnull Config config) {
+		return withConfig(config, "");
+	}
+
+	/**
+	 * 
+	 * @param config
+	 * @param module
+	 * @return
+	 */
+	public static ZmqConfigurator withConfig(@Nonnull Config config, String module) {
 		Assertor.nonNull(config, "config");
-		var delegate = new ConfigDelegate<ZmqConfigOption>(config);
+		var delegate = new ConfigDelegate<ZmqConfigOption>(config, module);
 		var protocol = ZmqProtocol.of(delegate.getStringOrThrows(Protocol));
-		ZmqConfigurator configurator = null;
+		ZmqConfigurator zmqConf = null;
 		switch (protocol) {
 		case TCP:
 			int port = delegate.getIntOrThrows(Port);
 			if (delegate.hasOption(Addr)) {
 				String tcpAddr = delegate.getStringOrThrows(Addr);
 				Assertor.isValid(tcpAddr, IpAddressValidator::isIpAddress, new IpAddressIllegalException(tcpAddr));
-				configurator = ZmqConfigurator.tcp(tcpAddr, port);
+				zmqConf = ZmqConfigurator.tcp(tcpAddr, port);
 			} else {
 				// 没有addr配置项, 使用本地地址
-				configurator = ZmqConfigurator.tcp(port);
+				zmqConf = ZmqConfigurator.tcp(port);
 			}
 			break;
 		case IPC:
 		case INPROC:
 			// 使用ipc或inproc协议
-			String innerAddr = delegate.getStringOrThrows(Addr);
-			configurator = new ZmqConfigurator(protocol, innerAddr);
+			String internalAddr = delegate.getStringOrThrows(Addr);
+			zmqConf = new ZmqConfigurator(protocol, internalAddr);
 		default:
 			break;
 		}
 		if (delegate.hasOption(IoThreads))
-			configurator.ioThreads(delegate.getInt(IoThreads));
-		log.info("created ZmqConfigurator object -> {}", configurator);
-		return configurator;
+			zmqConf.ioThreads(delegate.getInt(IoThreads));
+		log.info("created ZmqConfigurator object -> {}", zmqConf);
+		return zmqConf;
 	}
 
 	/**
@@ -134,7 +145,8 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	public static ZmqConfigurator tcp(@Nonnull String addr, int port) {
 		Assertor.nonEmpty(addr, "addr");
 		Assertor.atWithinRange(port, 4096, 65536, "port");
-		IpAddressValidator.assertIpAddress(addr);
+		if (!addr.equals("*"))
+			IpAddressValidator.assertIpAddress(addr);
 		return new ZmqConfigurator(ZmqProtocol.TCP, addr + ":" + port);
 	}
 
@@ -168,7 +180,7 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	 */
 	public ZmqConfigurator ioThreads(int ioThreads) {
 		Assertor.greaterThan(ioThreads, 0, "ioThreads");
-		this.ioThreads = ioThreads;
+		this.ioThreads = ioThreads < availableProcessors() ? ioThreads : availableProcessors();
 		return this;
 	}
 
@@ -390,17 +402,17 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 
 	public static enum ZmqConfigOption implements ConfigOption {
 
-		Protocol("zmq.protocol"), Addr("zmq.addr"), Port("zmq.port"), IoThreads("zmq.ioThreads");
+		Protocol("protocol"), Addr("addr"), Port("port"), IoThreads("ioThreads");
 
-		private final String name;
+		private final String configName;
 
 		private ZmqConfigOption(String name) {
-			this.name = name;
+			this.configName = "zmq." + name;
 		}
 
 		@Override
 		public String getConfigName() {
-			return name;
+			return configName;
 		}
 	}
 
