@@ -63,7 +63,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 		this.readOnly = builder.readOnly;
 		this.epoch = builder.epoch;
 		this.fileCycle = builder.fileCycle;
-		this.fileClearCycle = builder.fileClearCycle <= 0 ? 0 : builder.fileClearCycle < 3 ? 3 : builder.fileClearCycle;
+		this.fileClearCycle = builder.fileClearCycle <= 0 ? 0 : builder.fileClearCycle < 7 ? 7 : builder.fileClearCycle;
 		this.storeFileListener = builder.storeFileListener;
 		if (builder.logger != null) {
 			this.logger = builder.logger;
@@ -164,8 +164,8 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 		int deleteBaseline = last - fileClearCycle;
 		logger.info("Execute clear schedule : lastCycle==[{}], deleteBaseline==[{}]", last, deleteBaseline);
 		// 获取全部存储文件的Key
-		Set<Integer> keySet = cycleFileMap.keySet();
-		for (int saveCycle : keySet) {
+		Set<Integer> cycleFileKeys = cycleFileMap.keySet();
+		for (int saveCycle : cycleFileKeys) {
 			// 小于基准线的文件被删除
 			if (saveCycle < deleteBaseline) {
 				String fileAbsolutePath = cycleFileMap.get(saveCycle);
