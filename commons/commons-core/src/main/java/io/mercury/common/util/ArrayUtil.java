@@ -172,7 +172,7 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static double[] newOf(@Nonnull double[] origin) {
-		double[] target = new double[origin.length];
+		var target = new double[origin.length];
 		arraycopy(origin, 0, target, 0, origin.length);
 		return target;
 	}
