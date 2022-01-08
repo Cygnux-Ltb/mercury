@@ -171,7 +171,7 @@ public final class PropertiesUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("---nwe---");
+		System.out.println("---new---");
 		PropertiesUtil.showProperties(System.getProperties());
 	}
 

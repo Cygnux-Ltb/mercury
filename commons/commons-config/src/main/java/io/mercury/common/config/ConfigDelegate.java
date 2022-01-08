@@ -1,25 +1,35 @@
 package io.mercury.common.config;
 
+import static io.mercury.common.functional.Functions.getOrDefault;
+import static io.mercury.common.functional.Functions.getOrThrows;
+import static io.mercury.common.lang.Assertor.nonNull;
+import static io.mercury.common.util.StringSupport.nonEmpty;
+
 import java.util.function.DoublePredicate;
 import java.util.function.IntPredicate;
 import java.util.function.LongPredicate;
 import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigException;
 
-import io.mercury.common.functional.Functions;
-import io.mercury.common.lang.Assertor;
-
 public final class ConfigDelegate<O extends ConfigOption> {
 
-	private final Config conf;
+	private final Config config;
 
-	public ConfigDelegate(@Nonnull Config conf) {
-		Assertor.nonNull(conf, "conf");
-		this.conf = conf;
+	private final String module;
+
+	public ConfigDelegate(@Nonnull Config config) {
+		this(config, "");
+	}
+
+	public ConfigDelegate(@Nonnull Config config, @Nullable String module) {
+		nonNull(config, "config");
+		this.config = config;
+		this.module = nonEmpty(module) ? module.endsWith(".") ? module : module + "." : "";
 	}
 
 	/**
@@ -29,7 +39,7 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @return
 	 */
 	public boolean hasOption(@Nonnull O option) {
-		return conf.hasPath(option.getConfigName());
+		return config.hasPath(option.getConfigName(module));
 	}
 
 	/**
@@ -39,7 +49,7 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @return
 	 */
 	public boolean hasOptionOrNull(@Nonnull O option) {
-		return conf.hasPathOrNull(option.getConfigName());
+		return config.hasPathOrNull(option.getConfigName(module));
 	}
 
 	/**
@@ -61,8 +71,8 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @return
 	 */
 	public boolean getBoolean(@Nonnull O option, boolean defaultVal) {
-		return Functions.getOrDefault(() -> conf.hasPath(option.getConfigName()),
-				() -> conf.getBoolean(option.getConfigName()), defaultVal);
+		return getOrDefault(() -> config.hasPath(option.getConfigName(module)),
+				() -> config.getBoolean(option.getConfigName(module)), defaultVal);
 	}
 
 	/**
@@ -84,8 +94,8 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @return
 	 */
 	public int getInt(@Nonnull O option, int defaultVal) {
-		return Functions.getOrDefault(() -> conf.hasPath(option.getConfigName()),
-				() -> conf.getInt(option.getConfigName()), defaultVal);
+		return getOrDefault(() -> config.hasPath(option.getConfigName(module)),
+				() -> config.getInt(option.getConfigName(module)), defaultVal);
 	}
 
 	/**
@@ -107,8 +117,8 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @return
 	 */
 	public long getLong(@Nonnull O option, long defaultVal) {
-		return Functions.getOrDefault(() -> conf.hasPath(option.getConfigName()),
-				() -> conf.getLong(option.getConfigName()), defaultVal);
+		return getOrDefault(() -> config.hasPath(option.getConfigName(module)),
+				() -> config.getLong(option.getConfigName(module)), defaultVal);
 	}
 
 	/**
@@ -130,8 +140,8 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @return
 	 */
 	public double getDouble(@Nonnull O option, double defaultVal) {
-		return Functions.getOrDefault(() -> conf.hasPath(option.getConfigName()),
-				() -> conf.getDouble(option.getConfigName()), defaultVal);
+		return getOrDefault(() -> config.hasPath(option.getConfigName(module)),
+				() -> config.getDouble(option.getConfigName(module)), defaultVal);
 	}
 
 	/**
@@ -153,8 +163,8 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @return
 	 */
 	public String getString(@Nonnull O option, @Nonnull String defaultVal) {
-		return Functions.getOrDefault(() -> conf.hasPath(option.getConfigName()),
-				() -> conf.getString(option.getConfigName()), defaultVal);
+		return getOrDefault(() -> config.hasPath(option.getConfigName(module)),
+				() -> config.getString(option.getConfigName(module)), defaultVal);
 	}
 
 	/**
@@ -164,8 +174,9 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @throws ConfigException.Missing
 	 */
 	public boolean getBooleanOrThrows(@Nonnull O option) throws ConfigException.Missing {
-		return Functions.getOrThrows(() -> conf.hasPath(option.getConfigName()),
-				() -> conf.getBoolean(option.getConfigName()), new ConfigException.Missing(option.getConfigName()));
+		return getOrThrows(() -> config.hasPath(option.getConfigName(module)),
+				() -> config.getBoolean(option.getConfigName(module)),
+				new ConfigException.Missing(option.getConfigName(module)));
 	}
 
 	/**
@@ -175,8 +186,9 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @throws ConfigException.Missing
 	 */
 	public int getIntOrThrows(@Nonnull O option) throws ConfigException.Missing {
-		return Functions.getOrThrows(() -> conf.hasPath(option.getConfigName()),
-				() -> conf.getInt(option.getConfigName()), new ConfigException.Missing(option.getConfigName()));
+		return getOrThrows(() -> config.hasPath(option.getConfigName(module)),
+				() -> config.getInt(option.getConfigName(module)),
+				new ConfigException.Missing(option.getConfigName(module)));
 	}
 
 	/**
@@ -190,7 +202,7 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	public int getIntOrThrows(@Nonnull O option, IntPredicate predicate)
 			throws ConfigException.Missing, ConfigException.BadValue {
 		return getIntOrThrows(option, predicate,
-				new IllegalArgumentException("Illegal argument -> " + option.getConfigName()));
+				new IllegalArgumentException("Illegal argument -> " + option.getConfigName(module)));
 	}
 
 	/**
@@ -208,7 +220,7 @@ public final class ConfigDelegate<O extends ConfigOption> {
 		if (predicate.test(value))
 			return value;
 		else
-			throw new ConfigException.BadValue(option.getConfigName(), "value == " + value, exception);
+			throw new ConfigException.BadValue(option.getConfigName(module), "value == " + value, exception);
 	}
 
 	/**
@@ -218,8 +230,9 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @throws ConfigException.Missing
 	 */
 	public long getLongOrThrows(@Nonnull O option) throws ConfigException.Missing {
-		return Functions.getOrThrows(() -> conf.hasPath(option.getConfigName()),
-				() -> conf.getLong(option.getConfigName()), new ConfigException.Missing(option.getConfigName()));
+		return getOrThrows(() -> config.hasPath(option.getConfigName(module)),
+				() -> config.getLong(option.getConfigName(module)),
+				new ConfigException.Missing(option.getConfigName(module)));
 	}
 
 	/**
@@ -233,7 +246,7 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	public long getLongOrThrows(@Nonnull O option, LongPredicate predicate)
 			throws ConfigException.Missing, ConfigException.BadValue {
 		return getLongOrThrows(option, predicate,
-				new IllegalArgumentException("Illegal argument -> " + option.getConfigName()));
+				new IllegalArgumentException("Illegal argument -> " + option.getConfigName(module)));
 	}
 
 	/**
@@ -251,7 +264,7 @@ public final class ConfigDelegate<O extends ConfigOption> {
 		if (predicate.test(value))
 			return value;
 		else
-			throw new ConfigException.BadValue(option.getConfigName(), "value == " + value, exception);
+			throw new ConfigException.BadValue(option.getConfigName(module), "value == " + value, exception);
 	}
 
 	/**
@@ -261,8 +274,9 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @throws ConfigException.Missing
 	 */
 	public double getDoubleOrThrows(@Nonnull O option) throws ConfigException.Missing {
-		return Functions.getOrThrows(() -> conf.hasPath(option.getConfigName()),
-				() -> conf.getDouble(option.getConfigName()), new ConfigException.Missing(option.getConfigName()));
+		return getOrThrows(() -> config.hasPath(option.getConfigName(module)),
+				() -> config.getDouble(option.getConfigName(module)),
+				new ConfigException.Missing(option.getConfigName(module)));
 	}
 
 	/**
@@ -276,7 +290,7 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	public double getDoubleOrThrows(@Nonnull O option, DoublePredicate predicate)
 			throws ConfigException.Missing, ConfigException.BadValue {
 		return getDoubleOrThrows(option, predicate,
-				new IllegalArgumentException("Illegal argument -> " + option.getConfigName()));
+				new IllegalArgumentException("Illegal argument -> " + option.getConfigName(module)));
 	}
 
 	/**
@@ -294,7 +308,7 @@ public final class ConfigDelegate<O extends ConfigOption> {
 		if (predicate.test(value))
 			return value;
 		else
-			throw new ConfigException.BadValue(option.getConfigName(), "value == " + value, exception);
+			throw new ConfigException.BadValue(option.getConfigName(module), "value == " + value, exception);
 	}
 
 	/**
@@ -304,8 +318,9 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 * @throws ConfigException.Missing
 	 */
 	public String getStringOrThrows(@Nonnull O option) throws ConfigException.Missing {
-		return Functions.getOrThrows(() -> conf.hasPath(option.getConfigName()),
-				() -> conf.getString(option.getConfigName()), new ConfigException.Missing(option.getConfigName()));
+		return getOrThrows(() -> config.hasPath(option.getConfigName(module)),
+				() -> config.getString(option.getConfigName(module)),
+				new ConfigException.Missing(option.getConfigName(module)));
 	}
 
 	/**
@@ -319,7 +334,7 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	public String getStringOrThrows(@Nonnull O option, Predicate<String> predicate)
 			throws ConfigException.Missing, ConfigException.BadValue {
 		return getStringOrThrows(option, predicate,
-				new IllegalArgumentException("Illegal argument -> " + option.getConfigName()));
+				new IllegalArgumentException("Illegal argument -> " + option.getConfigName(module)));
 	}
 
 	/**
@@ -337,7 +352,7 @@ public final class ConfigDelegate<O extends ConfigOption> {
 		if (predicate.test(value))
 			return value;
 		else
-			throw new ConfigException.BadValue(option.getConfigName(), "value == " + value, exception);
+			throw new ConfigException.BadValue(option.getConfigName(module), "value == " + value, exception);
 	}
 
 }
