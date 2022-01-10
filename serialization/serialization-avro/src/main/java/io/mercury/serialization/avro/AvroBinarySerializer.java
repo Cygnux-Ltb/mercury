@@ -2,7 +2,6 @@ package io.mercury.serialization.avro;
 
 import static io.mercury.common.concurrent.map.JctConcurrentMaps.newNonBlockingLongMap;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.ConcurrentMap;
@@ -14,6 +13,7 @@ import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecord;
+import org.apache.avro.util.NonCopyingByteArrayOutputStream;
 import org.slf4j.Logger;
 
 import io.mercury.common.annotation.thread.ThreadSafeVariable;
@@ -30,38 +30,36 @@ public final class AvroBinarySerializer<T extends SpecificRecord> implements Byt
 
 	private final ConcurrentMap<Long, BinaryEncoder> encoderMap = newNonBlockingLongMap(16);
 
-	private final ConcurrentMap<Long, ByteArrayOutputStream> streamMap = newNonBlockingLongMap(16);
+	private final ConcurrentMap<Long, NonCopyingByteArrayOutputStream> streamMap = newNonBlockingLongMap(16);
 
-	private final int bufferSize;
+	private final int bufSize;
 
 	/**
 	 * Use default ByteArrayOutputStream size : 8192
 	 */
-	public AvroBinarySerializer(Class<T> clazz) {
-		this(clazz, 8192);
+	public AvroBinarySerializer(Class<T> type) {
+		this(type, 8192);
 	}
 
 	/**
 	 * 
-	 * @param clazz      : object type
-	 * @param bufferSize : size is inner ByteArrayOutputStream size
+	 * @param type    : object type
+	 * @param bufSize : size is inner ByteArrayOutputStream size
 	 */
-	public AvroBinarySerializer(Class<T> clazz, int bufferSize) {
-		this.writer = new SpecificDatumWriter<>(clazz);
-		this.bufferSize = bufferSize;
+	public AvroBinarySerializer(Class<T> type, int bufSize) {
+		this.writer = new SpecificDatumWriter<>(type);
+		this.bufSize = bufSize;
 	}
 
 	@Override
 	public ByteBuffer serialization(T obj) {
 		try {
-			final long threadId = Thread.currentThread().getId();
-			final ByteArrayOutputStream outputStream = streamMap.putIfAbsent(threadId,
-					new ByteArrayOutputStream(bufferSize));
-			final BinaryEncoder encoder = encoderMap.putIfAbsent(threadId,
-					EncoderFactory.get().binaryEncoder(outputStream, null));
+			var threadId = Thread.currentThread().getId();
+			var outputStream = streamMap.putIfAbsent(threadId, new NonCopyingByteArrayOutputStream(bufSize));
+			var encoder = encoderMap.putIfAbsent(threadId, EncoderFactory.get().binaryEncoder(outputStream, null));
 			writer.write(obj, encoder);
 			encoder.flush();
-			ByteBuffer buffer = ByteBuffer.wrap(outputStream.toByteArray());
+			var buffer = outputStream.asByteBuffer();
 			outputStream.reset();
 			return buffer;
 		} catch (IOException e) {
