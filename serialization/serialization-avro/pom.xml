@@ -17,6 +17,13 @@
 		<avro.version>1.11.0</avro.version>
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>avro-util</id>
+			<url>https://linkedin.jfrog.io/artifactory/avro-util/</url>
+		</repository>
+	</repositories>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -54,6 +61,20 @@
 	</build>
 
 	<dependencies>
+		<!-- The core functionality of the CodeModel java source code generation 
+			library -->
+		<dependency>
+			<groupId>com.sun.codemodel</groupId>
+			<artifactId>codemodel</artifactId>
+			<version>2.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.linkedin.avroutil1</groupId>
+			<artifactId>helper-all</artifactId>
+			<version>0.2.71</version>
+		</dependency>
+
 		<dependency>
 			<groupId>io.mercury</groupId>
 			<artifactId>commons-concurrent</artifactId>
@@ -98,13 +119,6 @@
 					<artifactId>jackson-databind</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-
-		<!-- Core Jackson processing abstractions (aka Streaming API), implementation 
-			for JSON -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
 		</dependency>
 
 		<!-- General data-binding functionality for Jackson: works on core streaming 

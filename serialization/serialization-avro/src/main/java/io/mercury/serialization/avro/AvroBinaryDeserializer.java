@@ -26,25 +26,29 @@ public final class AvroBinaryDeserializer<T extends SpecificRecord> implements B
 	@ThreadSafeVariable
 	private final DatumReader<T> reader;
 
-	private final ReusableByteArrayInputStream reusable;
+	private final ReusableByteArrayInputStream inputStream;
 
 	private BinaryDecoder decoder;
 
+	/**
+	 * 
+	 * @param type
+	 */
 	public AvroBinaryDeserializer(Class<T> type) {
 		this.type = type;
 		this.reader = new SpecificDatumReader<>(type);
-		this.reusable = new ReusableByteArrayInputStream();
+		this.inputStream = new ReusableByteArrayInputStream();
 	}
 
 	@Override
 	public T deserialization(@Nonnull byte[] data, @Nullable T reuse) {
 		try {
-			reusable.setByteArray(data, 0, data.length);
-			decoder = DecoderFactory.get().binaryDecoder(reusable, decoder);
+			inputStream.setByteArray(data, 0, data.length);
+			decoder = DecoderFactory.get().binaryDecoder(inputStream, decoder);
 			reuse = reader.read(reuse, decoder);
 			return reuse;
 		} catch (Exception e) {
-			log.error("deserialization func -> " + e.getMessage(), e);
+			log.error("deserialization func -> {}", e.getMessage(), e);
 			throw new RuntimeException(
 					"Type -> " + type.getName() + ", deserialization func has Exception -> " + e.getMessage());
 		}

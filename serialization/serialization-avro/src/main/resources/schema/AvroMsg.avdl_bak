@@ -1,7 +1,11 @@
 @namespace ( "io.mercury.serialization.avro.msg" )
-protocol EmptyProtocol {
+protocol UselessProtocol {
 	
 	enum ContentType {
+		NULL,
+		BOOLEAN,
+		BYTE,
+		CHAR,
 		INT,
 		LONG,
 		DOUBLE,

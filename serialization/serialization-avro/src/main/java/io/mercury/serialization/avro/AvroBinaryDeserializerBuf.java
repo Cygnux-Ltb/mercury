@@ -14,6 +14,12 @@ import org.slf4j.Logger;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.BytesDeserializer;
 
+/**
+ * 
+ * @author yellow013
+ *
+ * @param <T>
+ */
 @ThreadSafe
 public final class AvroBinaryDeserializerBuf<T extends SpecificRecord> implements BytesDeserializer<T> {
 
@@ -23,6 +29,10 @@ public final class AvroBinaryDeserializerBuf<T extends SpecificRecord> implement
 
 	private final ConcurrentMap<Long, AvroBinaryDeserializer<T>> deserializers = newNonBlockingLongMap(16);
 
+	/**
+	 * 
+	 * @param type
+	 */
 	public AvroBinaryDeserializerBuf(Class<T> type) {
 		this.type = type;
 	}
@@ -32,13 +42,13 @@ public final class AvroBinaryDeserializerBuf<T extends SpecificRecord> implement
 		try {
 			return getDeserializer().deserialization(source, reuse);
 		} catch (Exception e) {
-			log.error("deserialization func -> " + e.getMessage(), e);
+			log.error("deserialization func -> {}", e.getMessage(), e);
 			throw e;
 		}
 	}
 
 	/**
-	 * 根据线程ID获取Decoder
+	 * 根据线程ID获取Deserializer
 	 * 
 	 * @param source
 	 * @return

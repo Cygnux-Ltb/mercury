@@ -44,6 +44,7 @@ public final class AvroFileWriter<T extends SpecificRecord> implements Closeable
 	 * 
 	 * @param saveFile
 	 * @param records
+	 * 
 	 * @throws IOException
 	 */
 	public void append(final File saveFile, Collection<T> records) throws IOException {
@@ -55,31 +56,32 @@ public final class AvroFileWriter<T extends SpecificRecord> implements Closeable
 	 * @param codecFactory
 	 * @param saveFile
 	 * @param records
+	 * 
 	 * @throws IOException
 	 */
 	public void append(@Nullable CodecFactory codec, final File saveFile, Collection<T> records) throws IOException {
 		Assertor.nonNull(saveFile, "saveFile");
 		File dir = saveFile.getParentFile();
-		if (!dir.exists())
+		if (!dir.exists()) {
 			dir.mkdirs();
-
+		}
 		// 如果文件存在则追加, 否则创建新文件
-		if (saveFile.exists())
+		if (saveFile.exists()) {
 			fileWriter.appendTo(saveFile);
-		else
+		} else {
 			fileWriter.create(schema, saveFile);
-
+		}
 		// 设置Codec
-		if (codec != null)
+		if (codec != null) {
 			fileWriter.setCodec(codec);
-
+		}
 		// Serializing
 		if (CollectionUtils.isNotEmpty(records)) {
 			Iterator<T> iterator = records.iterator();
-			while (iterator.hasNext())
+			while (iterator.hasNext()) {
 				// write record
 				fileWriter.append(iterator.next());
-
+			}
 			fileWriter.fSync();
 		}
 	}
