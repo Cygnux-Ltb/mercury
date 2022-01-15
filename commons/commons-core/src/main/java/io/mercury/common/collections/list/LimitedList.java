@@ -1,5 +1,6 @@
 package io.mercury.common.collections.list;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.collections.impl.list.mutable.FastList;
@@ -8,11 +9,11 @@ import io.mercury.common.annotation.AbstractFunction;
 
 public abstract class LimitedList<L extends List<E>, E> extends LimitedContainer<E> {
 
-	private L savedList;
+	private L list;
 
-	private LimitedList(int capacity) {
+	protected LimitedList(int capacity) {
 		super(capacity);
-		this.savedList = initList(capacity);
+		this.list = newList(capacity);
 	}
 
 	/**
@@ -21,31 +22,74 @@ public abstract class LimitedList<L extends List<E>, E> extends LimitedContainer
 	 * @param capacity
 	 * @return
 	 */
-	public final static <E> LimitedList<FastList<E>, E> newWithFastList(int capacity) {
-		return new LimitedList<FastList<E>, E>(capacity) {
-			@Override
-			protected FastList<E> initList(int capacity) {
-				return new FastList<>(capacity);
-			}
-		};
+	public final static <E> LimitedFastList<E> newLimitedFastList(int capacity) {
+		return new LimitedFastList<E>(capacity);
+	}
+
+	/**
+	 * 
+	 * @param <E>
+	 * @param capacity
+	 * @return
+	 */
+	public final static <E> LimitedArrayList<E> newLimitedArrayList(int capacity) {
+		return new LimitedArrayList<E>(capacity);
 	}
 
 	@AbstractFunction
-	protected abstract L initList(int capacity);
+	protected abstract L newList(int capacity);
 
 	@Override
 	protected void setTail(int tail, E e) {
-		savedList.set(tail, e);
+		list.set(tail, e);
 	}
 
 	@Override
 	public E getTail() {
-		return savedList.get(tailIndex());
+		return list.get(tailIndex());
 	}
 
 	@Override
 	public E getHead() {
-		return savedList.get(headIndex());
+		return list.get(headIndex());
+	}
+
+	/**
+	 * 
+	 * @author yellow013
+	 *
+	 * @param <E>
+	 */
+	public static class LimitedFastList<E> extends LimitedList<FastList<E>, E> {
+
+		private LimitedFastList(int capacity) {
+			super(capacity);
+		}
+
+		@Override
+		protected FastList<E> newList(int capacity) {
+			return new FastList<>(capacity);
+		}
+
+	}
+
+	/**
+	 * 
+	 * @author yellow013
+	 *
+	 * @param <E>
+	 */
+	public static class LimitedArrayList<E> extends LimitedList<ArrayList<E>, E> {
+
+		private LimitedArrayList(int capacity) {
+			super(capacity);
+		}
+
+		@Override
+		protected ArrayList<E> newList(int capacity) {
+			return new ArrayList<>(capacity);
+		}
+
 	}
 
 }

@@ -1,4 +1,4 @@
-package io.mercury.common.collections.list;
+package io.mercury.common.collections.window;
 
 import java.util.LongSummaryStatistics;
 import java.util.function.LongConsumer;

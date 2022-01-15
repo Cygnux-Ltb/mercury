@@ -41,8 +41,8 @@ public class PendingOfferAbortedException extends OfferTimeoutException {
 		super(msg);
 	}
 
-	public PendingOfferAbortedException(String msg, Throwable t) {
-		super(msg, t);
+	public PendingOfferAbortedException(String msg, Throwable cause) {
+		super(msg, cause);
 	}
 
 }

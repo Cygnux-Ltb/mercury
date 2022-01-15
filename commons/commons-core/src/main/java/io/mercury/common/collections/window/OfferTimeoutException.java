@@ -38,8 +38,8 @@ public class OfferTimeoutException extends Exception {
 		super(msg);
 	}
 
-	public OfferTimeoutException(String msg, Throwable t) {
-		super(msg, t);
+	public OfferTimeoutException(String msg, Throwable cause) {
+		super(msg, cause);
 	}
 
 }
