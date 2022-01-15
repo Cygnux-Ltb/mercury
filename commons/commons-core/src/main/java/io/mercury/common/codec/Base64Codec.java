@@ -64,35 +64,35 @@ public class Base64Codec {
 	 * @return The base64-encoded representation of the provided raw data.
 	 */
 	public static String encode(byte[] rawData) {
-		var buffer = new StringBuilder(4 * rawData.length / 3);
+		var buf = new StringBuilder(4 * rawData.length / 3);
 
 		int pos = 0;
 		int iterations = rawData.length / 3;
 		for (int i = 0; i < iterations; i++) {
 			int value = ((rawData[pos++] & 0xFF) << 16) | ((rawData[pos++] & 0xFF) << 8) | (rawData[pos++] & 0xFF);
 
-			buffer.append(BASE64_ALPHABET[(value >>> 18) & 0x3F]);
-			buffer.append(BASE64_ALPHABET[(value >>> 12) & 0x3F]);
-			buffer.append(BASE64_ALPHABET[(value >>> 6) & 0x3F]);
-			buffer.append(BASE64_ALPHABET[value & 0x3F]);
+			buf.append(BASE64_ALPHABET[(value >>> 18) & 0x3F]);
+			buf.append(BASE64_ALPHABET[(value >>> 12) & 0x3F]);
+			buf.append(BASE64_ALPHABET[(value >>> 6) & 0x3F]);
+			buf.append(BASE64_ALPHABET[value & 0x3F]);
 		}
 
 		switch (rawData.length % 3) {
 		case 1:
-			buffer.append(BASE64_ALPHABET[(rawData[pos] >>> 2) & 0x3F]);
-			buffer.append(BASE64_ALPHABET[(rawData[pos] << 4) & 0x3F]);
-			buffer.append("==");
+			buf.append(BASE64_ALPHABET[(rawData[pos] >>> 2) & 0x3F]);
+			buf.append(BASE64_ALPHABET[(rawData[pos] << 4) & 0x3F]);
+			buf.append("==");
 			break;
 		case 2:
 			int value = ((rawData[pos++] & 0xFF) << 8) | (rawData[pos] & 0xFF);
-			buffer.append(BASE64_ALPHABET[(value >>> 10) & 0x3F]);
-			buffer.append(BASE64_ALPHABET[(value >>> 4) & 0x3F]);
-			buffer.append(BASE64_ALPHABET[(value << 2) & 0x3F]);
-			buffer.append("=");
+			buf.append(BASE64_ALPHABET[(value >>> 10) & 0x3F]);
+			buf.append(BASE64_ALPHABET[(value >>> 4) & 0x3F]);
+			buf.append(BASE64_ALPHABET[(value << 2) & 0x3F]);
+			buf.append("=");
 			break;
 		}
 
-		return buffer.toString();
+		return buf.toString();
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class Base64Codec {
 			// Message message = ERR_BASE64_DECODE_INVALID_LENGTH.get(encodedData);
 			throw new ParseException("Base64 data was not 4-byte aligned", 0);
 
-		var buffer = ByteBuffer.allocate(length);
+		var buf = ByteBuffer.allocate(length);
 		for (int i = 0; i < length; i += 4) {
 			boolean append = true;
 			int value = 0;
@@ -315,11 +315,11 @@ public class Base64Codec {
 					append = false;
 					switch (j) {
 					case 2:
-						buffer.put((byte) ((value >>> 4) & 0xFF));
+						buf.put((byte) ((value >>> 4) & 0xFF));
 						break;
 					case 3:
-						buffer.put((byte) ((value >>> 10) & 0xFF));
-						buffer.put((byte) ((value >>> 2) & 0xFF));
+						buf.put((byte) ((value >>> 10) & 0xFF));
+						buf.put((byte) ((value >>> 2) & 0xFF));
 						break;
 					}
 					break;
@@ -335,17 +335,17 @@ public class Base64Codec {
 			}
 
 			if (append) {
-				buffer.put((byte) ((value >>> 16) & 0xFF));
-				buffer.put((byte) ((value >>> 8) & 0xFF));
-				buffer.put((byte) (value & 0xFF));
+				buf.put((byte) ((value >>> 16) & 0xFF));
+				buf.put((byte) ((value >>> 8) & 0xFF));
+				buf.put((byte) (value & 0xFF));
 			} else {
 				break;
 			}
 		}
 
-		buffer.flip();
-		byte[] returnArray = new byte[buffer.limit()];
-		buffer.get(returnArray);
+		buf.flip();
+		byte[] returnArray = new byte[buf.limit()];
+		buf.get(returnArray);
 		return returnArray;
 	}
 

@@ -2,6 +2,7 @@ package io.mercury.common.datetime;
 
 public interface TimeConst {
 
+	/******************** Hours ********************/
 	/**
 	 * Hours per day.
 	 */
@@ -12,6 +13,7 @@ public interface TimeConst {
 	 */
 	int HOURS_PER_HALF_DAY = HOURS_PER_DAY / 2;
 
+	/******************** Minutes ********************/
 	/**
 	 * Minutes per hour.
 	 */
@@ -27,6 +29,7 @@ public interface TimeConst {
 	 */
 	int MINUTES_PER_HALF_DAY = MINUTES_PER_DAY / 2;
 
+	/******************** Seconds ********************/
 	/**
 	 * Seconds per minute.
 	 */
@@ -47,6 +50,7 @@ public interface TimeConst {
 	 */
 	int SECONDS_PER_HALF_DAY = SECONDS_PER_DAY / 2;
 
+	/******************** Milliseconds ********************/
 	/**
 	 * Milliseconds per Seconds.
 	 */
@@ -72,6 +76,7 @@ public interface TimeConst {
 	 */
 	int MILLIS_PER_HALF_DAY = MILLIS_PER_DAY / 2;
 
+	/******************** Microseconds ********************/
 	/**
 	 * Microseconds per Milliseconds.
 	 */
@@ -102,6 +107,7 @@ public interface TimeConst {
 	 */
 	long MICROS_PER_HALF_DAY = MICROS_PER_DAY / 2;
 
+	/******************** Nanoseconds ********************/
 	/**
 	 * Nanoseconds per Microseconds.
 	 */

@@ -289,26 +289,6 @@ public final class EpochUtil {
 	}
 
 	public static void main(String[] args) {
-
-//		long epoch = currentTimeMillis();
-//		LocalDateTime now = LocalDateTime.now();
-//		ZoneOffset offset = ZonedDateTime.now().getOffset();
-//
-//		System.out.println(offset.getId() + "-" + offset.getTotalSeconds());
-//		System.out.println(epoch);
-//		System.out.println();
-//		System.out.println(getEpochSeconds(now));
-//		System.out.println(now.toEpochSecond(offset));
-//		System.out.println();
-//		System.out.println(getEpochMillis());
-//		System.out.println(getEpochMillis(now));
-//		System.out.println(getEpochMillis(now, offset));
-//		System.out.println();
-//		System.out.println(getEpochMicros());
-//		System.out.println(getEpochMicros(now));
-//		System.out.println(getEpochMicros(now, offset));
-//		System.out.println(getEpochHours());
-
 		long[] mss = new long[50];
 		long[] nss = new long[50];
 		long ms = System.currentTimeMillis();

@@ -64,19 +64,15 @@ public final class Hasher {
 		/** Secure Hash Algorithm - 512 bit */
 		SHA512(ALGO_SHA512);
 
-		private final String algorithm;
+		private final String algoName;
 
-		private Algorithm(final String algorithm) {
-			this.algorithm = algorithm;
-		}
-
-		public String getAlgorithm() {
-			return algorithm;
+		private Algorithm(final String algoName) {
+			this.algoName = algoName;
 		}
 
 		@Override
 		public String toString() {
-			return algorithm;
+			return algoName;
 		}
 
 	}
