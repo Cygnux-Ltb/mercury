@@ -1,7 +1,5 @@
 package io.mercury.common.character;
 
-import static java.nio.charset.Charset.defaultCharset;
-
 import java.nio.charset.Charset;
 
 import io.mercury.common.util.StringSupport;
@@ -18,7 +16,7 @@ public interface Charsets {
 		}
 	}
 
-	Charset SYS_DEFAULT = defaultCharset();
+	Charset SYS_DEFAULT = Charset.defaultCharset();
 
 	Charset ASCII = Charset.forName("ASCII");
 
@@ -30,8 +28,14 @@ public interface Charsets {
 
 	Charset UTF32 = Charset.forName("UTF-32");
 
+	Charset BIG5 = Charset.forName("Big5");
+
 	Charset GBK = Charset.forName("GBK");
 
 	Charset GB2312 = Charset.forName("GB2312");
+
+	public static void main(String[] args) {
+		Charset.availableCharsets().entrySet().stream().forEach(System.out::println);
+	}
 
 }
