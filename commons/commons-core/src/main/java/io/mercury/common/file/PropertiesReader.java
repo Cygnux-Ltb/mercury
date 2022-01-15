@@ -1,5 +1,6 @@
 package io.mercury.common.file;
 
+import static io.mercury.common.file.FileScanner.depthFirst;
 import static io.mercury.common.util.StringSupport.notDecimal;
 
 import java.io.File;
@@ -29,26 +30,25 @@ public final class PropertiesReader {
 	private static final String FILE_SUFFIX = ".properties";
 
 	static {
-		MutableSet<File> propFiles = FileScanner.depthFirst(
-				new File(PropertiesReader.class.getResource("/").getPath()),
+		MutableSet<File> files = depthFirst(new File(PropertiesReader.class.getResource("/").getPath()),
 				file -> file.getName().endsWith(FILE_SUFFIX));
 		try {
-			for (File propFile : propFiles) {
-				log.info("Properties file -> [{}] start load", propFile);
-				String fileName = propFile.getName();
+			for (File file : files) {
+				log.info("Properties file -> [{}] start load", file);
+				String fileName = file.getName();
 				Properties prop = new Properties();
-				prop.load(new FileInputStream(propFile));
+				prop.load(new FileInputStream(file));
 				PropertiesMap.put(deleteSuffix(fileName), prop);
 				for (String propName : prop.stringPropertyNames()) {
-					String propKey = mergePropertiesKey(fileName, propName);
-					String propValue = prop.getProperty(propName);
-					String currentValue = PropertiesItemMap.get(propKey);
+					String key = mergePropertiesKey(fileName, propName);
+					String value = prop.getProperty(propName);
+					String currentValue = PropertiesItemMap.get(key);
 					if (currentValue != null) {
-						log.warn("Current item value modified, propKey==[{}], currentValue==[{}], propValue==[{}]",
-								propKey, currentValue, propValue);
+						log.warn("Current item value modified, propKey==[{}], currentValue==[{}], newValue==[{}]", key,
+								currentValue, value);
 					}
-					log.info("Put property item, propKey==[{}], propValue==[{}]", propKey, propValue);
-					PropertiesItemMap.put(propKey, propValue);
+					log.info("Put property item, propKey==[{}], propValue==[{}]", key, value);
+					PropertiesItemMap.put(key, value);
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -67,7 +67,7 @@ public final class PropertiesReader {
 	 * @return
 	 */
 	private static String mergePropertiesKey(String fileName, String propName) {
-		return new StringBuilder(24).append(deleteSuffix(fileName)).append("-").append(propName).toString();
+		return new StringBuilder(24).append(deleteSuffix(fileName)).append(".").append(propName).toString();
 	}
 
 	/**
@@ -89,7 +89,7 @@ public final class PropertiesReader {
 	 * @return
 	 */
 	public static Properties getProperty(String fileName) {
-		Properties properties = PropertiesMap.get(deleteSuffix(fileName));
+		var properties = PropertiesMap.get(deleteSuffix(fileName));
 		if (properties == null)
 			return new Properties();
 		return properties;
@@ -102,14 +102,13 @@ public final class PropertiesReader {
 	 * @return
 	 */
 	public static String getProperty(String fileName, String propName) {
-		String mergeKey = mergePropertiesKey(fileName, propName);
-		String propValue = PropertiesItemMap.get(mergeKey);
-		if (propValue == null) {
-			log.error("Property name -> [{}] is not found of file name -> [{}], mergeKey==[{}]", propName, fileName,
-					mergeKey);
+		var key = mergePropertiesKey(fileName, propName);
+		var value = PropertiesItemMap.get(key);
+		if (value == null) {
+			log.error("Property name -> [{}] is not found of file name -> [{}], Key==[{}]", propName, fileName, key);
 			throw new RuntimeException("Read property error.");
 		}
-		return propValue;
+		return value;
 	}
 
 	/**
@@ -119,16 +118,16 @@ public final class PropertiesReader {
 	 * @return
 	 */
 	public static int getIntProperty(String fileName, String propName) {
-		String propValue = getProperty(fileName, propName);
-		if (notDecimal(propValue)) {
+		var value = getProperty(fileName, propName);
+		if (notDecimal(value)) {
 			log.error("Property name -> [{}] is not decimal of file name -> [{}]", propName, fileName);
 			throw new NumberFormatException("Read property error.");
 		}
 		try {
-			return Integer.parseInt(propValue);
+			return Integer.parseInt(value);
 		} catch (NumberFormatException e) {
 			log.error("Property name -> [{}], value -> [{}] from file name -> [{}] throw NumberFormatException",
-					propName, propValue, fileName, e);
+					propName, value, fileName, e);
 			throw e;
 		}
 	}
@@ -140,16 +139,16 @@ public final class PropertiesReader {
 	 * @return
 	 */
 	public static long getLongProperty(String fileName, String propName) {
-		String propValue = getProperty(fileName, propName);
-		if (notDecimal(propValue)) {
+		var value = getProperty(fileName, propName);
+		if (notDecimal(value)) {
 			log.error("Property name -> [{}] is not decimal of file name -> [{}]", propName, fileName);
 			throw new NumberFormatException("Read property error.");
 		}
 		try {
-			return Long.parseLong(propValue);
+			return Long.parseLong(value);
 		} catch (NumberFormatException e) {
 			log.error("Property name -> [{}], value -> [{}] from file name -> [{}] throw NumberFormatException",
-					propName, propValue, fileName, e);
+					propName, value, fileName, e);
 			throw e;
 		}
 	}
@@ -161,16 +160,16 @@ public final class PropertiesReader {
 	 * @return
 	 */
 	public static double getDoubleProperty(String fileName, String propName) {
-		String propValue = getProperty(fileName, propName);
-		if (notDecimal(propValue)) {
+		var value = getProperty(fileName, propName);
+		if (notDecimal(value)) {
 			log.error("Property name -> [{}] is not decimal of file name -> [{}]", propName, fileName);
 			throw new NumberFormatException("Read property error.");
 		}
 		try {
-			return Double.parseDouble(propValue);
+			return Double.parseDouble(value);
 		} catch (NumberFormatException e) {
 			log.error("Property name -> [{}], value -> [{}] from file name -> [{}] throw NumberFormatException",
-					propName, propValue, fileName, e);
+					propName, value, fileName, e);
 			throw e;
 		}
 	}

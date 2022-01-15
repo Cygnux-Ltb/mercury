@@ -46,9 +46,8 @@ public class FileExtensionFilter implements FileFilter {
 	public FileExtensionFilter(boolean ignoreCase, @Nonnull String... extensions) throws IllegalArgumentException {
 		// check each extension
 		for (String ext : extensions) {
-			if (!FileUtil.isValidFileExtension(ext)) {
+			if (!FileUtil.isValidFileExtension(ext))
 				throw new IllegalArgumentException("Invalid file extension '" + ext + "' cannot be matched");
-			}
 		}
 		this.ignoreCase = ignoreCase;
 		this.extensions = extensions;
@@ -67,10 +66,9 @@ public class FileExtensionFilter implements FileFilter {
 		String fileExt = FileUtil.parseFileExtension(file.getName());
 
 		// a file extension might not have existed
-		if (fileExt == null) {
+		if (fileExt == null)
 			// if no file extension extracted, this definitely is not a match
 			return false;
-		}
 
 		// does it match our list of acceptable file extensions?
 		for (String extension : extensions) {

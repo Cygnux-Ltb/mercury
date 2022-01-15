@@ -20,13 +20,10 @@ package io.mercury.common.file.filter;
  * #L%
  */
 
-// java imports
 import java.io.File;
 import java.io.FileFilter;
 
 import javax.annotation.Nonnull;
-
-// my imports
 
 /**
  * Accepts a file based on whether its filename startsWith a specific string.
@@ -37,24 +34,25 @@ import javax.annotation.Nonnull;
  */
 public class FileNameStartsWithFilter implements FileFilter {
 
-	private final String startsWithStr;
+	private final String startsWith;
 	private final boolean ignoreCase;
 
-	public FileNameStartsWithFilter(String startsWithStr) {
-		this(startsWithStr, false);
+	public FileNameStartsWithFilter(String startsWith) {
+		this(startsWith, false);
 	}
 
-	public FileNameStartsWithFilter(String startsWithStr, boolean ignoreCase) {
-		this.startsWithStr = startsWithStr;
+	public FileNameStartsWithFilter(String startsWith, boolean ignoreCase) {
+		this.startsWith = startsWith;
 		this.ignoreCase = ignoreCase;
 	}
 
 	@Override
 	public boolean accept(@Nonnull File file) {
 		if (ignoreCase) {
-			return file.getName().toLowerCase().startsWith(startsWithStr.toLowerCase());
+			return file.getName().toLowerCase().startsWith(startsWith.toLowerCase());
 		} else {
-			return file.getName().startsWith(startsWithStr);
+			return file.getName().startsWith(startsWith);
 		}
 	}
+
 }

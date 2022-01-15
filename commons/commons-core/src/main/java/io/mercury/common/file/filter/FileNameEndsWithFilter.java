@@ -7,24 +7,24 @@ import javax.annotation.Nonnull;
 
 public class FileNameEndsWithFilter implements FileFilter {
 
-	private final String endsWithStr;
+	private final String endsWith;
 	private final boolean ignoreCase;
 
-	public FileNameEndsWithFilter(@Nonnull String endsWithStr) {
-		this(endsWithStr, true);
+	public FileNameEndsWithFilter(@Nonnull String endsWith) {
+		this(endsWith, true);
 	}
 
-	public FileNameEndsWithFilter(@Nonnull String endsWithStr, boolean ignoreCase) throws IllegalArgumentException {
-		this.endsWithStr = endsWithStr;
+	public FileNameEndsWithFilter(@Nonnull String endsWith, boolean ignoreCase) throws IllegalArgumentException {
+		this.endsWith = endsWith;
 		this.ignoreCase = ignoreCase;
 	}
 
 	@Override
 	public boolean accept(@Nonnull File file) {
 		if (ignoreCase) {
-			return file.getName().toLowerCase().endsWith(endsWithStr.toLowerCase());
+			return file.getName().toLowerCase().endsWith(endsWith.toLowerCase());
 		} else {
-			return file.getName().endsWith(endsWithStr);
+			return file.getName().endsWith(endsWith);
 		}
 	}
 

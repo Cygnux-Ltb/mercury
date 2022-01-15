@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.FileFilter;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.eclipse.collections.api.set.MutableSet;
 
 import io.mercury.common.collections.MutableSets;
+import io.mercury.common.lang.Assertor;
 
 public final class FileScanner {
 
@@ -22,6 +24,7 @@ public final class FileScanner {
 	 */
 	@Nonnull
 	public static final MutableSet<File> depthFirst(@Nonnull File path) {
+		Assertor.nonNull(path, "path");
 		return depthFirst(path, any -> true);
 	}
 
@@ -33,7 +36,8 @@ public final class FileScanner {
 	 * @return
 	 */
 	@Nonnull
-	public static final MutableSet<File> depthFirst(@Nonnull File path, @Nonnull FileFilter filter) {
+	public static final MutableSet<File> depthFirst(@Nonnull File path, @Nullable FileFilter filter) {
+		Assertor.nonNull(path, "path");
 		if (filter == null)
 			filter = any -> true;
 		MutableSet<File> files = MutableSets.newUnifiedSet();
@@ -45,7 +49,7 @@ public final class FileScanner {
 			@Nonnull FileFilter filter) {
 		if (path == null || filter == null)
 			return;
-		File[] listFiles = path.listFiles();
+		var listFiles = path.listFiles();
 		if (listFiles != null && listFiles.length != 0) {
 			for (File file : listFiles) {
 				if (file.isDirectory())

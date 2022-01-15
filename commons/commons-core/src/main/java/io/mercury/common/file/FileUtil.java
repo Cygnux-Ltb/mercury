@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Set;
@@ -25,6 +24,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.collections.impl.list.mutable.FastList;
 
 import io.mercury.common.datetime.pattern.DatePattern;
 import io.mercury.common.datetime.pattern.TemporalPattern;
@@ -95,78 +95,74 @@ public final class FileUtil {
 		return file;
 	}
 
-	public static void main(String[] args) {
-		System.out.println(FileUtil.mkdirInHome("aaaa"));
-	}
-
 	/**
 	 * Tests whether the contents of two files equals each other by performing a
 	 * byte-by-byte comparison. Each byte must match each other in both files.
 	 * 
-	 * @param file1 The file to compare
-	 * @param file2 The other file to compare
+	 * @param file0 The file to compare
+	 * @param file1 The other file to compare
 	 * @return True if file contents are equal, otherwise false.
 	 * @throws IOException Thrown if there is an underlying IO error while attempt
 	 *                     to compare the bytes.
 	 */
-	public static boolean equals(File file1, File file2) throws IOException {
+	public static boolean equals(File file0, File file1) throws IOException {
 		// file lengths must match
-		if (file1.length() != file2.length())
+		if (file0.length() != file1.length())
 			return false;
 
+		InputStream is0 = null;
 		InputStream is1 = null;
-		InputStream is2 = null;
 		try {
+			is0 = new FileInputStream(file0);
 			is1 = new FileInputStream(file1);
-			is2 = new FileInputStream(file2);
-			return equals(is1, is2);
+			return equals(is0, is1);
 		} finally {
 			// make sure input streams are closed
+			if (is0 != null)
+				IOUtils.close(is0);
 			if (is1 != null)
 				IOUtils.close(is1);
-			if (is2 != null)
-				IOUtils.close(is2);
 		}
 	}
 
-	private static boolean equals(InputStream is1, InputStream is2) throws IOException {
-		int buffsize = 1024;
-		byte buf1[] = new byte[buffsize];
-		byte buf2[] = new byte[buffsize];
+	private static boolean equals(InputStream is0, InputStream is1) throws IOException {
+		int size = 1024;
+		byte buf0[] = new byte[size];
+		byte buf1[] = new byte[size];
 
-		if (is1 == is2)
+		if (is0 == is1)
 			return true;
-		if (is1 == null && is2 == null)
+		if (is0 == null && is1 == null)
 			return true;
-		if (is1 == null || is2 == null)
+		if (is0 == null || is1 == null)
 			return false;
 
+		int read0 = -1;
 		int read1 = -1;
-		int read2 = -1;
 
 		do {
+			int offset0 = 0;
+			while (offset0 < size && (read0 = is0.read(buf0, offset0, size - offset0)) >= 0)
+				offset0 += read0;
+
 			int offset1 = 0;
-			while (offset1 < buffsize && (read1 = is1.read(buf1, offset1, buffsize - offset1)) >= 0)
+			while (offset1 < size && (read1 = is1.read(buf1, offset1, size - offset1)) >= 0)
 				offset1 += read1;
 
-			int offset2 = 0;
-			while (offset2 < buffsize && (read2 = is2.read(buf2, offset2, buffsize - offset2)) >= 0)
-				offset2 += read2;
-
-			if (offset1 != offset2)
+			if (offset0 != offset1)
 				return false;
 
-			if (offset1 != buffsize) {
-				Arrays.fill(buf1, offset1, buffsize, (byte) 0);
-				Arrays.fill(buf2, offset2, buffsize, (byte) 0);
+			if (offset0 != size) {
+				Arrays.fill(buf0, offset0, size, (byte) 0);
+				Arrays.fill(buf1, offset1, size, (byte) 0);
 			}
 
-			if (!Arrays.equals(buf1, buf2))
+			if (!Arrays.equals(buf0, buf1))
 				return false;
 
-		} while (read1 >= 0 && read2 >= 0);
+		} while (read0 >= 0 && read1 >= 0);
 
-		if (read1 < 0 && read2 < 0)
+		if (read0 < 0 && read1 < 0)
 			return true; // both at EOF
 
 		return false;
@@ -232,15 +228,15 @@ public final class FileUtil {
 			throw new FileNotFoundException("File " + dir + " is not a directory.");
 
 		// being matching process, create array for returning results
-		ArrayList<File> files = new ArrayList<File>();
+		var files = new FastList<File>();
 
 		// get all files in this directory
-		File[] allFiles = dir.listFiles();
+		File[] dirFiles = dir.listFiles();
 
 		// were any files returned?
-		if (allFiles != null && allFiles.length > 0) {
+		if (dirFiles != null && dirFiles.length > 0) {
 			// loop thru every file in the dir
-			for (File file : allFiles) {
+			for (File file : dirFiles) {
 				// only match files, not a directory
 				if (file.isFile()) {
 					// delegate matching to provided file matcher
@@ -423,13 +419,13 @@ public final class FileUtil {
 	/**
 	 * Read <CODE>f</CODE> and return as byte[]
 	 * 
-	 * @param f
+	 * @param file
 	 * @throws IOException
 	 * @return bytes from <CODE>f</CODE>
 	 */
 
-	public static final byte[] load(File f) throws IOException {
-		FileInputStream fis = new FileInputStream(f);
+	public static final byte[] load(File file) throws IOException {
+		FileInputStream fis = new FileInputStream(file);
 		return load(fis, true);
 	}
 
@@ -464,24 +460,24 @@ public final class FileUtil {
 			this(null, null);
 		}
 
-		public FileNameDateTimeComparator(TemporalPattern pattern, ZoneId zone) {
+		public FileNameDateTimeComparator(TemporalPattern pattern, ZoneId zoneId) {
 			if (pattern == null)
 				this.pattern = DatePattern.YYYY_MM_DD;
 			else
 				this.pattern = pattern;
 
-			if (zone == null)
+			if (zoneId == null)
 				this.zoneId = ZoneOffset.UTC;
 			else
-				this.zoneId = zone;
+				this.zoneId = zoneId;
 		}
 
-		public int compare(File f1, File f2) {
+		public int compare(File file0, File file1) {
 			// extract datetimes from both files
-			ZonedDateTime zdt1 = ZonedDateTime.of(LocalDateTime.parse(f1.getName(), pattern.getFormatter()), zoneId);
-			ZonedDateTime zdt2 = ZonedDateTime.of(LocalDateTime.parse(f2.getName(), pattern.getFormatter()), zoneId);
+			var zdt0 = ZonedDateTime.of(LocalDateTime.parse(file0.getName(), pattern.getFormatter()), zoneId);
+			var zdt1 = ZonedDateTime.of(LocalDateTime.parse(file1.getName(), pattern.getFormatter()), zoneId);
 			// compare these two
-			return zdt1.compareTo(zdt2);
+			return zdt0.compareTo(zdt1);
 		}
 	}
 
