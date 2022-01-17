@@ -6,7 +6,7 @@ import java.util.Random;
 import org.junit.Test;
 
 import io.mercury.common.thread.SleepSupport;
-import io.mercury.common.thread.Threads;
+import io.mercury.common.thread.ThreadSupport;
 import io.mercury.transport.attr.Topics;
 
 public class ZmqTcpPubSubTest {
@@ -17,7 +17,7 @@ public class ZmqTcpPubSubTest {
 
 		String topic = "tcp-test";
 
-		Threads.startNewThread(() -> {
+		ThreadSupport.startNewThread(() -> {
 			try (var publisher = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(1).newPublisherWithString(topic)) {
 				SleepSupport.sleep(2000);
 				Random random = new Random();

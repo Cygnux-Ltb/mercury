@@ -13,7 +13,7 @@ import org.apache.commons.io.IOUtils;
 import io.mercury.common.concurrent.disruptor.RingQueue;
 import io.mercury.common.concurrent.queue.AbstractSingleConsumerQueue;
 import io.mercury.common.thread.SleepSupport;
-import io.mercury.common.thread.Threads;
+import io.mercury.common.thread.ThreadSupport;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
 
 public final class SocketTransceiver extends BaseTransceiver<String> {
@@ -90,7 +90,7 @@ public final class SocketTransceiver extends BaseTransceiver<String> {
 	private synchronized void startReceiveThread() {
 		if (isReceiving.get())
 			return;
-		Threads.startNewThread(() -> {
+		ThreadSupport.startNewThread(() -> {
 			InputStream inputStream = null;
 			while (isRun.get()) {
 				try {

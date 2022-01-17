@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.thread.SleepSupport;
-import io.mercury.common.thread.Threads;
+import io.mercury.common.thread.ThreadSupport;
 import io.mercury.transport.api.Receiver;
 import io.mercury.transport.api.TransportComponent;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
@@ -85,7 +85,7 @@ public class SocketReceiver extends TransportComponent implements Receiver {
 		if (isReceiving.get())
 			return;
 		isReceiving.set(true);
-		Threads.startNewThread(() -> {
+		ThreadSupport.startNewThread(() -> {
 			InputStream inputStream = null;
 			try {
 				inputStream = socket.getInputStream();

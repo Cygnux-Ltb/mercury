@@ -6,7 +6,7 @@ import java.util.Random;
 import org.junit.Test;
 
 import io.mercury.common.thread.SleepSupport;
-import io.mercury.common.thread.Threads;
+import io.mercury.common.thread.ThreadSupport;
 import io.mercury.transport.attr.Topics;
 
 public class ZmqIpcPubSubTest {
@@ -17,7 +17,7 @@ public class ZmqIpcPubSubTest {
 
 		String topic = "ipc-test";
 
-		Threads.startNewThread(() -> {
+		ThreadSupport.startNewThread(() -> {
 			try (var publisher = ZmqConfigurator.ipc("test/01").ioThreads(1).newPublisherWithString(topic)) {
 				SleepSupport.sleep(2000);
 				Random random = new Random();

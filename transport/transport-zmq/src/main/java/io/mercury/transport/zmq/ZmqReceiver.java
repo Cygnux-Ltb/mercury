@@ -12,7 +12,7 @@ import org.zeromq.SocketType;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.thread.SleepSupport;
-import io.mercury.common.thread.Threads;
+import io.mercury.common.thread.ThreadSupport;
 import io.mercury.transport.api.Receiver;
 import io.mercury.transport.zmq.exception.ZmqBindException;
 
@@ -68,7 +68,7 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 			return null;
 		})) {
 			SleepSupport.sleep(15000);
-			Threads.startNewThread(() -> receiver.receive());
+			ThreadSupport.startNewThread(() -> receiver.receive());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
