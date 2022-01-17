@@ -566,9 +566,8 @@ public final class StringSupport {
 	public static byte[] getAsciiBytes(String input) {
 		char[] c = input.toCharArray();
 		byte[] b = new byte[c.length];
-		for (int i = 0; i < c.length; i++) {
+		for (int i = 0; i < c.length; i++)
 			b[i] = (byte) (c[i] & 0x007F);
-		}
 		return b;
 	}
 

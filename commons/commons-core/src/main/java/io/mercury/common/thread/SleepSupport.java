@@ -39,7 +39,7 @@ public final class SleepSupport {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
-			log.error("Threads::sleepIgnoreInterrupts(millis==[{}]) throw InterruptedException -> {}", millis,
+			log.error("SleepSupport::sleepIgnoreInterrupts(millis==[{}]) throw InterruptedException -> {}", millis,
 					e.getMessage(), e);
 		}
 	}
@@ -53,7 +53,7 @@ public final class SleepSupport {
 		try {
 			Thread.sleep(millis, nanos);
 		} catch (InterruptedException e) {
-			log.error("Threads::sleepIgnoreInterrupts(millis==[{}]) throw InterruptedException -> {}", millis,
+			log.error("SleepSupport::sleepIgnoreInterrupts(millis==[{}]) throw InterruptedException -> {}", millis,
 					e.getMessage(), e);
 		}
 	}
@@ -67,8 +67,8 @@ public final class SleepSupport {
 		try {
 			timeUnit.sleep(time);
 		} catch (InterruptedException e) {
-			log.error("Threads::sleep(time==[{}], timeUnit==[{}]) throw InterruptedException -> {}", time, timeUnit,
-					e.getMessage(), e);
+			log.error("SleepSupport::sleepIgnoreInterrupts(timeUnit==[{}], time==[{}]) throw InterruptedException -> {}",
+					timeUnit, time, e.getMessage(), e);
 		}
 	}
 
@@ -81,7 +81,7 @@ public final class SleepSupport {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
-			log.error("Threads::sleep(millis==[{}]) throw InterruptedException -> {}", millis, e.getMessage(), e);
+			log.error("SleepSupport::sleep(millis==[{}]) throw InterruptedException -> {}", millis, e.getMessage(), e);
 			throw new RuntimeInterruptedException(e);
 		}
 	}
@@ -96,7 +96,7 @@ public final class SleepSupport {
 		try {
 			Thread.sleep(millis, nanos);
 		} catch (InterruptedException e) {
-			log.error("Threads::sleep(millis==[{}], nanos==[{}]) throw InterruptedException -> {}", millis, nanos,
+			log.error("SleepSupport::sleep(millis==[{}], nanos==[{}]) throw InterruptedException -> {}", millis, nanos,
 					e.getMessage(), e);
 			throw new RuntimeInterruptedException(e);
 		}
@@ -112,8 +112,8 @@ public final class SleepSupport {
 		try {
 			timeUnit.sleep(time);
 		} catch (InterruptedException e) {
-			log.error("Threads::sleep(time==[{}], timeUnit==[{}]) throw InterruptedException -> {}", time, timeUnit,
-					e.getMessage(), e);
+			log.error("SleepSupport::sleep(timeUnit==[{}], time==[{}]) throw InterruptedException -> {}", timeUnit,
+					time, e.getMessage(), e);
 			throw new RuntimeInterruptedException(e);
 		}
 	}

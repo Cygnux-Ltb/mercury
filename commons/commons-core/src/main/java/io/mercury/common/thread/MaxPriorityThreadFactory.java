@@ -1,6 +1,6 @@
 package io.mercury.common.thread;
 
-import static io.mercury.common.thread.Threads.newMaxPriorityThread;
+import static io.mercury.common.thread.ThreadSupport.newMaxPriorityThread;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;

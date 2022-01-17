@@ -9,22 +9,42 @@ package io.mercury.common.datetime.pattern;
 public final class DatePattern extends AbstractPattern {
 
 	/**
-	 * Example: 201803
+	 * example: 1803
+	 */
+	public final static DatePattern YYMM = new DatePattern("yyMM");
+
+	/**
+	 * example: 201803
 	 */
 	public final static DatePattern YYYYMM = new DatePattern("yyyyMM");
 
 	/**
-	 * Example: 20180314
+	 * example: 180314
+	 */
+	public final static DatePattern YYMMDD = new DatePattern("yyyyMMdd");
+
+	/**
+	 * example: 20180314
 	 */
 	public final static DatePattern YYYYMMDD = new DatePattern("yyyyMMdd");
 
 	/**
-	 * Example: 2018-03
+	 * example: 18-03
+	 */
+	public final static DatePattern YY_MM = new DatePattern("yy-MM");
+
+	/**
+	 * example: 2018-03
 	 */
 	public final static DatePattern YYYY_MM = new DatePattern("yyyy-MM");
 
 	/**
-	 * Example: 2018-03-14
+	 * example: 18-03-14
+	 */
+	public final static DatePattern YY_MM_DD = new DatePattern("yyyy-MM-dd");
+
+	/**
+	 * example: 2018-03-14
 	 */
 	public final static DatePattern YYYY_MM_DD = new DatePattern("yyyy-MM-dd");
 

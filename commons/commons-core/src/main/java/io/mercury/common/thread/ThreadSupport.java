@@ -16,9 +16,11 @@ import io.mercury.common.collections.MutableMaps;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.util.StringSupport;
 
-public final class Threads {
+public final class ThreadSupport {
 
-	private Threads() {
+	private static final Logger log = Log4j2LoggerFactory.getLogger(ThreadSupport.class);
+
+	private ThreadSupport() {
 	}
 
 	public static enum ThreadPriority {
@@ -58,8 +60,6 @@ public final class Threads {
 			return value;
 		}
 	}
-
-	private static final Logger log = Log4j2LoggerFactory.getLogger(Threads.class);
 
 	/**
 	 * 

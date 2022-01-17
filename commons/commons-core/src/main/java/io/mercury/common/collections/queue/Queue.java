@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.queue;
+package io.mercury.common.collections.queue;
 
 public interface Queue<E> {
 
@@ -9,5 +9,11 @@ public interface Queue<E> {
 	boolean isEmpty();
 
 	QueueType getQueueType();
+
+	public static enum QueueType {
+
+		SPSC, SPMC, MPSC, MPMC
+
+	}
 
 }

@@ -19,7 +19,6 @@ public final class ResourceUtil {
 			if (obj instanceof Closeable)
 				close((Closeable) obj);
 		}
-
 	}
 
 	/**

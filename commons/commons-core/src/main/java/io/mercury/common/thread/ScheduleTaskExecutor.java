@@ -1,5 +1,8 @@
 package io.mercury.common.thread;
 
+import static io.mercury.common.thread.ThreadSupport.newMaxPriorityThread;
+import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,6 +31,7 @@ public final class ScheduleTaskExecutor {
 	 * @param runnable
 	 * @return
 	 */
+	@Deprecated
 	public static Timer startDelayTask(LocalDateTime firstTime, Runnable runnable) {
 		return startDelayTask(Duration.between(LocalDateTime.now(), firstTime).toMillis(), TimeUnit.MILLISECONDS,
 				runnable);
@@ -40,6 +44,7 @@ public final class ScheduleTaskExecutor {
 	 * @param runnable
 	 * @return
 	 */
+	@Deprecated
 	public static Timer startDelayTask(long delay, TimeUnit unit, Runnable runnable) {
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -63,6 +68,7 @@ public final class ScheduleTaskExecutor {
 	 * @param runnable
 	 * @return
 	 */
+	@Deprecated
 	public static Timer startCycleTask(LocalDateTime firstTime, long period, TimeUnit unit, Runnable runnable) {
 		return startCycleTask(Duration.between(LocalDateTime.now(), firstTime).toMillis(), unit.toMillis(period),
 				TimeUnit.MILLISECONDS, runnable);
@@ -76,6 +82,7 @@ public final class ScheduleTaskExecutor {
 	 * @param runnable
 	 * @return
 	 */
+	@Deprecated
 	public static Timer startCycleTask(long delay, long period, TimeUnit unit, Runnable runnable) {
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -99,6 +106,7 @@ public final class ScheduleTaskExecutor {
 	 * @param runnable
 	 * @return
 	 */
+	@Deprecated
 	public static Timer startFixedRateCycleTask(LocalDateTime firstTime, long period, TimeUnit unit,
 			Runnable runnable) {
 		return startFixedRateCycleTask(Duration.between(LocalDateTime.now(), firstTime).toMillis(),
@@ -113,6 +121,7 @@ public final class ScheduleTaskExecutor {
 	 * @param runnable
 	 * @return
 	 */
+	@Deprecated
 	public static Timer startFixedRateCycleTask(long delay, long period, TimeUnit unit, Runnable runnable) {
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate((new TimerTask() {
@@ -131,8 +140,8 @@ public final class ScheduleTaskExecutor {
 	/**
 	 * SingleThreadExecutor
 	 */
-	private static final ScheduledExecutorService SingleThreadExecutor = Executors
-			.newSingleThreadScheduledExecutor(runnable -> new Thread(runnable, "SingleThreadScheduledExecutor"));
+	private static final ScheduledExecutorService SingleThreadExecutor = newSingleThreadScheduledExecutor(
+			runnable -> newMaxPriorityThread("SingleThreadScheduledExecutor", runnable));
 
 	/**
 	 * Creates and executes a one-shot action that becomes enabled after the given
@@ -357,8 +366,8 @@ public final class ScheduleTaskExecutor {
 
 	public static void main(String[] args) {
 
-		multiThreadScheduleAtFixedRate(LocalDateTime.of(LocalDate.now(), LocalTime.of(11, 38, 00)), 3,
-				TimeUnit.SECONDS, () -> System.out.println(12345));
+		multiThreadScheduleAtFixedRate(LocalDateTime.of(LocalDate.now(), LocalTime.of(11, 38, 00)), 3, TimeUnit.SECONDS,
+				() -> System.out.println(12345));
 
 	}
 

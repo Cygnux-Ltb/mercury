@@ -48,7 +48,7 @@ public final class ShutdownHooks {
 	}
 
 	public static Thread addShutdownHook(String threadName, Runnable hook) {
-		var thread = Threads.newThread(threadName, hook);
+		var thread = ThreadSupport.newThread(threadName, hook);
 		Runtime.getRuntime().addShutdownHook(thread);
 		return thread;
 	}
