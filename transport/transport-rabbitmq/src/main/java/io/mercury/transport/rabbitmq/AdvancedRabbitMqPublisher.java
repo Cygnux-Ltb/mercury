@@ -22,7 +22,7 @@ import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.common.thread.SleepSupport;
-import io.mercury.common.thread.Threads;
+import io.mercury.common.thread.ThreadSupport;
 import io.mercury.transport.api.Publisher;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.exception.InitializeFailureException;
@@ -469,7 +469,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 
 		try (AdvancedRabbitMqPublisher<String> publisher = AdvancedRabbitMqPublisher
 				.createWithString(RabbitPublisherConfig.configuration(connection, fanoutExchange).build())) {
-			Threads.startNewThread(() -> {
+			ThreadSupport.startNewThread(() -> {
 				int count = 0;
 				while (true) {
 					SleepSupport.sleep(5000);
