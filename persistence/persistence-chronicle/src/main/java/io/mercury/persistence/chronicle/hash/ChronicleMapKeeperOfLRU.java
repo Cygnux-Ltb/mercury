@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
 import io.mercury.common.datetime.EpochUtil;
-import io.mercury.common.thread.Threads;
+import io.mercury.common.thread.ThreadSupport;
 import io.mercury.persistence.chronicle.exception.ChronicleIOException;
 import net.openhft.chronicle.map.ChronicleMap;
 import net.openhft.chronicle.map.ChronicleMapBuilder;
@@ -71,7 +71,8 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 		} catch (IOException e) {
 			throw new ChronicleIOException(e);
 		}
-		this.cleanupThread = Threads.startNewThread("Keeper-<" + cfg.getConfigInfo() + ">-Cleanup-Thread",
+		// TODO 修改为线程池定时任务
+		this.cleanupThread = ThreadSupport.startNewThread("Keeper-<" + cfg.getConfigInfo() + ">-Cleanup-Task",
 				this::cleanupFunc);
 	}
 
@@ -79,6 +80,7 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 	 * 定时运行的线程
 	 */
 	private void cleanupFunc() {
+		// TODO
 		System.out.println("启动清理线程");
 		do {
 			try {

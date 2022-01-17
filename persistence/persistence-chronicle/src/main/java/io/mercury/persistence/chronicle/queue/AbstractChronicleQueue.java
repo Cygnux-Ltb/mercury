@@ -29,7 +29,7 @@ import io.mercury.common.sys.SysProperties;
 import io.mercury.common.thread.RuntimeInterruptedException;
 import io.mercury.common.thread.ShutdownHooks;
 import io.mercury.common.thread.SleepSupport;
-import io.mercury.common.thread.Threads;
+import io.mercury.common.thread.ThreadSupport;
 import io.mercury.common.util.StringSupport;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleReader.ReaderParam;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueue;
@@ -135,14 +135,14 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 			// 周期文件清理间隔
 			long delay = fileCycle.getSeconds() * fileClearCycle;
 			// 创建文件清理线程
-			this.fileClearThread = Threads.startNewThread(queueName + "-FileClearThread", () -> {
+			this.fileClearThread = ThreadSupport.startNewThread(queueName + "-FileClearThread", () -> {
 				do {
 					try {
 						SleepSupport.sleep(TimeUnit.SECONDS, delay);
 					} catch (RuntimeInterruptedException e) {
 						logger.info("Last execution fileClearTask");
 						fileClearTask();
-						logger.info("Thread -> {} quit now", Threads.getCurrentThreadName());
+						logger.info("Thread -> {} quit now", ThreadSupport.getCurrentThreadName());
 					}
 					if (isClearRunning.get()) {
 						fileClearTask();
