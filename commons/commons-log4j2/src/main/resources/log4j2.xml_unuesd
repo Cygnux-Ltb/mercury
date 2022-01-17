@@ -17,7 +17,7 @@
 			<Policies>
 				<TimeBasedTriggeringPolicy interval="1"
 					modulate="true" />
-				<SizeBasedTriggeringPolicy size="127MB" />
+				<SizeBasedTriggeringPolicy size="${sys:log4j2.sizeOfMb}MB" />
 			</Policies>
 		</RollingFile>
 	</appenders>

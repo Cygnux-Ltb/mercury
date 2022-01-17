@@ -3,7 +3,6 @@ package io.mercury.common.log;
 /**
  * 
  * @author yellow013
- *
  */
 public final class Log4j2Configurator {
 
@@ -33,6 +32,14 @@ public final class Log4j2Configurator {
 
 	/**
 	 * 
+	 * @param sizeOfMb
+	 */
+	public static synchronized void setFileSizeOfMb(int sizeOfMb) {
+		System.setProperty("log4j2.sizeOfMb", Integer.toString(sizeOfMb));
+	}
+
+	/**
+	 * 
 	 * @return
 	 */
 	public static synchronized String getFolder() {
@@ -53,6 +60,14 @@ public final class Log4j2Configurator {
 	 */
 	public static synchronized String getLogLevel() {
 		return System.getProperty("log4j2.level");
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static synchronized String getFileSizeOfMb() {
+		return System.getProperty("log4j2.sizeOfMb");
 	}
 
 	/**
