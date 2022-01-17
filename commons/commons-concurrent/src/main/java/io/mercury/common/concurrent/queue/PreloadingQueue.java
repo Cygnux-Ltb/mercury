@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.slf4j.Logger;
@@ -13,10 +14,9 @@ import io.mercury.common.collections.queue.LoadContainer;
 import io.mercury.common.log.Log4j2LoggerFactory;
 
 @ThreadSafe
-@Deprecated
-public class MpmcPreloadingQueue<E> implements MultiConsumerQueue<E> {
+public class PreloadingQueue<E> implements MultiConsumerQueue<E> {
 
-	private static final Logger log = Log4j2LoggerFactory.getLogger(MpmcPreloadingQueue.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(PreloadingQueue.class);
 
 	private LoadContainer<E>[] containers;
 
@@ -32,7 +32,7 @@ public class MpmcPreloadingQueue<E> implements MultiConsumerQueue<E> {
 	private Condition notFull;
 
 	@SuppressWarnings("unchecked")
-	public MpmcPreloadingQueue(int size) {
+	public PreloadingQueue(int size) {
 		if (size <= 0) {
 			throw new IllegalArgumentException("size is too big.");
 		}
@@ -58,8 +58,8 @@ public class MpmcPreloadingQueue<E> implements MultiConsumerQueue<E> {
 			count.incrementAndGet();
 			notEmpty.signal();
 			return true;
-		} catch (InterruptedException exception) {
-			log.error("PreloadingArrayBlockingQueue.enQueue(t)", exception);
+		} catch (InterruptedException ie) {
+			log.error("PreloadingQueue.enqueue() -> {}", ie.getMessage());
 			return false;
 		} finally {
 			lock.unlock();
@@ -68,6 +68,7 @@ public class MpmcPreloadingQueue<E> implements MultiConsumerQueue<E> {
 
 	@Override
 	@LockHeld
+	@Nullable
 	public E dequeue() {
 		try {
 			lock.lockInterruptibly();
@@ -79,8 +80,8 @@ public class MpmcPreloadingQueue<E> implements MultiConsumerQueue<E> {
 			count.decrementAndGet();
 			notFull.signal();
 			return e;
-		} catch (InterruptedException e) {
-			log.error("PreloadingArrayBlockingQueue.deQueue() : " + e.getMessage());
+		} catch (InterruptedException ie) {
+			log.error("PreloadingQueue.dequeue() : {}", ie.getMessage());
 			return null;
 		} finally {
 			lock.unlock();
@@ -89,7 +90,7 @@ public class MpmcPreloadingQueue<E> implements MultiConsumerQueue<E> {
 
 	@Override
 	public String getQueueName() {
-		return "MpmcPreloadingQueue";
+		return "PreloadingQueue";
 	}
 
 	@Override

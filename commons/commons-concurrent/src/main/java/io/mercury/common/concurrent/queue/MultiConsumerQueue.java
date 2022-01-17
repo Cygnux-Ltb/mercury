@@ -5,6 +5,8 @@ import java.util.function.Predicate;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
+import io.mercury.common.collections.queue.Queue;
+
 /**
  * 
  * @author yellow013

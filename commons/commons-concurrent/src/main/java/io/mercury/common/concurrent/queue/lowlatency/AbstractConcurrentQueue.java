@@ -1,11 +1,11 @@
 package io.mercury.common.concurrent.queue.lowlatency;
 
-import sun.misc.Unsafe;
-
-import java.lang.reflect.Field;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
+import io.mercury.common.util.JreReflection;
+import sun.misc.Unsafe;
 
 /**
  * Copyright 2014 Rob Austin
@@ -30,16 +30,14 @@ public abstract class AbstractConcurrentQueue {
 
 	private static final long READ_LOCATION_OFFSET;
 	private static final long WRITE_LOCATION_OFFSET;
-	private static final Unsafe Unsafe;
+	private static final Unsafe UNSAFE;
 
 	static {
 		try {
-			final Field field = Unsafe.class.getDeclaredField("theUnsafe");
-			field.setAccessible(true);
-			Unsafe = (Unsafe) field.get(null);
-			READ_LOCATION_OFFSET = Unsafe
+			UNSAFE = JreReflection.extractField(Unsafe.class, "theUnsafe");
+			READ_LOCATION_OFFSET = UNSAFE
 					.objectFieldOffset(AbstractConcurrentQueue.class.getDeclaredField("readLocation"));
-			WRITE_LOCATION_OFFSET = Unsafe
+			WRITE_LOCATION_OFFSET = UNSAFE
 					.objectFieldOffset(AbstractConcurrentQueue.class.getDeclaredField("writeLocation"));
 		} catch (Exception e) {
 			throw new AssertionError(e);
@@ -91,7 +89,7 @@ public abstract class AbstractConcurrentQueue {
 		// to have a memory barrier as we will be doing that in the line below
 
 		// write back the next write location
-		Unsafe.putOrderedInt(this, WRITE_LOCATION_OFFSET, nextWriteLocation);
+		UNSAFE.putOrderedInt(this, WRITE_LOCATION_OFFSET, nextWriteLocation);
 	}
 
 	protected void setReadLocation(int nextReadLocation) {
@@ -103,7 +101,7 @@ public abstract class AbstractConcurrentQueue {
 
 		// the write memory barrier will occur here, as we are storing the
 		// nextReadLocation
-		Unsafe.putOrderedInt(this, READ_LOCATION_OFFSET, nextReadLocation);
+		UNSAFE.putOrderedInt(this, READ_LOCATION_OFFSET, nextReadLocation);
 	}
 
 	/**

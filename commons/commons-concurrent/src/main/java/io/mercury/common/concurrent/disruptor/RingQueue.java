@@ -1,6 +1,6 @@
 package io.mercury.common.concurrent.disruptor;
 
-import static io.mercury.common.thread.Threads.newMaxPriorityThread;
+import static io.mercury.common.thread.ThreadSupport.newMaxPriorityThread;
 
 import org.slf4j.Logger;
 
@@ -12,11 +12,10 @@ import com.lmax.disruptor.dsl.ProducerType;
 
 import io.mercury.common.collections.queue.LoadContainer;
 import io.mercury.common.concurrent.queue.AbstractSingleConsumerQueue;
-import io.mercury.common.concurrent.queue.QueueType;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.thread.SleepSupport;
-import io.mercury.common.thread.Threads;
+import io.mercury.common.thread.ThreadSupport;
 
 /**
  * 
@@ -123,7 +122,7 @@ public class RingQueue<T> extends AbstractSingleConsumerQueue<T> {
 
 		RingQueue<Integer> queue = new RingQueue<>("Test-Queue", 32, true, in -> System.out.println(in));
 
-		Threads.startNewThread(() -> {
+		ThreadSupport.startNewThread(() -> {
 			int i = 0;
 			for (;;)
 				queue.enqueue(++i);

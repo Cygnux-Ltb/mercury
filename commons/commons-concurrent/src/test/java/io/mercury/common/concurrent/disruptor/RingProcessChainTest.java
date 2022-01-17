@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import io.mercury.common.concurrent.disruptor.example.LongEvent;
 import io.mercury.common.thread.SleepSupport;
-import io.mercury.common.thread.Threads;
+import io.mercury.common.thread.ThreadSupport;
 
 public class RingProcessChainTest {
 
@@ -31,7 +31,7 @@ public class RingProcessChainTest {
 			p2.increment();
 		}).name("Test-RingProcessChain").size(32).setWaitStrategy(Yielding.get()).create();
 
-		Thread thread = Threads.startNewThread(() -> {
+		Thread thread = ThreadSupport.startNewThread(() -> {
 			for (long l = 0L; l < 1000; l++)
 				processChain.publishEvent(l);
 		});

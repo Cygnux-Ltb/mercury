@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import io.mercury.common.concurrent.disruptor.example.LongEvent;
 import io.mercury.common.thread.SleepSupport;
-import io.mercury.common.thread.Threads;
+import io.mercury.common.thread.ThreadSupport;
 
 public class RingMulticasterTest {
 
@@ -31,7 +31,7 @@ public class RingMulticasterTest {
 			p2.increment();
 		}).name("Test-Multicaster").setWaitStrategy(Yielding.get()).size(32).create();
 
-		Thread thread = Threads.startNewThread(() -> {
+		Thread thread = ThreadSupport.startNewThread(() -> {
 			for (long l = 0L; l < 1000; l++)
 				multicaster.publishEvent(l);
 		});

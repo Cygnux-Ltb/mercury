@@ -4,6 +4,7 @@ import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMM
 
 import java.time.LocalDateTime;
 
+import io.mercury.common.collections.queue.Queue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.thread.RunnableComponent;
