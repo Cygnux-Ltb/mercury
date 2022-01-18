@@ -3,7 +3,7 @@ package io.mercury.persistence.chronicle.hash;
 import java.io.IOException;
 import java.time.Duration;
 
-import io.mercury.common.datetime.EpochUtil;
+import io.mercury.common.datetime.Epochs;
 import io.mercury.common.log.Log4j2Configurator;
 import io.mercury.common.log.Log4j2Configurator.LogLevel;
 import io.mercury.common.sys.SysProperties;
@@ -28,7 +28,7 @@ public class ChronicleMapKeeperOfLRUTest {
 			long l = 0;
 			long fileCycle = 60 * 1000;
 			for (;;) {
-				long millis = EpochUtil.getEpochMillis();
+				long millis = Epochs.getEpochMillis();
 				long filename = millis / fileCycle;
 				ChronicleMap<Long, String> acquire = mapKeeper.acquire(Long.toString(filename));
 				acquire.put(++l, Long.toString(l));
