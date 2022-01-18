@@ -14,7 +14,7 @@ import javax.annotation.concurrent.ThreadSafe;
  *
  */
 @ThreadSafe
-public final class LinearSequence {
+public final class SysNanoSequence {
 
 	/**
 	 * 

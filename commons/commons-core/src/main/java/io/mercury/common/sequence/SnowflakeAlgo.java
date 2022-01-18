@@ -1,20 +1,20 @@
 package io.mercury.common.sequence;
 
+import static io.mercury.common.datetime.Epochs.EPOCH_ZERO;
+import static io.mercury.common.datetime.TimeZone.UTC;
+import static io.mercury.common.util.BitOperator.maxValueOfBit;
 import static java.lang.System.currentTimeMillis;
+import static java.time.LocalTime.MIN;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
 import javax.annotation.Nonnull;
 
-import io.mercury.common.datetime.EpochUtil;
 import io.mercury.common.datetime.TimeZone;
 import io.mercury.common.util.BitFormatter;
-import io.mercury.common.util.BitOperator;
 import io.mercury.common.util.HexUtil;
 
 /**
@@ -35,8 +35,7 @@ public final class SnowflakeAlgo {
 	/**
 	 * 最小基线时间, UTC 2000-01-01 00:00:00.000
 	 */
-	public static final ZonedDateTime MinimumBaseline = ZonedDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.MIN,
-			TimeZone.UTC);
+	public static final ZonedDateTime MinimumBaseline = ZonedDateTime.of(LocalDate.of(2000, 1, 1), MIN, UTC);
 
 	/**
 	 * 所有者在ID中占的位数
@@ -66,12 +65,12 @@ public final class SnowflakeAlgo {
 	/**
 	 * 生成序列的掩码, 4095 (0xffff == 4095 == 0b1111_11111111)
 	 */
-	public static final long SequenceMask = BitOperator.maxValueOfBit(SequenceBits);
+	public static final long SequenceMask = maxValueOfBit(SequenceBits);
 
 	/**
 	 * 所有者ID的掩码
 	 */
-	public static final long OwnerIdMask = BitOperator.maxValueOfBit(OwnerIdBits) << OwnerIdLeftShift;
+	public static final long OwnerIdMask = maxValueOfBit(OwnerIdBits) << OwnerIdLeftShift;
 
 	// 开始时间截 (使用自己业务系统指定的时间)
 	private final long baseline;
@@ -90,7 +89,7 @@ public final class SnowflakeAlgo {
 	 * @param ownerId
 	 */
 	public SnowflakeAlgo(int ownerId) {
-		this(ownerId, ZonedDateTime.ofInstant(Instant.EPOCH, TimeZone.UTC));
+		this(ownerId, ZonedDateTime.ofInstant(Instant.EPOCH, UTC));
 	}
 
 	/**
@@ -99,7 +98,7 @@ public final class SnowflakeAlgo {
 	 * @param start
 	 */
 	public SnowflakeAlgo(int ownerId, @Nonnull LocalDate start) {
-		this(ownerId, start, ZoneOffset.UTC);
+		this(ownerId, start, UTC);
 	}
 
 	/**
@@ -109,8 +108,7 @@ public final class SnowflakeAlgo {
 	 * @param zoneId
 	 */
 	public SnowflakeAlgo(int ownerId, @Nonnull LocalDate start, @Nonnull ZoneId zoneId) {
-		this(ownerId, start == null ? EpochUtil.EPOCH_ZERO
-				: ZonedDateTime.of(start, LocalTime.MIN, zoneId == null ? TimeZone.UTC : zoneId));
+		this(ownerId, start == null ? EPOCH_ZERO : ZonedDateTime.of(start, MIN, zoneId == null ? UTC : zoneId));
 	}
 
 	/**
@@ -118,10 +116,10 @@ public final class SnowflakeAlgo {
 	 * @param start
 	 */
 	private SnowflakeAlgo(int ownerId, ZonedDateTime start) {
-		if (ownerId < 0 || ownerId > BitOperator.maxValueOfBit(OwnerIdBits))
+		if (ownerId < 0 || ownerId > maxValueOfBit(OwnerIdBits))
 			throw new IllegalArgumentException("ownerId must be [greater than 0] and [less than or equal 1024]");
 		this.ownerId = ownerId;
-		this.baseline = start.isBefore(EpochUtil.EPOCH_ZERO) ? 0 : start.toInstant().toEpochMilli();
+		this.baseline = start.isBefore(EPOCH_ZERO) ? 0 : start.toInstant().toEpochMilli();
 	}
 
 	/**
@@ -231,12 +229,12 @@ public final class SnowflakeAlgo {
 
 		System.out.println(ZonedDateTime.ofInstant(Instant.ofEpochMilli(time), TimeZone.UTC));
 
-		long maxSequence = BitOperator.maxValueOfBit(SequenceBits);
+		long maxSequence = maxValueOfBit(SequenceBits);
 		System.out.println(maxSequence);
 		System.out.println(BitFormatter.longBinaryFormat(maxSequence));
 		System.out.println(HexUtil.toHex(maxSequence));
 
-		long maxOwnerId = BitOperator.maxValueOfBit(OwnerIdBits);
+		long maxOwnerId = maxValueOfBit(OwnerIdBits);
 		System.out.println(maxOwnerId);
 		System.out.println(BitFormatter.longBinaryFormat(maxOwnerId));
 		System.out.println(HexUtil.toHex(maxOwnerId));

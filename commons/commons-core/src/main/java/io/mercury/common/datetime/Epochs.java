@@ -10,8 +10,10 @@ import static io.mercury.common.datetime.TimeConst.NANOS_PER_MILLIS;
 import static io.mercury.common.datetime.TimeConst.SECONDS_PER_HOUR;
 import static io.mercury.common.datetime.TimeConst.SECONDS_PER_MINUTE;
 import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
+import static io.mercury.common.datetime.TimeZone.UTC;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.System.nanoTime;
+import static java.time.Instant.EPOCH;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -22,12 +24,12 @@ import java.time.ZonedDateTime;
 
 import javax.annotation.Nonnull;;
 
-public final class EpochUtil {
+public final class Epochs {
 
 	/**
 	 * EpochTime Zero Point : UTC 1970-01-01 00:00:00.0000
 	 */
-	public static final ZonedDateTime EPOCH_ZERO = ZonedDateTime.ofInstant(Instant.EPOCH, TimeZone.UTC);
+	public static final ZonedDateTime EPOCH_ZERO = ZonedDateTime.ofInstant(EPOCH, UTC);
 
 	private static final long NANOS_EPOCH_OFFSET;
 
@@ -91,7 +93,8 @@ public final class EpochUtil {
 	 */
 	public static final long getEpochMillis(@Nonnull LocalDateTime datetime) {
 		return datetime.toLocalDate().toEpochDay() * MILLIS_PER_DAY
-				+ datetime.toLocalTime().toSecondOfDay() * MILLIS_PER_SECONDS + datetime.getNano() / NANOS_PER_MILLIS
+				+ datetime.toLocalTime().toSecondOfDay() * MILLIS_PER_SECONDS
+				+ datetime.getNano() / NANOS_PER_MILLIS
 				- SYS_DEFAULT.getTotalSeconds() * MILLIS_PER_SECONDS;
 	}
 
@@ -103,7 +106,8 @@ public final class EpochUtil {
 	 */
 	public static final long getEpochMillis(@Nonnull LocalDateTime datetime, @Nonnull ZoneOffset offset) {
 		return datetime.toLocalDate().toEpochDay() * MILLIS_PER_DAY
-				+ datetime.toLocalTime().toSecondOfDay() * MILLIS_PER_SECONDS + datetime.getNano() / NANOS_PER_MILLIS
+				+ datetime.toLocalTime().toSecondOfDay() * MILLIS_PER_SECONDS 
+				+ datetime.getNano() / NANOS_PER_MILLIS
 				- offset.getTotalSeconds() * MILLIS_PER_SECONDS;
 	}
 

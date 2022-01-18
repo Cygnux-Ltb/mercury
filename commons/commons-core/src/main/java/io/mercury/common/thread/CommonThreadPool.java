@@ -186,7 +186,6 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
 		System.out.println(Integer.toBinaryString(1 << COUNT_BITS));
 		System.out.println(Integer.toBinaryString(2 << COUNT_BITS));
 		System.out.println(Integer.toBinaryString(3 << COUNT_BITS));
-
 	}
 
 }

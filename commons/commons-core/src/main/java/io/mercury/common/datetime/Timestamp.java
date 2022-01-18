@@ -1,19 +1,27 @@
 package io.mercury.common.datetime;
 
+import static io.mercury.common.datetime.EpochUnit.MICROS;
+import static io.mercury.common.datetime.EpochUnit.MILLIS;
+import static io.mercury.common.datetime.EpochUnit.NANOS;
+import static io.mercury.common.datetime.EpochUnit.SECOND;
+import static io.mercury.common.datetime.TimeConst.MICROS_PER_SECONDS;
+import static io.mercury.common.datetime.TimeConst.NANOS_PER_SECOND;
 import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
+import static java.lang.Math.floorDiv;
+import static java.lang.Math.floorMod;
 import static java.lang.System.currentTimeMillis;
-import static java.lang.System.nanoTime;
+import static java.time.Instant.ofEpochMilli;
+import static java.time.Instant.ofEpochSecond;
+import static java.time.ZonedDateTime.ofInstant;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import io.mercury.common.serialization.JsonSerializable;
 
@@ -25,19 +33,14 @@ import io.mercury.common.serialization.JsonSerializable;
 public final class Timestamp implements Comparable<Timestamp>, JsonSerializable {
 
 	/**
-	 * Epoch Milliseconds
+	 * Epoch
 	 */
-	private final long epochMillis;
+	private final long epoch;
 
 	/**
-	 * sysNanoTime is use {@link System.nanoTime()}
+	 * EpochUnit
 	 */
-	private final long sysNanoTime;
-
-	/**
-	 * java.time.ZoneOffset
-	 */
-	private final ZoneOffset offset;
+	private final EpochUnit epochUnit;
 
 	/**
 	 * java.time.Instant
@@ -45,144 +48,81 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 	private Instant instant;
 
 	/**
-	 * java.time.ZonedDateTime
-	 */
-	private ZonedDateTime datetime;
-
-	/**
 	 * 
-	 * @param epochMillis
-	 * @param zoneId
-	 * @param instant
-	 * @param datetime
+	 * @param epoch
+	 * @param unit
 	 */
-	private Timestamp(long epochMillis, @Nonnull ZoneOffset offset, @Nullable Instant instant,
-			@Nullable ZonedDateTime datetime) {
-		this.sysNanoTime = nanoTime();
-		this.epochMillis = epochMillis;
-		this.offset = offset;
-		this.instant = instant;
-		this.datetime = datetime;
+	private Timestamp(long epoch, @Nonnull EpochUnit unit) {
+		this.epoch = epoch;
+		this.epochUnit = unit;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
-	public static Timestamp now() {
-		return new Timestamp(currentTimeMillis(), SYS_DEFAULT, null, null);
+	public static Timestamp nowWithSecond() {
+		return new Timestamp(Epochs.getEpochSeconds(), SECOND);
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
-	public static Timestamp now(@Nonnull ZoneOffset offset) {
-		return new Timestamp(currentTimeMillis(), offset, null, null);
+	public static Timestamp nowWithMillis() {
+		return new Timestamp(currentTimeMillis(), MILLIS);
 	}
 
-	/**
-	 * 
-	 * @param epochMillis
-	 * @return
-	 */
+	public static Timestamp nowWithMicros() {
+		return new Timestamp(Epochs.getEpochMicros(), MICROS);
+	}
+
+	public static Timestamp nowWithNanos() {
+		return new Timestamp(Epochs.getEpochNanos(), NANOS);
+	}
+
+	public static Timestamp withEpochSecond(long epochSecond) {
+		return new Timestamp(epochSecond, SECOND);
+	}
+
 	public static Timestamp withEpochMillis(long epochMillis) {
-		return new Timestamp(epochMillis, SYS_DEFAULT, null, null);
+		return new Timestamp(epochMillis, MILLIS);
 	}
 
-	/**
-	 * 
-	 * @param epochMillis
-	 * @param zoneId
-	 * @return
-	 */
-	public static Timestamp withEpochMillis(long epochMillis, @Nonnull ZoneOffset offset) {
-		return new Timestamp(epochMillis, offset, null, null);
+	public static Timestamp withEpochMicros(long epochMicros) {
+		return new Timestamp(epochMicros, MICROS);
 	}
 
-	/**
-	 * 
-	 * @param instant
-	 * @return
-	 */
-	public static Timestamp withInstant(@Nonnull Instant instant) {
-		return new Timestamp(instant.toEpochMilli(), SYS_DEFAULT, instant, null);
+	public static Timestamp withEpochNanos(long epochNanos) {
+		return new Timestamp(epochNanos, NANOS);
 	}
 
-	/**
-	 * 
-	 * @param instant
-	 * @param zoneId
-	 * @return
-	 */
-	public static Timestamp withInstant(@Nonnull Instant instant, @Nonnull ZoneOffset offset) {
-		return new Timestamp(instant.toEpochMilli(), offset, instant, null);
+	public static Timestamp withDateTime(LocalDate date, LocalTime time) {
+		return withDateTime(ZonedDateTime.of(date, time, SYS_DEFAULT));
 	}
 
-	/**
-	 * 
-	 * @param date
-	 * @param time
-	 * @return
-	 */
-	public static Timestamp withDateTime(@Nonnull LocalDate date, LocalTime time) {
-		return withDateTime(ZonedDateTime.of(LocalDateTime.of(date, time), SYS_DEFAULT));
+	public static Timestamp withDateTime(LocalDate date, LocalTime time, ZoneId zoneId) {
+		return withDateTime(ZonedDateTime.of(date, time, zoneId));
 	}
 
-	/**
-	 * 
-	 * @param date
-	 * @param time
-	 * @param zoneId
-	 * @return
-	 */
-	public static Timestamp withDateTime(@Nonnull LocalDate date, LocalTime time, @Nonnull ZoneId zoneId) {
-		return withDateTime(ZonedDateTime.of(LocalDateTime.of(date, time), zoneId));
-	}
-
-	/**
-	 * 
-	 * @param datetime
-	 * @return
-	 */
-	public static Timestamp withDateTime(@Nonnull LocalDateTime datetime) {
+	public static Timestamp withDateTime(LocalDateTime datetime) {
 		return withDateTime(ZonedDateTime.of(datetime, SYS_DEFAULT));
 	}
 
-	/**
-	 * 
-	 * @param datetime
-	 * @param zoneId
-	 * @return
-	 */
-	public static Timestamp withDateTime(@Nonnull LocalDateTime datetime, @Nonnull ZoneId zoneId) {
+	public static Timestamp withDateTime(LocalDateTime datetime, ZoneId zoneId) {
 		return withDateTime(ZonedDateTime.of(datetime, zoneId));
 	}
 
-	/**
-	 * 
-	 * @param zonedDateTime
-	 * @return
-	 */
-	public static Timestamp withDateTime(@Nonnull ZonedDateTime zonedDateTime) {
-		final Instant instant = zonedDateTime.toInstant();
-		return new Timestamp(instant.toEpochMilli(), zonedDateTime.getOffset(), instant, zonedDateTime);
+	public static Timestamp withDateTime(ZonedDateTime datetime) {
+		return new Timestamp(datetime.toInstant().toEpochMilli(), MILLIS);
 	}
 
 	/**
 	 * 
 	 * @return
 	 */
-	public long getEpochMillis() {
-		return epochMillis;
+	public long getEpoch() {
+		return epoch;
 	}
 
 	/**
 	 * 
 	 * @return
 	 */
-	public long getSysNanoTime() {
-		return sysNanoTime;
+	public EpochUnit getEpochUnit() {
+		return epochUnit;
 	}
 
 	/**
@@ -195,69 +135,61 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 	}
 
 	/**
-	 * 
-	 * @return
-	 */
-	public ZoneOffset getOffset() {
-		return offset;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public ZonedDateTime getDatetime() {
-		if (datetime == null)
-			this.datetime = getDatetimeWith(offset);
-		return datetime;
-	}
-
-	/**
-	 * 根据指定时区更新并获取时间
+	 * 根据指定时区获取时间
 	 * 
 	 * @param zoneId
 	 * @return
 	 */
-	public ZonedDateTime getDatetimeWith(ZoneId zoneId) {
+	public ZonedDateTime getDateTimeWith(ZoneId zoneId) {
 		newInstantOfEpochMillis();
-		return ZonedDateTime.ofInstant(instant, zoneId);
+		return ofInstant(instant, zoneId);
 	}
 
 	/**
 	 * 根据Epoch毫秒数生成Instant
 	 */
 	private void newInstantOfEpochMillis() {
-		if (instant == null)
-			this.instant = Instant.ofEpochMilli(epochMillis);
+		if (instant == null) {
+			switch (epochUnit) {
+			case SECOND:
+				this.instant = ofEpochSecond(epoch);
+				break;
+			case MILLIS:
+				this.instant = ofEpochMilli(epoch);
+				break;
+			case MICROS:
+				this.instant = ofEpochSecond(floorDiv(epoch, MICROS_PER_SECONDS),
+						floorMod(epoch, TimeConst.MICROS_PER_SECONDS));
+				break;
+			case NANOS:
+				this.instant = ofEpochSecond(floorDiv(epoch, NANOS_PER_SECOND), floorMod(epoch, NANOS_PER_SECOND));
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
 	@Override
 	public int compareTo(Timestamp o) {
-		return epochMillis < o.epochMillis ? -1
-				: epochMillis > o.epochMillis ? 1
-						: sysNanoTime < o.sysNanoTime ? -1 : sysNanoTime > sysNanoTime ? 1 : 0;
+		return epoch < o.epoch ? -1 : epoch > o.epoch ? 1 : 0;
 	}
 
-	private static final String epochMillisField = "{\"epochMillis\" : ";
-	private static final String offsetField = ", \"offset\" : ";
+	private static final String epochField = "{\"epoch\" : ";
+	private static final String epochUnitField = ", \"epochUnit\" : ";
 	private static final String instantField = ", \"instant\" : ";
-	private static final String datetimeField = ", \"datetime\" : ";
 	private static final String end = "}";
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder(90);
-		builder.append(epochMillisField);
-		builder.append(epochMillis);
-		builder.append(offsetField);
-		builder.append(offset);
+		var builder = new StringBuilder(90);
+		builder.append(epochField);
+		builder.append(epoch);
+		builder.append(epochUnitField);
+		builder.append(epochUnit);
 		if (instant != null) {
 			builder.append(instantField);
 			builder.append(instant);
-		}
-		if (datetime != null) {
-			builder.append(datetimeField);
-			builder.append(datetime);
 		}
 		builder.append(end);
 		return builder.toString();
@@ -272,12 +204,12 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 
 		System.out.println(TimeZone.CST);
 
-		Timestamp timestamp = Timestamp.now();
+		Timestamp timestamp = Timestamp.nowWithMillis();
 		System.out.println(timestamp);
 
 		for (int i = 0; i < 100000; i++) {
-			EpochUtil.getEpochMillis();
-			Timestamp.now();
+			Epochs.getEpochMillis();
+			Timestamp.nowWithMillis();
 			Instant.now();
 			i++;
 			i--;
@@ -294,7 +226,7 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 		}
 
 		long l1_0 = System.nanoTime();
-		Timestamp.now();
+		Timestamp.nowWithMillis();
 		long l1_1 = System.nanoTime();
 
 		long l2_0 = System.nanoTime();
@@ -307,16 +239,15 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 		System.out.println(l1);
 		System.out.println(l2);
 
-		Timestamp now = Timestamp.now();
+		Timestamp now = Timestamp.nowWithMillis();
 
-		System.out.println(now.getEpochMillis());
+		System.out.println(now.getEpoch());
 		System.out.println(now.getInstant().getEpochSecond() * 1000000 + now.getInstant().getNano() / 1000);
 		System.out.println(now.getInstant());
-		System.out.println(now.getDatetime());
 		System.out.println(now);
 
-		System.out.println(Timestamp.now());
-		System.out.println(Timestamp.withEpochMillis(47237547328L).getDatetimeWith(TimeZone.UTC));
+		System.out.println(Timestamp.nowWithMillis());
+		System.out.println(Timestamp.withEpochMillis(47237547328L).getDateTimeWith(TimeZone.UTC));
 		System.out.println(Timestamp.withDateTime(LocalDateTime.now(), TimeZone.CST));
 
 	}
