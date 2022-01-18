@@ -1,6 +1,9 @@
 package io.mercury.common.collections;
 
+import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.Nonnull;
 
 import io.mercury.common.util.BitOperator;
 
@@ -22,6 +25,20 @@ public final class MapUtil {
 			return false;
 		else
 			return map0.equals(map1);
+	}
+
+	/**
+	 * 
+	 * @param <K>
+	 * @param <V>
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	public static final <K, V> Map<K, V> map(@Nonnull K key, @Nonnull V value) {
+		var map = new HashMap<K, V>(1);
+		map.put(key, value);
+		return map;
 	}
 
 	/**

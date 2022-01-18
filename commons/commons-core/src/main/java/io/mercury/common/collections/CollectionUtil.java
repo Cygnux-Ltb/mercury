@@ -73,10 +73,18 @@ public final class CollectionUtil {
 		return collection;
 	}
 
+	/**
+	 * 
+	 * @param <E>
+	 * @param <C>
+	 * @param collection
+	 * @param creator
+	 * @return
+	 */
 	public static final <E, C extends Collection<E>> E[] toArray(@Nonnull final C collection,
-			IntFunction<E[]> arrayCreator) {
+			IntFunction<E[]> creator) {
 		Assertor.nonNull(collection, "collection");
-		var values = arrayCreator.apply(collection.size());
+		var values = creator.apply(collection.size());
 		var iterator = collection.iterator();
 		int i = 0;
 		while (iterator.hasNext()) {

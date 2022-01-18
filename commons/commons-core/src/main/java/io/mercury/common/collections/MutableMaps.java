@@ -577,6 +577,67 @@ public final class MutableMaps {
 	 * 
 	 * @param <K>
 	 * @param <V>
+	 * @param key
+	 * @param value
+	 * @return MutableMap<K, V>
+	 */
+	public static final <K, V> MutableMap<K, V> newUnifiedMap(K key, V value) {
+		return UnifiedMap.newWithKeysValues(key, value);
+	}
+
+	/**
+	 * 
+	 * @param <K>
+	 * @param <V>
+	 * @param key0
+	 * @param value0
+	 * @param key1
+	 * @param value1
+	 * @return MutableMap<K, V>
+	 */
+	public static final <K, V> MutableMap<K, V> newUnifiedMap(K key0, V value0, K key1, V value1) {
+		return UnifiedMap.newWithKeysValues(key0, value0, key1, value1);
+	}
+
+	/**
+	 * 
+	 * @param <K>
+	 * @param <V>
+	 * @param key0
+	 * @param value0
+	 * @param key1
+	 * @param value1
+	 * @param key2
+	 * @param value2
+	 * @return MutableMap<K, V>
+	 */
+	public static final <K, V> MutableMap<K, V> newUnifiedMap(K key0, V value0, K key1, V value1, K key2, V value2) {
+		return UnifiedMap.newWithKeysValues(key0, value0, key1, value1, key2, value2);
+	}
+
+	/**
+	 * 
+	 * @param <K>
+	 * @param <V>
+	 * @param key0
+	 * @param value0
+	 * @param key1
+	 * @param value1
+	 * @param key2
+	 * @param value2
+	 * @param key3
+	 * @param value3
+	 * @return MutableMap<K, V>
+	 */
+	public static final <K, V> MutableMap<K, V> newUnifiedMap(K key0, V value0, K key1, V value1, K key2, V value2,
+			K key3, V value3) {
+		return UnifiedMap.newWithKeysValues(key0, value0, key1, value1, key2, value2, key3, value3);
+	}
+
+	/**
+	 * 
+	 * @param <K>
+	 * @param <V>
 	 * @return ConcurrentMutableMap<K, V>
 	 */
 	public static final <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMap() {
