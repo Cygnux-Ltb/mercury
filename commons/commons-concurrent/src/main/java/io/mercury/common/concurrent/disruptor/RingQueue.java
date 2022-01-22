@@ -1,6 +1,6 @@
 package io.mercury.common.concurrent.disruptor;
 
-import static io.mercury.common.thread.ThreadSupport.newMaxPriorityThread;
+import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Sleeping;
 
 import org.slf4j.Logger;
 
@@ -14,6 +14,7 @@ import io.mercury.common.collections.queue.LoadContainer;
 import io.mercury.common.concurrent.queue.AbstractSingleConsumerQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.thread.MaxPriorityThreadFactory;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.ThreadSupport;
 
@@ -21,53 +22,46 @@ import io.mercury.common.thread.ThreadSupport;
  * 
  * @author yellow013
  *
- * @param <T>
+ * @param <E>
  */
-public class RingQueue<T> extends AbstractSingleConsumerQueue<T> {
+public class RingQueue<E> extends AbstractSingleConsumerQueue<E> {
 
 	private static final Logger log = Log4j2LoggerFactory.getLogger(RingQueue.class);
 
-	private final Disruptor<LoadContainer<T>> disruptor;
+	private Disruptor<LoadContainer<E>> disruptor;
 
-	private final LoadContainerEventProducer producer;
+	private LoadContainerEventProducer producer;
 
-	public RingQueue(String queueName, int size, Processor<T> processor) {
-		this(queueName, size, true, processor);
-	}
-
-	public RingQueue(String queueName, int size, boolean startNow, Processor<T> processor) {
-		this(queueName, size, startNow, processor, CommonWaitStrategy.Sleeping.get());
-	}
-
-	public RingQueue(String queueName, int size, boolean startNow, Processor<T> processor, WaitStrategy strategy) {
+	private RingQueue(String name, int size, StartMode mode, ProducerType type, WaitStrategy strategy,
+			Processor<E> processor) {
 		super(processor);
-		if (queueName != null)
-			super.name = queueName;
-		// if (queueSize == 0 || queueSize % 2 != 0)
-		// throw new IllegalArgumentException("queueSize set error...");
+		if (name != null)
+			super.name = name;
 		this.disruptor = new Disruptor<>(
 				// 实现EventFactory<LoadContainer<>>的Lambda
 				LoadContainer::new,
 				// 队列容量
 				size,
 				// 实现ThreadFactory的Lambda
-				(Runnable runnable) -> newMaxPriorityThread(this.name + "-worker", runnable),
 				// DaemonThreadFactory.INSTANCE,
+				// (Runnable runnable) -> newMaxPriorityThread(this.name + "-worker", runnable),
+				new MaxPriorityThreadFactory(this.name + "-worker"),
 				// 生产者策略, 使用单生产者
-				ProducerType.SINGLE,
+				type,
 				// Waiting策略
 				strategy);
 		this.disruptor.handleEventsWith(this::process);
+		// TODO 异常处理
+		// this.disruptor.setDefaultExceptionHandler(null);
 		this.producer = new LoadContainerEventProducer(disruptor.getRingBuffer());
-		if (startNow)
-			start();
+		startWith(mode);
 	}
 
-	private void process(LoadContainer<T> container, long sequence, boolean endOfBatch) {
+	private void process(LoadContainer<E> container, long sequence, boolean endOfBatch) {
 		try {
 			processor.process(container.unloading());
 		} catch (Exception e) {
-			log.error("processor.process(t) throw exception -> [{}]", e.getMessage(), e);
+			log.error("processor::process throw exception -> [{}]", e.getMessage(), e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -79,29 +73,29 @@ public class RingQueue<T> extends AbstractSingleConsumerQueue<T> {
 	 */
 	private class LoadContainerEventProducer {
 
-		private final RingBuffer<LoadContainer<T>> ringBuffer;
+		private final RingBuffer<LoadContainer<E>> ringBuffer;
 
-		private final EventTranslatorOneArg<LoadContainer<T>, T> translator = (container, sequence, t) -> container
-				.loading(t);
+		private final EventTranslatorOneArg<LoadContainer<E>, E> translator = (container, sequence, e) -> container
+				.loading(e);
 
-		private LoadContainerEventProducer(RingBuffer<LoadContainer<T>> ringBuffer) {
+		private LoadContainerEventProducer(RingBuffer<LoadContainer<E>> ringBuffer) {
 			this.ringBuffer = ringBuffer;
 		}
 
-		private void onEvent(T t) {
+		private void onEvent(E t) {
 			ringBuffer.publishEvent(translator, t);
 		}
 	}
 
 	@Override
-	public boolean enqueue(T t) {
+	public boolean enqueue(E in) {
+		if (!isRunning())
+			return false;
 		try {
-			if (!isRunning())
-				return false;
-			producer.onEvent(t);
+			producer.onEvent(in);
 			return true;
 		} catch (Exception e) {
-			log.error("producer.onData(t) throw exception -> [{}]", e.getMessage(), e);
+			log.error("producer.onEvent(in) throw exception -> [{}]", e.getMessage(), e);
 			return false;
 		}
 	}
@@ -118,9 +112,61 @@ public class RingQueue<T> extends AbstractSingleConsumerQueue<T> {
 		log.info("Disruptor::shutdown() func execution succeed, {} is shutdown", name);
 	}
 
+	public static Builder withMultiProducer() {
+		return new Builder(ProducerType.MULTI);
+	}
+
+	public static Builder withSingleProducer() {
+		return new Builder(ProducerType.SINGLE);
+	}
+
+	public static class Builder {
+
+		private final ProducerType type;
+		private String name = "ring-" + System.currentTimeMillis();
+		private int size = 32;
+		private StartMode mode = StartMode.auto();
+		private WaitStrategy strategy = Sleeping.get();
+
+		private Builder(ProducerType type) {
+			this.type = type;
+		}
+
+		public Builder setName(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public Builder size(int size) {
+			this.size = size;
+			return this;
+		}
+
+		public Builder setStartMode(StartMode mode) {
+			this.mode = mode;
+			return this;
+		}
+
+		public Builder setWaitStrategy(CommonWaitStrategy strategy) {
+			this.strategy = strategy.get();
+			return this;
+		}
+
+		public Builder setWaitStrategy(WaitStrategy strategy) {
+			this.strategy = strategy;
+			return this;
+		}
+
+		public <E> RingQueue<E> process(Processor<E> processor) {
+			return new RingQueue<>(name, size, mode, type, strategy, processor);
+		}
+
+	}
+
 	public static void main(String[] args) {
 
-		RingQueue<Integer> queue = new RingQueue<>("Test-Queue", 32, true, in -> System.out.println(in));
+		RingQueue<Integer> queue = RingQueue.withSingleProducer().setName("Test-Queue")
+				.process(in -> System.out.println(in));
 
 		ThreadSupport.startNewThread(() -> {
 			int i = 0;

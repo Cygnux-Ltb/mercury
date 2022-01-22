@@ -18,7 +18,7 @@ public class RingProcessChainTest {
 		var p0 = new LongAdder();
 		var p1 = new LongAdder();
 		var p2 = new LongAdder();
-		var processChain = RingProcessChain.newBuilder(LongEvent.class, (LongEvent t, Long l) -> {
+		var processChain = RingProcessChain.withSingleProducer(LongEvent.class, (LongEvent t, Long l) -> {
 			t.set(l);
 		}).addFirstHandler((event, sequence, endOfBatch) -> {
 			System.out.println("sequence -> " + sequence + " p0 - " + event.get() + " : " + endOfBatch);

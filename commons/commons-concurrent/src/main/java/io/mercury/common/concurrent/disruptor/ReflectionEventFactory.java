@@ -57,8 +57,6 @@ public final class ReflectionEventFactory<T> implements EventFactory<T> {
 		} catch (RuntimeReflectionException e) {
 			if (log != null)
 				log.error("Class -> {} :: new instance exception -> {}", type, e.getMessage(), e);
-			else
-				System.err.println("Class -> " + type + " :: new instance exception -> " + e.getMessage());
 			throw e;
 		}
 	}

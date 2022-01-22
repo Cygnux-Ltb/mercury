@@ -248,7 +248,7 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
 
 		private final QueueType type;
 		private String queueName = null;
-		private StartMode mode = StartMode.Auto;
+		private StartMode mode = StartMode.auto();
 		private WaitingStrategy strategy = WaitingStrategy.Spin;
 		private long sleepMillis = 5;
 		private int capacity = 32;
@@ -284,7 +284,7 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
 			return this;
 		}
 
-		public final <E> JctSingleConsumerQueue<E> build(Processor<E> processor) {
+		public final <E> JctSingleConsumerQueue<E> process(Processor<E> processor) {
 			switch (type) {
 			case SPSC:
 				return new JctSpscQueue<>(queueName, capacity, mode, strategy, sleepMillis, processor);

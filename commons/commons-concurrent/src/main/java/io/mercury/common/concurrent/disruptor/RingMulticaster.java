@@ -15,6 +15,7 @@ import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.WaitStrategy;
+import com.lmax.disruptor.dsl.ProducerType;
 
 import io.mercury.common.collections.CollectionUtil;
 import io.mercury.common.collections.MutableLists;
@@ -29,7 +30,7 @@ import io.mercury.common.log.Log4j2LoggerFactory;
  * @param <E> 进行处理的类型
  * @param <I> 发布的数据类型
  */
-public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> {
+public final class RingMulticaster<E, I> extends AbstractRingBuffer<E, I> {
 
 	private static final Logger log = Log4j2LoggerFactory.getLogger(RingMulticaster.class);
 
@@ -53,51 +54,82 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 	 * @param name
 	 * @param size
 	 * @param factory
-	 * @param option
+	 * @param type
+	 * @param strategy
 	 * @param mode
 	 * @param translator
 	 * @param handlers
 	 */
 	@SuppressWarnings("unchecked")
-	private RingMulticaster(String name, int size, @Nonnull EventFactory<E> factory, @Nonnull WaitStrategy strategy,
-			@Nonnull StartMode mode, @Nonnull EventTranslatorOneArg<E, I> translator,
+	private RingMulticaster(String name, int size, @Nonnull EventFactory<E> factory, @Nonnull ProducerType type,
+			@Nonnull WaitStrategy strategy, @Nonnull StartMode mode, @Nonnull EventTranslatorOneArg<E, I> translator,
 			@Nonnull List<EventHandler<E>> handlers) {
-		super(name, size, factory, strategy, translator);
+		super(name, size, factory, type, strategy, translator);
 		Assertor.requiredLength(handlers, 1, "handlers");
 		// 将处理器添加进Disruptor中, 各个处理器进行并行处理
-		super.disruptor.handleEventsWith(CollectionUtil.toArray(handlers, length -> {
+		disruptor.handleEventsWith(CollectionUtil.toArray(handlers, length -> {
 			return (EventHandler<E>[]) new EventHandler[length];
 		}));
 		log.info(
-				"Initialize RingMulticaster -> {}, size -> {}, WaitStrategy -> {}, StartMode -> {}, EventHandler count -> {}",
+				"Initialized RingMulticaster -> {}, size -> {}, WaitStrategy -> {}, StartMode -> {}, EventHandler count -> {}",
 				super.name, size, strategy, mode, handlers.size());
 		startWith(mode);
 	}
 
-	public static <E, I> Builder<E, I> newBuilder(@Nonnull Class<E> eventType,
+	// **************** 单生产者广播器 ****************//
+
+	public static <E, I> Builder<E, I> withSingleProducer(@Nonnull Class<E> eventType,
 			@Nonnull RingEventPublisher<E, I> publisher) {
-		return newBuilder(
+		return withSingleProducer(
 				// 使用反射EventFactory
 				newFactory(eventType, log), publisher);
 	}
 
-	public static <E, I> Builder<E, I> newBuilder(@Nonnull Class<E> eventType,
+	public static <E, I> Builder<E, I> withSingleProducer(@Nonnull Class<E> eventType,
 			@Nonnull EventTranslatorOneArg<E, I> translator) {
-		return newBuilder(
+		return withSingleProducer(
 				// 使用反射EventFactory
 				newFactory(eventType, log), translator);
 	}
 
-	public static <E, I> Builder<E, I> newBuilder(@Nonnull EventFactory<E> eventFactory,
+	public static <E, I> Builder<E, I> withSingleProducer(@Nonnull EventFactory<E> eventFactory,
 			@Nonnull RingEventPublisher<E, I> publisher) {
-		return newBuilder(eventFactory,
+		return withSingleProducer(eventFactory,
 				// EventTranslator实现函数, 负责调用处理In对象到Event对象之间的转换
 				(event, sequence, in) -> publisher.accept(event, in));
 	}
 
-	public static <E, I> Builder<E, I> newBuilder(EventFactory<E> eventFactory,
+	public static <E, I> Builder<E, I> withSingleProducer(EventFactory<E> eventFactory,
 			@Nonnull EventTranslatorOneArg<E, I> translator) {
-		return new Builder<>(eventFactory, translator);
+		return new Builder<>(ProducerType.SINGLE, eventFactory, translator);
+	}
+
+	// **************** 多生产者广播器 ****************//
+
+	public static <E, I> Builder<E, I> withMultiProducer(@Nonnull Class<E> eventType,
+			@Nonnull RingEventPublisher<E, I> publisher) {
+		return withMultiProducer(
+				// 使用反射EventFactory
+				newFactory(eventType, log), publisher);
+	}
+
+	public static <E, I> Builder<E, I> withMultiProducer(@Nonnull Class<E> eventType,
+			@Nonnull EventTranslatorOneArg<E, I> translator) {
+		return withMultiProducer(
+				// 使用反射EventFactory
+				newFactory(eventType, log), translator);
+	}
+
+	public static <E, I> Builder<E, I> withMultiProducer(@Nonnull EventFactory<E> eventFactory,
+			@Nonnull RingEventPublisher<E, I> publisher) {
+		return withMultiProducer(eventFactory,
+				// EventTranslator实现函数, 负责调用处理In对象到Event对象之间的转换
+				(event, sequence, in) -> publisher.accept(event, in));
+	}
+
+	public static <E, I> Builder<E, I> withMultiProducer(EventFactory<E> eventFactory,
+			@Nonnull EventTranslatorOneArg<E, I> translator) {
+		return new Builder<>(ProducerType.MULTI, eventFactory, translator);
 	}
 
 	@Override
@@ -109,23 +141,24 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 
 		private String name;
 		private int size = 64;
+		private StartMode mode = StartMode.auto();
 		private WaitStrategy waitStrategy;
-		private StartMode mode = StartMode.Auto;
+		private final ProducerType producerType;
 		private final EventFactory<E> eventFactory;
-		private final EventTranslatorOneArg<E, I> translator;
+		private final EventTranslatorOneArg<E, I> eventTranslator;
 		private final List<EventHandler<E>> handlers = MutableLists.newFastList();
 
-		private Builder(EventFactory<E> eventFactory, EventTranslatorOneArg<E, I> translator) {
+		private Builder(ProducerType producerType, EventFactory<E> eventFactory,
+				EventTranslatorOneArg<E, I> translator) {
+			this.producerType = producerType;
 			this.eventFactory = eventFactory;
-			this.translator = translator;
+			this.eventTranslator = translator;
 		}
 
 		public Builder<E, I> addProcessor(@Nonnull Processor<E> processor) {
 			Assertor.nonNull(processor, "processor");
-			this.handlers.add(
-					// 将Processor实现加载到HandlerWrapper中
+			return addHandler(// 将Processor实现加载到HandlerWrapper中
 					new EventHandlerWrapper<>(processor, log));
-			return this;
 		}
 
 		public Builder<E, I> addHandler(@Nonnull EventHandler<E> handler) {
@@ -134,7 +167,7 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 			return this;
 		}
 
-		public Builder<E, I> name(String name) {
+		public Builder<E, I> setName(String name) {
 			this.name = name;
 			return this;
 		}
@@ -163,7 +196,8 @@ public final class RingMulticaster<E, I> extends SingleProducerRingBuffer<E, I> 
 				Throws.illegalArgument("handlers");
 			if (waitStrategy == null)
 				waitStrategy = handlers.size() > availableProcessors() ? Sleeping.get() : Yielding.get();
-			return new RingMulticaster<>(name, size, eventFactory, waitStrategy, mode, translator, handlers);
+			return new RingMulticaster<>(name, size, eventFactory, producerType, waitStrategy, mode, eventTranslator,
+					handlers);
 		}
 
 	}

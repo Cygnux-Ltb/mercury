@@ -27,7 +27,8 @@ public class EventHandlerWrapper<E> implements EventHandler<E> {
 		try {
 			processor.process(event);
 		} catch (Exception e) {
-			log.error("process event -> {} throw exception -> [{}]", event, e.getMessage(), e);
+			log.error("process event -> {}, sequence==[{}], endOfBatch==[{}], Throw exception -> [{}]", event, sequence,
+					endOfBatch, e.getMessage(), e);
 			throw e;
 		}
 	}

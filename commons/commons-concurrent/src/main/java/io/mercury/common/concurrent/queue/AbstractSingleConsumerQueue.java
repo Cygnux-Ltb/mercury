@@ -24,7 +24,7 @@ public abstract class AbstractSingleConsumerQueue<E> extends RunnableComponent i
 	protected AbstractSingleConsumerQueue(Processor<E> processor) {
 		Assertor.nonNull(processor, "processor");
 		this.processor = processor;
-		this.name = "Queue-" + "[" + YYYYMMDD_L_HHMMSSSSS.format(LocalDateTime.now()) + "]";
+		this.name = "queue-" + "[" + YYYYMMDD_L_HHMMSSSSS.format(LocalDateTime.now()) + "]";
 	}
 
 	@Override

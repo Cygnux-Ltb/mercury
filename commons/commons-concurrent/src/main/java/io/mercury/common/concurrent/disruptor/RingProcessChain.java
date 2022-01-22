@@ -4,11 +4,13 @@ import static io.mercury.common.collections.CollectionUtil.toArray;
 import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Sleeping;
 import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Yielding;
 import static io.mercury.common.concurrent.disruptor.ReflectionEventFactory.newFactory;
+import static io.mercury.common.lang.Assertor.nonNull;
 import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
 
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
 import org.slf4j.Logger;
@@ -17,11 +19,11 @@ import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.WaitStrategy;
+import com.lmax.disruptor.dsl.ProducerType;
 
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.collections.MutableMaps;
 import io.mercury.common.functional.Processor;
-import io.mercury.common.lang.Assertor;
 import io.mercury.common.lang.Throws;
 import io.mercury.common.log.Log4j2LoggerFactory;
 
@@ -31,23 +33,23 @@ import io.mercury.common.log.Log4j2LoggerFactory;
  *
  * @param <E>
  */
-public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
+public class RingProcessChain<E, I> extends AbstractRingBuffer<E, I> {
 
 	private static final Logger log = Log4j2LoggerFactory.getLogger(RingProcessChain.class);
 
 	@SuppressWarnings("unchecked")
-	private RingProcessChain(String name, int size, @Nonnull EventFactory<E> factory, @Nonnull WaitStrategy strategy,
-			@Nonnull StartMode mode, @Nonnull EventTranslatorOneArg<E, I> translator,
+	private RingProcessChain(String name, int size, @Nonnull EventFactory<E> factory, @Nonnull ProducerType type,
+			@Nonnull WaitStrategy strategy, @Nonnull StartMode mode, @Nonnull EventTranslatorOneArg<E, I> translator,
 			@Nonnull MutableIntObjectMap<List<EventHandler<E>>> handlersMap) {
-		super(name, size, factory, strategy, translator);
+		super(name, size, factory, type, strategy, translator);
 		int[] keys = handlersMap.keySet().toSortedArray();
 		var handlers0 = handlersMap.get(keys[0]);
 		if (keys.length == 1) {
-			super.disruptor.handleEventsWith(toArray(handlers0, length -> {
+			disruptor.handleEventsWith(toArray(handlers0, length -> {
 				return (EventHandler<E>[]) new EventHandler[length];
 			}));
 		} else {
-			var handlerGroup = super.disruptor.handleEventsWith(toArray(handlers0, length -> {
+			var handlerGroup = disruptor.handleEventsWith(toArray(handlers0, length -> {
 				return (EventHandler<E>[]) new EventHandler[length];
 			}));
 			for (int i = 1; i < keys.length; i++) {
@@ -59,7 +61,7 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 			}
 		}
 		log.info(
-				"Initialize RingProcessChain -> {}, size -> {}, WaitStrategy -> {}, StartMode -> {}, EventHandler china level count -> {}",
+				"Initialized RingProcessChain -> {}, size -> {}, WaitStrategy -> {}, StartMode -> {}, EventHandler china level count -> {}",
 				super.name, size, strategy, mode, handlersMap.size());
 		startWith(mode);
 	}
@@ -69,45 +71,79 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 		return "RingProcessChain";
 	}
 
-	public static <E, I> Builder<E, I> newBuilder(@Nonnull Class<E> eventType,
+	// **************** 单生产者处理链 ****************//
+
+	public static <E, I> Builder<E, I> withSingleProducer(@Nonnull Class<E> eventType,
 			@Nonnull RingEventPublisher<E, I> publisher) {
-		return newBuilder(
+		return withSingleProducer(
 				// 使用反射EventFactory
 				newFactory(eventType, log), publisher);
 	}
 
-	public static <E, I> Builder<E, I> newBuilder(@Nonnull Class<E> eventType,
-			@Nonnull EventTranslatorOneArg<E, I> translator) {
-		return newBuilder(
+	public static <E, I> Builder<E, I> withSingleProducer(@Nonnull Class<E> eventType,
+			@Nonnull EventTranslatorOneArg<E, I> eventTranslator) {
+		return withSingleProducer(
 				// 使用反射EventFactory
-				newFactory(eventType, log), translator);
+				newFactory(eventType, log), eventTranslator);
 	}
 
-	public static <E, I> Builder<E, I> newBuilder(EventFactory<E> eventFactory,
+	public static <E, I> Builder<E, I> withSingleProducer(EventFactory<E> eventFactory,
 			@Nonnull RingEventPublisher<E, I> publisher) {
-		return newBuilder(eventFactory,
+		return withSingleProducer(eventFactory,
 				// EventTranslator实现函数, 负责调用处理In对象到Event对象之间的转换
 				(event, sequence, in) -> publisher.accept(event, in));
 	}
 
-	public static <E, I> Builder<E, I> newBuilder(EventFactory<E> eventFactory,
-			@Nonnull EventTranslatorOneArg<E, I> translator) {
-		return new Builder<>(eventFactory, translator);
+	public static <E, I> Builder<E, I> withSingleProducer(EventFactory<E> eventFactory,
+			@Nonnull EventTranslatorOneArg<E, I> eventTranslator) {
+		return new Builder<>(ProducerType.SINGLE, eventFactory, eventTranslator);
 	}
 
+	// **************** 多生产者处理链 ****************//
+
+	public static <E, I> Builder<E, I> withMultiProducer(@Nonnull Class<E> eventType,
+			@Nonnull RingEventPublisher<E, I> publisher) {
+		return withMultiProducer(
+				// 使用反射EventFactory
+				newFactory(eventType, log), publisher);
+	}
+
+	public static <E, I> Builder<E, I> withMultiProducer(@Nonnull Class<E> eventType,
+			@Nonnull EventTranslatorOneArg<E, I> eventTranslator) {
+		return withMultiProducer(
+				// 使用反射EventFactory
+				newFactory(eventType, log), eventTranslator);
+	}
+
+	public static <E, I> Builder<E, I> withMultiProducer(EventFactory<E> eventFactory,
+			@Nonnull RingEventPublisher<E, I> publisher) {
+		return withMultiProducer(eventFactory,
+				// EventTranslator实现函数, 负责调用处理In对象到Event对象之间的转换
+				(event, sequence, in) -> publisher.accept(event, in));
+	}
+
+	public static <E, I> Builder<E, I> withMultiProducer(EventFactory<E> eventFactory,
+			@Nonnull EventTranslatorOneArg<E, I> eventTranslator) {
+		return new Builder<>(ProducerType.SINGLE, eventFactory, eventTranslator);
+	}
+
+	@NotThreadSafe
 	public static class Builder<E, I> {
 
 		private String name;
 		private int size = 64;
-		private StartMode mode = StartMode.Auto;
+		private StartMode mode = StartMode.auto();
 		private WaitStrategy waitStrategy;
+		private final ProducerType producerType;
 		private final EventFactory<E> eventFactory;
-		private final EventTranslatorOneArg<E, I> translator;
+		private final EventTranslatorOneArg<E, I> eventTranslator;
 		private final MutableIntObjectMap<List<EventHandler<E>>> handlersMap = MutableMaps.newIntObjectHashMap();
 
-		private Builder(EventFactory<E> eventFactory, EventTranslatorOneArg<E, I> translator) {
+		private Builder(ProducerType producerType, EventFactory<E> eventFactory,
+				EventTranslatorOneArg<E, I> eventTranslator) {
+			this.producerType = producerType;
 			this.eventFactory = eventFactory;
-			this.translator = translator;
+			this.eventTranslator = eventTranslator;
 		}
 
 		public Builder<E, I> addFirstProcessor(@Nonnull Processor<E> processor) {
@@ -123,11 +159,10 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 		}
 
 		public Builder<E, I> addProcessor(int level, @Nonnull Processor<E> processor) {
-			Assertor.nonNull(processor, "processor");
-			handlersMap.getIfAbsentPut(level, MutableLists::newFastList).add(
+			nonNull(processor, "processor");
+			return addHandler(level,
 					// 将Processor实现加载到HandlerWrapper中
 					new EventHandlerWrapper<>(processor, log));
-			return this;
 		}
 
 		public Builder<E, I> addFirstHandler(@Nonnull EventHandler<E> handler) {
@@ -143,7 +178,7 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 		}
 
 		public Builder<E, I> addHandler(int level, @Nonnull EventHandler<E> handler) {
-			Assertor.nonNull(handler, "handler");
+			nonNull(handler, "handler");
 			handlersMap.getIfAbsentPut(level, MutableLists::newFastList).add(handler);
 			return this;
 		}
@@ -178,7 +213,8 @@ public class RingProcessChain<E, I> extends SingleProducerRingBuffer<E, I> {
 			if (waitStrategy == null)
 				waitStrategy = handlersMap.stream().mapToInt(List::size).sum() > availableProcessors() ? Sleeping.get()
 						: Yielding.get();
-			return new RingProcessChain<>(name, size, eventFactory, waitStrategy, mode, translator, handlersMap);
+			return new RingProcessChain<>(name, size, eventFactory, producerType, waitStrategy, mode, eventTranslator,
+					handlersMap);
 		}
 
 	}
