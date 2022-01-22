@@ -84,7 +84,7 @@ public final class SocketSender extends TransportComponent implements Sender<byt
 	}
 
 	private AbstractSingleConsumerQueue<byte[]> innerQueue = JctSingleConsumerQueue.mpscQueue(getName() + "-InnerQueue")
-			.setCapacity(512).build(bytes -> processSendQueue(bytes));
+			.setCapacity(512).process(bytes -> processSendQueue(bytes));
 
 	public static void main(String[] args) throws IOException {
 		SocketConfigurator configurator = SocketConfigurator.builder().host("192.168.1.138").port(7901).build();

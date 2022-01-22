@@ -136,7 +136,7 @@ public final class SocketTransceiver extends BaseTransceiver<String> {
 
 	@Override
 	protected AbstractSingleConsumerQueue<String> initSendQueue() {
-		return new RingQueue<>("socket-queue", 128, true, (msg) -> {
+		return RingQueue.withSingleProducer().setName("socket-queue").size(128).process((msg) -> {
 			processSendQueue(msg);
 		});
 	}
