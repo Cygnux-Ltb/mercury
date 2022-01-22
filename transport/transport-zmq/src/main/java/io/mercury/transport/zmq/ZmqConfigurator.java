@@ -84,7 +84,7 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	 * @return
 	 */
 	public static ZmqConfigurator withConfig(@Nonnull Config config) {
-		return withConfig(config, "");
+		return withConfig("", config);
 	}
 
 	/**
@@ -93,9 +93,9 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	 * @param module
 	 * @return
 	 */
-	public static ZmqConfigurator withConfig(@Nonnull Config config, String module) {
+	public static ZmqConfigurator withConfig(String module, @Nonnull Config config) {
 		Assertor.nonNull(config, "config");
-		var delegate = new ConfigDelegate<ZmqConfigOption>(config, module);
+		var delegate = new ConfigDelegate<ZmqConfigOption>(module, config);
 		var protocol = ZmqProtocol.of(delegate.getStringOrThrows(Protocol));
 		ZmqConfigurator zmqConf = null;
 		switch (protocol) {
@@ -402,17 +402,30 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 
 	public static enum ZmqConfigOption implements ConfigOption {
 
-		Protocol("protocol"), Addr("addr"), Port("port"), IoThreads("ioThreads");
+		Protocol("zmq.protocol", "zeromq.protocol"),
+
+		Addr("zmq.addr", "zeromq.addr"),
+
+		Port("zmq.port", "zeromq.port"),
+
+		IoThreads("zmq.ioThreads", "zeromq.ioThreads");
 
 		private final String configName;
 
-		private ZmqConfigOption(String name) {
-			this.configName = "zmq." + name;
+		private final String otherConfigName;
+
+		private ZmqConfigOption(String configName, String otherConfigName) {
+			this.configName = configName;
+			this.otherConfigName = otherConfigName;
 		}
 
 		@Override
 		public String getConfigName() {
 			return configName;
+		}
+
+		public String getOtherConfigName() {
+			return otherConfigName;
 		}
 	}
 
