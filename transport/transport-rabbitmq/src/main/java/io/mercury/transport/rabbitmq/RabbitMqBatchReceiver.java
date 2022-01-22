@@ -62,7 +62,7 @@ public class RabbitMqBatchReceiver<T> extends RabbitMqTransport implements Recei
 
 	public RabbitMqBatchReceiver(String tag, @Nonnull RabbitReceiverConfig cfg, long autoFlushInterval,
 			BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent) {
-		super(nonEmpty(tag) ? tag : "batch-receiver-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
+		super(nonEmpty(tag) ? tag : "batch-recv-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
 		this.receiveQueue = cfg.getReceiveQueue().getQueueName();
 		createConnection();
 		queueDeclare();

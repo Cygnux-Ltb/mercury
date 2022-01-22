@@ -223,7 +223,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	private AdvancedRabbitMqPublisher(@Nullable String tag, @Nonnull RabbitPublisherConfig config,
 			@Nonnull BytesSerializer<T> serializer, @Nullable AckCallback ackCallback,
 			@Nullable NoAckCallback noAckCallback) {
-		super(nonEmpty(tag) ? tag : "adv-publisher-" + datetimeOfMillisecond(), config.getConnection());
+		super(nonEmpty(tag) ? tag : "adv-pub-" + datetimeOfMillisecond(), config.getConnection());
 		Assertor.nonNull(config.getPublishExchange(), "exchangeRelation");
 		this.publishExchange = config.getPublishExchange();
 		this.exchangeName = publishExchange.getExchangeName();

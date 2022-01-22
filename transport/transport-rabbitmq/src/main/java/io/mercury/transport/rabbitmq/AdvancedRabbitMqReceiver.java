@@ -206,7 +206,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	private AdvancedRabbitMqReceiver(String tag, @Nonnull RabbitReceiverConfig config,
 			@Nonnull BytesDeserializer<T> deserializer, @Nullable Consumer<T> consumer,
 			@Nullable SelfAckConsumer<T> selfAckConsumer) {
-		super(nonEmpty(tag) ? tag : "adv-receiver-" + datetimeOfMillisecond(), config.getConnection());
+		super(nonEmpty(tag) ? tag : "adv-recv-" + datetimeOfMillisecond(), config.getConnection());
 		if (consumer == null && selfAckConsumer == null) {
 			throw new NullPointerException("[Consumer] and [SelfAckConsumer] cannot all be null");
 		}

@@ -134,26 +134,27 @@ public final class ExchangeRelationship extends Relationship {
 
 	/**
 	 * 
-	 * @param exchanges
+	 * @param destExchanges
 	 * @return
 	 */
-	public ExchangeRelationship bindingExchange(AmqpExchange... exchanges) {
-		return bindingExchange(exchanges != null ? newFastList(exchanges) : null, null);
+	public ExchangeRelationship bindingExchange(AmqpExchange... destExchanges) {
+		return bindingExchange(newFastList(destExchanges), null);
 	}
 
 	/**
 	 * 
-	 * @param exchanges
+	 * @param destExchanges
 	 * @param routingKeys
 	 * @return
 	 */
-	public ExchangeRelationship bindingExchange(Collection<AmqpExchange> exchanges, Collection<String> routingKeys) {
-		if (exchanges != null) {
-			exchanges.forEach(exchange -> {
+	public ExchangeRelationship bindingExchange(@Nonnull Collection<AmqpExchange> destExchanges,
+			@Nonnull Collection<String> routingKeys) {
+		if (CollectionUtils.isNotEmpty(destExchanges)) {
+			destExchanges.forEach(dest -> {
 				if (CollectionUtils.isNotEmpty(routingKeys))
-					routingKeys.forEach(routingKey -> bindings.add(new Binding(this.exchange, exchange, routingKey)));
+					routingKeys.forEach(routingKey -> bindings.add(new Binding(exchange, dest, routingKey)));
 				else
-					bindings.add(new Binding(this.exchange, exchange));
+					bindings.add(new Binding(exchange, dest));
 			});
 		}
 		return this;
@@ -161,26 +162,27 @@ public final class ExchangeRelationship extends Relationship {
 
 	/**
 	 * 
-	 * @param queues
+	 * @param destQueues
 	 * @return
 	 */
-	public ExchangeRelationship bindingQueue(AmqpQueue... queues) {
-		return bindingQueue(queues != null ? newFastList(queues) : null, null);
+	public ExchangeRelationship bindingQueue(AmqpQueue... destQueues) {
+		return bindingQueue(newFastList(destQueues), null);
 	}
 
 	/**
 	 * 
-	 * @param queues
+	 * @param destQueues
 	 * @param routingKeys
 	 * @return
 	 */
-	public ExchangeRelationship bindingQueue(Collection<AmqpQueue> queues, Collection<String> routingKeys) {
-		if (queues != null) {
-			queues.forEach(queue -> {
+	public ExchangeRelationship bindingQueue(@Nonnull Collection<AmqpQueue> destQueues,
+			@Nonnull Collection<String> routingKeys) {
+		if (CollectionUtils.isNotEmpty(destQueues)) {
+			destQueues.forEach(dest -> {
 				if (CollectionUtils.isNotEmpty(routingKeys))
-					routingKeys.forEach(routingKey -> bindings.add(new Binding(exchange, queue, routingKey)));
+					routingKeys.forEach(routingKey -> bindings.add(new Binding(exchange, dest, routingKey)));
 				else
-					bindings.add(new Binding(exchange, queue));
+					bindings.add(new Binding(exchange, dest));
 			});
 		}
 		return this;

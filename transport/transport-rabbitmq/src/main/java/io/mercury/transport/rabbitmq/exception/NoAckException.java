@@ -2,9 +2,6 @@ package io.mercury.transport.rabbitmq.exception;
 
 public class NoAckException extends Exception {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = -197190157920481972L;
 
 	/**
@@ -25,12 +22,11 @@ public class NoAckException extends Exception {
 	 * @param routingKey
 	 * @param confirmRetry
 	 * @param confirmTimeout
-	 * @param throwable
+	 * @param cause
 	 */
-	public NoAckException(String exchange, String routingKey, int confirmRetry, long confirmTimeout,
-			Throwable throwable) {
+	public NoAckException(String exchange, String routingKey, int confirmRetry, long confirmTimeout, Throwable cause) {
 		super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
-				+ "], confirmRetry==[" + confirmRetry + "], confirmTimeout==[" + confirmTimeout + "]", throwable);
+				+ "], confirmRetry==[" + confirmRetry + "], confirmTimeout==[" + confirmTimeout + "]", cause);
 	}
 
 	/**
@@ -41,8 +37,7 @@ public class NoAckException extends Exception {
 	 * @param confirmTimeout
 	 * @param msg
 	 */
-	public NoAckException(String exchange, String routingKey, int confirmRetry, long confirmTimeout,
-			byte[] msg) {
+	public NoAckException(String exchange, String routingKey, int confirmRetry, long confirmTimeout, byte[] msg) {
 		super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
 				+ "], confirmRetry==[" + confirmRetry + "], confirmTimeout==[" + confirmTimeout + "], msg==["
 				+ new String(msg) + "]");
@@ -55,13 +50,13 @@ public class NoAckException extends Exception {
 	 * @param confirmRetry
 	 * @param confirmTimeout
 	 * @param msg
-	 * @param throwable
+	 * @param cause
 	 */
 	public NoAckException(String exchange, String routingKey, int confirmRetry, long confirmTimeout, byte[] msg,
-			Throwable throwable) {
+			Throwable cause) {
 		super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
 				+ "], confirmRetry==[" + confirmRetry + "], confirmTimeout==[" + confirmTimeout + "], msg==["
-				+ new String(msg) + "]", throwable);
+				+ new String(msg) + "]", cause);
 	}
 
 }

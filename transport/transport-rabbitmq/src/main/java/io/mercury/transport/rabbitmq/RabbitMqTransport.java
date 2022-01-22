@@ -1,6 +1,7 @@
 package io.mercury.transport.rabbitmq;
 
 import static io.mercury.common.thread.SleepSupport.sleep;
+import static java.lang.System.currentTimeMillis;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -75,7 +76,7 @@ public abstract class RabbitMqTransport extends TransportComponent implements Tr
 		}
 		try {
 			connection = connectionFactory.newConnection();
-			connection.setId(tag + "$[" + System.currentTimeMillis() + "]");
+			connection.setId(tag + "$[" + currentTimeMillis() + "]");
 			log.info("Function -> [connectionFactory.newConnection()] finished, tag -> {}, connection id -> {}", tag,
 					connection.getId());
 			connection.addShutdownListener(this::handleShutdownSignal);
@@ -83,10 +84,9 @@ public abstract class RabbitMqTransport extends TransportComponent implements Tr
 			log.info("Function -> [connection.createChannel()] finished, connection id -> {}, channel number -> {}",
 					connection.getId(), channel.getChannelNumber());
 			log.info("Create connection finished");
-		} catch (IOException e) {
-			log.error("Function createConnection() throw IOException -> {}", e.getMessage(), e);
-		} catch (TimeoutException e) {
-			log.error("Function createConnection() throw TimeoutException -> {}", e.getMessage(), e);
+		} catch (IOException | TimeoutException e) {
+			log.error("Func RabbitMqTransport::createConnection() throw: {}, msg: {}", e.getClass().getSimpleName(),
+					e.getMessage(), e);
 		}
 	}
 
@@ -120,29 +120,27 @@ public abstract class RabbitMqTransport extends TransportComponent implements Tr
 	protected boolean isNormalShutdown(ShutdownSignalException sig) {
 		Method reason = sig.getReason();
 		if (reason instanceof AMQP.Channel.Close) {
-			AMQP.Channel.Close channelClose = (AMQP.Channel.Close) reason;
-			return channelClose.getReplyCode() == AMQP.REPLY_SUCCESS
-					&& StringSupport.isEquals(channelClose.getReplyText(), "OK");
+			AMQP.Channel.Close amqpChannelClose = (AMQP.Channel.Close) reason;
+			return amqpChannelClose.getReplyCode() == AMQP.REPLY_SUCCESS
+					&& StringSupport.isEquals(amqpChannelClose.getReplyText(), "OK");
 		} else if (reason instanceof AMQP.Connection.Close) {
-			AMQP.Connection.Close connectionClose = (AMQP.Connection.Close) reason;
-			return connectionClose.getReplyCode() == AMQP.REPLY_SUCCESS
-					&& StringSupport.isEquals(connectionClose.getReplyText(), "OK");
+			AMQP.Connection.Close amqpConnectionClose = (AMQP.Connection.Close) reason;
+			return amqpConnectionClose.getReplyCode() == AMQP.REPLY_SUCCESS
+					&& StringSupport.isEquals(amqpConnectionClose.getReplyText(), "OK");
 		} else
 			return false;
 	}
 
 	protected void closeConnection() {
-		log.info("Function -> closeConnection() ");
+		log.info("Call func -> RabbitMqTransport::closeConnection()");
 		try {
 			if (channel != null && channel.isOpen()) {
 				try {
 					channel.close();
 					log.info("Channel is closed!");
-				} catch (IOException e) {
-					log.error("Function -> [channel.close()] throw IOException : [{}]", e.getMessage());
-					throw e;
-				} catch (TimeoutException e) {
-					log.error("Function -> [channel.close()] throw TimeoutException : [{}]", e.getMessage());
+				} catch (IOException | TimeoutException e) {
+					log.error("Func -> Channel::close() throw: {}, msg: {}", e.getClass().getSimpleName(),
+							e.getMessage());
 					throw e;
 				}
 			}
@@ -151,20 +149,19 @@ public abstract class RabbitMqTransport extends TransportComponent implements Tr
 					connection.close();
 					log.info("Connection is closed!");
 				} catch (IOException e) {
-					log.error("Function -> [connection.close()] throw TimeoutException : [{}]", e.getMessage());
+					log.error("Func -> Connection::close() throw: {}, msg: {}", e.getClass().getSimpleName(),
+							e.getMessage());
 					throw e;
 				}
 			}
-		} catch (IOException e) {
-			log.error("Catch IOException -> {}", e.getMessage(), e);
-		} catch (TimeoutException e) {
-			log.error("Catch TimeoutException -> {}", e.getMessage(), e);
+		} catch (IOException | TimeoutException e) {
+			log.error("Catch: {}, msg: {}", e.getClass().getSimpleName(), e.getMessage(), e);
 		}
 	}
 
 	@Override
 	public boolean closeIgnoreException() {
-		log.info("Function -> destroy() from AbstractRabbitMqTransport tag==[{}]", tag);
+		log.info("Call func -> RabbitMqTransport::closeIgnoreException(), tag==[{}]", tag);
 		closeConnection();
 		newEndTime();
 		return true;

@@ -86,6 +86,8 @@ public final class AmqpQueue {
 	}
 
 	public boolean isIdempotent(AmqpQueue another) {
+		if(another == null)
+			return false;
 		return name.equals(another.name) 
 				&& durable == another.durable 
 				&& exclusive == another.exclusive

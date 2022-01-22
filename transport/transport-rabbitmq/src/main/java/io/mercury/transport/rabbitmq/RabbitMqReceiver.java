@@ -290,7 +290,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 						}
 					});
 		} catch (IOException e) {
-			log.error("Function basicConsume() IOException message -> {}", e.getMessage(), e);
+			log.error("Func -> RabbitMqReceiver::basicConsume() IOException msg -> {}", e.getMessage(), e);
 			throw new ReceiverStartException(e.getMessage(), e);
 		}
 		// # Set Consume end *****
@@ -366,7 +366,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 			if (isConnected()) {
 				log.debug("Last detect connection isConnected() == true, Reconnection count {}", reconnectionCount);
 				channel.basicAck(deliveryTag, multipleAck);
-				log.debug("Call function channel.basicAck() finished");
+				log.debug("Call function Channel::basicAck() finished");
 				return true;
 			} else {
 				log.error("Last detect connection isConnected() == false, Reconnection count {}", reconnectionCount);
@@ -374,7 +374,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 				return ack0(deliveryTag, retry);
 			}
 		} catch (IOException e) {
-			log.error("Call function channel.basicAck(deliveryTag==[{}], multiple==[{}]) throw IOException -> {}",
+			log.error("Call func Channel::basicAck(deliveryTag==[{}], multiple==[{}]) throw IOException -> {}",
 					deliveryTag, multipleAck, e.getMessage(), e);
 			return ack0(deliveryTag, ++retry);
 		}
@@ -382,7 +382,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 
 	@Override
 	public boolean closeIgnoreException() {
-		log.info("Call function closeIgnoreException() from Receiver name==[{}]", receiverName);
+		log.info("Call func -> RabbitMqReceiver::closeIgnoreException(), receiverName==[{}]", receiverName);
 		return super.closeIgnoreException();
 	}
 

@@ -6,9 +6,6 @@ import com.rabbitmq.client.BuiltinExchangeType;
 
 public final class DeclareException extends Exception {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7352101640279556300L;
 
 	/**

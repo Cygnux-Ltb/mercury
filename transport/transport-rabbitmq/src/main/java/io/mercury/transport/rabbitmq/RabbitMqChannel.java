@@ -71,7 +71,7 @@ public final class RabbitMqChannel extends RabbitMqTransport {
 	 * @param connection
 	 */
 	private RabbitMqChannel(String tag, RabbitConnection connection) {
-		super("GeneralChannel-" + ZonedDateTime.now(SYS_DEFAULT), connection);
+		super("RmqChannel-" + ZonedDateTime.now(SYS_DEFAULT), connection);
 		createConnection();
 	}
 

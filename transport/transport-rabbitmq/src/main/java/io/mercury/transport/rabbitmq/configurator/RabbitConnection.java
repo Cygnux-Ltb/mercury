@@ -5,12 +5,15 @@ import javax.annotation.Nonnull;
 import javax.net.ssl.SSLContext;
 
 import com.rabbitmq.client.ConnectionFactory;
+import com.typesafe.config.Config;
 
+import io.mercury.common.config.ConfigDelegate;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.util.StringSupport;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.TransportConfigurator;
 import io.mercury.transport.rabbitmq.RabbitMqTransport.ShutdownSignalHandler;
+import io.mercury.transport.rabbitmq.configurator.RabbitConfig.RabbitConfigOption;
 
 public final class RabbitConnection implements TransportConfigurator {
 
@@ -101,6 +104,16 @@ public final class RabbitConnection implements TransportConfigurator {
 		return new Builder(host, port, username, password, virtualHost);
 	}
 
+	public static Builder configuration(@Nonnull Config config) {
+		return configuration("", config);
+	}
+
+	public static Builder configuration(@Nonnull String module, @Nonnull Config config) {
+		var delegate = new ConfigDelegate<RabbitConfigOption>(module, config);
+		return new Builder(delegate.getString(RabbitConfigOption.Host), delegate.getInt(RabbitConfigOption.Port),
+				delegate.getString(RabbitConfigOption.Username), delegate.getString(RabbitConfigOption.Password));
+	}
+
 	public String getHost() {
 		return host;
 	}
@@ -177,7 +190,7 @@ public final class RabbitConnection implements TransportConfigurator {
 	 * @return ConnectionFactory
 	 */
 	public ConnectionFactory createConnectionFactory() {
-		ConnectionFactory factory = new ConnectionFactory();
+		var factory = new ConnectionFactory();
 		factory.setHost(host);
 		factory.setPort(port);
 		factory.setUsername(username);

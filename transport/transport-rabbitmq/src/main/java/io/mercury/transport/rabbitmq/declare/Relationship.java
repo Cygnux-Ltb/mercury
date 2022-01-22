@@ -37,10 +37,10 @@ public abstract class Relationship {
 	 * @param binding
 	 * @throws DeclareException
 	 */
-	private void declareBinding(RabbitMqOperator declarator, Binding binding) throws DeclareException {
+	private void declareBinding(RabbitMqOperator operator, Binding binding) throws DeclareException {
 		AmqpExchange source = binding.source;
 		try {
-			declarator.declareExchange(source);
+			operator.declareExchange(source);
 		} catch (DeclareException declareException) {
 			log.error("Declare source exchange failure -> {}", source);
 			throw declareException;
@@ -50,13 +50,13 @@ public abstract class Relationship {
 		case Exchange:
 			AmqpExchange destExchange = binding.destExchange;
 			try {
-				declarator.declareExchange(destExchange);
+				operator.declareExchange(destExchange);
 			} catch (DeclareException e) {
 				log.error("Declare dest exchange failure -> destExchange==[{}]", destExchange, e);
 				throw e;
 			}
 			try {
-				declarator.bindExchange(destExchange.getName(), source.getName(), routingKey);
+				operator.bindExchange(destExchange.getName(), source.getName(), routingKey);
 			} catch (DeclareException e) {
 				log.error("Declare bind exchange failure -> destExchange==[{}], source==[{}], routingKey==[{}]",
 						destExchange, source, routingKey, e);
@@ -66,13 +66,13 @@ public abstract class Relationship {
 		case Queue:
 			AmqpQueue destQueue = binding.destQueue;
 			try {
-				declarator.declareQueue(destQueue);
+				operator.declareQueue(destQueue);
 			} catch (DeclareException e) {
 				log.error("Declare dest queue failure -> destQueue==[{}]", destQueue, e);
 				throw e;
 			}
 			try {
-				declarator.bindQueue(destQueue.getName(), source.getName(), routingKey);
+				operator.bindQueue(destQueue.getName(), source.getName(), routingKey);
 			} catch (DeclareException e) {
 				log.error("Declare bind queue failure -> destQueue==[{}], source==[{}], routingKey==[{}]", destQueue,
 						source, routingKey, e);
@@ -98,39 +98,39 @@ public abstract class Relationship {
 		/**
 		 * 
 		 * @param source
-		 * @param destExchange
+		 * @param dest
 		 */
-		Binding(AmqpExchange source, AmqpExchange destExchange) {
-			this(source, destExchange, "");
+		Binding(AmqpExchange source, AmqpExchange dest) {
+			this(source, dest, "");
 		}
 
 		/**
 		 * 
 		 * @param source
-		 * @param destExchange
+		 * @param dest
 		 * @param routingKey
 		 */
-		Binding(AmqpExchange source, AmqpExchange destExchange, String routingKey) {
-			this(source, destExchange, null, routingKey, DestType.Exchange);
+		Binding(AmqpExchange source, AmqpExchange dest, String routingKey) {
+			this(source, dest, null, routingKey, DestType.Exchange);
 		}
 
 		/**
 		 * 
 		 * @param source
-		 * @param destQueue
+		 * @param dest
 		 */
-		Binding(AmqpExchange source, AmqpQueue destQueue) {
-			this(source, destQueue, "");
+		Binding(AmqpExchange source, AmqpQueue dest) {
+			this(source, dest, "");
 		}
 
 		/**
 		 * 
 		 * @param source
-		 * @param destQueue
+		 * @param dest
 		 * @param routingKey
 		 */
-		Binding(AmqpExchange source, AmqpQueue destQueue, String routingKey) {
-			this(source, null, destQueue, routingKey, DestType.Queue);
+		Binding(AmqpExchange source, AmqpQueue dest, String routingKey) {
+			this(source, null, dest, routingKey, DestType.Queue);
 		}
 
 		/**
@@ -141,7 +141,7 @@ public abstract class Relationship {
 		 * @param routingKey
 		 * @param destType
 		 */
-		Binding(AmqpExchange source, AmqpExchange destExchange, AmqpQueue destQueue, String routingKey,
+		private Binding(AmqpExchange source, AmqpExchange destExchange, AmqpQueue destQueue, String routingKey,
 				DestType destType) {
 			this.source = source;
 			this.destExchange = destExchange;

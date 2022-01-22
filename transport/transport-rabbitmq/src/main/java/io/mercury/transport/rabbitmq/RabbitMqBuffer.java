@@ -100,12 +100,12 @@ public class RabbitMqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 	 * @throws DeclareException
 	 */
 	private void declareQueue() throws DeclareException {
-		QueueRelationship queueRelationship = QueueRelationship.named(queueName).binding(
+		var relationship = QueueRelationship.named(queueName).binding(
 				// 如果routingKeys为空集合, 则创建fanout交换器, 否则创建直接交换器
 				exchangeNames.stream().map(exchangeName -> routingKeys.isEmpty() ? AmqpExchange.fanout(exchangeName)
 						: AmqpExchange.direct(exchangeName)).collect(Collectors.toList()),
 				routingKeys);
-		queueRelationship.declare(RabbitMqOperator.newWith(channel.internalChannel()));
+		relationship.declare(RabbitMqOperator.newWith(channel.internalChannel()));
 	}
 
 	/**

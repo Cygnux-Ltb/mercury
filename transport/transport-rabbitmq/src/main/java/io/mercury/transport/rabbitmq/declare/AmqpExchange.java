@@ -131,8 +131,13 @@ public final class AmqpExchange {
 	 * @return
 	 */
 	public boolean isIdempotent(AmqpExchange another) {
-		return name.equals(another.name) && type == another.type && durable == another.durable
-				&& autoDelete == another.autoDelete && internal == another.internal
+		if (another == null)
+			return false;
+		return name.equals(another.name) 
+				&& type == another.type 
+				&& durable == another.durable
+				&& autoDelete == another.autoDelete 
+				&& internal == another.internal
 				&& MapUtil.isEquals(args, another.args);
 	}
 
