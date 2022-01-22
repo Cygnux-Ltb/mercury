@@ -156,7 +156,7 @@ public final class DoubleArithmetic {
 	 * @param d2
 	 * @return
 	 */
-	public static double division(double d1, double d2) {
+	public static double div(double d1, double d2) {
 		return correction8(d1 / d2);
 	}
 
@@ -180,7 +180,6 @@ public final class DoubleArithmetic {
 			System.out.println(correction8(d));
 			i++;
 		}
-
 	}
 
 }

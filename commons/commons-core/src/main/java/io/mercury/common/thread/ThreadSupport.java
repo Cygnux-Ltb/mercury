@@ -1,5 +1,9 @@
 package io.mercury.common.thread;
 
+import static java.lang.Thread.MAX_PRIORITY;
+import static java.lang.Thread.MIN_PRIORITY;
+import static java.lang.Thread.NORM_PRIORITY;
+
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
@@ -27,26 +31,26 @@ public final class ThreadSupport {
 		/**
 		 * The minimum priority that a thread can have.
 		 */
-		MIN(Thread.MIN_PRIORITY),
+		MIN(MIN_PRIORITY),
 
 		/**
 		 * BELOW NORM_PRIORITY
 		 */
-		BELOW_NORM(Thread.NORM_PRIORITY - 2),
+		BELOW_NORM(NORM_PRIORITY - 2),
 
 		/**
 		 * The default priority that is assigned to a thread.
 		 */
-		NORM(Thread.NORM_PRIORITY),
+		NORM(NORM_PRIORITY),
 
 		/**
 		 * ABOVE NORM_PRIORITY
 		 */
-		ABOVE_NORM(Thread.NORM_PRIORITY + 2),
+		ABOVE_NORM(NORM_PRIORITY + 2),
 		/**
 		 * The maximum priority that a thread can have.
 		 */
-		MAX(Thread.MAX_PRIORITY),
+		MAX(MAX_PRIORITY),
 
 		;
 
@@ -387,17 +391,16 @@ public final class ThreadSupport {
 	 * @return An array (will not be null) of all matching threads. An empty array
 	 *         will be returned if no threads match.
 	 */
-	public static Thread[] getAllThreadsMatching(final String regex) {
+	public static Thread[] getThreadsWithMatched(final String regex) {
 		if (regex == null)
 			throw new NullPointerException("Null thread name regex");
-		final Thread[] threads = getAllThreads();
-		ArrayList<Thread> matchingThreads = new ArrayList<Thread>();
+		final var threads = getAllThreads();
+		final var matched = new ArrayList<Thread>();
 		for (Thread thread : threads) {
-			if (thread.getName().matches(regex)) {
-				matchingThreads.add(thread);
-			}
+			if (thread.getName().matches(regex))
+				matched.add(thread);
 		}
-		return matchingThreads.toArray(new Thread[0]);
+		return matched.toArray(new Thread[matched.size()]);
 	}
 
 	/**

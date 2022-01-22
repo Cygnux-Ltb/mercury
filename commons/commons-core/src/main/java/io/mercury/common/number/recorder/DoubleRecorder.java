@@ -1,13 +1,14 @@
 package io.mercury.common.number.recorder;
 
+import static io.mercury.common.collections.MutableMaps.newDoubleIntHashMap;
+import static io.mercury.common.collections.MutableSets.newDoubleHashSet;
+
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.eclipse.collections.api.map.primitive.MutableDoubleIntMap;
 import org.eclipse.collections.api.set.primitive.MutableDoubleSet;
 
 import io.mercury.common.collections.Capacity;
-import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.collections.MutableSets;
 
 /**
  * 有序的记录N个double数值并排序<br>
@@ -25,8 +26,8 @@ public final class DoubleRecorder {
 	private MutableDoubleSet doubleSet;
 
 	public DoubleRecorder(Capacity capacity) {
-		this.doubleCounter = MutableMaps.newDoubleIntHashMap(capacity.value());
-		this.doubleSet = MutableSets.newDoubleHashSet(capacity);
+		this.doubleCounter = newDoubleIntHashMap(capacity.value());
+		this.doubleSet = newDoubleHashSet(capacity);
 	}
 
 	/**

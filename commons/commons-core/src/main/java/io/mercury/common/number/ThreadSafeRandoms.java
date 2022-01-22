@@ -1,5 +1,7 @@
 package io.mercury.common.number;
 
+import static java.lang.Math.abs;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.concurrent.ThreadSafe;
@@ -8,7 +10,7 @@ import javax.annotation.concurrent.ThreadSafe;
 public final class ThreadSafeRandoms {
 
 	/**
-	 * @ThreadSafe
+	 * 
 	 * @return int
 	 */
 	public static int randomInt() {
@@ -16,15 +18,19 @@ public final class ThreadSafeRandoms {
 	}
 
 	/**
-	 * @ThreadSafe
+	 * 
 	 * @return unsigned int
 	 */
 	public static int randomUnsignedInt() {
-		return Math.abs(ThreadLocalRandom.current().nextInt());
+		int next;
+		do {
+			next = ThreadLocalRandom.current().nextInt();
+		} while (next == Integer.MIN_VALUE);
+		return abs(next);
 	}
 
 	/**
-	 * @ThreadSafe
+	 * 
 	 * @return long
 	 */
 	public static long randomLong() {
@@ -32,15 +38,19 @@ public final class ThreadSafeRandoms {
 	}
 
 	/**
-	 * @ThreadSafe
+	 * 
 	 * @return unsigned long
 	 */
 	public static long randomUnsignedLong() {
-		return Math.abs(ThreadLocalRandom.current().nextLong());
+		long next;
+		do {
+			next = ThreadLocalRandom.current().nextLong();
+		} while (next == Long.MIN_VALUE);
+		return abs(next);
 	}
 
 	/**
-	 * @ThreadSafe
+	 * 
 	 * @return double
 	 */
 	public static double randomDouble() {
@@ -48,11 +58,11 @@ public final class ThreadSafeRandoms {
 	}
 
 	/**
-	 * @ThreadSafe
+	 * 
 	 * @return unsigned double
 	 */
 	public static double randomUnsignedDouble() {
-		return Math.abs(ThreadLocalRandom.current().nextDouble());
+		return abs(ThreadLocalRandom.current().nextDouble());
 	}
 
 }

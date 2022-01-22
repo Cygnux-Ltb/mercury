@@ -1,5 +1,7 @@
 package io.mercury.common.number;
 
+import static java.lang.Math.abs;
+
 import java.security.SecureRandom;
 
 import javax.annotation.concurrent.NotThreadSafe;
@@ -10,7 +12,7 @@ public final class Randoms {
 	private static final SecureRandom Random = new SecureRandom();
 
 	/**
-	 * @NotThreadSafe
+	 * 
 	 * @return int
 	 */
 	public static int nextInt() {
@@ -18,7 +20,7 @@ public final class Randoms {
 	}
 
 	/**
-	 * @NotThreadSafe
+	 * 
 	 * @return unsigned int
 	 */
 
@@ -27,11 +29,11 @@ public final class Randoms {
 		do {
 			next = Random.nextInt();
 		} while (next == Integer.MIN_VALUE);
-		return Math.abs(next);
+		return abs(next);
 	}
 
 	/**
-	 * @NotThreadSafe
+	 * 
 	 * @return long
 	 */
 	public static long nextLong() {
@@ -39,7 +41,7 @@ public final class Randoms {
 	}
 
 	/**
-	 * @NotThreadSafe
+	 * 
 	 * @return unsigned long
 	 */
 	public static long nextUnsignedLong() {
@@ -47,11 +49,11 @@ public final class Randoms {
 		do {
 			next = Random.nextLong();
 		} while (next == Long.MIN_VALUE);
-		return Math.abs(next);
+		return abs(next);
 	}
 
 	/**
-	 * @NotThreadSafe
+	 * 
 	 * @return double
 	 */
 	public static double nextDouble() {
@@ -59,11 +61,11 @@ public final class Randoms {
 	}
 
 	/**
-	 * @NotThreadSafe
+	 * 
 	 * @return unsigned double
 	 */
 	public static double nextUnsignedDouble() {
-		return Math.abs(Random.nextDouble());
+		return abs(Random.nextDouble());
 	}
 
 }

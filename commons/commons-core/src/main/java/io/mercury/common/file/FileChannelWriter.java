@@ -11,6 +11,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -37,7 +38,7 @@ public final class FileChannelWriter {
 	 * @throws NullPointerException
 	 * @throws IOException
 	 */
-	public static final File write(List<String> lines, @Nonnull final File target)
+	public static final File write(Collection<String> lines, @Nonnull final File target)
 			throws NullPointerException, IOException {
 		return write(lines, UTF8, target, 8192, true);
 	}
@@ -51,24 +52,24 @@ public final class FileChannelWriter {
 	 * @throws NullPointerException
 	 * @throws IOException
 	 */
-	public static final File write(List<String> lines, @Nonnull File target, boolean append)
+	public static final File write(Collection<String> lines, @Nonnull File target, boolean append)
 			throws NullPointerException, IOException {
 		return write(lines, UTF8, target, 8192, append);
 	}
 
 	/**
 	 * 
-	 * @param lines    : written data
-	 * @param charset  : value charset
-	 * @param target   : written target file
-	 * @param capacity : buffer capacity
-	 * @param append   : append file end
+	 * @param lines    : Written data
+	 * @param charset  : Value charset
+	 * @param target   : Written target file
+	 * @param capacity : Buffer capacity
+	 * @param append   : Is append to file end
 	 * @return
 	 * @throws NullPointerException
 	 * @throws IOException
 	 */
-	public static final File write(List<String> lines, @Nonnull Charset charset, @Nonnull File target, int capacity,
-			boolean append) throws NullPointerException, IOException {
+	public static final File write(Collection<String> lines, @Nonnull Charset charset, @Nonnull File target,
+			int capacity, boolean append) throws NullPointerException, IOException {
 		return write(lines,
 				line -> line.endsWith(LINE_SEPARATOR) ? line.getBytes(charset)
 						: new StringBuilder(line.length() + LINE_SEPARATOR.length()).append(line).append(LINE_SEPARATOR)
@@ -83,12 +84,13 @@ public final class FileChannelWriter {
 	 * @param serialization : Serialization function
 	 * @param target        : Written target file
 	 * @param capacity      : Buffer capacity
-	 * @param append        : Is append file end
+	 * @param append        : Is append to file end
 	 * @return
+	 * 
 	 * @throws NullPointerException
 	 * @throws IOException
 	 */
-	public static final <T> File write(List<T> data, @Nonnull BytesSerializer<T> serializer, @Nonnull File target,
+	public static final <T> File write(Collection<T> data, @Nonnull BytesSerializer<T> serializer, @Nonnull File target,
 			int capacity, boolean append) throws NullPointerException, IOException {
 		if (target == null)
 			throw new NullPointerException("target file must not be null.");
@@ -100,16 +102,17 @@ public final class FileChannelWriter {
 		if (!target.exists())
 			target.createNewFile();
 		if (CollectionUtils.isNotEmpty(data)) {
-			try (RandomAccessFile rafile = new RandomAccessFile(target, "rw")) {
+			try (var rafile = new RandomAccessFile(target, "rw")) {
 				if (append) {
 					// Seek to end
 					rafile.seek(rafile.length());
 				}
-				try (FileChannel channel = rafile.getChannel()) {
+				try (var channel = rafile.getChannel()) {
 					// Allocate [capacity] direct buffer
-					ByteBuffer buffer = ByteBuffer.allocateDirect(capacity);
-					for (int i = 0; i < data.size(); i++) {
-						byte[] bytes = serializer.serialization(data.get(i));
+					var buffer = ByteBuffer.allocateDirect(capacity);
+					// for (int i = 0; i < data.size(); i++) {
+					for (T t : data) {
+						byte[] bytes = serializer.serialization(t);
 						if (bytes == null || bytes.length == 0) {
 							continue;
 						}
@@ -143,6 +146,7 @@ public final class FileChannelWriter {
 	 * 
 	 * @param buffer
 	 * @param channel
+	 * 
 	 * @throws IOException
 	 */
 	private static final void flipAndChannelWrite(ByteBuffer buffer, FileChannel channel) throws IOException {

@@ -2,7 +2,7 @@ package io.mercury.common.number.impl;
 
 import static io.mercury.common.number.DoubleArithmetic.add4;
 import static io.mercury.common.number.DoubleArithmetic.add8;
-import static io.mercury.common.number.DoubleArithmetic.division;
+import static io.mercury.common.number.DoubleArithmetic.div;
 import static io.mercury.common.number.DoubleArithmetic.multiply4;
 import static io.mercury.common.number.DoubleArithmetic.multiply8;
 import static io.mercury.common.number.DoubleArithmetic.subtraction;
@@ -58,7 +58,7 @@ public final class DoubleNum implements Num<DoubleNum> {
 
 	@Override
 	public DoubleNum divided(Num<?> divisor) {
-		this.value = division(value, divisor.doubleValue());
+		this.value = div(value, divisor.doubleValue());
 		return this;
 	}
 
