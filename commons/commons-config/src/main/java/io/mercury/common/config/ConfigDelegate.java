@@ -23,10 +23,10 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	private final String module;
 
 	public ConfigDelegate(@Nonnull Config config) {
-		this(config, "");
+		this("", config);
 	}
 
-	public ConfigDelegate(@Nonnull Config config, @Nullable String module) {
+	public ConfigDelegate(@Nullable String module, @Nonnull Config config) {
 		nonNull(config, "config");
 		this.config = config;
 		this.module = nonEmpty(module) ? module.endsWith(".") ? module : module + "." : "";
