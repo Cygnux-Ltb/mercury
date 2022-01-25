@@ -1,4 +1,4 @@
-package guide.util;
+package org.zeromq.guide.util;
 
 /*
 *

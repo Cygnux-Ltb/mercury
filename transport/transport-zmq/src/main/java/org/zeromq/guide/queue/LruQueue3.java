@@ -1,4 +1,4 @@
-package guide.queue;
+package org.zeromq.guide.queue;
 
 import java.util.LinkedList;
 import java.util.Queue;

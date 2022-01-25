@@ -1,4 +1,4 @@
-package guide.util;
+package org.zeromq.guide.util;
 
 import java.math.BigInteger;
 import java.util.Arrays;

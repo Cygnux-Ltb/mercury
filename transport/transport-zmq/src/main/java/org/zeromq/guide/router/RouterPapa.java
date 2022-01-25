@@ -1,4 +1,4 @@
-package guide.router;
+package org.zeromq.guide.router;
 
 //
 //Custom routing Router to Papa (ROUTER to REP)
@@ -8,8 +8,7 @@ import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Socket;
-
-import guide.util.ZHelper;
+import org.zeromq.guide.util.ZHelper;
 
 public class RouterPapa {
 	// We will do this all in one thread to emphasize the getSequence of events

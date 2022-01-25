@@ -1,4 +1,4 @@
-package guide.peering;
+package org.zeromq.guide.peering;
 
 import java.io.IOException;
 import java.util.ArrayList;

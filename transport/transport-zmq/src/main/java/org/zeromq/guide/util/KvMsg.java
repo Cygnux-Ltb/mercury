@@ -1,4 +1,4 @@
-package guide.util;
+package org.zeromq.guide.util;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
@@ -327,7 +327,7 @@ public class KvMsg {
 			kvmsg.send(output);
 			kvmsg.store(kvmap);
 
-			kvmsg = guide.util.KvMsg.recv(input);
+			kvmsg = org.zeromq.guide.util.KvMsg.recv(input);
 			if (verbose)
 				kvmsg.dump();
 			assert (kvmsg.getKey().equals("getKey"));
@@ -347,7 +347,7 @@ public class KvMsg {
 			kvmsg.send(output);
 			kvmsg.destroy();
 
-			kvmsg = guide.util.KvMsg.recv(input);
+			kvmsg = org.zeromq.guide.util.KvMsg.recv(input);
 			if (verbose)
 				kvmsg.dump();
 			assert (kvmsg.key.equals("getKey"));

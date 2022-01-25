@@ -1,4 +1,4 @@
-package guide.router;
+package org.zeromq.guide.router;
 
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;

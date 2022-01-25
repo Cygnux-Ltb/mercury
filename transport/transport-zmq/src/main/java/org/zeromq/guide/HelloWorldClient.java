@@ -1,4 +1,4 @@
-package guide;
+package org.zeromq.guide;
 
 //
 //  Hello World client in Java

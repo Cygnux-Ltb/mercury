@@ -1,4 +1,4 @@
-package guide.clone;
+package org.zeromq.guide.clone;
 
 import java.util.Random;
 

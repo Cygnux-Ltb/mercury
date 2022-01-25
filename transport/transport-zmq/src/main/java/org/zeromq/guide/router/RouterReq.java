@@ -1,12 +1,11 @@
-package guide.router;
+package org.zeromq.guide.router;
 
 import java.util.Random;
 
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ.Socket;
-
-import guide.util.ZHelper;
+import org.zeromq.guide.util.ZHelper;
 
 /**
  * ROUTER-TO-REQ example

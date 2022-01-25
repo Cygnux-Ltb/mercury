@@ -1,4 +1,4 @@
-package guide.weather;
+package org.zeromq.guide.weather;
 
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;

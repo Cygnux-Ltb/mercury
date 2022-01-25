@@ -1,4 +1,4 @@
-package guide.peering;
+package org.zeromq.guide.peering;
 
 import java.util.ArrayList;
 import java.util.Random;

@@ -1,4 +1,4 @@
-package guide.freelance;
+package org.zeromq.guide.freelance;
 
 import java.util.ArrayList;
 import java.util.HashMap;

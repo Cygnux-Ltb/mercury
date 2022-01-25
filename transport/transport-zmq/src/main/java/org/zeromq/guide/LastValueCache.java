@@ -1,4 +1,4 @@
-package guide;
+package org.zeromq.guide;
 
 import java.util.HashMap;
 import java.util.Map;

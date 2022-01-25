@@ -1,4 +1,4 @@
-package guide.majordomo;
+package org.zeromq.guide.majordomo;
 
 import org.zeromq.ZMsg;
 

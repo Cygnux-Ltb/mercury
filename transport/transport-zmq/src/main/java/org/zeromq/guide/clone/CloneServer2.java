@@ -1,4 +1,4 @@
-package guide.clone;
+package org.zeromq.guide.clone;
 
 import java.nio.ByteBuffer;
 import java.util.Iterator;
@@ -14,8 +14,7 @@ import org.zeromq.ZMQ.Poller;
 import org.zeromq.ZMQ.Socket;
 import org.zeromq.ZThread;
 import org.zeromq.ZThread.IAttachedRunnable;
-
-import guide.util.KvSimple;
+import org.zeromq.guide.util.KvSimple;
 
 /**
  * Clone server Model Two

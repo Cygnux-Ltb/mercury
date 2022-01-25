@@ -1,4 +1,4 @@
-package guide.task;
+package org.zeromq.guide.task;
 
 import java.util.Random;
 

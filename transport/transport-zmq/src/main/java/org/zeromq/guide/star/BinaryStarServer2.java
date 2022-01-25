@@ -1,4 +1,4 @@
-package guide.star;
+package org.zeromq.guide.star;
 
 import org.zeromq.SocketType;
 import org.zeromq.ZLoop;

@@ -1,4 +1,4 @@
-package guide.freelance;
+package org.zeromq.guide.freelance;
 
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;

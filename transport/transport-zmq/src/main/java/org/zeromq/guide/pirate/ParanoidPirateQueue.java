@@ -1,4 +1,4 @@
-package guide.pirate;
+package org.zeromq.guide.pirate;
 
 import java.util.ArrayList;
 import java.util.Iterator;

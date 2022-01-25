@@ -1,4 +1,4 @@
-package guide.weather;
+package org.zeromq.guide.weather;
 
 import java.util.Random;
 

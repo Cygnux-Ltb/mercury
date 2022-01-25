@@ -1,4 +1,4 @@
-package guide.clone;
+package org.zeromq.guide.clone;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
@@ -10,8 +10,7 @@ import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Poller;
 import org.zeromq.ZMQ.Socket;
-
-import guide.util.KvSimple;
+import org.zeromq.guide.util.KvSimple;
 
 /**
  * Clone client Model Four
