@@ -16,9 +16,9 @@ import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Transport;
 import io.mercury.transport.api.TransportComponent;
 import io.mercury.transport.attr.TcpKeepAlive;
-import io.mercury.transport.attr.TcpKeepAlive.KeepAlive;
+import io.mercury.transport.attr.TcpKeepAlive.KeepAliveType;
 
-abstract class ZmqTransport extends TransportComponent implements Transport, Closeable {
+public abstract class ZmqTransport extends TransportComponent implements Transport, Closeable {
 
 	private static final Logger log = Log4j2LoggerFactory.getLogger(ZmqTransport.class);
 
@@ -28,10 +28,10 @@ abstract class ZmqTransport extends TransportComponent implements Transport, Clo
 	// 组件运行状态, 初始为已开始运行
 	protected final AtomicBoolean isRunning = new AtomicBoolean(true);
 
-	// ZContext
+	// org.zeromq.ZContext
 	protected ZContext context;
 
-	// ZMQ.Socket
+	// org.zeromq.ZMQ.Socket
 	protected ZMQ.Socket socket;
 
 	// 组件名称
@@ -50,8 +50,10 @@ abstract class ZmqTransport extends TransportComponent implements Transport, Clo
 	@AbstractFunction
 	protected abstract SocketType getSocketType();
 
+	public abstract ZmqTransportType getTransportType();
+
 	/**
-	 * 设置TcpKeepAlive, 由子类调用
+	 * 设置TcpKeepAlive, 由子类负责调用
 	 *
 	 * @param option
 	 * @return
@@ -59,7 +61,7 @@ abstract class ZmqTransport extends TransportComponent implements Transport, Clo
 	protected ZMQ.Socket setTcpKeepAlive(TcpKeepAlive option) {
 		if (option != null) {
 			log.info("setting ZMQ.Socket TCP KeepAlive with -> {}", option);
-			KeepAlive keepAlive = option.getKeepAlive();
+			KeepAliveType keepAlive = option.getKeepAlive();
 			switch (keepAlive) {
 			case Enable:
 				int keepAliveCount = option.getKeepAliveCount();
@@ -125,9 +127,9 @@ abstract class ZmqTransport extends TransportComponent implements Transport, Clo
 			socket.close();
 			context.close();
 			newEndTime();
-			log.info("ZMQ transport component -> {} closed, Running duration millis -> {}", name, getRunningDuration());
+			log.info("Zmq component -> {} closed, Running duration millis -> {}", name, getRunningDuration());
 		} else
-			log.warn("ZMQ transport component -> {} already closed, Cannot be called again", name);
+			log.warn("Zmq component -> {} already closed, Cannot be called again", name);
 		return context.isClosed();
 	}
 

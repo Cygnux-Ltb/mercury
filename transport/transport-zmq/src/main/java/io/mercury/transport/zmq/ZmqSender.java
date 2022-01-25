@@ -18,9 +18,9 @@ import io.mercury.transport.zmq.exception.ZmqConnectionException;
 @NotThreadSafe
 public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 
-	private final BytesSerializer<T> serializer;
-
 	private static final Logger log = Log4j2LoggerFactory.getLogger(ZmqSender.class);
+
+	private final BytesSerializer<T> serializer;
 
 	/**
 	 * @param cfg
@@ -37,13 +37,18 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 			log.error("ZmqSender unable to connect addr -> {}", addr);
 			throw new ZmqConnectionException(addr);
 		}
-		this.name = "zmq::req$" + addr;
+		this.name = "zreq$" + addr;
 		newStartTime();
 	}
 
 	@Override
 	protected SocketType getSocketType() {
 		return SocketType.REQ;
+	}
+
+	@Override
+	public ZmqTransportType getTransportType() {
+		return ZmqTransportType.ZmqSender;
 	}
 
 	@Override

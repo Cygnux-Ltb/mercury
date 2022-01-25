@@ -96,31 +96,31 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 		Assertor.nonNull(config, "config");
 		ConfigDelegate<ZmqConfigOption> delegate = new ConfigDelegate<>(module, config);
 		ZmqProtocol protocol = ZmqProtocol.of(delegate.getStringOrThrows(Protocol));
-		ZmqConfigurator zmqConf = null;
+		ZmqConfigurator conf = null;
 		switch (protocol) {
 		case TCP:
 			int port = delegate.getIntOrThrows(Port);
 			if (delegate.hasOption(Addr)) {
 				String tcpAddr = delegate.getStringOrThrows(Addr);
 				Assertor.isValid(tcpAddr, IpAddressValidator::isIpAddress, new IpAddressIllegalException(tcpAddr));
-				zmqConf = ZmqConfigurator.tcp(tcpAddr, port);
+				conf = ZmqConfigurator.tcp(tcpAddr, port);
 			} else {
 				// 没有addr配置项, 使用本地地址
-				zmqConf = ZmqConfigurator.tcp(port);
+				conf = ZmqConfigurator.tcp(port);
 			}
 			break;
 		case IPC:
 		case INPROC:
 			// 使用ipc或inproc协议
-			String internalAddr = delegate.getStringOrThrows(Addr);
-			zmqConf = new ZmqConfigurator(protocol, internalAddr);
+			String localAddr = delegate.getStringOrThrows(Addr);
+			conf = new ZmqConfigurator(protocol, localAddr);
 		default:
 			break;
 		}
 		if (delegate.hasOption(IoThreads))
-			zmqConf.ioThreads(delegate.getInt(IoThreads));
-		log.info("created ZmqConfigurator object -> {}", zmqConf);
-		return zmqConf;
+			conf.ioThreads(delegate.getInt(IoThreads));
+		log.info("created ZmqConfigurator object -> {}", conf);
+		return conf;
 	}
 
 	/**
@@ -399,7 +399,7 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 
 	}
 
-	//public static enum ZmqConfigOption 
+	// public static enum ZmqConfigOption
 
 	public static void main(String[] args) {
 		ZmqConfigurator configurator = ZmqConfigurator.tcp("192.168.1.1", 5551).ioThreads(3)

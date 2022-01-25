@@ -19,12 +19,12 @@ import io.mercury.transport.zmq.exception.ZmqBindException;
 
 public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byte[], T>, Closeable {
 
+	private static final Logger log = Log4j2LoggerFactory.getLogger(ZmqPublisher.class);
+
 	// default topic
 	private final byte[] sendMore;
 
 	private final BytesSerializer<T> serializer;
-
-	private static final Logger log = Log4j2LoggerFactory.getLogger(ZmqPublisher.class);
 
 	/**
 	 * @param cfg
@@ -45,7 +45,7 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
 			throw new ZmqBindException(addr);
 		}
 		setTcpKeepAlive(cfg.getTcpKeepAlive());
-		this.name = "zmq::pub$" + addr + "/" + topic;
+		this.name = "zpub$" + addr + "/" + topic;
 		newStartTime();
 	}
 
@@ -56,6 +56,11 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
 	@Override
 	protected SocketType getSocketType() {
 		return SocketType.PUB;
+	}
+
+	@Override
+	public ZmqTransportType getTransportType() {
+		return ZmqTransportType.ZmqPublisher;
 	}
 
 	@Override

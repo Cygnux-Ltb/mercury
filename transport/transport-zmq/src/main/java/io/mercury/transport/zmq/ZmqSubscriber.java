@@ -23,13 +23,13 @@ import io.mercury.transport.zmq.exception.ZmqConnectionException;
  */
 public final class ZmqSubscriber extends ZmqTransport implements Subscriber {
 
+	private static final Logger log = Log4j2LoggerFactory.getLogger(ZmqSubscriber.class);
+
 	// topics
 	private final Topics topics;
 
 	// 订阅消息消费者
 	private final BiConsumer<byte[], byte[]> consumer;
-
-	private static final Logger log = Log4j2LoggerFactory.getLogger(ZmqSubscriber.class);
 
 	ZmqSubscriber(@Nonnull ZmqConfigurator cfg, @Nonnull Topics topics, @Nonnull BiConsumer<byte[], byte[]> consumer)
 			throws ZmqConnectionException {
@@ -50,7 +50,7 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber {
 				? TcpKeepAlive.enable().setKeepAliveCount(10).setKeepAliveIdle(30).setKeepAliveInterval(30)
 				: cfg.getTcpKeepAlive());
 		topics.each(topic -> socket.subscribe(topic.getBytes(ZMQ.CHARSET)));
-		this.name = "zmq::sub$" + addr + "/" + topics;
+		this.name = "zsub$" + addr + "/" + topics;
 		newStartTime();
 	}
 
@@ -61,6 +61,11 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber {
 	@Override
 	protected SocketType getSocketType() {
 		return SocketType.SUB;
+	}
+
+	@Override
+	public ZmqTransportType getTransportType() {
+		return ZmqTransportType.ZmqSubscriber;
 	}
 
 	@Override

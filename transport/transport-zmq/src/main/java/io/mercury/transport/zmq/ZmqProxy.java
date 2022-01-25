@@ -3,28 +3,141 @@ package io.mercury.transport.zmq;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.slf4j.Logger;
 import org.zeromq.ZMQ;
 
-public final class ZmqProxy {
+import io.mercury.common.lang.Assertor;
+import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.transport.api.TransportComponent;
+import io.mercury.transport.zmq.exception.ZmqProxyException;
 
-	private ZmqProxy(
-			// 代理前端
-			@Nonnull ZmqTransport frontend,
-			// 代理后端
-			@Nonnull ZmqTransport backend,
-			// If the capture socket is not NULL, the proxy shall send all messages,
-			// received on both frontend and backend, to the capture socket.
-			// The capture socket should be a ZMQ_PUB, ZMQ_DEALER, ZMQ_PUSH, or ZMQ_PAIR
-			// socket.
-			@Nullable ZmqTransport capture,
-			// Proxy控制管道, 用于接收控制指令
+public final class ZmqProxy extends TransportComponent {
+
+	private static final Logger log = Log4j2LoggerFactory.getLogger(ZmqProxy.class);
+
+	private final String name;
+
+	private final boolean isConnected;
+
+	private final ZmqTransport frontend;
+	private final ZmqTransport backend;
+	private ZmqTransport capture;
+	private ZmqSender<String> control;
+
+	ZmqProxy(@Nonnull ZmqTransport frontend, @Nonnull ZmqTransport backend, @Nullable ZmqTransport capture,
 			@Nullable ZmqTransport control) {
-		boolean succeed = ZMQ.proxy(frontend.getSocket(), backend.getSocket(), capture.getSocket(),
-				control.getSocket());
-
+		Assertor.nonNull(frontend, "frontend");
+		Assertor.nonNull(backend, "backend");
+		this.frontend = frontend;
+		this.backend = backend;
+		this.name = "[" + frontend.getName() + "]->[" + backend.getName() + "]";
+		try {
+			this.isConnected = ZMQ.proxy(
+					// 代理前端
+					frontend.getSocket(),
+					// 代理后端
+					backend.getSocket(),
+					// 捕获通道
+					capture != null ? capture.getSocket() : null,
+					// 控制通道
+					control.getSocket());
+		} catch (Exception e) {
+			throw new ZmqProxyException("ZMQ.proxy(frontend, backend, capture, control) -> " + e.getMessage(), e);
+		}
+		log.info("", name);
+		newStartTime();
 	}
 
-	public static class B {
+	public ZmqTransport getFrontend() {
+		return frontend;
+	}
+
+	public ZmqTransport getBackend() {
+		return backend;
+	}
+
+	public ZmqTransport getCapture() {
+		return capture;
+	}
+
+	public ZmqSender<String> getControl() {
+		return control;
+	}
+	
+	
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public boolean isConnected() {
+		return isConnected;
+	}
+
+	@Override
+	public boolean closeIgnoreException() {
+
+		return false;
+	}
+
+	/**
+	 * 
+	 * @param frontend 代理前端
+	 * @param backend  代理后端
+	 * @return
+	 */
+	public static Builder config(ZmqTransport frontend, ZmqTransport backend) {
+		return new Builder(frontend, backend);
+	}
+
+	public static class Builder {
+		// 代理前端
+		private final ZmqTransport frontend;
+		// 代理后端
+		private final ZmqTransport backend;
+
+		// 捕获通道
+		private ZmqTransport capture;
+		// 控制通道
+		private ZmqTransport control;
+
+		private Builder(ZmqTransport frontend, ZmqTransport backend) {
+			this.frontend = frontend;
+			this.backend = backend;
+		}
+
+		/**
+		 * If the capture socket is not NULL, the proxy shall send all messages,<br>
+		 * received on both frontend and backend, to the capture socket. <br>
+		 * The capture socket should be a ZMQ_PUB, ZMQ_DEALER, ZMQ_PUSH, or ZMQ_PAIR
+		 * socket.
+		 * 
+		 * 代理将发送所有前端和后端接收到的消息到捕获Socket. 捕获Socket应该为ZMQ_PUB, ZMQ_DEALER,
+		 * ZMQ_PUSH或ZMQ_PAIR类型的套接字
+		 * 
+		 * @param capture 捕获Socket, 用于接收全部数据
+		 * @return
+		 */
+		public Builder setCapture(ZmqTransport capture) {
+			this.capture = capture;
+			return this;
+		}
+
+		/**
+		 * 
+		 * @param control 控制通道, 用于接收控制指令
+		 * @return
+		 */
+		public Builder setControl(ZmqTransport control) {
+			this.control = control;
+			return this;
+		}
+
+		public ZmqProxy build() {
+			return new ZmqProxy(frontend, backend, capture, control);
+		}
 
 	}
 

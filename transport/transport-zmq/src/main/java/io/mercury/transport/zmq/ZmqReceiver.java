@@ -18,9 +18,9 @@ import io.mercury.transport.zmq.exception.ZmqBindException;
 
 public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 
-	private final Function<byte[], byte[]> handler;
-
 	private static final Logger log = Log4j2LoggerFactory.getLogger(ZmqPublisher.class);
+
+	private final Function<byte[], byte[]> handler;
 
 	ZmqReceiver(@Nonnull ZmqConfigurator cfg, @Nonnull Function<byte[], byte[]> handler) {
 		super(cfg);
@@ -34,7 +34,7 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 			throw new ZmqBindException(addr);
 		}
 		setTcpKeepAlive(cfg.getTcpKeepAlive());
-		this.name = "zmq::rep$" + addr;
+		this.name = "zrep$" + addr;
 		newStartTime();
 	}
 
@@ -45,6 +45,11 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 	@Override
 	protected SocketType getSocketType() {
 		return SocketType.REP;
+	}
+
+	@Override
+	public ZmqTransportType getTransportType() {
+		return ZmqTransportType.ZmqReceiver;
 	}
 
 	private final byte[] emptyMsg = new byte[] {};
