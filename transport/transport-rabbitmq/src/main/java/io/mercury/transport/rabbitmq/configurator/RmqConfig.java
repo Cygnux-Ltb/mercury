@@ -7,18 +7,18 @@ import io.mercury.common.config.ConfigOption;
  * @author yellow013
  *
  */
-public abstract class RabbitConfig {
+public abstract class RmqConfig {
 
 	/**
 	 * 连接配置信息
 	 */
-	private final RabbitConnection connection;
+	private final RmqConnection connection;
 
-	protected RabbitConfig(RabbitConnection connection) {
+	protected RmqConfig(RmqConnection connection) {
 		this.connection = connection;
 	}
 
-	public RabbitConnection getConnection() {
+	public RmqConnection getConnection() {
 		return connection;
 	}
 

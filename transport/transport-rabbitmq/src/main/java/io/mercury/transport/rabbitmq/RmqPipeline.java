@@ -1,5 +1,5 @@
 package io.mercury.transport.rabbitmq;
 
-public final class RabbitMqPipeline {
+public final class RmqPipeline {
 
 }

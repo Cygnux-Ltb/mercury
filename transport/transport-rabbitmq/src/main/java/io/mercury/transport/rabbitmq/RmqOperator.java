@@ -12,12 +12,12 @@ import com.rabbitmq.client.Channel;
 
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.lang.Assertor;
-import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
+import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 import io.mercury.transport.rabbitmq.declare.AmqpExchange;
 import io.mercury.transport.rabbitmq.declare.AmqpQueue;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 
-public final class RabbitMqOperator extends RabbitMqTransport {
+public final class RmqOperator extends RmqTransport {
 
 	/**
 	 * Create OperationalChannel of host, port, username and password
@@ -30,8 +30,8 @@ public final class RabbitMqOperator extends RabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqOperator newWith(String host, int port, String username, String password) {
-		return newWith(RabbitConnection.configuration(host, port, username, password).build());
+	public static RmqOperator with(String host, int port, String username, String password) {
+		return with(RmqConnection.with(host, port, username, password).build());
 	}
 
 	/**
@@ -46,9 +46,8 @@ public final class RabbitMqOperator extends RabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqOperator newWith(String host, int port, String username, String password,
-			String virtualHost) {
-		return newWith(RabbitConnection.configuration(host, port, username, password, virtualHost).build());
+	public static RmqOperator with(String host, int port, String username, String password, String virtualHost) {
+		return with(RmqConnection.with(host, port, username, password, virtualHost).build());
 	}
 
 	/**
@@ -59,8 +58,8 @@ public final class RabbitMqOperator extends RabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqOperator newWith(RabbitConnection connection) {
-		return new RabbitMqOperator(connection);
+	public static RmqOperator with(RmqConnection connection) {
+		return new RmqOperator(connection);
 	}
 
 	/**
@@ -69,28 +68,28 @@ public final class RabbitMqOperator extends RabbitMqTransport {
 	 * @param channel
 	 * @return
 	 */
-	public static RabbitMqOperator newWith(Channel channel) {
-		return new RabbitMqOperator(channel);
+	public static RmqOperator with(Channel channel) {
+		return new RmqOperator(channel);
 	}
 
-	private RabbitMqOperator(RabbitConnection connection) {
+	private RmqOperator(RmqConnection connection) {
 		super("declarator-" + DateTimeUtil.datetimeOfMillisecond(), connection);
 		createConnection();
 	}
 
-	private RabbitMqOperator(Channel channel) {
+	private RmqOperator(Channel channel) {
 		super("declarator-with-channel-" + channel.getChannelNumber());
 		this.channel = channel;
 	}
 
 	/**
 	 * 
-	 * @param String           -> queue name
-	 * @param DefaultParameter -> durable == true, exclusive == false, autoDelete ==
-	 *                         false<br>
+	 * @param String           queue name
+	 * @param DefaultParameter durable == true, exclusive == false, autoDelete ==
+	 *                         false
 	 * @throws DeclareException
 	 */
-	public boolean declareQueueWithDefault(@Nonnull String queue) throws DeclareException {
+	public boolean declareQueue(@Nonnull String queue) throws DeclareException {
 		return declareQueue(queue, true, false, false, null);
 	}
 
@@ -137,8 +136,9 @@ public final class RabbitMqOperator extends RabbitMqTransport {
 	/**
 	 * 
 	 * @param exchange
-	 * @param DefaultParameter -> durable == true, autoDelete == false, internal ==
+	 * @param DefaultParameter durable == true, autoDelete == false, internal ==
 	 *                         false
+	 * 
 	 * @return
 	 * @throws ExchangeDeclareException
 	 */
@@ -169,7 +169,7 @@ public final class RabbitMqOperator extends RabbitMqTransport {
 	 * @return
 	 * @throws DeclareException
 	 */
-	public boolean declareDefaultDirectExchange(@Nonnull String exchange) throws DeclareException {
+	public boolean declareDirectExchange(@Nonnull String exchange) throws DeclareException {
 		return declareDirectExchange(exchange, true, false, false, null);
 	}
 
@@ -194,7 +194,7 @@ public final class RabbitMqOperator extends RabbitMqTransport {
 	 * @return
 	 * @throws DeclareException
 	 */
-	public boolean declareDefaultFanoutExchange(@Nonnull String exchange) throws DeclareException {
+	public boolean declareFanoutExchange(@Nonnull String exchange) throws DeclareException {
 		return declareFanoutExchange(exchange, true, false, false, null);
 	}
 
@@ -219,7 +219,7 @@ public final class RabbitMqOperator extends RabbitMqTransport {
 	 * @return
 	 * @throws DeclareException
 	 */
-	public boolean declareDefaultTopicExchange(@Nonnull String exchange) throws DeclareException {
+	public boolean declareTopicExchange(@Nonnull String exchange) throws DeclareException {
 		return declareTopicExchange(exchange, true, false, false, null);
 	}
 
@@ -401,7 +401,7 @@ public final class RabbitMqOperator extends RabbitMqTransport {
 
 	public static void main(String[] args) {
 		try {
-			RabbitMqOperator declarator = newWith("127.0.0.1", 5672, "guest", "guest");
+			RmqOperator declarator = with("127.0.0.1", 5672, "guest", "guest");
 			System.out.println(declarator.isConnected());
 			try {
 				declarator.declareFanoutExchange("MarketData", true, false, false, null);

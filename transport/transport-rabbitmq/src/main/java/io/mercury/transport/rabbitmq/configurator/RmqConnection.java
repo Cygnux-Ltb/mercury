@@ -12,10 +12,10 @@ import io.mercury.common.lang.Assertor;
 import io.mercury.common.util.StringSupport;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.TransportConfigurator;
-import io.mercury.transport.rabbitmq.RabbitMqTransport.ShutdownSignalHandler;
-import io.mercury.transport.rabbitmq.configurator.RabbitConfig.RabbitConfigOption;
+import io.mercury.transport.rabbitmq.RmqTransport.ShutdownSignalHandler;
+import io.mercury.transport.rabbitmq.configurator.RmqConfig.RabbitConfigOption;
 
-public final class RabbitConnection implements TransportConfigurator {
+public final class RmqConnection implements TransportConfigurator {
 
 	// 连接地址
 	private final String host;
@@ -59,7 +59,7 @@ public final class RabbitConnection implements TransportConfigurator {
 	// 配置连接信息
 	private final String connectionInfo;
 
-	private RabbitConnection(Builder builder) {
+	private RmqConnection(Builder builder) {
 		this.host = builder.host;
 		this.port = builder.port;
 		this.username = builder.username;
@@ -85,8 +85,7 @@ public final class RabbitConnection implements TransportConfigurator {
 	 * @param password
 	 * @return
 	 */
-	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
-			@Nonnull String password) {
+	public static Builder with(@Nonnull String host, int port, @Nonnull String username, @Nonnull String password) {
 		return new Builder(host, port, username, password);
 	}
 
@@ -99,17 +98,28 @@ public final class RabbitConnection implements TransportConfigurator {
 	 * @param virtualHost
 	 * @return
 	 */
-	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
-			@Nonnull String password, @CheckForNull String virtualHost) {
+	public static Builder with(@Nonnull String host, int port, @Nonnull String username, @Nonnull String password,
+			@CheckForNull String virtualHost) {
 		return new Builder(host, port, username, password, virtualHost);
 	}
 
-	public static Builder configuration(@Nonnull Config config) {
-		return configuration("", config);
+	/**
+	 * 
+	 * @param config
+	 * @return
+	 */
+	public static Builder with(@Nonnull Config config) {
+		return with("", config);
 	}
 
-	public static Builder configuration(@Nonnull String module, @Nonnull Config config) {
-		var delegate = new ConfigDelegate<RabbitConfigOption>(module, config);
+	/**
+	 * 
+	 * @param module
+	 * @param config
+	 * @return
+	 */
+	public static Builder with(@Nonnull String module, @Nonnull Config config) {
+		ConfigDelegate<RabbitConfigOption> delegate = new ConfigDelegate<>(module, config);
 		return new Builder(delegate.getString(RabbitConfigOption.Host), delegate.getInt(RabbitConfigOption.Port),
 				delegate.getString(RabbitConfigOption.Username), delegate.getString(RabbitConfigOption.Password));
 	}
@@ -190,7 +200,7 @@ public final class RabbitConnection implements TransportConfigurator {
 	 * @return ConnectionFactory
 	 */
 	public ConnectionFactory createConnectionFactory() {
-		var factory = new ConnectionFactory();
+		ConnectionFactory factory = new ConnectionFactory();
 		factory.setHost(host);
 		factory.setPort(port);
 		factory.setUsername(username);
@@ -300,15 +310,15 @@ public final class RabbitConnection implements TransportConfigurator {
 			return this;
 		}
 
-		public RabbitConnection build() {
-			return new RabbitConnection(this);
+		public RmqConnection build() {
+			return new RmqConnection(this);
 		}
 
 	}
 
 	public static void main(String[] args) {
 
-		RabbitConnection configuration = configuration("localhost", 5672, "admin", "admin", "report").build();
+		RmqConnection configuration = with("localhost", 5672, "admin", "admin", "report").build();
 		System.out.println(configuration);
 		System.out.println(configuration.getConfigInfo());
 

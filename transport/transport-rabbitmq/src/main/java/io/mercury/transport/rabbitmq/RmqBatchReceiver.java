@@ -31,7 +31,7 @@ import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.BytesDeserializer;
 import io.mercury.transport.api.Receiver;
-import io.mercury.transport.rabbitmq.configurator.RabbitReceiverConfig;
+import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfig;
 
 /**
  * @author yellow013
@@ -39,9 +39,9 @@ import io.mercury.transport.rabbitmq.configurator.RabbitReceiverConfig;
  *         处理批量数据, 手动ACK
  * 
  */
-public class RabbitMqBatchReceiver<T> extends RabbitMqTransport implements Receiver, Runnable {
+public class RmqBatchReceiver<T> extends RmqTransport implements Receiver, Runnable {
 
-	private static final Logger log = Log4j2LoggerFactory.getLogger(RabbitMqBatchReceiver.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(RmqBatchReceiver.class);
 
 	// 接收者名称
 	private String receiverName;
@@ -60,7 +60,7 @@ public class RabbitMqBatchReceiver<T> extends RabbitMqTransport implements Recei
 
 	private BatchProcessConsumer<T> consumer;
 
-	public RabbitMqBatchReceiver(String tag, @Nonnull RabbitReceiverConfig cfg, long autoFlushInterval,
+	public RmqBatchReceiver(String tag, @Nonnull RmqReceiverConfig cfg, long autoFlushInterval,
 			BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent) {
 		super(nonEmpty(tag) ? tag : "batch-recv-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
 		this.receiveQueue = cfg.getReceiveQueue().getQueueName();
@@ -70,7 +70,7 @@ public class RabbitMqBatchReceiver<T> extends RabbitMqTransport implements Recei
 				batchHandler, deserializer, refreshNowEvent, null);
 	}
 
-	public RabbitMqBatchReceiver(String tag, @Nonnull RabbitReceiverConfig configurator, long autoFlushInterval,
+	public RmqBatchReceiver(String tag, @Nonnull RmqReceiverConfig configurator, long autoFlushInterval,
 			BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent,
 			Predicate<T> filter) {
 		super(nonEmpty(tag) ? tag : "batch-receiver-" + DateTimeUtil.datetimeOfMillisecond(),

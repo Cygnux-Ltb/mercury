@@ -24,17 +24,17 @@ import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Publisher;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.exception.PublishFailedException;
-import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
-import io.mercury.transport.rabbitmq.configurator.RabbitPublisherConfig;
+import io.mercury.transport.rabbitmq.configurator.RmqConnection;
+import io.mercury.transport.rabbitmq.configurator.RmqPublisherConfig;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 import io.mercury.transport.rabbitmq.exception.DeclareRuntimeException;
 import io.mercury.transport.rabbitmq.exception.NoAckException;
 
 @ThreadSafe
-public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<String, byte[]>, Sender<byte[]> {
+public class RmqPublisher extends RmqTransport implements Publisher<String, byte[]>, Sender<byte[]> {
 
-	private static final Logger log = Log4j2LoggerFactory.getLogger(RabbitMqPublisher.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(RmqPublisher.class);
 
 	// 发布消息使用的[ExchangeDefinition]
 	private final ExchangeRelationship publishExchange;
@@ -58,30 +58,30 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<St
 
 	/**
 	 * 
-	 * @param config
+	 * @param cfg
 	 */
-	public RabbitMqPublisher(@Nonnull RabbitPublisherConfig config) {
-		this(null, config);
+	public RmqPublisher(@Nonnull RmqPublisherConfig cfg) {
+		this(null, cfg);
 	}
 
 	/**
 	 * 
 	 * @param tag
-	 * @param config
+	 * @param cfg
 	 * @param ackCallback
 	 * @param noAckCallback
 	 */
-	public RabbitMqPublisher(@Nullable String tag, @Nonnull RabbitPublisherConfig config) {
-		super(nonEmpty(tag) ? tag : "publisher-" + datetimeOfMillisecond(), config.getConnection());
-		Assertor.nonNull(config.getPublishExchange(), "exchangeRelation");
-		this.publishExchange = config.getPublishExchange();
+	public RmqPublisher(@Nullable String tag, @Nonnull RmqPublisherConfig cfg) {
+		super(nonEmpty(tag) ? tag : "publisher-" + datetimeOfMillisecond(), cfg.getConnection());
+		Assertor.nonNull(cfg.getPublishExchange(), "exchangeRelation");
+		this.publishExchange = cfg.getPublishExchange();
 		this.exchangeName = publishExchange.getExchangeName();
-		this.defaultRoutingKey = config.getDefaultRoutingKey();
-		this.defaultMsgProps = config.getDefaultMsgProps();
-		this.msgPropsSupplier = config.getMsgPropsSupplier();
-		this.confirm = config.getConfirmOptions().isConfirm();
-		this.confirmTimeout = config.getConfirmOptions().getConfirmTimeout();
-		this.confirmRetry = config.getConfirmOptions().getConfirmRetry();
+		this.defaultRoutingKey = cfg.getDefaultRoutingKey();
+		this.defaultMsgProps = cfg.getDefaultMsgProps();
+		this.msgPropsSupplier = cfg.getMsgPropsSupplier();
+		this.confirm = cfg.getConfirmOptions().isConfirm();
+		this.confirmTimeout = cfg.getConfirmOptions().getConfirmTimeout();
+		this.confirmRetry = cfg.getConfirmOptions().getConfirmRetry();
 		this.hasPropsSupplier = msgPropsSupplier != null;
 		this.publisherName = "publisher::" + rabbitConnection.getConnectionInfo() + "$" + exchangeName;
 		createConnection();
@@ -95,7 +95,7 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<St
 						"Publisher -> {} use anonymous exchange, Please specify [queue name] as the [routing key] when publish",
 						tag);
 			else
-				this.publishExchange.declare(RabbitMqOperator.newWith(channel));
+				this.publishExchange.declare(RmqOperator.with(channel));
 		} catch (DeclareException e) {
 			// 在定义Exchange和进行绑定时抛出任何异常都需要终止程序
 			log.error("Exchange declare throw exception -> connection configurator info : {}, " + "error message : {}",
@@ -202,12 +202,9 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<St
 			log.error("Func channel.confirmSelect() throw IOException from publisherName -> {}, routingKey -> {}",
 					publisherName, routingKey, e);
 			throw e;
-		} catch (InterruptedException e) {
-			log.error("Func channel.waitForConfirms() throw InterruptedException from publisherName -> {}, "
-					+ "routingKey -> {}", publisherName, routingKey, e);
-		} catch (TimeoutException e) {
-			log.error("Func channel.waitForConfirms() throw TimeoutException from publisherName -> {}, "
-					+ "routingKey -> {}", publisherName, routingKey, e);
+		} catch (InterruptedException | TimeoutException e) {
+			log.error("Func channel.waitForConfirms() throw {} from publisherName -> {}, routingKey -> {}",
+					e.getClass().getSimpleName(), publisherName, routingKey, e);
 		}
 	}
 
@@ -256,13 +253,12 @@ public class RabbitMqPublisher extends RabbitMqTransport implements Publisher<St
 
 	public static void main(String[] args) {
 
-		RabbitConnection connectionConfigurator0 = RabbitConnection.configuration("127.0.0.1", 5672, "guest", "guest")
-				.build();
+		RmqConnection connection = RmqConnection.with("127.0.0.1", 5672, "guest", "guest").build();
 
 		ExchangeRelationship fanoutExchange = ExchangeRelationship.fanout("fanout-test");
 
-		try (RabbitMqPublisher publisher = new RabbitMqPublisher(
-				RabbitPublisherConfig.configuration(connectionConfigurator0, fanoutExchange).build())) {
+		try (RmqPublisher publisher = new RmqPublisher(
+				RmqPublisherConfig.configuration(connection, fanoutExchange).build())) {
 			ThreadSupport.startNewThread(() -> {
 				int count = 0;
 				while (true) {

@@ -26,7 +26,7 @@ import io.mercury.transport.api.Receiver;
 import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.exception.ConnectionBreakException;
 import io.mercury.transport.exception.ReceiverStartException;
-import io.mercury.transport.rabbitmq.configurator.RabbitReceiverConfig;
+import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfig;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
 import io.mercury.transport.rabbitmq.declare.QueueRelationship;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
@@ -40,9 +40,9 @@ import io.mercury.transport.rabbitmq.exception.MsgHandleException;
  *         [已完成]改造升级, 使用共同的构建者建立Exchange, RoutingKey, Queue的绑定关系
  *
  */
-public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Subscriber, Receiver, Runnable {
+public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, Receiver, Runnable {
 
-	private static final Logger log = Log4j2LoggerFactory.getLogger(AdvancedRabbitMqReceiver.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(AdvancedRmqReceiver.class);
 
 	// 接收消息使用的反序列化器
 	private final BytesDeserializer<T> deserializer;
@@ -113,11 +113,11 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @param consumer
 	 * @return
 	 */
-	public static AdvancedRabbitMqReceiver<byte[]> create(@Nonnull RabbitReceiverConfig config,
+	public static AdvancedRmqReceiver<byte[]> create(@Nonnull RmqReceiverConfig config,
 			@Nonnull Consumer<byte[]> consumer) {
 		Assertor.nonNull(config, "config");
 		Assertor.nonNull(consumer, "consumer");
-		return new AdvancedRabbitMqReceiver<byte[]>(null, config, (msg, reuse) -> msg, consumer, null);
+		return new AdvancedRmqReceiver<byte[]>(null, config, (msg, reuse) -> msg, consumer, null);
 	}
 
 	/**
@@ -127,11 +127,11 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @param consumer
 	 * @return
 	 */
-	public static AdvancedRabbitMqReceiver<byte[]> create(String tag, @Nonnull RabbitReceiverConfig config,
+	public static AdvancedRmqReceiver<byte[]> create(String tag, @Nonnull RmqReceiverConfig config,
 			@Nonnull Consumer<byte[]> consumer) {
 		Assertor.nonNull(config, "config");
 		Assertor.nonNull(consumer, "consumer");
-		return new AdvancedRabbitMqReceiver<byte[]>(tag, config, (msg, reuse) -> msg, consumer, null);
+		return new AdvancedRmqReceiver<byte[]>(tag, config, (msg, reuse) -> msg, consumer, null);
 	}
 
 	/**
@@ -143,12 +143,12 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @param consumer
 	 * @return
 	 */
-	public static <T> AdvancedRabbitMqReceiver<T> create(String tag, @Nonnull RabbitReceiverConfig config,
+	public static <T> AdvancedRmqReceiver<T> create(String tag, @Nonnull RmqReceiverConfig config,
 			@Nonnull BytesDeserializer<T> deserializer, @Nonnull Consumer<T> consumer) {
 		Assertor.nonNull(config, "config");
 		Assertor.nonNull(deserializer, "deserializer");
 		Assertor.nonNull(consumer, "consumer");
-		return new AdvancedRabbitMqReceiver<>(tag, config, deserializer, consumer, null);
+		return new AdvancedRmqReceiver<>(tag, config, deserializer, consumer, null);
 	}
 
 	/**
@@ -157,11 +157,11 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @param selfAckConsumer
 	 * @return
 	 */
-	public static AdvancedRabbitMqReceiver<byte[]> createWithSelfAck(@Nonnull RabbitReceiverConfig config,
+	public static AdvancedRmqReceiver<byte[]> createWithSelfAck(@Nonnull RmqReceiverConfig config,
 			@Nonnull SelfAckConsumer<byte[]> selfAckConsumer) {
 		Assertor.nonNull(config, "config");
 		Assertor.nonNull(selfAckConsumer, "selfAckConsumer");
-		return new AdvancedRabbitMqReceiver<>(null, config, (msg, reuse) -> msg, null, selfAckConsumer);
+		return new AdvancedRmqReceiver<>(null, config, (msg, reuse) -> msg, null, selfAckConsumer);
 	}
 
 	/**
@@ -171,11 +171,11 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @param selfAckConsumer
 	 * @return
 	 */
-	public static AdvancedRabbitMqReceiver<byte[]> createWithSelfAck(String tag, @Nonnull RabbitReceiverConfig config,
+	public static AdvancedRmqReceiver<byte[]> createWithSelfAck(String tag, @Nonnull RmqReceiverConfig config,
 			@Nonnull SelfAckConsumer<byte[]> selfAckConsumer) {
 		Assertor.nonNull(config, "config");
 		Assertor.nonNull(selfAckConsumer, "selfAckConsumer");
-		return new AdvancedRabbitMqReceiver<>(tag, config, (msg, reuse) -> msg, null, selfAckConsumer);
+		return new AdvancedRmqReceiver<>(tag, config, (msg, reuse) -> msg, null, selfAckConsumer);
 	}
 
 	/**
@@ -187,12 +187,12 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @param selfAckConsumer
 	 * @return
 	 */
-	public static <T> AdvancedRabbitMqReceiver<T> createWithSelfAck(String tag, @Nonnull RabbitReceiverConfig config,
+	public static <T> AdvancedRmqReceiver<T> createWithSelfAck(String tag, @Nonnull RmqReceiverConfig config,
 			@Nonnull BytesDeserializer<T> deserializer, @Nonnull SelfAckConsumer<T> selfAckConsumer) {
 		Assertor.nonNull(config, "config");
 		Assertor.nonNull(deserializer, "deserializer");
 		Assertor.nonNull(selfAckConsumer, "selfAckConsumer");
-		return new AdvancedRabbitMqReceiver<>(tag, config, deserializer, null, selfAckConsumer);
+		return new AdvancedRmqReceiver<>(tag, config, deserializer, null, selfAckConsumer);
 	}
 
 	/**
@@ -203,7 +203,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @param consumer
 	 * @param selfAckConsumer
 	 */
-	private AdvancedRabbitMqReceiver(String tag, @Nonnull RabbitReceiverConfig config,
+	private AdvancedRmqReceiver(String tag, @Nonnull RmqReceiverConfig config,
 			@Nonnull BytesDeserializer<T> deserializer, @Nullable Consumer<T> consumer,
 			@Nullable SelfAckConsumer<T> selfAckConsumer) {
 		super(nonEmpty(tag) ? tag : "adv-recv-" + datetimeOfMillisecond(), config.getConnection());
@@ -245,7 +245,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 * @throws DeclareRuntimeException
 	 */
 	private void declareQueue() throws DeclareRuntimeException {
-		RabbitMqOperator operator = RabbitMqOperator.newWith(channel);
+		RmqOperator operator = RmqOperator.with(channel);
 		try {
 			this.receiveQueue.declare(operator);
 		} catch (DeclareException e) {
@@ -265,7 +265,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 		}
 	}
 
-	private void declareErrMsgExchange(RabbitMqOperator operator) {
+	private void declareErrMsgExchange(RmqOperator operator) {
 		try {
 			this.errMsgExchange.declare(operator);
 		} catch (DeclareException e) {
@@ -280,7 +280,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 		this.hasErrMsgExchange = true;
 	}
 
-	private void declareErrMsgQueueName(RabbitMqOperator operator) {
+	private void declareErrMsgQueueName(RmqOperator operator) {
 		try {
 			this.errMsgQueue.declare(operator);
 		} catch (DeclareException e) {
@@ -586,9 +586,9 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	 */
 	public static class AckDelegate {
 
-		private AdvancedRabbitMqReceiver<?> receiver;
+		private AdvancedRmqReceiver<?> receiver;
 
-		private AckDelegate(AdvancedRabbitMqReceiver<?> receiver) {
+		private AckDelegate(AdvancedRmqReceiver<?> receiver) {
 			this.receiver = receiver;
 		}
 
@@ -632,13 +632,7 @@ public class AdvancedRabbitMqReceiver<T> extends RabbitMqTransport implements Su
 	}
 
 	public static void main(String[] args) {
-//		AdvancedRabbitMqReceiver<byte[]> receiver = new AdvancedRabbitMqReceiver("test",
-//				RmqReceiverConfigurator
-//						.configuration(RmqConnection.configuration("127.0.0.1", 5672, "user", "u_pass").build(),
-//								QueueRelationship.named("TEST"))
-//						.build(),
-//				msg -> System.out.println(new String(msg, Charsets.UTF8)));
-//		receiver.receive();
+
 	}
 
 }

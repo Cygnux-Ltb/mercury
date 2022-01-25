@@ -27,8 +27,8 @@ import io.mercury.transport.api.Publisher;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.exception.InitializeFailureException;
 import io.mercury.transport.exception.PublishFailedException;
-import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
-import io.mercury.transport.rabbitmq.configurator.RabbitPublisherConfig;
+import io.mercury.transport.rabbitmq.configurator.RmqConnection;
+import io.mercury.transport.rabbitmq.configurator.RmqPublisherConfig;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 import io.mercury.transport.rabbitmq.exception.DeclareRuntimeException;
@@ -43,9 +43,9 @@ import io.mercury.transport.rabbitmq.exception.NoAckException;
  *
  */
 @ThreadSafe
-public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements Publisher<String, T>, Sender<T> {
+public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<String, T>, Sender<T> {
 
-	private static final Logger log = Log4j2LoggerFactory.getLogger(AdvancedRabbitMqPublisher.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(AdvancedRmqPublisher.class);
 
 	// 发布消息使用的[ExchangeDeclare]
 	private final ExchangeRelationship publishExchange;
@@ -87,9 +87,9 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param serializer
 	 * @return
 	 */
-	public final static <T> AdvancedRabbitMqPublisher<T> create(@Nonnull RabbitPublisherConfig config,
+	public final static <T> AdvancedRmqPublisher<T> create(@Nonnull RmqPublisherConfig config,
 			@Nonnull BytesSerializer<T> serializer) {
-		return new AdvancedRabbitMqPublisher<>(null, config, serializer, null, null);
+		return new AdvancedRmqPublisher<>(null, config, serializer, null, null);
 	}
 
 	/**
@@ -100,9 +100,9 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param serializer
 	 * @return
 	 */
-	public final static <T> AdvancedRabbitMqPublisher<T> create(@Nullable String tag, @Nonnull RabbitPublisherConfig config,
+	public final static <T> AdvancedRmqPublisher<T> create(@Nullable String tag, @Nonnull RmqPublisherConfig config,
 			@Nonnull BytesSerializer<T> serializer) {
-		return new AdvancedRabbitMqPublisher<>(tag, config, serializer, null, null);
+		return new AdvancedRmqPublisher<>(tag, config, serializer, null, null);
 	}
 
 	/**
@@ -115,10 +115,10 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param noAckCallback
 	 * @return
 	 */
-	public final static <T> AdvancedRabbitMqPublisher<T> create(@Nullable String tag, @Nonnull RabbitPublisherConfig config,
+	public final static <T> AdvancedRmqPublisher<T> create(@Nullable String tag, @Nonnull RmqPublisherConfig config,
 			@Nonnull BytesSerializer<T> serializer, @Nonnull AckCallback ackCallback,
 			@Nonnull NoAckCallback noAckCallback) {
-		return new AdvancedRabbitMqPublisher<>(tag, config, serializer, ackCallback, noAckCallback);
+		return new AdvancedRmqPublisher<>(tag, config, serializer, ackCallback, noAckCallback);
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param config
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<byte[]> createWithBytes(@Nonnull RabbitPublisherConfig config) {
+	public final static AdvancedRmqPublisher<byte[]> createWithBytes(@Nonnull RmqPublisherConfig config) {
 		return createWithBytes(null, config, null, null);
 	}
 
@@ -136,8 +136,8 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param config
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<byte[]> createWithBytes(@Nullable String tag,
-			@Nonnull RabbitPublisherConfig config) {
+	public final static AdvancedRmqPublisher<byte[]> createWithBytes(@Nullable String tag,
+			@Nonnull RmqPublisherConfig config) {
 		return createWithBytes(tag, config, null, null);
 	}
 
@@ -149,9 +149,10 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param noAckCallback
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<byte[]> createWithBytes(@Nullable String tag,
-			@Nonnull RabbitPublisherConfig config, @Nonnull AckCallback ackCallback, @Nonnull NoAckCallback noAckCallback) {
-		return new AdvancedRabbitMqPublisher<>(tag, config, msg -> msg, ackCallback, noAckCallback);
+	public final static AdvancedRmqPublisher<byte[]> createWithBytes(@Nullable String tag,
+			@Nonnull RmqPublisherConfig config, @Nonnull AckCallback ackCallback,
+			@Nonnull NoAckCallback noAckCallback) {
+		return new AdvancedRmqPublisher<>(tag, config, msg -> msg, ackCallback, noAckCallback);
 	}
 
 	/**
@@ -159,7 +160,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param config
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<String> createWithString(@Nonnull RabbitPublisherConfig config) {
+	public final static AdvancedRmqPublisher<String> createWithString(@Nonnull RmqPublisherConfig config) {
 		return createWithString(null, config, Charsets.UTF8, null, null);
 	}
 
@@ -169,7 +170,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param charset
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<String> createWithString(@Nonnull RabbitPublisherConfig config,
+	public final static AdvancedRmqPublisher<String> createWithString(@Nonnull RmqPublisherConfig config,
 			@Nonnull Charset charset) {
 		return createWithString(null, config, charset, null, null);
 	}
@@ -180,8 +181,8 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param config
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<String> createWithString(@Nullable String tag,
-			@Nonnull RabbitPublisherConfig config) {
+	public final static AdvancedRmqPublisher<String> createWithString(@Nullable String tag,
+			@Nonnull RmqPublisherConfig config) {
 		return createWithString(tag, config, Charsets.UTF8, null, null);
 	}
 
@@ -192,8 +193,8 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param charset
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<String> createWithString(@Nullable String tag,
-			@Nonnull RabbitPublisherConfig config, @Nonnull Charset charset) {
+	public final static AdvancedRmqPublisher<String> createWithString(@Nullable String tag,
+			@Nonnull RmqPublisherConfig config, @Nonnull Charset charset) {
 		return createWithString(tag, config, charset, null, null);
 	}
 
@@ -206,21 +207,21 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 	 * @param noAckCallback
 	 * @return
 	 */
-	public final static AdvancedRabbitMqPublisher<String> createWithString(@Nullable String tag,
-			@Nonnull RabbitPublisherConfig config, @Nonnull Charset charset, @Nonnull AckCallback ackCallback,
+	public final static AdvancedRmqPublisher<String> createWithString(@Nullable String tag,
+			@Nonnull RmqPublisherConfig config, @Nonnull Charset charset, @Nonnull AckCallback ackCallback,
 			@Nonnull NoAckCallback noAckCallback) {
-		return new AdvancedRabbitMqPublisher<>(tag, config, msg -> msg.getBytes(charset), ackCallback, noAckCallback);
+		return new AdvancedRmqPublisher<>(tag, config, msg -> msg.getBytes(charset), ackCallback, noAckCallback);
 	}
 
 	/**
 	 * 
 	 * @param tag           标签
-	 * @param config           配置器
+	 * @param config        配置器
 	 * @param serializer    序列化器
 	 * @param ackCallback   ACK成功回调
 	 * @param noAckCallback ACK未成功回调
 	 */
-	private AdvancedRabbitMqPublisher(@Nullable String tag, @Nonnull RabbitPublisherConfig config,
+	private AdvancedRmqPublisher(@Nullable String tag, @Nonnull RmqPublisherConfig config,
 			@Nonnull BytesSerializer<T> serializer, @Nullable AckCallback ackCallback,
 			@Nullable NoAckCallback noAckCallback) {
 		super(nonEmpty(tag) ? tag : "adv-pub-" + datetimeOfMillisecond(), config.getConnection());
@@ -284,7 +285,7 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 				log.warn("Publisher -> {} use anonymous exchange, Please specify [queue name] "
 						+ "as the [routing key] when publish", tag);
 			} else {
-				this.publishExchange.declare(RabbitMqOperator.newWith(channel));
+				this.publishExchange.declare(RmqOperator.with(channel));
 			}
 		} catch (DeclareException e) {
 			// 在定义Exchange和进行绑定时抛出任何异常都需要终止程序
@@ -394,12 +395,9 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 			log.error("Function basicPublish() throw IOException from publisherName -> {}, routingKey -> {}",
 					publisherName, routingKey, e);
 			throw e;
-		} catch (InterruptedException e) {
-			log.error("Function channel.waitForConfirms() throw InterruptedException from publisherName -> {}, "
-					+ "routingKey -> {}", publisherName, routingKey, e);
-		} catch (TimeoutException e) {
-			log.error("Function channel.waitForConfirms() throw TimeoutException from publisherName -> {}, "
-					+ "routingKey -> {}", publisherName, routingKey, e);
+		} catch (InterruptedException | TimeoutException e) {
+			log.error("Function channel.waitForConfirms() throw {} from publisherName -> {}, routingKey -> {}",
+					e.getClass().getSimpleName(), publisherName, routingKey, e);
 		}
 	}
 
@@ -463,12 +461,12 @@ public class AdvancedRabbitMqPublisher<T> extends RabbitMqTransport implements P
 
 	public static void main(String[] args) {
 
-		RabbitConnection connection = RabbitConnection.configuration("127.0.0.1", 5672, "guest", "guest").build();
+		RmqConnection connection = RmqConnection.with("127.0.0.1", 5672, "guest", "guest").build();
 
-		ExchangeRelationship fanoutExchange = ExchangeRelationship.fanout("fanout-test");
+		ExchangeRelationship fanout = ExchangeRelationship.fanout("fanout-test");
 
-		try (AdvancedRabbitMqPublisher<String> publisher = AdvancedRabbitMqPublisher
-				.createWithString(RabbitPublisherConfig.configuration(connection, fanoutExchange).build())) {
+		try (AdvancedRmqPublisher<String> publisher = AdvancedRmqPublisher
+				.createWithString(RmqPublisherConfig.configuration(connection, fanout).build())) {
 			ThreadSupport.startNewThread(() -> {
 				int count = 0;
 				while (true) {

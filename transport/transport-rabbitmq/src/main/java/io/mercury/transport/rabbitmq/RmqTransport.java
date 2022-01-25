@@ -24,11 +24,11 @@ import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Transport;
 import io.mercury.transport.api.TransportComponent;
-import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
+import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 
-public abstract class RabbitMqTransport extends TransportComponent implements Transport, Closeable {
+public abstract class RmqTransport extends TransportComponent implements Transport, Closeable {
 
-	private static final Logger log = Log4j2LoggerFactory.getLogger(RabbitMqTransport.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(RmqTransport.class);
 
 	// 连接RabbitMQ Server使用的组件
 	protected ConnectionFactory connectionFactory;
@@ -36,7 +36,7 @@ public abstract class RabbitMqTransport extends TransportComponent implements Tr
 	protected volatile Channel channel;
 
 	// 存储配置信息对象
-	protected RabbitConnection rabbitConnection;
+	protected RmqConnection rabbitConnection;
 
 	// 停机事件, 在监听到ShutdownSignalException时调用
 	protected ShutdownSignalHandler shutdownSignalHandler;
@@ -48,7 +48,7 @@ public abstract class RabbitMqTransport extends TransportComponent implements Tr
 	 * 
 	 * @param tag
 	 */
-	protected RabbitMqTransport(String tag) {
+	protected RmqTransport(String tag) {
 		// Generally not used
 		this.tag = tag;
 	}
@@ -59,7 +59,7 @@ public abstract class RabbitMqTransport extends TransportComponent implements Tr
 	 * @param moduleType
 	 * @param rabbitConnection
 	 */
-	protected RabbitMqTransport(@Nonnull String tag, @Nonnull RabbitConnection rabbitConnection) {
+	protected RmqTransport(@Nonnull String tag, @Nonnull RmqConnection rabbitConnection) {
 		Assertor.nonNull(rabbitConnection, "rabbitConnection");
 		this.tag = tag;
 		this.rabbitConnection = rabbitConnection;

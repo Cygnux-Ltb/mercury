@@ -18,7 +18,7 @@ import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
  * @author yellow013
  * 
  */
-public final class RabbitPublisherConfig extends RabbitConfig {
+public final class RmqPublisherConfig extends RmqConfig {
 
 	// 发布者ExchangeDeclare
 	private final ExchangeRelationship publishExchange;
@@ -39,7 +39,7 @@ public final class RabbitPublisherConfig extends RabbitConfig {
 	 * 
 	 * @param builder
 	 */
-	private RabbitPublisherConfig(Builder builder) {
+	private RmqPublisherConfig(Builder builder) {
 		super(builder.connection);
 		this.publishExchange = builder.publishExchange;
 		this.defaultRoutingKey = builder.defaultRoutingKey;
@@ -79,7 +79,7 @@ public final class RabbitPublisherConfig extends RabbitConfig {
 	 */
 	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
 			@Nonnull String password) {
-		return configuration(RabbitConnection.configuration(host, port, username, password).build());
+		return configuration(RmqConnection.with(host, port, username, password).build());
 	}
 
 	/**
@@ -94,7 +94,7 @@ public final class RabbitPublisherConfig extends RabbitConfig {
 	 */
 	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
 			@Nonnull String password, String virtualHost) {
-		return configuration(RabbitConnection.configuration(host, port, username, password, virtualHost).build());
+		return configuration(RmqConnection.with(host, port, username, password, virtualHost).build());
 	}
 
 	/**
@@ -103,7 +103,7 @@ public final class RabbitPublisherConfig extends RabbitConfig {
 	 * @param connection
 	 * @return
 	 */
-	public static Builder configuration(@Nonnull RabbitConnection connection) {
+	public static Builder configuration(@Nonnull RmqConnection connection) {
 		return configuration(connection, ExchangeRelationship.Anonymous);
 	}
 
@@ -120,7 +120,7 @@ public final class RabbitPublisherConfig extends RabbitConfig {
 	 */
 	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
 			@Nonnull String password, @Nonnull ExchangeRelationship publishExchange) {
-		return configuration(RabbitConnection.configuration(host, port, username, password).build(), publishExchange);
+		return configuration(RmqConnection.with(host, port, username, password).build(), publishExchange);
 	}
 
 	/**
@@ -136,7 +136,7 @@ public final class RabbitPublisherConfig extends RabbitConfig {
 	 */
 	public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
 			@Nonnull String password, String virtualHost, @Nonnull ExchangeRelationship publishExchange) {
-		return configuration(RabbitConnection.configuration(host, port, username, password, virtualHost).build(),
+		return configuration(RmqConnection.with(host, port, username, password, virtualHost).build(),
 				publishExchange);
 	}
 
@@ -147,7 +147,7 @@ public final class RabbitPublisherConfig extends RabbitConfig {
 	 * @param exchangeRelation
 	 * @return
 	 */
-	public static Builder configuration(@Nonnull RabbitConnection connection,
+	public static Builder configuration(@Nonnull RmqConnection connection,
 			@Nonnull ExchangeRelationship publishExchange) {
 		return new Builder(nonNull(connection, "connection"), nonNull(publishExchange, "publishExchange"));
 	}
@@ -164,7 +164,7 @@ public final class RabbitPublisherConfig extends RabbitConfig {
 	public static class Builder {
 
 		// 连接配置
-		private final RabbitConnection connection;
+		private final RmqConnection connection;
 		// 消息发布Exchange和相关绑定
 		private final ExchangeRelationship publishExchange;
 
@@ -185,7 +185,7 @@ public final class RabbitPublisherConfig extends RabbitConfig {
 		 * @param connection
 		 * @param publishExchange
 		 */
-		private Builder(RabbitConnection connection, ExchangeRelationship publishExchange) {
+		private Builder(RmqConnection connection, ExchangeRelationship publishExchange) {
 			this.connection = connection;
 			this.publishExchange = publishExchange;
 		}
@@ -244,8 +244,8 @@ public final class RabbitPublisherConfig extends RabbitConfig {
 		 * 
 		 * @return
 		 */
-		public RabbitPublisherConfig build() {
-			return new RabbitPublisherConfig(this);
+		public RmqPublisherConfig build() {
+			return new RmqPublisherConfig(this);
 		}
 
 	}
@@ -327,7 +327,7 @@ public final class RabbitPublisherConfig extends RabbitConfig {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.println(configuration(RabbitConnection.configuration("localhost", 5672, "user0", "userpass").build(),
+		System.out.println(configuration(RmqConnection.with("localhost", 5672, "user0", "userpass").build(),
 				ExchangeRelationship.direct("TEST").bindingQueue(AmqpQueue.named("TEST_0"))).build());
 	}
 

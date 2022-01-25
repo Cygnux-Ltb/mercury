@@ -1,5 +1,7 @@
 package io.mercury.transport.rabbitmq;
 
+import static io.mercury.common.character.Charsets.UTF8;
+import static io.mercury.common.datetime.DateTimeUtil.datetimeOfMillisecond;
 import static io.mercury.common.util.StringSupport.nonEmpty;
 
 import java.io.IOException;
@@ -15,9 +17,7 @@ import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 
-import io.mercury.common.character.Charsets;
 import io.mercury.common.codec.DecodeException;
-import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.util.StringSupport;
@@ -25,8 +25,8 @@ import io.mercury.transport.api.Receiver;
 import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.exception.ConnectionBreakException;
 import io.mercury.transport.exception.ReceiverStartException;
-import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
-import io.mercury.transport.rabbitmq.configurator.RabbitReceiverConfig;
+import io.mercury.transport.rabbitmq.configurator.RmqConnection;
+import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfig;
 import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
 import io.mercury.transport.rabbitmq.declare.QueueRelationship;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
@@ -40,9 +40,9 @@ import io.mercury.transport.rabbitmq.exception.MsgHandleException;
  *         [已完成]改造升级, 使用共同的构建者建立Exchange, RoutingKey, Queue的绑定关系
  *
  */
-public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, Subscriber, Runnable {
+public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber, Runnable {
 
-	private static final Logger log = Log4j2LoggerFactory.getLogger(RabbitMqReceiver.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(RmqReceiver.class);
 
 	// 接收消息使用的反序列化器
 	private final Function<byte[], T> deserializer;
@@ -97,83 +97,82 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 
 	/**
 	 * 
-	 * @param config
+	 * @param cfg
 	 * @param consumer
 	 * @return
 	 */
-	public static final RabbitMqReceiver<byte[]> create(@Nonnull RabbitReceiverConfig config,
-			@Nonnull Consumer<byte[]> consumer) {
-		return create(null, config, consumer);
+	public static final RmqReceiver<byte[]> create(@Nonnull RmqReceiverConfig cfg, @Nonnull Consumer<byte[]> consumer) {
+		return create(null, cfg, consumer);
 	}
 
 	/**
 	 * 
 	 * @param tag
-	 * @param config
+	 * @param cfg
 	 * @param consumer
 	 * @return
 	 */
-	public static final RabbitMqReceiver<byte[]> create(@Nullable String tag, @Nonnull RabbitReceiverConfig config,
+	public static final RmqReceiver<byte[]> create(@Nullable String tag, @Nonnull RmqReceiverConfig cfg,
 			@Nonnull Consumer<byte[]> consumer) {
-		return create(tag, config, msg -> msg, consumer);
+		return create(tag, cfg, msg -> msg, consumer);
 	}
 
 	/**
 	 * 
 	 * @param <T>
-	 * @param config
+	 * @param cfg
 	 * @param deserializer
 	 * @param consumer
 	 * @return
 	 */
-	public static final <T> RabbitMqReceiver<T> create(@Nonnull RabbitReceiverConfig config,
+	public static final <T> RmqReceiver<T> create(@Nonnull RmqReceiverConfig cfg,
 			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
-		return create(null, config, deserializer, consumer);
+		return create(null, cfg, deserializer, consumer);
 	}
 
 	/**
 	 * 
 	 * @param <T>
 	 * @param tag
-	 * @param config
+	 * @param cfg
 	 * @param deserializer
 	 * @param consumer
 	 * @return
 	 */
-	public static final <T> RabbitMqReceiver<T> create(@Nullable String tag, @Nonnull RabbitReceiverConfig config,
+	public static final <T> RmqReceiver<T> create(@Nullable String tag, @Nonnull RmqReceiverConfig cfg,
 			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
-		return new RabbitMqReceiver<T>(tag, config, deserializer, consumer);
+		return new RmqReceiver<T>(tag, cfg, deserializer, consumer);
 	}
 
 	/**
 	 * 
 	 * @param tag
-	 * @param config
+	 * @param cfg
 	 * @param deserializer
 	 * @param callback
 	 */
-	private RabbitMqReceiver(@Nullable String tag, @Nonnull RabbitReceiverConfig config,
-			@Nonnull Function<byte[], T> deserializer, @Nonnull Consumer<T> consumer) {
-		super(nonEmpty(tag) ? tag : "receiver-" + DateTimeUtil.datetimeOfMillisecond(), config.getConnection());
-		this.receiveQueue = config.getReceiveQueue();
+	private RmqReceiver(@Nullable String tag, @Nonnull RmqReceiverConfig cfg, @Nonnull Function<byte[], T> deserializer,
+			@Nonnull Consumer<T> consumer) {
+		super(nonEmpty(tag) ? tag : "receiver-" + datetimeOfMillisecond(), cfg.getConnection());
+		this.receiveQueue = cfg.getReceiveQueue();
 		this.queueName = receiveQueue.getQueueName();
 		this.deserializer = deserializer;
 		this.consumer = consumer;
-		this.errMsgExchange = config.getErrMsgExchange();
-		this.errMsgRoutingKey = config.getErrMsgRoutingKey();
-		this.errMsgQueue = config.getErrMsgQueue();
-		this.autoAck = config.getAckOptions().isAutoAck();
-		this.multipleAck = config.getAckOptions().isMultipleAck();
-		this.maxAckTotal = config.getAckOptions().getMaxAckTotal();
-		this.maxAckReconnection = config.getAckOptions().getMaxAckReconnection();
-		this.qos = config.getAckOptions().getQos();
+		this.errMsgExchange = cfg.getErrMsgExchange();
+		this.errMsgRoutingKey = cfg.getErrMsgRoutingKey();
+		this.errMsgQueue = cfg.getErrMsgQueue();
+		this.autoAck = cfg.getAckOptions().isAutoAck();
+		this.multipleAck = cfg.getAckOptions().isMultipleAck();
+		this.maxAckTotal = cfg.getAckOptions().getMaxAckTotal();
+		this.maxAckReconnection = cfg.getAckOptions().getMaxAckReconnection();
+		this.qos = cfg.getAckOptions().getQos();
 		this.receiverName = "receiver::" + rabbitConnection.getConnectionInfo() + "$" + queueName;
 		createConnection();
 		declare();
 	}
 
 	private void declare() {
-		RabbitMqOperator operator = RabbitMqOperator.newWith(channel);
+		RmqOperator operator = RmqOperator.with(channel);
 		try {
 			this.receiveQueue.declare(operator);
 		} catch (DeclareException e) {
@@ -193,7 +192,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 		}
 	}
 
-	private void declareErrMsgExchange(RabbitMqOperator operator) {
+	private void declareErrMsgExchange(RmqOperator operator) {
 		try {
 			this.errMsgExchange.declare(operator);
 		} catch (DeclareException e) {
@@ -208,7 +207,7 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 		this.hasErrMsgExchange = true;
 	}
 
-	private void declareErrMsgQueueName(RabbitMqOperator operator) {
+	private void declareErrMsgQueueName(RmqOperator operator) {
 		try {
 			this.errMsgQueue.declare(operator);
 		} catch (DeclareException e) {
@@ -398,12 +397,11 @@ public class RabbitMqReceiver<T> extends RabbitMqTransport implements Receiver, 
 	}
 
 	public static void main(String[] args) {
-		RabbitMqReceiver<byte[]> receiver = RabbitMqReceiver.create("test",
-				RabbitReceiverConfig
-						.configuration(RabbitConnection.configuration("127.0.0.1", 5672, "user", "u_pass").build(),
-								QueueRelationship.named("TEST"))
-						.build(),
-				msg -> System.out.println(new String(msg, Charsets.UTF8)));
+		RmqReceiver<byte[]> receiver = RmqReceiver
+				.create("test",
+						RmqReceiverConfig.configuration(RmqConnection.with("127.0.0.1", 5672, "user", "u_pass").build(),
+								QueueRelationship.named("TEST")).build(),
+						msg -> System.out.println(new String(msg, UTF8)));
 		receiver.receive();
 	}
 

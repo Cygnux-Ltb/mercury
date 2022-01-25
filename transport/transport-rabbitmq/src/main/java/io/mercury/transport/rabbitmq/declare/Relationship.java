@@ -9,7 +9,7 @@ import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.transport.rabbitmq.RabbitMqOperator;
+import io.mercury.transport.rabbitmq.RmqOperator;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 
 public abstract class Relationship {
@@ -23,7 +23,7 @@ public abstract class Relationship {
 	 * @param operator
 	 * @throws DeclareException
 	 */
-	public void declare(@Nonnull RabbitMqOperator operator) throws DeclareException {
+	public void declare(@Nonnull RmqOperator operator) throws DeclareException {
 		Assertor.nonNull(operator, "operator");
 		declare0(operator);
 		for (Binding binding : bindings) {
@@ -37,7 +37,7 @@ public abstract class Relationship {
 	 * @param binding
 	 * @throws DeclareException
 	 */
-	private void declareBinding(RabbitMqOperator operator, Binding binding) throws DeclareException {
+	private void declareBinding(RmqOperator operator, Binding binding) throws DeclareException {
 		AmqpExchange source = binding.source;
 		try {
 			operator.declareExchange(source);
@@ -85,7 +85,7 @@ public abstract class Relationship {
 	}
 
 	@AbstractFunction
-	protected abstract void declare0(RabbitMqOperator operator);
+	protected abstract void declare0(RmqOperator operator);
 
 	public final class Binding {
 

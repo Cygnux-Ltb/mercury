@@ -17,17 +17,17 @@ import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.BytesDeserializer;
 import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
+import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 import io.mercury.transport.rabbitmq.declare.AmqpExchange;
 import io.mercury.transport.rabbitmq.declare.QueueRelationship;
 import io.mercury.transport.rabbitmq.exception.DeclareException;
 
-public class RabbitMqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
+public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 
-	private static final Logger log = Log4j2LoggerFactory.getLogger(RabbitMqBuffer.class);
+	private static final Logger log = Log4j2LoggerFactory.getLogger(RmqBuffer.class);
 
-	private RabbitConnection connection;
-	private RabbitMqChannel channel;
+	private RmqConnection connection;
+	private RmqChannel channel;
 	private String queueName;
 	private List<String> exchangeNames;
 	private List<String> routingKeys;
@@ -47,9 +47,9 @@ public class RabbitMqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 	 * @return
 	 * @throws DeclareException
 	 */
-	public static final <E> RabbitMqBuffer<E> newQueue(RabbitConnection connection, String queueName,
+	public static final <E> RmqBuffer<E> newQueue(RmqConnection connection, String queueName,
 			BytesSerializer<E> serializer, BytesDeserializer<E> deserializer) throws DeclareException {
-		return new RabbitMqBuffer<>(connection, queueName, MutableLists.emptyFastList(), MutableLists.emptyFastList(),
+		return new RmqBuffer<>(connection, queueName, MutableLists.emptyFastList(), MutableLists.emptyFastList(),
 				serializer, deserializer);
 	}
 
@@ -65,10 +65,10 @@ public class RabbitMqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 	 * @return
 	 * @throws DeclareException
 	 */
-	public static final <E> RabbitMqBuffer<E> newQueue(RabbitConnection connection, String queueName,
+	public static final <E> RmqBuffer<E> newQueue(RmqConnection connection, String queueName,
 			List<String> exchangeNames, List<String> routingKeys, BytesSerializer<E> serializer,
 			BytesDeserializer<E> deserializer) throws DeclareException {
-		return new RabbitMqBuffer<>(connection, queueName, exchangeNames, routingKeys, serializer, deserializer);
+		return new RmqBuffer<>(connection, queueName, exchangeNames, routingKeys, serializer, deserializer);
 	}
 
 	/**
@@ -81,16 +81,15 @@ public class RabbitMqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 	 * @param deserializer
 	 * @throws DeclareException
 	 */
-	private RabbitMqBuffer(RabbitConnection connection, String queueName, List<String> exchangeNames,
-			List<String> routingKeys, BytesSerializer<E> serializer, BytesDeserializer<E> deserializer)
-			throws DeclareException {
+	private RmqBuffer(RmqConnection connection, String queueName, List<String> exchangeNames, List<String> routingKeys,
+			BytesSerializer<E> serializer, BytesDeserializer<E> deserializer) throws DeclareException {
 		this.connection = connection;
 		this.queueName = queueName;
 		this.exchangeNames = exchangeNames;
 		this.routingKeys = routingKeys;
 		this.serializer = serializer;
 		this.deserializer = deserializer;
-		this.channel = RabbitMqChannel.newWith(connection);
+		this.channel = RmqChannel.with(connection);
 		this.name = "rabbitmq-buffer::" + connection.getConnectionInfo() + "/" + queueName + "";
 		declareQueue();
 	}
@@ -100,19 +99,19 @@ public class RabbitMqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 	 * @throws DeclareException
 	 */
 	private void declareQueue() throws DeclareException {
-		var relationship = QueueRelationship.named(queueName).binding(
+		QueueRelationship relationship = QueueRelationship.named(queueName).binding(
 				// 如果routingKeys为空集合, 则创建fanout交换器, 否则创建直接交换器
 				exchangeNames.stream().map(exchangeName -> routingKeys.isEmpty() ? AmqpExchange.fanout(exchangeName)
 						: AmqpExchange.direct(exchangeName)).collect(Collectors.toList()),
 				routingKeys);
-		relationship.declare(RabbitMqOperator.newWith(channel.internalChannel()));
+		relationship.declare(RmqOperator.with(channel.internalChannel()));
 	}
 
 	/**
 	 * 
 	 * @return
 	 */
-	public RabbitConnection getConnection() {
+	public RmqConnection getConnection() {
 		return connection;
 	}
 
@@ -195,10 +194,10 @@ public class RabbitMqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 
 	public static void main(String[] args) {
 
-		RabbitConnection connection = RabbitConnection.configuration("127.0.0.1", 5672, "user", "password").build();
+		RmqConnection connection = RmqConnection.with("127.0.0.1", 5672, "user", "password").build();
 
 		try {
-			RabbitMqBuffer<String> testQueue = newQueue(connection, "rmq_test",
+			RmqBuffer<String> testQueue = newQueue(connection, "rmq_test",
 					e -> JsonWrapper.toJson(e).getBytes(Charsets.UTF8),
 					(bytes, reuuse) -> new String(bytes, Charsets.UTF8));
 			testQueue.pollAndApply(str -> {

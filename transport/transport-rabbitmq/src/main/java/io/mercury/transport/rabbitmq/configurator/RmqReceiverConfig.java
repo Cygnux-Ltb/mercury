@@ -13,7 +13,7 @@ import io.mercury.transport.rabbitmq.declare.QueueRelationship;
  * @author yellow013
  *
  */
-public final class RabbitReceiverConfig extends RabbitConfig {
+public final class RmqReceiverConfig extends RmqConfig {
 
 	// 接受者QueueDeclare
 	private final QueueRelationship receiveQueue;
@@ -37,7 +37,7 @@ public final class RabbitReceiverConfig extends RabbitConfig {
 	 * 
 	 * @param builder
 	 */
-	private RabbitReceiverConfig(Builder builder) {
+	private RmqReceiverConfig(Builder builder) {
 		super(builder.connection);
 		this.receiveQueue = builder.receiveQueue;
 		this.errMsgExchange = builder.errMsgExchange;
@@ -53,7 +53,7 @@ public final class RabbitReceiverConfig extends RabbitConfig {
 	 * @param receiveQueue
 	 * @return
 	 */
-	public static Builder configuration(@Nonnull RabbitConnection connection, @Nonnull QueueRelationship receiveQueue) {
+	public static Builder configuration(@Nonnull RmqConnection connection, @Nonnull QueueRelationship receiveQueue) {
 		nonNull(connection, "connection");
 		nonNull(receiveQueue, "receiveQueue");
 		return new Builder(connection, receiveQueue);
@@ -99,7 +99,7 @@ public final class RabbitReceiverConfig extends RabbitConfig {
 	public static class Builder {
 
 		// 连接配置
-		private final RabbitConnection connection;
+		private final RmqConnection connection;
 		// 接受者QueueRelationship
 		private final QueueRelationship receiveQueue;
 		// 错误消息ExchangeRelationship
@@ -119,7 +119,7 @@ public final class RabbitReceiverConfig extends RabbitConfig {
 		// ACK选项
 		private ReceiveAckOptions ackOptions = ReceiveAckOptions.withDefault();
 
-		private Builder(RabbitConnection connection, QueueRelationship receiveQueue) {
+		private Builder(RmqConnection connection, QueueRelationship receiveQueue) {
 			this.connection = connection;
 			this.receiveQueue = receiveQueue;
 		}
@@ -195,8 +195,8 @@ public final class RabbitReceiverConfig extends RabbitConfig {
 			return this;
 		}
 
-		public RabbitReceiverConfig build() {
-			return new RabbitReceiverConfig(this);
+		public RmqReceiverConfig build() {
+			return new RmqReceiverConfig(this);
 		}
 
 	}

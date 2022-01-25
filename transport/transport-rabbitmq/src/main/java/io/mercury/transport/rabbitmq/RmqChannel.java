@@ -8,9 +8,9 @@ import java.util.concurrent.TimeoutException;
 
 import com.rabbitmq.client.Channel;
 
-import io.mercury.transport.rabbitmq.configurator.RabbitConnection;
+import io.mercury.transport.rabbitmq.configurator.RmqConnection;
 
-public final class RabbitMqChannel extends RabbitMqTransport {
+public final class RmqChannel extends RmqTransport {
 
 	/**
 	 * Create GeneralChannel of host, port, username and password
@@ -23,8 +23,8 @@ public final class RabbitMqChannel extends RabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqChannel newWith(String host, int port, String username, String password) {
-		return newWith(RabbitConnection.configuration(host, port, username, password).build());
+	public static RmqChannel with(String host, int port, String username, String password) {
+		return with(RmqConnection.with(host, port, username, password).build());
 	}
 
 	/**
@@ -39,8 +39,8 @@ public final class RabbitMqChannel extends RabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqChannel newWith(String host, int port, String username, String password, String virtualHost) {
-		return newWith(RabbitConnection.configuration(host, port, username, password, virtualHost).build());
+	public static RmqChannel with(String host, int port, String username, String password, String virtualHost) {
+		return with(RmqConnection.with(host, port, username, password, virtualHost).build());
 	}
 
 	/**
@@ -51,8 +51,8 @@ public final class RabbitMqChannel extends RabbitMqTransport {
 	 * @throws IOException
 	 * @throws TimeoutException
 	 */
-	public static RabbitMqChannel newWith(RabbitConnection connection) {
-		return new RabbitMqChannel(null, connection);
+	public static RmqChannel with(RmqConnection connection) {
+		return new RmqChannel(null, connection);
 	}
 
 	/**
@@ -61,8 +61,8 @@ public final class RabbitMqChannel extends RabbitMqTransport {
 	 * @param channel
 	 * @return
 	 */
-	public static RabbitMqChannel newWith(Channel channel) {
-		return new RabbitMqChannel(channel);
+	public static RmqChannel newWith(Channel channel) {
+		return new RmqChannel(channel);
 	}
 
 	/**
@@ -70,7 +70,7 @@ public final class RabbitMqChannel extends RabbitMqTransport {
 	 * @param tag
 	 * @param connection
 	 */
-	private RabbitMqChannel(String tag, RabbitConnection connection) {
+	private RmqChannel(String tag, RmqConnection connection) {
 		super("RmqChannel-" + ZonedDateTime.now(SYS_DEFAULT), connection);
 		createConnection();
 	}
@@ -79,7 +79,7 @@ public final class RabbitMqChannel extends RabbitMqTransport {
 	 * 
 	 * @param channel
 	 */
-	private RabbitMqChannel(Channel channel) {
+	private RmqChannel(Channel channel) {
 		super("channel-" + channel.getChannelNumber());
 		this.channel = channel;
 	}
