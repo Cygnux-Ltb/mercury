@@ -15,10 +15,10 @@ public class RingProcessChainTest {
 
 	@Test
 	public void test() {
-		var p0 = new LongAdder();
-		var p1 = new LongAdder();
-		var p2 = new LongAdder();
-		var processChain = RingProcessChain.withSingleProducer(LongEvent.class, (LongEvent t, Long l) -> {
+		LongAdder p0 = new LongAdder();
+		LongAdder p1 = new LongAdder();
+		LongAdder p2 = new LongAdder();
+		RingProcessChain<LongEvent, Long> processChain = RingProcessChain.withSingleProducer(LongEvent.class, (LongEvent t, Long l) -> {
 			t.set(l);
 		}).addFirstHandler((event, sequence, endOfBatch) -> {
 			System.out.println("sequence -> " + sequence + " p0 - " + event.get() + " : " + endOfBatch);

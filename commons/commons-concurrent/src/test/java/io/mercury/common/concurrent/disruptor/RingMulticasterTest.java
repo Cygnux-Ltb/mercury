@@ -15,10 +15,10 @@ public class RingMulticasterTest {
 
 	@Test
 	public void test() {
-		var p0 = new LongAdder();
-		var p1 = new LongAdder();
-		var p2 = new LongAdder();
-		var multicaster = RingMulticaster.withSingleProducer(LongEvent.class, (LongEvent event, Long l) -> {
+		LongAdder p0 = new LongAdder();
+		LongAdder p1 = new LongAdder();
+		LongAdder p2 = new LongAdder();
+		RingMulticaster<LongEvent, Long> multicaster = RingMulticaster.withSingleProducer(LongEvent.class, (LongEvent event, Long l) -> {
 			event.set(l);
 		}).addHandler((event, sequence, endOfBatch) -> {
 			System.out.println("sequence -> " + sequence + " p0 - " + event.get() + " : " + endOfBatch);

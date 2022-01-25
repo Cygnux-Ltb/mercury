@@ -19,6 +19,7 @@ import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.WaitStrategy;
+import com.lmax.disruptor.dsl.EventHandlerGroup;
 import com.lmax.disruptor.dsl.ProducerType;
 
 import io.mercury.common.collections.MutableLists;
@@ -43,18 +44,18 @@ public class RingProcessChain<E, I> extends AbstractRingBuffer<E, I> {
 			@Nonnull MutableIntObjectMap<List<EventHandler<E>>> handlersMap) {
 		super(name, size, factory, type, strategy, translator);
 		int[] keys = handlersMap.keySet().toSortedArray();
-		var handlers0 = handlersMap.get(keys[0]);
+		List<EventHandler<E>> handlers0 = handlersMap.get(keys[0]);
 		if (keys.length == 1) {
 			disruptor.handleEventsWith(toArray(handlers0, length -> {
 				return (EventHandler<E>[]) new EventHandler[length];
 			}));
 		} else {
-			var handlerGroup = disruptor.handleEventsWith(toArray(handlers0, length -> {
+			EventHandlerGroup<E> handlerGroup = disruptor.handleEventsWith(toArray(handlers0, length -> {
 				return (EventHandler<E>[]) new EventHandler[length];
 			}));
 			for (int i = 1; i < keys.length; i++) {
 				// 将处理器以处理链的方式添加进Disruptor
-				var handlers = handlersMap.get(keys[i]);
+				List<EventHandler<E>> handlers = handlersMap.get(keys[i]);
 				handlerGroup.then(toArray(handlers, length -> {
 					return (EventHandler<E>[]) new EventHandler[length];
 				}));

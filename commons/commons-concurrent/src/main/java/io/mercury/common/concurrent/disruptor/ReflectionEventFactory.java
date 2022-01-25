@@ -50,7 +50,7 @@ public final class ReflectionEventFactory<T> implements EventFactory<T> {
 	public static <T> ReflectionEventFactory<T> newFactory(@Nonnull Class<T> type, Logger log)
 			throws RuntimeReflectionException {
 		Assertor.nonNull(type, "type");
-		var factory = new ReflectionEventFactory<>(type);
+		ReflectionEventFactory<T> factory = new ReflectionEventFactory<>(type);
 		try {
 			factory.newInstance();
 			return factory;
