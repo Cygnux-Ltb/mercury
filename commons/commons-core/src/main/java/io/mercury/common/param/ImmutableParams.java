@@ -21,6 +21,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import org.eclipse.collections.api.map.ImmutableMap;
+import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.collections.api.set.ImmutableSet;
 import org.slf4j.Logger;
 
@@ -44,7 +45,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 			throws NullPointerException, IllegalArgumentException {
 		requiredLength(keys, 1, "keys");
 		nonEmptyMap(map, "map");
-		var mutableMap = MutableMaps.<K, String>newUnifiedMap();
+		MutableMap<K, String> mutableMap = MutableMaps.newUnifiedMap();
 		for (K key : keys) {
 			if (map.containsKey(key.getParamName()))
 				mutableMap.put(key, map.get(key.getParamName()).toString());
@@ -65,7 +66,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 			throws NullPointerException, IllegalArgumentException {
 		requiredLength(keys, 1, "keys");
 		nonNull(prop, "prop");
-		var map = MutableMaps.<K, String>newUnifiedMap();
+		MutableMap<K, String> map = MutableMaps.newUnifiedMap();
 		for (K key : keys) {
 			if (prop.containsKey(key.getParamName()))
 				map.put(key, prop.get(key.getParamName()).toString());

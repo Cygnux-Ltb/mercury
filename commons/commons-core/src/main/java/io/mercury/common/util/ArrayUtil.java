@@ -106,7 +106,7 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static boolean[] newOf(@Nonnull boolean[] origin) {
-		var target = new boolean[origin.length];
+		boolean[] target = new boolean[origin.length];
 		arraycopy(origin, 0, target, 0, origin.length);
 		return target;
 	}
@@ -117,7 +117,7 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static byte[] newOf(@Nonnull byte[] origin) {
-		var target = new byte[origin.length];
+		byte[] target = new byte[origin.length];
 		arraycopy(origin, 0, target, 0, origin.length);
 		return target;
 	}
@@ -128,7 +128,7 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static char[] newOf(@Nonnull char[] origin) {
-		var target = new char[origin.length];
+		char[] target = new char[origin.length];
 		arraycopy(origin, 0, target, 0, origin.length);
 		return target;
 	}
@@ -139,7 +139,7 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static int[] newOf(@Nonnull int[] origin) {
-		var target = new int[origin.length];
+		int[] target = new int[origin.length];
 		arraycopy(origin, 0, target, 0, origin.length);
 		return target;
 	}
@@ -150,7 +150,7 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static long[] newOf(@Nonnull long[] origin) {
-		var target = new long[origin.length];
+		long[] target = new long[origin.length];
 		arraycopy(origin, 0, target, 0, origin.length);
 		return target;
 	}
@@ -161,7 +161,7 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static float[] newOf(@Nonnull float[] origin) {
-		var target = new float[origin.length];
+		float[] target = new float[origin.length];
 		arraycopy(origin, 0, target, 0, origin.length);
 		return target;
 	}
@@ -172,7 +172,7 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static double[] newOf(@Nonnull double[] origin) {
-		var target = new double[origin.length];
+		double[] target = new double[origin.length];
 		arraycopy(origin, 0, target, 0, origin.length);
 		return target;
 	}
@@ -183,7 +183,7 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static String[] newOf(@Nonnull String[] origin) {
-		var target = new String[origin.length];
+		String[] target = new String[origin.length];
 		arraycopy(origin, 0, target, 0, origin.length);
 		return target;
 	}
@@ -194,7 +194,7 @@ public final class ArrayUtil {
 	 * @return
 	 */
 	public static Object[] newOf(@Nonnull Object[] origin) {
-		var target = new Object[origin.length];
+		Object[] target = new Object[origin.length];
 		arraycopy(origin, 0, target, 0, origin.length);
 		return target;
 	}

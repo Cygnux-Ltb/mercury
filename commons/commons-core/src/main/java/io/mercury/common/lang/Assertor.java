@@ -25,7 +25,7 @@ public final class Assertor {
 	public static int greaterThan(int i, int min, String objName) throws IllegalArgumentException {
 		if (i > min)
 			return i;
-		throw new IllegalArgumentException(objName + " must greater than " + min);
+		throw new IllegalArgumentException("Param: [" + objName + "] must greater than " + min);
 	}
 
 	/**
@@ -39,7 +39,7 @@ public final class Assertor {
 	public static long greaterThan(long l, long min, String objName) throws IllegalArgumentException {
 		if (l > min)
 			return l;
-		throw new IllegalArgumentException(objName + " must greater than " + min);
+		throw new IllegalArgumentException("Param: [" + objName + "] must greater than " + min);
 	}
 
 	/**
@@ -53,7 +53,7 @@ public final class Assertor {
 	public static int lessThan(int i, int max, String objName) throws IllegalArgumentException {
 		if (i < max)
 			return i;
-		throw new IllegalArgumentException(objName + " must less than " + max);
+		throw new IllegalArgumentException("Param: [" + objName + "] must less than " + max);
 	}
 
 	/**
@@ -67,7 +67,7 @@ public final class Assertor {
 	public static long lessThan(long l, long max, String objName) throws IllegalArgumentException {
 		if (l < max)
 			return l;
-		throw new IllegalArgumentException(objName + " must less than " + max);
+		throw new IllegalArgumentException("Param: [" + objName + "] must less than " + max);
 	}
 
 	/**
@@ -83,7 +83,7 @@ public final class Assertor {
 		if (i >= min && i <= max)
 			return i;
 		throw new IllegalArgumentException(
-				"argument : [" + objName + "] must in the range of [" + min + "] to [" + max + "]");
+				"Param: [" + objName + "] must in the range of [" + min + "] to [" + max + "]");
 	}
 
 	/**
@@ -125,7 +125,7 @@ public final class Assertor {
 			if (StringSupport.isNullOrEmpty(objName))
 				throw new NullPointerException("param cannot be null");
 			else
-				throw new NullPointerException("param [" + objName + "] cannot be null");
+				throw new NullPointerException("Param: [" + objName + "] cannot be null");
 		return t;
 	}
 
@@ -154,9 +154,9 @@ public final class Assertor {
 	 */
 	public static String nonEmpty(String str, String objName) throws NullPointerException, IllegalArgumentException {
 		if (str == null)
-			throw new NullPointerException(objName + " can not be null");
+			throw new NullPointerException("Param: [" + objName + "] can not be null");
 		if (str.length() <= 0)
-			throw new IllegalArgumentException(objName + " can not be empty");
+			throw new IllegalArgumentException("Param: [" + objName + "] can not be empty");
 		return str;
 	}
 
@@ -172,9 +172,9 @@ public final class Assertor {
 	public static <T extends Collection<E>, E> T nonEmptyCollection(T collection, String objName)
 			throws NullPointerException, IllegalArgumentException {
 		if (collection == null)
-			throw new NullPointerException(objName + " can not be null");
+			throw new NullPointerException("Param: [" + objName + "] can not be null");
 		if (collection.isEmpty())
-			throw new IllegalArgumentException(objName + " can not be empty");
+			throw new IllegalArgumentException("Param: [" + objName + "] can not be empty");
 		return collection;
 	}
 
@@ -190,9 +190,9 @@ public final class Assertor {
 	public static <T extends Map<?, ?>> T nonEmptyMap(T map, String objName)
 			throws NullPointerException, IllegalArgumentException {
 		if (map == null)
-			throw new NullPointerException(objName + " can not be null");
+			throw new NullPointerException("Param: [" + objName + "] can not be null");
 		if (map.isEmpty())
-			throw new IllegalArgumentException(objName + " can not be empty");
+			throw new IllegalArgumentException("Param: [" + objName + "] can not be empty");
 		return map;
 	}
 
@@ -209,9 +209,10 @@ public final class Assertor {
 	public static <T> T[] requiredLength(T[] array, int requiredLength, String arrayName)
 			throws NullPointerException, IllegalArgumentException {
 		if (array == null)
-			throw new NullPointerException(arrayName + " can not be null");
+			throw new NullPointerException("Param: [" + arrayName + "] can not be null");
 		if (array.length < requiredLength)
-			throw new IllegalArgumentException(arrayName + " length must be greater than " + requiredLength);
+			throw new IllegalArgumentException(
+					"Param: [" + arrayName + "] length must be greater than " + requiredLength);
 		return array;
 	}
 
@@ -228,9 +229,10 @@ public final class Assertor {
 	public static <T> List<T> requiredLength(List<T> list, int requiredLength, String listName)
 			throws NullPointerException, IllegalArgumentException {
 		if (list == null)
-			throw new NullPointerException(listName + " can not be null");
+			throw new NullPointerException("Param: [" + listName + "] can not be null");
 		if (list.size() < requiredLength)
-			throw new IllegalArgumentException(listName + " length must be greater than " + requiredLength);
+			throw new IllegalArgumentException(
+					"Param: [" + listName + "] length must be greater than " + requiredLength);
 		return list;
 	}
 
@@ -246,9 +248,10 @@ public final class Assertor {
 	public static boolean[] requiredLength(boolean[] array, int requiredLength, String arrayName)
 			throws NullPointerException, IllegalArgumentException {
 		if (array == null)
-			throw new NullPointerException(arrayName + " can not be null");
+			throw new NullPointerException("Param: [" + arrayName + "] can not be null");
 		if (array.length < requiredLength)
-			throw new IllegalArgumentException(arrayName + " length must be greater than " + requiredLength);
+			throw new IllegalArgumentException(
+					"Param: [" + arrayName + "] length must be greater than " + requiredLength);
 		return array;
 	}
 
@@ -264,9 +267,10 @@ public final class Assertor {
 	public static byte[] requiredLength(byte[] array, int requiredLength, String arrayName)
 			throws NullPointerException, IllegalArgumentException {
 		if (array == null)
-			throw new NullPointerException(arrayName + " can not be null");
+			throw new NullPointerException("Param: [" + arrayName + "] can not be null");
 		if (array.length < requiredLength)
-			throw new IllegalArgumentException(arrayName + " length must be greater than " + requiredLength);
+			throw new IllegalArgumentException(
+					"Param: [" + arrayName + "] length must be greater than " + requiredLength);
 		return array;
 	}
 
@@ -282,9 +286,10 @@ public final class Assertor {
 	public static char[] requiredLength(char[] array, int requiredLength, String arrayName)
 			throws NullPointerException, IllegalArgumentException {
 		if (array == null)
-			throw new NullPointerException(arrayName + " can not be null");
+			throw new NullPointerException("Param: [" + arrayName + "] can not be null");
 		if (array.length < requiredLength)
-			throw new IllegalArgumentException(arrayName + " length must be greater than " + requiredLength);
+			throw new IllegalArgumentException(
+					"Param: [" + arrayName + "] length must be greater than " + requiredLength);
 		return array;
 	}
 
@@ -300,9 +305,10 @@ public final class Assertor {
 	public static int[] requiredLength(int[] array, int requiredLength, String arrayName)
 			throws NullPointerException, IllegalArgumentException {
 		if (array == null)
-			throw new NullPointerException(arrayName + " can not be null");
+			throw new NullPointerException("Param: [" + arrayName + "] can not be null");
 		if (array.length < requiredLength)
-			throw new IllegalArgumentException(arrayName + " length must be greater than " + requiredLength);
+			throw new IllegalArgumentException(
+					"Param: [" + arrayName + "] length must be greater than " + requiredLength);
 		return array;
 	}
 
@@ -318,9 +324,10 @@ public final class Assertor {
 	public static long[] requiredLength(long[] array, int requiredLength, String arrayName)
 			throws NullPointerException, IllegalArgumentException {
 		if (array == null)
-			throw new NullPointerException(arrayName + " can not be null");
+			throw new NullPointerException("Param: [" + arrayName + "] can not be null");
 		if (array.length < requiredLength)
-			throw new IllegalArgumentException(arrayName + " length must be greater than " + requiredLength);
+			throw new IllegalArgumentException(
+					"Param: [" + arrayName + "] length must be greater than " + requiredLength);
 		return array;
 	}
 
@@ -337,9 +344,10 @@ public final class Assertor {
 	public static float[] requiredLength(float[] array, int requiredLength, String arrayName)
 			throws NullPointerException, IllegalArgumentException {
 		if (array == null)
-			throw new NullPointerException(arrayName + " can not be null");
+			throw new NullPointerException("Param: [" + arrayName + "] can not be null");
 		if (array.length < requiredLength)
-			throw new IllegalArgumentException(arrayName + " length must be greater than " + requiredLength);
+			throw new IllegalArgumentException(
+					"Param: [" + arrayName + "] length must be greater than " + requiredLength);
 		return array;
 	}
 
@@ -355,26 +363,40 @@ public final class Assertor {
 	public static double[] requiredLength(double[] array, int requiredLength, String arrayName)
 			throws NullPointerException, IllegalArgumentException {
 		if (array == null)
-			throw new NullPointerException(arrayName + " can not be null");
+			throw new NullPointerException("Param: [" + arrayName + " can not be null");
 		if (array.length < requiredLength)
-			throw new IllegalArgumentException(arrayName + " length must be greater than " + requiredLength);
+			throw new IllegalArgumentException(
+					"Param: [" + arrayName + " length must be greater than " + requiredLength);
 		return array;
 	}
 
 	/**
 	 * 
 	 * @param <T>
-	 * @param <E>
-	 * @param t
+	 * @param param
 	 * @param predicate
-	 * @param e
+	 * @param paramName
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
+	public static <T> T isValid(T param, Predicate<T> predicate, String paramName) throws IllegalArgumentException {
+		return isValid(param, predicate, new IllegalArgumentException("Param: [" + paramName + "] is illegal"));
+	}
+
+	/**
+	 * 
+	 * @param <T>
+	 * @param <E>
+	 * @param param
+	 * @param predicate
+	 * @param exception
 	 * @return
 	 * @throws E
 	 */
-	public static <T, E extends Exception> T isValid(T t, Predicate<T> predicate, E e) throws E {
-		if (predicate.test(t))
-			return t;
-		throw e;
+	public static <T, E extends Exception> T isValid(T param, Predicate<T> predicate, E exception) throws E {
+		if (predicate.test(param))
+			return param;
+		throw exception;
 	}
 
 }

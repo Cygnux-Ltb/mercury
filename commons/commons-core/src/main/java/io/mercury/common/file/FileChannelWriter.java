@@ -102,14 +102,14 @@ public final class FileChannelWriter {
 		if (!target.exists())
 			target.createNewFile();
 		if (CollectionUtils.isNotEmpty(data)) {
-			try (var rafile = new RandomAccessFile(target, "rw")) {
+			try (RandomAccessFile rafile = new RandomAccessFile(target, "rw")) {
 				if (append) {
 					// Seek to end
 					rafile.seek(rafile.length());
 				}
-				try (var channel = rafile.getChannel()) {
+				try (FileChannel channel = rafile.getChannel()) {
 					// Allocate [capacity] direct buffer
-					var buffer = ByteBuffer.allocateDirect(capacity);
+					ByteBuffer buffer = ByteBuffer.allocateDirect(capacity);
 					// for (int i = 0; i < data.size(); i++) {
 					for (T t : data) {
 						byte[] bytes = serializer.serialization(t);

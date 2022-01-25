@@ -19,6 +19,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -228,7 +229,7 @@ public final class FileUtil {
 			throw new FileNotFoundException("File " + dir + " is not a directory.");
 
 		// being matching process, create array for returning results
-		var files = new FastList<File>();
+		List<File> files = new FastList<File>();
 
 		// get all files in this directory
 		File[] dirFiles = dir.listFiles();
@@ -474,8 +475,8 @@ public final class FileUtil {
 
 		public int compare(File file0, File file1) {
 			// extract datetimes from both files
-			var zdt0 = ZonedDateTime.of(LocalDateTime.parse(file0.getName(), pattern.getFormatter()), zoneId);
-			var zdt1 = ZonedDateTime.of(LocalDateTime.parse(file1.getName(), pattern.getFormatter()), zoneId);
+			ZonedDateTime zdt0 = ZonedDateTime.of(LocalDateTime.parse(file0.getName(), pattern.getFormatter()), zoneId);
+			ZonedDateTime zdt1 = ZonedDateTime.of(LocalDateTime.parse(file1.getName(), pattern.getFormatter()), zoneId);
 			// compare these two
 			return zdt0.compareTo(zdt1);
 		}

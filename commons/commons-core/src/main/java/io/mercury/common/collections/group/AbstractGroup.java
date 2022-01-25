@@ -27,7 +27,7 @@ public abstract class AbstractGroup<K, V> implements Group<K, V> {
 	protected final Set<K> keys;
 
 	public AbstractGroup(Supplier<Map<K, V>> supplier) {
-		var map = supplier.get();
+		Map<K, V> map = supplier.get();
 		if (map == null)
 			throw new IllegalArgumentException("supplier result is null");
 		this.keys = map.keySet();
@@ -36,7 +36,7 @@ public abstract class AbstractGroup<K, V> implements Group<K, V> {
 
 	@Override
 	public V getMember(K key) throws MemberNotExistException {
-		var value = savedMap.get(key);
+		V value = savedMap.get(key);
 		if (value == null)
 			throw new MemberNotExistException("key -> [" + key + "] no found value");
 		return value;

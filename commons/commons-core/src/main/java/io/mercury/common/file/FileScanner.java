@@ -49,7 +49,7 @@ public final class FileScanner {
 			@Nonnull FileFilter filter) {
 		if (path == null || filter == null)
 			return;
-		var listFiles = path.listFiles();
+		File[] listFiles = path.listFiles();
 		if (listFiles != null && listFiles.length != 0) {
 			for (File file : listFiles) {
 				if (file.isDirectory())

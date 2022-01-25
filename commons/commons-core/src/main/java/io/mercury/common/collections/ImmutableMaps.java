@@ -139,7 +139,7 @@ public final class ImmutableMaps {
 	public static final <K, V> ImmutableMap<K, V> newImmutableMap(Supplier<Map<K, V>> supplier) {
 		if (supplier == null)
 			return ImmutableMapFactoryImpl.INSTANCE.empty();
-		var map = supplier.get();
+		Map<K, V> map = supplier.get();
 		if (map == null)
 			return ImmutableMapFactoryImpl.INSTANCE.empty();
 		if (map instanceof ImmutableMap)
@@ -173,7 +173,7 @@ public final class ImmutableMaps {
 	public static final <K, V> ImmutableSortedMap<K, V> newImmutableSortedMap(Supplier<Map<K, V>> supplier) {
 		if (supplier == null)
 			return ImmutableSortedMapFactoryImpl.INSTANCE.empty();
-		var map = supplier.get();
+		Map<K, V> map = supplier.get();
 		if (map == null)
 			return ImmutableSortedMapFactoryImpl.INSTANCE.empty();
 		if (map instanceof SortedMap)

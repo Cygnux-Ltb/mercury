@@ -105,13 +105,13 @@ public final class StringSupport {
 	public static final String toString(@Nullable Object... objs) {
 		if (objs == null)
 			return CONST_EMPTY;
-		StringBuilder sb = new StringBuilder(objs.length * 16).append('[');
+		StringBuilder builder = new StringBuilder(objs.length * 16).append('[');
 		for (int i = 0, j = objs.length - 1; i < objs.length; i++) {
-			sb.append(toString(objs[i]));
+			builder.append(toString(objs[i]));
 			if (i < j)
-				sb.append(',');
+				builder.append(',');
 		}
-		return sb.append(']').toString();
+		return builder.append(']').toString();
 	}
 
 	/**
@@ -123,13 +123,13 @@ public final class StringSupport {
 	public static final String toString(@Nullable String... strs) {
 		if (strs == null)
 			return CONST_EMPTY;
-		StringBuilder sb = new StringBuilder(strs.length * 16).append('[');
+		StringBuilder builder = new StringBuilder(strs.length * 16).append('[');
 		for (int i = 0, j = strs.length - 1; i < strs.length; i++) {
-			sb.append(toString(strs[i]));
+			builder.append(toString(strs[i]));
 			if (i < j)
-				sb.append(',');
+				builder.append(',');
 		}
-		return sb.append(']').toString();
+		return builder.append(']').toString();
 	}
 
 	/**
@@ -359,13 +359,13 @@ public final class StringSupport {
 	public static final String removeNonDigits(String str) {
 		if (isNullOrEmpty(str))
 			return CONST_EMPTY;
-		var buf = new StringBuilder(str.length());
+		StringBuilder builder = new StringBuilder(str.length());
 		for (int i = 0; i < str.length(); i++) {
 			char c = str.charAt(i);
 			if ('0' <= c && c <= '9')
-				buf.append(c);
+				builder.append(c);
 		}
-		return buf.toString();
+		return builder.toString();
 	}
 
 	/**
@@ -378,13 +378,13 @@ public final class StringSupport {
 	public static final String removeNonAlphabet(String str) {
 		if (isNullOrEmpty(str))
 			return CONST_EMPTY;
-		var buf = new StringBuilder(str.length());
+		StringBuilder builder = new StringBuilder(str.length());
 		for (int i = 0; i < str.length(); i++) {
 			char c = str.charAt(i);
 			if (('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z'))
-				buf.append(c);
+				builder.append(c);
 		}
-		return buf.toString();
+		return builder.toString();
 	}
 
 	/**
@@ -529,13 +529,13 @@ public final class StringSupport {
 	public static final String concatenateStr(int capacity, char symbol, String... strs) {
 		if (strs == null || strs.length == 0)
 			return CONST_EMPTY;
-		var buf = new StringBuilder(capacity);
+		StringBuilder builder = new StringBuilder(capacity);
 		for (int i = 0; i < strs.length; i++) {
-			buf.append(strs[i]);
+			builder.append(strs[i]);
 			if (i < strs.length - 1)
-				buf.append(symbol);
+				builder.append(symbol);
 		}
-		return buf.toString();
+		return builder.toString();
 	}
 
 	/**
@@ -577,10 +577,10 @@ public final class StringSupport {
 	 * @return
 	 */
 	public static String getAsciiString(byte[] input) {
-		var buf = new StringBuffer(input.length);
+		StringBuilder builder = new StringBuilder(input.length);
 		for (byte b : input)
-			buf.append((char) b);
-		return buf.toString();
+			builder.append((char) b);
+		return builder.toString();
 	}
 
 	public static void main(String[] args) {

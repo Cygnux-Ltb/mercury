@@ -35,8 +35,8 @@ public interface Params<K extends ParamKey> {
 	}
 
 	default void printParams(Logger log) {
-		var keys = getParamKeys();
-		for (var key : keys) {
+		Set<K> keys = getParamKeys();
+		for (K key : keys) {
 			switch (key.getValueType()) {
 			case STRING:
 				if (log != null)

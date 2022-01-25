@@ -54,7 +54,7 @@ public final class HexUtil {
 			return "";
 		assertOffsetAndLength(offset, length, bytes.length);
 		// each byte is 2 chars in string
-		var builder = new StringBuilder(length * 2 + 2).append("0x");
+		StringBuilder builder = new StringBuilder(length * 2 + 2).append("0x");
 		appendHex(builder, bytes, offset, length);
 		return builder.toString();
 	}
@@ -95,7 +95,7 @@ public final class HexUtil {
 	 * @return
 	 */
 	public static String toHex(byte value) {
-		var builder = new StringBuilder(4).append("0x");
+		StringBuilder builder = new StringBuilder(4).append("0x");
 		appendHex(builder, value);
 		return builder.toString();
 	}
@@ -116,7 +116,7 @@ public final class HexUtil {
 	 * @return
 	 */
 	public static String toHex(short value) {
-		var builder = new StringBuilder(6).append("0x");
+		StringBuilder builder = new StringBuilder(6).append("0x");
 		appendHex(builder, value);
 		return builder.toString();
 	}
@@ -138,7 +138,7 @@ public final class HexUtil {
 	 * @return
 	 */
 	public static String toHex(int value) {
-		var builder = new StringBuilder(10).append("0x");
+		StringBuilder builder = new StringBuilder(10).append("0x");
 		appendHex(builder, value);
 		return builder.toString();
 	}
@@ -162,7 +162,7 @@ public final class HexUtil {
 	 * @return
 	 */
 	public static String toHex(long value) {
-		var builder = new StringBuilder(18).append("0x");
+		StringBuilder builder = new StringBuilder(18).append("0x");
 		appendHex(builder, value);
 		return builder.toString();
 	}

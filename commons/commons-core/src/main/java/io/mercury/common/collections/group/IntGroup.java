@@ -25,7 +25,7 @@ public abstract class IntGroup<V> {
 	protected final IntSet keys;
 
 	public IntGroup(Supplier<IntObjectMap<V>> supplier) {
-		var map = supplier.get();
+		IntObjectMap<V> map = supplier.get();
 		if (map == null)
 			throw new IllegalArgumentException("supplier result is null");
 		this.keys = map.keySet();
@@ -33,7 +33,7 @@ public abstract class IntGroup<V> {
 	}
 
 	public V getMember(int key) throws MemberNotExistException {
-		var value = savedMap.get(key);
+		V value = savedMap.get(key);
 		if (value == null)
 			throw new MemberNotExistException("key -> [" + key + "] no found value");
 		return value;

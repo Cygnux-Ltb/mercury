@@ -182,7 +182,7 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 
 	@Override
 	public String toString() {
-		var builder = new StringBuilder(90);
+		StringBuilder builder = new StringBuilder(90);
 		builder.append(epochField);
 		builder.append(epoch);
 		builder.append(epochUnitField);

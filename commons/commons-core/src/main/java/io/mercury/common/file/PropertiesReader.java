@@ -89,7 +89,7 @@ public final class PropertiesReader {
 	 * @return
 	 */
 	public static Properties getProperty(String fileName) {
-		var properties = PropertiesMap.get(deleteSuffix(fileName));
+		Properties properties = PropertiesMap.get(deleteSuffix(fileName));
 		if (properties == null)
 			return new Properties();
 		return properties;
@@ -102,8 +102,8 @@ public final class PropertiesReader {
 	 * @return
 	 */
 	public static String getProperty(String fileName, String propName) {
-		var key = mergePropertiesKey(fileName, propName);
-		var value = PropertiesItemMap.get(key);
+		String key = mergePropertiesKey(fileName, propName);
+		String value = PropertiesItemMap.get(key);
 		if (value == null) {
 			log.error("Property name -> [{}] is not found of file name -> [{}], Key==[{}]", propName, fileName, key);
 			throw new RuntimeException("Read property error.");
@@ -118,7 +118,7 @@ public final class PropertiesReader {
 	 * @return
 	 */
 	public static int getIntProperty(String fileName, String propName) {
-		var value = getProperty(fileName, propName);
+		String value = getProperty(fileName, propName);
 		if (notDecimal(value)) {
 			log.error("Property name -> [{}] is not decimal of file name -> [{}]", propName, fileName);
 			throw new NumberFormatException("Read property error.");
@@ -139,7 +139,7 @@ public final class PropertiesReader {
 	 * @return
 	 */
 	public static long getLongProperty(String fileName, String propName) {
-		var value = getProperty(fileName, propName);
+		String value = getProperty(fileName, propName);
 		if (notDecimal(value)) {
 			log.error("Property name -> [{}] is not decimal of file name -> [{}]", propName, fileName);
 			throw new NumberFormatException("Read property error.");
@@ -160,7 +160,7 @@ public final class PropertiesReader {
 	 * @return
 	 */
 	public static double getDoubleProperty(String fileName, String propName) {
-		var value = getProperty(fileName, propName);
+		String value = getProperty(fileName, propName);
 		if (notDecimal(value)) {
 			log.error("Property name -> [{}] is not decimal of file name -> [{}]", propName, fileName);
 			throw new NumberFormatException("Read property error.");

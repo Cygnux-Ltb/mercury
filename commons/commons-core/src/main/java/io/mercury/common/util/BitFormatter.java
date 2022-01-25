@@ -110,7 +110,7 @@ public final class BitFormatter {
 	 * @return
 	 */
 	private static final String highPosFill(int sumLen, int blankLen, String binaryStr) {
-		var builder = new StringBuilder(sumLen);
+		StringBuilder builder = new StringBuilder(sumLen);
 		for (int i = 0; i < blankLen; i++)
 			builder.append('0');
 		return builder.append(binaryStr).toString();

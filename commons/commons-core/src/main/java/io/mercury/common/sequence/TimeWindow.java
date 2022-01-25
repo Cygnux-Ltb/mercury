@@ -136,7 +136,7 @@ public class TimeWindow implements Serial<TimeWindow> {
 			ZoneOffset offset, Duration duration) {
 		if (end.isBefore(start))
 			throw new IllegalArgumentException("the end time can not before start time");
-		var between = Duration.between(start, end);
+		Duration between = Duration.between(start, end);
 		long seconds = duration.getSeconds();
 		long count = between.getSeconds() / seconds;
 		MutableList<TimeWindow> windows = MutableLists.newFastList();
@@ -145,8 +145,8 @@ public class TimeWindow implements Serial<TimeWindow> {
 			windows.add(new TimeWindow(start, end, offset));
 		else {
 			// 分配第一个时间窗口
-			var t0 = start;
-			var t1 = start.plusSeconds(seconds);
+			LocalDateTime t0 = start;
+			LocalDateTime t1 = start.plusSeconds(seconds);
 			for (int i = 0; i < count; i++) {
 				windows.add(new TimeWindow(t0, t1, offset));
 				// 增加新时间窗口

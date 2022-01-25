@@ -1,6 +1,8 @@
 package io.mercury.common.sys;
 
 import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadInfo;
+import java.lang.management.ThreadMXBean;
 import java.lang.reflect.Method;
 
 public final class SystemUtil {
@@ -96,11 +98,11 @@ public final class SystemUtil {
 	 *         traces.
 	 */
 	public static String threadDump() {
-		var builder = new StringBuilder();
-		var threadMXBean = ManagementFactory.getThreadMXBean();
-		for (var threadInfo : threadMXBean.getThreadInfo(threadMXBean.getAllThreadIds(), Integer.MAX_VALUE)) {
+		StringBuilder builder = new StringBuilder();
+		ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
+		for (ThreadInfo threadInfo : threadMXBean.getThreadInfo(threadMXBean.getAllThreadIds(), Integer.MAX_VALUE)) {
 			builder.append('[').append(threadInfo.getThreadName()).append("] : ").append(threadInfo.getThreadState());
-			for (var stackTraceElement : threadInfo.getStackTrace()) {
+			for (StackTraceElement stackTraceElement : threadInfo.getStackTrace()) {
 				builder.append("\n    at ").append(stackTraceElement.toString());
 			}
 			builder.append("\n\n");

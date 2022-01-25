@@ -38,7 +38,7 @@ public final class JreReflection {
 	@SuppressWarnings("unchecked")
 	public static <R, T> R extractField(Class<T> clazz, T obj, String fieldName) throws RuntimeReflectionException {
 		try {
-			var field = getField(clazz, fieldName);
+			Field field = getField(clazz, fieldName);
 			field.setAccessible(true);
 			return (R) field.get(obj);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
@@ -60,7 +60,7 @@ public final class JreReflection {
 		try {
 			return clazz.getDeclaredField(fieldName);
 		} catch (NoSuchFieldException e) {
-			var superClass = clazz.getSuperclass();
+			Class<?> superClass = clazz.getSuperclass();
 			if (superClass == null)
 				throw new RuntimeReflectionException("Can not find field: [" + fieldName + "]", e);
 			else

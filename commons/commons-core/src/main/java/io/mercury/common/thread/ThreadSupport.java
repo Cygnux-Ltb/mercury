@@ -6,14 +6,17 @@ import static java.lang.Thread.NORM_PRIORITY;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import javax.annotation.Nonnull;
 
+import org.eclipse.collections.api.map.MutableMap;
 import org.slf4j.Logger;
 
 import io.mercury.common.collections.MutableMaps;
@@ -394,8 +397,8 @@ public final class ThreadSupport {
 	public static Thread[] getThreadsWithMatched(final String regex) {
 		if (regex == null)
 			throw new NullPointerException("Null thread name regex");
-		final var threads = getAllThreads();
-		final var matched = new ArrayList<Thread>();
+		final Thread[] threads = getAllThreads();
+		final List<Thread> matched = new ArrayList<Thread>();
 		for (Thread thread : threads) {
 			if (thread.getName().matches(regex))
 				matched.add(thread);
@@ -417,17 +420,17 @@ public final class ThreadSupport {
 	 * @return String
 	 */
 	public static final String dumpThreadInfo(@Nonnull final Thread thread) {
-		final var threadMXBean = ManagementFactory.getThreadMXBean();
-		final var map = MutableMaps.newUnifiedMap();
-		final var threadInfo = threadMXBean.getThreadInfo(thread.getId());
+		final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
+		final MutableMap<String, String> map = MutableMaps.newUnifiedMap();
+		final ThreadInfo threadInfo = threadMXBean.getThreadInfo(thread.getId());
 		map.put("threadId", StringSupport.toString(threadInfo.getThreadId()));
 		map.put("threadName", threadInfo.getThreadName());
 		map.put("threadState", StringSupport.toString(threadInfo.getThreadState()));
-		map.put("priority", StringSupport.toString(threadInfo.getPriority()));
+		//map.put("priority", StringSupport.toString(threadInfo.getPriority()));
 		map.put("lockName", threadInfo.getLockName());
 		map.put("lockInfo", StringSupport.toString(threadInfo.getLockInfo()));
 		map.put("lockOwnerId", StringSupport.toString(threadInfo.getLockOwnerId()));
-		map.put("lockOwnerName", (threadInfo.getLockOwnerName()));
+		map.put("lockOwnerName", threadInfo.getLockOwnerName());
 		map.put("waitedCount", StringSupport.toString(threadInfo.getWaitedCount()));
 		map.put("waitedTime", StringSupport.toString(threadInfo.getWaitedTime()));
 		map.put("blockedCount", StringSupport.toString(threadInfo.getBlockedCount()));

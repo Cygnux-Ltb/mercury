@@ -1,6 +1,7 @@
 package io.mercury.common.collections;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
@@ -47,7 +48,7 @@ public final class CollectionUtil {
 		Assertor.nonNull(collection, "collection");
 		if (ArrayUtil.isNullOrEmpty(values))
 			return collection;
-		for (var e : values)
+		for (E e : values)
 			collection.add(e);
 		return collection;
 	}
@@ -68,7 +69,7 @@ public final class CollectionUtil {
 		Assertor.nonNull(converter, "converter");
 		if (ArrayUtil.isNullOrEmpty(values))
 			return collection;
-		for (var v : values)
+		for (V v : values)
 			collection.add(converter.apply(v));
 		return collection;
 	}
@@ -84,8 +85,8 @@ public final class CollectionUtil {
 	public static final <E, C extends Collection<E>> E[] toArray(@Nonnull final C collection,
 			IntFunction<E[]> creator) {
 		Assertor.nonNull(collection, "collection");
-		var values = creator.apply(collection.size());
-		var iterator = collection.iterator();
+		E[] values = creator.apply(collection.size());
+		Iterator<E> iterator = collection.iterator();
 		int i = 0;
 		while (iterator.hasNext()) {
 			values[i] = iterator.next();

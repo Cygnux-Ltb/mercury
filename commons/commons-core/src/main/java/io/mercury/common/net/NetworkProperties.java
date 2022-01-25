@@ -3,19 +3,20 @@ package io.mercury.common.net;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
 
 public final class NetworkProperties {
 
 	public final static String getLocalMacAddress() {
 		try {
-			var networkInterfaces = NetworkInterface.getNetworkInterfaces();
+			Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
 			while (networkInterfaces.hasMoreElements()) {
-				var networkInterface = networkInterfaces.nextElement();
-				var mac = networkInterface.getHardwareAddress();
+				NetworkInterface networkInterface = networkInterfaces.nextElement();
+				byte[] mac = networkInterface.getHardwareAddress();
 				if (mac == null)
 					continue;
 				else {
-					var builder = new StringBuilder();
+					StringBuilder builder = new StringBuilder();
 					for (int i = 0; i < mac.length; i++) {
 						if (i != 0)
 							builder.append('-');
