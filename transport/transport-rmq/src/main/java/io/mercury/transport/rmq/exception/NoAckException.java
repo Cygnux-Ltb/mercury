@@ -1,4 +1,4 @@
-package io.mercury.transport.rabbitmq.exception;
+package io.mercury.transport.rmq.exception;
 
 public class NoAckException extends Exception {
 

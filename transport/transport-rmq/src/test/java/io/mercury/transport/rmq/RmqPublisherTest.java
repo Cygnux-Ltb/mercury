@@ -1,14 +1,14 @@
-package io.mercury.transport.rabbitmq;
+package io.mercury.transport.rmq;
 
 import java.io.IOException;
 import java.util.Arrays;
 
-import io.mercury.transport.rabbitmq.configurator.RmqConnection;
-import io.mercury.transport.rabbitmq.configurator.RmqPublisherConfig;
-import io.mercury.transport.rabbitmq.declare.AmqpQueue;
-import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
+import io.mercury.transport.rmq.configurator.RmqConnection;
+import io.mercury.transport.rmq.configurator.RmqPublisherConfig;
+import io.mercury.transport.rmq.declare.AmqpQueue;
+import io.mercury.transport.rmq.declare.ExchangeRelationship;
 
-public class RabbitMqPublisherTest {
+public class RmqPublisherTest {
 
 	public static void main(String[] args) {
 

@@ -1,4 +1,4 @@
-package io.mercury.transport.rabbitmq.declare;
+package io.mercury.transport.rmq.declare;
 
 import java.util.Map;
 

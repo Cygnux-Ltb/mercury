@@ -1,4 +1,4 @@
-package io.mercury.transport.rabbitmq.configurator;
+package io.mercury.transport.rmq.configurator;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -12,7 +12,7 @@ import io.mercury.common.lang.Assertor;
 import io.mercury.common.util.StringSupport;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.TransportConfigurator;
-import io.mercury.transport.rabbitmq.RmqTransport.ShutdownSignalHandler;
+import io.mercury.transport.rmq.RmqTransport.ShutdownSignalHandler;
 
 public final class RmqConnection implements TransportConfigurator {
 

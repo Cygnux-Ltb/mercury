@@ -1,12 +1,12 @@
-package io.mercury.transport.rabbitmq.configurator;
+package io.mercury.transport.rmq.configurator;
 
 import static io.mercury.common.lang.Assertor.nonNull;
 
 import javax.annotation.Nonnull;
 
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
-import io.mercury.transport.rabbitmq.declare.QueueRelationship;
+import io.mercury.transport.rmq.declare.ExchangeRelationship;
+import io.mercury.transport.rmq.declare.QueueRelationship;
 
 /**
  * 

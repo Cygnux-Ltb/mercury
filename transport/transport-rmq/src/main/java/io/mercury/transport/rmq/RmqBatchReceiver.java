@@ -1,4 +1,4 @@
-package io.mercury.transport.rabbitmq;
+package io.mercury.transport.rmq;
 
 import static io.mercury.common.util.StringSupport.nonEmpty;
 
@@ -31,7 +31,7 @@ import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.BytesDeserializer;
 import io.mercury.transport.api.Receiver;
-import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfig;
+import io.mercury.transport.rmq.configurator.RmqReceiverConfig;
 
 /**
  * @author yellow013

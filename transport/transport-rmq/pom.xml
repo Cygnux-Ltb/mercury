@@ -10,8 +10,8 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>transport-rabbitmq</artifactId>
-	<name>transport-rabbitmq</name>
+	<artifactId>transport-rmq</artifactId>
+	<name>transport-rmq</name>
 
 	<packaging>jar</packaging>
 

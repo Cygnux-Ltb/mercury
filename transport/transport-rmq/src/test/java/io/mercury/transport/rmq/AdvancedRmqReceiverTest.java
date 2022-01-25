@@ -1,8 +1,8 @@
-package io.mercury.transport.rabbitmq;
+package io.mercury.transport.rmq;
 
 import org.junit.Test;
 
-public class AdvRabbitMqReceiverTest {
+public class AdvancedRmqReceiverTest {
 
 	@Test
 	public void test() {

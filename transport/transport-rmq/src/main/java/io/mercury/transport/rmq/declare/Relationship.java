@@ -1,4 +1,4 @@
-package io.mercury.transport.rabbitmq.declare;
+package io.mercury.transport.rmq.declare;
 
 import javax.annotation.Nonnull;
 
@@ -9,8 +9,8 @@ import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.transport.rabbitmq.RmqOperator;
-import io.mercury.transport.rabbitmq.exception.DeclareException;
+import io.mercury.transport.rmq.RmqOperator;
+import io.mercury.transport.rmq.exception.DeclareException;
 
 public abstract class Relationship {
 

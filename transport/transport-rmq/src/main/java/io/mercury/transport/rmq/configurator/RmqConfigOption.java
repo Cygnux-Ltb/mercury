@@ -1,4 +1,4 @@
-package io.mercury.transport.rabbitmq.configurator;
+package io.mercury.transport.rmq.configurator;
 
 import io.mercury.common.config.ConfigOption;
 

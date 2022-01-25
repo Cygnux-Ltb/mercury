@@ -1,12 +1,12 @@
-package io.mercury.transport.rabbitmq;
+package io.mercury.transport.rmq;
 
 import org.junit.Test;
 
-public class RabbitMqReceiverTest {
+public class RmqReceiverTest {
 
 	@Test
 	public void test() {
-		
+
 	}
 
 }

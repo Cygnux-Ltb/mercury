@@ -1,4 +1,4 @@
-package io.mercury.transport.rabbitmq;
+package io.mercury.transport.rmq;
 
 import java.io.IOException;
 import java.util.Map;
@@ -12,10 +12,10 @@ import com.rabbitmq.client.Channel;
 
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.lang.Assertor;
-import io.mercury.transport.rabbitmq.configurator.RmqConnection;
-import io.mercury.transport.rabbitmq.declare.AmqpExchange;
-import io.mercury.transport.rabbitmq.declare.AmqpQueue;
-import io.mercury.transport.rabbitmq.exception.DeclareException;
+import io.mercury.transport.rmq.configurator.RmqConnection;
+import io.mercury.transport.rmq.declare.AmqpExchange;
+import io.mercury.transport.rmq.declare.AmqpQueue;
+import io.mercury.transport.rmq.exception.DeclareException;
 
 public final class RmqOperator extends RmqTransport {
 

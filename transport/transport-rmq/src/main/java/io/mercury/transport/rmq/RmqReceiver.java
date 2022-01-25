@@ -1,4 +1,4 @@
-package io.mercury.transport.rabbitmq;
+package io.mercury.transport.rmq;
 
 import static io.mercury.common.character.Charsets.UTF8;
 import static io.mercury.common.datetime.DateTimeUtil.datetimeOfMillisecond;
@@ -25,13 +25,13 @@ import io.mercury.transport.api.Receiver;
 import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.exception.ConnectionBreakException;
 import io.mercury.transport.exception.ReceiverStartException;
-import io.mercury.transport.rabbitmq.configurator.RmqConnection;
-import io.mercury.transport.rabbitmq.configurator.RmqReceiverConfig;
-import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
-import io.mercury.transport.rabbitmq.declare.QueueRelationship;
-import io.mercury.transport.rabbitmq.exception.DeclareException;
-import io.mercury.transport.rabbitmq.exception.DeclareRuntimeException;
-import io.mercury.transport.rabbitmq.exception.MsgHandleException;
+import io.mercury.transport.rmq.configurator.RmqConnection;
+import io.mercury.transport.rmq.configurator.RmqReceiverConfig;
+import io.mercury.transport.rmq.declare.ExchangeRelationship;
+import io.mercury.transport.rmq.declare.QueueRelationship;
+import io.mercury.transport.rmq.exception.DeclareException;
+import io.mercury.transport.rmq.exception.DeclareRuntimeException;
+import io.mercury.transport.rmq.exception.MsgHandleException;
 
 /**
  * 

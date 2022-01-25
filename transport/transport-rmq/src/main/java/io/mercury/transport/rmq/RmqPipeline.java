@@ -1,4 +1,4 @@
-package io.mercury.transport.rabbitmq;
+package io.mercury.transport.rmq;
 
 public final class RmqPipeline {
 

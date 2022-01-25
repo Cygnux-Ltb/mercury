@@ -1,4 +1,4 @@
-package io.mercury.transport.rabbitmq.declare;
+package io.mercury.transport.rmq.declare;
 
 import java.util.Collection;
 import java.util.Map;
@@ -8,8 +8,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.lang.Assertor;
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.rabbitmq.RmqOperator;
-import io.mercury.transport.rabbitmq.exception.DeclareException;
+import io.mercury.transport.rmq.RmqOperator;
+import io.mercury.transport.rmq.exception.DeclareException;
 
 /**
  * 定义Queue和其他实体绑定关系

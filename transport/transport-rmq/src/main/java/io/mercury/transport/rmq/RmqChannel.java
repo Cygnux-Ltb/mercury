@@ -1,4 +1,4 @@
-package io.mercury.transport.rabbitmq;
+package io.mercury.transport.rmq;
 
 import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
 
@@ -8,7 +8,7 @@ import java.util.concurrent.TimeoutException;
 
 import com.rabbitmq.client.Channel;
 
-import io.mercury.transport.rabbitmq.configurator.RmqConnection;
+import io.mercury.transport.rmq.configurator.RmqConnection;
 
 public final class RmqChannel extends RmqTransport {
 

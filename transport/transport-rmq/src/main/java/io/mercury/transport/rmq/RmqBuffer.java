@@ -1,4 +1,4 @@
-package io.mercury.transport.rabbitmq;
+package io.mercury.transport.rmq;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -17,10 +17,10 @@ import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.BytesDeserializer;
 import io.mercury.common.serialization.BytesSerializer;
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.rabbitmq.configurator.RmqConnection;
-import io.mercury.transport.rabbitmq.declare.AmqpExchange;
-import io.mercury.transport.rabbitmq.declare.QueueRelationship;
-import io.mercury.transport.rabbitmq.exception.DeclareException;
+import io.mercury.transport.rmq.configurator.RmqConnection;
+import io.mercury.transport.rmq.declare.AmqpExchange;
+import io.mercury.transport.rmq.declare.QueueRelationship;
+import io.mercury.transport.rmq.exception.DeclareException;
 
 public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 

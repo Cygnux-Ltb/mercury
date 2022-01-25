@@ -1,4 +1,4 @@
-package io.mercury.transport.rabbitmq;
+package io.mercury.transport.rmq;
 
 import static io.mercury.common.datetime.DateTimeUtil.datetimeOfMillisecond;
 import static io.mercury.common.util.StringSupport.nonEmpty;
@@ -24,12 +24,12 @@ import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Publisher;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.exception.PublishFailedException;
-import io.mercury.transport.rabbitmq.configurator.RmqConnection;
-import io.mercury.transport.rabbitmq.configurator.RmqPublisherConfig;
-import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
-import io.mercury.transport.rabbitmq.exception.DeclareException;
-import io.mercury.transport.rabbitmq.exception.DeclareRuntimeException;
-import io.mercury.transport.rabbitmq.exception.NoAckException;
+import io.mercury.transport.rmq.configurator.RmqConnection;
+import io.mercury.transport.rmq.configurator.RmqPublisherConfig;
+import io.mercury.transport.rmq.declare.ExchangeRelationship;
+import io.mercury.transport.rmq.exception.DeclareException;
+import io.mercury.transport.rmq.exception.DeclareRuntimeException;
+import io.mercury.transport.rmq.exception.NoAckException;
 
 @ThreadSafe
 public class RmqPublisher extends RmqTransport implements Publisher<String, byte[]>, Sender<byte[]> {

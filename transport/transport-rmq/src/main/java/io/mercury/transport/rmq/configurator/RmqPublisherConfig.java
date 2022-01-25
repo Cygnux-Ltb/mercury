@@ -1,4 +1,4 @@
-package io.mercury.transport.rabbitmq.configurator;
+package io.mercury.transport.rmq.configurator;
 
 import static com.rabbitmq.client.MessageProperties.PERSISTENT_BASIC;
 import static io.mercury.common.lang.Assertor.nonNull;
@@ -10,8 +10,8 @@ import javax.annotation.Nonnull;
 import com.rabbitmq.client.AMQP.BasicProperties;
 
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.rabbitmq.declare.AmqpQueue;
-import io.mercury.transport.rabbitmq.declare.ExchangeRelationship;
+import io.mercury.transport.rmq.declare.AmqpQueue;
+import io.mercury.transport.rmq.declare.ExchangeRelationship;
 
 /**
  * 
