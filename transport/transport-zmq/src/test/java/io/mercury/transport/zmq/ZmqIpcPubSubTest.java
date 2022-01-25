@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.ThreadSupport;
+import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.attr.Topics;
 
 public class ZmqIpcPubSubTest {
@@ -18,7 +19,8 @@ public class ZmqIpcPubSubTest {
 		String topic = "ipc-test";
 
 		ThreadSupport.startNewThread(() -> {
-			try (var publisher = ZmqConfigurator.ipc("test/01").ioThreads(1).newPublisherWithString(topic)) {
+			try (ZmqPublisher<String> publisher = ZmqConfigurator.ipc("test/01").ioThreads(1)
+					.newPublisherWithString(topic)) {
 				SleepSupport.sleep(2000);
 				Random random = new Random();
 				for (int i = 0; i < 20; i++) {
@@ -31,7 +33,7 @@ public class ZmqIpcPubSubTest {
 			}
 		});
 
-		try (var subscriber = ZmqConfigurator.ipc("test/01").ioThreads(1).newSubscriber(Topics.with(topic),
+		try (Subscriber subscriber = ZmqConfigurator.ipc("test/01").ioThreads(1).newSubscriber(Topics.with(topic),
 				this::handleMag)) {
 			subscriber.subscribe();
 		} catch (IOException e) {

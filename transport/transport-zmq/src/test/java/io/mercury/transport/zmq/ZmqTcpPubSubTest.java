@@ -18,7 +18,8 @@ public class ZmqTcpPubSubTest {
 		String topic = "tcp-test";
 
 		ThreadSupport.startNewThread(() -> {
-			try (var publisher = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(1).newPublisherWithString(topic)) {
+			try (ZmqPublisher<String> publisher = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(1)
+					.newPublisherWithString(topic)) {
 				SleepSupport.sleep(2000);
 				Random random = new Random();
 				for (int i = 0; i < 20; i++) {
@@ -31,7 +32,7 @@ public class ZmqTcpPubSubTest {
 			}
 		});
 
-		try (var subscriber = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(1).newSubscriber(Topics.with(topic),
+		try (ZmqSubscriber subscriber = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(1).newSubscriber(Topics.with(topic),
 				this::handleMag)) {
 			subscriber.subscribe();
 		} catch (IOException e) {
