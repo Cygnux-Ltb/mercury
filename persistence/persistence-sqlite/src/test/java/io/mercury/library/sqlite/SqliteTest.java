@@ -122,11 +122,11 @@ public final class SqliteTest {
 
 		ResultSet rs = statement.executeQuery("SELECT * FROM COMPANY;");
 		while (rs.next()) {
-			var id = rs.getInt("id");
-			var name = rs.getString("name");
-			var age = rs.getInt("age");
-			var address = rs.getString("address");
-			var salary = rs.getDouble("salary");
+			int id = rs.getInt("id");
+			String name = rs.getString("name");
+			int age = rs.getInt("age");
+			String address = rs.getString("address");
+			double salary = rs.getDouble("salary");
 			System.out.println("ID = " + id);
 			System.out.println("NAME = " + name);
 			System.out.println("AGE = " + age);
