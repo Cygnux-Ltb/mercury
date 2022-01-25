@@ -16,6 +16,7 @@ import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Transport;
 import io.mercury.transport.api.TransportComponent;
 import io.mercury.transport.attr.TcpKeepAlive;
+import io.mercury.transport.attr.TcpKeepAlive.KeepAlive;
 
 abstract class ZmqTransport extends TransportComponent implements Transport, Closeable {
 
@@ -41,7 +42,7 @@ abstract class ZmqTransport extends TransportComponent implements Transport, Clo
 		this.cfg = cfg;
 		this.context = new ZContext(cfg.getIoThreads());
 		log.info("ZMQ context initialized, ioThreads=={}", cfg.getIoThreads());
-		var type = getSocketType();
+		SocketType type = getSocketType();
 		this.socket = context.createSocket(type);
 		log.info("ZMQ socket created with type -> {}", type);
 	}
@@ -58,14 +59,14 @@ abstract class ZmqTransport extends TransportComponent implements Transport, Clo
 	protected ZMQ.Socket setTcpKeepAlive(TcpKeepAlive option) {
 		if (option != null) {
 			log.info("setting ZMQ.Socket TCP KeepAlive with -> {}", option);
-			var keepAlive = option.getKeepAlive();
+			KeepAlive keepAlive = option.getKeepAlive();
 			switch (keepAlive) {
 			case Enable:
 				int keepAliveCount = option.getKeepAliveCount();
 				int keepAliveIdle = option.getKeepAliveIdle();
 				int keepAliveInterval = option.getKeepAliveInterval();
 				log.info(
-						"ZMQ.Socket used [Enable] option, KeepAliveCount -> {}, KeepAliveIdle -> {}, KeepAliveInterval -> {}",
+						"ZMQ.Socket used [Enable] option, KeepAliveCount==[{}], KeepAliveIdle==[{}], KeepAliveInterval==[{}]",
 						keepAliveCount, keepAliveIdle, keepAliveInterval);
 				socket.setTCPKeepAlive(keepAlive.getCode());
 				socket.setTCPKeepAliveCount(keepAliveCount);

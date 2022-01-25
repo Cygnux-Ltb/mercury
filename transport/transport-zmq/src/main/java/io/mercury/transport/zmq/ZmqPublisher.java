@@ -37,7 +37,7 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
 		Assertor.nonNull(serializer, "serializer");
 		this.sendMore = topic.getBytes(ZMQ.CHARSET);
 		this.serializer = serializer;
-		var addr = cfg.getAddr();
+		String addr = cfg.getAddr();
 		if (socket.bind(addr))
 			log.info("ZmqPublisher bound addr -> {}", addr);
 		else {
@@ -45,7 +45,7 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
 			throw new ZmqBindException(addr);
 		}
 		setTcpKeepAlive(cfg.getTcpKeepAlive());
-		this.name = "ZMQ::PUB$" + addr + "/" + topic;
+		this.name = "zmq::pub$" + addr + "/" + topic;
 		newStartTime();
 	}
 

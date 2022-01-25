@@ -38,7 +38,7 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber {
 		Assertor.nonNull(consumer, "consumer");
 		this.topics = topics;
 		this.consumer = consumer;
-		var addr = cfg.getAddr();
+		String addr = cfg.getAddr();
 		if (socket.connect(addr))
 			log.info("ZmqSubscriber connected addr -> {}", addr);
 		else {
@@ -50,7 +50,7 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber {
 				? TcpKeepAlive.enable().setKeepAliveCount(10).setKeepAliveIdle(30).setKeepAliveInterval(30)
 				: cfg.getTcpKeepAlive());
 		topics.each(topic -> socket.subscribe(topic.getBytes(ZMQ.CHARSET)));
-		this.name = "ZMQ::SUB$" + addr + "/" + topics;
+		this.name = "zmq::sub$" + addr + "/" + topics;
 		newStartTime();
 	}
 
@@ -66,9 +66,9 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber {
 	@Override
 	public void subscribe() {
 		while (isRunning.get()) {
-			var topic = socket.recv();
+			byte[] topic = socket.recv();
 			log.debug("received topic, length: {}", topic.length);
-			var msg = socket.recv();
+			byte[] msg = socket.recv();
 			log.debug("received msg, length: {}", topic.length);
 			consumer.accept(topic, msg);
 		}

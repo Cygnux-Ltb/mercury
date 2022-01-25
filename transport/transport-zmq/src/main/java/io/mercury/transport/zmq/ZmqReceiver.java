@@ -26,7 +26,7 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 		super(cfg);
 		Assertor.nonNull(handler, "handler");
 		this.handler = handler;
-		var addr = cfg.getAddr();
+		String addr = cfg.getAddr();
 		if (socket.bind(addr))
 			log.info("ZmqReceiver bound addr -> {}", addr);
 		else {
@@ -34,7 +34,7 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 			throw new ZmqBindException(addr);
 		}
 		setTcpKeepAlive(cfg.getTcpKeepAlive());
-		this.name = "ZMQ::REP$" + addr;
+		this.name = "zmq::rep$" + addr;
 		newStartTime();
 	}
 
@@ -47,13 +47,17 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 		return SocketType.REP;
 	}
 
+	private final byte[] emptyMsg = new byte[] {};
+
 	@Override
 	public void receive() {
 		while (isRunning.get()) {
-			var recv = socket.recv();
-			var sent = handler.apply(recv);
+			byte[] recv = socket.recv();
+			byte[] sent = handler.apply(recv);
 			if (sent != null)
 				socket.send(sent);
+			else
+				socket.send(emptyMsg);
 		}
 	}
 
@@ -63,8 +67,8 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 	}
 
 	public static void main(String[] args) {
-		try (ZmqReceiver receiver = new ZmqReceiver(ZmqConfigurator.tcp(5551).ioThreads(10), (byte[] byteMsg) -> {
-			System.out.println(new String(byteMsg));
+		try (ZmqReceiver receiver = ZmqConfigurator.tcp(5551).newReceiver((byte[] recvMsg) -> {
+			System.out.println(new String(recvMsg));
 			return null;
 		})) {
 			SleepSupport.sleep(15000);

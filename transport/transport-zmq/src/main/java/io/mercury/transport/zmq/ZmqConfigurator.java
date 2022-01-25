@@ -1,10 +1,10 @@
 package io.mercury.transport.zmq;
 
 import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
-import static io.mercury.transport.zmq.ZmqConfigurator.ZmqConfigOption.Addr;
-import static io.mercury.transport.zmq.ZmqConfigurator.ZmqConfigOption.IoThreads;
-import static io.mercury.transport.zmq.ZmqConfigurator.ZmqConfigOption.Port;
-import static io.mercury.transport.zmq.ZmqConfigurator.ZmqConfigOption.Protocol;
+import static io.mercury.transport.zmq.ZmqConfigOption.Addr;
+import static io.mercury.transport.zmq.ZmqConfigOption.IoThreads;
+import static io.mercury.transport.zmq.ZmqConfigOption.Port;
+import static io.mercury.transport.zmq.ZmqConfigOption.Protocol;
 
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -20,7 +20,6 @@ import com.typesafe.config.Config;
 
 import io.mercury.common.annotation.OnlyOverrideEquals;
 import io.mercury.common.config.ConfigDelegate;
-import io.mercury.common.config.ConfigOption;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.net.IpAddressIllegalException;
@@ -42,7 +41,7 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 
 	private int ioThreads = 1;
 
-	private TcpKeepAlive tcpKeepAlive;
+	private TcpKeepAlive tcpKeepAlive = null;
 
 	/**
 	 * 
@@ -95,8 +94,8 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	 */
 	public static ZmqConfigurator withConfig(String module, @Nonnull Config config) {
 		Assertor.nonNull(config, "config");
-		var delegate = new ConfigDelegate<ZmqConfigOption>(module, config);
-		var protocol = ZmqProtocol.of(delegate.getStringOrThrows(Protocol));
+		ConfigDelegate<ZmqConfigOption> delegate = new ConfigDelegate<>(module, config);
+		ZmqProtocol protocol = ZmqProtocol.of(delegate.getStringOrThrows(Protocol));
 		ZmqConfigurator zmqConf = null;
 		switch (protocol) {
 		case TCP:
@@ -361,10 +360,10 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	@Override
 	public ZmqConfigurator fromJson(String json) {
 		Map<String, Object> map = JsonParser.toMap(json);
-		var addr = (String) map.get("addr");
+		String addr = (String) map.get("addr");
 		int ioThreads = (int) map.get("ioThreads");
-		var tcpKeepAliveJson = (String) map.get("tcpKeepAlive");
-		var tcpKeepAlive = JsonParser.toObject(tcpKeepAliveJson, TcpKeepAlive.class);
+		String tcpKeepAliveJson = (String) map.get("tcpKeepAlive");
+		TcpKeepAlive tcpKeepAlive = JsonParser.toObject(tcpKeepAliveJson, TcpKeepAlive.class);
 		return new ZmqConfigurator(addr).ioThreads(ioThreads).tcpKeepAlive(tcpKeepAlive);
 	}
 
@@ -392,7 +391,7 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 		}
 
 		public static ZmqProtocol of(String name) {
-			for (var protocol : ZmqProtocol.values())
+			for (ZmqProtocol protocol : ZmqProtocol.values())
 				if (protocol.name.equalsIgnoreCase(name))
 					return protocol;
 			throw new IllegalArgumentException("Unsupported protocol type -> " + name);
@@ -400,34 +399,7 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 
 	}
 
-	public static enum ZmqConfigOption implements ConfigOption {
-
-		Protocol("zmq.protocol", "zeromq.protocol"),
-
-		Addr("zmq.addr", "zeromq.addr"),
-
-		Port("zmq.port", "zeromq.port"),
-
-		IoThreads("zmq.ioThreads", "zeromq.ioThreads");
-
-		private final String configName;
-
-		private final String otherConfigName;
-
-		private ZmqConfigOption(String configName, String otherConfigName) {
-			this.configName = configName;
-			this.otherConfigName = otherConfigName;
-		}
-
-		@Override
-		public String getConfigName() {
-			return configName;
-		}
-
-		public String getOtherConfigName() {
-			return otherConfigName;
-		}
-	}
+	//public static enum ZmqConfigOption 
 
 	public static void main(String[] args) {
 		ZmqConfigurator configurator = ZmqConfigurator.tcp("192.168.1.1", 5551).ioThreads(3)
