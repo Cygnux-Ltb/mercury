@@ -54,7 +54,7 @@ public final class AvroBinaryDeserializerBuf<T extends SpecificRecord> implement
 	 * @return
 	 */
 	private AvroBinaryDeserializer<T> getDeserializer() {
-		var threadId = Thread.currentThread().getId();
+		long threadId = Thread.currentThread().getId();
 		return deserializers.putIfAbsent(threadId, new AvroBinaryDeserializer<>(type));
 	}
 

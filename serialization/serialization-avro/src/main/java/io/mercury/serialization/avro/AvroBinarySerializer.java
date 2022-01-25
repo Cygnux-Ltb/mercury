@@ -55,7 +55,7 @@ public final class AvroBinarySerializer<T extends SpecificRecord> implements Byt
 			encoder = EncoderFactory.get().binaryEncoder(outputStream, encoder);
 			writer.write(obj, encoder);
 			encoder.flush();
-			var buffer = outputStream.asByteBuffer();
+			ByteBuffer buffer = outputStream.asByteBuffer();
 			outputStream.reset();
 			return buffer;
 		} catch (IOException e) {
