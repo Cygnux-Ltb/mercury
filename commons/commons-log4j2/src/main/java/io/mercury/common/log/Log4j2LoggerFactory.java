@@ -68,19 +68,19 @@ public final class Log4j2LoggerFactory {
 	 */
 	private static final void checkAndSettings() {
 		// 配置日志存储目录, 基于${user.home}
-		var folder = getFolder();
+		String folder = getFolder();
 		if (folder == null || folder.isEmpty())
 			setLogFolder(DefaultFolder);
 		// 配置日志文件名
-		var filename = getFilename();
+		String filename = getFilename();
 		if (filename == null || filename.isEmpty())
 			setLogFilename(DefaultFileName);
 		// 配置日志級別
-		var level = getLogLevel();
+		String level = getLogLevel();
 		if (level == null || level.isEmpty())
 			setLogLevel(ERROR);
 		// 配置日志文件大小
-		var sizeOfMb = getFileSizeOfMb();
+		String sizeOfMb = getFileSizeOfMb();
 		if (sizeOfMb == null || sizeOfMb.isEmpty())
 			setFileSizeOfMb(127);
 	}

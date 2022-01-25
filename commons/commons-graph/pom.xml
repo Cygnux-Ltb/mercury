@@ -4,7 +4,6 @@
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-
 	<parent>
 		<groupId>io.mercury</groupId>
 		<artifactId>commons</artifactId>
@@ -26,7 +25,10 @@
 		<dependency>
 			<groupId>org.jgrapht</groupId>
 			<artifactId>jgrapht-core</artifactId>
+			<!-- java 11 -->
 			<version>1.5.1</version>
+			<!-- java 8 -->
+			<!-- <version>1.4.0</version> -->
 			<exclusions>
 				<exclusion>
 					<groupId>org.jheaps</groupId>
