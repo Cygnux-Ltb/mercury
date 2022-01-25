@@ -13,7 +13,6 @@ import io.mercury.common.util.StringSupport;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.TransportConfigurator;
 import io.mercury.transport.rabbitmq.RmqTransport.ShutdownSignalHandler;
-import io.mercury.transport.rabbitmq.configurator.RmqConfig.RabbitConfigOption;
 
 public final class RmqConnection implements TransportConfigurator {
 
@@ -119,9 +118,9 @@ public final class RmqConnection implements TransportConfigurator {
 	 * @return
 	 */
 	public static Builder with(@Nonnull String module, @Nonnull Config config) {
-		ConfigDelegate<RabbitConfigOption> delegate = new ConfigDelegate<>(module, config);
-		return new Builder(delegate.getString(RabbitConfigOption.Host), delegate.getInt(RabbitConfigOption.Port),
-				delegate.getString(RabbitConfigOption.Username), delegate.getString(RabbitConfigOption.Password));
+		ConfigDelegate<RmqConfigOption> delegate = new ConfigDelegate<>(module, config);
+		return new Builder(delegate.getString(RmqConfigOption.Host), delegate.getInt(RmqConfigOption.Port),
+				delegate.getString(RmqConfigOption.Username), delegate.getString(RmqConfigOption.Password));
 	}
 
 	public String getHost() {
