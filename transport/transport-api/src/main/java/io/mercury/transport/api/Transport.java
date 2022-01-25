@@ -43,8 +43,12 @@ public interface Transport extends Closeable {
 
 	@Override
 	default void close() throws IOException {
-		if (!closeIgnoreException())
-			throw new IOException("Close function failed");
+		try {
+			if (!closeIgnoreException())
+				throw new IOException(getName() + " -> Close failed");
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 
 }

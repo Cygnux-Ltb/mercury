@@ -20,7 +20,7 @@
 		<module>transport-http</module>
 		<module>transport-jetty</module>
 		<module>transport-netty</module>
-		<module>transport-rabbitmq</module>
+		<module>transport-rmq</module>
 		<module>transport-socket</module>
 		<module>transport-udp</module>
 		<module>transport-zmq</module>

@@ -7,16 +7,16 @@ import io.mercury.serialization.json.JsonWrapper;
 @OnlyOverrideEquals
 public final class TcpKeepAlive implements JsonSerializable {
 
-	private final KeepAlive keepAlive;
+	private final KeepAliveType keepAlive;
 	private int keepAliveCount;
 	private int keepAliveIdle;
 	private int keepAliveInterval;
 
-	private TcpKeepAlive(KeepAlive keepAlive) {
+	private TcpKeepAlive(KeepAliveType keepAlive) {
 		this.keepAlive = keepAlive;
 	}
 
-	public KeepAlive getKeepAlive() {
+	public KeepAliveType getKeepAlive() {
 		return keepAlive;
 	}
 
@@ -70,7 +70,7 @@ public final class TcpKeepAlive implements JsonSerializable {
 	 * @return
 	 */
 	public static final TcpKeepAlive enable() {
-		return new TcpKeepAlive(KeepAlive.Enable);
+		return new TcpKeepAlive(KeepAliveType.Enable);
 	}
 
 	/**
@@ -78,7 +78,7 @@ public final class TcpKeepAlive implements JsonSerializable {
 	 * @return
 	 */
 	public static final TcpKeepAlive disable() {
-		return new TcpKeepAlive(KeepAlive.Disable);
+		return new TcpKeepAlive(KeepAliveType.Disable);
 	}
 
 	/**
@@ -86,10 +86,10 @@ public final class TcpKeepAlive implements JsonSerializable {
 	 * @return
 	 */
 	public static final TcpKeepAlive withDefault() {
-		return new TcpKeepAlive(KeepAlive.Default);
+		return new TcpKeepAlive(KeepAliveType.Default);
 	}
 
-	public static enum KeepAlive {
+	public static enum KeepAliveType {
 
 		Enable(1), Disable(0), Default(-1),
 
@@ -97,7 +97,7 @@ public final class TcpKeepAlive implements JsonSerializable {
 
 		private final int code;
 
-		private KeepAlive(int code) {
+		private KeepAliveType(int code) {
 			this.code = code;
 		}
 
