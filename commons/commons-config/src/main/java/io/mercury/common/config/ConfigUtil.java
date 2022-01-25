@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 
 import com.typesafe.config.Config;
+import com.typesafe.config.ConfigValue;
 
 /**
  * 
@@ -31,7 +32,7 @@ public final class ConfigUtil {
 	 */
 	public static void showConfig(@Nonnull Config config, @Nullable Logger log) {
 		config.entrySet().stream().forEach(entry -> {
-			var value = entry.getValue();
+			ConfigValue value = entry.getValue();
 			if (log != null)
 				log.info("Key -> [{}],  ValueType -> [{}],  Value -> [{}]", entry.getKey(), value.valueType(),
 						value.unwrapped());

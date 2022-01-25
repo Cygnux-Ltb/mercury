@@ -216,7 +216,7 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 */
 	public int getIntOrThrows(@Nonnull O option, IntPredicate predicate, Exception exception)
 			throws ConfigException.Missing, ConfigException.BadValue {
-		var value = getIntOrThrows(option);
+		int value = getIntOrThrows(option);
 		if (predicate.test(value))
 			return value;
 		else
@@ -260,7 +260,7 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 */
 	public long getLongOrThrows(@Nonnull O option, LongPredicate predicate, Exception exception)
 			throws ConfigException.Missing, ConfigException.BadValue {
-		var value = getLongOrThrows(option);
+		long value = getLongOrThrows(option);
 		if (predicate.test(value))
 			return value;
 		else
@@ -304,7 +304,7 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 */
 	public double getDoubleOrThrows(@Nonnull O option, DoublePredicate predicate, Exception exception)
 			throws ConfigException.Missing, ConfigException.BadValue {
-		var value = getDoubleOrThrows(option);
+		double value = getDoubleOrThrows(option);
 		if (predicate.test(value))
 			return value;
 		else
@@ -348,7 +348,7 @@ public final class ConfigDelegate<O extends ConfigOption> {
 	 */
 	public String getStringOrThrows(@Nonnull O option, Predicate<String> predicate, Exception exception)
 			throws ConfigException.Missing, ConfigException.BadValue {
-		var value = getStringOrThrows(option);
+		String value = getStringOrThrows(option);
 		if (predicate.test(value))
 			return value;
 		else

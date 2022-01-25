@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.annotation.Nonnull;
@@ -82,7 +83,7 @@ public final class PropertiesUtil {
 	 */
 	public static Properties load(@Nonnull final InputStream inputStream) throws IOException {
 		Assertor.nonNull(inputStream, "inputStream");
-		var props = new Properties();
+		Properties props = new Properties();
 		try (final InputStream in = inputStream) {
 			props.load(in);
 		}
@@ -152,9 +153,9 @@ public final class PropertiesUtil {
 	 * @param log
 	 */
 	public static final void showProperties(@Nonnull final Properties props, @Nullable final Logger log) {
-		var list = new ArrayList<>(props.entrySet());
-		for (var i = 0; i < list.size(); i++) {
-			var entry = list.get(i);
+		ArrayList<Entry<Object, Object>> list = new ArrayList<>(props.entrySet());
+		for (int i = 0; i < list.size(); i++) {
+			Entry<Object, Object> entry = list.get(i);
 			if (log == null)
 				out.println("Property " + i + " : key -> " + entry.getKey() + ", value -> " + entry.getValue());
 			else

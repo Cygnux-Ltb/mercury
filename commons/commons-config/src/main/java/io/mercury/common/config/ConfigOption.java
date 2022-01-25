@@ -4,12 +4,12 @@ public interface ConfigOption {
 
 	String getConfigName();
 
-	default String getOtherConfigName() {
-		return getConfigName();
-	}
-
 	default String getConfigName(String module) {
 		return module + getConfigName();
+	}
+
+	default String getOtherConfigName() {
+		return getConfigName();
 	}
 
 	default String getOtherConfigName(String module) {
