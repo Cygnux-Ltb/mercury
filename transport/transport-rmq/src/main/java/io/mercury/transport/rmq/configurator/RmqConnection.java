@@ -7,7 +7,7 @@ import javax.net.ssl.SSLContext;
 import com.rabbitmq.client.ConnectionFactory;
 import com.typesafe.config.Config;
 
-import io.mercury.common.config.ConfigDelegate;
+import io.mercury.common.config.ConfigWrapper;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.util.StringSupport;
 import io.mercury.serialization.json.JsonWrapper;
@@ -118,7 +118,7 @@ public final class RmqConnection implements TransportConfigurator {
 	 * @return
 	 */
 	public static Builder with(@Nonnull String module, @Nonnull Config config) {
-		ConfigDelegate<RmqConfigOption> delegate = new ConfigDelegate<>(module, config);
+		ConfigWrapper<RmqConfigOption> delegate = new ConfigWrapper<>(module, config);
 		return new Builder(delegate.getString(RmqConfigOption.Host), delegate.getInt(RmqConfigOption.Port),
 				delegate.getString(RmqConfigOption.Username), delegate.getString(RmqConfigOption.Password));
 	}

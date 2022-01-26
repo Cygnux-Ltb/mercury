@@ -19,7 +19,7 @@ import org.zeromq.ZMQ;
 import com.typesafe.config.Config;
 
 import io.mercury.common.annotation.OnlyOverrideEquals;
-import io.mercury.common.config.ConfigDelegate;
+import io.mercury.common.config.ConfigWrapper;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.net.IpAddressIllegalException;
@@ -40,6 +40,8 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	private final String addr;
 
 	private int ioThreads = 1;
+
+	private int highWaterMark = 8192;
 
 	private TcpKeepAlive tcpKeepAlive = null;
 
@@ -68,6 +70,10 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 		return ioThreads;
 	}
 
+	public int getHighWaterMark() {
+		return highWaterMark;
+	}
+
 	public TcpKeepAlive getTcpKeepAlive() {
 		return tcpKeepAlive;
 	}
@@ -94,7 +100,7 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	 */
 	public static ZmqConfigurator withConfig(String module, @Nonnull Config config) {
 		Assertor.nonNull(config, "config");
-		ConfigDelegate<ZmqConfigOption> delegate = new ConfigDelegate<>(module, config);
+		ConfigWrapper<ZmqConfigOption> delegate = new ConfigWrapper<>(module, config);
 		ZmqProtocol protocol = ZmqProtocol.of(delegate.getStringOrThrows(Protocol));
 		ZmqConfigurator conf = null;
 		switch (protocol) {
@@ -180,6 +186,17 @@ public final class ZmqConfigurator implements TransportConfigurator, JsonDeseria
 	public ZmqConfigurator ioThreads(int ioThreads) {
 		Assertor.greaterThan(ioThreads, 0, "ioThreads");
 		this.ioThreads = ioThreads < availableProcessors() ? ioThreads : availableProcessors();
+		return this;
+	}
+
+	/**
+	 * Set high water mark with socket
+	 * 
+	 * @param highWaterMark
+	 * @return
+	 */
+	public ZmqConfigurator setHighWaterMark(int highWaterMark) {
+		this.highWaterMark = highWaterMark;
 		return this;
 	}
 

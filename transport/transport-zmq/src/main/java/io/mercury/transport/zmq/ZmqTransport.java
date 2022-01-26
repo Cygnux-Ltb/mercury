@@ -18,6 +18,16 @@ import io.mercury.transport.api.TransportComponent;
 import io.mercury.transport.attr.TcpKeepAlive;
 import io.mercury.transport.attr.TcpKeepAlive.KeepAliveType;
 
+/**
+ * 
+ * @author yellow013
+ *
+ *         <pre>
+  	-XX:+UseBiasedLocking might increase performance a little bit or not
+	-XX:+UseNUMA could increase performance
+ *         </pre>
+ *
+ */
 public abstract class ZmqTransport extends TransportComponent implements Transport, Closeable {
 
 	private static final Logger log = Log4j2LoggerFactory.getLogger(ZmqTransport.class);
