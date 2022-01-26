@@ -14,7 +14,7 @@
 	<name>serialization-sbe</name>
 
 	<properties>
-		<sbe.tool.version>1.25.1</sbe.tool.version>
+		<sbe-tool.version>1.25.1</sbe-tool.version>
 	</properties>
 
 	<!-- <build>
@@ -95,7 +95,7 @@
 		<dependency>
 			<groupId>uk.co.real-logic</groupId>
 			<artifactId>sbe-tool</artifactId>
-			<version>${sbe.tool.version}</version>
+			<version>${sbe-tool.version}</version>
 		</dependency>
 	</dependencies>
 </project>

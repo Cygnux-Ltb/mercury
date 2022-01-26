@@ -71,7 +71,7 @@ public final class JsonParser {
 	@Nullable
 	public static final <T> T toObject(@Nonnull final String json) throws JsonParseException {
 		try {
-			if (json == null)
+			if (json == null || json.isBlank())
 				return null;
 			return Mapper.readValue(json, new TypeReference<T>() {
 			});
@@ -91,7 +91,7 @@ public final class JsonParser {
 	@Nullable
 	public static final <T> T toObject(@Nonnull final String json, @Nonnull Class<T> type) throws JsonParseException {
 		try {
-			if (json == null || type == null)
+			if (json == null || json.isBlank() || type == null)
 				return null;
 			return Mapper.readValue(json, type);
 		} catch (Exception e) {
@@ -118,13 +118,13 @@ public final class JsonParser {
 	 * 
 	 * @param <T>
 	 * @param json
-	 * @param clazz
+	 * @param type
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final <T> List<T> toList(@Nonnull String json, @Nonnull Class<T> clazz) throws JsonParseException {
+	public static final <T> List<T> toList(@Nonnull String json, @Nonnull Class<T> type) throws JsonParseException {
 		try {
-			return Mapper.readValue(json, TypeFactory.constructCollectionLikeType(List.class, clazz));
+			return Mapper.readValue(json, TypeFactory.constructCollectionLikeType(List.class, type));
 		} catch (Exception e) {
 			throw new JsonParseException(json, e);
 		}
@@ -150,14 +150,14 @@ public final class JsonParser {
 	/**
 	 * 
 	 * @param json
-	 * @param clazz
+	 * @param type
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final <T> MutableList<T> toMutableList(@Nonnull String json, @Nonnull Class<T> clazz)
+	public static final <T> MutableList<T> toMutableList(@Nonnull String json, @Nonnull Class<T> type)
 			throws JsonParseException {
 		try {
-			List<T> list = Mapper.readValue(json, TypeFactory.constructCollectionLikeType(List.class, clazz));
+			final List<T> list = Mapper.readValue(json, TypeFactory.constructCollectionLikeType(List.class, type));
 			return newFastList(
 					// List convert to MutableList
 					list);
@@ -274,18 +274,14 @@ public final class JsonParser {
 	 */
 	public static final class JsonParseException extends RuntimeException {
 
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 9000408863460789219L;
 
-		public JsonParseException(String json, Throwable throwable) {
-			super("Parsing JSON -> " + json + " | Throw exception -> [" + throwable.getClass().getName() + "]",
-					throwable);
+		public JsonParseException(String json, Throwable cause) {
+			super("Parsing JSON -> " + json + " , Throw exception -> [" + cause.getClass().getName() + "]", cause);
 		}
 
-		public JsonParseException(Throwable throwable) {
-			super("Parsing JSON throw exception -> [" + throwable.getClass().getName() + "]", throwable);
+		public JsonParseException(Throwable cause) {
+			super("Parsing JSON throw exception -> [" + cause.getClass().getName() + "]", cause);
 		}
 
 		public JsonParseException(String message) {

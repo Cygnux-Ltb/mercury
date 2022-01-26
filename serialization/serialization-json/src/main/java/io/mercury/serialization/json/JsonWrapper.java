@@ -5,6 +5,13 @@ import javax.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+/**
+ * 
+ * @author yellow013
+ *
+ *         TODO 优化实现
+ *
+ */
 public final class JsonWrapper {
 
 	// 普通JSON序列化

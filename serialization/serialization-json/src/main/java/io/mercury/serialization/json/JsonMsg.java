@@ -13,16 +13,6 @@ public final class JsonMsg implements JsonSerializable {
 	private ContentType contentType;
 	private String content;
 
-	/**
-	 * 
-	 * @param json
-	 * @return
-	 */
-	@Nullable
-	public static JsonMsg fromJson(String json) {
-		return JsonParser.toObject(json, JsonMsg.class);
-	}
-
 	public long getSequence() {
 		return sequence;
 	}
@@ -73,20 +63,35 @@ public final class JsonMsg implements JsonSerializable {
 	}
 
 	@Override
-	public String toJson() {
-		return JsonWrapper.toJson(this);
-	}
-
-	@Override
 	public String toString() {
 		return toJson();
 	}
 
+	@Override
+	public String toJson() {
+		return JsonWrapper.toJson(this);
+	}
+
+	/**
+	 * 
+	 * @param json
+	 * @return
+	 */
+	@Nullable
+	public static JsonMsg fromJson(String json) {
+		return JsonParser.toObject(json, JsonMsg.class);
+	}
+
+	/**
+	 * 
+	 * @author yellow013
+	 *
+	 */
 	public static enum ContentType {
 
-		INT, LONG, DOUBLE, STRING,
+		INT, LONG, DOUBLE, STRING, OBJECT,
 
-		OBJECT, LIST, MAP,
+		LIST, MAP,
 
 	}
 
