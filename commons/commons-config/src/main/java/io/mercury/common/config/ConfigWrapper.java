@@ -16,17 +16,17 @@ import javax.annotation.Nullable;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigException;
 
-public final class ConfigDelegate<O extends ConfigOption> {
+public final class ConfigWrapper<O extends ConfigOption> {
 
 	private final Config config;
 
 	private final String module;
 
-	public ConfigDelegate(@Nonnull Config config) {
+	public ConfigWrapper(@Nonnull Config config) {
 		this("", config);
 	}
 
-	public ConfigDelegate(@Nullable String module, @Nonnull Config config) {
+	public ConfigWrapper(@Nullable String module, @Nonnull Config config) {
 		nonNull(config, "config");
 		this.config = config;
 		this.module = nonEmpty(module) ? module.endsWith(".") ? module : module + "." : "";
