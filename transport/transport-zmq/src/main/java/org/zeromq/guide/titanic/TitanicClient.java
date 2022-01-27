@@ -1,4 +1,4 @@
-package org.zeromq.guide.majordomo;
+package org.zeromq.guide.titanic;
 
 //  Titanic client example
 //  Implements client side of http://rfc.zeromq.org/spec:9
@@ -9,6 +9,7 @@ package org.zeromq.guide.majordomo;
 
 import org.zeromq.ZFrame;
 import org.zeromq.ZMsg;
+import org.zeromq.guide.majordomo.MajordomoProtocolClientAPI;
 
 public class TitanicClient {
 	

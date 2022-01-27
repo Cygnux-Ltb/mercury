@@ -1,4 +1,4 @@
-package org.zeromq.guide.majordomo;
+package org.zeromq.guide.titanic;
 
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -21,6 +21,8 @@ import org.zeromq.ZMsg;
 import org.zeromq.ZThread;
 import org.zeromq.ZThread.IAttachedRunnable;
 import org.zeromq.ZThread.IDetachedRunnable;
+import org.zeromq.guide.majordomo.MajordomoProtocolClientAPI;
+import org.zeromq.guide.majordomo.MajordomoProtocolWorkerAPI;
 
 public class Titanic {
 	// Return a new UUID as a printable character string

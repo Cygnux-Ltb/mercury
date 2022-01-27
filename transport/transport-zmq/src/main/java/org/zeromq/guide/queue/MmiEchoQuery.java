@@ -1,6 +1,7 @@
-package org.zeromq.guide.majordomo;
+package org.zeromq.guide.queue;
 
 import org.zeromq.ZMsg;
+import org.zeromq.guide.majordomo.MajordomoProtocolClientAPI;
 
 /**
  * MMI echo query example

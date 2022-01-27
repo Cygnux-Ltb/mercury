@@ -1,4 +1,4 @@
-package org.zeromq.guide;
+package org.zeromq.guide.envelope;
 
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
