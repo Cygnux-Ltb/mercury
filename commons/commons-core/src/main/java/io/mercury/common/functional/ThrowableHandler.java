@@ -6,6 +6,6 @@ package io.mercury.common.functional;
  *
  */
 @FunctionalInterface
-public interface ExceptionHandler<E extends Exception> extends Handler<E> {
+public interface ThrowableHandler<E extends Throwable> extends Handler<E> {
 
 }

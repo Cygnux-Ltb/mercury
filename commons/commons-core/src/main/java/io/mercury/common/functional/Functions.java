@@ -28,7 +28,7 @@ public final class Functions {
 	 * @return
 	 */
 	public final static <R> R exec(@Nonnull final Supplier<R> supplier, @Nullable final Function<R, R> successFunc,
-			@Nullable final ExceptionHandler<? super Exception> failureFunc, @Nonnull final Supplier<R> defSupplier) {
+			@Nullable final ThrowableHandler<? super Exception> failureFunc, @Nonnull final Supplier<R> defSupplier) {
 		try {
 			R r = supplier.get();
 			if (successFunc != null)
@@ -53,7 +53,7 @@ public final class Functions {
 	 */
 	public final static <T> List<T> exec(@Nonnull final Supplier<List<T>> supplier,
 			@Nullable final Function<List<T>, List<T>> successFunc,
-			@Nullable final ExceptionHandler<? super Exception> failureFunc) {
+			@Nullable final ThrowableHandler<? super Exception> failureFunc) {
 		return exec(supplier, successFunc, failureFunc, FastList::new);
 	}
 
