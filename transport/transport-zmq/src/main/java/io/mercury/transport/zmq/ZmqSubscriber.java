@@ -38,7 +38,7 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber {
 		Assertor.nonNull(consumer, "consumer");
 		this.topics = topics;
 		this.consumer = consumer;
-		String addr = cfg.getAddr();
+		String addr = cfg.getAddr().toString();
 		if (socket.connect(addr))
 			log.info("ZmqSubscriber connected addr -> {}", addr);
 		else {

@@ -30,7 +30,7 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 		super(cfg);
 		Assertor.nonNull(serializer, "serializer");
 		this.serializer = serializer;
-		String addr = cfg.getAddr();
+		String addr = cfg.getAddr().toString();
 		if (socket.connect(addr))
 			log.info("ZmqSender connected addr -> {}", addr);
 		else {

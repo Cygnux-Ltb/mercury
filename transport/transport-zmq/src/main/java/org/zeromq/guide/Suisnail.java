@@ -50,9 +50,14 @@ public class Suisnail {
 		}
 	}
 
-	// .split publisher task
-	// This is our publisher task. It publishes a time-stamped message to its
-	// PUB socket every millisecond:
+	/**
+	 * .split publisher task <br>
+	 * This is our publisher task. <br>
+	 * It publishes a time-stamped message to its PUB socket every millisecond:
+	 * 
+	 * @author yellow013
+	 *
+	 */
 	private static class Publisher implements IAttachedRunnable {
 		@Override
 		public void run(Object[] args, ZContext ctx, Socket pipe) {

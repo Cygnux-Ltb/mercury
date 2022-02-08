@@ -24,20 +24,20 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
 	// default topic
 	private final byte[] sendMore;
 
-	private final BytesSerializer<T> serializer;
+	private final BytesSerializer<T> ser;
 
 	/**
 	 * @param cfg
 	 * @param topic
-	 * @param serializer
+	 * @param ser
 	 */
-	ZmqPublisher(@Nonnull ZmqConfigurator cfg, @Nonnull String topic, @Nonnull BytesSerializer<T> serializer) {
+	ZmqPublisher(@Nonnull ZmqConfigurator cfg, @Nonnull String topic, @Nonnull BytesSerializer<T> ser) {
 		super(cfg);
 		Assertor.nonNull(topic, "topic");
-		Assertor.nonNull(serializer, "serializer");
+		Assertor.nonNull(ser, "ser");
 		this.sendMore = topic.getBytes(ZMQ.CHARSET);
-		this.serializer = serializer;
-		String addr = cfg.getAddr();
+		this.ser = ser;
+		String addr = cfg.getAddr().toString();
 		if (socket.bind(addr))
 			log.info("ZmqPublisher bound addr -> {}", addr);
 		else {
@@ -50,7 +50,7 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
 	}
 
 	public BytesSerializer<T> getSerializer() {
-		return serializer;
+		return ser;
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
 	@Override
 	public void publish(byte[] target, T msg) throws PublishFailedException {
 		if (isRunning.get()) {
-			byte[] bytes = serializer.serialization(msg);
+			byte[] bytes = ser.serialization(msg);
 			if (bytes != null && bytes.length > 0) {
 				socket.sendMore(target);
 				socket.send(bytes, ZMQ.NOBLOCK);
@@ -81,7 +81,6 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
 	}
 
 	public static void main(String[] args) {
-
 		try (ZmqPublisher<String> publisher = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(2)
 				.newPublisherWithString("test")) {
 			Random random = new Random();

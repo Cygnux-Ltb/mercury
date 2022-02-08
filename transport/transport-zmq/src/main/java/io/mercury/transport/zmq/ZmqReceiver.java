@@ -26,7 +26,7 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 		super(cfg);
 		Assertor.nonNull(handler, "handler");
 		this.handler = handler;
-		String addr = cfg.getAddr();
+		String addr = cfg.getAddr().toString();
 		if (socket.bind(addr))
 			log.info("ZmqReceiver bound addr -> {}", addr);
 		else {
