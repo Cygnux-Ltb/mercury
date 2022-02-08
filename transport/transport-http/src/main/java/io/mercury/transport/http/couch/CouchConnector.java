@@ -10,7 +10,7 @@ import io.mercury.common.config.PropertiesUtil;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.sys.SysProperties;
 import io.mercury.serialization.json.JsonParser;
-import io.mercury.transport.http.HttpRequester;
+import io.mercury.transport.http.SyncHttp;
 
 public final class CouchConnector {
 
@@ -55,7 +55,7 @@ public final class CouchConnector {
 	private String sendGetRequest(String database, String documentId) {
 		log.info("sendGetRequest() -> database==[{}], documentId==[{}]", database, documentId);
 		try {
-			return HttpRequester.sentGet(couchdbUrl + "/" + database + "/" + documentId);
+			return SyncHttp.sentGet(couchdbUrl + "/" + database + "/" + documentId);
 		} catch (Exception e) {
 			log.error("sendGetRequest() -> database==[{}], documentId==[{}]", database, documentId, e);
 			return "";
