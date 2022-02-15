@@ -1,37 +1,43 @@
 package io.mercury.transport.attr;
 
-import static io.mercury.transport.attr.NetworkProtocol.TCP;
+public final class NetworkAddr {
 
-public final class TcpAddr {
-
+	private final NetworkProtocol protocol;
 	private final String addr;
 	private final int port;
 
-	private final String info;
+	private final String completeInfo;
 
-	private TcpAddr(String addr, int port) {
+	private NetworkAddr(NetworkProtocol protocol, String addr, int port) {
+		this.protocol = protocol;
 		this.addr = addr;
 		this.port = port;
-		this.info = TCP.getPrefix() + addr + ":" + port;
+		this.completeInfo = protocol.fixAddr(addr) + ":" + port;
 	}
 
 	/**
 	 * 
+	 * @param protocol
 	 * @param port
 	 * @return
 	 */
-	public static final TcpAddr localhost(int port) {
-		return new TcpAddr("127.0.0.1", port);
+	public static final NetworkAddr localhost(NetworkProtocol protocol, int port) {
+		return new NetworkAddr(protocol, "127.0.0.1", port);
 	}
 
 	/**
 	 * 
+	 * @param protocol
 	 * @param addr
 	 * @param port
 	 * @return
 	 */
-	public static final TcpAddr with(String addr, int port) {
-		return new TcpAddr(addr, port);
+	public static final NetworkAddr with(NetworkProtocol protocol, String addr, int port) {
+		return new NetworkAddr(protocol, addr, port);
+	}
+
+	public NetworkProtocol getProtocol() {
+		return protocol;
 	}
 
 	public String getAddr() {
@@ -44,7 +50,17 @@ public final class TcpAddr {
 
 	@Override
 	public String toString() {
-		return info;
+		return completeInfo;
+	}
+
+	public static void main(String[] args) {
+
+		System.out.println(NetworkAddr.localhost(NetworkProtocol.HTTP, 8859));
+		System.out.println(NetworkAddr.localhost(NetworkProtocol.WS, 8860));
+
+		System.out.println(NetworkAddr.with(NetworkProtocol.TCP, "23.111.45.12", 8860));
+		System.out.println(NetworkAddr.with(NetworkProtocol.WS, "23.111.45.12", 18860));
+
 	}
 
 }

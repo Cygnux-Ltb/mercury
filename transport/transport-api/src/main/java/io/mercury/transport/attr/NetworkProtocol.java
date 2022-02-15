@@ -2,28 +2,40 @@ package io.mercury.transport.attr;
 
 public enum NetworkProtocol {
 
-	TCP("tcp://"),
+	TCP("tcp"),
 
-	UDP("udp://"),
+	UDP("udp"),
 
-	HTTP("http://"),
+	HTTP("http"),
 
-	HTTPS("https://"),
+	HTTPS("https"),
 
-	WS("ws://"),
+	WS("ws"),
 
-	WSS("wss://"),
+	WSS("wss"),
 
 	;
 
+	private final String name;
 	private final String prefix;
 
-	private NetworkProtocol(String prefix) {
-		this.prefix = prefix;
+	private NetworkProtocol(String name) {
+		this.name = name;
+		this.prefix = name + "://";
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public String getPrefix() {
 		return prefix;
+	}
+
+	public String fixAddr(String addr) {
+		if (!addr.startsWith(prefix))
+			return prefix + addr;
+		return addr;
 	}
 
 }

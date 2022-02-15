@@ -50,7 +50,7 @@ public final class TcpKeepAlive implements JsonSerializable {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null || !(obj instanceof TcpKeepAlive)) {
-			return super.equals(obj);
+			return false;
 		} else {
 			TcpKeepAlive o = (TcpKeepAlive) obj;
 			if (!this.keepAlive.equals(o.getKeepAlive()))
@@ -89,6 +89,11 @@ public final class TcpKeepAlive implements JsonSerializable {
 		return new TcpKeepAlive(KeepAliveType.Default);
 	}
 
+	/**
+	 * 
+	 * @author yellow013
+	 *
+	 */
 	public static enum KeepAliveType {
 
 		Enable(1), Disable(0), Default(-1),

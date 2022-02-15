@@ -21,10 +21,45 @@
 			<artifactId>transport-api</artifactId>
 		</dependency>
 
-		<!-- Netty All In One -->
+		<!-- Netty/All -->
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-all</artifactId>
+			<version>${netty.version}</version>
+		</dependency>
+
+		<!-- Netty/Transport -->
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-transport</artifactId>
+			<version>${netty.version}</version>
+		</dependency>
+
+		<!-- Netty/Transport/Native/Epoll -->
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-transport-native-epoll</artifactId>
+			<version>${netty.version}</version>
+		</dependency>
+
+		<!-- Netty/Transport/Native/KQueue -->
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-transport-native-kqueue</artifactId>
+			<version>${netty.version}</version>
+		</dependency>
+
+		<!-- Netty/Codec -->
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-codec</artifactId>
+			<version>${netty.version}</version>
+		</dependency>
+
+		<!-- Netty/Codec/HTTP -->
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-codec-http</artifactId>
 			<version>${netty.version}</version>
 		</dependency>
 

@@ -2,17 +2,14 @@ package io.mercury.transport.exception;
 
 public final class ConnectionBreakException extends RuntimeException {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1822516879154638625L;
 
 	/**
 	 * 
-	 * @param message
+	 * @param msg
 	 */
-	public ConnectionBreakException(String message) {
-		super(message);
+	public ConnectionBreakException(String msg) {
+		super(msg);
 	}
 
 	/**
@@ -25,11 +22,11 @@ public final class ConnectionBreakException extends RuntimeException {
 
 	/**
 	 * 
-	 * @param message
+	 * @param msg
 	 * @param cause
 	 */
-	public ConnectionBreakException(String message, Throwable cause) {
-		super(message, cause);
+	public ConnectionBreakException(String msg, Throwable cause) {
+		super(msg, cause);
 	}
 
 }

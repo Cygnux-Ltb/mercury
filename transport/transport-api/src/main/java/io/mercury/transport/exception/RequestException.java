@@ -2,34 +2,31 @@ package io.mercury.transport.exception;
 
 public final class RequestException extends RuntimeException {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1535413038727671000L;
 
 	/**
 	 * 
-	 * @param message
+	 * @param msg
 	 */
-	public RequestException(String message) {
-		super(message);
+	public RequestException(String msg) {
+		super(msg);
 	}
 
 	/**
 	 * 
-	 * @param throwable
+	 * @param cause
 	 */
-	public RequestException(Throwable throwable) {
-		super(throwable);
+	public RequestException(Throwable cause) {
+		super(cause);
 	}
 
 	/**
 	 * 
-	 * @param message
-	 * @param throwable
+	 * @param msg
+	 * @param cause
 	 */
-	public RequestException(String message, Throwable throwable) {
-		super(message, throwable);
+	public RequestException(String msg, Throwable cause) {
+		super(msg, cause);
 	}
 
 }

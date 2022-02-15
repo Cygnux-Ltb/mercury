@@ -5,14 +5,14 @@ import org.eclipse.collections.api.set.MutableSet;
 
 import io.mercury.common.collections.CollectionUtil;
 import io.mercury.common.collections.MutableSets;
-import io.mercury.common.util.StringSupport;
+import io.mercury.serialization.json.JsonWrapper;
 
 public class Topics {
 
-	private final MutableSet<String> topics = MutableSets.newUnifiedSet();
+	private final MutableSet<String> saved = MutableSets.newUnifiedSet();
 
 	private Topics(String[] topics) {
-		CollectionUtil.addAll(this.topics, topics);
+		CollectionUtil.addAll(this.saved, topics);
 	}
 
 	public static Topics empty() {
@@ -23,26 +23,30 @@ public class Topics {
 		return new Topics(topics);
 	}
 
-	public MutableSet<String> get() {
-		return topics;
+	public MutableSet<String> getAll() {
+		return saved;
+	}
+
+	public int getCount() {
+		return saved.size();
 	}
 
 	public Topics add(String... topics) {
-		CollectionUtil.addAll(this.topics, topics);
+		CollectionUtil.addAll(this.saved, topics);
 		return this;
 	}
 
 	public void each(Procedure<String> procedure) {
-		topics.each(procedure);
+		saved.each(procedure);
 	}
 
-	private transient String cache;
+	private transient String toString;
 
 	@Override
 	public String toString() {
-		if (cache == null)
-			this.cache = StringSupport.toString(topics);
-		return cache;
+		if (toString == null)
+			this.toString = JsonWrapper.toJson(this);
+		return toString;
 	}
 
 }

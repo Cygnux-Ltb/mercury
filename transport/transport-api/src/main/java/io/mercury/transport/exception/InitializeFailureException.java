@@ -2,17 +2,14 @@ package io.mercury.transport.exception;
 
 public final class InitializeFailureException extends RuntimeException {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3673823194109364790L;
 
 	/**
 	 * 
-	 * @param message
+	 * @param msg
 	 */
-	public InitializeFailureException(String message) {
-		super(message);
+	public InitializeFailureException(String msg) {
+		super(msg);
 	}
 
 	/**
@@ -25,11 +22,11 @@ public final class InitializeFailureException extends RuntimeException {
 
 	/**
 	 * 
-	 * @param message
+	 * @param msg
 	 * @param cause
 	 */
-	public InitializeFailureException(String message, Throwable cause) {
-		super(message, cause);
+	public InitializeFailureException(String msg, Throwable cause) {
+		super(msg, cause);
 	}
 
 }

@@ -1,15 +1,15 @@
 package io.mercury.transport.http.base;
 
-public class PathParam {
+public final class PathParam {
 
 	private final String param;
-	private final Object value;
+	private final String value;
 
 	/**
 	 * @param name
 	 * @param value
 	 */
-	public PathParam(String param, Object value) {
+	public PathParam(String param, String value) {
 		this.param = param;
 		this.value = value;
 	}

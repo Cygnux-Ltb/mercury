@@ -18,7 +18,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Method;
 import com.rabbitmq.client.ShutdownSignalException;
 
-import io.mercury.common.functional.ExceptionHandler;
+import io.mercury.common.functional.ThrowableHandler;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.util.StringSupport;
@@ -178,7 +178,7 @@ public abstract class RmqTransport extends TransportComponent implements Transpo
 	}
 
 	@FunctionalInterface
-	public static interface ShutdownSignalHandler extends ExceptionHandler<ShutdownSignalException> {
+	public static interface ShutdownSignalHandler extends ThrowableHandler<ShutdownSignalException> {
 
 	}
 
