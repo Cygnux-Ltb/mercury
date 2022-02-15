@@ -1,5 +1,8 @@
 package io.mercury.persistence.chronicle.queue.multitype;
 
+import static io.mercury.common.datetime.DateTimeUtil.formatDateTime;
+import static io.mercury.common.datetime.pattern.DateTimePattern.YY_MM_DD_HH_MM_SS_SSS;
+
 import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
@@ -13,44 +16,17 @@ import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.codec.Envelope;
 import io.mercury.common.serialization.Serializer;
 import io.mercury.persistence.chronicle.exception.ChronicleAppendException;
-import io.mercury.persistence.chronicle.queue.multitype.AbstractChronicleMultitypeQueue.CloseableChronicleAccessor;
+import io.mercury.persistence.chronicle.queue.AbstractChronicleAppender;
 import net.openhft.chronicle.queue.ExcerptAppender;
 
 @Immutable
 @NotThreadSafe
-public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN> extends CloseableChronicleAccessor
+public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN> extends AbstractChronicleAppender<IN>
 		implements Runnable {
 
-	private final String appenderName;
-
-	protected final Logger logger;
-	protected final ExcerptAppender excerptAppender;
-
-	private final Supplier<IN> dataSupplier;
-
 	protected AbstractChronicleMultitypeAppender(long allocateSeq, String appenderName, Logger logger,
-			ExcerptAppender excerptAppender, Supplier<IN> dataSupplier) {
-		super(allocateSeq);
-		this.appenderName = appenderName;
-		this.logger = logger;
-		this.excerptAppender = excerptAppender;
-		this.dataSupplier = dataSupplier;
-	}
-
-	public ExcerptAppender excerptAppender() {
-		return excerptAppender;
-	}
-
-	public int cycle() {
-		return excerptAppender.cycle();
-	}
-
-	public int sourceId() {
-		return excerptAppender.sourceId();
-	}
-
-	public String appenderName() {
-		return appenderName;
+			ExcerptAppender appender, Supplier<IN> dataProducer) {
+		super(allocateSeq, appenderName, logger, appender, dataProducer);
 	}
 
 	/**
@@ -67,7 +43,7 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN>
 			if (t != null) {
 				append0(envelope, t);
 			} else {
-				logger.warn("appenderName -> {} : received null object, Not written to the queue.", appenderName);
+				logger.warn("appenderName -> {} : received null object, Not written to the queue.", appenderName());
 			}
 		} catch (Exception e) {
 			throw new ChronicleAppendException(e.getMessage(), e);
@@ -89,6 +65,11 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN>
 	@AbstractFunction
 	protected abstract void append0(@Nonnull E envelope, @Nonnull IN t);
 
+	@Override
+	protected void append0(IN in) {
+		append0(envelope, in);
+	}
+
 	@Nullable
 	private E envelope;
 
@@ -103,29 +84,26 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN>
 
 	@Override
 	public void run() {
-		if (dataSupplier == null) {
+		if (dataProducer == null) {
 			logger.error("Supplier is null, Thread exit");
 			return;
 		}
 		if (envelope != null) {
 			for (;;) {
 				if (isClose) {
-					logger.info("Chronicle queue is closed, {} Thread exit", appenderName);
+					logger.info("Chronicle queue is closed, {} Thread exit", appenderName());
 					break;
 				} else {
-					IN t = dataSupplier.get();
+					IN t = dataProducer.get();
 					if (t != null)
 						append(envelope, t);
 				}
 			}
 		} else {
-			logger.error("Default envelope is null, Thread exit");
+			logger.error("ChronicleMultitypeAppender -> [{}] Default envelope is null, Thread exit at {}",
+					appenderName(), formatDateTime(YY_MM_DD_HH_MM_SS_SSS));
 			return;
 		}
-	}
-
-	protected void close0() {
-
 	}
 
 }

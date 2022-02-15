@@ -1,7 +1,7 @@
 package net.openhft.chronicle.queue.simple.translator;
 
 import net.openhft.chronicle.bytes.MethodReader;
-import net.openhft.chronicle.queue.impl.single.SingleChronicleQueue;
+import net.openhft.chronicle.queue.impl.RollingChronicleQueue;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
 
 /**
@@ -11,13 +11,13 @@ public class TranslatorMain {
 
 	public static void main(String[] args) throws InterruptedException {
 		String path_fr = "queue-fr";
-		SingleChronicleQueue queuefr = SingleChronicleQueueBuilder.binary(path_fr).build();
-		MessageConsumer messageConsumer = queuefr.acquireAppender().methodWriter(MessageConsumer.class);
+		RollingChronicleQueue queue_fr = SingleChronicleQueueBuilder.binary(path_fr).build();
+		MessageConsumer messageConsumer = queue_fr.acquireAppender().methodWriter(MessageConsumer.class);
 
 		MessageConsumer simpleTranslator = new SimpleTranslator(messageConsumer);
 
 		String path_en = "queue-en";
-		SingleChronicleQueue queue_en = SingleChronicleQueueBuilder.binary(path_en).build();
+		RollingChronicleQueue queue_en = SingleChronicleQueueBuilder.binary(path_en).build();
 		MethodReader methodReader = queue_en.createTailer().methodReader(simpleTranslator);
 
 		while (true) {

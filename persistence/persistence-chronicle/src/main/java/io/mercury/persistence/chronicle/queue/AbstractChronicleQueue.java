@@ -2,10 +2,13 @@ package io.mercury.persistence.chronicle.queue;
 
 import static io.mercury.common.datetime.DateTimeUtil.datetimeOfSecond;
 import static io.mercury.common.number.ThreadSafeRandoms.randomUnsignedInt;
+import static io.mercury.common.sys.SysProperties.JAVA_IO_TMPDIR;
+import static io.mercury.common.sys.SysProperties.USER_HOME;
 
 import java.io.File;
 import java.lang.Thread.State;
 import java.util.Set;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -18,21 +21,20 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import org.eclipse.collections.api.map.ConcurrentMutableMap;
 import org.slf4j.Logger;
 
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.collections.MutableMaps;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.common.sys.SysProperties;
 import io.mercury.common.thread.RuntimeInterruptedException;
 import io.mercury.common.thread.ShutdownHooks;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.ThreadSupport;
 import io.mercury.common.util.StringSupport;
-import io.mercury.persistence.chronicle.queue.AbstractChronicleReader.ReaderParam;
-import net.openhft.chronicle.queue.impl.single.SingleChronicleQueue;
+import io.mercury.persistence.chronicle.queue.base.CloseableChronicleAccessor;
+import io.mercury.persistence.chronicle.queue.params.ReaderParams;
+import net.openhft.chronicle.queue.impl.RollingChronicleQueue;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
 
 @Immutable
@@ -53,7 +55,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 	private final File savePath;
 	private final String queueName;
 
-	protected final SingleChronicleQueue internalQueue;
+	protected final RollingChronicleQueue internalQueue;
 
 	protected Logger logger = Log4j2LoggerFactory.getLogger(getClass());;
 
@@ -76,7 +78,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 				fileCycle.getDesc());
 	}
 
-	private SingleChronicleQueue buildChronicleQueue() {
+	private RollingChronicleQueue buildChronicleQueue() {
 		if (!savePath.exists()) {
 			// 创建存储路径
 			savePath.mkdirs();
@@ -119,7 +121,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 	// 最后文件周期
 	private AtomicInteger lastCycle;
 	// 周期文件存储Map
-	private ConcurrentMutableMap<Integer, String> cycleFileMap;
+	private ConcurrentMap<Integer, String> cycleFileMap;
 	// 周期文件清理线程
 	private Thread fileClearThread;
 	// 周期文件清理线程运行状态
@@ -225,7 +227,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 		return fileCycle;
 	}
 
-	public SingleChronicleQueue internalQueue() {
+	public RollingChronicleQueue internalQueue() {
 		return internalQueue;
 	}
 
@@ -235,9 +237,8 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 
 	@Override
 	public void close() {
-		if (isClosed()) {
+		if (isClosed())
 			return;
-		}
 		// 关闭外部访问器
 		closeAllAccessor();
 		// 关闭队列
@@ -264,7 +265,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 	 * @throws IllegalStateException
 	 */
 	public RT createReader() throws IllegalStateException {
-		return createReader(generateReaderName(), ReaderParam.defaultParam(), t -> logger.info(EMPTY_CONSUMER_MSG));
+		return createReader(generateReaderName(), ReaderParams.defaultParams(), t -> logger.info(EMPTY_CONSUMER_MSG));
 	}
 
 	/**
@@ -274,7 +275,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 	 * @throws IllegalStateException
 	 */
 	public RT createReader(@Nonnull Consumer<T> dataConsumer) throws IllegalStateException {
-		return createReader(generateReaderName(), ReaderParam.defaultParam(), dataConsumer);
+		return createReader(generateReaderName(), ReaderParams.defaultParams(), dataConsumer);
 	}
 
 	/**
@@ -285,7 +286,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 	 * @throws IllegalStateException
 	 */
 	public RT createReader(@Nonnull String readerName, @Nonnull Consumer<T> dataConsumer) throws IllegalStateException {
-		return createReader(readerName, ReaderParam.defaultParam(), dataConsumer);
+		return createReader(readerName, ReaderParams.defaultParams(), dataConsumer);
 	}
 
 	/**
@@ -295,7 +296,8 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public RT createReader(@Nonnull ReaderParam param, @Nonnull Consumer<T> dataConsumer) throws IllegalStateException {
+	public RT createReader(@Nonnull ReaderParams param, @Nonnull Consumer<T> dataConsumer)
+			throws IllegalStateException {
 		return createReader(generateReaderName(), param, dataConsumer);
 	}
 
@@ -307,7 +309,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 	 * @return
 	 * @throws IllegalStateException
 	 */
-	public RT createReader(@Nonnull String readerName, @Nonnull ReaderParam param, @Nonnull Consumer<T> dataConsumer)
+	public RT createReader(@Nonnull String readerName, @Nonnull ReaderParams param, @Nonnull Consumer<T> dataConsumer)
 			throws IllegalStateException {
 		if (isClosed()) {
 			throw new IllegalStateException("Cannot be create reader, Chronicle queue is closed");
@@ -325,13 +327,13 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 	 * @param readerName
 	 * @param param
 	 * @param log
-	 * @param consumer
+	 * @param dataConsumer
 	 * @return
 	 * @throws IllegalStateException
 	 */
 	@AbstractFunction
-	protected abstract RT createReader(@Nonnull String readerName, @Nonnull ReaderParam param, @Nonnull Logger log,
-			@Nonnull Consumer<T> consumer) throws IllegalStateException;
+	protected abstract RT createReader(@Nonnull String readerName, @Nonnull ReaderParams param, @Nonnull Logger log,
+			@Nonnull Consumer<T> dataConsumer) throws IllegalStateException;
 
 	/**
 	 * 
@@ -404,8 +406,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 	/**
 	 * 已分配的访问器
 	 */
-	private ConcurrentMutableMap<Long, CloseableChronicleAccessor> allocatedAccessor = MutableMaps
-			.newConcurrentHashMap();
+	private ConcurrentMap<Long, CloseableChronicleAccessor> allocatedAccessor = MutableMaps.newConcurrentHashMap();
 
 	/**
 	 * 添加访问器
@@ -413,7 +414,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 	 * @param accessor
 	 */
 	private void addAccessor(CloseableChronicleAccessor accessor) {
-		allocatedAccessor.put(accessor.allocateSeq, accessor);
+		allocatedAccessor.put(accessor.getAllocateSeq(), accessor);
 	}
 
 	/**
@@ -435,8 +436,8 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 	 */
 	protected abstract static class AbstractQueueBuilder<B extends AbstractQueueBuilder<B>> {
 
-		private String rootPath = SysProperties.JAVA_IO_TMPDIR + "/";
-		private String folder = "auto-create-" + datetimeOfSecond() + "/";
+		private String rootPath = JAVA_IO_TMPDIR + File.separator;
+		private String folder = "auto-created-" + datetimeOfSecond() + File.separator;
 		private boolean readOnly = false;
 		private long epoch = 0L;
 		private FileCycle fileCycle = FileCycle.SMALL_DAILY;
@@ -446,12 +447,12 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 		private Logger logger;
 
 		public B saveToUserHome() {
-			rootPath(SysProperties.USER_HOME);
+			rootPath(USER_HOME);
 			return self();
 		}
 
 		public B saveToTmpDir() {
-			rootPath(SysProperties.JAVA_IO_TMPDIR);
+			rootPath(JAVA_IO_TMPDIR);
 			return self();
 		}
 
@@ -509,43 +510,6 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
 
 		@AbstractFunction
 		protected abstract B self();
-
-	}
-
-	/**
-	 * 通用访问器抽象类
-	 * 
-	 * @author yellow013
-	 *
-	 */
-	public static abstract class CloseableChronicleAccessor implements net.openhft.chronicle.core.io.Closeable {
-
-		protected volatile boolean isClose = false;
-
-		private final long allocateSeq;
-
-		protected CloseableChronicleAccessor(long allocateSeq) {
-			this.allocateSeq = allocateSeq;
-		}
-
-		@Override
-		public void close() {
-			this.isClose = true;
-			close0();
-		}
-
-		@Override
-		public void notifyClosing() {
-			// TODO 添加关闭访问器回调通知
-		}
-
-		@Override
-		public boolean isClosed() {
-			return isClose;
-		}
-
-		@AbstractFunction
-		protected abstract void close0();
 
 	}
 

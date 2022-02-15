@@ -1,7 +1,7 @@
 package io.mercury.persistence.chronicle.queue;
 
-import static io.mercury.common.lang.Assertor.greaterThan;
-import static io.mercury.common.lang.Assertor.nonNull;
+import static io.mercury.common.datetime.DateTimeUtil.formatDateTime;
+import static io.mercury.common.datetime.pattern.DateTimePattern.YY_MM_DD_HH_MM_SS_SSS;
 import static io.mercury.common.thread.SleepSupport.sleep;
 import static io.mercury.common.thread.ThreadSupport.startNewThread;
 
@@ -22,7 +22,8 @@ import org.slf4j.Logger;
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.datetime.TimeConst;
 import io.mercury.persistence.chronicle.exception.ChronicleReadException;
-import io.mercury.persistence.chronicle.queue.AbstractChronicleQueue.CloseableChronicleAccessor;
+import io.mercury.persistence.chronicle.queue.base.CloseableChronicleAccessor;
+import io.mercury.persistence.chronicle.queue.params.ReaderParams;
 import net.openhft.chronicle.queue.ExcerptTailer;
 import net.openhft.chronicle.queue.TailerState;
 
@@ -33,36 +34,36 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
 	private final String readerName;
 	private final FileCycle fileCycle;
 
-	protected final ReaderParam param;
+	protected final ReaderParams params;
 
 	protected final Logger logger;
-	protected final ExcerptTailer excerptTailer;
+	protected final ExcerptTailer tailer;
 
-	private final Consumer<OUT> consumer;
+	protected final Consumer<OUT> dataConsumer;
 
 	/**
 	 * 
 	 * @param allocateSeq
 	 * @param readerName
 	 * @param fileCycle
-	 * @param param
+	 * @param params
 	 * @param logger
-	 * @param excerptTailer
-	 * @param consumer
+	 * @param tailer
+	 * @param dataConsumer
 	 */
-	protected AbstractChronicleReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param,
-			Logger logger, ExcerptTailer excerptTailer, Consumer<OUT> consumer) {
+	protected AbstractChronicleReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParams params,
+			Logger logger, ExcerptTailer tailer, Consumer<OUT> dataConsumer) {
 		super(allocateSeq);
 		this.readerName = readerName;
 		this.fileCycle = fileCycle;
-		this.param = param;
+		this.params = params;
 		this.logger = logger;
-		this.excerptTailer = excerptTailer;
-		this.consumer = consumer;
+		this.tailer = tailer;
+		this.dataConsumer = dataConsumer;
 	}
 
 	public ExcerptTailer getExcerptTailer() {
-		return excerptTailer;
+		return tailer;
 	}
 
 	public boolean moveTo(@Nonnull LocalDate date) {
@@ -84,21 +85,21 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
 	 * @return
 	 */
 	public boolean moveTo(long epochSecond) {
-		return excerptTailer.moveToIndex(fileCycle.toIndex(epochSecond));
+		return tailer.moveToIndex(fileCycle.toIndex(epochSecond));
 	}
 
 	/**
 	 * 移动到开头
 	 */
 	public void toStart() {
-		excerptTailer.toStart();
+		tailer.toStart();
 	}
 
 	/**
 	 * 移动到结尾
 	 */
 	public void toEnd() {
-		excerptTailer.toEnd();
+		tailer.toEnd();
 	}
 
 	/**
@@ -106,7 +107,7 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
 	 * @return int
 	 */
 	public int cycle() {
-		return excerptTailer.cycle();
+		return tailer.cycle();
 	}
 
 	/**
@@ -114,7 +115,7 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
 	 * @return long
 	 */
 	public long epochSecond() {
-		return ((long) excerptTailer.cycle()) * fileCycle.getSeconds();
+		return ((long) tailer.cycle()) * fileCycle.getSeconds();
 	}
 
 	/**
@@ -122,7 +123,7 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
 	 * @return long
 	 */
 	public long index() {
-		return excerptTailer.index();
+		return tailer.index();
 	}
 
 	/**
@@ -130,7 +131,7 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
 	 * @return TailerState
 	 */
 	public TailerState state() {
-		return excerptTailer.state();
+		return tailer.state();
 	}
 
 	/**
@@ -145,8 +146,8 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
 	 * 
 	 * @return Thread
 	 */
-	public Thread runningOnNewThread() {
-		return runningOnNewThread(readerName);
+	public Thread runWithNewThread() {
+		return runWithNewThread(readerName);
 	}
 
 	/**
@@ -154,7 +155,7 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
 	 * @param threadName
 	 * @return Thread
 	 */
-	public Thread runningOnNewThread(String threadName) {
+	public Thread runWithNewThread(String threadName) {
 		return startNewThread(threadName, this);
 	}
 
@@ -174,9 +175,8 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
 	 */
 	@CheckForNull
 	public OUT next() throws IllegalStateException, ChronicleReadException {
-		if (isClose) {
+		if (isClose)
 			throw new IllegalStateException("Unable to read next, Chronicle queue is closed");
-		}
 		try {
 			return next0();
 		} catch (Exception e) {
@@ -186,17 +186,17 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
 
 	@Override
 	public void run() {
-		final boolean readFailLogging = param.readFailLogging;
-		final boolean readFailCrash = param.readFailCrash;
-		final boolean waitingData = param.waitingData;
-		final boolean spinWaiting = param.spinWaiting;
-		final TimeUnit readIntervalUnit = param.readIntervalUnit;
-		final long readIntervalTime = param.readIntervalTime;
-		if (param.delayReadTime > 0)
-			sleep(param.delayReadUnit, param.delayReadTime);
+		logger.info("ChronicleReader -> [{}] is running at [{}]", readerName, formatDateTime(YY_MM_DD_HH_MM_SS_SSS));
+		if (params.getDelayReadTime() > 0)
+			sleep(params.getDelayReadUnit(), params.getDelayReadTime());
+		boolean waitingData = params.isWaitingData();
+		boolean spinWaiting = params.isSpinWaiting();
+		TimeUnit readIntervalUnit = params.getReadIntervalUnit();
+		long readIntervalTime = params.getReadIntervalTime();
 		for (;;) {
 			if (isClose) {
-				logger.info("ChronicleReader is cloesd, execute exit()");
+				logger.info("ChronicleReader -> [{}] is cloesd, execute exit function at [{}]", readerName,
+						formatDateTime(YY_MM_DD_HH_MM_SS_SSS));
 				exit();
 				break;
 			}
@@ -204,15 +204,16 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
 			try {
 				next = next();
 			} catch (ChronicleReadException e) {
-				if (readFailLogging)
-					logger.error("{} call next throw exception -> {}", readerName, e.getMessage(), e);
-				if (readFailCrash)
+				if (params.isReadFailLogging())
+					logger.error("ChronicleReader -> [{}] call next throw exception: [{}] at [{}]", readerName,
+							e.getMessage(), formatDateTime(YY_MM_DD_HH_MM_SS_SSS), e);
+				if (params.isReadFailCrash())
 					throw e;
 			}
 			if (next == null) {
 				// 等待新数据
 				if (waitingData) {
-					// 非自旋等待
+					// 非自旋等待, 进入休眠
 					if (!spinWaiting) {
 						sleep(readIntervalUnit, readIntervalTime);
 					}
@@ -222,205 +223,28 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
 					break;
 				}
 			} else {
-				consumer.accept(next);
+				dataConsumer.accept(next);
 			}
 		}
 	}
 
 	private void exit() {
-		final Runnable exitRunnable = param.exitRunnable;
-		if (exitRunnable != null) {
-			if (param.asyncExit) {
+		final Runnable exitTask = params.getExitTask();
+		if (exitTask != null) {
+			if (params.isAsyncExit())
 				// 异步执行退出函数
-				startNewThread(readerName + "-exit", exitRunnable);
-			} else {
+				startNewThread(readerName + "-exit", exitTask);
+			else
 				// 同步执行退出函数
-				exitRunnable.run();
-			}
+				exitTask.run();
+
 		}
-		logger.info("reader -> {} running exit", readerName);
+		logger.info("ChronicleReader -> [{}] running exit at {}", readerName, formatDateTime(YY_MM_DD_HH_MM_SS_SSS));
 	}
 
 	@Override
 	protected void close0() {
 		// TODO NONE
-	}
-
-	public static final class ReaderParam {
-
-		// 是否读取失败后关闭线程
-		private final boolean readFailCrash;
-		// 是否读取失败后记录日志
-		private final boolean readFailLogging;
-		// 读取间隔时间单位
-		private final TimeUnit readIntervalUnit;
-		// 读取时间
-		private final long readIntervalTime;
-		// 延迟读取时间单位
-		private final TimeUnit delayReadUnit;
-		// 延迟读取时间
-		private final long delayReadTime;
-		// 是否等待数据写入
-		private final boolean waitingData;
-		// 是否自旋等待
-		private final boolean spinWaiting;
-		// 是否以异步方式退出
-		private final boolean asyncExit;
-		// 退出函数
-		private final Runnable exitRunnable;
-
-		private ReaderParam(Builder builder) {
-			this.readFailCrash = builder.readFailCrash;
-			this.readFailLogging = builder.readFailLogging;
-			this.readIntervalUnit = builder.readIntervalUnit;
-			this.readIntervalTime = builder.readIntervalTime;
-			this.delayReadUnit = builder.delayReadUnit;
-			this.delayReadTime = builder.delayReadTime;
-			this.waitingData = builder.waitingData;
-			this.spinWaiting = builder.spinWaiting;
-			this.asyncExit = builder.asyncExit;
-			this.exitRunnable = builder.exitRunnable;
-		}
-
-		/**
-		 * 
-		 * @return
-		 */
-		public static Builder newBuilder() {
-			return new Builder();
-		}
-
-		/**
-		 * 
-		 * @return
-		 */
-		static ReaderParam defaultParam() {
-			return new Builder().build();
-		}
-
-		public static class Builder {
-
-			// 读取失败崩溃
-			private boolean readFailCrash = false;
-			// 读取失败打印Log
-			private boolean readFailLogging = true;
-			// 是否等待新数据
-			private boolean waitingData = true;
-			// 是否自旋等待
-			private boolean spinWaiting = false;
-
-			// 读取间隔
-			private TimeUnit readIntervalUnit = TimeUnit.MILLISECONDS;
-			private long readIntervalTime = 10;
-
-			// 开始读取延迟时间
-			private TimeUnit delayReadUnit = TimeUnit.MILLISECONDS;
-			private long delayReadTime = 0;
-
-			// 退出方式
-			private boolean asyncExit = false;
-			private Runnable exitRunnable;
-
-			/**
-			 * 设置读取失败后崩溃
-			 * 
-			 * @param readFailCrash
-			 * @return
-			 */
-			public Builder isReadFailCrash(boolean readFailCrash) {
-				this.readFailCrash = readFailCrash;
-				return this;
-			}
-
-			/**
-			 * 设置读取失败进行记录
-			 * 
-			 * @param readFailLogging
-			 * @return
-			 */
-			public Builder isReadFailLogging(boolean readFailLogging) {
-				this.readFailLogging = readFailLogging;
-				return this;
-			}
-
-			/**
-			 * 设置是否等待新数据
-			 * 
-			 * @param waitingData
-			 * @return
-			 */
-			public Builder isWaitingData(boolean waitingData) {
-				this.waitingData = waitingData;
-				return this;
-			}
-
-			/**
-			 * 设置是否自旋等待新数据
-			 * 
-			 * @param spinWaiting
-			 * @return
-			 */
-			public Builder isSpinWaiting(boolean spinWaiting) {
-				this.spinWaiting = spinWaiting;
-				return this;
-			}
-
-			/**
-			 * 设置读取等待间隔
-			 * 
-			 * @param timeUnit
-			 * @param time
-			 * @return
-			 */
-			public Builder setReadInterval(@Nonnull TimeUnit timeUnit, long time) {
-				this.readIntervalUnit = nonNull(timeUnit, "timeUnit");
-				this.readIntervalTime = greaterThan(time, 0, "time");
-				return this;
-			}
-
-			/**
-			 * 设置开始读取延迟时间
-			 * 
-			 * @param timeUnit
-			 * @param time
-			 * @return
-			 */
-			public Builder setDelayRead(@Nonnull TimeUnit timeUnit, long time) {
-				this.delayReadUnit = nonNull(timeUnit, "timeUnit");
-				this.delayReadTime = greaterThan(time, 0, "time");
-				return this;
-			}
-
-			/**
-			 * 设置是否异步推出
-			 * 
-			 * @param asyncExit
-			 * @return
-			 */
-			public Builder isAsyncExit(boolean asyncExit) {
-				this.asyncExit = asyncExit;
-				return this;
-			}
-
-			/**
-			 * 退出读取任务执行线程
-			 * 
-			 * @param exitRunnable
-			 * @return
-			 */
-			public Builder setExitRunnable(@Nonnull Runnable exitRunnable) {
-				this.exitRunnable = nonNull(exitRunnable, "exitRunnable");
-				return this;
-			}
-
-			/**
-			 * 
-			 * @return
-			 */
-			public ReaderParam build() {
-				return new ReaderParam(this);
-			}
-		}
 	}
 
 }

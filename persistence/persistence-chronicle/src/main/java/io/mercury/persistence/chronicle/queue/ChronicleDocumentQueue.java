@@ -11,9 +11,9 @@ import org.slf4j.Logger;
 
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.sequence.EpochSequence;
-import io.mercury.persistence.chronicle.queue.AbstractChronicleReader.ReaderParam;
 import io.mercury.persistence.chronicle.queue.ChronicleDocumentQueue.ChronicleDocumentAppender;
 import io.mercury.persistence.chronicle.queue.ChronicleDocumentQueue.ChronicleDocumentReader;
+import io.mercury.persistence.chronicle.queue.params.ReaderParams;
 import net.openhft.chronicle.queue.ExcerptAppender;
 import net.openhft.chronicle.queue.ExcerptTailer;
 import net.openhft.chronicle.wire.Marshallable;
@@ -35,17 +35,17 @@ public class ChronicleDocumentQueue<T extends Marshallable>
 	}
 
 	@Override
-	protected ChronicleDocumentReader<T> createReader(String readerName, ReaderParam readerParam, Logger logger,
+	protected ChronicleDocumentReader<T> createReader(String readerName, ReaderParams readerParam, Logger logger,
 			Consumer<T> consumer) throws IllegalStateException {
 		return new ChronicleDocumentReader<>(EpochSequence.allocate(), readerName, fileCycle(), readerParam, logger,
 				internalQueue.createTailer(), consumer, marshallableSupplier);
 	}
 
 	@Override
-	protected ChronicleDocumentAppender<T> acquireAppender(String appenderName, Logger logger, Supplier<T> supplier)
+	protected ChronicleDocumentAppender<T> acquireAppender(String appenderName, Logger logger, Supplier<T> dataProducer)
 			throws IllegalStateException {
 		return new ChronicleDocumentAppender<>(EpochSequence.allocate(), appenderName, logger,
-				internalQueue.acquireAppender(), supplier);
+				internalQueue.acquireAppender(), dataProducer);
 	}
 
 	/**
@@ -81,14 +81,14 @@ public class ChronicleDocumentQueue<T extends Marshallable>
 	@NotThreadSafe
 	public static final class ChronicleDocumentAppender<T extends Marshallable> extends AbstractChronicleAppender<T> {
 
-		ChronicleDocumentAppender(long allocateSeq, String appenderName, Logger logger, ExcerptAppender excerptAppender,
-				Supplier<T> supplier) {
-			super(allocateSeq, appenderName, logger, excerptAppender, supplier);
+		ChronicleDocumentAppender(long allocateSeq, String appenderName, Logger logger, ExcerptAppender appender,
+				Supplier<T> dataProducer) {
+			super(allocateSeq, appenderName, logger, appender, dataProducer);
 		}
 
 		@Override
 		protected void append0(T t) {
-			excerptAppender.writeDocument(t);
+			appender.writeDocument(t);
 		}
 
 	}
@@ -99,16 +99,16 @@ public class ChronicleDocumentQueue<T extends Marshallable>
 
 		private final Supplier<T> marshallableSupplier;
 
-		ChronicleDocumentReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param,
-				Logger logger, ExcerptTailer excerptTailer, Consumer<T> consumer, Supplier<T> marshallableSupplier) {
-			super(allocateSeq, readerName, fileCycle, param, logger, excerptTailer, consumer);
+		ChronicleDocumentReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParams param,
+				Logger logger, ExcerptTailer tailer, Consumer<T> dataConsumer, Supplier<T> marshallableSupplier) {
+			super(allocateSeq, readerName, fileCycle, param, logger, tailer, dataConsumer);
 			this.marshallableSupplier = marshallableSupplier;
 		}
 
 		@Override
 		protected T next0() {
 			final T t = marshallableSupplier.get();
-			return excerptTailer.readDocument(t) ? t : null;
+			return tailer.readDocument(t) ? t : null;
 		}
 
 	}

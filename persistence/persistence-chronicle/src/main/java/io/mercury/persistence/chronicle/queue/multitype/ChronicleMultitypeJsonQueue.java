@@ -10,10 +10,11 @@ import org.slf4j.Logger;
 
 import io.mercury.common.codec.Envelope;
 import io.mercury.common.sequence.EpochSequence;
+import io.mercury.persistence.chronicle.queue.AbstractChronicleReader;
 import io.mercury.persistence.chronicle.queue.FileCycle;
-import io.mercury.persistence.chronicle.queue.multitype.AbstractChronicleMultitypeReader.ReaderParam;
 import io.mercury.persistence.chronicle.queue.multitype.ChronicleMultitypeJsonQueue.ChronicleMultitypeJsonAppender;
 import io.mercury.persistence.chronicle.queue.multitype.ChronicleMultitypeJsonQueue.ChronicleMultitypeJsonReader;
+import io.mercury.persistence.chronicle.queue.params.ReaderParams;
 import io.mercury.serialization.json.JsonMsg;
 import io.mercury.serialization.json.JsonParser.JsonParseException;
 import net.openhft.chronicle.queue.ExcerptAppender;
@@ -27,22 +28,22 @@ public class ChronicleMultitypeJsonQueue<E extends Envelope> extends
 		super(builder);
 	}
 
-	public static <E extends Envelope> Builder<E> newBuilder(Class<E> envelopeClass) {
+	public static <E extends Envelope> Builder<E> newBuilder(Class<E> envelopeType) {
 		return new Builder<>();
 	}
 
 	@Override
-	protected ChronicleMultitypeJsonReader createReader(String readerName, ReaderParam readerParam, Logger logger,
-			Consumer<JsonMsg> consumer) throws IllegalStateException {
-		return new ChronicleMultitypeJsonReader(EpochSequence.allocate(), readerName, fileCycle(), readerParam, logger,
-				internalQueue.createTailer(), consumer);
+	protected ChronicleMultitypeJsonReader createReader(String readerName, ReaderParams params, Logger logger,
+			Consumer<JsonMsg> dataConsumer) throws IllegalStateException {
+		return new ChronicleMultitypeJsonReader(EpochSequence.allocate(), readerName, fileCycle(), params, logger,
+				internalQueue.createTailer(), dataConsumer);
 	}
 
 	@Override
 	protected ChronicleMultitypeJsonAppender<E> acquireAppender(String appenderName, Logger logger,
-			Supplier<String> supplier) throws IllegalStateException {
+			Supplier<String> dataProducer) throws IllegalStateException {
 		return new ChronicleMultitypeJsonAppender<>(EpochSequence.allocate(), appenderName, logger,
-				internalQueue.acquireAppender(), supplier);
+				internalQueue.acquireAppender(), dataProducer);
 	}
 
 	/**
@@ -71,9 +72,9 @@ public class ChronicleMultitypeJsonQueue<E extends Envelope> extends
 	public static final class ChronicleMultitypeJsonAppender<E extends Envelope>
 			extends AbstractChronicleMultitypeAppender<E, String> {
 
-		ChronicleMultitypeJsonAppender(long allocateSeq, String appenderName, Logger logger,
-				ExcerptAppender excerptAppender, Supplier<String> supplier) {
-			super(allocateSeq, appenderName, logger, excerptAppender, supplier);
+		ChronicleMultitypeJsonAppender(long allocateSeq, String appenderName, Logger logger, ExcerptAppender appender,
+				Supplier<String> dataProducer) {
+			super(allocateSeq, appenderName, logger, appender, dataProducer);
 		}
 
 		// 內建JsonMsg对象
@@ -81,7 +82,7 @@ public class ChronicleMultitypeJsonQueue<E extends Envelope> extends
 
 		@Override
 		protected void append0(E envelope, String t) {
-			excerptAppender.writeText(
+			appender.writeText(
 					// 设置信封
 					jsonMsg.setEnvelope(envelope.getCode())
 							// 设置内容
@@ -94,16 +95,16 @@ public class ChronicleMultitypeJsonQueue<E extends Envelope> extends
 
 	@Immutable
 	@NotThreadSafe
-	public static final class ChronicleMultitypeJsonReader extends AbstractChronicleMultitypeReader<JsonMsg> {
+	public static final class ChronicleMultitypeJsonReader extends AbstractChronicleReader<JsonMsg> {
 
-		ChronicleMultitypeJsonReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param,
-				Logger logger, ExcerptTailer excerptTailer, Consumer<JsonMsg> consumer) {
-			super(allocateSeq, readerName, fileCycle, param, logger, excerptTailer, consumer);
+		ChronicleMultitypeJsonReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParams params,
+				Logger logger, ExcerptTailer tailer, Consumer<JsonMsg> dataConsumer) {
+			super(allocateSeq, readerName, fileCycle, params, logger, tailer, dataConsumer);
 		}
 
 		@Override
 		protected JsonMsg next0() {
-			String next = excerptTailer.readText();
+			String next = tailer.readText();
 			if (next == null)
 				return null;
 			try {

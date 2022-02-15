@@ -12,9 +12,9 @@ import org.slf4j.Logger;
 import io.mercury.common.number.Randoms;
 import io.mercury.common.sequence.EpochSequence;
 import io.mercury.common.thread.SleepSupport;
-import io.mercury.persistence.chronicle.queue.AbstractChronicleReader.ReaderParam;
 import io.mercury.persistence.chronicle.queue.ChronicleBytesQueue.ChronicleBytesAppender;
 import io.mercury.persistence.chronicle.queue.ChronicleBytesQueue.ChronicleBytesReader;
+import io.mercury.persistence.chronicle.queue.params.ReaderParams;
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.bytes.BytesStore;
 import net.openhft.chronicle.queue.ExcerptAppender;
@@ -42,17 +42,17 @@ public class ChronicleBytesQueue
 	}
 
 	@Override
-	protected ChronicleBytesReader createReader(String readerName, ReaderParam readerParam, Logger logger,
-			Consumer<ByteBuffer> consumer) throws IllegalStateException {
+	protected ChronicleBytesReader createReader(String readerName, ReaderParams readerParam, Logger logger,
+			Consumer<ByteBuffer> dataConsumer) throws IllegalStateException {
 		return new ChronicleBytesReader(EpochSequence.allocate(), readerName, fileCycle(), readerParam, logger,
-				bufferSize, useDirectMemory, internalQueue.createTailer(), consumer);
+				bufferSize, useDirectMemory, internalQueue.createTailer(), dataConsumer);
 	}
 
 	@Override
-	protected ChronicleBytesAppender acquireAppender(String appenderName, Logger logger, Supplier<ByteBuffer> supplier)
-			throws IllegalStateException {
+	protected ChronicleBytesAppender acquireAppender(String appenderName, Logger logger,
+			Supplier<ByteBuffer> dataProducer) throws IllegalStateException {
 		return new ChronicleBytesAppender(EpochSequence.allocate(), appenderName, logger,
-				internalQueue.acquireAppender(), supplier);
+				internalQueue.acquireAppender(), dataProducer);
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class ChronicleBytesQueue
 	 */
 	public static final class BytesQueueBuilder extends AbstractQueueBuilder<BytesQueueBuilder> {
 
-		private int bufferSize = 256;
+		private int bufferSize = 512;
 		private boolean useDirectMemory = false;
 
 		private BytesQueueBuilder() {
@@ -73,13 +73,13 @@ public class ChronicleBytesQueue
 		}
 
 		/**
-		 * if set size less than 256, use default size the 256
+		 * if set size less than 512, use default size the 512
 		 * 
 		 * @param readBufferSize
 		 * @return
 		 */
 		public BytesQueueBuilder bufferSize(int bufferSize) {
-			this.bufferSize = Math.max(bufferSize, 256);
+			this.bufferSize = Math.max(bufferSize, 512);
 			return this;
 		}
 
@@ -104,15 +104,15 @@ public class ChronicleBytesQueue
 	@NotThreadSafe
 	public static final class ChronicleBytesAppender extends AbstractChronicleAppender<ByteBuffer> {
 
-		ChronicleBytesAppender(long allocateSeq, String appenderName, Logger logger, ExcerptAppender excerptAppender,
-				Supplier<ByteBuffer> supplier) {
-			super(allocateSeq, appenderName, logger, excerptAppender, supplier);
+		ChronicleBytesAppender(long allocateSeq, String appenderName, Logger logger, ExcerptAppender appender,
+				Supplier<ByteBuffer> dataProducer) {
+			super(allocateSeq, appenderName, logger, appender, dataProducer);
 		}
 
 		@Override
 		protected void append0(ByteBuffer t) {
 			// use heap memory or direct by the byteBuffer
-			excerptAppender.writeBytes(BytesStore.wrap(t));
+			appender.writeBytes(BytesStore.wrap(t));
 		}
 
 	}
@@ -129,9 +129,10 @@ public class ChronicleBytesQueue
 		private final int bufferSize;
 		private final boolean useDirectMemory;
 
-		ChronicleBytesReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParam param, Logger logger,
-				int bufferSize, boolean useDirectMemory, ExcerptTailer excerptTailer, Consumer<ByteBuffer> consumer) {
-			super(allocateSeq, readerName, fileCycle, param, logger, excerptTailer, consumer);
+		ChronicleBytesReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParams params,
+				Logger logger, int bufferSize, boolean useDirectMemory, ExcerptTailer tailer,
+				Consumer<ByteBuffer> dataConsumer) {
+			super(allocateSeq, readerName, fileCycle, params, logger, tailer, dataConsumer);
 			this.bufferSize = bufferSize;
 			this.useDirectMemory = useDirectMemory;
 		}
@@ -145,7 +146,7 @@ public class ChronicleBytesQueue
 			else
 				// use heap memory
 				bytes = Bytes.elasticHeapByteBuffer(bufferSize);
-			excerptTailer.readBytes(bytes);
+			tailer.readBytes(bytes);
 			if (bytes.isEmpty())
 				return null;
 			logger.debug("ChronicleBytesReader.next0() -> {}", bytes.toDebugString());
@@ -171,7 +172,7 @@ public class ChronicleBytesQueue
 				}
 			}
 		}).start();
-		reader.runningOnNewThread();
+		reader.runWithNewThread();
 	}
 
 }

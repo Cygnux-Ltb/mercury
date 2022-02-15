@@ -99,9 +99,9 @@
 				<groupId>com.zaxxer</groupId>
 				<artifactId>HikariCP</artifactId>
 				<!-- java 8 -->
-				<!-- <version>4.0.3</version> -->
+				<version>4.0.3</version>
 				<!-- java 11 -->
-				<version>5.0.1</version>
+				<!-- <version>5.0.1</version> -->
 			</dependency>
 
 			<!-- Apache Commons Compress software defines an API for working with 

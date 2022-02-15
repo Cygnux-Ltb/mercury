@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.serialization.Serializer;
 import io.mercury.persistence.chronicle.exception.ChronicleAppendException;
-import io.mercury.persistence.chronicle.queue.AbstractChronicleQueue.CloseableChronicleAccessor;
+import io.mercury.persistence.chronicle.queue.base.CloseableChronicleAccessor;
 import net.openhft.chronicle.queue.ExcerptAppender;
 
 @Immutable
@@ -21,29 +21,29 @@ public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAc
 	private final String appenderName;
 
 	protected final Logger logger;
-	protected final ExcerptAppender excerptAppender;
+	protected final ExcerptAppender appender;
 
-	private final Supplier<IN> dataSupplier;
+	protected final Supplier<IN> dataProducer;
 
-	protected AbstractChronicleAppender(long allocateSeq, String appenderName, Logger logger,
-			ExcerptAppender excerptAppender, Supplier<IN> dataSupplier) {
+	protected AbstractChronicleAppender(long allocateSeq, String appenderName, Logger logger, ExcerptAppender appender,
+			Supplier<IN> dataProducer) {
 		super(allocateSeq);
 		this.appenderName = appenderName;
 		this.logger = logger;
-		this.excerptAppender = excerptAppender;
-		this.dataSupplier = dataSupplier;
+		this.appender = appender;
+		this.dataProducer = dataProducer;
 	}
 
 	public ExcerptAppender getExcerptAppender() {
-		return excerptAppender;
+		return appender;
 	}
 
 	public int cycle() {
-		return excerptAppender.cycle();
+		return appender.cycle();
 	}
 
 	public int sourceId() {
-		return excerptAppender.sourceId();
+		return appender.sourceId();
 	}
 
 	public String appenderName() {
@@ -52,19 +52,19 @@ public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAc
 
 	/**
 	 * 
-	 * @param t
+	 * @param in
 	 * @throws IllegalStateException
 	 * @throws ChronicleAppendException
 	 */
-	public void append(@Nonnull IN t) throws IllegalStateException, ChronicleAppendException {
+	public void append(@Nonnull IN in) throws IllegalStateException, ChronicleAppendException {
 		if (isClose) {
 			throw new IllegalStateException("Unable to append data, Chronicle queue is closed");
 		}
 		try {
-			if (t != null) {
-				append0(t);
+			if (in != null) {
+				append0(in);
 			} else {
-				logger.warn("appenderName -> {} : received null object, Not written to the queue.", appenderName);
+				logger.warn("ChronicleAppender -> [{}] : received null object, Not written to the queue", appenderName);
 			}
 		} catch (Exception e) {
 			throw new ChronicleAppendException(e.getMessage(), e);
@@ -78,28 +78,28 @@ public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAc
 	 * @throws IllegalStateException
 	 * @throws ChronicleAppendException
 	 */
-	public void append(@Nonnull Object obj, Serializer<Object, IN> serializer)
+	public <T> void append(@Nonnull T t, Serializer<T, IN> serializer)
 			throws IllegalStateException, ChronicleAppendException {
-		append(serializer.serialization(obj));
+		append(serializer.serialization(t));
 	}
 
 	@AbstractFunction
-	protected abstract void append0(@Nonnull IN t);
+	protected abstract void append0(@Nonnull IN in);
 
 	@Override
 	public void run() {
-		if (dataSupplier != null) {
+		if (dataProducer != null) {
 			for (;;) {
 				if (isClose) {
 					logger.info("Chronicle queue is closed, {} Thread exit", appenderName);
 					break;
 				} else {
-					IN t = dataSupplier.get();
-					append(t);
+					IN in = dataProducer.get();
+					append(in);
 				}
 			}
 		} else {
-			logger.warn("Supplier is null, Thread exit");
+			logger.warn("Data producer function is null, Thread exit");
 		}
 	}
 

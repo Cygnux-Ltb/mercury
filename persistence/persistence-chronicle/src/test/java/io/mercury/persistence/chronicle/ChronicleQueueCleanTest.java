@@ -27,7 +27,7 @@ public class ChronicleQueueCleanTest {
 		// TimeZones.SYSTEM_DEFAULT);
 
 		// System.out.println("is moved == " + moved);
-		reader.runningOnNewThread();
+		reader.runWithNewThread();
 		int i = 0;
 		while (true) {
 			try {

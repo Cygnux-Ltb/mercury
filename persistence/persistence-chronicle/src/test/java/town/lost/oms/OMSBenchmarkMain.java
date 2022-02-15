@@ -71,118 +71,104 @@ Percentile   run1         run2         run3         run4         run5      % Var
 worst:       1678.85     28090.37     12480.51      1005.31      6952.96        94.73
  */
 public class OMSBenchmarkMain {
-    public static final int THROUGHPUT = Integer.getInteger("throughput", 100_000);
-    public static final Base85LongConverter BASE85 = Base85LongConverter.INSTANCE;
-    public static final String PATH = System.getProperty("path", OS.TMP);
-    public static final boolean ACCOUNT_FOR_COORDINATED_OMMISSION = Boolean.getBoolean("accountForCoordinatedOmmission");
 
-    static {
-        System.setProperty("pauser.minProcessors", "2");
-    }
+	public static final int THROUGHPUT = Integer.getInteger("throughput", 100_000);
+	public static final Base85LongConverter BASE85 = Base85LongConverter.INSTANCE;
+	public static final String PATH = System.getProperty("path", OS.TMP);
+	public static final boolean ACCOUNT_FOR_COORDINATED_OMMISSION = Boolean
+			.getBoolean("accountForCoordinatedOmmission");
 
-    public static void main(String[] args) {
-        printProperties();
+	static {
+		System.setProperty("pauser.minProcessors", "2");
+	}
 
-        String tmpDir = PATH + "/bench-" + System.nanoTime();
-        try (ChronicleQueue input = ChronicleQueue.single(tmpDir + "/input");
-             ChronicleQueue output = ChronicleQueue.single(tmpDir + "/output")) {
+	public static void main(String[] args) {
+		printProperties();
 
-            // processing thread
-            Thread processor = new Thread(() -> {
-                try (AffinityLock lock = AffinityLock.acquireCore()) {
-                    OMSOut out = output.acquireAppender().methodWriter(OMSOut.class);
-                    OMSImpl oms = new OMSImpl(out);
-                    MethodReader in = input.createTailer("test").methodReader(oms);
-                    Pauser pauser = Pauser.busy();
-                    while (!Thread.currentThread().isInterrupted()) {
-                        if (in.readOne())
-                            pauser.reset();
-                        else
-                            pauser.pause();
-                    }
-                }
-            }, "processor");
-            processor.start();
+		String tmpDir = PATH + "/bench-" + System.nanoTime();
+		try (ChronicleQueue input = ChronicleQueue.single(tmpDir + "/input");
+				ChronicleQueue output = ChronicleQueue.single(tmpDir + "/output")) {
 
-            JLBH jlbh = new JLBH(new JLBHOptions()
-                    .warmUpIterations(50000)
-                    .pauseAfterWarmupMS(500)
-                    .throughput(THROUGHPUT)
-                    .iterations(Math.min(2_000_000, THROUGHPUT * 10))
-                    .runs(5)
-                    .recordOSJitter(false)
-                    .accountForCoordinatedOmmission(ACCOUNT_FOR_COORDINATED_OMMISSION)
-                    .jlbhTask(new MyJLBHTask(input)));
-            jlbh.start();
-            processor.interrupt();
-        }
-        printProperties();
-        Jvm.pause(1000);
-        IOTools.deleteDirWithFiles(tmpDir);
-    }
+			// processing thread
+			Thread processor = new Thread(() -> {
+				try (AffinityLock lock = AffinityLock.acquireCore()) {
+					OMSOut out = output.acquireAppender().methodWriter(OMSOut.class);
+					OMSImpl oms = new OMSImpl(out);
+					MethodReader in = input.createTailer("test").methodReader(oms);
+					Pauser pauser = Pauser.busy();
+					while (!Thread.currentThread().isInterrupted()) {
+						if (in.readOne())
+							pauser.reset();
+						else
+							pauser.pause();
+					}
+				}
+			}, "processor");
+			processor.start();
 
-    private static void printProperties() {
-        long estimatedMemory = Math.round(Runtime.getRuntime().totalMemory() / 1e6);
-        System.out.println("-Xmx" + estimatedMemory + "m " +
-                "-DbyteInBinary=" + AbstractEvent.BYTES_IN_BINARY + " " +
-                "-DpregeneratedMarshallable=" + AbstractEvent.PREGENERATED_MARSHALLABLE + " " +
-                "-Dthroughput=" + THROUGHPUT + " " +
-                "-Dpath=" + PATH + " " +
-                "-DaccountForCoordinatedOmission=" + ACCOUNT_FOR_COORDINATED_OMMISSION);
-    }
+			JLBH jlbh = new JLBH(new JLBHOptions().warmUpIterations(50000).pauseAfterWarmupMS(500)
+					.throughput(THROUGHPUT).iterations(Math.min(2_000_000, THROUGHPUT * 10)).runs(5)
+					.recordOSJitter(false).accountForCoordinatedOmmission(ACCOUNT_FOR_COORDINATED_OMMISSION)
+					.jlbhTask(new MyJLBHTask(input)));
+			jlbh.start();
+			processor.interrupt();
+		}
+		printProperties();
+		Jvm.pause(1000);
+		IOTools.deleteDirWithFiles(tmpDir);
+	}
 
-    private static class MyJLBHTask implements JLBHTask {
-        private JLBH jlbh;
-        private NewOrderSingle nos;
-        private ExcerptTailer tailer;
-        private OMSIn in;
+	private static void printProperties() {
+		long estimatedMemory = Math.round(Runtime.getRuntime().totalMemory() / 1e6);
+		System.out.println("-Xmx" + estimatedMemory + "m " + "-DbyteInBinary=" + AbstractEvent.BYTES_IN_BINARY + " "
+				+ "-DpregeneratedMarshallable=" + AbstractEvent.PREGENERATED_MARSHALLABLE + " " + "-Dthroughput="
+				+ THROUGHPUT + " " + "-Dpath=" + PATH + " " + "-DaccountForCoordinatedOmission="
+				+ ACCOUNT_FOR_COORDINATED_OMMISSION);
+	}
 
-        public MyJLBHTask(ChronicleQueue input) {
-            nos = new NewOrderSingle()
-                    .sender(BASE85.parse("client"))
-                    .target(BASE85.parse("OMS"))
-                    .clOrdID("clOrdId")
-                    .orderQty(1e6)
-                    .price(1.6)
-                    .symbol(BASE85.parse("AUDUSD"))
-                    .ordType(OrderType.Limit)
-                    .side(BuySell.Buy);
-            tailer = input.createTailer();
-            in = input.acquireAppender().methodWriter(OMSIn.class);
-        }
+	private static class MyJLBHTask implements JLBHTask {
+		private JLBH jlbh;
+		private NewOrderSingle nos;
+		private ExcerptTailer tailer;
+		private OMSIn in;
 
-        @Override
-        public void init(JLBH jlbh) {
-            this.jlbh = jlbh;
-        }
+		public MyJLBHTask(ChronicleQueue input) {
+			nos = new NewOrderSingle().sender(BASE85.parse("client")).target(BASE85.parse("OMS")).clOrdID("clOrdId")
+					.orderQty(1e6).price(1.6).symbol(BASE85.parse("AUDUSD")).ordType(OrderType.Limit).side(BuySell.Buy);
+			tailer = input.createTailer();
+			in = input.acquireAppender().methodWriter(OMSIn.class);
+		}
 
-        @Override
-        public void run(long startTimeNS) {
-            try {
-                in.newOrderSingle(nos.sendingTime(startTimeNS));
-                long start = System.currentTimeMillis();
-                while (true) {
-                    try (DocumentContext dc = tailer.readingDocument()) {
-                        if (dc.isPresent())
-                            break;
-                    }
-                    if (start + 1e3 > System.currentTimeMillis()) {
-                        System.err.println("Failed to get message");
-                        break;
-                    }
-                }
+		@Override
+		public void init(JLBH jlbh) {
+			this.jlbh = jlbh;
+		}
 
-                jlbh.sampleNanos(System.nanoTime() - startTimeNS);
-/*
-                try (DocumentContext dc = tailer.readingDocument()) {
-                    if (dc.isPresent())
-                        throw new AssertionError();
-                }
-*/
+		@Override
+		public void run(long startTimeNS) {
+			try {
+				in.newOrderSingle(nos.sendingTime(startTimeNS));
+				long start = System.currentTimeMillis();
+				while (true) {
+					try (DocumentContext dc = tailer.readingDocument()) {
+						if (dc.isPresent())
+							break;
+					}
+					if (start + 1e3 > System.currentTimeMillis()) {
+						System.err.println("Failed to get message");
+						break;
+					}
+				}
 
-            } catch (Throwable t) {
-                t.printStackTrace();
-            }
-        }
-    }
+				jlbh.sampleNanos(System.nanoTime() - startTimeNS);
+				/*
+				 * try (DocumentContext dc = tailer.readingDocument()) { if (dc.isPresent())
+				 * throw new AssertionError(); }
+				 */
+
+			} catch (Throwable t) {
+				t.printStackTrace();
+			}
+		}
+	}
 }

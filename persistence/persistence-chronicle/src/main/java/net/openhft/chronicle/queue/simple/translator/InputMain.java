@@ -2,7 +2,7 @@ package net.openhft.chronicle.queue.simple.translator;
 
 import java.util.Scanner;
 
-import net.openhft.chronicle.queue.impl.single.SingleChronicleQueue;
+import net.openhft.chronicle.queue.impl.RollingChronicleQueue;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
 
 /**
@@ -11,9 +11,9 @@ import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
 public class InputMain {
 
 	public static void main(String[] args) {
-		String path_en = "queue-en";
-		SingleChronicleQueue queue_en = SingleChronicleQueueBuilder.binary(path_en).build();
-		MessageConsumer messageConsumer = queue_en.acquireAppender().methodWriter(MessageConsumer.class);
+		String path = "queue-en";
+		RollingChronicleQueue queue = SingleChronicleQueueBuilder.binary(path).build();
+		MessageConsumer messageConsumer = queue.acquireAppender().methodWriter(MessageConsumer.class);
 		try (Scanner read = new Scanner(System.in)) {
 			while (true) {
 				System.out.println("type something");

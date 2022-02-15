@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.avro.generic.GenericRecord;
 
 import net.openhft.chronicle.queue.ExcerptAppender;
-import net.openhft.chronicle.queue.impl.single.SingleChronicleQueue;
+import net.openhft.chronicle.queue.impl.RollingChronicleQueue;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
 import net.openhft.chronicle.wire.DocumentContext;
 
@@ -16,7 +16,7 @@ public class InputMain {
 		AvroHelper avro = new AvroHelper();
 
 		String path = "avro-queue";
-		SingleChronicleQueue queue = SingleChronicleQueueBuilder.binary(path).build();
+		RollingChronicleQueue queue = SingleChronicleQueueBuilder.binary(path).build();
 		ExcerptAppender appender = queue.acquireAppender();
 
 		try (DocumentContext dc = appender.writingDocument()) {

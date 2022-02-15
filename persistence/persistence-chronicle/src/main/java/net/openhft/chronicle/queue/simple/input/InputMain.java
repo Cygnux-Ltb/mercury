@@ -3,7 +3,7 @@ package net.openhft.chronicle.queue.simple.input;
 import java.util.Scanner;
 
 import net.openhft.chronicle.queue.ExcerptAppender;
-import net.openhft.chronicle.queue.impl.single.SingleChronicleQueue;
+import net.openhft.chronicle.queue.impl.RollingChronicleQueue;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
 
 /**
@@ -14,7 +14,7 @@ public class InputMain {
 	public static void main(String[] args) {
 
 		String path = "queue";
-		SingleChronicleQueue queue = SingleChronicleQueueBuilder.binary(path).build();
+		RollingChronicleQueue queue = SingleChronicleQueueBuilder.binary(path).build();
 		ExcerptAppender appender = queue.acquireAppender();
 		try (Scanner read = new Scanner(System.in)) {
 			while (true) {

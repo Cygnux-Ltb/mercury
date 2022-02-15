@@ -17,7 +17,6 @@ import io.mercury.common.sys.SysProperties;
 public final class ChronicleMapConfigurator<K, V> implements Configurator {
 
 	private final Class<K> keyClass;
-
 	private final Class<V> valueClass;
 
 	private final K averageKey;
