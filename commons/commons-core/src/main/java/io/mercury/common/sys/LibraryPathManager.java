@@ -5,7 +5,16 @@ import java.lang.reflect.Field;
 
 import io.mercury.common.character.Separator;
 
-public class LibraryPathManager {
+public final class LibraryPathManager {
+
+	/**
+	 * 获取LibraryPath, System.getProperty("java.library.path")
+	 * 
+	 * @return
+	 */
+	public static String getLibraryPath() {
+		return SysProperties.JAVA_LIBRARY_PATH;
+	}
 
 	/**
 	 * 添加java.library.path
@@ -28,9 +37,8 @@ public class LibraryPathManager {
 		String[] paths = (String[]) usrPathsField.get(null);
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < paths.length; i++) {
-			if (libraryPath.equals(paths[i])) {
+			if (libraryPath.equals(paths[i]))
 				continue;
-			}
 			sb.append(paths[i]).append(Separator.PATH_SEPARATOR);
 		}
 		sb.append(libraryPath);

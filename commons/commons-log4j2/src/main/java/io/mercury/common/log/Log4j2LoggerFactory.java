@@ -104,12 +104,12 @@ public final class Log4j2LoggerFactory {
 	/**
 	 * Logger Context对象
 	 */
-	private static final LoggerContext CTX = (LoggerContext) LogManager.getContext(false);
+	private static volatile LoggerContext CTX;
 
 	/**
 	 * Configuration对象
 	 */
-	private static final Configuration CONF = CTX.getConfiguration();
+	private static volatile Configuration CONF;
 
 	/**
 	 * 业务日志目录
@@ -123,7 +123,10 @@ public final class Log4j2LoggerFactory {
 	 * @return
 	 */
 	private static void buildAndUpdate(String loggerName, LogLevel logLevel) {
-
+		if (CTX == null)
+			CTX = (LoggerContext) LogManager.getContext(false);
+		if (CONF == null)
+			CONF = CTX.getConfiguration();
 		// 基于时间分割日志文件
 		TriggeringPolicy timeBased = TimeBasedTriggeringPolicy.newBuilder().withInterval(1).withModulate(true).build();
 

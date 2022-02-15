@@ -5,6 +5,7 @@ import java.net.URL;
 import java.security.CodeSource;
 
 public class NativeTime {
+	
 	public static final boolean LOADED;
 	private static double ticks_per_nanosecond = 1.0;
 
