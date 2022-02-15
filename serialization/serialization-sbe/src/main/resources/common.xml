@@ -36,4 +36,7 @@
 			<type name="varData" primitiveType="uint8" length="0" />
 		</composite>
 	</types>
+	<sbe:message name="Common" id="1"
+		description="Common Message">
+	</sbe:message>
 </sbe:messageSchema>

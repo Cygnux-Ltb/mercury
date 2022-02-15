@@ -71,7 +71,7 @@ public final class JsonParser {
 	@Nullable
 	public static final <T> T toObject(@Nonnull final String json) throws JsonParseException {
 		try {
-			if (json == null || json.isBlank())
+			if (json == null || json.isEmpty())
 				return null;
 			return Mapper.readValue(json, new TypeReference<T>() {
 			});
@@ -91,7 +91,7 @@ public final class JsonParser {
 	@Nullable
 	public static final <T> T toObject(@Nonnull final String json, @Nonnull Class<T> type) throws JsonParseException {
 		try {
-			if (json == null || json.isBlank() || type == null)
+			if (json == null || json.isEmpty() || type == null)
 				return null;
 			return Mapper.readValue(json, type);
 		} catch (Exception e) {

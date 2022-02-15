@@ -17,12 +17,12 @@
 		<avro.version>1.11.0</avro.version>
 	</properties>
 
-	<repositories>
+<!-- 	<repositories>
 		<repository>
 			<id>avro-util</id>
 			<url>https://linkedin.jfrog.io/artifactory/avro-util/</url>
 		</repository>
-	</repositories>
+	</repositories> -->
 
 	<build>
 		<plugins>
@@ -69,11 +69,11 @@
 			<version>2.6</version>
 		</dependency>
 
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.linkedin.avroutil1</groupId>
 			<artifactId>helper-all</artifactId>
 			<version>0.2.71</version>
-		</dependency>
+		</dependency> -->
 
 		<dependency>
 			<groupId>io.mercury</groupId>
