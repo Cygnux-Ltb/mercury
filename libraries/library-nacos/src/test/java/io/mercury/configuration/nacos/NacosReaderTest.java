@@ -17,7 +17,7 @@ public class NacosReaderTest {
 	@Test
 	public void test() {
 		Properties properties = NacosReader.getProperties("", "", "");
-		PropertiesUtil.showProperties(properties);
+		PropertiesUtil.show(properties);
 	}
 
 }
