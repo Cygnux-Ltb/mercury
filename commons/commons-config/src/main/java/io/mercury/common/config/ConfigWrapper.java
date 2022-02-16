@@ -194,33 +194,33 @@ public final class ConfigWrapper<O extends ConfigOption> {
 	/**
 	 * 
 	 * @param option
-	 * @param predicate
+	 * @param verify
 	 * @return
 	 * @throws ConfigException.Missing
 	 * @throws ConfigException.BadValue
 	 */
-	public int getIntOrThrows(@Nonnull O option, IntPredicate predicate)
+	public int getIntOrThrows(@Nonnull O option, IntPredicate verify)
 			throws ConfigException.Missing, ConfigException.BadValue {
-		return getIntOrThrows(option, predicate,
+		return getIntOrThrows(option, verify,
 				new IllegalArgumentException("Illegal argument -> " + option.getConfigName(module)));
 	}
 
 	/**
 	 * 
 	 * @param option
-	 * @param predicate
-	 * @param exception
+	 * @param verify
+	 * @param ex
 	 * @return
 	 * @throws ConfigException.Missing
 	 * @throws ConfigException.BadValue
 	 */
-	public int getIntOrThrows(@Nonnull O option, IntPredicate predicate, Exception exception)
+	public int getIntOrThrows(@Nonnull O option, IntPredicate verify, Exception ex)
 			throws ConfigException.Missing, ConfigException.BadValue {
 		int value = getIntOrThrows(option);
-		if (predicate.test(value))
+		if (verify.test(value))
 			return value;
 		else
-			throw new ConfigException.BadValue(option.getConfigName(module), "value == " + value, exception);
+			throw new ConfigException.BadValue(option.getConfigName(module), "value == " + value, ex);
 	}
 
 	/**
@@ -238,33 +238,33 @@ public final class ConfigWrapper<O extends ConfigOption> {
 	/**
 	 * 
 	 * @param option
-	 * @param predicate
+	 * @param verify
 	 * @return
 	 * @throws ConfigException.Missing
 	 * @throws ConfigException.BadValue
 	 */
-	public long getLongOrThrows(@Nonnull O option, LongPredicate predicate)
+	public long getLongOrThrows(@Nonnull O option, LongPredicate verify)
 			throws ConfigException.Missing, ConfigException.BadValue {
-		return getLongOrThrows(option, predicate,
+		return getLongOrThrows(option, verify,
 				new IllegalArgumentException("Illegal argument -> " + option.getConfigName(module)));
 	}
 
 	/**
 	 * 
 	 * @param option
-	 * @param predicate
-	 * @param exception
+	 * @param verify
+	 * @param ex
 	 * @return
 	 * @throws ConfigException.Missing
 	 * @throws ConfigException.BadValue
 	 */
-	public long getLongOrThrows(@Nonnull O option, LongPredicate predicate, Exception exception)
+	public long getLongOrThrows(@Nonnull O option, LongPredicate verify, Exception ex)
 			throws ConfigException.Missing, ConfigException.BadValue {
 		long value = getLongOrThrows(option);
-		if (predicate.test(value))
+		if (verify.test(value))
 			return value;
 		else
-			throw new ConfigException.BadValue(option.getConfigName(module), "value == " + value, exception);
+			throw new ConfigException.BadValue(option.getConfigName(module), "value == " + value, ex);
 	}
 
 	/**
@@ -282,33 +282,33 @@ public final class ConfigWrapper<O extends ConfigOption> {
 	/**
 	 * 
 	 * @param option
-	 * @param predicate
+	 * @param verify
 	 * @return
 	 * @throws ConfigException.Missing
 	 * @throws ConfigException.BadValue
 	 */
-	public double getDoubleOrThrows(@Nonnull O option, DoublePredicate predicate)
+	public double getDoubleOrThrows(@Nonnull O option, DoublePredicate verify)
 			throws ConfigException.Missing, ConfigException.BadValue {
-		return getDoubleOrThrows(option, predicate,
+		return getDoubleOrThrows(option, verify,
 				new IllegalArgumentException("Illegal argument -> " + option.getConfigName(module)));
 	}
 
 	/**
 	 * 
 	 * @param option
-	 * @param predicate
-	 * @param exception
+	 * @param verify
+	 * @param ex
 	 * @return
 	 * @throws ConfigException.Missing
 	 * @throws ConfigException.BadValue
 	 */
-	public double getDoubleOrThrows(@Nonnull O option, DoublePredicate predicate, Exception exception)
+	public double getDoubleOrThrows(@Nonnull O option, DoublePredicate verify, Exception ex)
 			throws ConfigException.Missing, ConfigException.BadValue {
 		double value = getDoubleOrThrows(option);
-		if (predicate.test(value))
+		if (verify.test(value))
 			return value;
 		else
-			throw new ConfigException.BadValue(option.getConfigName(module), "value == " + value, exception);
+			throw new ConfigException.BadValue(option.getConfigName(module), "value == " + value, ex);
 	}
 
 	/**
@@ -326,33 +326,33 @@ public final class ConfigWrapper<O extends ConfigOption> {
 	/**
 	 * 
 	 * @param option
-	 * @param predicate
+	 * @param verify
 	 * @return
 	 * @throws ConfigException.Missing
 	 * @throws ConfigException.BadValue
 	 */
-	public String getStringOrThrows(@Nonnull O option, Predicate<String> predicate)
+	public String getStringOrThrows(@Nonnull O option, Predicate<String> verify)
 			throws ConfigException.Missing, ConfigException.BadValue {
-		return getStringOrThrows(option, predicate,
+		return getStringOrThrows(option, verify,
 				new IllegalArgumentException("Illegal argument -> " + option.getConfigName(module)));
 	}
 
 	/**
 	 * 
 	 * @param option
-	 * @param predicate
-	 * @param exception
+	 * @param verify
+	 * @param ex
 	 * @return
 	 * @throws ConfigException.Missing
 	 * @throws ConfigException.BadValue
 	 */
-	public String getStringOrThrows(@Nonnull O option, Predicate<String> predicate, Exception exception)
+	public String getStringOrThrows(@Nonnull O option, Predicate<String> verify, Exception ex)
 			throws ConfigException.Missing, ConfigException.BadValue {
 		String value = getStringOrThrows(option);
-		if (predicate.test(value))
+		if (verify.test(value))
 			return value;
 		else
-			throw new ConfigException.BadValue(option.getConfigName(module), "value == " + value, exception);
+			throw new ConfigException.BadValue(option.getConfigName(module), "value == " + value, ex);
 	}
 
 }

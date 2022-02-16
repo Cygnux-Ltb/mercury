@@ -1,7 +1,5 @@
 package io.mercury.common.config;
 
-import static java.lang.System.out;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -37,8 +35,8 @@ public final class ConfigUtil {
 				log.info("Key -> [{}],  ValueType -> [{}],  Value -> [{}]", entry.getKey(), value.valueType(),
 						value.unwrapped());
 			else
-				out.println("Key -> [" + entry.getKey() + "],  ValueType -> [" + value.valueType() + "],  Value -> ["
-						+ value.unwrapped() + "]");
+				System.out.println("Key -> [" + entry.getKey() + "],  ValueType -> [" + value.valueType()
+						+ "],  Value -> [" + value.unwrapped() + "]");
 		});
 	}
 

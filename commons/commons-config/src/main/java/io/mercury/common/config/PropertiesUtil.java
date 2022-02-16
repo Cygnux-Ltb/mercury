@@ -3,7 +3,6 @@ package io.mercury.common.config;
 import static java.lang.Boolean.parseBoolean;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
-import static java.lang.System.out;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -77,15 +76,17 @@ public final class PropertiesUtil {
 
 	/**
 	 * 
-	 * @param inputStream
+	 * @param stream
 	 * @return
 	 * @throws IOException
 	 */
-	public static Properties load(@Nonnull final InputStream inputStream) throws IOException {
-		Assertor.nonNull(inputStream, "inputStream");
+	public static Properties load(@Nonnull final InputStream stream) throws IOException {
+		Assertor.nonNull(stream, "stream");
 		Properties props = new Properties();
-		try (final InputStream in = inputStream) {
+		try (final InputStream in = stream) {
 			props.load(in);
+		} catch (Exception e) {
+			// noop
 		}
 		return props;
 	}
@@ -96,7 +97,7 @@ public final class PropertiesUtil {
 	 * @param key
 	 * @return
 	 */
-	public static final String getProperty(@Nonnull final Properties props, final String key) {
+	public static final String getString(@Nonnull final Properties props, final String key) {
 		return props.getProperty(key, "");
 	}
 
@@ -107,7 +108,7 @@ public final class PropertiesUtil {
 	 * @return
 	 * @throws NumberFormatException
 	 */
-	public static final boolean getBoobleProperty(@Nonnull final Properties props, final String key)
+	public static final boolean getBooble(@Nonnull final Properties props, final String key)
 			throws NumberFormatException {
 		String prop = props.getProperty(key);
 		return StringSupport.isNullOrEmpty(prop) ? false : parseBoolean(prop);
@@ -120,8 +121,7 @@ public final class PropertiesUtil {
 	 * @return
 	 * @throws NumberFormatException
 	 */
-	public static final int getIntProperty(@Nonnull final Properties props, final String key)
-			throws NumberFormatException {
+	public static final int getInt(@Nonnull final Properties props, final String key) throws NumberFormatException {
 		String prop = props.getProperty(key);
 		return StringSupport.isNullOrEmpty(prop) ? 0 : parseInt(prop);
 	}
@@ -133,7 +133,7 @@ public final class PropertiesUtil {
 	 * @return
 	 * @throws NumberFormatException
 	 */
-	public static final double getDoubleProperty(@Nonnull final Properties props, final String key)
+	public static final double getDouble(@Nonnull final Properties props, final String key)
 			throws NumberFormatException {
 		String prop = props.getProperty(key);
 		return StringSupport.isNullOrEmpty(prop) ? 0.0D : parseDouble(prop);
@@ -143,8 +143,8 @@ public final class PropertiesUtil {
 	 * 
 	 * @param props
 	 */
-	public static final void showProperties(@Nonnull final Properties props) {
-		showProperties(props, null);
+	public static final void show(@Nonnull final Properties props) {
+		show(props, null);
 	}
 
 	/**
@@ -152,12 +152,12 @@ public final class PropertiesUtil {
 	 * @param props
 	 * @param log
 	 */
-	public static final void showProperties(@Nonnull final Properties props, @Nullable final Logger log) {
+	public static final void show(@Nonnull final Properties props, @Nullable final Logger log) {
 		ArrayList<Entry<Object, Object>> list = new ArrayList<>(props.entrySet());
 		for (int i = 0; i < list.size(); i++) {
 			Entry<Object, Object> entry = list.get(i);
 			if (log == null)
-				out.println("Property " + i + " : key -> " + entry.getKey() + ", value -> " + entry.getValue());
+				System.out.println("Property " + i + " : key -> " + entry.getKey() + ", value -> " + entry.getValue());
 			else
 				log.info("Property {} : key -> {}, value -> {}", i, entry.getKey(), entry.getValue());
 		}
@@ -166,14 +166,14 @@ public final class PropertiesUtil {
 
 	public static void main(String[] args) {
 		System.out.println("---old---");
-		PropertiesUtil.showProperties(System.getProperties());
+		PropertiesUtil.show(System.getProperties());
 		try {
 			LibraryPathManager.addLibraryDir("~/java_lib");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		System.out.println("---new---");
-		PropertiesUtil.showProperties(System.getProperties());
+		PropertiesUtil.show(System.getProperties());
 	}
 
 }
