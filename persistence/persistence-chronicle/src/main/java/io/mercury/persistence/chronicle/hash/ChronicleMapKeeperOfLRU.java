@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
-import io.mercury.common.datetime.Epochs;
+import io.mercury.common.datetime.EpochTime;
 import io.mercury.common.thread.ThreadSupport;
 import io.mercury.persistence.chronicle.exception.ChronicleIOException;
 import net.openhft.chronicle.map.ChronicleMap;
@@ -87,7 +87,7 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 				Thread.sleep(expireMillis);
 				System.out.println("执行清理.......");
 				Set<String> filenames = lastUsedLog.keySet();
-				long now = Epochs.getEpochMillis();
+				long now = EpochTime.getEpochMillis();
 				for (String filename : filenames) {
 					long lastUsed = lastUsedLog.get(filename);
 					System.out.println("文件 -> " + filename + "最后使用时间 -> " + lastUsed);
@@ -126,7 +126,7 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 	public ChronicleMap<K, V> acquire(String filename) throws ChronicleIOException {
 		ChronicleMap<K, V> acquire = super.acquire(filename);
 		// 存储文件名和到期时间
-		long expireEpoch = Epochs.getEpochMillis() + expireMillis;
+		long expireEpoch = EpochTime.getEpochMillis() + expireMillis;
 		System.out.println("分配新文件 -> " + filename + ", 过期时间为 -> " + expireEpoch);
 		lastUsedLog.put(filename, expireEpoch);
 		return acquire;
