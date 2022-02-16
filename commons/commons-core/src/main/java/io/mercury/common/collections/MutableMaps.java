@@ -1,5 +1,8 @@
 package io.mercury.common.collections;
 
+import static io.mercury.common.collections.Capacity.checkAndGet;
+import static io.mercury.common.collections.MapUtil.optimizationCapacity;
+
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -67,7 +70,7 @@ public final class MutableMaps {
 	 * @return MutableIntIntMap
 	 */
 	public static final MutableIntIntMap newIntIntHashMap(int capacity) {
-		return new IntIntHashMap(MapUtil.optimizationCapacity(capacity));
+		return new IntIntHashMap(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -76,7 +79,7 @@ public final class MutableMaps {
 	 * @return MutableIntIntMap
 	 */
 	public static final MutableIntIntMap newIntIntHashMap(Capacity capacity) {
-		return new IntIntHashMap(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new IntIntHashMap(checkAndGet(capacity));
 	}
 
 	/**
@@ -93,7 +96,7 @@ public final class MutableMaps {
 	 * @return MutableIntLongMap
 	 */
 	public static final MutableIntLongMap newIntLongHashMap(int capacity) {
-		return new IntLongHashMap(MapUtil.optimizationCapacity(capacity));
+		return new IntLongHashMap(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -102,7 +105,7 @@ public final class MutableMaps {
 	 * @return MutableIntLongMap
 	 */
 	public static final MutableIntLongMap newIntLongHashMap(Capacity capacity) {
-		return new IntLongHashMap(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new IntLongHashMap(checkAndGet(capacity));
 	}
 
 	/**
@@ -119,7 +122,7 @@ public final class MutableMaps {
 	 * @return MutableIntDoubleMap
 	 */
 	public static final MutableIntDoubleMap newIntDoubleHashMap(int capacity) {
-		return new IntDoubleHashMap(MapUtil.optimizationCapacity(capacity));
+		return new IntDoubleHashMap(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -128,7 +131,7 @@ public final class MutableMaps {
 	 * @return MutableIntDoubleMap
 	 */
 	public static final MutableIntDoubleMap newIntDoubleHashMap(Capacity capacity) {
-		return new IntDoubleHashMap(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new IntDoubleHashMap(checkAndGet(capacity));
 	}
 
 	/**
@@ -145,7 +148,7 @@ public final class MutableMaps {
 	 * @return MutableIntBooleanMap
 	 */
 	public static final MutableIntBooleanMap newIntBooleanHashMap(int capacity) {
-		return new IntBooleanHashMap(MapUtil.optimizationCapacity(capacity));
+		return new IntBooleanHashMap(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -154,7 +157,7 @@ public final class MutableMaps {
 	 * @return MutableIntBooleanMap
 	 */
 	public static final MutableIntBooleanMap newIntBooleanHashMap(Capacity capacity) {
-		return new IntBooleanHashMap(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new IntBooleanHashMap(checkAndGet(capacity));
 	}
 
 	/**
@@ -173,7 +176,7 @@ public final class MutableMaps {
 	 * @return MutableIntObjectMap<V>
 	 */
 	public static final <V> MutableIntObjectMap<V> newIntObjectHashMap(int capacity) {
-		return new IntObjectHashMap<>(MapUtil.optimizationCapacity(capacity));
+		return new IntObjectHashMap<>(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -183,7 +186,7 @@ public final class MutableMaps {
 	 * @return MutableIntObjectMap<V>
 	 */
 	public static final <V> MutableIntObjectMap<V> newIntObjectHashMap(Capacity capacity) {
-		return new IntObjectHashMap<>(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new IntObjectHashMap<>(checkAndGet(capacity));
 	}
 
 	/********** Key -> long **********/
@@ -201,7 +204,7 @@ public final class MutableMaps {
 	 * @return MutableLongLongMap
 	 */
 	public static final MutableLongLongMap newLongLongHashMap(int capacity) {
-		return new LongLongHashMap(MapUtil.optimizationCapacity(capacity));
+		return new LongLongHashMap(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -210,7 +213,7 @@ public final class MutableMaps {
 	 * @return MutableLongLongMap
 	 */
 	public static final MutableLongLongMap newLongLongHashMap(Capacity capacity) {
-		return new LongLongHashMap(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new LongLongHashMap(checkAndGet(capacity));
 	}
 
 	/**
@@ -227,7 +230,7 @@ public final class MutableMaps {
 	 * @return MutableLongIntMap
 	 */
 	public static final MutableLongIntMap newLongIntHashMap(int capacity) {
-		return new LongIntHashMap(MapUtil.optimizationCapacity(capacity));
+		return new LongIntHashMap(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -236,7 +239,7 @@ public final class MutableMaps {
 	 * @return MutableLongIntMap
 	 */
 	public static final MutableLongIntMap newLongIntHashMap(Capacity capacity) {
-		return new LongIntHashMap(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new LongIntHashMap(checkAndGet(capacity));
 	}
 
 	/**
@@ -253,7 +256,7 @@ public final class MutableMaps {
 	 * @return MutableLongDoubleMap
 	 */
 	public static final MutableLongDoubleMap newLongDoubleHashMap(int capacity) {
-		return new LongDoubleHashMap(MapUtil.optimizationCapacity(capacity));
+		return new LongDoubleHashMap(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -262,7 +265,7 @@ public final class MutableMaps {
 	 * @return MutableLongDoubleMap
 	 */
 	public static final MutableLongDoubleMap newLongDoubleHashMap(Capacity capacity) {
-		return new LongDoubleHashMap(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new LongDoubleHashMap(checkAndGet(capacity));
 	}
 
 	/**
@@ -279,7 +282,7 @@ public final class MutableMaps {
 	 * @return MutableLongBooleanMap
 	 */
 	public static final MutableLongBooleanMap newLongBooleanHashMap(int capacity) {
-		return new LongBooleanHashMap(MapUtil.optimizationCapacity(capacity));
+		return new LongBooleanHashMap(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -288,7 +291,7 @@ public final class MutableMaps {
 	 * @return MutableLongBooleanMap
 	 */
 	public static final MutableLongBooleanMap newLongBooleanHashMap(Capacity capacity) {
-		return new LongBooleanHashMap(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new LongBooleanHashMap(checkAndGet(capacity));
 	}
 
 	/**
@@ -307,7 +310,7 @@ public final class MutableMaps {
 	 * @return MutableLongObjectMap<V>
 	 */
 	public static final <V> MutableLongObjectMap<V> newLongObjectHashMap(int capacity) {
-		return new LongObjectHashMap<>(MapUtil.optimizationCapacity(capacity));
+		return new LongObjectHashMap<>(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -317,7 +320,7 @@ public final class MutableMaps {
 	 * @return MutableLongObjectMap<V>
 	 */
 	public static final <V> MutableLongObjectMap<V> newLongObjectHashMap(Capacity capacity) {
-		return new LongObjectHashMap<>(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new LongObjectHashMap<>(checkAndGet(capacity));
 	}
 
 	/********** Key -> double **********/
@@ -335,7 +338,7 @@ public final class MutableMaps {
 	 * @return MutableDoubleBooleanMap
 	 */
 	public static final MutableDoubleBooleanMap newDoubleBooleanHashMap(int capacity) {
-		return new DoubleBooleanHashMap(MapUtil.optimizationCapacity(capacity));
+		return new DoubleBooleanHashMap(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -344,7 +347,7 @@ public final class MutableMaps {
 	 * @return MutableDoubleBooleanMap
 	 */
 	public static final MutableDoubleBooleanMap newDoubleBooleanHashMap(Capacity capacity) {
-		return new DoubleBooleanHashMap(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new DoubleBooleanHashMap(checkAndGet(capacity));
 	}
 
 	/**
@@ -361,7 +364,7 @@ public final class MutableMaps {
 	 * @return MutableDoubleIntMap
 	 */
 	public static final MutableDoubleIntMap newDoubleIntHashMap(int capacity) {
-		return new DoubleIntHashMap(MapUtil.optimizationCapacity(capacity));
+		return new DoubleIntHashMap(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -370,7 +373,7 @@ public final class MutableMaps {
 	 * @return MutableDoubleIntMap
 	 */
 	public static final MutableDoubleIntMap newDoubleIntHashMap(Capacity capacity) {
-		return new DoubleIntHashMap(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new DoubleIntHashMap(checkAndGet(capacity));
 	}
 
 	/**
@@ -387,7 +390,7 @@ public final class MutableMaps {
 	 * @return MutableDoubleLongMap
 	 */
 	public static final MutableDoubleLongMap newDoubleLongHashMap(int capacity) {
-		return new DoubleLongHashMap(MapUtil.optimizationCapacity(capacity));
+		return new DoubleLongHashMap(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -396,7 +399,7 @@ public final class MutableMaps {
 	 * @return MutableDoubleLongMap
 	 */
 	public static final MutableDoubleLongMap newDoubleLongHashMap(Capacity capacity) {
-		return new DoubleLongHashMap(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new DoubleLongHashMap(checkAndGet(capacity));
 	}
 
 	/**
@@ -415,7 +418,7 @@ public final class MutableMaps {
 	 * @return MutableObjectBooleanMap<K>
 	 */
 	public static final <K> MutableObjectBooleanMap<K> newObjectBooleanHashMap(int capacity) {
-		return new ObjectBooleanHashMap<>(MapUtil.optimizationCapacity(capacity));
+		return new ObjectBooleanHashMap<>(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -425,7 +428,7 @@ public final class MutableMaps {
 	 * @return MutableObjectBooleanMap<K>
 	 */
 	public static final <K> MutableObjectBooleanMap<K> newObjectBooleanHashMap(Capacity capacity) {
-		return new ObjectBooleanHashMap<>(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new ObjectBooleanHashMap<>(checkAndGet(capacity));
 	}
 
 	/**
@@ -444,7 +447,7 @@ public final class MutableMaps {
 	 * @return MutableObjectIntMap<K>
 	 */
 	public static final <K> MutableObjectIntMap<K> newObjectIntHashMap(int capacity) {
-		return new ObjectIntHashMap<>(MapUtil.optimizationCapacity(capacity));
+		return new ObjectIntHashMap<>(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -454,7 +457,7 @@ public final class MutableMaps {
 	 * @return MutableObjectIntMap<K>
 	 */
 	public static final <K> MutableObjectIntMap<K> newObjectIntHashMap(Capacity capacity) {
-		return new ObjectIntHashMap<>(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new ObjectIntHashMap<>(checkAndGet(capacity));
 	}
 
 	/**
@@ -473,7 +476,7 @@ public final class MutableMaps {
 	 * @return MutableObjectLongMap<K>
 	 */
 	public static final <K> MutableObjectLongMap<K> newObjectLongHashMap(int capacity) {
-		return new ObjectLongHashMap<>(MapUtil.optimizationCapacity(capacity));
+		return new ObjectLongHashMap<>(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -483,7 +486,7 @@ public final class MutableMaps {
 	 * @return MutableObjectLongMap<K>
 	 */
 	public static final <K> MutableObjectLongMap<K> newObjectLongHashMap(Capacity capacity) {
-		return new ObjectLongHashMap<>(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new ObjectLongHashMap<>(checkAndGet(capacity));
 	}
 
 	/**
@@ -502,7 +505,7 @@ public final class MutableMaps {
 	 * @return MutableObjectDoubleMap<K>
 	 */
 	public static final <K> MutableObjectDoubleMap<K> newObjectDoubleHashMap(int capacity) {
-		return new ObjectDoubleHashMap<>(MapUtil.optimizationCapacity(capacity));
+		return new ObjectDoubleHashMap<>(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -512,7 +515,7 @@ public final class MutableMaps {
 	 * @return MutableObjectDoubleMap<K>
 	 */
 	public static final <K> MutableObjectDoubleMap<K> newObjectDoubleHashMap(Capacity capacity) {
-		return new ObjectDoubleHashMap<>(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new ObjectDoubleHashMap<>(checkAndGet(capacity));
 	}
 
 	/**
@@ -533,7 +536,7 @@ public final class MutableMaps {
 	 * @return MutableMap<K, V>
 	 */
 	public static final <K, V> MutableMap<K, V> newUnifiedMap(int capacity) {
-		return new UnifiedMap<>(MapUtil.optimizationCapacity(capacity));
+		return new UnifiedMap<>(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -544,7 +547,7 @@ public final class MutableMaps {
 	 * @return MutableMap<K, V>
 	 */
 	public static final <K, V> MutableMap<K, V> newUnifiedMap(Capacity capacity) {
-		return new UnifiedMap<>(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new UnifiedMap<>(checkAndGet(capacity));
 	}
 
 	/**
@@ -652,7 +655,7 @@ public final class MutableMaps {
 	 * @return ConcurrentMutableMap<K, V>
 	 */
 	public static final <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMap(int capacity) {
-		return ConcurrentHashMap.newMap(MapUtil.optimizationCapacity(capacity));
+		return ConcurrentHashMap.newMap(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -663,7 +666,7 @@ public final class MutableMaps {
 	 * @return ConcurrentMutableMap<K, V>
 	 */
 	public static final <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMap(Capacity capacity) {
-		return ConcurrentHashMap.newMap(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return ConcurrentHashMap.newMap(checkAndGet(capacity));
 	}
 
 	/**
@@ -710,7 +713,7 @@ public final class MutableMaps {
 	 * @return ConcurrentMutableMap<K, V>
 	 */
 	public static final <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMapUnsafe(int capacity) {
-		return ConcurrentHashMapUnsafe.newMap(MapUtil.optimizationCapacity(capacity));
+		return ConcurrentHashMapUnsafe.newMap(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -721,7 +724,7 @@ public final class MutableMaps {
 	 * @return ConcurrentMutableMap<K, V>
 	 */
 	public static final <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMapUnsafe(Capacity capacity) {
-		return ConcurrentHashMapUnsafe.newMap(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return ConcurrentHashMapUnsafe.newMap(checkAndGet(capacity));
 	}
 
 	/**
@@ -768,7 +771,7 @@ public final class MutableMaps {
 	 * @return MutableBiMap<K, V>
 	 */
 	public static final <K, V> MutableBiMap<K, V> newHashBiMap(int capacity) {
-		return new HashBiMap<>(MapUtil.optimizationCapacity(capacity));
+		return new HashBiMap<>(optimizationCapacity(capacity));
 	}
 
 	/**
@@ -779,7 +782,7 @@ public final class MutableMaps {
 	 * @return MutableBiMap<K, V>
 	 */
 	public static final <K, V> MutableBiMap<K, V> newHashBiMap(Capacity capacity) {
-		return new HashBiMap<>(capacity == null ? Capacity.L04_SIZE.value() : capacity.value());
+		return new HashBiMap<>(checkAndGet(capacity));
 	}
 
 	/**

@@ -1,5 +1,7 @@
 package io.mercury.common.collections;
 
+import static io.mercury.common.collections.Capacity.checkAndGet;
+
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -39,7 +41,7 @@ public final class MutableSets {
 	 * @return
 	 */
 	public static final MutableIntSet newIntHashSet(Capacity capacity) {
-		return new IntHashSet(capacity.value());
+		return new IntHashSet(checkAndGet(capacity));
 	}
 
 	/**
@@ -70,7 +72,7 @@ public final class MutableSets {
 	 * @return
 	 */
 	public static final MutableLongSet newLongHashSet(Capacity capacity) {
-		return new LongHashSet(capacity.value());
+		return new LongHashSet(checkAndGet(capacity));
 	}
 
 	/**
@@ -101,7 +103,7 @@ public final class MutableSets {
 	 * @return
 	 */
 	public static final MutableDoubleSet newDoubleHashSet(Capacity capacity) {
-		return new DoubleHashSet(capacity.value());
+		return new DoubleHashSet(checkAndGet(capacity));
 	}
 
 	/**
@@ -151,7 +153,7 @@ public final class MutableSets {
 	 * @return
 	 */
 	public static final <E> MutableSet<E> newUnifiedSet(Capacity capacity) {
-		return new UnifiedSet<>(capacity.value());
+		return new UnifiedSet<>(checkAndGet(capacity));
 	}
 
 	/**

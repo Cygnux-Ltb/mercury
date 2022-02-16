@@ -10,11 +10,9 @@ import java.lang.annotation.Target;
  * 标识函数的返回值需要被检查
  * 
  * @author yellow013
- *
  */
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CheckReturnValue {
-
 }

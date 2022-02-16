@@ -7,10 +7,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 标识启动函数
+ * 启动函数标识
  * 
  * @author yellow013
- *
  */
 @Documented
 @Target({ ElementType.METHOD })

@@ -11,6 +11,7 @@ import static io.mercury.common.datetime.TimeConst.SECONDS_PER_HOUR;
 import static io.mercury.common.datetime.TimeConst.SECONDS_PER_MINUTE;
 import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
 import static io.mercury.common.datetime.TimeZone.UTC;
+import static io.mercury.common.lang.Assertor.nonNull;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.System.nanoTime;
 import static java.time.Instant.EPOCH;
@@ -24,7 +25,13 @@ import java.time.ZonedDateTime;
 
 import javax.annotation.Nonnull;;
 
-public final class Epochs {
+/**
+ * 
+ * <b>Epoch </b>获取工具
+ * 
+ * @author yellow013
+ */
+public final class EpochTime {
 
 	/**
 	 * EpochTime Zero Point : UTC 1970-01-01 00:00:00.0000
@@ -48,6 +55,27 @@ public final class Epochs {
 		long microsEpoch = millisEpoch * MICROS_PER_MILLIS;
 		// 计算系统纳秒函数与Epoch函数的微秒偏移量
 		MICROS_EPOCH_OFFSET = microsEpoch - (baseline / NANOS_PER_MICROS);
+	}
+
+	/**
+	 * 
+	 * @param unit
+	 * @return
+	 */
+	public static final long getEpochs(@Nonnull EpochUnit unit) {
+		nonNull(unit, "unit");
+		switch (unit) {
+		case SECOND:
+			return getEpochSeconds();
+		case MILLIS:
+			return getEpochMillis();
+		case MICROS:
+			return getEpochMicros();
+		case NANOS:
+			return getEpochNanos();
+		default:
+			return 0L;
+		}
 	}
 
 	/**
@@ -93,8 +121,7 @@ public final class Epochs {
 	 */
 	public static final long getEpochMillis(@Nonnull LocalDateTime datetime) {
 		return datetime.toLocalDate().toEpochDay() * MILLIS_PER_DAY
-				+ datetime.toLocalTime().toSecondOfDay() * MILLIS_PER_SECONDS
-				+ datetime.getNano() / NANOS_PER_MILLIS
+				+ datetime.toLocalTime().toSecondOfDay() * MILLIS_PER_SECONDS + datetime.getNano() / NANOS_PER_MILLIS
 				- SYS_DEFAULT.getTotalSeconds() * MILLIS_PER_SECONDS;
 	}
 
@@ -106,8 +133,7 @@ public final class Epochs {
 	 */
 	public static final long getEpochMillis(@Nonnull LocalDateTime datetime, @Nonnull ZoneOffset offset) {
 		return datetime.toLocalDate().toEpochDay() * MILLIS_PER_DAY
-				+ datetime.toLocalTime().toSecondOfDay() * MILLIS_PER_SECONDS 
-				+ datetime.getNano() / NANOS_PER_MILLIS
+				+ datetime.toLocalTime().toSecondOfDay() * MILLIS_PER_SECONDS + datetime.getNano() / NANOS_PER_MILLIS
 				- offset.getTotalSeconds() * MILLIS_PER_SECONDS;
 	}
 
@@ -269,7 +295,7 @@ public final class Epochs {
 	 * @param zoneId
 	 * @return
 	 */
-	public static final ZonedDateTime ofEpochMillis(long millis, ZoneId zoneId) {
+	public static final ZonedDateTime ofEpochMillis(long millis, @Nonnull ZoneId zoneId) {
 		return ZonedDateTime.ofInstant(Instant.ofEpochMilli(millis), zoneId);
 	}
 
@@ -288,10 +314,11 @@ public final class Epochs {
 	 * @param zoneId
 	 * @return
 	 */
-	public static final ZonedDateTime ofEpochSeconds(long seconds, ZoneId zoneId) {
+	public static final ZonedDateTime ofEpochSeconds(long seconds, @Nonnull ZoneId zoneId) {
 		return ZonedDateTime.ofInstant(Instant.ofEpochSecond(seconds), zoneId);
 	}
 
+	
 	public static void main(String[] args) {
 		long[] mss = new long[50];
 		long[] nss = new long[50];
@@ -300,7 +327,6 @@ public final class Epochs {
 			mss[i] = getEpochMicros();
 			nss[i] = getEpochNanos();
 		}
-
 		System.out.println(ms);
 		for (int i = 0; i < nss.length; i++) {
 			System.out.println(mss[i]);

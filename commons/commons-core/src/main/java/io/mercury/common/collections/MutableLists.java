@@ -23,8 +23,6 @@ public final class MutableLists {
 	private MutableLists() {
 	}
 
-	private static final int DEFAULT_CAPACITY = 16;
-
 	/**
 	 **************** primitive list ****************
 	 */
@@ -42,7 +40,7 @@ public final class MutableLists {
 	 * @return MutableByteList
 	 */
 	public static final MutableByteList newByteArrayList(int capacity) {
-		return new ByteArrayList(capacity > DEFAULT_CAPACITY ? capacity : DEFAULT_CAPACITY);
+		return new ByteArrayList(capacity);
 	}
 
 	/**
@@ -70,7 +68,7 @@ public final class MutableLists {
 	 * @return MutableCharList
 	 */
 	public static final MutableCharList newCharArrayList(int capacity) {
-		return new CharArrayList(capacity > DEFAULT_CAPACITY ? capacity : DEFAULT_CAPACITY);
+		return new CharArrayList(capacity);
 	}
 
 	/**
@@ -98,7 +96,7 @@ public final class MutableLists {
 	 * @return MutableIntList
 	 */
 	public static final MutableIntList newIntArrayList(int capacity) {
-		return new IntArrayList(capacity > DEFAULT_CAPACITY ? capacity : DEFAULT_CAPACITY);
+		return new IntArrayList(capacity);
 	}
 
 	/**
@@ -126,7 +124,7 @@ public final class MutableLists {
 	 * @return MutableLongList
 	 */
 	public static final MutableLongList newLongArrayList(int capacity) {
-		return new LongArrayList(capacity > DEFAULT_CAPACITY ? capacity : DEFAULT_CAPACITY);
+		return new LongArrayList(capacity);
 	}
 
 	/**
@@ -154,7 +152,7 @@ public final class MutableLists {
 	 * @return MutableDoubleList
 	 */
 	public static final MutableDoubleList newDoubleArrayList(int capacity) {
-		return new DoubleArrayList(capacity > DEFAULT_CAPACITY ? capacity : DEFAULT_CAPACITY);
+		return new DoubleArrayList(capacity);
 	}
 
 	/**
@@ -196,17 +194,17 @@ public final class MutableLists {
 	 * @return MutableList
 	 */
 	public static final <E> MutableList<E> newFastList(int capacity) {
-		return new FastList<>(capacity > DEFAULT_CAPACITY ? capacity : DEFAULT_CAPACITY);
+		return new FastList<>(capacity);
 	}
 
 	/**
 	 * 
 	 * @param <E>
-	 * @param coll
+	 * @param collection
 	 * @return MutableList
 	 */
-	public static final <E> MutableList<E> newFastList(Collection<E> coll) {
-		return new FastList<>(coll);
+	public static final <E> MutableList<E> newFastList(Collection<E> collection) {
+		return new FastList<>(collection);
 	}
 
 	/**
@@ -217,7 +215,7 @@ public final class MutableLists {
 	 */
 	public static final <E> MutableList<E> newFastList(Iterator<E> iterator) {
 		if (iterator != null && iterator.hasNext()) {
-			MutableList<E> list = newFastList(DEFAULT_CAPACITY);
+			MutableList<E> list = newFastList(Capacity.DEFAULT_SIZE);
 			while (iterator.hasNext())
 				list.add(iterator.next());
 			return list;

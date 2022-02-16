@@ -1,6 +1,6 @@
 package io.mercury.common.sequence;
 
-import static io.mercury.common.datetime.Epochs.EPOCH_ZERO;
+import static io.mercury.common.datetime.EpochTime.EPOCH_ZERO;
 import static io.mercury.common.datetime.TimeZone.UTC;
 import static io.mercury.common.util.BitOperator.maxValueOfBit;
 import static java.lang.System.currentTimeMillis;

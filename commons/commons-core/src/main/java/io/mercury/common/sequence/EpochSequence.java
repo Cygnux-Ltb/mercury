@@ -8,7 +8,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.eclipse.collections.api.list.primitive.MutableLongList;
 
 import io.mercury.common.collections.MutableLists;
-import io.mercury.common.datetime.Epochs;
+import io.mercury.common.datetime.EpochTime;
 import io.mercury.common.util.BitFormatter;
 import io.mercury.common.util.BitOperator;
 
@@ -149,7 +149,7 @@ public final class EpochSequence {
 		System.out.println("========================================");
 		System.out.println();
 
-		long epochMillis = Epochs.getEpochMillis();
+		long epochMillis = EpochTime.getEpochMillis();
 		System.out.println("epoch millis binary: ");
 		System.out.println(longBinaryFormat(epochMillis));
 		long lmEpochMillis = epochMillis << 16;

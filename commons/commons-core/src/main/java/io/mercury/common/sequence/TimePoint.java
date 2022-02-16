@@ -4,7 +4,7 @@ import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HH_M
 
 import java.time.ZonedDateTime;
 
-import io.mercury.common.datetime.Epochs;
+import io.mercury.common.datetime.EpochTime;
 import io.mercury.common.lang.Assertor;
 
 /**
@@ -101,8 +101,8 @@ public class TimePoint implements Serial<TimePoint> {
 		System.out.println(timeStarted1.getEpochSecond());
 		System.out.println(timeStarted1.getSerialId());
 
-		System.out.println(Epochs.getEpochMillis());
-		System.out.println(Epochs.getEpochSeconds());
+		System.out.println(EpochTime.getEpochMillis());
+		System.out.println(EpochTime.getEpochSeconds());
 
 		System.out.println(Long.MAX_VALUE);
 

@@ -7,10 +7,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 标识抽象函数
+ * 抽象函数标识
  * 
  * @author yellow013
- *
  */
 @Documented
 @Target({ ElementType.METHOD })

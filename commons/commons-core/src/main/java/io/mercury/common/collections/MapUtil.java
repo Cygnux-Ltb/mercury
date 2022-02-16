@@ -47,7 +47,7 @@ public final class MapUtil {
 	 * @return
 	 */
 	public static final int optimizationCapacity(int capacity) {
-		return optimizationCapacity(16, capacity);
+		return optimizationCapacity(Capacity.DEFAULT_SIZE, capacity);
 	}
 
 	/**

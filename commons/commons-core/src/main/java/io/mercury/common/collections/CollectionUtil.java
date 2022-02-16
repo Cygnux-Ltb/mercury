@@ -15,11 +15,11 @@ public final class CollectionUtil {
 	/**
 	 * 
 	 * @param <E>
-	 * @param coll
+	 * @param collection
 	 * @return
 	 */
-	public static final <E> boolean onlyOneElement(Collection<E> coll) {
-		if (coll != null && coll.size() == 1)
+	public static final <E> boolean onlyOneElement(Collection<E> collection) {
+		if (collection != null && collection.size() == 1)
 			return true;
 		return false;
 	}
@@ -27,11 +27,11 @@ public final class CollectionUtil {
 	/**
 	 * 
 	 * @param <E>
-	 * @param coll
+	 * @param collection
 	 * @return
 	 */
-	public static final <E> boolean notEmpty(Collection<E> coll) {
-		if (coll != null && coll.size() > 1)
+	public static final <E> boolean notEmpty(Collection<E> collection) {
+		if (collection != null && collection.size() > 1)
 			return true;
 		return false;
 	}

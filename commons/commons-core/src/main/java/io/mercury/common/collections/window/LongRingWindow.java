@@ -15,7 +15,6 @@ import org.eclipse.collections.impl.list.mutable.primitive.LongArrayList;
  * 内部包含Long原始类型的数组, 长度不可变
  * 
  * @author yellow013
- *
  */
 @NotThreadSafe
 public final class LongRingWindow {

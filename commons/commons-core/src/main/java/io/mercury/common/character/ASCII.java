@@ -16,7 +16,7 @@ package io.mercury.common.character;
  * 
  * @author yellow013
  */
-public interface AsciiCharacter {
+public interface ASCII {
 
 	/**
 	 * Null

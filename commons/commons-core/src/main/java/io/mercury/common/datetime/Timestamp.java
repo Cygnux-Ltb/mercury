@@ -58,7 +58,7 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 	}
 
 	public static Timestamp nowWithSecond() {
-		return new Timestamp(Epochs.getEpochSeconds(), SECOND);
+		return new Timestamp(EpochTime.getEpochSeconds(), SECOND);
 	}
 
 	public static Timestamp nowWithMillis() {
@@ -66,11 +66,11 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 	}
 
 	public static Timestamp nowWithMicros() {
-		return new Timestamp(Epochs.getEpochMicros(), MICROS);
+		return new Timestamp(EpochTime.getEpochMicros(), MICROS);
 	}
 
 	public static Timestamp nowWithNanos() {
-		return new Timestamp(Epochs.getEpochNanos(), NANOS);
+		return new Timestamp(EpochTime.getEpochNanos(), NANOS);
 	}
 
 	public static Timestamp withEpochSecond(long epochSecond) {
@@ -208,7 +208,7 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
 		System.out.println(timestamp);
 
 		for (int i = 0; i < 100000; i++) {
-			Epochs.getEpochMillis();
+			EpochTime.getEpochMillis();
 			Timestamp.nowWithMillis();
 			Instant.now();
 			i++;

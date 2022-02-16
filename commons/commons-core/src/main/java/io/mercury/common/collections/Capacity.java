@@ -214,6 +214,8 @@ public enum Capacity {
 
 	;
 
+	public static final int DEFAULT_SIZE = 16;
+
 	private static final MutableIntObjectMap<Capacity> ValueMap = new IntObjectHashMap<Capacity>();
 
 	static {
@@ -225,6 +227,15 @@ public enum Capacity {
 
 	private Capacity(int value) {
 		this.value = value;
+	}
+
+	/**
+	 * 
+	 * @param capacity
+	 * @return
+	 */
+	public static final int checkAndGet(Capacity capacity) {
+		return capacity == null ? Capacity.DEFAULT_SIZE : capacity.value();
 	}
 
 	/**
@@ -258,7 +269,7 @@ public enum Capacity {
 	 */
 	public Capacity get(int value) {
 		int pow2 = BitOperator.minPow2(value);
-		return pow2 >= 16 ? Capacity.L04_SIZE : ValueMap.get(pow2);
+		return pow2 >= DEFAULT_SIZE ? Capacity.L04_SIZE : ValueMap.get(pow2);
 	}
 
 	public static void main(String[] args) {
