@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.collections.api.list.ImmutableList;
+
 /**
  * DAG : Directed Acyclic Graph
  *
@@ -45,12 +47,12 @@ public class DAG implements Cloneable, Serializable {
 	/**
 	 * Maps vertex's label to vertex
 	 */
-	private Map<String, Vertex> vertexMap = new HashMap<String, Vertex>();
+	private final Map<String, Vertex> vertexMap = new HashMap<String, Vertex>();
 
 	/**
 	 * Conatin list of all vertices
 	 */
-	private List<Vertex> vertexList = new ArrayList<Vertex>();
+	private final List<Vertex> vertexList = new ArrayList<Vertex>();
 
 	// ------------------------------------------------------------
 	// Constructors
@@ -142,7 +144,7 @@ public class DAG implements Cloneable, Serializable {
 	 * @param label
 	 * @return
 	 */
-	public List<String> getChildLabels(String label) {
+	public ImmutableList<String> getChildLabels(String label) {
 		return getVertex(label).getChildLabels();
 	}
 
@@ -150,7 +152,7 @@ public class DAG implements Cloneable, Serializable {
 	 * @param label
 	 * @return
 	 */
-	public List<String> getParentLabels(String label) {
+	public ImmutableList<String> getParentLabels(String label) {
 		return getVertex(label).getParentLabels();
 	}
 

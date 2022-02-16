@@ -1,5 +1,7 @@
 package io.mercury.common.graph.dag;
 
+import static org.eclipse.collections.impl.collector.Collectors2.toImmutableList;
+
 /*
  * Copyright The Codehaus Foundation.
  *
@@ -17,8 +19,11 @@ package io.mercury.common.graph.dag;
  */
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+
+import io.mercury.common.collections.MutableLists;
 
 /**
  * 
@@ -37,20 +42,28 @@ public class Vertex implements Cloneable, Serializable {
 
 	private final String label;
 
-	private List<Vertex> children = new ArrayList<Vertex>();
+	private final MutableList<Vertex> children = MutableLists.newFastList();
 
-	private List<Vertex> parents = new ArrayList<Vertex>();
+	private final MutableList<Vertex> parents = MutableLists.newFastList();
 
 	public String getLabel() {
 		return label;
 	}
 
-	public List<Vertex> getChildren() {
-		return children;
+	/**
+	 * 
+	 * @return
+	 */
+	public ImmutableList<Vertex> getChildren() {
+		return children.toImmutable();
 	}
 
-	public List<Vertex> getParents() {
-		return parents;
+	/**
+	 * 
+	 * @return
+	 */
+	public ImmutableList<Vertex> getParents() {
+		return parents.toImmutable();
 	}
 
 	// ------------------------------------------------------------
@@ -102,12 +115,8 @@ public class Vertex implements Cloneable, Serializable {
 	 *
 	 * @return the labels used by the most direct children.
 	 */
-	public List<String> getChildLabels() {
-		List<String> retValue = new ArrayList<String>(children.size());
-		for (Vertex vertex : children) {
-			retValue.add(vertex.getLabel());
-		}
-		return retValue;
+	public ImmutableList<String> getChildLabels() {
+		return children.stream().map(v -> v.getLabel()).collect(toImmutableList());
 	}
 
 	/**
@@ -115,12 +124,8 @@ public class Vertex implements Cloneable, Serializable {
 	 *
 	 * @return the labels used parents
 	 */
-	public List<String> getParentLabels() {
-		List<String> retValue = new ArrayList<String>(parents.size());
-		for (Vertex vertex : parents) {
-			retValue.add(vertex.getLabel());
-		}
-		return retValue;
+	public ImmutableList<String> getParentLabels() {
+		return parents.stream().map(v -> v.getLabel()).collect(toImmutableList());
 	}
 
 	/**
