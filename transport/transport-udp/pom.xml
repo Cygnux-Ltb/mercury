@@ -15,6 +15,7 @@
 
 	<properties>
 		<aeron.version>1.37.0</aeron.version>
+		<byte-buddy.version>1.12.8</byte-buddy.version>
 	</properties>
 
 	<dependencies>
@@ -22,12 +23,45 @@
 			<groupId>io.mercury</groupId>
 			<artifactId>transport-api</artifactId>
 		</dependency>
-	
-		<!-- Efficient reliable UDP unicast, UDP multicast, and IPC transport protocol. -->
+
+		<!-- Aeron : Efficient reliable UDP unicast, UDP multicast, and IPC transport 
+			protocol. -->
 		<dependency>
 			<groupId>io.aeron</groupId>
-			<artifactId>aeron-all</artifactId>
+			<artifactId>aeron-agent</artifactId>
 			<version>${aeron.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.aeron</groupId>
+			<artifactId>aeron-archive</artifactId>
+			<version>${aeron.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.aeron</groupId>
+			<artifactId>aeron-client</artifactId>
+			<version>${aeron.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.aeron</groupId>
+			<artifactId>aeron-cluster</artifactId>
+			<version>${aeron.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.aeron</groupId>
+			<artifactId>aeron-driver</artifactId>
+			<version>${aeron.version}</version>
+		</dependency>
+
+		<!-- Byte Buddy -->
+		<dependency>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy</artifactId>
+			<version>${byte-buddy.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy-agent</artifactId>
+			<version>${byte-buddy.version}</version>
 		</dependency>
 
 		<!-- HdrHistogram supports the recording and analyzing sampled data value 
