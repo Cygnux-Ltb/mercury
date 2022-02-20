@@ -15,11 +15,11 @@ public class ReadFromAvro {
 
 		File file = new File(SysProperties.USER_HOME_FILE, "test");
 
-		final DatumReader<AvroTextMsg> reader = new SpecificDatumReader<AvroTextMsg>();
+		final DatumReader<AvroTextMsg> reader = new SpecificDatumReader<>();
 
-		final DataFileReader<AvroTextMsg> msgReader = new DataFileReader<AvroTextMsg>(file, reader);
+		final DataFileReader<AvroTextMsg> msgReader = new DataFileReader<>(file, reader);
 
-		AvroTextMsg msg = null;
+		AvroTextMsg msg;
 
 		while (msgReader.hasNext()) {
 			// Reuse user object by passing it to next(). This saves us from

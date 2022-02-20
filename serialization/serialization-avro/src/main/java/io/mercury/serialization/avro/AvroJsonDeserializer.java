@@ -3,6 +3,7 @@ package io.mercury.serialization.avro;
 import java.io.IOException;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.apache.avro.AvroRuntimeException;
@@ -20,9 +21,9 @@ public final class AvroJsonDeserializer<T extends SpecificRecord> implements Jso
 
 	private static final Logger log = Log4j2LoggerFactory.getLogger(AvroJsonDeserializer.class);
 
-	private JsonDecoder decoder;
+	private final SpecificDatumReader<T> datumReader;
 
-	private SpecificDatumReader<T> datumReader;
+	private final JsonDecoder decoder;
 
 	public AvroJsonDeserializer(Class<T> tClass) {
 		this.datumReader = new SpecificDatumReader<>(tClass);
@@ -37,8 +38,9 @@ public final class AvroJsonDeserializer<T extends SpecificRecord> implements Jso
 		}
 	}
 
+	@Nonnull
 	@Override
-	public T deserialization(String source, T reuse) {
+	public T deserialization(@Nonnull String source, T reuse) {
 		try {
 			decoder.configure(source);
 			return datumReader.read(reuse, decoder);

@@ -1,14 +1,6 @@
 package io.mercury.serialization.avro;
 
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Iterator;
-
-import javax.annotation.Nullable;
-import javax.annotation.concurrent.NotThreadSafe;
-
+import io.mercury.common.lang.Assertor;
 import org.apache.avro.Schema;
 import org.apache.avro.file.CodecFactory;
 import org.apache.avro.file.DataFileWriter;
@@ -17,7 +9,12 @@ import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecord;
 import org.apache.commons.collections4.CollectionUtils;
 
-import io.mercury.common.lang.Assertor;
+import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
 
 @NotThreadSafe
 public final class AvroFileWriter<T extends SpecificRecord> implements Closeable {
@@ -25,8 +22,6 @@ public final class AvroFileWriter<T extends SpecificRecord> implements Closeable
 	// SpecificRecord schema
 	private final Schema schema;
 
-	// DatumWriter instance use SpecificDatumWriter
-	private final DatumWriter<T> datumWriter;
 	// DataFileWriter
 	private final DataFileWriter<T> fileWriter;
 
@@ -36,7 +31,8 @@ public final class AvroFileWriter<T extends SpecificRecord> implements Closeable
 	 */
 	public AvroFileWriter(T record) {
 		this.schema = record.getSchema();
-		this.datumWriter = new SpecificDatumWriter<>(schema);
+		// DatumWriter instance use SpecificDatumWriter
+		DatumWriter<T> datumWriter = new SpecificDatumWriter<>(schema);
 		this.fileWriter = new DataFileWriter<>(datumWriter);
 	}
 
@@ -53,7 +49,7 @@ public final class AvroFileWriter<T extends SpecificRecord> implements Closeable
 
 	/**
 	 * 
-	 * @param codecFactory
+	 * @param codec
 	 * @param saveFile
 	 * @param records
 	 * 
@@ -77,10 +73,9 @@ public final class AvroFileWriter<T extends SpecificRecord> implements Closeable
 		}
 		// Serializing
 		if (CollectionUtils.isNotEmpty(records)) {
-			Iterator<T> iterator = records.iterator();
-			while (iterator.hasNext()) {
+			for (T record : records) {
 				// write record
-				fileWriter.append(iterator.next());
+				fileWriter.append(record);
 			}
 			fileWriter.fSync();
 		}

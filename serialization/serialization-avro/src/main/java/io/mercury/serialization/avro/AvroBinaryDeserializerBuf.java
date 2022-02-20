@@ -37,6 +37,7 @@ public final class AvroBinaryDeserializerBuf<T extends SpecificRecord> implement
 		this.type = type;
 	}
 
+	@Nonnull
 	@Override
 	public T deserialization(@Nonnull byte[] source, @Nullable T reuse) {
 		try {
@@ -50,7 +51,6 @@ public final class AvroBinaryDeserializerBuf<T extends SpecificRecord> implement
 	/**
 	 * 根据线程ID获取Deserializer
 	 * 
-	 * @param source
 	 * @return
 	 */
 	private AvroBinaryDeserializer<T> getDeserializer() {

@@ -40,6 +40,7 @@ public final class AvroBinaryDeserializer<T extends SpecificRecord> implements B
 		this.inputStream = new ReusableByteArrayInputStream();
 	}
 
+	@Nonnull
 	@Override
 	public T deserialization(@Nonnull byte[] data, @Nullable T reuse) {
 		try {

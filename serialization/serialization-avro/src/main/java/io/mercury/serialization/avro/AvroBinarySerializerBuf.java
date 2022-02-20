@@ -5,6 +5,7 @@ import static io.mercury.common.concurrent.map.JctConcurrentMaps.newNonBlockingL
 import java.nio.ByteBuffer;
 import java.util.concurrent.ConcurrentMap;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.apache.avro.specific.SpecificRecord;
@@ -42,7 +43,7 @@ public final class AvroBinarySerializerBuf<T extends SpecificRecord> implements 
 	}
 
 	@Override
-	public ByteBuffer serialization(T obj) {
+	public ByteBuffer serialization(@Nonnull T obj) {
 		try {
 			return getSerializer().serialization(obj);
 		} catch (Exception e) {

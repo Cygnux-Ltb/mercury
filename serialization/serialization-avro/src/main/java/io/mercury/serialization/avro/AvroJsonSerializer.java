@@ -24,9 +24,9 @@ public class AvroJsonSerializer<T extends SpecificRecord> implements JsonSeriali
 
 	private JsonEncoder encoder;
 
-	private ByteArrayOutputStream outputStream;
+	private final ByteArrayOutputStream outputStream;
 
-	private DatumWriter<T> writer;
+	private final DatumWriter<T> writer;
 
 	/**
 	 * Use default ByteArrayOutputStream size

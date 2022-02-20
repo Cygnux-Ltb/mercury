@@ -31,7 +31,7 @@ public final class JsonWrapper {
 	 * @param obj
 	 * @return
 	 */
-	public static final String toJson(@Nullable Object obj) {
+	public static String toJson(@Nullable Object obj) {
 		return toJson0(Gson, obj);
 	}
 
@@ -40,7 +40,7 @@ public final class JsonWrapper {
 	 * @param obj
 	 * @return
 	 */
-	public static final String toPrettyJson(@Nullable Object obj) {
+	public static String toPrettyJson(@Nullable Object obj) {
 		return toJson0(GsonPretty, obj);
 	}
 
@@ -49,7 +49,7 @@ public final class JsonWrapper {
 	 * @param obj
 	 * @return
 	 */
-	public static final String toJsonHasNulls(@Nullable Object obj) {
+	public static String toJsonHasNulls(@Nullable Object obj) {
 		return toJson0(GsonHasNulls, obj);
 	}
 
@@ -58,11 +58,11 @@ public final class JsonWrapper {
 	 * @param obj
 	 * @return
 	 */
-	public static final String toPrettyJsonHasNulls(@Nullable Object obj) {
+	public static String toPrettyJsonHasNulls(@Nullable Object obj) {
 		return toJson0(GsonPrettyHasNulls, obj);
 	}
 
-	private static final String toJson0(final Gson gson, final Object obj) {
+	private static String toJson0(final Gson gson, final Object obj) {
 		if (obj == null)
 			return "null";
 		return gson.toJson(obj);

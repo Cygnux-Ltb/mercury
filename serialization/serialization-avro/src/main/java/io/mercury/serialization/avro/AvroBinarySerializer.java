@@ -3,6 +3,7 @@ package io.mercury.serialization.avro;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.apache.avro.io.BinaryEncoder;
@@ -50,7 +51,7 @@ public final class AvroBinarySerializer<T extends SpecificRecord> implements Byt
 	}
 
 	@Override
-	public ByteBuffer serialization(T obj) {
+	public ByteBuffer serialization(@Nonnull T obj) {
 		try {
 			encoder = EncoderFactory.get().binaryEncoder(outputStream, encoder);
 			writer.write(obj, encoder);

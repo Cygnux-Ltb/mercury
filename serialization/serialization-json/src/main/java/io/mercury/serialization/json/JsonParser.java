@@ -69,7 +69,7 @@ public final class JsonParser {
 	 * @throws JsonParseException
 	 */
 	@Nullable
-	public static final <T> T toObject(@Nonnull final String json) throws JsonParseException {
+	public static <T> T toObject(@Nullable final String json) throws JsonParseException {
 		try {
 			if (json == null || json.isEmpty())
 				return null;
@@ -89,7 +89,7 @@ public final class JsonParser {
 	 * @throws JsonParseException
 	 */
 	@Nullable
-	public static final <T> T toObject(@Nonnull final String json, @Nonnull Class<T> type) throws JsonParseException {
+	public static <T> T toObject(@Nullable final String json, @Nullable Class<T> type) throws JsonParseException {
 		try {
 			if (json == null || json.isEmpty() || type == null)
 				return null;
@@ -105,7 +105,7 @@ public final class JsonParser {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final <T> List<T> toList(@Nonnull String json) throws JsonParseException {
+	public static <T> List<T> toList(@Nonnull String json) throws JsonParseException {
 		try {
 			return Mapper.readValue(json, new TypeReference<List<T>>() {
 			});
@@ -122,7 +122,7 @@ public final class JsonParser {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final <T> List<T> toList(@Nonnull String json, @Nonnull Class<T> type) throws JsonParseException {
+	public static <T> List<T> toList(@Nonnull String json, @Nonnull Class<T> type) throws JsonParseException {
 		try {
 			return Mapper.readValue(json, TypeFactory.constructCollectionLikeType(List.class, type));
 		} catch (Exception e) {
@@ -136,7 +136,7 @@ public final class JsonParser {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final <T> MutableList<T> toMutableList(@Nonnull String json) throws JsonParseException {
+	public static <T> MutableList<T> toMutableList(@Nonnull String json) throws JsonParseException {
 		try {
 			return newFastList(
 					// List convert to MutableList
@@ -154,7 +154,7 @@ public final class JsonParser {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final <T> MutableList<T> toMutableList(@Nonnull String json, @Nonnull Class<T> type)
+	public static <T> MutableList<T> toMutableList(@Nonnull String json, @Nonnull Class<T> type)
 			throws JsonParseException {
 		try {
 			final List<T> list = Mapper.readValue(json, TypeFactory.constructCollectionLikeType(List.class, type));
@@ -172,7 +172,7 @@ public final class JsonParser {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final <T> ImmutableList<T> toImmutableList(@Nonnull String json) throws JsonParseException {
+	public static <T> ImmutableList<T> toImmutableList(@Nonnull String json) throws JsonParseException {
 		try {
 			return newImmutableList(
 					// List convert to MutableList
@@ -190,7 +190,7 @@ public final class JsonParser {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final <T> ImmutableList<T> toImmutableList(@Nonnull String json, @Nonnull Class<T> type)
+	public static <T> ImmutableList<T> toImmutableList(@Nonnull String json, @Nonnull Class<T> type)
 			throws JsonParseException {
 		try {
 			final List<T> list = Mapper.readValue(json, TypeFactory.constructCollectionLikeType(List.class, type));
@@ -208,7 +208,7 @@ public final class JsonParser {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final <K, V> Map<K, V> toMap(@Nonnull final String json) throws JsonParseException {
+	public static <K, V> Map<K, V> toMap(@Nonnull final String json) throws JsonParseException {
 		try {
 			return Mapper.readValue(json, new TypeReference<Map<K, V>>() {
 			});
@@ -225,7 +225,7 @@ public final class JsonParser {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final <K, V> Map<K, V> toMap(@Nonnull final String json, @Nonnull Class<K> keyType,
+	public static <K, V> Map<K, V> toMap(@Nonnull final String json, @Nonnull Class<K> keyType,
 			@Nonnull Class<V> valueType) throws JsonParseException {
 		try {
 			return Mapper.readValue(json, TypeFactory.constructMapLikeType(Map.class, keyType, valueType));
@@ -240,7 +240,7 @@ public final class JsonParser {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final <K, V> MutableMap<K, V> toMutableMap(@Nonnull final String json) throws JsonParseException {
+	public static <K, V> MutableMap<K, V> toMutableMap(@Nonnull final String json) throws JsonParseException {
 		try {
 			return newUnifiedMap(
 					// Map convert to MutableMap
@@ -257,7 +257,7 @@ public final class JsonParser {
 	 * @return
 	 * @throws JsonParseException
 	 */
-	public static final <K, V> ImmutableMap<K, V> toImmutableMap(@Nonnull String json) throws JsonParseException {
+	public static <K, V> ImmutableMap<K, V> toImmutableMap(@Nonnull String json) throws JsonParseException {
 		try {
 			return newImmutableMap(
 					// Map convert to ImmutableMap
@@ -301,9 +301,9 @@ public final class JsonParser {
 		System.out.println(json);
 		Map<Object, Object> map1 = JsonParser.toMap(json);
 		System.out.println(map1);
-		map1.entrySet().forEach(obj -> {
-			System.out.println(obj.getKey().getClass());
-			System.out.println(obj.getValue().getClass());
+		map1.forEach((key, value) -> {
+			System.out.println(key.getClass());
+			System.out.println(value.getClass());
 		});
 	}
 

@@ -1,5 +1,6 @@
 package io.mercury.serialization.json;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import io.mercury.common.serialization.JsonSerializable;
@@ -42,6 +43,10 @@ public final class JsonMsg implements JsonSerializable {
 		return this;
 	}
 
+	public void setEpoch(long epoch) {
+		this.epoch = epoch;
+	}
+
 	public JsonMsg setEnvelope(int envelope) {
 		this.envelope = envelope;
 		return this;
@@ -67,6 +72,7 @@ public final class JsonMsg implements JsonSerializable {
 		return toJson();
 	}
 
+	@Nonnull
 	@Override
 	public String toJson() {
 		return JsonWrapper.toJson(this);
