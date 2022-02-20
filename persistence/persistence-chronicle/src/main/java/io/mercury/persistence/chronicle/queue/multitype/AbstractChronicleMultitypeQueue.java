@@ -341,7 +341,7 @@ public abstract class AbstractChronicleMultitypeQueue<
 	 * 
 	 * @param appenderName
 	 * @param logger
-	 * @param supplier
+	 * @param dataProducer
 	 * @return
 	 * @throws IllegalStateException
 	 */
@@ -388,7 +388,7 @@ public abstract class AbstractChronicleMultitypeQueue<
 
 	/**
 	 * 
-	 * @param param
+	 * @param params
 	 * @param dataConsumer
 	 * @return
 	 * @throws IllegalStateException
@@ -401,7 +401,7 @@ public abstract class AbstractChronicleMultitypeQueue<
 	/**
 	 * 
 	 * @param readerName
-	 * @param param
+	 * @param params
 	 * @param dataConsumer
 	 * @return
 	 * @throws IllegalStateException
@@ -422,7 +422,7 @@ public abstract class AbstractChronicleMultitypeQueue<
 	/**
 	 * 
 	 * @param readerName
-	 * @param param
+	 * @param params
 	 * @param log
 	 * @param consumer
 	 * @return
@@ -435,7 +435,7 @@ public abstract class AbstractChronicleMultitypeQueue<
 	/**
 	 * 已分配的访问器
 	 */
-	private ConcurrentMutableMap<Long, CloseableChronicleAccessor> allocatedAccessor = MutableMaps
+	private final ConcurrentMutableMap<Long, CloseableChronicleAccessor> allocatedAccessor = MutableMaps
 			.newConcurrentHashMap();
 
 	/**

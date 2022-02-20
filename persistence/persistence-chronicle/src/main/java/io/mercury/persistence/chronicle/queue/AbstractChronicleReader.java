@@ -195,7 +195,7 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
 		long readIntervalTime = params.getReadIntervalTime();
 		for (;;) {
 			if (isClose) {
-				logger.info("ChronicleReader -> [{}] is cloesd, execute exit function at [{}]", readerName,
+				logger.info("ChronicleReader -> [{}] is closed, execute exit function at [{}]", readerName,
 						formatDateTime(YY_MM_DD_HH_MM_SS_SSS));
 				exit();
 				break;

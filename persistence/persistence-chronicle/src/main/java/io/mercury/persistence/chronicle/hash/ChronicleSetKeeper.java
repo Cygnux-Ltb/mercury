@@ -22,8 +22,9 @@ public class ChronicleSetKeeper<E> extends AbstractKeeper<String, ChronicleSet<E
 		this.cfg = cfg;
 	}
 
+	@Nonnull
 	@Override
-	public ChronicleSet<E> acquire(String filename) throws ChronicleIOException {
+	public ChronicleSet<E> acquire(@Nonnull String filename) throws ChronicleIOException {
 		return super.acquire(filename);
 	}
 

@@ -33,8 +33,9 @@ public class ChronicleMapKeeper<K, V> extends AbstractKeeper<String, ChronicleMa
 	// 关闭状态
 	protected volatile boolean isClosed = false;
 
+	@Nonnull
 	@Override
-	public ChronicleMap<K, V> acquire(String filename) throws ChronicleIOException {
+	public ChronicleMap<K, V> acquire(@Nonnull String filename) throws ChronicleIOException {
 		Assertor.nonEmpty(filename, "filename");
 		synchronized (lock) {
 			if (isClosed) {

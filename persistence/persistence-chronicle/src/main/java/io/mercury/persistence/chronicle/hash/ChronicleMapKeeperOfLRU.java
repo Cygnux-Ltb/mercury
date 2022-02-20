@@ -36,7 +36,7 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 		final long millis = expire.toMillis();
 		// 定义最小过期时间为两小时
 		final long minExpireMillis = 2 * 60 * 60 * 1000;
-		this.expireMillis = millis < minExpireMillis ? minExpireMillis : millis;
+		this.expireMillis = Math.max(millis, minExpireMillis);
 		this.savePath = cfg.getSavePath();
 		// LRU记录构建器
 		final ChronicleMapBuilder<String, Long> builder = ChronicleMapBuilder
@@ -51,7 +51,7 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 				// 设置LRU名称
 				.name(cfg.getConfigInfo() + "-last-used-log")
 				// 设置LRU记录条目总数, 最小65536条
-				.entries(fileTotal < 65536 ? 65536 : fileTotal);
+				.entries(Math.max(fileTotal, 65536));
 		File persistentFile = new File(cfg.getSavePath(), ".last-used-log");
 		try {
 			if (!persistentFile.exists()) {
@@ -104,7 +104,7 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 						}
 					}
 				}
-			} catch (InterruptedException e) {
+			} catch (InterruptedException ignored) {
 
 			}
 		} while (!isClosed);
@@ -122,8 +122,9 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 		}
 	}
 
-	@Override
-	public ChronicleMap<K, V> acquire(String filename) throws ChronicleIOException {
+	@Nonnull
+    @Override
+	public ChronicleMap<K, V> acquire(@Nonnull String filename) throws ChronicleIOException {
 		ChronicleMap<K, V> acquire = super.acquire(filename);
 		// 存储文件名和到期时间
 		long expireEpoch = EpochTime.getEpochMillis() + expireMillis;

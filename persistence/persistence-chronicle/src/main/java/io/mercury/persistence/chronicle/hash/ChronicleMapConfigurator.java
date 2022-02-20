@@ -197,10 +197,10 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
 	 */
 	public static class Builder<K, V> {
 
-		private Class<K> keyClass;
-		private Class<V> valueClass;
-		private String rootPath;
-		private String folder;
+		private final Class<K> keyClass;
+		private final Class<V> valueClass;
+		private final String rootPath;
+		private final String folder;
 
 		private K averageKey;
 		private V averageValue;

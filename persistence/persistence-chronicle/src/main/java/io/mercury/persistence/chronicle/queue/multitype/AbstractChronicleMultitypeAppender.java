@@ -35,7 +35,7 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN>
 	 * @throws IllegalStateException
 	 * @throws ChronicleAppendException
 	 */
-	public void append(@Nonnull E envelope, @Nonnull IN t) throws IllegalStateException, ChronicleAppendException {
+	public void append(@Nonnull E envelope, @Nullable IN t) throws IllegalStateException, ChronicleAppendException {
 		if (isClose) {
 			throw new IllegalStateException("Unable to append data, Chronicle queue is closed");
 		}
@@ -66,7 +66,7 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN>
 	protected abstract void append0(@Nonnull E envelope, @Nonnull IN t);
 
 	@Override
-	protected void append0(IN in) {
+	protected void append0(@Nonnull IN in) {
 		append0(envelope, in);
 	}
 

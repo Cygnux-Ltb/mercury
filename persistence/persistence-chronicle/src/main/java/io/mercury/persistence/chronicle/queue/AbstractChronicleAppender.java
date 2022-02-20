@@ -73,7 +73,7 @@ public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAc
 
 	/**
 	 * 
-	 * @param obj
+	 * @param t
 	 * @param serializer
 	 * @throws IllegalStateException
 	 * @throws ChronicleAppendException

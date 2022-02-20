@@ -99,7 +99,7 @@ public class ChronicleStringQueue
 	public static void main(String[] args) {
 		ChronicleStringQueue queue = ChronicleStringQueue.newBuilder().fileCycle(FileCycle.MINUTELY).build();
 		ChronicleStringAppender writer = queue.acquireAppender();
-		ChronicleStringReader reader = queue.createReader(next -> System.out.println(next));
+		ChronicleStringReader reader = queue.createReader(System.out::println);
 		new Thread(() -> {
 			for (;;) {
 				try {

@@ -114,9 +114,9 @@ public final class ChronicleSetConfigurator<E> implements Configurator {
 	 */
 	public static class Builder<E> {
 
-		private Class<E> elementClass;
-		private String rootPath;
-		private String folder;
+		private final Class<E> elementClass;
+		private final String rootPath;
+		private final String folder;
 
 		private E averageElement;
 

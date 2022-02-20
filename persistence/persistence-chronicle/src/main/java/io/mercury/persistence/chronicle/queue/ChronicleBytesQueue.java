@@ -75,7 +75,7 @@ public class ChronicleBytesQueue
 		/**
 		 * if set size less than 512, use default size the 512
 		 * 
-		 * @param readBufferSize
+		 * @param bufferSize
 		 * @return
 		 */
 		public BytesQueueBuilder bufferSize(int bufferSize) {

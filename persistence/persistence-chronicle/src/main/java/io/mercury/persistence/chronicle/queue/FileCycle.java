@@ -95,7 +95,7 @@ public enum FileCycle {
 
 	private final String desc;
 
-	private FileCycle(RollCycle rollCycle, String desc) {
+	FileCycle(RollCycle rollCycle, String desc) {
 		this.seconds = rollCycle.lengthInMillis() / MILLIS_PER_SECONDS;
 		this.rollCycle = rollCycle;
 		this.desc = desc;
