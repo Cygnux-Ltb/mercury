@@ -96,7 +96,7 @@ public final class Log4j2Configurator {
 	 *
 	 *         Typically, configuring a level in a filter or on a logger will cause
 	 *         logging events of that level and those that are more specific to pass
-	 *         through the filter. A special level, {@link #ALL}, is guaranteed to
+	 *         through the filter. A special level, {@link #DEBUG}, is guaranteed to
 	 *         capture all levels when used in logging configurations.
 	 *
 	 */
@@ -130,7 +130,7 @@ public final class Log4j2Configurator {
 			return ThresholdFilter.createFilter(level, Result.ACCEPT, mismatch);
 		}
 
-		public static final Filter getCompositeFilterWith(LogLevel level) {
+		public static Filter getCompositeFilterWith(LogLevel level) {
 			List<Filter> filters = new ArrayList<>();
 			for (LogLevel logLevel : values()) {
 				if (logLevel.priority < level.priority)

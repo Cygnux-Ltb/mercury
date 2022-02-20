@@ -47,11 +47,10 @@ public final class Log4j2LoggerFactory {
 
 	/**
 	 * 
-	 * @param <T>
 	 * @param obj
 	 * @return
 	 */
-	public static final org.slf4j.Logger getLogger(Object obj) {
+	public static org.slf4j.Logger getLogger(Object obj) {
 		if (obj == null)
 			return Log4j2LoggerFactory.getLogger("Unnamed-Logger");
 		if (obj instanceof String)
