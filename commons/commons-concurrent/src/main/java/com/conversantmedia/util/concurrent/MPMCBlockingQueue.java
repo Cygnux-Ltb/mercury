@@ -20,6 +20,7 @@ package com.conversantmedia.util.concurrent;
  * #L%
  */
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
@@ -43,8 +44,8 @@ public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
 	// if MultithreadConcurrentQueue is used directly, these calls are
 	// optimized out and have no impact on timing values
 	//
-	protected final Condition queueNotFullCondition;
-	protected final Condition queueNotEmptyCondition;
+	private final Condition queueNotFullCondition;
+	private final Condition queueNotEmptyCondition;
 
 	/**
 	 * <p>
@@ -120,7 +121,7 @@ public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
 	}
 
 	@Override
-	public final boolean offer(E e) {
+	public boolean offer(@Nonnull E e) {
 		if (super.offer(e)) {
 			queueNotEmptyCondition.signal();
 			return true;
@@ -131,7 +132,7 @@ public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
 	}
 
 	@Override
-	public final E poll() {
+	public E poll() {
 		final E e = super.poll();
 		// not full now
 		queueNotFullCondition.signal();
@@ -160,9 +161,9 @@ public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
 	}
 
 	@Override
-	public void put(E e) throws InterruptedException {
+	public void put(@Nonnull E e) throws InterruptedException {
 		// add object, wait for space to become available
-		while (offer(e) == false) {
+		while (!offer(e)) {
 			if (Thread.currentThread().isInterrupted()) {
 				throw new InterruptedException();
 			}
@@ -171,7 +172,7 @@ public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
 	}
 
 	@Override
-	public boolean offer(E e, long timeout, TimeUnit unit) throws InterruptedException {
+	public boolean offer(E e, long timeout, @Nonnull TimeUnit unit) throws InterruptedException {
 		for (;;) {
 			if (offer(e)) {
 				return true;
@@ -184,23 +185,23 @@ public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
 		}
 	}
 
+	@Nonnull
 	@Override
 	public E take() throws InterruptedException {
 		for (;;) {
-			E pollObj = poll();
-			if (pollObj != null) {
-				return pollObj;
+			E obj = poll();
+			if (obj != null) {
+				return obj;
 			}
 			if (Thread.currentThread().isInterrupted()) {
 				throw new InterruptedException();
 			}
-
 			queueNotEmptyCondition.await();
 		}
 	}
 
 	@Override
-	public E poll(long timeout, TimeUnit unit) throws InterruptedException {
+	public E poll(long timeout, @Nonnull TimeUnit unit) throws InterruptedException {
 		for (;;) {
 			E pollObj = poll();
 			if (pollObj != null) {
@@ -225,13 +226,13 @@ public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
 	}
 
 	@Override
-	public int drainTo(Collection<? super E> c) {
+	public int drainTo(@Nonnull Collection<? super E> c) {
 		return drainTo(c, size());
 	}
 
 	@Override
 	// drain the whole queue at once
-	public int drainTo(Collection<? super E> c, int maxElements) {
+	public int drainTo(@Nonnull Collection<? super E> c, int maxElements) {
 
 		// required by spec
 		if (this == c)
@@ -252,6 +253,7 @@ public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
 		return nRead;
 	}
 
+	@Nonnull
 	@Override
 	public Object[] toArray() {
 		@SuppressWarnings("unchecked")
@@ -265,7 +267,7 @@ public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T[] toArray(T[] a) {
+	public <T> T[] toArray(@Nonnull T[] a) {
 
 		remove((E[]) a);
 
@@ -273,7 +275,7 @@ public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
 	}
 
 	@Override
-	public boolean add(E e) {
+	public boolean add(@Nonnull E e) {
 		if (offer(e))
 			return true;
 		throw new IllegalStateException("queue is full");
@@ -303,21 +305,22 @@ public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
 	}
 
 	@Override
-	public boolean removeAll(Collection<?> c) {
+	public boolean removeAll(@Nonnull Collection<?> c) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public boolean retainAll(Collection<?> c) {
+	public boolean retainAll(@Nonnull Collection<?> c) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Nonnull
 	@Override
 	public Iterator<E> iterator() {
 		return new RingIter();
 	}
 
-	private final boolean isFull() {
+	private boolean isFull() {
 		final long queueStart = tail.get() - size;
 		return head.get() == queueStart;
 	}
@@ -355,7 +358,7 @@ public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
 
 		@Override
 		// @return boolean - true if the queue is full
-		public final boolean test() {
+		public boolean test() {
 			return isFull();
 		}
 	}
@@ -364,7 +367,7 @@ public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
 	private final class QueueNotEmpty extends AbstractCondition {
 		@Override
 		// @return boolean - true if the queue is empty
-		public final boolean test() {
+		public boolean test() {
 			return isEmpty();
 		}
 	}
@@ -374,7 +377,7 @@ public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
 
 		@Override
 		// @return boolean - true if the queue is full
-		public final boolean test() {
+		public boolean test() {
 			return isFull();
 		}
 	}
@@ -383,7 +386,7 @@ public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
 	private final class WaitingQueueNotEmpty extends AbstractWaitingCondition {
 		@Override
 		// @return boolean - true if the queue is empty
-		public final boolean test() {
+		public boolean test() {
 			return isEmpty();
 		}
 	}
@@ -392,7 +395,7 @@ public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
 
 		@Override
 		// @return boolean - true if the queue is full
-		public final boolean test() {
+		public boolean test() {
 			return isFull();
 		}
 	}
@@ -401,7 +404,7 @@ public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
 	private final class SpinningQueueNotEmpty extends AbstractSpinningCondition {
 		@Override
 		// @return boolean - true if the queue is empty
-		public final boolean test() {
+		public boolean test() {
 			return isEmpty();
 		}
 	}

@@ -74,8 +74,6 @@ public enum CommonWaitStrategy implements Supplier<WaitStrategy> {
 			return new BusySpinWaitStrategy();
 		case Blocking:
 			return new BlockingWaitStrategy();
-		case Sleeping:
-			return new SleepingWaitStrategy();
 		case Yielding:
 			return new YieldingWaitStrategy();
 		default:

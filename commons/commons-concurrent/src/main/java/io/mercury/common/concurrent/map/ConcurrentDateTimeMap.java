@@ -243,7 +243,7 @@ public class ConcurrentDateTimeMap<K extends Temporal, V> {
 			System.out.println(scan.size());
 		}
 
-		map.scan(LocalDate.now(), LocalDate.now().plusYears(1)).each(str -> System.out.println(str));
+		map.scan(LocalDate.now(), LocalDate.now().plusYears(1)).each(System.out::println);
 
 	}
 

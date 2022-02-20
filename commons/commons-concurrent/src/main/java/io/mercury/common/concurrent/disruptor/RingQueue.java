@@ -28,9 +28,9 @@ public class RingQueue<E> extends AbstractSingleConsumerQueue<E> {
 
 	private static final Logger log = Log4j2LoggerFactory.getLogger(RingQueue.class);
 
-	private Disruptor<LoadContainer<E>> disruptor;
+	private final Disruptor<LoadContainer<E>> disruptor;
 
-	private LoadContainerEventProducer producer;
+	private final LoadContainerEventProducer producer;
 
 	private RingQueue(String name, int size, StartMode mode, ProducerType type, WaitStrategy strategy,
 			Processor<E> processor) {
@@ -166,7 +166,7 @@ public class RingQueue<E> extends AbstractSingleConsumerQueue<E> {
 	public static void main(String[] args) {
 
 		RingQueue<Integer> queue = RingQueue.withSingleProducer().setName("Test-Queue")
-				.process(in -> System.out.println(in));
+				.process(System.out::println);
 
 		ThreadSupport.startNewThread(() -> {
 			int i = 0;

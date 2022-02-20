@@ -9,18 +9,18 @@ import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelEvent;
  * @Describe :
  * @version: 1.0
  */
-public class PIDStrategy implements RegulateStrategy {
+public class PidStrategy implements RegulateStrategy {
 
-	private ProportionStrategy proportionStrategy = new ProportionStrategy();
-	private IntegralStrategy integralStrategy = new IntegralStrategy();
-	private DerivativeStrategy derivativeStrategy = new DerivativeStrategy();
-	private SimpleStrategy simpleStrategy = new SimpleStrategy();
+	private final ProportionStrategy proportionStrategy = new ProportionStrategy();
+	private final IntegralStrategy integralStrategy = new IntegralStrategy();
+	private final DerivativeStrategy derivativeStrategy = new DerivativeStrategy();
+	private final SimpleStrategy simpleStrategy = new SimpleStrategy();
 
 	private int p = 66;
 	private int i = 100;
 	private int d = 66;
 
-	public void setPID(int p, int i, int d) {
+	public void setPid(int p, int i, int d) {
 		this.p = checkRange(p);
 		this.i = checkRange(i);
 		this.d = checkRange(d);

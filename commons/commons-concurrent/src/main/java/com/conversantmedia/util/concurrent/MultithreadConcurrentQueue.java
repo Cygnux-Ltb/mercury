@@ -20,6 +20,7 @@ package com.conversantmedia.util.concurrent;
  * #L%
  */
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.LongAdder;
 
 /**
@@ -141,7 +142,7 @@ public class MultithreadConcurrentQueue<E> implements ConcurrentQueue<E> {
 					try {
 						// copy the data out of slot
 						final int pollSlot = (int) (head & mask);
-						final E pollObj = (E) buffer[pollSlot];
+						final E pollObj = buffer[pollSlot];
 
 						// got it, safe to read and free
 						buffer[pollSlot] = null;
@@ -245,9 +246,7 @@ public class MultithreadConcurrentQueue<E> implements ConcurrentQueue<E> {
 						// we just blocked all changes to the queue
 
 						// remove leaked refs
-						for (int i = 0; i < buffer.length; i++) {
-							buffer[i] = null;
-						}
+						Arrays.fill(buffer, null);
 
 						// advance head to same location as current end
 						this.tail.increment();

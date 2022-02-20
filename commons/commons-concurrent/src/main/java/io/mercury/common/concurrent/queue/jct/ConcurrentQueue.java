@@ -53,14 +53,8 @@ public final class ConcurrentQueue<E> implements MultiConsumerQueue<E> {
 	}
 
 	private void waiting() {
-		switch (strategy) {
-		case Spin:
-			break;
-		case Sleep:
+		if (strategy == WaitingStrategy.Sleep) {
 			SleepSupport.sleep(10);
-			break;
-		default:
-			break;
 		}
 	}
 

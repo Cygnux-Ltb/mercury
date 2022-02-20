@@ -29,12 +29,11 @@ import java.io.IOException;
  */
 public final class PercentileFile {
 
-	public static void main(final String[] arg) throws IOException {
+	public static void main(final String[] args) throws IOException {
 
-		for (int i = 0; i < arg.length; i++) {
-			final String fileName = arg[i];
+		for (final String arg : args) {
 			final Percentile pFile = new Percentile();
-			final BufferedReader br = new BufferedReader(new FileReader(fileName));
+			final BufferedReader br = new BufferedReader(new FileReader(arg));
 			String line;
 			while ((line = br.readLine()) != null) {
 				final float sample = Float.parseFloat(line.trim());
@@ -42,7 +41,7 @@ public final class PercentileFile {
 			}
 			br.close();
 
-			Percentile.print(System.out, fileName, pFile);
+			Percentile.print(System.out, arg, pFile);
 		}
 
 	}

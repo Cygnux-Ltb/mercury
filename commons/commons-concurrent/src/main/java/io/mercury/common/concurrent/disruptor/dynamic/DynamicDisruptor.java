@@ -24,7 +24,7 @@ import io.mercury.common.concurrent.disruptor.dynamic.core.HandlerFactory;
 import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelClient;
 import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelEvent;
 import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelListener;
-import io.mercury.common.concurrent.disruptor.dynamic.strategy.PIDStrategy;
+import io.mercury.common.concurrent.disruptor.dynamic.strategy.PidStrategy;
 import io.mercury.common.concurrent.disruptor.dynamic.strategy.RegulateStrategy;
 
 /**
@@ -40,13 +40,10 @@ public class DynamicDisruptor implements DynamicConsumer, SentinelListener {
 	public static final int DEFAULT_CORE_SIZE = 32;
 	public static final int DEFAULT_MAX_SIZE = 256;
 
-	private String name;
-
-	private int initSize;
-
-	private int coreSize;
-
-	private int maxSize;
+	private final String name;
+	private final int initSize;
+	private final int coreSize;
+	private final int maxSize;
 
 	private SentinelClient sentinelClient;
 
@@ -102,7 +99,7 @@ public class DynamicDisruptor implements DynamicConsumer, SentinelListener {
 	/**
 	 * 线程取名字用的同步int
 	 */
-	private AtomicInteger threadId = new AtomicInteger();
+	private final AtomicInteger threadId = new AtomicInteger();
 
 	/**
 	 * handler 工厂
@@ -112,7 +109,7 @@ public class DynamicDisruptor implements DynamicConsumer, SentinelListener {
 	/**
 	 * 默认的处理策略是比例控制
 	 */
-	private RegulateStrategy strategy = new PIDStrategy();
+	private RegulateStrategy strategy = new PidStrategy();
 
 	public ExceptionHandler<HandlerEvent> getExceptionHandler() {
 		return exceptionHandler;
@@ -213,8 +210,7 @@ public class DynamicDisruptor implements DynamicConsumer, SentinelListener {
 				processor.halt();
 				try {
 					handler.awaitShutdown();
-				} catch (InterruptedException e) {
-					System.out.println(e);
+				} catch (InterruptedException ignored) {
 				}
 				ringBuffer.removeGatingSequence(processor.getSequence());
 			}

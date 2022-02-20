@@ -20,8 +20,8 @@ import io.mercury.common.collections.MutableMaps;
 @ThreadSafe
 public final class DeduplicateCounterGroup<T extends Comparable<T>> {
 
-	private DeduplicateCounter<T> counter = new DeduplicateCounter<>();
-	private MutableIntObjectMap<DeduplicateCounter<T>> groupCounterMap = MutableMaps.newIntObjectHashMap();
+	private final DeduplicateCounter<T> counter = new DeduplicateCounter<>();
+	private final MutableIntObjectMap<DeduplicateCounter<T>> groupCounterMap = MutableMaps.newIntObjectHashMap();
 
 	/**
 	 * 

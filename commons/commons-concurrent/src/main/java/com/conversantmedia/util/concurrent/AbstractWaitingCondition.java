@@ -62,7 +62,6 @@ public abstract class AbstractWaitingCondition implements Condition {
 	@Override
 	public void awaitNanos(long timeout) throws InterruptedException {
 		for (;;) {
-
 			try {
 				final long waitCount = this.waitCount.sum();
 				long waitSequence = waitCount;
@@ -73,24 +72,21 @@ public abstract class AbstractWaitingCondition implements Condition {
 				final long expires = timeNow + timeout;
 
 				final Thread t = Thread.currentThread();
-
+				int spin = 0;
 				if (waitCount == 0) {
 					// first thread spins
-
-					int spin = 0;
+					// int spin = 0;
 					while (test() && expires > timeNow && !t.isInterrupted()) {
 						spin = Condition.progressiveYield(spin);
 						timeNow = System.nanoTime();
 					}
-
 					if (t.isInterrupted()) {
 						throw new InterruptedException();
 					}
-
-					return;
+					// return;
 				} else {
 					// wait to become a waiter
-					int spin = 0;
+					// int spin = 0;
 					while (test()
 							&& !waiter.compareAndSet((int) (waitSequence++ & WAITER_MASK) + CACHE_LINE_REFS, null, t)
 							&& expires > timeNow) {
@@ -99,7 +95,6 @@ public abstract class AbstractWaitingCondition implements Condition {
 						} else {
 							LockSupport.parkNanos(MAX_WAITERS * Condition.PARK_TIMEOUT);
 						}
-
 						timeNow = System.nanoTime();
 					}
 					// are we a waiter? wait until we are awakened
@@ -108,18 +103,15 @@ public abstract class AbstractWaitingCondition implements Condition {
 						LockSupport.parkNanos((expires - timeNow) >> 2);
 						timeNow = System.nanoTime();
 					}
-
 					if (t.isInterrupted()) {
 						// we are not waiting we are interrupted
 						while (!waiter.compareAndSet((int) ((waitSequence - 1) & WAITER_MASK) + CACHE_LINE_REFS, t,
 								null) && waiter.get(CACHE_LINE_REFS) == t) {
 							LockSupport.parkNanos(PARK_TIMEOUT);
 						}
-
 						throw new InterruptedException();
 					}
-
-					return;
+					// return;
 				}
 			} finally {
 				waitCount.decrement();
@@ -131,7 +123,6 @@ public abstract class AbstractWaitingCondition implements Condition {
 	@Override
 	public void await() throws InterruptedException {
 		for (;;) {
-
 			try {
 				final long waitCount = this.waitCount.sum();
 				long waitSequence = waitCount;
@@ -140,22 +131,20 @@ public abstract class AbstractWaitingCondition implements Condition {
 
 				final Thread t = Thread.currentThread();
 
+				int spin = 0;
 				if (waitCount == 0) {
-					int spin = 0;
+					//int spin = 0;
 					// first thread spinning
 					while (test() && !t.isInterrupted()) {
 						spin = Condition.progressiveYield(spin);
 					}
-
 					if (t.isInterrupted()) {
 						throw new InterruptedException();
 					}
-
-					return;
+					// return;
 				} else {
-
 					// wait to become a waiter
-					int spin = 0;
+					// int spin = 0;
 					while (test()
 							&& !waiter.compareAndSet((int) (waitSequence++ & WAITER_MASK) + CACHE_LINE_REFS, null, t)
 							&& !t.isInterrupted()) {
@@ -165,25 +154,20 @@ public abstract class AbstractWaitingCondition implements Condition {
 							LockSupport.parkNanos(MAX_WAITERS * Condition.PARK_TIMEOUT);
 						}
 					}
-
 					// are we a waiter? wait until we are awakened
 					while (test() && (waiter.get((int) ((waitSequence - 1) & WAITER_MASK) + CACHE_LINE_REFS) == t)
 							&& !t.isInterrupted()) {
 						LockSupport.parkNanos(1_000_000L);
 					}
-
 					if (t.isInterrupted()) {
 						// we are not waiting we are interrupted
 						while (!waiter.compareAndSet((int) ((waitSequence - 1) & WAITER_MASK) + CACHE_LINE_REFS, t,
 								null) && waiter.get(CACHE_LINE_REFS) == t) {
 							LockSupport.parkNanos(WAIT_TIME);
 						}
-
 						throw new InterruptedException();
 					}
-
-					return;
-
+					// return;
 				}
 			} finally {
 				waitCount.decrement();

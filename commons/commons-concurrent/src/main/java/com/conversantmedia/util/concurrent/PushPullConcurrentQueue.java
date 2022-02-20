@@ -20,6 +20,7 @@ package com.conversantmedia.util.concurrent;
  * #L%
  */
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.LongAdder;
 
 /**
@@ -114,9 +115,7 @@ public class PushPullConcurrentQueue<E> implements ConcurrentQueue<E> {
 
 	@Override
 	public void clear() {
-		for (int i = 0; i < buffer.length; i++) {
-			buffer[i] = null;
-		}
+		Arrays.fill(buffer, null);
 		head.add(tail.sum() - head.sum());
 	}
 

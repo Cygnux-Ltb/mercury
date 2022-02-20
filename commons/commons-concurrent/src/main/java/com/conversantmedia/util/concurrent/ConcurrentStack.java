@@ -60,7 +60,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 		while (stackSize < size)
 			stackSize <<= 1;
 		this.size = stackSize;
-		stack = new AtomicReferenceArray<N>(stackSize);
+		stack = new AtomicReferenceArray<>(stackSize);
 
 		switch (spinPolicy) {
 		case BLOCKING:
@@ -79,7 +79,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 	}
 
 	@Override
-	public final boolean push(final N n, final long time, final TimeUnit unit) throws InterruptedException {
+	public boolean push(final N n, final long time, final TimeUnit unit) throws InterruptedException {
 		final long endDate = System.nanoTime() + unit.toNanos(time);
 		while (!push(n)) {
 			if (endDate - System.nanoTime() < 0) {
@@ -93,7 +93,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 	}
 
 	@Override
-	public final void pushInterruptibly(final N n) throws InterruptedException {
+	public void pushInterruptibly(final N n) throws InterruptedException {
 		while (!push(n)) {
 			if (Thread.currentThread().isInterrupted()) {
 				throw new InterruptedException();
@@ -104,7 +104,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 	}
 
 	@Override
-	public final boolean contains(final N n) {
+	public boolean contains(final N n) {
 		if (n != null) {
 			for (int i = 0; i < stackTop.get(); i++) {
 				if (n.equals(stack.get(i)))
@@ -122,7 +122,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 	 * @return boolean - false if stack overflow, true otherwise
 	 */
 	@Override
-	public final boolean push(final N n) {
+	public boolean push(final N n) {
 		int spin = 0;
 		for (;;) {
 
@@ -156,7 +156,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 	 * @return N - the object at the top of the stack
 	 */
 	@Override
-	public final N peek() {
+	public N peek() {
 		// read the current cursor
 		int spin = 0;
 		for (;;) {
@@ -181,7 +181,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 	 * @return N - The object on the top of the stack
 	 */
 	@Override
-	public final N pop() {
+	public N pop() {
 
 		int spin = 0;
 		// now pop the stack
@@ -215,7 +215,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 	}
 
 	@Override
-	public final N pop(final long time, final TimeUnit unit) throws InterruptedException {
+	public N pop(final long time, final TimeUnit unit) throws InterruptedException {
 		final long endTime = System.nanoTime() + unit.toNanos(time);
 		for (;;) {
 			final N n = pop();
@@ -232,7 +232,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 	}
 
 	@Override
-	public final N popInterruptibly() throws InterruptedException {
+	public N popInterruptibly() throws InterruptedException {
 		for (;;) {
 			final N n = pop();
 			if (n != null) {
@@ -253,7 +253,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 	 * @return int - number of elements in the stack
 	 */
 	@Override
-	public final int size() {
+	public int size() {
 		return stackTop.get();
 	}
 
@@ -261,7 +261,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 	 * how much available space in the stack
 	 */
 	@Override
-	public final int remainingCapacity() {
+	public int remainingCapacity() {
 		return size - stackTop.get();
 	}
 
@@ -269,7 +269,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 	 * @return boolean - true if stack is currently empty
 	 */
 	@Override
-	public final boolean isEmpty() {
+	public boolean isEmpty() {
 		return stackTop.get() == 0;
 	}
 
@@ -277,7 +277,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 	 * clear the stack - does not null old references
 	 */
 	@Override
-	public final void clear() {
+	public void clear() {
 		int spin = 0;
 		for (;;) {
 			final long writeLock = seqLock.tryWriteLock();
@@ -311,7 +311,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 
 		@Override
 		// @return boolean - true if the queue is full
-		public final boolean test() {
+		public boolean test() {
 			return isFull();
 		}
 	}
@@ -320,7 +320,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 	private final class WaitingStackNotEmpty extends AbstractWaitingCondition {
 		@Override
 		// @return boolean - true if the queue is empty
-		public final boolean test() {
+		public boolean test() {
 			return isEmpty();
 		}
 	}
@@ -330,7 +330,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 
 		@Override
 		// @return boolean - true if the queue is full
-		public final boolean test() {
+		public boolean test() {
 			return isFull();
 		}
 	}
@@ -339,7 +339,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 	private final class SpinningStackNotEmpty extends AbstractSpinningCondition {
 		@Override
 		// @return boolean - true if the queue is empty
-		public final boolean test() {
+		public boolean test() {
 			return isEmpty();
 		}
 	}
@@ -349,7 +349,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 
 		@Override
 		// @return boolean - true if the queue is full
-		public final boolean test() {
+		public boolean test() {
 			return isFull();
 		}
 	}
@@ -358,7 +358,7 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
 	private final class StackNotEmpty extends AbstractCondition {
 		@Override
 		// @return boolean - true if the queue is empty
-		public final boolean test() {
+		public boolean test() {
 			return isEmpty();
 		}
 	}

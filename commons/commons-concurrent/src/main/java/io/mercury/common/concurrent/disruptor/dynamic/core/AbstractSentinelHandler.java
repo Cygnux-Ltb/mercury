@@ -18,7 +18,7 @@ import io.mercury.common.concurrent.disruptor.dynamic.sentinel.ThreadStatusInfo;
  */
 public abstract class AbstractSentinelHandler
 		implements WorkHandler<HandlerEvent>, LifecycleAware, ThreadStatusInfo, ConsumeStatusInfo {
-	private SentinelClient sentinelClient;
+	private final SentinelClient sentinelClient;
 
 	public AbstractSentinelHandler(SentinelClient sentinelClient) {
 		this.sentinelClient = sentinelClient;
@@ -51,7 +51,7 @@ public abstract class AbstractSentinelHandler
 	 */
 	public abstract void deal(HandlerEvent event) throws Exception;
 
-	private CountDownLatch shutdownLatch = new CountDownLatch(1);
+	private final CountDownLatch shutdownLatch = new CountDownLatch(1);
 
 	@Override
 	public void onStart() {

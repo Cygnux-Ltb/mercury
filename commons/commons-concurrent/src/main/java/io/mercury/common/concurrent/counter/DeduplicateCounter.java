@@ -19,7 +19,7 @@ import io.mercury.common.collections.MutableSets;
 @ThreadSafe
 public final class DeduplicateCounter<T extends Comparable<T>> {
 
-	private MutableSet<T> deRepeatSet = MutableSets.newUnifiedSet(Capacity.L06_SIZE);
+	private final MutableSet<T> deRepeatSet = MutableSets.newUnifiedSet(Capacity.L06_SIZE);
 
 	private volatile int count;
 	private final int initCount;
@@ -100,12 +100,13 @@ public final class DeduplicateCounter<T extends Comparable<T>> {
 	 * @return
 	 */
 	public synchronized void archive() {
-		deRepeatSet.clear();
+		this.isArchived = true;
+		this.deRepeatSet.clear();
 	}
 
 	public static void main(String[] args) {
 
-		DeduplicateCounter<String> deRepeatCounter = new DeduplicateCounter<String>(100);
+		DeduplicateCounter<String> deRepeatCounter = new DeduplicateCounter<>(100);
 		System.out.println(deRepeatCounter.add("").add("fsdaf").add("dsfsad").add("").add("aaa").add("aaa").count());
 
 	}

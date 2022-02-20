@@ -46,19 +46,13 @@ public class RingProcessChain<E, I> extends AbstractRingBuffer<E, I> {
 		int[] keys = handlersMap.keySet().toSortedArray();
 		List<EventHandler<E>> handlers0 = handlersMap.get(keys[0]);
 		if (keys.length == 1) {
-			disruptor.handleEventsWith(toArray(handlers0, length -> {
-				return (EventHandler<E>[]) new EventHandler[length];
-			}));
+			disruptor.handleEventsWith(toArray(handlers0, EventHandler[]::new));
 		} else {
-			EventHandlerGroup<E> handlerGroup = disruptor.handleEventsWith(toArray(handlers0, length -> {
-				return (EventHandler<E>[]) new EventHandler[length];
-			}));
+			EventHandlerGroup<E> handlerGroup = disruptor.handleEventsWith(toArray(handlers0, EventHandler[]::new));
 			for (int i = 1; i < keys.length; i++) {
 				// 将处理器以处理链的方式添加进Disruptor
 				List<EventHandler<E>> handlers = handlersMap.get(keys[i]);
-				handlerGroup.then(toArray(handlers, length -> {
-					return (EventHandler<E>[]) new EventHandler[length];
-				}));
+				handlerGroup.then(toArray(handlers, EventHandler[]::new));
 			}
 		}
 		log.info(

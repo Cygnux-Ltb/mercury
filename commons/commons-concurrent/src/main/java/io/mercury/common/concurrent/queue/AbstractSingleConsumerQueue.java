@@ -12,7 +12,7 @@ import io.mercury.common.thread.RunnableComponent;
 /**
  * @author yellow013
  *
- * @param <T> Single Consumer Queue base implements
+ * @param <E> Single Consumer Queue base implements
  */
 public abstract class AbstractSingleConsumerQueue<E> extends RunnableComponent implements Queue<E> {
 

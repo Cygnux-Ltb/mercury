@@ -27,7 +27,7 @@ public interface MultiConsumerQueue<E> extends Queue<E> {
 	}
 
 	@FunctionalInterface
-	public static interface PollFunction<E> extends Predicate<E> {
+	interface PollFunction<E> extends Predicate<E> {
 
 		boolean apply(E e);
 

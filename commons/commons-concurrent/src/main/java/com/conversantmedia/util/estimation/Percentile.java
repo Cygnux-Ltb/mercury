@@ -32,7 +32,8 @@ import java.util.Arrays;
  * Created by jcairns on 5/28/14.
  */
 public class Percentile {
-	private static float[] DEFAULT_PERCENTILE = { 0.05F, 0.5F, 0.683F, 0.75F, 0.85F, 0.954F, 0.99F };
+
+	private static final float[] DEFAULT_PERCENTILE = { 0.05F, 0.5F, 0.683F, 0.75F, 0.85F, 0.954F, 0.99F };
 
 	private final float[] quantiles;
 
@@ -179,7 +180,7 @@ public class Percentile {
 		int k = 1;
 
 		if (x < q[1]) {
-			k = 1;
+			// k = 1;
 			q[1] = x;
 		} else if (x >= q[2 * m + 3]) {
 			k = 2 * m + 2;
@@ -266,7 +267,7 @@ public class Percentile {
 					sb.append(String.format("%4.3f\n", e[i]));
 				}
 
-				out.println(sb.toString());
+				out.println(sb);
 			} catch (InsufficientSamplesException e) {
 				// this can never occur
 			}
@@ -277,7 +278,7 @@ public class Percentile {
 	 * Indicates too few measurements have been added to compute the requested
 	 * estimation
 	 */
-	public class InsufficientSamplesException extends Exception {
+	public static class InsufficientSamplesException extends Exception {
 
 		private static final long serialVersionUID = 5843257020225380888L;
 

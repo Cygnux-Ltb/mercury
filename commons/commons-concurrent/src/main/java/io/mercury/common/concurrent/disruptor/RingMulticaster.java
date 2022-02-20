@@ -67,9 +67,7 @@ public final class RingMulticaster<E, I> extends AbstractRingBuffer<E, I> {
 		super(name, size, factory, type, strategy, translator);
 		Assertor.requiredLength(handlers, 1, "handlers");
 		// 将处理器添加进Disruptor中, 各个处理器进行并行处理
-		disruptor.handleEventsWith(CollectionUtil.toArray(handlers, length -> {
-			return (EventHandler<E>[]) new EventHandler[length];
-		}));
+		disruptor.handleEventsWith(CollectionUtil.toArray(handlers, EventHandler[]::new));
 		log.info(
 				"Initialized RingMulticaster -> {}, size -> {}, WaitStrategy -> {}, StartMode -> {}, EventHandler count -> {}",
 				super.name, size, strategy, mode, handlers.size());

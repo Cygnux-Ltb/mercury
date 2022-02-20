@@ -60,7 +60,7 @@ class MPMCConcurrentQueue<E> implements ConcurrentQueue<E> {
 		mask = size - 1L;
 		buffer = new Cell[size];
 		for (int i = 0; i < size; i++) {
-			buffer[i] = new Cell<E>(i);
+			buffer[i] = new Cell<>(i);
 		}
 	}
 
@@ -85,7 +85,7 @@ class MPMCConcurrentQueue<E> implements ConcurrentQueue<E> {
 		cell.entry = e;
 		cell.seq.set(tail + 1);
 		return true;
-	};
+	}
 
 	@Override
 	public E poll() {

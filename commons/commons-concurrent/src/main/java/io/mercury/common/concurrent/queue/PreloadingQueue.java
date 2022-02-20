@@ -18,18 +18,18 @@ public class PreloadingQueue<E> implements MultiConsumerQueue<E> {
 
 	private static final Logger log = Log4j2LoggerFactory.getLogger(PreloadingQueue.class);
 
-	private LoadContainer<E>[] containers;
+	private final LoadContainer<E>[] containers;
 
 	private final int size;
-	private AtomicInteger count = new AtomicInteger();
+	private final AtomicInteger count = new AtomicInteger();
 
 	private volatile int readOffset;
 	private volatile int writeOffset;
 
-	private ReentrantLock lock;
+	private final ReentrantLock lock;
 
-	private Condition notEmpty;
-	private Condition notFull;
+	private final Condition notEmpty;
+	private final Condition notFull;
 
 	@SuppressWarnings("unchecked")
 	public PreloadingQueue(int size) {

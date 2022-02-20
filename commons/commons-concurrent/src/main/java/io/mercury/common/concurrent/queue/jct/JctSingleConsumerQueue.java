@@ -20,7 +20,7 @@ import io.mercury.common.util.StringSupport;
 /**
  * @author yellow013
  *
- * @param <T>
+ * @param <E>
  * 
  *            Single Consumer Queue
  * 
@@ -125,14 +125,8 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
 	 * 
 	 */
 	private void waiting() {
-		switch (strategy) {
-		case Spin:
-			break;
-		case Sleep:
+		if (strategy == WaitingStrategy.Sleep) {
 			SleepSupport.sleepIgnoreInterrupts(sleepMillis);
-			break;
-		default:
-			break;
 		}
 	}
 
@@ -169,7 +163,7 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
 	}
 
 	@Override
-	protected void stop0() throws Exception {
+	protected void stop0() {
 	}
 
 	@Override
