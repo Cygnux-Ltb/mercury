@@ -23,7 +23,7 @@ public final class StringSupport {
 
 	/**
 	 * 
-	 * @param int
+	 * @param i
 	 * @return
 	 */
 	@Nonnull

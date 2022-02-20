@@ -15,7 +15,7 @@ public enum SysDirectory {
 	private String absolutePath;
 	private File file;
 
-	private SysDirectory(String absolutePath) {
+	SysDirectory(String absolutePath) {
 		this.absolutePath = absolutePath;
 		this.file = new File(absolutePath);
 	}

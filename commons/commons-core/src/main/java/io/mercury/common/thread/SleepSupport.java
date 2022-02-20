@@ -19,7 +19,7 @@ public final class SleepSupport {
 	/**
 	 * 
 	 */
-	public static final void parkNano() {
+	public static void parkNano() {
 		LockSupport.parkNanos(1);
 	}
 
@@ -27,7 +27,7 @@ public final class SleepSupport {
 	 * 
 	 * @param nanos
 	 */
-	public static final void parkNanos(long nanos) {
+	public static void parkNanos(long nanos) {
 		LockSupport.parkNanos(nanos);
 	}
 
@@ -35,7 +35,7 @@ public final class SleepSupport {
 	 * 
 	 * @param millis
 	 */
-	public static final void sleepIgnoreInterrupts(long millis) {
+	public static void sleepIgnoreInterrupts(long millis) {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
@@ -49,7 +49,7 @@ public final class SleepSupport {
 	 * @param millis
 	 * @param nanos
 	 */
-	public static final void sleepIgnoreInterrupts(long millis, int nanos) {
+	public static void sleepIgnoreInterrupts(long millis, int nanos) {
 		try {
 			Thread.sleep(millis, nanos);
 		} catch (InterruptedException e) {
@@ -63,7 +63,7 @@ public final class SleepSupport {
 	 * @param timeUnit
 	 * @param time
 	 */
-	public static final void sleepIgnoreInterrupts(@Nonnull TimeUnit timeUnit, long time) {
+	public static void sleepIgnoreInterrupts(@Nonnull TimeUnit timeUnit, long time) {
 		try {
 			timeUnit.sleep(time);
 		} catch (InterruptedException e) {
@@ -77,7 +77,7 @@ public final class SleepSupport {
 	 * @param millis
 	 * @throws RuntimeInterruptedException
 	 */
-	public static final void sleep(long millis) throws RuntimeInterruptedException {
+	public static void sleep(long millis) throws RuntimeInterruptedException {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
@@ -92,7 +92,7 @@ public final class SleepSupport {
 	 * @param nanos
 	 * @throws RuntimeInterruptedException
 	 */
-	public static final void sleep(long millis, int nanos) throws RuntimeInterruptedException {
+	public static void sleep(long millis, int nanos) throws RuntimeInterruptedException {
 		try {
 			Thread.sleep(millis, nanos);
 		} catch (InterruptedException e) {
@@ -108,7 +108,7 @@ public final class SleepSupport {
 	 * @param time
 	 * @throws RuntimeInterruptedException
 	 */
-	public static final void sleep(@Nonnull TimeUnit timeUnit, long time) throws RuntimeInterruptedException {
+	public static void sleep(@Nonnull TimeUnit timeUnit, long time) throws RuntimeInterruptedException {
 		try {
 			timeUnit.sleep(time);
 		} catch (InterruptedException e) {

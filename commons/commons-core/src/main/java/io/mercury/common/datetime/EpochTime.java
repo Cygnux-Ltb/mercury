@@ -23,7 +23,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
-import javax.annotation.Nonnull;;
+import javax.annotation.Nonnull;
 
 /**
  * 
@@ -62,7 +62,7 @@ public final class EpochTime {
 	 * @param unit
 	 * @return
 	 */
-	public static final long getEpochs(@Nonnull EpochUnit unit) {
+	public static long getEpochs(@Nonnull EpochUnit unit) {
 		nonNull(unit, "unit");
 		switch (unit) {
 		case SECOND:
@@ -83,7 +83,7 @@ public final class EpochTime {
 	 * 
 	 * @return long
 	 */
-	public static final long getEpochNanos() {
+	public static long getEpochNanos() {
 		return nanoTime() + NANOS_EPOCH_OFFSET;
 	}
 
@@ -92,7 +92,7 @@ public final class EpochTime {
 	 * 
 	 * @return long
 	 */
-	public static final long getEpochMicros() {
+	public static long getEpochMicros() {
 		return nanoTime() / NANOS_PER_MICROS + MICROS_EPOCH_OFFSET;
 	}
 
@@ -101,7 +101,7 @@ public final class EpochTime {
 	 * 
 	 * @return long
 	 */
-	public static final long getEpochMillis() {
+	public static long getEpochMillis() {
 		return currentTimeMillis();
 	}
 
@@ -110,7 +110,7 @@ public final class EpochTime {
 	 * @param datetime
 	 * @return
 	 */
-	public static final long getEpochMillis(@Nonnull ZonedDateTime datetime) {
+	public static long getEpochMillis(@Nonnull ZonedDateTime datetime) {
 		return datetime.toEpochSecond() * MILLIS_PER_SECONDS + datetime.getNano() / NANOS_PER_MILLIS;
 	}
 
@@ -119,10 +119,10 @@ public final class EpochTime {
 	 * @param datetime
 	 * @return
 	 */
-	public static final long getEpochMillis(@Nonnull LocalDateTime datetime) {
+	public static long getEpochMillis(@Nonnull LocalDateTime datetime) {
 		return datetime.toLocalDate().toEpochDay() * MILLIS_PER_DAY
-				+ datetime.toLocalTime().toSecondOfDay() * MILLIS_PER_SECONDS + datetime.getNano() / NANOS_PER_MILLIS
-				- SYS_DEFAULT.getTotalSeconds() * MILLIS_PER_SECONDS;
+				+ (long) datetime.toLocalTime().toSecondOfDay() * MILLIS_PER_SECONDS + datetime.getNano() / NANOS_PER_MILLIS
+				- (long) SYS_DEFAULT.getTotalSeconds() * MILLIS_PER_SECONDS;
 	}
 
 	/**
@@ -131,17 +131,17 @@ public final class EpochTime {
 	 * @param offset
 	 * @return
 	 */
-	public static final long getEpochMillis(@Nonnull LocalDateTime datetime, @Nonnull ZoneOffset offset) {
+	public static long getEpochMillis(@Nonnull LocalDateTime datetime, @Nonnull ZoneOffset offset) {
 		return datetime.toLocalDate().toEpochDay() * MILLIS_PER_DAY
-				+ datetime.toLocalTime().toSecondOfDay() * MILLIS_PER_SECONDS + datetime.getNano() / NANOS_PER_MILLIS
-				- offset.getTotalSeconds() * MILLIS_PER_SECONDS;
+				+ (long) datetime.toLocalTime().toSecondOfDay() * MILLIS_PER_SECONDS + datetime.getNano() / NANOS_PER_MILLIS
+				- (long) offset.getTotalSeconds() * MILLIS_PER_SECONDS;
 	}
 
 	/**
 	 * 
 	 * @return
 	 */
-	public static final long getEpochSeconds() {
+	public static long getEpochSeconds() {
 		return currentTimeMillis() / MILLIS_PER_SECONDS;
 	}
 
@@ -150,7 +150,7 @@ public final class EpochTime {
 	 * @param datetime
 	 * @return
 	 */
-	public static final long getEpochSeconds(@Nonnull LocalDateTime datetime) {
+	public static long getEpochSeconds(@Nonnull LocalDateTime datetime) {
 		return datetime.toEpochSecond(SYS_DEFAULT);
 	}
 
@@ -160,7 +160,7 @@ public final class EpochTime {
 	 * @param offset
 	 * @return
 	 */
-	public static final long getEpochSeconds(@Nonnull LocalDateTime datetime, @Nonnull ZoneOffset offset) {
+	public static long getEpochSeconds(@Nonnull LocalDateTime datetime, @Nonnull ZoneOffset offset) {
 		return datetime.toEpochSecond(offset);
 	}
 
@@ -169,7 +169,7 @@ public final class EpochTime {
 	 * @param datetime
 	 * @return
 	 */
-	public static final long getEpochSeconds(@Nonnull ZonedDateTime datetime) {
+	public static long getEpochSeconds(@Nonnull ZonedDateTime datetime) {
 		return datetime.toEpochSecond();
 	}
 
@@ -177,7 +177,7 @@ public final class EpochTime {
 	 * 
 	 * @return
 	 */
-	public static final long getEpochMinutes() {
+	public static long getEpochMinutes() {
 		return currentTimeMillis() / MILLIS_PER_MINUTE;
 	}
 
@@ -186,7 +186,7 @@ public final class EpochTime {
 	 * @param datetime
 	 * @return
 	 */
-	public static final long getEpochMinutes(@Nonnull LocalDateTime datetime) {
+	public static long getEpochMinutes(@Nonnull LocalDateTime datetime) {
 		return getEpochMinutes(datetime, SYS_DEFAULT);
 	}
 
@@ -196,7 +196,7 @@ public final class EpochTime {
 	 * @param offset
 	 * @return
 	 */
-	public static final long getEpochMinutes(@Nonnull LocalDateTime datetime, @Nonnull ZoneOffset offset) {
+	public static long getEpochMinutes(@Nonnull LocalDateTime datetime, @Nonnull ZoneOffset offset) {
 		return datetime.toEpochSecond(offset) / SECONDS_PER_MINUTE;
 	}
 
@@ -205,7 +205,7 @@ public final class EpochTime {
 	 * @param datetime
 	 * @return
 	 */
-	public static final long getEpochMinutes(@Nonnull ZonedDateTime datetime) {
+	public static long getEpochMinutes(@Nonnull ZonedDateTime datetime) {
 		return datetime.toEpochSecond() / SECONDS_PER_MINUTE;
 	}
 
@@ -213,7 +213,7 @@ public final class EpochTime {
 	 * 
 	 * @return
 	 */
-	public static final long getEpochHours() {
+	public static long getEpochHours() {
 		return currentTimeMillis() / MILLIS_PER_HOUR;
 	}
 
@@ -222,7 +222,7 @@ public final class EpochTime {
 	 * @param datetime
 	 * @return
 	 */
-	public static final long getEpochHours(@Nonnull LocalDateTime datetime) {
+	public static long getEpochHours(@Nonnull LocalDateTime datetime) {
 		return datetime.toEpochSecond(SYS_DEFAULT) / SECONDS_PER_HOUR;
 	}
 
@@ -232,7 +232,7 @@ public final class EpochTime {
 	 * @param offset
 	 * @return
 	 */
-	public static final long getEpochHours(@Nonnull LocalDateTime datetime, @Nonnull ZoneOffset offset) {
+	public static long getEpochHours(@Nonnull LocalDateTime datetime, @Nonnull ZoneOffset offset) {
 		return datetime.toEpochSecond(offset) / SECONDS_PER_HOUR;
 	}
 
@@ -241,7 +241,7 @@ public final class EpochTime {
 	 * @param datetime
 	 * @return
 	 */
-	public static final long getEpochHours(@Nonnull ZonedDateTime datetime) {
+	public static long getEpochHours(@Nonnull ZonedDateTime datetime) {
 		return datetime.toEpochSecond() / SECONDS_PER_HOUR;
 	}
 
@@ -249,7 +249,7 @@ public final class EpochTime {
 	 * 
 	 * @return
 	 */
-	public static final long getEpochDays() {
+	public static long getEpochDays() {
 		return currentTimeMillis() / MILLIS_PER_DAY;
 	}
 
@@ -258,7 +258,7 @@ public final class EpochTime {
 	 * @param date
 	 * @return
 	 */
-	public static final long getEpochDays(@Nonnull LocalDate date) {
+	public static long getEpochDays(@Nonnull LocalDate date) {
 		return date.toEpochDay();
 	}
 
@@ -267,7 +267,7 @@ public final class EpochTime {
 	 * @param dateTime
 	 * @return
 	 */
-	public static final long getEpochDays(@Nonnull LocalDateTime dateTime) {
+	public static long getEpochDays(@Nonnull LocalDateTime dateTime) {
 		return dateTime.toLocalDate().toEpochDay();
 	}
 
@@ -276,7 +276,7 @@ public final class EpochTime {
 	 * @param datetime
 	 * @return
 	 */
-	public static final long getEpochDays(@Nonnull ZonedDateTime datetime) {
+	public static long getEpochDays(@Nonnull ZonedDateTime datetime) {
 		return datetime.toLocalDate().toEpochDay();
 	}
 
@@ -285,7 +285,7 @@ public final class EpochTime {
 	 * @param millis
 	 * @return
 	 */
-	public static final ZonedDateTime ofEpochMillis(long millis) {
+	public static ZonedDateTime ofEpochMillis(long millis) {
 		return ofEpochMillis(millis, SYS_DEFAULT);
 	}
 
@@ -295,7 +295,7 @@ public final class EpochTime {
 	 * @param zoneId
 	 * @return
 	 */
-	public static final ZonedDateTime ofEpochMillis(long millis, @Nonnull ZoneId zoneId) {
+	public static ZonedDateTime ofEpochMillis(long millis, @Nonnull ZoneId zoneId) {
 		return ZonedDateTime.ofInstant(Instant.ofEpochMilli(millis), zoneId);
 	}
 
@@ -304,7 +304,7 @@ public final class EpochTime {
 	 * @param seconds
 	 * @return
 	 */
-	public static final ZonedDateTime ofEpochSeconds(long seconds) {
+	public static ZonedDateTime ofEpochSeconds(long seconds) {
 		return ofEpochSeconds(seconds, SYS_DEFAULT);
 	}
 
@@ -314,7 +314,7 @@ public final class EpochTime {
 	 * @param zoneId
 	 * @return
 	 */
-	public static final ZonedDateTime ofEpochSeconds(long seconds, @Nonnull ZoneId zoneId) {
+	public static ZonedDateTime ofEpochSeconds(long seconds, @Nonnull ZoneId zoneId) {
 		return ZonedDateTime.ofInstant(Instant.ofEpochSecond(seconds), zoneId);
 	}
 

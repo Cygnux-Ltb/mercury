@@ -18,10 +18,8 @@ public final class CollectionUtil {
 	 * @param collection
 	 * @return
 	 */
-	public static final <E> boolean onlyOneElement(Collection<E> collection) {
-		if (collection != null && collection.size() == 1)
-			return true;
-		return false;
+	public static <E> boolean onlyOneElement(Collection<E> collection) {
+		return collection != null && collection.size() == 1;
 	}
 
 	/**
@@ -30,10 +28,8 @@ public final class CollectionUtil {
 	 * @param collection
 	 * @return
 	 */
-	public static final <E> boolean notEmpty(Collection<E> collection) {
-		if (collection != null && collection.size() > 1)
-			return true;
-		return false;
+	public static <E> boolean notEmpty(Collection<E> collection) {
+		return collection != null && collection.size() >= 1;
 	}
 
 	/**
@@ -44,7 +40,7 @@ public final class CollectionUtil {
 	 * @return
 	 */
 	@SafeVarargs
-	public static final <E, C extends Collection<E>> C addAll(@Nonnull final C collection, @Nonnull final E... values) {
+	public static <E, C extends Collection<E>> C addAll(@Nonnull final C collection, @Nonnull final E... values) {
 		Assertor.nonNull(collection, "collection");
 		if (ArrayUtil.isNullOrEmpty(values))
 			return collection;
@@ -63,7 +59,7 @@ public final class CollectionUtil {
 	 * @return
 	 */
 	@SafeVarargs
-	public static final <E, V, C extends Collection<E>> C addAll(@Nonnull final C collection,
+	public static <E, V, C extends Collection<E>> C addAll(@Nonnull final C collection,
 			@Nonnull Function<V, E> converter, @Nonnull final V... values) {
 		Assertor.nonNull(collection, "collection");
 		Assertor.nonNull(converter, "converter");
@@ -82,7 +78,7 @@ public final class CollectionUtil {
 	 * @param creator
 	 * @return
 	 */
-	public static final <E, C extends Collection<E>> E[] toArray(@Nonnull final C collection,
+	public static <E, C extends Collection<E>> E[] toArray(@Nonnull final C collection,
 			IntFunction<E[]> creator) {
 		Assertor.nonNull(collection, "collection");
 		E[] values = creator.apply(collection.size());

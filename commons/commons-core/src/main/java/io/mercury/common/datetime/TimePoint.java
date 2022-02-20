@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public final class TimePoint implements Comparable<TimePoint> {
 
@@ -17,7 +18,7 @@ public final class TimePoint implements Comparable<TimePoint> {
 	 * @param date
 	 * @param time
 	 * @param nano
-	 * @param zoneId
+	 * @param offset
 	 */
 	private TimePoint(int date, int time, int nano, ZoneOffset offset) {
 		this.date = date;
@@ -46,7 +47,7 @@ public final class TimePoint implements Comparable<TimePoint> {
 	/**
 	 * 
 	 * @param datetime
-	 * @param zoneId
+	 * @param offset
 	 * @return
 	 */
 	public static TimePoint now(@Nonnull LocalDateTime datetime, @Nonnull ZoneOffset offset) {
@@ -70,7 +71,7 @@ public final class TimePoint implements Comparable<TimePoint> {
 	 * @param date
 	 * @param time
 	 * @param nano
-	 * @param zoneId
+	 * @param offset
 	 * @return
 	 */
 	public static TimePoint of(int date, int time, int nano, @Nonnull ZoneOffset offset) {
@@ -94,7 +95,7 @@ public final class TimePoint implements Comparable<TimePoint> {
 	}
 
 	@Override
-	public int compareTo(@Nonnull TimePoint o) {
+	public int compareTo(@Nullable TimePoint o) {
 		return o == null ? -1
 				: date < o.date ? -1
 						: date > o.date ? 1

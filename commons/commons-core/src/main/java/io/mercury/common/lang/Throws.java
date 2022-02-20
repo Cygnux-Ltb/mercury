@@ -101,7 +101,7 @@ public final class Throws {
 
 	/**
 	 * 
-	 * @param obj
+	 * @param state
 	 * @throws IllegalStateException
 	 */
 	public static final void illegalState(String state) throws IllegalStateException {

@@ -56,7 +56,6 @@ public final class ConfigWrapper<O extends ConfigOption> {
 	 * 获取[boolean]配置值, 如果未配置, 默认值[false]
 	 * 
 	 * @param option
-	 * @param defaultVal
 	 * @return
 	 */
 	public boolean getBoolean(@Nonnull O option) {
@@ -79,7 +78,6 @@ public final class ConfigWrapper<O extends ConfigOption> {
 	 * 获取[int]配置值, 如果未配置, 默认值[0]
 	 * 
 	 * @param option
-	 * @param defaultVal
 	 * @return
 	 */
 	public int getInt(@Nonnull O option) {
@@ -102,7 +100,6 @@ public final class ConfigWrapper<O extends ConfigOption> {
 	 * 获取[long]配置值, 如果未配置, 默认值[0L]
 	 * 
 	 * @param option
-	 * @param defaultVal
 	 * @return
 	 */
 	public long getLong(@Nonnull O option) {
@@ -125,7 +122,6 @@ public final class ConfigWrapper<O extends ConfigOption> {
 	 * 获取[double]配置值, 如果未配置, 默认值[0.0D]
 	 * 
 	 * @param option
-	 * @param defaultVal
 	 * @return
 	 */
 	public double getDouble(@Nonnull O option) {
@@ -148,7 +144,6 @@ public final class ConfigWrapper<O extends ConfigOption> {
 	 * 获取[String]配置值, 如果未配置, 默认值[""]
 	 * 
 	 * @param option
-	 * @param defaultVal
 	 * @return
 	 */
 	public String getString(@Nonnull O option) {

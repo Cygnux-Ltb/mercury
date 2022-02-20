@@ -264,7 +264,7 @@ public enum Capacity {
 
 	/**
 	 * 
-	 * @param size
+	 * @param value
 	 * @return
 	 */
 	public Capacity get(int value) {

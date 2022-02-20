@@ -39,7 +39,7 @@ public final class SystemUtil {
 					pid = Long.parseLong(jvmName.split("@")[0]);
 				}
 			} catch (final Throwable ignore2) {
-				System.err.println(ignore2.getMessage());
+
 			}
 		}
 		PID = pid;
@@ -72,20 +72,20 @@ public final class SystemUtil {
 	}
 
 	/**
-	 * Is the operating system likely to be Windows based on {@link #osName()}.
+	 * Is the operating system likely to be Windows based on {@link #getOsName()}.
 	 *
 	 * @return true if the operating system is likely to be Windows based on
-	 *         {@link #osName()}.
+	 *         {@link #getOsName()}.
 	 */
 	public static boolean isWindows() {
 		return OS_NAME.startsWith("win");
 	}
 
 	/**
-	 * Is the operating system likely to be Linux based on {@link #osName()}.
+	 * Is the operating system likely to be Linux based on {@link #getOsName()}.
 	 *
 	 * @return true if the operating system is likely to be Linux based on
-	 *         {@link #osName()}.
+	 *         {@link #getOsName()}.
 	 */
 	public static boolean isLinux() {
 		return OS_NAME.contains("linux");

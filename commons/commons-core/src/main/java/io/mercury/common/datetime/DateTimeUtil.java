@@ -23,20 +23,19 @@ public final class DateTimeUtil {
 	/**
 	 * 返回 primitive int 表示的 yyyyMMdd
 	 * 
-	 * @param date
 	 * @return
 	 */
-	public final static int date() {
+	public static int date() {
 		return date(LocalDate.now());
 	}
 
 	/**
 	 * 根据指定 LocalDateTime 返回 primitive int 表示的 yyyyMMdd
 	 * 
-	 * @param date
+	 * @param datetime
 	 * @return
 	 */
-	public final static int date(@Nonnull LocalDateTime datetime) {
+	public static int date(@Nonnull LocalDateTime datetime) {
 		return date(datetime.toLocalDate());
 	}
 
@@ -46,7 +45,7 @@ public final class DateTimeUtil {
 	 * @param datetime
 	 * @return
 	 */
-	public final static int date(@Nonnull ZonedDateTime datetime) {
+	public static int date(@Nonnull ZonedDateTime datetime) {
 		return date(datetime.toLocalDate());
 	}
 
@@ -56,7 +55,7 @@ public final class DateTimeUtil {
 	 * @param date
 	 * @return
 	 */
-	public final static int date(@Nonnull LocalDate date) {
+	public static int date(@Nonnull LocalDate date) {
 		return date.getYear() * 10000 + date.getMonth().getValue() * 100 + date.getDayOfMonth();
 	}
 
@@ -66,17 +65,16 @@ public final class DateTimeUtil {
 	 * @param date
 	 * @return
 	 */
-	public final static int date(@Nonnull Date date) {
+	public static int date(@Nonnull Date date) {
 		return date(toLocalDate(date));
 	}
 
 	/**
 	 * 返回 primitive int 表示的 yyyyMM
 	 * 
-	 * @param date
 	 * @return
 	 */
-	public final static int dateOfMonth() {
+	public static int dateOfMonth() {
 		return dateOfMonth(LocalDate.now());
 	}
 
@@ -86,7 +84,7 @@ public final class DateTimeUtil {
 	 * @param datetime
 	 * @return
 	 */
-	public final static int dateOfMonth(@Nonnull LocalDateTime datetime) {
+	public static int dateOfMonth(@Nonnull LocalDateTime datetime) {
 		return dateOfMonth(datetime.toLocalDate());
 	}
 
@@ -96,7 +94,7 @@ public final class DateTimeUtil {
 	 * @param datetime
 	 * @return
 	 */
-	public final static int dateOfMonth(@Nonnull ZonedDateTime datetime) {
+	public static int dateOfMonth(@Nonnull ZonedDateTime datetime) {
 		return dateOfMonth(datetime.toLocalDate());
 	}
 
@@ -106,17 +104,16 @@ public final class DateTimeUtil {
 	 * @param date
 	 * @return
 	 */
-	public final static int dateOfMonth(@Nonnull LocalDate date) {
+	public static int dateOfMonth(@Nonnull LocalDate date) {
 		return date.getYear() * 100 + date.getMonth().getValue();
 	}
 
 	/**
 	 * 返回 primitive int 表示的 yyyyXXX
 	 * 
-	 * @param date
 	 * @return
 	 */
-	public final static int yearDay() {
+	public static int yearDay() {
 		return yearDay(LocalDate.now());
 	}
 
@@ -126,7 +123,7 @@ public final class DateTimeUtil {
 	 * @param date
 	 * @return
 	 */
-	public final static int yearDay(@Nonnull LocalDate date) {
+	public static int yearDay(@Nonnull LocalDate date) {
 		return date.getYear() * 1000 + date.getDayOfYear();
 	}
 
@@ -135,7 +132,7 @@ public final class DateTimeUtil {
 	 * 
 	 * @return
 	 */
-	public final static int timeOfHour() {
+	public static int timeOfHour() {
 		return timeOfHour(LocalTime.now());
 	}
 
@@ -145,7 +142,7 @@ public final class DateTimeUtil {
 	 * @param time
 	 * @return
 	 */
-	public final static int timeOfHour(@Nonnull LocalTime time) {
+	public static int timeOfHour(@Nonnull LocalTime time) {
 		return time.getHour();
 	}
 
@@ -154,7 +151,7 @@ public final class DateTimeUtil {
 	 * 
 	 * @return
 	 */
-	public final static int timeOfMinute() {
+	public static int timeOfMinute() {
 		return timeOfMinute(LocalTime.now());
 	}
 
@@ -164,7 +161,7 @@ public final class DateTimeUtil {
 	 * @param time
 	 * @return
 	 */
-	public final static int timeOfMinute(@Nonnull LocalTime time) {
+	public static int timeOfMinute(@Nonnull LocalTime time) {
 		return time.getHour() * 100 + time.getMinute();
 	}
 
@@ -173,7 +170,7 @@ public final class DateTimeUtil {
 	 * 
 	 * @return
 	 */
-	public final static int timeOfSecond() {
+	public static int timeOfSecond() {
 		return timeOfSecond(LocalTime.now());
 	}
 
@@ -183,7 +180,7 @@ public final class DateTimeUtil {
 	 * @param time
 	 * @return
 	 */
-	public final static int timeOfSecond(@Nonnull LocalTime time) {
+	public static int timeOfSecond(@Nonnull LocalTime time) {
 		return time.getHour() * 10000 + time.getMinute() * 100 + time.getSecond();
 	}
 
@@ -192,7 +189,7 @@ public final class DateTimeUtil {
 	 * 
 	 * @return
 	 */
-	public final static int timeOfMillisecond() {
+	public static int timeOfMillisecond() {
 		return timeOfMillisecond(LocalTime.now());
 	}
 
@@ -202,7 +199,7 @@ public final class DateTimeUtil {
 	 * @param time
 	 * @return
 	 */
-	public final static int timeOfMillisecond(@Nonnull LocalTime time) {
+	public static int timeOfMillisecond(@Nonnull LocalTime time) {
 		return timeOfSecond(time) * 1000 + time.getNano() / 1000000;
 	}
 
@@ -211,7 +208,7 @@ public final class DateTimeUtil {
 	 * 
 	 * @return
 	 */
-	public final static long timeOfMicrosecond() {
+	public static long timeOfMicrosecond() {
 		return timeOfMicrosecond(LocalTime.now());
 	}
 
@@ -221,7 +218,7 @@ public final class DateTimeUtil {
 	 * @param time
 	 * @return
 	 */
-	public final static long timeOfMicrosecond(@Nonnull LocalTime time) {
+	public static long timeOfMicrosecond(@Nonnull LocalTime time) {
 		return timeOfSecond(time) * 1000000L + time.getNano() / 1000;
 	}
 
@@ -230,7 +227,7 @@ public final class DateTimeUtil {
 	 * 
 	 * @return
 	 */
-	public final static long timeOfNanosecond() {
+	public static long timeOfNanosecond() {
 		return timeOfNanosecond(LocalTime.now());
 	}
 
@@ -240,7 +237,7 @@ public final class DateTimeUtil {
 	 * @param time
 	 * @return
 	 */
-	public final static long timeOfNanosecond(@Nonnull LocalTime time) {
+	public static long timeOfNanosecond(@Nonnull LocalTime time) {
 		return timeOfSecond(time) * 1000000000L + time.getNano();
 	}
 
@@ -249,7 +246,7 @@ public final class DateTimeUtil {
 	 * 
 	 * @return
 	 */
-	public final static long datetimeOfHour() {
+	public static long datetimeOfHour() {
 		return datetimeOfHour(LocalDateTime.now());
 	}
 
@@ -259,7 +256,7 @@ public final class DateTimeUtil {
 	 * @param datetime
 	 * @return
 	 */
-	public final static long datetimeOfHour(@Nonnull LocalDateTime datetime) {
+	public static long datetimeOfHour(@Nonnull LocalDateTime datetime) {
 		return date(datetime.toLocalDate()) * 100L + timeOfHour(datetime.toLocalTime());
 	}
 
@@ -268,7 +265,7 @@ public final class DateTimeUtil {
 	 * 
 	 * @return
 	 */
-	public final static long datetimeOfMinute() {
+	public static long datetimeOfMinute() {
 		return datetimeOfMinute(LocalDateTime.now());
 	}
 
@@ -278,7 +275,7 @@ public final class DateTimeUtil {
 	 * @param datetime
 	 * @return
 	 */
-	public final static long datetimeOfMinute(@Nonnull LocalDateTime datetime) {
+	public static long datetimeOfMinute(@Nonnull LocalDateTime datetime) {
 		return date(datetime.toLocalDate()) * 10000L + timeOfMinute(datetime.toLocalTime());
 	}
 
@@ -287,7 +284,7 @@ public final class DateTimeUtil {
 	 * 
 	 * @return
 	 */
-	public final static long datetimeOfSecond() {
+	public static long datetimeOfSecond() {
 		return datetimeOfSecond(LocalDateTime.now());
 	}
 
@@ -297,7 +294,7 @@ public final class DateTimeUtil {
 	 * @param datetime
 	 * @return
 	 */
-	public final static long datetimeOfSecond(@Nonnull LocalDateTime datetime) {
+	public static long datetimeOfSecond(@Nonnull LocalDateTime datetime) {
 		return date(datetime.toLocalDate()) * 1000000L + timeOfSecond(datetime.toLocalTime());
 	}
 
@@ -306,7 +303,7 @@ public final class DateTimeUtil {
 	 * 
 	 * @return
 	 */
-	public final static long datetimeOfMillisecond() {
+	public static long datetimeOfMillisecond() {
 		return datetimeOfMillisecond(LocalDateTime.now());
 	}
 
@@ -317,7 +314,7 @@ public final class DateTimeUtil {
 	 * @param datetime
 	 * @return
 	 */
-	public final static long datetimeOfMillisecond(@Nonnull LocalDateTime datetime) {
+	public static long datetimeOfMillisecond(@Nonnull LocalDateTime datetime) {
 		return datetimeOfSecond(datetime) * 1000L + datetime.toLocalTime().getNano() / 1000000;
 	}
 
@@ -327,7 +324,7 @@ public final class DateTimeUtil {
 	 * @param date
 	 * @return
 	 */
-	public final static LocalDate toLocalDate(int date) {
+	public static LocalDate toLocalDate(int date) {
 		return LocalDate.of(date / 10000, (date % 10000) / 100, date % 100);
 	}
 
@@ -337,17 +334,17 @@ public final class DateTimeUtil {
 	 * @param date
 	 * @return
 	 */
-	public final static LocalDate toLocalDate(Date date) {
+	public static LocalDate toLocalDate(Date date) {
 		return LocalDateTime.ofInstant(date.toInstant(), TimeZone.SYS_DEFAULT).toLocalDate();
 	}
 
 	/**
 	 * primitive int HHmmss 转换为 LocalTime
 	 * 
-	 * @param date
+	 * @param time
 	 * @return
 	 */
-	public final static LocalTime toLocalTime(int time) {
+	public static LocalTime toLocalTime(int time) {
 		return LocalTime.of(time / 10000000, (time % 10000000) / 100000, (time % 100000) / 1000,
 				(time % 1000) * 1000000);
 	}
@@ -355,10 +352,10 @@ public final class DateTimeUtil {
 	/**
 	 * primitive long yyyyMMddHHmmss 转换为 LocalDateTime
 	 * 
-	 * @param date
+	 * @param datetime
 	 * @return
 	 */
-	public final static LocalDateTime toLocalDateTime(long datetime) {
+	public static LocalDateTime toLocalDateTime(long datetime) {
 		return LocalDateTime.of(toLocalDate((int) (datetime / 1000000000)), toLocalTime((int) (datetime % 1000000000)));
 	}
 
@@ -370,7 +367,7 @@ public final class DateTimeUtil {
 	 * @throws IllegalArgumentException
 	 * @throws DateTimeParseException
 	 */
-	public final static LocalDate toLocalDate(@Nonnull DatePattern pattern, @Nonnull String str)
+	public static LocalDate toLocalDate(@Nonnull DatePattern pattern, @Nonnull String str)
 			throws IllegalArgumentException, DateTimeParseException {
 		checkFormatParam(pattern, str);
 		return LocalDate.parse(str, pattern.getFormatter());
@@ -384,7 +381,7 @@ public final class DateTimeUtil {
 	 * @throws IllegalArgumentException
 	 * @throws DateTimeParseException
 	 */
-	public final static LocalTime toLocalTime(@Nonnull TimePattern pattern, @Nonnull String str)
+	public static LocalTime toLocalTime(@Nonnull TimePattern pattern, @Nonnull String str)
 			throws IllegalArgumentException, DateTimeParseException {
 		checkFormatParam(pattern, str);
 		return LocalTime.parse(str, pattern.getFormatter());
@@ -398,7 +395,7 @@ public final class DateTimeUtil {
 	 * @throws IllegalArgumentException
 	 * @throws DateTimeParseException
 	 */
-	public final static LocalDateTime toLocalDateTime(@Nonnull DateTimePattern pattern, @Nonnull String datetime)
+	public static LocalDateTime toLocalDateTime(@Nonnull DateTimePattern pattern, @Nonnull String datetime)
 			throws IllegalArgumentException, DateTimeParseException {
 		checkFormatParam(pattern, datetime);
 		return LocalDateTime.parse(datetime, pattern.getFormatter());
@@ -418,7 +415,7 @@ public final class DateTimeUtil {
 	 * @param date
 	 * @return
 	 */
-	public final static LocalDateTime toLocalDateTime(@Nonnull Date date) {
+	public static LocalDateTime toLocalDateTime(@Nonnull Date date) {
 		return LocalDateTime.ofInstant(date.toInstant(), TimeZone.SYS_DEFAULT);
 	}
 
@@ -428,7 +425,7 @@ public final class DateTimeUtil {
 	 * @param zoneId
 	 * @return
 	 */
-	public final static LocalDateTime toLocalDateTime(@Nonnull Date date, @Nonnull ZoneId zoneId) {
+	public static LocalDateTime toLocalDateTime(@Nonnull Date date, @Nonnull ZoneId zoneId) {
 		return LocalDateTime.ofInstant(date.toInstant(), zoneId);
 	}
 
@@ -437,7 +434,7 @@ public final class DateTimeUtil {
 	 * @param pattern
 	 * @return
 	 */
-	public final static String formatDate(@Nonnull DatePattern pattern) {
+	public static String formatDate(@Nonnull DatePattern pattern) {
 		return pattern.getFormatter().format(LocalDate.now());
 	}
 
@@ -447,7 +444,7 @@ public final class DateTimeUtil {
 	 * @param pattern
 	 * @return
 	 */
-	public final static String formatDate(@Nonnull DatePattern pattern, @Nonnull LocalDate date) {
+	public static String formatDate(@Nonnull DatePattern pattern, @Nonnull LocalDate date) {
 		return pattern.getFormatter().format(date);
 	}
 
@@ -456,7 +453,7 @@ public final class DateTimeUtil {
 	 * @param pattern
 	 * @return
 	 */
-	public final static String formatTime(@Nonnull TimePattern pattern) {
+	public static String formatTime(@Nonnull TimePattern pattern) {
 		return pattern.getFormatter().format(LocalTime.now());
 	}
 
@@ -466,7 +463,7 @@ public final class DateTimeUtil {
 	 * @param pattern
 	 * @return
 	 */
-	public final static String formatTime(@Nonnull TimePattern pattern, @Nonnull LocalTime time) {
+	public static String formatTime(@Nonnull TimePattern pattern, @Nonnull LocalTime time) {
 		return pattern.getFormatter().format(time);
 	}
 
@@ -476,7 +473,7 @@ public final class DateTimeUtil {
 	 * @param pattern
 	 * @return
 	 */
-	public final static String formatDateTime(@Nonnull DateTimePattern pattern, @Nonnull LocalDateTime datetime) {
+	public static String formatDateTime(@Nonnull DateTimePattern pattern, @Nonnull LocalDateTime datetime) {
 		return pattern.getFormatter().format(datetime);
 	}
 
@@ -485,7 +482,7 @@ public final class DateTimeUtil {
 	 * @param pattern
 	 * @return
 	 */
-	public final static String formatDateTime(@Nonnull DateTimePattern pattern) {
+	public static String formatDateTime(@Nonnull DateTimePattern pattern) {
 		return pattern.getFormatter().format(LocalDateTime.now());
 	}
 
@@ -501,7 +498,7 @@ public final class DateTimeUtil {
 	 * 
 	 * @return
 	 */
-	public static final LocalDate previousDate() {
+	public static LocalDate previousDate() {
 		return previousDate(LocalDate.now());
 	}
 
@@ -510,7 +507,7 @@ public final class DateTimeUtil {
 	 * @param date
 	 * @return
 	 */
-	public static final LocalDate previousDate(LocalDate date) {
+	public static LocalDate previousDate(LocalDate date) {
 		return date.minusDays(1);
 	}
 
@@ -518,7 +515,7 @@ public final class DateTimeUtil {
 	 * 
 	 * @return
 	 */
-	public static final LocalDate nextDate() {
+	public static LocalDate nextDate() {
 		return nextDate(LocalDate.now());
 	}
 
@@ -527,7 +524,7 @@ public final class DateTimeUtil {
 	 * @param date
 	 * @return
 	 */
-	public static final LocalDate nextDate(LocalDate date) {
+	public static LocalDate nextDate(LocalDate date) {
 		return date.plusDays(1);
 	}
 

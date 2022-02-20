@@ -30,7 +30,7 @@ public final class ThreadSupport {
 	private ThreadSupport() {
 	}
 
-	public static enum ThreadPriority {
+	public enum ThreadPriority {
 		/**
 		 * The minimum priority that a thread can have.
 		 */
@@ -59,7 +59,7 @@ public final class ThreadSupport {
 
 		private final int value;
 
-		private ThreadPriority(int value) {
+		ThreadPriority(int value) {
 			this.value = value;
 		}
 
@@ -72,7 +72,7 @@ public final class ThreadSupport {
 	 * 
 	 * @return
 	 */
-	public static final ThreadPoolExecutor newCommonThreadPool() {
+	public static ThreadPoolExecutor newCommonThreadPool() {
 		return CommonThreadPool.newBuilder().build();
 	}
 
@@ -151,7 +151,7 @@ public final class ThreadSupport {
 	 * @param runnable
 	 * @return
 	 */
-	public static final Thread newThread(Runnable runnable) {
+	public static Thread newThread(Runnable runnable) {
 		return new Thread(runnable);
 	}
 
@@ -161,7 +161,7 @@ public final class ThreadSupport {
 	 * @param name
 	 * @return
 	 */
-	public static final Thread newThread(String name, Runnable runnable) {
+	public static Thread newThread(String name, Runnable runnable) {
 		return new Thread(runnable, name);
 	}
 
@@ -171,7 +171,7 @@ public final class ThreadSupport {
 	 * @param priority
 	 * @return
 	 */
-	public static final Thread newThread(Runnable runnable, ThreadPriority priority) {
+	public static Thread newThread(Runnable runnable, ThreadPriority priority) {
 		return setThreadPriority(new Thread(runnable), priority);
 	}
 
@@ -182,7 +182,7 @@ public final class ThreadSupport {
 	 * @param priority
 	 * @return
 	 */
-	public static final Thread newThread(String name, Runnable runnable, ThreadPriority priority) {
+	public static Thread newThread(String name, Runnable runnable, ThreadPriority priority) {
 		return setThreadPriority(new Thread(runnable, name), priority);
 	}
 
@@ -191,7 +191,7 @@ public final class ThreadSupport {
 	 * @param runnable
 	 * @return
 	 */
-	public static final Thread newMaxPriorityThread(Runnable runnable) {
+	public static Thread newMaxPriorityThread(Runnable runnable) {
 		return setThreadPriority(new Thread(runnable), ThreadPriority.MAX);
 	}
 
@@ -201,7 +201,7 @@ public final class ThreadSupport {
 	 * @param name
 	 * @return
 	 */
-	public static final Thread newMaxPriorityThread(String name, Runnable runnable) {
+	public static Thread newMaxPriorityThread(String name, Runnable runnable) {
 		return setThreadPriority(new Thread(runnable, name), ThreadPriority.MAX);
 	}
 
@@ -210,7 +210,7 @@ public final class ThreadSupport {
 	 * @param runnable
 	 * @return
 	 */
-	public static final Thread newMinPriorityThread(Runnable runnable) {
+	public static Thread newMinPriorityThread(Runnable runnable) {
 		return setThreadPriority(new Thread(runnable), ThreadPriority.MIN);
 	}
 
@@ -220,7 +220,7 @@ public final class ThreadSupport {
 	 * @param name
 	 * @return
 	 */
-	public static final Thread newMinPriorityThread(String name, Runnable runnable) {
+	public static Thread newMinPriorityThread(String name, Runnable runnable) {
 		return setThreadPriority(new Thread(runnable, name), ThreadPriority.MIN);
 	}
 
@@ -229,7 +229,7 @@ public final class ThreadSupport {
 	 * @param runnable
 	 * @return
 	 */
-	public static final Thread startNewThread(Runnable runnable) {
+	public static Thread startNewThread(Runnable runnable) {
 		return startThread(newThread(runnable));
 	}
 
@@ -239,7 +239,7 @@ public final class ThreadSupport {
 	 * @param name
 	 * @return
 	 */
-	public static final Thread startNewThread(String name, Runnable runnable) {
+	public static Thread startNewThread(String name, Runnable runnable) {
 		return startThread(new Thread(runnable, name));
 	}
 
@@ -248,7 +248,7 @@ public final class ThreadSupport {
 	 * @param runnable
 	 * @return
 	 */
-	public static final Thread startNewMaxPriorityThread(Runnable runnable) {
+	public static Thread startNewMaxPriorityThread(Runnable runnable) {
 		return startThread(newMaxPriorityThread(runnable));
 	}
 
@@ -258,7 +258,7 @@ public final class ThreadSupport {
 	 * @param name
 	 * @return
 	 */
-	public static final Thread startNewMaxPriorityThread(String name, Runnable runnable) {
+	public static Thread startNewMaxPriorityThread(String name, Runnable runnable) {
 		return startThread(newMaxPriorityThread(name, runnable));
 	}
 
@@ -267,7 +267,7 @@ public final class ThreadSupport {
 	 * @param runnable
 	 * @return
 	 */
-	public static final Thread startNewMinPriorityThread(Runnable runnable) {
+	public static Thread startNewMinPriorityThread(Runnable runnable) {
 		return startThread(newMinPriorityThread(runnable));
 	}
 
@@ -277,7 +277,7 @@ public final class ThreadSupport {
 	 * @param name
 	 * @return
 	 */
-	public static final Thread startNewMinPriorityThread(String name, Runnable runnable) {
+	public static Thread startNewMinPriorityThread(String name, Runnable runnable) {
 		return startThread(newMinPriorityThread(name, runnable));
 	}
 
@@ -286,7 +286,7 @@ public final class ThreadSupport {
 	 * @param thread
 	 * @return
 	 */
-	public static final Thread startThread(Thread thread) {
+	public static Thread startThread(Thread thread) {
 		thread.start();
 		return thread;
 	}
@@ -294,7 +294,7 @@ public final class ThreadSupport {
 	/**
 	 * 
 	 */
-	public static final void join() {
+	public static void join() {
 		join(Thread.currentThread());
 	}
 
@@ -302,7 +302,7 @@ public final class ThreadSupport {
 	 * 
 	 * @param thread
 	 */
-	public static final void join(Thread thread) {
+	public static void join(Thread thread) {
 		try {
 			thread.join();
 		} catch (InterruptedException e) {
@@ -316,7 +316,7 @@ public final class ThreadSupport {
 	 * 
 	 * @return
 	 */
-	public static final Thread getCurrentThread() {
+	public static Thread getCurrentThread() {
 		return Thread.currentThread();
 	}
 
@@ -324,7 +324,7 @@ public final class ThreadSupport {
 	 * 
 	 * @return
 	 */
-	public static final String getCurrentThreadName() {
+	public static String getCurrentThreadName() {
 		return Thread.currentThread().getName();
 	}
 
@@ -355,7 +355,7 @@ public final class ThreadSupport {
 		final ThreadGroup root = getRootThreadGroup();
 		final ThreadMXBean mxBean = ManagementFactory.getThreadMXBean();
 		int count = mxBean.getThreadCount();
-		int n = 0;
+		int n;
 		Thread[] threads;
 		do {
 			count *= 2;
@@ -398,7 +398,7 @@ public final class ThreadSupport {
 		if (regex == null)
 			throw new NullPointerException("Null thread name regex");
 		final Thread[] threads = getAllThreads();
-		final List<Thread> matched = new ArrayList<Thread>();
+		final List<Thread> matched = new ArrayList<>();
 		for (Thread thread : threads) {
 			if (thread.getName().matches(regex))
 				matched.add(thread);
@@ -410,7 +410,7 @@ public final class ThreadSupport {
 	 * 
 	 * @return String
 	 */
-	public static final String dumpThreadInfo() {
+	public static String dumpThreadInfo() {
 		return dumpThreadInfo(getCurrentThread());
 	}
 
@@ -419,7 +419,7 @@ public final class ThreadSupport {
 	 * @param thread
 	 * @return String
 	 */
-	public static final String dumpThreadInfo(@Nonnull final Thread thread) {
+	public static String dumpThreadInfo(@Nonnull final Thread thread) {
 		final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
 		final MutableMap<String, String> map = MutableMaps.newUnifiedMap();
 		final ThreadInfo threadInfo = threadMXBean.getThreadInfo(thread.getId());

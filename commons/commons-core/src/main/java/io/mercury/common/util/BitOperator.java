@@ -244,7 +244,7 @@ public final class BitOperator {
 	 * 清理DirectMemory
 	 * 
 	 * @since 1.8
-	 * @param buffer
+	 * @param
 	 */
 //	@SuppressWarnings("restriction")
 //	public static boolean cleanDirectMemory(final ByteBuffer buffer) throws RuntimeException {

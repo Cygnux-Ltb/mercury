@@ -169,9 +169,9 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
 			if (factory != null && rejectedHandler != null)
 				return new CommonThreadPool(threadPoolName, this, factory, rejectedHandler, beforeHandler,
 						afterHandler);
-			if (factory != null && rejectedHandler == null)
+			if (factory != null)
 				return new CommonThreadPool(threadPoolName, this, factory, beforeHandler, afterHandler);
-			if (factory == null && rejectedHandler != null)
+			if (rejectedHandler != null)
 				return new CommonThreadPool(threadPoolName, this, rejectedHandler, beforeHandler, afterHandler);
 			else
 				return new CommonThreadPool(threadPoolName, this, beforeHandler, afterHandler);

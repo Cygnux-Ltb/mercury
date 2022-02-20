@@ -29,7 +29,7 @@ public final class ConfigUtil {
 	 * @param log
 	 */
 	public static void showConfig(@Nonnull Config config, @Nullable Logger log) {
-		config.entrySet().stream().forEach(entry -> {
+		config.entrySet().forEach(entry -> {
 			ConfigValue value = entry.getValue();
 			if (log != null)
 				log.info("Key -> [{}],  ValueType -> [{}],  Value -> [{}]", entry.getKey(), value.valueType(),

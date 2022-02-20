@@ -36,70 +36,70 @@ public final class ImmutableMaps {
 	/**
 	 * @return ImmutableIntIntMapFactory Instance
 	 */
-	public static final ImmutableIntIntMapFactory getIntIntMapFactory() {
+	public static ImmutableIntIntMapFactory getIntIntMapFactory() {
 		return ImmutableIntIntMapFactoryImpl.INSTANCE;
 	}
 
 	/**
 	 * @return ImmutableIntLongMapFactory Instance
 	 */
-	public static final ImmutableIntLongMapFactory getIntLongMapFactory() {
+	public static ImmutableIntLongMapFactory getIntLongMapFactory() {
 		return ImmutableIntLongMapFactoryImpl.INSTANCE;
 	}
 
 	/**
 	 * @return ImmutableIntDoubleMapFactory Instance
 	 */
-	public static final ImmutableIntDoubleMapFactory getIntDoubleMapFactory() {
+	public static ImmutableIntDoubleMapFactory getIntDoubleMapFactory() {
 		return ImmutableIntDoubleMapFactoryImpl.INSTANCE;
 	}
 
 	/**
 	 * @return ImmutableIntObjectMapFactory Instance
 	 */
-	public static final ImmutableIntObjectMapFactory getIntObjectMapFactory() {
+	public static ImmutableIntObjectMapFactory getIntObjectMapFactory() {
 		return ImmutableIntObjectMapFactoryImpl.INSTANCE;
 	}
 
 	/**
 	 * @return ImmutableLongIntMapFactory Instance
 	 */
-	public static final ImmutableLongIntMapFactory getLongIntMapFactory() {
+	public static ImmutableLongIntMapFactory getLongIntMapFactory() {
 		return ImmutableLongIntMapFactoryImpl.INSTANCE;
 	}
 
 	/**
 	 * @return ImmutableLongLongMapFactory Instance
 	 */
-	public static final ImmutableLongLongMapFactory getLongLongMapFactory() {
+	public static ImmutableLongLongMapFactory getLongLongMapFactory() {
 		return ImmutableLongLongMapFactoryImpl.INSTANCE;
 	}
 
 	/**
 	 * @return ImmutableLongDoubleMapFactory Instance
 	 */
-	public static final ImmutableLongDoubleMapFactory getLongDoubleMapFactory() {
+	public static ImmutableLongDoubleMapFactory getLongDoubleMapFactory() {
 		return ImmutableLongDoubleMapFactoryImpl.INSTANCE;
 	}
 
 	/**
 	 * @return ImmutableLongObjectMapFactory Instance
 	 */
-	public static final ImmutableLongObjectMapFactory getLongObjectMapFactory() {
+	public static ImmutableLongObjectMapFactory getLongObjectMapFactory() {
 		return ImmutableLongObjectMapFactoryImpl.INSTANCE;
 	}
 
 	/**
 	 * @return ImmutableMapFactory Instance
 	 */
-	public static final ImmutableMapFactory getMapFactory() {
+	public static ImmutableMapFactory getMapFactory() {
 		return ImmutableMapFactoryImpl.INSTANCE;
 	}
 
 	/**
 	 * @return ImmutableSortedMapFactory Instance
 	 */
-	public static final ImmutableSortedMapFactory getSortedMapFactory() {
+	public static ImmutableSortedMapFactory getSortedMapFactory() {
 		return ImmutableSortedMapFactoryImpl.INSTANCE;
 	}
 
@@ -111,7 +111,7 @@ public final class ImmutableMaps {
 	 * @param value
 	 * @return The new ImmutableMap
 	 */
-	public static final <K, V> ImmutableMap<K, V> newImmutableMap(K key, V value) {
+	public static <K, V> ImmutableMap<K, V> newImmutableMap(K key, V value) {
 		return ImmutableMapFactoryImpl.INSTANCE.with(key, value);
 	}
 
@@ -122,7 +122,7 @@ public final class ImmutableMaps {
 	 * @param map
 	 * @return The new ImmutableMap
 	 */
-	public static final <K, V> ImmutableMap<K, V> newImmutableMap(Map<K, V> map) {
+	public static <K, V> ImmutableMap<K, V> newImmutableMap(Map<K, V> map) {
 		if (map == null || map.isEmpty())
 			return ImmutableMapFactoryImpl.INSTANCE.empty();
 		return ImmutableMapFactoryImpl.INSTANCE.withAll(map);
@@ -136,7 +136,7 @@ public final class ImmutableMaps {
 	 * @return The new ImmutableMap
 	 */
 	@SuppressWarnings("unchecked")
-	public static final <K, V> ImmutableMap<K, V> newImmutableMap(Supplier<Map<K, V>> supplier) {
+	public static <K, V> ImmutableMap<K, V> newImmutableMap(Supplier<Map<K, V>> supplier) {
 		if (supplier == null)
 			return ImmutableMapFactoryImpl.INSTANCE.empty();
 		Map<K, V> map = supplier.get();
@@ -154,7 +154,7 @@ public final class ImmutableMaps {
 	 * @param map
 	 * @return ImmutableSortedMap<K, V>
 	 */
-	public static final <K, V> ImmutableSortedMap<K, V> newImmutableSortedMap(Map<K, V> map) {
+	public static <K, V> ImmutableSortedMap<K, V> newImmutableSortedMap(Map<K, V> map) {
 		if (map == null)
 			return ImmutableSortedMapFactoryImpl.INSTANCE.empty();
 		if (map instanceof SortedMap)
@@ -170,7 +170,7 @@ public final class ImmutableMaps {
 	 * @param supplier
 	 * @return ImmutableSortedMap<K, V>
 	 */
-	public static final <K, V> ImmutableSortedMap<K, V> newImmutableSortedMap(Supplier<Map<K, V>> supplier) {
+	public static <K, V> ImmutableSortedMap<K, V> newImmutableSortedMap(Supplier<Map<K, V>> supplier) {
 		if (supplier == null)
 			return ImmutableSortedMapFactoryImpl.INSTANCE.empty();
 		Map<K, V> map = supplier.get();

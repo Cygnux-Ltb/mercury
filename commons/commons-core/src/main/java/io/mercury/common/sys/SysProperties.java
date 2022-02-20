@@ -11,7 +11,7 @@ public final class SysProperties {
 	 * @param key
 	 * @return
 	 */
-	public static final String get(String key) {
+	public static String get(String key) {
 		return System.getProperty(key);
 	}
 
@@ -113,7 +113,7 @@ public final class SysProperties {
 	/**
 	 * 
 	 */
-	public static final void showAll() {
+	public static void showAll() {
 		showAll(null);
 	}
 
@@ -121,13 +121,11 @@ public final class SysProperties {
 	 * 
 	 * @param log
 	 */
-	public static final void showAll(Logger log) {
+	public static void showAll(Logger log) {
 		if (log != null) {
-			System.getProperties().entrySet().stream()
-					.forEach(entry -> log.info("{} -> {}", entry.getKey(), entry.getValue()));
+			System.getProperties().forEach((key, value) -> log.info("{} -> {}", key, value));
 		} else {
-			System.getProperties().entrySet().stream()
-					.forEach(entry -> System.out.println(entry.getKey() + " -> " + entry.getValue()));
+			System.getProperties().forEach((key, value) -> System.out.println(key + " -> " + value));
 		}
 	}
 

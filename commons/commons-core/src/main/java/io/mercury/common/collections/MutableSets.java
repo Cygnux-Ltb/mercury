@@ -30,7 +30,7 @@ public final class MutableSets {
 	 * 
 	 * @return
 	 */
-	public static final MutableIntSet newIntHashSet() {
+	public static MutableIntSet newIntHashSet() {
 		return new IntHashSet();
 	}
 
@@ -40,7 +40,7 @@ public final class MutableSets {
 	 * @param capacity
 	 * @return
 	 */
-	public static final MutableIntSet newIntHashSet(Capacity capacity) {
+	public static MutableIntSet newIntHashSet(Capacity capacity) {
 		return new IntHashSet(checkAndGet(capacity));
 	}
 
@@ -50,7 +50,7 @@ public final class MutableSets {
 	 * @param values
 	 * @return
 	 */
-	public static final MutableIntSet newIntHashSetWith(int... values) {
+	public static MutableIntSet newIntHashSetWith(int... values) {
 		if (ArrayUtil.isNullOrEmpty(values))
 			return newIntHashSet();
 		return new IntHashSet(values);
@@ -61,7 +61,7 @@ public final class MutableSets {
 	 * 
 	 * @return
 	 */
-	public static final MutableLongSet newLongHashSet() {
+	public static MutableLongSet newLongHashSet() {
 		return new LongHashSet();
 	}
 
@@ -71,7 +71,7 @@ public final class MutableSets {
 	 * @param capacity
 	 * @return
 	 */
-	public static final MutableLongSet newLongHashSet(Capacity capacity) {
+	public static MutableLongSet newLongHashSet(Capacity capacity) {
 		return new LongHashSet(checkAndGet(capacity));
 	}
 
@@ -81,7 +81,7 @@ public final class MutableSets {
 	 * @param values
 	 * @return
 	 */
-	public static final MutableLongSet newLongHashSetWith(long... values) {
+	public static MutableLongSet newLongHashSetWith(long... values) {
 		if (ArrayUtil.isNullOrEmpty(values))
 			return newLongHashSet();
 		return new LongHashSet(values);
@@ -92,7 +92,7 @@ public final class MutableSets {
 	 * 
 	 * @return
 	 */
-	public static final MutableDoubleSet newDoubleHashSet() {
+	public static MutableDoubleSet newDoubleHashSet() {
 		return new DoubleHashSet();
 	}
 
@@ -102,7 +102,7 @@ public final class MutableSets {
 	 * @param capacity
 	 * @return
 	 */
-	public static final MutableDoubleSet newDoubleHashSet(Capacity capacity) {
+	public static MutableDoubleSet newDoubleHashSet(Capacity capacity) {
 		return new DoubleHashSet(checkAndGet(capacity));
 	}
 
@@ -112,7 +112,7 @@ public final class MutableSets {
 	 * @param values
 	 * @return
 	 */
-	public static final MutableDoubleSet newDoubleHashSetWith(double... values) {
+	public static MutableDoubleSet newDoubleHashSetWith(double... values) {
 		if (ArrayUtil.isNullOrEmpty(values))
 			return newDoubleHashSet();
 		return new DoubleHashSet(values);
@@ -124,7 +124,7 @@ public final class MutableSets {
 	 * @param <E>
 	 * @return
 	 */
-	public static final <E> MutableSet<E> newUnifiedSet() {
+	public static <E> MutableSet<E> newUnifiedSet() {
 		return new UnifiedSet<>();
 	}
 
@@ -136,7 +136,7 @@ public final class MutableSets {
 	 * @return
 	 */
 	@SafeVarargs
-	public static final <E> MutableSet<E> newUnifiedSet(E... values) {
+	public static <E> MutableSet<E> newUnifiedSet(E... values) {
 		MutableSet<E> set = new UnifiedSet<>();
 		if (ArrayUtil.isNullOrEmpty(values))
 			return set;
@@ -152,7 +152,7 @@ public final class MutableSets {
 	 * @param capacity
 	 * @return
 	 */
-	public static final <E> MutableSet<E> newUnifiedSet(Capacity capacity) {
+	public static <E> MutableSet<E> newUnifiedSet(Capacity capacity) {
 		return new UnifiedSet<>(checkAndGet(capacity));
 	}
 
@@ -163,7 +163,7 @@ public final class MutableSets {
 	 * @param iterator
 	 * @return
 	 */
-	public static final <E> MutableSet<E> newUnifiedSet(Iterator<E> iterator) {
+	public static <E> MutableSet<E> newUnifiedSet(Iterator<E> iterator) {
 		MutableSet<E> mutableSet = newUnifiedSet();
 		if (iterator != null && iterator.hasNext())
 			while (iterator.hasNext())
@@ -178,7 +178,7 @@ public final class MutableSets {
 	 * @param collection
 	 * @return
 	 */
-	public static final <E> MutableSet<E> newUnifiedSet(Collection<E> collection) {
+	public static <E> MutableSet<E> newUnifiedSet(Collection<E> collection) {
 		if (collection == null || collection.isEmpty())
 			return newUnifiedSet();
 		return new UnifiedSet<>(collection);
@@ -190,7 +190,7 @@ public final class MutableSets {
 	 * @param <E>
 	 * @return
 	 */
-	public static final <E> MutableSortedSet<E> newTreeSortedSet() {
+	public static <E> MutableSortedSet<E> newTreeSortedSet() {
 		return new TreeSortedSet<>();
 	}
 
@@ -202,7 +202,7 @@ public final class MutableSets {
 	 * @return
 	 */
 	@SafeVarargs
-	public static final <E> MutableSortedSet<E> newTreeSortedSet(E... values) {
+	public static <E> MutableSortedSet<E> newTreeSortedSet(E... values) {
 		MutableSortedSet<E> set = new TreeSortedSet<>();
 		if (ArrayUtil.isNullOrEmpty(values))
 			return set;
@@ -218,7 +218,7 @@ public final class MutableSets {
 	 * @param comparator
 	 * @return
 	 */
-	public static final <E> MutableSortedSet<E> newTreeSortedSet(Comparator<E> comparator) {
+	public static <E> MutableSortedSet<E> newTreeSortedSet(Comparator<E> comparator) {
 		if (comparator == null)
 			return newTreeSortedSet();
 		return new TreeSortedSet<>(comparator);
@@ -231,7 +231,7 @@ public final class MutableSets {
 	 * @param iterable
 	 * @return
 	 */
-	public static final <E> MutableSortedSet<E> newTreeSortedSet(Iterable<E> iterable) {
+	public static <E> MutableSortedSet<E> newTreeSortedSet(Iterable<E> iterable) {
 		if (Iterate.isEmpty(iterable))
 			return newTreeSortedSet();
 		return new TreeSortedSet<>(iterable);
@@ -244,7 +244,7 @@ public final class MutableSets {
 	 * @param comparator
 	 * @return
 	 */
-	public static final <E> MutableSortedSet<E> newTreeSortedSet(Comparator<E> comparator, Iterable<E> iterable) {
+	public static <E> MutableSortedSet<E> newTreeSortedSet(Comparator<E> comparator, Iterable<E> iterable) {
 		if (comparator != null && iterable != null)
 			return new TreeSortedSet<>(comparator, iterable);
 		if (comparator != null)
