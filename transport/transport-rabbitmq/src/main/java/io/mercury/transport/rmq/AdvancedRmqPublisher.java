@@ -87,7 +87,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
 	 * @param serializer
 	 * @return
 	 */
-	public final static <T> AdvancedRmqPublisher<T> create(@Nonnull RmqPublisherConfig config,
+	public static <T> AdvancedRmqPublisher<T> create(@Nonnull RmqPublisherConfig config,
 			@Nonnull BytesSerializer<T> serializer) {
 		return new AdvancedRmqPublisher<>(null, config, serializer, null, null);
 	}
@@ -100,7 +100,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
 	 * @param serializer
 	 * @return
 	 */
-	public final static <T> AdvancedRmqPublisher<T> create(@Nullable String tag, @Nonnull RmqPublisherConfig config,
+	public static <T> AdvancedRmqPublisher<T> create(@Nullable String tag, @Nonnull RmqPublisherConfig config,
 			@Nonnull BytesSerializer<T> serializer) {
 		return new AdvancedRmqPublisher<>(tag, config, serializer, null, null);
 	}
@@ -115,7 +115,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
 	 * @param noAckCallback
 	 * @return
 	 */
-	public final static <T> AdvancedRmqPublisher<T> create(@Nullable String tag, @Nonnull RmqPublisherConfig config,
+	public static <T> AdvancedRmqPublisher<T> create(@Nullable String tag, @Nonnull RmqPublisherConfig config,
 			@Nonnull BytesSerializer<T> serializer, @Nonnull AckCallback ackCallback,
 			@Nonnull NoAckCallback noAckCallback) {
 		return new AdvancedRmqPublisher<>(tag, config, serializer, ackCallback, noAckCallback);
@@ -126,7 +126,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
 	 * @param config
 	 * @return
 	 */
-	public final static AdvancedRmqPublisher<byte[]> createWithBytes(@Nonnull RmqPublisherConfig config) {
+	public static AdvancedRmqPublisher<byte[]> createWithBytes(@Nonnull RmqPublisherConfig config) {
 		return createWithBytes(null, config, null, null);
 	}
 
@@ -136,7 +136,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
 	 * @param config
 	 * @return
 	 */
-	public final static AdvancedRmqPublisher<byte[]> createWithBytes(@Nullable String tag,
+	public static AdvancedRmqPublisher<byte[]> createWithBytes(@Nullable String tag,
 			@Nonnull RmqPublisherConfig config) {
 		return createWithBytes(tag, config, null, null);
 	}
@@ -149,9 +149,9 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
 	 * @param noAckCallback
 	 * @return
 	 */
-	public final static AdvancedRmqPublisher<byte[]> createWithBytes(@Nullable String tag,
-			@Nonnull RmqPublisherConfig config, @Nonnull AckCallback ackCallback,
-			@Nonnull NoAckCallback noAckCallback) {
+	public static AdvancedRmqPublisher<byte[]> createWithBytes(@Nullable String tag,
+			@Nonnull RmqPublisherConfig config, @Nullable AckCallback ackCallback,
+			@Nullable NoAckCallback noAckCallback) {
 		return new AdvancedRmqPublisher<>(tag, config, msg -> msg, ackCallback, noAckCallback);
 	}
 
@@ -160,7 +160,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
 	 * @param config
 	 * @return
 	 */
-	public final static AdvancedRmqPublisher<String> createWithString(@Nonnull RmqPublisherConfig config) {
+	public static AdvancedRmqPublisher<String> createWithString(@Nonnull RmqPublisherConfig config) {
 		return createWithString(null, config, Charsets.UTF8, null, null);
 	}
 
@@ -170,7 +170,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
 	 * @param charset
 	 * @return
 	 */
-	public final static AdvancedRmqPublisher<String> createWithString(@Nonnull RmqPublisherConfig config,
+	public static AdvancedRmqPublisher<String> createWithString(@Nonnull RmqPublisherConfig config,
 			@Nonnull Charset charset) {
 		return createWithString(null, config, charset, null, null);
 	}
@@ -181,7 +181,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
 	 * @param config
 	 * @return
 	 */
-	public final static AdvancedRmqPublisher<String> createWithString(@Nullable String tag,
+	public static AdvancedRmqPublisher<String> createWithString(@Nullable String tag,
 			@Nonnull RmqPublisherConfig config) {
 		return createWithString(tag, config, Charsets.UTF8, null, null);
 	}
@@ -193,7 +193,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
 	 * @param charset
 	 * @return
 	 */
-	public final static AdvancedRmqPublisher<String> createWithString(@Nullable String tag,
+	public static AdvancedRmqPublisher<String> createWithString(@Nullable String tag,
 			@Nonnull RmqPublisherConfig config, @Nonnull Charset charset) {
 		return createWithString(tag, config, charset, null, null);
 	}
@@ -207,9 +207,9 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
 	 * @param noAckCallback
 	 * @return
 	 */
-	public final static AdvancedRmqPublisher<String> createWithString(@Nullable String tag,
-			@Nonnull RmqPublisherConfig config, @Nonnull Charset charset, @Nonnull AckCallback ackCallback,
-			@Nonnull NoAckCallback noAckCallback) {
+	public static AdvancedRmqPublisher<String> createWithString(@Nullable String tag,
+			@Nonnull RmqPublisherConfig config, @Nonnull Charset charset, @Nullable AckCallback ackCallback,
+			@Nullable NoAckCallback noAckCallback) {
 		return new AdvancedRmqPublisher<>(tag, config, msg -> msg.getBytes(charset), ackCallback, noAckCallback);
 	}
 
@@ -247,7 +247,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
 			final boolean hasNoAckCallback = noAckCallback != null;
 			// 添加ACK & NoAck回调
 			channel.addConfirmListener(
-					// ACK Callback
+					// Ack Callback
 					(deliveryTag, multiple) -> {
 						if (hasAckCallback)
 							ackCallback.handle(deliveryTag, multiple);
@@ -257,7 +257,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
 					// NoAck Callback
 					(deliveryTag, multiple) -> {
 						if (hasNoAckCallback)
-							ackCallback.handle(deliveryTag, multiple);
+							noAckCallback.handle(deliveryTag, multiple);
 						else
 							log.warn("Undefined NoAckCallback function. Publisher -> {}", publisherName);
 					});
@@ -450,12 +450,12 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
 	}
 
 	@FunctionalInterface
-	public static interface AckCallback extends ConfirmCallback {
+	public interface AckCallback extends ConfirmCallback {
 
 	}
 
 	@FunctionalInterface
-	public static interface NoAckCallback extends ConfirmCallback {
+	public interface NoAckCallback extends ConfirmCallback {
 
 	}
 

@@ -12,6 +12,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.zeromq.ZMQ;
@@ -49,7 +50,6 @@ public final class ZmqConfigurator
 
 	/**
 	 * 
-	 * @param protocol
 	 * @param addr
 	 */
 	private ZmqConfigurator(ZmqAddr addr) {
@@ -130,7 +130,6 @@ public final class ZmqConfigurator
 	/**
 	 * 创建TCP协议连接
 	 * 
-	 * @param addr
 	 * @param port
 	 * @return
 	 */
@@ -153,7 +152,6 @@ public final class ZmqConfigurator
 	 * 使用[ipc]协议连接, 用于进程间通信
 	 * 
 	 * @param addr
-	 * @param port
 	 * @return
 	 */
 	public static ZmqConfigurator ipc(@Nonnull String addr) {
@@ -340,7 +338,7 @@ public final class ZmqConfigurator
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(@Nullable Object obj) {
 		if (obj == null || !(obj instanceof ZmqConfigurator))
 			return false;
 		else {
@@ -364,13 +362,15 @@ public final class ZmqConfigurator
 		return ZMQ.getVersionString();
 	}
 
+	@Nonnull
 	@Override
 	public String toJson() {
 		return JsonWrapper.toJsonHasNulls(this);
 	}
 
+	@Nonnull
 	@Override
-	public ZmqConfigurator fromJson(String json) {
+	public ZmqConfigurator fromJson(@Nonnull String json) {
 		Map<String, Object> map = JsonParser.toMap(json);
 		ZmqProtocol protocol = ZmqProtocol.of((String) map.get("protocol"));
 		String addr = (String) map.get("addr");
@@ -391,7 +391,7 @@ public final class ZmqConfigurator
 		private final String name;
 		private final String prefix;
 
-		private ZmqProtocol(String name) {
+		ZmqProtocol(String name) {
 			this.name = name;
 			this.prefix = name + "://";
 		}
@@ -440,7 +440,6 @@ public final class ZmqConfigurator
 		/**
 		 * 创建TCP协议连接
 		 * 
-		 * @param addr
 		 * @param port
 		 * @return
 		 */
@@ -467,7 +466,6 @@ public final class ZmqConfigurator
 		 * 使用[ipc]协议连接, 用于进程间通信
 		 * 
 		 * @param addr
-		 * @param port
 		 * @return
 		 */
 		public static ZmqAddr ipc(@Nonnull String addr) {

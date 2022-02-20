@@ -78,19 +78,19 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
 	private boolean hasErrMsgQueue;
 
 	// 自动ACK
-	private boolean autoAck;
+	private final boolean autoAck;
 
 	// 一次ACK多条
-	private boolean multipleAck;
+	private final boolean multipleAck;
 
 	// ACK最大自动重试次数
-	private int maxAckTotal;
+	private final int maxAckTotal;
 
 	// ACK最大自动重连次数
-	private int maxAckReconnection;
+	private final int maxAckReconnection;
 
 	// QOS预取
-	private int qos;
+	private final int qos;
 
 	// Receiver名称
 	private final String receiverName;
@@ -101,7 +101,7 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
 	 * @param consumer
 	 * @return
 	 */
-	public static final RmqReceiver<byte[]> create(@Nonnull RmqReceiverConfig cfg, @Nonnull Consumer<byte[]> consumer) {
+	public static RmqReceiver<byte[]> create(@Nonnull RmqReceiverConfig cfg, @Nonnull Consumer<byte[]> consumer) {
 		return create(null, cfg, consumer);
 	}
 
@@ -112,7 +112,7 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
 	 * @param consumer
 	 * @return
 	 */
-	public static final RmqReceiver<byte[]> create(@Nullable String tag, @Nonnull RmqReceiverConfig cfg,
+	public static RmqReceiver<byte[]> create(@Nullable String tag, @Nonnull RmqReceiverConfig cfg,
 			@Nonnull Consumer<byte[]> consumer) {
 		return create(tag, cfg, msg -> msg, consumer);
 	}
@@ -149,7 +149,7 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
 	 * @param tag
 	 * @param cfg
 	 * @param deserializer
-	 * @param callback
+	 * @param consumer
 	 */
 	private RmqReceiver(@Nullable String tag, @Nonnull RmqReceiverConfig cfg, @Nonnull Function<byte[], T> deserializer,
 			@Nonnull Consumer<T> consumer) {
@@ -265,7 +265,7 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
 								log.debug(
 										"Callback handleDelivery, consumerTag==[{}], deliveryTag==[{}] body.length==[{}]",
 										consumerTag, envelope.getDeliveryTag(), body.length);
-								T apply = null;
+								T apply;
 								try {
 									apply = deserializer.apply(body);
 								} catch (Exception e) {
@@ -282,7 +282,7 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
 								if (ack(envelope.getDeliveryTag())) {
 									log.debug("Message handle and ack finished");
 								} else {
-									log.info("Ack failure envelope.getDeliveryTag()==[{}], Reject message");
+									log.info("Ack failure envelope.getDeliveryTag()==[{}], Reject message", envelope.getDeliveryTag());
 									channel.basicReject(envelope.getDeliveryTag(), true);
 								}
 							}

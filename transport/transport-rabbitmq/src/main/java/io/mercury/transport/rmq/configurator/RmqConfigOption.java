@@ -20,7 +20,7 @@ public enum RmqConfigOption implements ConfigOption {
 
 	private final String otherConfigName;
 
-	private RmqConfigOption(String configName, String otherConfigName) {
+	RmqConfigOption(String configName, String otherConfigName) {
 		this.configName = configName;
 		this.otherConfigName = otherConfigName;
 	}

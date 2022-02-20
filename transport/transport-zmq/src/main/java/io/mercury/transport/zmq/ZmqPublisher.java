@@ -64,12 +64,12 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
 	}
 
 	@Override
-	public void publish(T msg) {
+	public void publish(@Nonnull T msg) {
 		publish(sendMore, msg);
 	}
 
 	@Override
-	public void publish(byte[] target, T msg) throws PublishFailedException {
+	public void publish(@Nonnull byte[] target, @Nonnull T msg) throws PublishFailedException {
 		if (isRunning.get()) {
 			byte[] bytes = ser.serialization(msg);
 			if (bytes != null && bytes.length > 0) {

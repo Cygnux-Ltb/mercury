@@ -56,7 +56,6 @@ public abstract class RmqTransport extends TransportComponent implements Transpo
 	/**
 	 * 
 	 * @param tag
-	 * @param moduleType
 	 * @param rabbitConnection
 	 */
 	protected RmqTransport(@Nonnull String tag, @Nonnull RmqConnection rabbitConnection) {
@@ -178,7 +177,7 @@ public abstract class RmqTransport extends TransportComponent implements Transpo
 	}
 
 	@FunctionalInterface
-	public static interface ShutdownSignalHandler extends ThrowableHandler<ShutdownSignalException> {
+	public interface ShutdownSignalHandler extends ThrowableHandler<ShutdownSignalException> {
 
 	}
 

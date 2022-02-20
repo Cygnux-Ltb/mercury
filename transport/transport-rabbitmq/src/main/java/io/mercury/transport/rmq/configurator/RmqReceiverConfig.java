@@ -8,6 +8,8 @@ import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rmq.declare.ExchangeRelationship;
 import io.mercury.transport.rmq.declare.QueueRelationship;
 
+import java.util.Map;
+
 /**
  * 
  * @author yellow013
@@ -33,6 +35,9 @@ public final class RmqReceiverConfig extends RmqConfig {
 	// ACK选项
 	private final ReceiveAckOptions ackOptions;
 
+	// 消费者参数, 默认为null
+	private final Map<String, Object> args;
+
 	/**
 	 * 
 	 * @param builder
@@ -45,6 +50,7 @@ public final class RmqReceiverConfig extends RmqConfig {
 		this.errMsgQueue = builder.errMsgQueue;
 		this.exclusive = builder.exclusive;
 		this.ackOptions = builder.ackOptions;
+		this.args = builder.args;
 	}
 
 	/**
@@ -87,6 +93,10 @@ public final class RmqReceiverConfig extends RmqConfig {
 		return toStringCache;
 	}
 
+	public Map<String, Object> getArgs() {
+		return args;
+	}
+
 	private transient String toStringCache;
 
 	@Override
@@ -119,6 +129,9 @@ public final class RmqReceiverConfig extends RmqConfig {
 		// ACK选项
 		private ReceiveAckOptions ackOptions = ReceiveAckOptions.withDefault();
 
+		// 消费者参数, 默认为null
+		private Map<String, Object> args = null;
+
 		private Builder(RmqConnection connection, QueueRelationship receiveQueue) {
 			this.connection = connection;
 			this.receiveQueue = receiveQueue;
@@ -150,7 +163,7 @@ public final class RmqReceiverConfig extends RmqConfig {
 		}
 
 		/**
-		 * @param isAutoAck the isAutoAck to set
+		 * @param autoAck the isAutoAck to set
 		 */
 		public Builder setAutoAck(boolean autoAck) {
 			this.ackOptions.setAutoAck(autoAck);
@@ -158,7 +171,7 @@ public final class RmqReceiverConfig extends RmqConfig {
 		}
 
 		/**
-		 * @param isMultipleAck the isMultipleAck to set
+		 * @param multipleAck the isMultipleAck to set
 		 */
 		public Builder setMultipleAck(boolean multipleAck) {
 			this.ackOptions.setMultipleAck(multipleAck);
@@ -193,6 +206,10 @@ public final class RmqReceiverConfig extends RmqConfig {
 		public Builder setQos(int qos) {
 			this.ackOptions.setQos(qos);
 			return this;
+		}
+
+		public void setArgs(Map<String, Object> args) {
+			this.args = args;
 		}
 
 		public RmqReceiverConfig build() {

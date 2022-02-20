@@ -47,7 +47,7 @@ public class RmqBatchReceiver<T> extends RmqTransport implements Receiver, Runna
 	private String receiverName;
 
 	// 队列名称
-	private String receiveQueue;
+	private final String receiveQueue;
 
 	// 队列持久化
 	private boolean durable = true;

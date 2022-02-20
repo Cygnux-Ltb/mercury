@@ -53,7 +53,7 @@ public final class RmqOperator extends RmqTransport {
 	/**
 	 * Create OperationalChannel of RmqConnection
 	 * 
-	 * @param configurator
+	 * @param connection
 	 * @return
 	 * @throws IOException
 	 * @throws TimeoutException
@@ -84,9 +84,8 @@ public final class RmqOperator extends RmqTransport {
 
 	/**
 	 * 
-	 * @param String           queue name
-	 * @param DefaultParameter durable == true, exclusive == false, autoDelete ==
-	 *                         false
+	 * @param queue           queue name
+
 	 * @throws DeclareException
 	 */
 	public boolean declareQueue(@Nonnull String queue) throws DeclareException {
@@ -136,11 +135,9 @@ public final class RmqOperator extends RmqTransport {
 	/**
 	 * 
 	 * @param exchange
-	 * @param DefaultParameter durable == true, autoDelete == false, internal ==
-	 *                         false
-	 * 
+	 *
 	 * @return
-	 * @throws ExchangeDeclareException
+	 * @throws DeclareException
 	 */
 	public boolean declareExchange(@Nonnull AmqpExchange exchange) throws DeclareException {
 		try {

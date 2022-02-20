@@ -144,7 +144,7 @@ public final class RmqPublisherConfig extends RmqConfig {
 	 * Use Specified Exchange
 	 * 
 	 * @param connection
-	 * @param exchangeRelation
+	 * @param publishExchange
 	 * @return
 	 */
 	public static Builder configuration(@Nonnull RmqConnection connection,
@@ -307,7 +307,7 @@ public final class RmqPublisherConfig extends RmqConfig {
 		 * 
 		 * @return
 		 */
-		public static final PublishConfirmOptions withDefault() {
+		public static PublishConfirmOptions withDefault() {
 			return new PublishConfirmOptions();
 		}
 
@@ -316,7 +316,7 @@ public final class RmqPublisherConfig extends RmqConfig {
 		 * 
 		 * @return
 		 */
-		public static final PublishConfirmOptions with(boolean confirm, long confirmTimeout, int confirmRetry) {
+		public static PublishConfirmOptions with(boolean confirm, long confirmTimeout, int confirmRetry) {
 			return new PublishConfirmOptions(confirm, confirmTimeout, confirmRetry);
 		}
 

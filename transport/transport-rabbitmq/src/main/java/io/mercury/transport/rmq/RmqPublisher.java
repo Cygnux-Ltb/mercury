@@ -68,8 +68,6 @@ public class RmqPublisher extends RmqTransport implements Publisher<String, byte
 	 * 
 	 * @param tag
 	 * @param cfg
-	 * @param ackCallback
-	 * @param noAckCallback
 	 */
 	public RmqPublisher(@Nullable String tag, @Nonnull RmqPublisherConfig cfg) {
 		super(nonEmpty(tag) ? tag : "publisher-" + datetimeOfMillisecond(), cfg.getConnection());
@@ -230,7 +228,7 @@ public class RmqPublisher extends RmqTransport implements Publisher<String, byte
 			StringBuilder sb = new StringBuilder(240);
 			props.appendPropertyDebugStringTo(sb);
 			log.error("Func channel.basicPublish(exchange==[{}], routingKey==[{}], properties==[{}], msg==[...]) "
-					+ "throw IOException -> {}", exchangeName, routingKey, sb.toString(), e.getMessage(), e);
+					+ "throw IOException -> {}", exchangeName, routingKey, sb, e.getMessage(), e);
 			throw e;
 		}
 	}

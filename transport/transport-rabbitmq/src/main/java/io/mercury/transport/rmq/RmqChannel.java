@@ -46,7 +46,7 @@ public final class RmqChannel extends RmqTransport {
 	/**
 	 * Create GeneralChannel of RmqConnection
 	 * 
-	 * @param configurator
+	 * @param connection
 	 * @return
 	 * @throws IOException
 	 * @throws TimeoutException

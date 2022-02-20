@@ -16,7 +16,7 @@ public enum ZmqConfigOption implements ConfigOption {
 
 	private final String otherConfigName;
 
-	private ZmqConfigOption(String configName, String otherConfigName) {
+	ZmqConfigOption(String configName, String otherConfigName) {
 		this.configName = configName;
 		this.otherConfigName = otherConfigName;
 	}

@@ -63,7 +63,7 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 	public static void main(String[] args) {
 
 		ZmqConfigurator cfg = ZmqConfigurator.tcp("localhost", 5551);
-		try (ZmqSender<String> sender = new ZmqSender<String>(cfg, msg -> msg.getBytes())) {
+		try (ZmqSender<String> sender = new ZmqSender<String>(cfg, String::getBytes)) {
 			sender.sent("TEST MSG");
 		} catch (IOException e) {
 			e.printStackTrace();

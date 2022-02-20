@@ -81,19 +81,19 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 	private boolean hasErrMsgQueue;
 
 	// 自动ACK
-	private boolean autoAck;
+	private final boolean autoAck;
 
 	// 一次ACK多条
-	private boolean multipleAck;
+	private final boolean multipleAck;
 
 	// ACK最大自动重试次数
-	private int maxAckTotal;
+	private final int maxAckTotal;
 
 	// ACK最大自动重连次数
-	private int maxAckReconnection;
+	private final int maxAckReconnection;
 
 	// QOS预取值
-	private int qos;
+	private final int qos;
 
 	// Receiver名称
 	private final String receiverName;
@@ -102,7 +102,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 	private final boolean exclusive;
 
 	// 消费者参数, 默认为null
-	private final Map<String, Object> args = null;
+	private final Map<String, Object> args;
 
 	// 应答代理, 用于在外部回调中控制ACK过程
 	private AckDelegate ackDelegate;
@@ -117,7 +117,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 			@Nonnull Consumer<byte[]> consumer) {
 		Assertor.nonNull(config, "config");
 		Assertor.nonNull(consumer, "consumer");
-		return new AdvancedRmqReceiver<byte[]>(null, config, (msg, reuse) -> msg, consumer, null);
+		return new AdvancedRmqReceiver<>(null, config, (msg, reuse) -> msg, consumer, null);
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 			@Nonnull Consumer<byte[]> consumer) {
 		Assertor.nonNull(config, "config");
 		Assertor.nonNull(consumer, "consumer");
-		return new AdvancedRmqReceiver<byte[]>(tag, config, (msg, reuse) -> msg, consumer, null);
+		return new AdvancedRmqReceiver<>(tag, config, (msg, reuse) -> msg, consumer, null);
 	}
 
 	/**
@@ -222,6 +222,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 		this.maxAckReconnection = config.getAckOptions().getMaxAckReconnection();
 		this.qos = config.getAckOptions().getQos();
 		this.exclusive = config.isExclusive();
+		this.args = config.getArgs();
 		this.consumer = consumer;
 		this.selfAckConsumer = selfAckConsumer;
 		this.receiverName = "receiver::[" + rabbitConnection.getConnectionInfo() + "$" + queueName + "]";
@@ -304,9 +305,9 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 		receive();
 	}
 
-	private final CancelCallback defaultCancelCallback = consumerTag -> {
+	private final CancelCallback defaultCancelCallback = consumerTag ->
 		log.info("CancelCallback receive consumerTag==[{}]", consumerTag);
-	};
+
 
 	private final ConsumerShutdownSignalCallback defaultShutdownSignalCallback = (consumerTag, sig) -> {
 		log.info("Consumer received ShutdownSignalException, consumerTag==[{}]", consumerTag);
@@ -366,7 +367,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 								log.debug(
 										"Callback handleDelivery, consumerTag==[{}], deliveryTag==[{}], body.length==[{}]",
 										consumerTag, envelope.getDeliveryTag(), body.length);
-								T t = null;
+								T t;
 								try {
 									t = deserializer.deserialization(body);
 								} catch (Exception e) {
@@ -388,7 +389,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 								if (ack(envelope.getDeliveryTag())) {
 									log.debug("Message handle and ack finished");
 								} else {
-									log.info("Ack failure envelope.getDeliveryTag()==[{}], Reject message");
+									log.info("Ack failure envelope.getDeliveryTag()==[{}], Reject message", envelope.getDeliveryTag());
 									channel.basicReject(envelope.getDeliveryTag(), true);
 								}
 							}
@@ -404,7 +405,6 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 						e.getMessage(), e);
 				throw new ReceiverStartException(e.getMessage(), e);
 			}
-			return;
 			// # Set SelfAckConsumer end *****
 		}
 		// 如果[consumer]不为null, 设置consumer
@@ -440,7 +440,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 								log.debug(
 										"Callback handleDelivery, consumerTag==[{}], deliveryTag==[{}], body.length==[{}]",
 										consumerTag, envelope.getDeliveryTag(), body.length);
-								T t = null;
+								T t;
 								try {
 									t = deserializer.deserialization(body);
 								} catch (Exception e) {
@@ -456,7 +456,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 								if (ack(envelope.getDeliveryTag())) {
 									log.debug("Message handle and ack finished");
 								} else {
-									log.info("Ack failure envelope.getDeliveryTag()==[{}], Reject message");
+									log.info("Ack failure envelope.getDeliveryTag()==[{}], Reject message", envelope.getDeliveryTag());
 									channel.basicReject(envelope.getDeliveryTag(), true);
 								}
 							}
@@ -472,7 +472,6 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 				throw new ReceiverStartException(e.getMessage(), e);
 			}
 			// # Set Consume end *****
-			return;
 		}
 		newStartTime();
 	}
@@ -582,11 +581,11 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 	 * 
 	 * @author yellow013
 	 *
-	 * @param <T>
+	 * @param
 	 */
 	public static class AckDelegate {
 
-		private AdvancedRmqReceiver<?> receiver;
+		private final AdvancedRmqReceiver<?> receiver;
 
 		private AckDelegate(AdvancedRmqReceiver<?> receiver) {
 			this.receiver = receiver;
@@ -599,7 +598,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 	}
 
 	@FunctionalInterface
-	public static interface SelfAckConsumer<T> {
+	public interface SelfAckConsumer<T> {
 
 		void handleMessage(final AckDelegate ackDelegate, final String consumerTag, Message<T> msg);
 
@@ -607,9 +606,9 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 
 	public static class Message<T> {
 
-		private Envelope envelope;
-		private BasicProperties properties;
-		private T body;
+		private final Envelope envelope;
+		private final BasicProperties properties;
+		private final T body;
 
 		private Message(Envelope envelope, BasicProperties properties, T body) {
 			this.envelope = envelope;

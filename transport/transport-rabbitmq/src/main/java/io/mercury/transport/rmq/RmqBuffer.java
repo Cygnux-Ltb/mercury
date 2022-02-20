@@ -22,18 +22,20 @@ import io.mercury.transport.rmq.declare.AmqpExchange;
 import io.mercury.transport.rmq.declare.QueueRelationship;
 import io.mercury.transport.rmq.exception.DeclareException;
 
+import javax.annotation.Nonnull;
+
 public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 
 	private static final Logger log = Log4j2LoggerFactory.getLogger(RmqBuffer.class);
 
-	private RmqConnection connection;
-	private RmqChannel channel;
-	private String queueName;
-	private List<String> exchangeNames;
-	private List<String> routingKeys;
+	private final RmqConnection connection;
+	private final RmqChannel channel;
+	private final String queueName;
+	private final List<String> exchangeNames;
+	private final List<String> routingKeys;
 
-	private BytesSerializer<E> serializer;
-	private BytesDeserializer<E> deserializer;
+	private final BytesSerializer<E> serializer;
+	private final BytesDeserializer<E> deserializer;
 
 	private final String name;
 
@@ -47,8 +49,8 @@ public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 	 * @return
 	 * @throws DeclareException
 	 */
-	public static final <E> RmqBuffer<E> newQueue(RmqConnection connection, String queueName,
-			BytesSerializer<E> serializer, BytesDeserializer<E> deserializer) throws DeclareException {
+	public static <E> RmqBuffer<E> newQueue(RmqConnection connection, String queueName,
+											BytesSerializer<E> serializer, BytesDeserializer<E> deserializer) throws DeclareException {
 		return new RmqBuffer<>(connection, queueName, MutableLists.emptyFastList(), MutableLists.emptyFastList(),
 				serializer, deserializer);
 	}
@@ -65,9 +67,9 @@ public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 	 * @return
 	 * @throws DeclareException
 	 */
-	public static final <E> RmqBuffer<E> newQueue(RmqConnection connection, String queueName,
-			List<String> exchangeNames, List<String> routingKeys, BytesSerializer<E> serializer,
-			BytesDeserializer<E> deserializer) throws DeclareException {
+	public static <E> RmqBuffer<E> newQueue(RmqConnection connection, String queueName,
+											List<String> exchangeNames, List<String> routingKeys, BytesSerializer<E> serializer,
+											BytesDeserializer<E> deserializer) throws DeclareException {
 		return new RmqBuffer<>(connection, queueName, exchangeNames, routingKeys, serializer, deserializer);
 	}
 
@@ -140,7 +142,7 @@ public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 	}
 
 	@Override
-	public boolean pollAndApply(PollFunction<E> function) {
+	public boolean pollAndApply(@Nonnull PollFunction<E> function) {
 		GetResponse response = basicGet();
 		if (response == null)
 			return false;
