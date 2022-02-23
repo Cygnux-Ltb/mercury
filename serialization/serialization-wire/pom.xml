@@ -14,10 +14,11 @@
 	<name>serialization-wire</name>
 
 	<properties>
-		<chronicle-core.version>2.21.94</chronicle-core.version>
-		<chronicle-bytes.version>2.21.92</chronicle-bytes.version>
+		<chronicle-core.version>2.21.95</chronicle-core.version>
+		<chronicle-bytes.version>2.21.93</chronicle-bytes.version>
 		<chronicle-threads.version>2.21.87</chronicle-threads.version>
-		<chronicle-wire.version>2.21.93</chronicle-wire.version>
+		<chronicle-analytics.version>2.21.2</chronicle-analytics.version>
+		<chronicle-wire.version>2.21.94</chronicle-wire.version>
 	</properties>
 
 	<dependencies>
@@ -59,6 +60,10 @@
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
+				<exclusion>
+					<artifactId>chronicle-core</artifactId>
+					<groupId>net.openhft</groupId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 
@@ -76,7 +81,18 @@
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
+				<exclusion>
+					<artifactId>chronicle-core</artifactId>
+					<groupId>net.openhft</groupId>
+				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<!-- Chronicle-Analytics -->
+		<dependency>
+			<groupId>net.openhft</groupId>
+			<artifactId>chronicle-analytics</artifactId>
+			<version>${chronicle-analytics.version}</version>
 		</dependency>
 
 		<!-- ####### chronicle-wire ####### -->

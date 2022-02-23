@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE xml>
 <configuration status="${sys:log4j2.level:-ERROR}">
 	<appenders>
 		<Console name="CONSOLE" target="SYSTEM_OUT">

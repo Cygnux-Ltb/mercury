@@ -13,7 +13,7 @@ public class LocalSocketManager {
 
 	/**
 	 * 
-	 * @param name
+	 * @param host
 	 * @param port
 	 * @param callback
 	 * @return

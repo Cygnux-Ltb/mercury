@@ -67,6 +67,12 @@
 			<groupId>io.mercury</groupId>
 			<artifactId>serialization-protobuf</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>gson</artifactId>
+					<groupId>com.google.code.gson</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
