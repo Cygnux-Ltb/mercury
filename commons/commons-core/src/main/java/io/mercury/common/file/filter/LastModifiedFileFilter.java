@@ -6,7 +6,7 @@ import java.io.FileFilter;
 public class LastModifiedFileFilter implements FileFilter {
 
 	@Override
-	public boolean accept(File pathname) {
+	public boolean accept(File file) {
 		// TODO Auto-generated method stub
 		return false;
 	}

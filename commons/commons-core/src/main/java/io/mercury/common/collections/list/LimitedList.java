@@ -9,7 +9,7 @@ import io.mercury.common.annotation.AbstractFunction;
 
 public abstract class LimitedList<L extends List<E>, E> extends LimitedContainer<E> {
 
-	private L list;
+	private final L list;
 
 	protected LimitedList(int capacity) {
 		super(capacity);
@@ -22,7 +22,7 @@ public abstract class LimitedList<L extends List<E>, E> extends LimitedContainer
 	 * @param capacity
 	 * @return
 	 */
-	public final static <E> LimitedFastList<E> newLimitedFastList(int capacity) {
+	public static <E> LimitedFastList<E> newLimitedFastList(int capacity) {
 		return new LimitedFastList<E>(capacity);
 	}
 
@@ -32,7 +32,7 @@ public abstract class LimitedList<L extends List<E>, E> extends LimitedContainer
 	 * @param capacity
 	 * @return
 	 */
-	public final static <E> LimitedArrayList<E> newLimitedArrayList(int capacity) {
+	public static <E> LimitedArrayList<E> newLimitedArrayList(int capacity) {
 		return new LimitedArrayList<E>(capacity);
 	}
 

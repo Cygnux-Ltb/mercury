@@ -7,7 +7,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 @NotThreadSafe
 public class PreloadingQueue<T> {
 
-	private LinkedList<T> list = new LinkedList<>();
+	private final LinkedList<T> list = new LinkedList<>();
 
 	public T next() {
 		return list.removeFirst();

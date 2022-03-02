@@ -115,9 +115,7 @@ public final class ImmutableLists {
 	 * @return
 	 */
 	public static <E> boolean isNullOrEmpty(@Nullable ImmutableList<E> list) {
-		if (list == null || list.isEmpty())
-			return true;
-		return false;
+		return list == null || list.isEmpty();
 	}
 
 	/**
@@ -127,9 +125,7 @@ public final class ImmutableLists {
 	 * @return
 	 */
 	public static <E> boolean notNullAndEmpty(@Nullable ImmutableList<E> list) {
-		if (list != null && list.notEmpty())
-			return true;
-		return false;
+		return list != null && list.notEmpty();
 	}
 
 }

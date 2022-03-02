@@ -23,7 +23,7 @@ public final class MutableLists {
 	private MutableLists() {
 	}
 
-	/**
+	/*
 	 **************** primitive list ****************
 	 */
 	/**
@@ -166,7 +166,7 @@ public final class MutableLists {
 		return new DoubleArrayList(doubles);
 	}
 
-	/**
+	/*
 	 **************** object list ****************
 	 */
 	/**

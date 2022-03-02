@@ -29,8 +29,8 @@ public final class LocalTimeMap<V> extends TemporalMap<LocalTime, V, LocalTimeMa
 	 * @param <V>
 	 * @return
 	 */
-	public final static <V> LocalTimeMap<V> newMapWithHour() {
-		return new LocalTimeMap<>(key -> timeOfHour(key), key -> key.plusHours(1), HasNextKey);
+	public static <V> LocalTimeMap<V> newMapWithHour() {
+		return new LocalTimeMap<>(DateTimeUtil::timeOfHour, key -> key.plusHours(1), HasNextKey);
 	}
 
 	/**
@@ -38,8 +38,8 @@ public final class LocalTimeMap<V> extends TemporalMap<LocalTime, V, LocalTimeMa
 	 * @param <V>
 	 * @return
 	 */
-	public final static <V> LocalTimeMap<V> newMapWithMinute() {
-		return new LocalTimeMap<>(key -> timeOfMinute(key), key -> key.plusMinutes(1), HasNextKey);
+	public static <V> LocalTimeMap<V> newMapWithMinute() {
+		return new LocalTimeMap<>(DateTimeUtil::timeOfMinute, key -> key.plusMinutes(1), HasNextKey);
 	}
 
 	/**
@@ -47,8 +47,8 @@ public final class LocalTimeMap<V> extends TemporalMap<LocalTime, V, LocalTimeMa
 	 * @param <V>
 	 * @return
 	 */
-	public final static <V> LocalTimeMap<V> newMapWithSecond() {
-		return new LocalTimeMap<>(key -> timeOfSecond(key), key -> key.plusSeconds(1), HasNextKey);
+	public static <V> LocalTimeMap<V> newMapWithSecond() {
+		return new LocalTimeMap<>(DateTimeUtil::timeOfSecond, key -> key.plusSeconds(1), HasNextKey);
 	}
 
 	@Override

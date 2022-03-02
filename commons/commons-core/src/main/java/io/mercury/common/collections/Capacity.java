@@ -234,7 +234,7 @@ public enum Capacity {
 	 * @param capacity
 	 * @return
 	 */
-	public static final int checkAndGet(Capacity capacity) {
+	public static int checkAndGet(Capacity capacity) {
 		return capacity == null ? Capacity.DEFAULT_SIZE : capacity.value();
 	}
 

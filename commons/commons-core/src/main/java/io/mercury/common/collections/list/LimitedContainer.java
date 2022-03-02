@@ -6,7 +6,7 @@ public abstract class LimitedContainer<E> {
 	private int tail = 0;
 	private int count = 0;
 
-	private int capacity;
+	private final int capacity;
 
 	protected LimitedContainer(int capacity) {
 		this.capacity = capacity;

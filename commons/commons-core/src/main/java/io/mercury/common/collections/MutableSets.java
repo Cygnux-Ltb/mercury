@@ -25,7 +25,7 @@ public final class MutableSets {
 	private MutableSets() {
 	}
 
-	/**
+	/*
 	 * primitive int set
 	 * 
 	 * @return

@@ -23,7 +23,7 @@ public final class FileScanner {
 	 * @return
 	 */
 	@Nonnull
-	public static final MutableSet<File> depthFirst(@Nonnull File path) {
+	public static MutableSet<File> depthFirst(@Nonnull File path) {
 		Assertor.nonNull(path, "path");
 		return depthFirst(path, any -> true);
 	}
@@ -32,11 +32,11 @@ public final class FileScanner {
 	 * 根据过滤器收集指定路径下全部文件, 如果过滤器为null, 默认收集全部文件
 	 * 
 	 * @param path
-	 * @param fileFilter
+	 * @param filter
 	 * @return
 	 */
 	@Nonnull
-	public static final MutableSet<File> depthFirst(@Nonnull File path, @Nullable FileFilter filter) {
+	public static MutableSet<File> depthFirst(@Nonnull File path, @Nullable FileFilter filter) {
 		Assertor.nonNull(path, "path");
 		if (filter == null)
 			filter = any -> true;
@@ -45,7 +45,7 @@ public final class FileScanner {
 		return files;
 	}
 
-	private static final void depthFirst0(@Nonnull MutableSet<File> files, @Nonnull File path,
+	private static void depthFirst0(@Nonnull MutableSet<File> files, @Nonnull File path,
 			@Nonnull FileFilter filter) {
 		if (path == null || filter == null)
 			return;

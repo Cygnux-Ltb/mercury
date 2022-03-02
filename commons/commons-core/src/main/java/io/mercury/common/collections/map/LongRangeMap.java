@@ -128,7 +128,7 @@ public final class LongRangeMap<V> {
 
 	private void operatingSelect(MutableLongSet selectKey, LongProcedure func) {
 		if (!selectKey.isEmpty())
-			selectKey.each(key -> func.accept(key));
+			selectKey.each(func::accept);
 	}
 
 	public static void main(String[] args) {

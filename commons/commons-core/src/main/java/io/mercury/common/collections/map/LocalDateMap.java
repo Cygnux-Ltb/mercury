@@ -27,7 +27,7 @@ public final class LocalDateMap<V> extends TemporalMap<LocalDate, V, LocalDateMa
 	 * @param <V>
 	 * @return
 	 */
-	public final static <V> LocalDateMap<V> newMap() {
+	public static <V> LocalDateMap<V> newMap() {
 		return new LocalDateMap<>(key -> date(key), key -> key.plusDays(1), HasNextKey);
 	}
 
@@ -41,6 +41,7 @@ public final class LocalDateMap<V> extends TemporalMap<LocalDate, V, LocalDateMa
 		LocalDateMap<String> newMap = newMap();
 
 		LocalDate date = LocalDate.of(2019, 5, 30);
+
 		for (int i = 0; i < 5000; i++) {
 			date = date.plusDays(1);
 			newMap.put(date, date.toString());
@@ -54,7 +55,7 @@ public final class LocalDateMap<V> extends TemporalMap<LocalDate, V, LocalDateMa
 			System.out.println(scan.size());
 		}
 
-		newMap.scan(LocalDate.now(), LocalDate.now().plusYears(1)).each(str -> System.out.println(str));
+		newMap.scan(LocalDate.now(), LocalDate.now().plusYears(1)).each(System.out::println);
 
 	}
 

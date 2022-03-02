@@ -1,5 +1,7 @@
 package io.mercury.common.collections.map;
 
+import io.mercury.common.datetime.DateTimeUtil;
+
 import static io.mercury.common.datetime.DateTimeUtil.datetimeOfHour;
 import static io.mercury.common.datetime.DateTimeUtil.datetimeOfMinute;
 import static io.mercury.common.datetime.DateTimeUtil.datetimeOfSecond;
@@ -27,8 +29,8 @@ public final class LocalDateTimeMap<V> extends TemporalMap<LocalDateTime, V, Loc
 	 * @param <V>
 	 * @return
 	 */
-	public final static <V> LocalDateTimeMap<V> newMapWithHour() {
-		return new LocalDateTimeMap<>(key -> datetimeOfHour(key), key -> key.plusHours(1), HasNextKey);
+	public static <V> LocalDateTimeMap<V> newMapWithHour() {
+		return new LocalDateTimeMap<>(DateTimeUtil::datetimeOfHour, key -> key.plusHours(1), HasNextKey);
 	}
 
 	/**
@@ -36,8 +38,8 @@ public final class LocalDateTimeMap<V> extends TemporalMap<LocalDateTime, V, Loc
 	 * @param <V>
 	 * @return
 	 */
-	public final static <V> LocalDateTimeMap<V> newMapWithMinute() {
-		return new LocalDateTimeMap<>(key -> datetimeOfMinute(key), key -> key.plusMinutes(1), HasNextKey);
+	public static <V> LocalDateTimeMap<V> newMapWithMinute() {
+		return new LocalDateTimeMap<>(DateTimeUtil::datetimeOfMinute, key -> key.plusMinutes(1), HasNextKey);
 	}
 
 	/**
@@ -45,8 +47,8 @@ public final class LocalDateTimeMap<V> extends TemporalMap<LocalDateTime, V, Loc
 	 * @param <V>
 	 * @return
 	 */
-	public final static <V> LocalDateTimeMap<V> newMapWithSecond() {
-		return new LocalDateTimeMap<>(key -> datetimeOfSecond(key), key -> key.plusSeconds(1), HasNextKey);
+	public static <V> LocalDateTimeMap<V> newMapWithSecond() {
+		return new LocalDateTimeMap<>(DateTimeUtil::datetimeOfSecond, key -> key.plusSeconds(1), HasNextKey);
 	}
 
 	@Override
