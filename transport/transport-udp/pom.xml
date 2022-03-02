@@ -1,80 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>io.mercury</groupId>
-		<artifactId>transport</artifactId>
-		<version>1.0-SNAPSHOT</version>
-	</parent>
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.mercury</groupId>
+        <artifactId>transport</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>transport-udp</artifactId>
-	<name>transport-udp</name>
+    <artifactId>transport-udp</artifactId>
+    <name>transport-udp</name>
 
-	<properties>
-		<aeron.version>1.37.0</aeron.version>
-		<byte-buddy.version>1.12.8</byte-buddy.version>
-	</properties>
+    <properties>
+        <aeron.version>1.37.0</aeron.version>
+        <byte-buddy.version>1.12.8</byte-buddy.version>
+    </properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>io.mercury</groupId>
-			<artifactId>transport-api</artifactId>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>io.mercury</groupId>
+            <artifactId>transport-api</artifactId>
+        </dependency>
 
-		<!-- Aeron : Efficient reliable UDP unicast, UDP multicast, and IPC transport 
-			protocol. -->
-		<dependency>
-			<groupId>io.aeron</groupId>
-			<artifactId>aeron-agent</artifactId>
-			<version>${aeron.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.aeron</groupId>
-			<artifactId>aeron-archive</artifactId>
-			<version>${aeron.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.aeron</groupId>
-			<artifactId>aeron-client</artifactId>
-			<version>${aeron.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.aeron</groupId>
-			<artifactId>aeron-cluster</artifactId>
-			<version>${aeron.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.aeron</groupId>
-			<artifactId>aeron-driver</artifactId>
-			<version>${aeron.version}</version>
-		</dependency>
+        <!-- High performance primitives and utility library.  -->
+        <dependency>
+            <groupId>org.agrona</groupId>
+            <artifactId>agrona</artifactId>
+            <version>1.14.0</version>
+        </dependency>
 
-		<!-- Byte Buddy -->
-		<dependency>
-			<groupId>net.bytebuddy</groupId>
-			<artifactId>byte-buddy</artifactId>
-			<version>${byte-buddy.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.bytebuddy</groupId>
-			<artifactId>byte-buddy-agent</artifactId>
-			<version>${byte-buddy.version}</version>
-		</dependency>
+        <!-- Aeron : Efficient reliable UDP unicast, UDP multicast, and IPC transport
+            protocol. -->
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-agent</artifactId>
+            <version>${aeron.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-archive</artifactId>
+            <version>${aeron.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-client</artifactId>
+            <version>${aeron.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-cluster</artifactId>
+            <version>${aeron.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.aeron</groupId>
+            <artifactId>aeron-driver</artifactId>
+            <version>${aeron.version}</version>
+        </dependency>
 
-		<!-- HdrHistogram supports the recording and analyzing sampled data value 
-			counts across a configurable integer value range with configurable value 
-			precision within the range. Value precision is expressed as the number of 
-			significant digits in the value recording, and provides control over value 
-			quantization behavior across the value range and the subsequent value resolution 
-			at any given level. -->
-		<dependency>
-			<groupId>org.hdrhistogram</groupId>
-			<artifactId>HdrHistogram</artifactId>
-			<version>2.1.12</version>
-		</dependency>
+        <!-- Byte Buddy -->
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>${byte-buddy.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy-agent</artifactId>
+            <version>${byte-buddy.version}</version>
+        </dependency>
 
-	</dependencies>
+        <!-- HdrHistogram supports the recording and analyzing sampled data value
+            counts across a configurable integer value range with configurable value
+            precision within the range. Value precision is expressed as the number of
+            significant digits in the value recording, and provides control over value
+            quantization behavior across the value range and the subsequent value resolution
+            at any given level. -->
+        <dependency>
+            <groupId>org.hdrhistogram</groupId>
+            <artifactId>HdrHistogram</artifactId>
+            <version>2.1.12</version>
+        </dependency>
+
+    </dependencies>
 </project>
