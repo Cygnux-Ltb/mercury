@@ -75,11 +75,11 @@ public class FlakyExpressionCalculator extends AbstractLoggingActor {
 		return expr;
 	}
 
-	private SupervisorStrategy strategy = new OneForOneStrategy(false,
+	private final SupervisorStrategy strategy = new OneForOneStrategy(false,
 			DeciderBuilder.match(FlakinessException.class, e -> {
 				log().warning("Evaluation of {} failed, restarting.", getExpr());
 				return SupervisorStrategy.restart();
-			}).matchAny(e -> SupervisorStrategy.escalate()).build());
+			}).matchAny(e -> (SupervisorStrategy.Directive) SupervisorStrategy.escalate()).build());
 
 	@Override
 	public SupervisorStrategy supervisorStrategy() {

@@ -93,7 +93,7 @@ public final class JsonMsg implements JsonSerializable {
 	 * @author yellow013
 	 *
 	 */
-	public static enum ContentType {
+	public enum ContentType {
 
 		INT, LONG, DOUBLE, STRING, OBJECT,
 
