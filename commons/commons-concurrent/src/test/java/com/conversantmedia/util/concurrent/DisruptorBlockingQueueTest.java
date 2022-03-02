@@ -246,10 +246,10 @@ public class DisruptorBlockingQueueTest {
 	public void testTimeOffer() throws InterruptedException {
 
 		final int cap = 16;
-		final BlockingQueue<Integer> dbq = new DisruptorBlockingQueue<Integer>(cap);
+		final BlockingQueue<Integer> dbq = new DisruptorBlockingQueue<>(cap);
 
 		for (int i = 0; i < cap; i++) {
-			dbq.offer(Integer.valueOf(i));
+			dbq.offer(i);
 		}
 
 		executor.execute(() -> {
@@ -263,9 +263,9 @@ public class DisruptorBlockingQueueTest {
 		});
 
 		// expect to fail for only 50 ms
-		Assert.assertFalse(dbq.offer(Integer.valueOf(cap), 50, TimeUnit.MILLISECONDS));
+		Assert.assertFalse(dbq.offer(cap, 50, TimeUnit.MILLISECONDS));
 
-		Assert.assertTrue(dbq.offer(Integer.valueOf(cap), 16550, TimeUnit.MILLISECONDS));
+		Assert.assertTrue(dbq.offer(cap, 16550, TimeUnit.MILLISECONDS));
 
 		boolean hasValCap = false;
 		while (!dbq.isEmpty()) {
@@ -295,7 +295,7 @@ public class DisruptorBlockingQueueTest {
 
 	@Ignore // timing test are not suitable for build
 	public void offerTimeIsAccurate() throws InterruptedException {
-		final DisruptorBlockingQueue<Integer> dbq = new DisruptorBlockingQueue<Integer>(256);
+		final DisruptorBlockingQueue<Integer> dbq = new DisruptorBlockingQueue<>(256);
 
 		for (int i = 0; i < 256; i++) {
 			dbq.offer(1);
