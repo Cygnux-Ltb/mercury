@@ -1,7 +1,7 @@
 package io.mercury.transport.attr;
 
 import io.mercury.common.annotation.OnlyOverrideEquals;
-import io.mercury.common.serialization.JsonSerializable;
+import io.mercury.common.serialization.specific.JsonSerializable;
 import io.mercury.serialization.json.JsonWrapper;
 
 @OnlyOverrideEquals

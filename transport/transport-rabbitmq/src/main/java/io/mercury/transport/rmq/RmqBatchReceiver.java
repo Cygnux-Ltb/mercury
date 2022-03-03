@@ -29,7 +29,7 @@ import io.mercury.common.collections.MutableLists;
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.common.serialization.BytesDeserializer;
+import io.mercury.common.serialization.specific.BytesDeserializer;
 import io.mercury.transport.api.Receiver;
 import io.mercury.transport.rmq.configurator.RmqReceiverConfig;
 

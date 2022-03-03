@@ -20,7 +20,7 @@ import com.rabbitmq.client.ConfirmCallback;
 import io.mercury.common.character.Charsets;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.common.serialization.BytesSerializer;
+import io.mercury.common.serialization.specific.BytesSerializer;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.ThreadSupport;
 import io.mercury.transport.api.Publisher;
