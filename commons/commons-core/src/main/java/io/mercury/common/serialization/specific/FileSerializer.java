@@ -1,5 +1,7 @@
 package io.mercury.common.serialization;
 
+import io.mercury.common.serialization.base.Serializer;
+
 import java.io.File;
 import java.util.Collection;
 

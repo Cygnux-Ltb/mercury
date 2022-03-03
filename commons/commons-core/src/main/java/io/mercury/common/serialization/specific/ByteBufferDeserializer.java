@@ -1,5 +1,7 @@
 package io.mercury.common.serialization;
 
+import io.mercury.common.serialization.base.Deserializer;
+
 import java.nio.ByteBuffer;
 
 @FunctionalInterface
