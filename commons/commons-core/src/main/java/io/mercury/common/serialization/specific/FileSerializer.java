@@ -1,10 +1,9 @@
-package io.mercury.common.serialization;
+package io.mercury.common.serialization.specific;
 
-import io.mercury.common.serialization.base.Serializer;
+import io.mercury.common.serialization.basic.Serializer;
 
 import java.io.File;
-import java.util.Collection;
 
 @FunctionalInterface
-public interface FileSerializer<T> extends Serializer<Collection<T>, File> {
+public interface FileSerializer<T> extends Serializer<T, File> {
 }
