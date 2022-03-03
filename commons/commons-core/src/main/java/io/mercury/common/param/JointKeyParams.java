@@ -205,7 +205,7 @@ public class JointKeyParams<K extends JointKey> {
 	/**
 	 * 取出低位数值
 	 * 
-	 * @param jointId
+	 * @param jointKey
 	 * @return
 	 */
 	public static int getLowPos(long jointKey) {

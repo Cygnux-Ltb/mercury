@@ -102,7 +102,7 @@ public interface Params<K extends ParamKey> {
 	 * 
 	 * @author yellow013
 	 */
-	public static enum ValueType {
+	enum ValueType {
 
 		STRING,
 

@@ -114,7 +114,7 @@ public abstract class RunnableComponent {
 		} else if (mode.delayMillis > 0) {
 			// TODO 添加延迟启动
 		} else {
-			log.info("{} -> {}, Start mode is [manual], wating call start...", getComponentType(), name);
+			log.info("{} -> {}, Start mode is [Manual], waiting call start...", getComponentType(), name);
 		}
 	}
 
@@ -124,15 +124,15 @@ public abstract class RunnableComponent {
 	 */
 	public static final class StartMode {
 
-		public static final StartMode auto() {
+		public static StartMode auto() {
 			return new StartMode(true, 0L);
 		}
 
-		public static final StartMode manual() {
+		public static StartMode manual() {
 			return new StartMode(false, 0L);
 		}
 
-		public static final StartMode delay(long delayMillis) {
+		public static StartMode delay(long delayMillis) {
 			return new StartMode(false, delayMillis);
 		}
 

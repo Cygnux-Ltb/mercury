@@ -1,9 +1,9 @@
 package io.mercury.common.thread;
 
-import static io.mercury.common.thread.ThreadSupport.newMaxPriorityThread;
-
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static io.mercury.common.thread.ThreadSupport.newMaxPriorityThread;
 
 public class MaxPriorityThreadFactory implements ThreadFactory {
 
@@ -17,8 +17,7 @@ public class MaxPriorityThreadFactory implements ThreadFactory {
 
 	@Override
 	public Thread newThread(Runnable runnable) {
-		Thread thread = newMaxPriorityThread(name + "-" + incr.getAndIncrement(), runnable);
-		return thread;
+		return newMaxPriorityThread(name + "-" + incr.getAndIncrement(), runnable);
 	}
 
 }

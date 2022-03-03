@@ -19,7 +19,7 @@ public final class LibraryPathManager {
 	/**
 	 * 添加java.library.path
 	 * 
-	 * @param libraryPath
+	 * @param libraryFile
 	 * @throws Exception
 	 */
 	public static void addLibraryDir(File libraryFile) throws Exception {
@@ -36,10 +36,10 @@ public final class LibraryPathManager {
 		usrPathsField.setAccessible(true);
 		String[] paths = (String[]) usrPathsField.get(null);
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < paths.length; i++) {
-			if (libraryPath.equals(paths[i]))
+		for (String path : paths) {
+			if (libraryPath.equals(path))
 				continue;
-			sb.append(paths[i]).append(Separator.PATH_SEPARATOR);
+			sb.append(path).append(Separator.PATH_SEPARATOR);
 		}
 		sb.append(libraryPath);
 		System.setProperty("java.library.path", sb.toString());

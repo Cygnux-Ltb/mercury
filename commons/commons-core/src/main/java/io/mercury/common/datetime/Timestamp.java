@@ -23,7 +23,7 @@ import java.time.ZonedDateTime;
 
 import javax.annotation.Nonnull;
 
-import io.mercury.common.serialization.JsonSerializable;
+import io.mercury.common.serialization.specific.JsonSerializable;
 
 /**
  * 

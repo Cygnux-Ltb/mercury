@@ -403,7 +403,7 @@ public final class ThreadSupport {
 			if (thread.getName().matches(regex))
 				matched.add(thread);
 		}
-		return matched.toArray(new Thread[matched.size()]);
+		return matched.toArray(new Thread[0]);
 	}
 
 	/**

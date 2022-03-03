@@ -46,15 +46,15 @@ public final class EpochSequence {
 	private static final EpochSequence INSTANCE = new EpochSequence();
 
 	// 第一组占位
-	protected long p0, p1, p2, p3, p4, p5, p6;
+	private long p0, p1, p2, p3, p4, p5, p6;
 	// 最后使用的Epoch毫秒
 	private volatile long lastEpochMillis;
 	// 第二组占位
-	protected long p7, p8, p9, p10, p11, p12, p13;
+	private long p7, p8, p9, p10, p11, p12, p13;
 	// 自增位
 	private volatile long incr;
 	// 第三组占位
-	protected long p14, p15, p16, p17, p18, p19, p20;
+	private long p14, p15, p16, p17, p18, p19, p20;
 
 	private EpochSequence() {
 	}
@@ -70,7 +70,7 @@ public final class EpochSequence {
 	 * 
 	 * @return
 	 */
-	public static final long allocate() {
+	public static long allocate() {
 		return INSTANCE.allocate0();
 	}
 
@@ -79,7 +79,7 @@ public final class EpochSequence {
 	 * 
 	 * @return
 	 */
-	private synchronized final long allocate0() {
+	private synchronized long allocate0() {
 		long currentEpochMillis = currentTimeMillis();
 		// 如果当前时间小于上一次ID生成的时间戳, 说明系统时钟回退过这个时候应当抛出异常
 		if (currentEpochMillis < lastEpochMillis) {
@@ -126,7 +126,7 @@ public final class EpochSequence {
 	 * @param seq
 	 * @return
 	 */
-	public static final long parseEpochMillis(long seq) {
+	public static long parseEpochMillis(long seq) {
 		return seq >>> IncrBits;
 	}
 

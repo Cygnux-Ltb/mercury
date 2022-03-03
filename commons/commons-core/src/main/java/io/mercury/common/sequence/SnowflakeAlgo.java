@@ -12,6 +12,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import io.mercury.common.datetime.TimeZone;
 import io.mercury.common.util.BitFormatter;
@@ -107,7 +108,7 @@ public final class SnowflakeAlgo {
 	 * @param start
 	 * @param zoneId
 	 */
-	public SnowflakeAlgo(int ownerId, @Nonnull LocalDate start, @Nonnull ZoneId zoneId) {
+	public SnowflakeAlgo(int ownerId, @Nullable LocalDate start, @Nullable ZoneId zoneId) {
 		this(ownerId, start == null ? EPOCH_ZERO : ZonedDateTime.of(start, MIN, zoneId == null ? UTC : zoneId));
 	}
 

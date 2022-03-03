@@ -43,7 +43,7 @@ public class TimeAtomicBoolean {
 	public TimeAtomicBoolean(boolean initialValue, boolean expectedValue) {
 		this.value = new AtomicBoolean(initialValue);
 		this.updatedTime = System.currentTimeMillis();
-		this.expectedValue = Boolean.valueOf(expectedValue);
+		this.expectedValue = expectedValue;
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class TimeAtomicBoolean {
 		if (expectedValue == null) {
 			return get();
 		} else {
-			return this.expectedValue.booleanValue();
+			return this.expectedValue;
 		}
 	}
 
@@ -70,7 +70,7 @@ public class TimeAtomicBoolean {
 		// if no expectedValue is set, this is always true
 		if (this.expectedValue == null)
 			return true;
-		return (this.expectedValue.booleanValue() == get());
+		return (this.expectedValue == get());
 	}
 
 	/**

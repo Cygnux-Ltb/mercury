@@ -17,7 +17,7 @@ public final class BitOperator {
 	 * @return
 	 * @throws ArrayIndexOutOfBoundsException
 	 */
-	public static final char bytesToChar(@Nonnull byte[] bytes) throws ArrayIndexOutOfBoundsException {
+	public static char bytesToChar(@Nonnull byte[] bytes) throws ArrayIndexOutOfBoundsException {
 		Assertor.requiredLength(bytes, 2, "bytes array");
 		return (char) (((bytes[0] & 0xFF) << 8) | ((bytes[1] & 0xFF)));
 	}
@@ -29,7 +29,7 @@ public final class BitOperator {
 	 * @return
 	 * @throws ArrayIndexOutOfBoundsException
 	 */
-	public static final char bytesToChar(@Nonnull byte[] bytes, int offset) throws ArrayIndexOutOfBoundsException {
+	public static char bytesToChar(@Nonnull byte[] bytes, int offset) throws ArrayIndexOutOfBoundsException {
 		if (bytes == null || bytes.length < offset + 2)
 			throw new ArrayIndexOutOfBoundsException("byte array length must be greater than [offset + 2]");
 		return (char) (((bytes[offset] & 0xFF) << 8) | ((bytes[offset + 1] & 0xFF)));
@@ -41,7 +41,7 @@ public final class BitOperator {
 	 * @return
 	 * @throws ArrayIndexOutOfBoundsException
 	 */
-	public static final int bytesToInt(@Nonnull byte[] bytes) throws ArrayIndexOutOfBoundsException {
+	public static int bytesToInt(@Nonnull byte[] bytes) throws ArrayIndexOutOfBoundsException {
 		Assertor.requiredLength(bytes, 4, "bytes array");
 		return ((bytes[0] & 0xFF) << 24) | ((bytes[1] & 0xFF) << 16) | ((bytes[2] & 0xFF) << 8) | ((bytes[3] & 0xFF));
 	}
@@ -53,7 +53,7 @@ public final class BitOperator {
 	 * @return
 	 * @throws ArrayIndexOutOfBoundsException
 	 */
-	public static final int bytesToInt(@Nonnull byte[] bytes, int offset) throws ArrayIndexOutOfBoundsException {
+	public static int bytesToInt(@Nonnull byte[] bytes, int offset) throws ArrayIndexOutOfBoundsException {
 		if (bytes == null || bytes.length < offset + 4)
 			throw new ArrayIndexOutOfBoundsException("byte array length must be greater than [offset + 4]");
 		return ((bytes[offset] & 0xFF) << 24) | ((bytes[offset + 1] & 0xFF) << 16) | ((bytes[offset + 2] & 0xFF) << 8)
@@ -67,7 +67,7 @@ public final class BitOperator {
 	 * @param lowPos
 	 * @return
 	 */
-	public static final int merge(char highPos, char lowPos) {
+	public static int merge(char highPos, char lowPos) {
 		return (((int) highPos) << 16) | ((int) lowPos);
 	}
 
@@ -78,7 +78,7 @@ public final class BitOperator {
 	 * @param lowPos
 	 * @return
 	 */
-	public static final int merge(short highPos, short lowPos) {
+	public static  int merge(short highPos, short lowPos) {
 		return (((int) highPos) << 16) | ((int) lowPos);
 	}
 
@@ -91,7 +91,7 @@ public final class BitOperator {
 	 * @param lowPos
 	 * @return
 	 */
-	public static final long merge(char highPos, char second, char third, char lowPos) {
+	public static  long merge(char highPos, char second, char third, char lowPos) {
 		return (((long) highPos) << 48) | ((long) second << 32) | ((long) third << 16) | ((int) lowPos);
 	}
 
@@ -104,7 +104,7 @@ public final class BitOperator {
 	 * @param lowPos
 	 * @return
 	 */
-	public static final long merge(short highPos, short second, short third, short lowPos) {
+	public static  long merge(short highPos, short second, short third, short lowPos) {
 		return (((long) highPos) << 48) | ((long) second << 32) | ((long) third << 16) | ((int) lowPos);
 	}
 
@@ -115,7 +115,7 @@ public final class BitOperator {
 	 * @param lowPos
 	 * @return
 	 */
-	public static final long merge(int highPos, int lowPos) {
+	public static  long merge(int highPos, int lowPos) {
 		return (((long) highPos) << 32) | ((long) lowPos);
 	}
 
@@ -129,7 +129,7 @@ public final class BitOperator {
 	 * @param l
 	 * @return
 	 */
-	public static final int getLongHighPos(long l) {
+	public static  int getLongHighPos(long l) {
 		return (int) ((l & LongHighPosMask) >> 32);
 	}
 
@@ -143,7 +143,7 @@ public final class BitOperator {
 	 * @param l
 	 * @return
 	 */
-	public static final int getLongLowPos(long l) {
+	public static  int getLongLowPos(long l) {
 		return (int) (l & LongLowPosMask);
 	}
 
@@ -153,7 +153,7 @@ public final class BitOperator {
 	 * @param i
 	 * @return
 	 */
-	public static final boolean isOdd(int i) {
+	public static  boolean isOdd(int i) {
 		return (i & 1) != 0;
 	}
 
@@ -163,7 +163,7 @@ public final class BitOperator {
 	 * @param i
 	 * @return
 	 */
-	public static final boolean isEven(int i) {
+	public static  boolean isEven(int i) {
 		return !isOdd(i);
 	}
 
@@ -173,7 +173,7 @@ public final class BitOperator {
 	 * @param l
 	 * @return
 	 */
-	public static final boolean isOdd(long l) {
+	public static  boolean isOdd(long l) {
 		return (l & 1) != 0;
 	}
 
@@ -183,7 +183,7 @@ public final class BitOperator {
 	 * @param l
 	 * @return
 	 */
-	public static final boolean isEven(long l) {
+	public static  boolean isEven(long l) {
 		return !isOdd(l);
 	}
 
@@ -195,7 +195,7 @@ public final class BitOperator {
 	 * @param i
 	 * @return
 	 */
-	public static final int minPow2(int i) {
+	public static  int minPow2(int i) {
 		int n = i - 1;
 		n |= n >>> 1;
 		n |= n >>> 2;
@@ -213,7 +213,7 @@ public final class BitOperator {
 	 * @return
 	 */
 	public static long maxValueOfBit(int n) {
-		return n < 1 || n > 63 ? 0 : -1L ^ (-1L << n);
+		return n < 1 || n > 63 ? 0 : ~(-1L << n);
 	}
 
 	/**
@@ -263,13 +263,13 @@ public final class BitOperator {
 //	}
 
 	public static void main(String[] args) {
-
+		System.out.println(minPow2(129));
 		int i = 46346;
 
 		System.out.println(longBinaryFormat(-1L));
 		System.out.println(longBinaryFormat(-1L << i));
 		System.out.println(longBinaryFormat(-1L << Math.abs(i)));
-		System.out.println(longBinaryFormat(-1L ^ (-1L << i)));
+		System.out.println(longBinaryFormat(~(-1L << i)));
 		System.out.println(maxValueOfBit(i));
 
 	}

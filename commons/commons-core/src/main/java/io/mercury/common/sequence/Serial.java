@@ -7,7 +7,7 @@ public interface Serial<S extends Serial<S>> extends Comparable<S> {
 
 	@Override
 	default int compareTo(S o) {
-		return getSerialId() < o.getSerialId() ? -1 : getSerialId() > o.getSerialId() ? 1 : 0;
+		return Long.compare(getSerialId(), o.getSerialId());
 	}
 
 }

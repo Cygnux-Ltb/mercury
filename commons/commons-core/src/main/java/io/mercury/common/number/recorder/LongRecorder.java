@@ -12,8 +12,8 @@ import io.mercury.common.collections.MutableSets;
 @NotThreadSafe
 public final class LongRecorder {
 
-	private MutableLongIntMap longCounter;
-	private MutableLongSet longSet;
+	private final MutableLongIntMap longCounter;
+	private final MutableLongSet longSet;
 
 	public LongRecorder(Capacity capacity) {
 		this.longCounter = MutableMaps.newLongIntHashMap(capacity.value());

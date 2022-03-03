@@ -22,8 +22,8 @@ import io.mercury.common.collections.Capacity;
 @NotThreadSafe
 public final class DoubleRecorder {
 
-	private MutableDoubleIntMap doubleCounter;
-	private MutableDoubleSet doubleSet;
+	private final MutableDoubleIntMap doubleCounter;
+	private final MutableDoubleSet doubleSet;
 
 	public DoubleRecorder(Capacity capacity) {
 		this.doubleCounter = newDoubleIntHashMap(capacity.value());

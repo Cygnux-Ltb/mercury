@@ -13,7 +13,7 @@ public final class HeapGlobalSerial {
 	 * 
 	 * @return
 	 */
-	public static final long next() {
+	public static long next() {
 		return ATOMIC.incrementAndGet();
 	}
 

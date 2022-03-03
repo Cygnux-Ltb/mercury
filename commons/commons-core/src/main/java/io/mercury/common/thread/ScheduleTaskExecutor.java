@@ -366,7 +366,7 @@ public final class ScheduleTaskExecutor {
 
 	public static void main(String[] args) {
 
-		multiThreadScheduleAtFixedRate(LocalDateTime.of(LocalDate.now(), LocalTime.of(11, 38, 00)), 3, TimeUnit.SECONDS,
+		multiThreadScheduleAtFixedRate(LocalDateTime.of(LocalDate.now(), LocalTime.of(11, 38, 0)), 3, TimeUnit.SECONDS,
 				() -> System.out.println(12345));
 
 	}

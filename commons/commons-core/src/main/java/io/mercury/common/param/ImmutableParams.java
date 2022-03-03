@@ -56,9 +56,9 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
 
 	/**
 	 * 根据传入的Key获取Properties中的相应字段
-	 * 
+	 *
+	 * @param prop
 	 * @param keys
-	 * @param maps
 	 * @throws NullPointerException
 	 * @throws IllegalArgumentException
 	 */

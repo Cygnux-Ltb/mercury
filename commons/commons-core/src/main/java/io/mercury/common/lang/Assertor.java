@@ -333,7 +333,6 @@ public final class Assertor {
 
 	/**
 	 * 
-	 * @param <T>
 	 * @param array
 	 * @param requiredLength
 	 * @param arrayName

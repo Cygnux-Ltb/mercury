@@ -12,8 +12,8 @@ import io.mercury.common.collections.MutableSets;
 @NotThreadSafe
 public final class IntRecorder {
 
-	private MutableIntIntMap intCounter;
-	private MutableIntSet intSet;
+	private final MutableIntIntMap intCounter;
+	private final MutableIntSet intSet;
 
 	public IntRecorder(Capacity capacity) {
 		this.intCounter = MutableMaps.newIntIntHashMap(capacity.value());

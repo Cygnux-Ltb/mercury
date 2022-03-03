@@ -11,6 +11,6 @@ public interface JointKey {
 
 	int key1();
 
-	ValueType getValuetype();
+	ValueType getValueType();
 
 }

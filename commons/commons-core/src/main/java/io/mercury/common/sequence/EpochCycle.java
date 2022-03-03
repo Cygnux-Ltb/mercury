@@ -36,14 +36,14 @@ public final class EpochCycle {
 	 * @param cycleMillis
 	 */
 	public EpochCycle(long cycleMillis) {
-		this.cycleMillis = cycleMillis < 1L ? 1L : cycleMillis;
+		this.cycleMillis = Math.max(cycleMillis, 1L);
 	}
 
 	/**
 	 * 
 	 * @return
 	 */
-	public final long toCycle() {
+	public long toCycle() {
 		return toCycle(currentTimeMillis());
 	}
 
@@ -52,7 +52,7 @@ public final class EpochCycle {
 	 * @param epochMillis
 	 * @return
 	 */
-	public final long toCycle(long epochMillis) {
+	public long toCycle(long epochMillis) {
 		return epochMillis < 0 ? 0 : (epochMillis / cycleMillis);
 	}
 
@@ -61,7 +61,7 @@ public final class EpochCycle {
 	 * @param cycle
 	 * @return
 	 */
-	public final long toEpochMillis(long cycle) {
+	public long toEpochMillis(long cycle) {
 		return cycle * cycleMillis;
 	}
 

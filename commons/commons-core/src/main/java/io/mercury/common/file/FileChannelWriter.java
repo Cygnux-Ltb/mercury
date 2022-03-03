@@ -18,7 +18,7 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import io.mercury.common.serialization.BytesSerializer;
+import io.mercury.common.serialization.specific.BytesSerializer;
 
 /**
  * Use FileChannel

@@ -7,7 +7,7 @@ import java.util.Enumeration;
 
 public final class NetworkProperties {
 
-	public final static String getLocalMacAddress() {
+	public static String getLocalMacAddress() {
 		try {
 			Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
 			while (networkInterfaces.hasMoreElements()) {
@@ -29,7 +29,7 @@ public final class NetworkProperties {
 					return builder.toString();
 				}
 			}
-		} catch (SocketException e) {
+		} catch (SocketException ignored) {
 		}
 		return "";
 	}

@@ -10,7 +10,7 @@ public final class IntNum implements Num<IntNum> {
 		this.value = value;
 	}
 
-	public static final IntNum of(int value) {
+	public static IntNum of(int value) {
 		return new IntNum(value);
 	}
 

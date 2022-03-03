@@ -1,4 +1,9 @@
 package io.mercury.common.character;
 
-public class UnsupportedCharsetsException {
+public final class UnsupportedCharsetsException extends RuntimeException {
+
+    public UnsupportedCharsetsException(String charsetName) {
+        super("Cannot find charset : [" + charsetName + "]");
+    }
+
 }
