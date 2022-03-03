@@ -16,314 +16,306 @@ import io.mercury.common.sys.SysProperties;
 @Immutable
 public final class ChronicleMapConfigurator<K, V> implements Configurator {
 
-	private final Class<K> keyClass;
-	private final Class<V> valueClass;
+    private final Class<K> keyClass;
+    private final Class<V> valueClass;
 
-	private final K averageKey;
-	private final V averageValue;
+    private final K averageKey;
+    private final V averageValue;
 
-	private final boolean putReturnsNull;
-	private final boolean removeReturnsNull;
-	private final boolean recover;
-	private final boolean persistent;
+    private final boolean putReturnsNull;
+    private final boolean removeReturnsNull;
+    private final boolean recover;
+    private final boolean persistent;
 
-	private final long entries;
-	private final int actualChunkSize;
+    private final long entries;
+    private final int actualChunkSize;
 
-	private final String rootPath;
-	private final String folder;
+    private final String rootPath;
+    private final String folder;
 
-	// final save path
-	private final File savePath;
+    // final save path
+    private final File savePath;
 
-	private final String cfgInfo;
+    private final String cfgInfo;
 
-	public Class<K> getKeyClass() {
-		return keyClass;
-	}
+    public Class<K> getKeyClass() {
+        return keyClass;
+    }
 
-	public Class<V> getValueClass() {
-		return valueClass;
-	}
+    public Class<V> getValueClass() {
+        return valueClass;
+    }
 
-	public K getAverageKey() {
-		return averageKey;
-	}
+    public K getAverageKey() {
+        return averageKey;
+    }
 
-	public V getAverageValue() {
-		return averageValue;
-	}
+    public V getAverageValue() {
+        return averageValue;
+    }
 
-	public boolean isPutReturnsNull() {
-		return putReturnsNull;
-	}
+    public boolean isPutReturnsNull() {
+        return putReturnsNull;
+    }
 
-	public boolean isRemoveReturnsNull() {
-		return removeReturnsNull;
-	}
+    public boolean isRemoveReturnsNull() {
+        return removeReturnsNull;
+    }
 
-	public boolean isRecover() {
-		return recover;
-	}
+    public boolean isRecover() {
+        return recover;
+    }
 
-	public boolean isPersistent() {
-		return persistent;
-	}
+    public boolean isPersistent() {
+        return persistent;
+    }
 
-	public long getEntries() {
-		return entries;
-	}
+    public long getEntries() {
+        return entries;
+    }
 
-	public int getActualChunkSize() {
-		return actualChunkSize;
-	}
+    public int getActualChunkSize() {
+        return actualChunkSize;
+    }
 
-	public String getRootPath() {
-		return rootPath;
-	}
+    public String getRootPath() {
+        return rootPath;
+    }
 
-	public String getFolder() {
-		return folder;
-	}
+    public String getFolder() {
+        return folder;
+    }
 
-	public File getSavePath() {
-		return savePath;
-	}
+    public File getSavePath() {
+        return savePath;
+    }
 
-	// extended use
-	private Builder<K, V> builder;
+    // extended use
+    private Builder<K, V> builder;
 
-	private ChronicleMapConfigurator(Builder<K, V> builder) {
-		this.builder = builder;
-		this.keyClass = builder.keyClass;
-		this.valueClass = builder.valueClass;
-		this.averageKey = builder.averageKey;
-		this.averageValue = builder.averageValue;
-		this.putReturnsNull = builder.putReturnsNull;
-		this.removeReturnsNull = builder.removeReturnsNull;
-		this.recover = builder.recover;
-		this.persistent = builder.persistent;
-		this.entries = builder.entries;
-		this.actualChunkSize = builder.actualChunkSize;
-		this.rootPath = builder.rootPath;
-		this.folder = builder.folder;
-		this.savePath = new File(rootPath + FixedFolder + folder);
-		this.cfgInfo = "[SaveTo->" + savePath.getAbsolutePath() + "]:[KeyType==" + keyClass.getSimpleName()
-				+ ",ValueType==" + valueClass.getSimpleName() + "]";
-	}
+    private ChronicleMapConfigurator(Builder<K, V> builder) {
+        this.builder = builder;
+        this.keyClass = builder.keyClass;
+        this.valueClass = builder.valueClass;
+        this.averageKey = builder.averageKey;
+        this.averageValue = builder.averageValue;
+        this.putReturnsNull = builder.putReturnsNull;
+        this.removeReturnsNull = builder.removeReturnsNull;
+        this.recover = builder.recover;
+        this.persistent = builder.persistent;
+        this.entries = builder.entries;
+        this.actualChunkSize = builder.actualChunkSize;
+        this.rootPath = builder.rootPath;
+        this.folder = builder.folder;
+        this.savePath = new File(rootPath + FixedFolder + folder);
+        this.cfgInfo = "[SaveTo->" + savePath.getAbsolutePath() + "]:[KeyType==" + keyClass.getSimpleName()
+                + ",ValueType==" + valueClass.getSimpleName() + "]";
+    }
 
-	private static final String FixedFolder = "chronicle-map/";
+    private static final String FixedFolder = "chronicle-map/";
 
-	/**
-	 * 
-	 * @param <K>
-	 * @param <V>
-	 * @param keyClass
-	 * @param valueClass
-	 * @return
-	 * @throws NullPointerException
-	 */
-	public static <K, V> Builder<K, V> newBuilder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass)
-			throws NullPointerException {
-		Assertor.nonNull(keyClass, "keyClass");
-		Assertor.nonNull(valueClass, "valueClass");
-		return new Builder<>(keyClass, valueClass, SysProperties.JAVA_IO_TMPDIR,
-				"auto-create-" + DateTimeUtil.datetimeOfSecond());
-	}
+    /**
+     * @param <K>
+     * @param <V>
+     * @param keyClass
+     * @param valueClass
+     * @return
+     * @throws NullPointerException
+     */
+    public static <K, V> Builder<K, V> newBuilder(@Nonnull Class<K> keyClass,
+                                                  @Nonnull Class<V> valueClass)
+            throws NullPointerException {
+        Assertor.nonNull(keyClass, "keyClass");
+        Assertor.nonNull(valueClass, "valueClass");
+        return new Builder<>(keyClass, valueClass, SysProperties.JAVA_IO_TMPDIR,
+                "auto-create-" + DateTimeUtil.datetimeOfSecond());
+    }
 
-	/**
-	 * 
-	 * @param <K>
-	 * @param <V>
-	 * @param keyClass
-	 * @param valueClass
-	 * @param folder
-	 * @return
-	 * @throws NullPointerException
-	 */
-	public static <K, V> Builder<K, V> newBuilder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass,
-			@Nonnull String folder) throws NullPointerException {
-		Assertor.nonNull(keyClass, "keyClass");
-		Assertor.nonNull(valueClass, "valueClass");
-		Assertor.nonNull(folder, "folder");
-		return new Builder<>(keyClass, valueClass, SysProperties.JAVA_IO_TMPDIR, folder);
-	}
+    /**
+     * @param <K>
+     * @param <V>
+     * @param keyClass
+     * @param valueClass
+     * @param folder
+     * @return
+     * @throws NullPointerException
+     */
+    public static <K, V> Builder<K, V> newBuilder(@Nonnull Class<K> keyClass,
+                                                  @Nonnull Class<V> valueClass,
+                                                  @Nonnull String folder)
+            throws NullPointerException {
+        Assertor.nonNull(keyClass, "keyClass");
+        Assertor.nonNull(valueClass, "valueClass");
+        Assertor.nonNull(folder, "folder");
+        return new Builder<>(keyClass, valueClass, SysProperties.JAVA_IO_TMPDIR, folder);
+    }
 
-	/**
-	 * 
-	 * @param <K>
-	 * @param <V>
-	 * @param keyClass
-	 * @param valueClass
-	 * @param rootPath
-	 * @param folder
-	 * @return
-	 * @throws NullPointerException
-	 */
-	public static <K, V> Builder<K, V> newBuilder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass,
-			@Nonnull String rootPath, @Nonnull String folder) throws NullPointerException {
-		Assertor.nonNull(keyClass, "keyClass");
-		Assertor.nonNull(valueClass, "valueClass");
-		Assertor.nonNull(rootPath, "rootPath");
-		Assertor.nonNull(folder, "folder");
-		return new Builder<>(keyClass, valueClass, rootPath, folder);
-	}
+    /**
+     * @param <K>
+     * @param <V>
+     * @param keyClass
+     * @param valueClass
+     * @param rootPath
+     * @param folder
+     * @return
+     * @throws NullPointerException
+     */
+    public static <K, V> Builder<K, V> newBuilder(@Nonnull Class<K> keyClass,
+                                                  @Nonnull Class<V> valueClass,
+                                                  @Nonnull String rootPath,
+                                                  @Nonnull String folder)
+            throws NullPointerException {
+        Assertor.nonNull(keyClass, "keyClass");
+        Assertor.nonNull(valueClass, "valueClass");
+        Assertor.nonNull(rootPath, "rootPath");
+        Assertor.nonNull(folder, "folder");
+        return new Builder<>(keyClass, valueClass, rootPath, folder);
+    }
 
-	/**
-	 * 
-	 * @param <K>
-	 * @param <V>
-	 * @param original
-	 * @return
-	 * @throws NullPointerException
-	 */
-	public static <K, V> Builder<K, V> reset(@Nonnull ChronicleMapConfigurator<K, V> original)
-			throws NullPointerException {
-		Assertor.nonNull(original, "original");
-		return original.builder;
-	}
+    /**
+     * @param <K>
+     * @param <V>
+     * @param original
+     * @return
+     * @throws NullPointerException
+     */
+    public static <K, V> Builder<K, V> reset(@Nonnull ChronicleMapConfigurator<K, V> original)
+            throws NullPointerException {
+        Assertor.nonNull(original, "original");
+        return original.builder;
+    }
 
-	@Override
-	public String getConfigInfo() {
-		return cfgInfo;
-	}
+    @Override
+    public String getConfigInfo() {
+        return cfgInfo;
+    }
 
-	/**
-	 * 
-	 * @author yellow013
-	 *
-	 * @param <K>
-	 * @param <V>
-	 */
-	public static class Builder<K, V> {
+    /**
+     * @param <K>
+     * @param <V>
+     * @author yellow013
+     */
+    public static class Builder<K, V> {
 
-		private final Class<K> keyClass;
-		private final Class<V> valueClass;
-		private final String rootPath;
-		private final String folder;
+        private final Class<K> keyClass;
+        private final Class<V> valueClass;
+        private final String rootPath;
+        private final String folder;
 
-		private K averageKey;
-		private V averageValue;
+        private K averageKey;
+        private V averageValue;
 
-		private boolean putReturnsNull = false;
-		private boolean removeReturnsNull = false;
-		private boolean recover = false;
-		private boolean persistent = true;
+        private boolean putReturnsNull = false;
+        private boolean removeReturnsNull = false;
+        private boolean recover = false;
+        private boolean persistent = true;
 
-		private long entries = 65536;
-		private int actualChunkSize;
+        private long entries = 65536;
+        private int actualChunkSize;
 
-		private Builder(@Nonnull Class<K> keyClass, @Nonnull Class<V> valueClass, @Nonnull String rootPath,
-				@Nonnull String folder) {
-			this.keyClass = keyClass;
-			this.valueClass = valueClass;
-			this.rootPath = fixPath(rootPath);
-			this.folder = fixPath(folder);
-		}
+        private Builder(@Nonnull Class<K> keyClass,
+                        @Nonnull Class<V> valueClass,
+                        @Nonnull String rootPath,
+                        @Nonnull String folder) {
+            this.keyClass = keyClass;
+            this.valueClass = valueClass;
+            this.rootPath = fixPath(rootPath);
+            this.folder = fixPath(folder);
+        }
 
-		/**
-		 * 
-		 * @param averageKey
-		 * @return
-		 */
-		public Builder<K, V> averageKey(K averageKey) {
-			this.averageKey = averageKey;
-			return this;
-		}
+        /**
+         * @param averageKey
+         * @return
+         */
+        public Builder<K, V> averageKey(K averageKey) {
+            this.averageKey = averageKey;
+            return this;
+        }
 
-		/**
-		 * 
-		 * @param averageValue
-		 * @return
-		 */
-		public Builder<K, V> averageValue(V averageValue) {
-			this.averageValue = averageValue;
-			return this;
-		}
+        /**
+         * @param averageValue
+         * @return
+         */
+        public Builder<K, V> averageValue(V averageValue) {
+            this.averageValue = averageValue;
+            return this;
+        }
 
-		/**
-		 * 
-		 * @return
-		 */
-		public Builder<K, V> enablePutReturnsNull() {
-			this.putReturnsNull = true;
-			return this;
-		}
+        /**
+         * @return
+         */
+        public Builder<K, V> enablePutReturnsNull() {
+            this.putReturnsNull = true;
+            return this;
+        }
 
-		/**
-		 * 
-		 * @return
-		 */
-		public Builder<K, V> enableRemoveReturnsNull() {
-			this.removeReturnsNull = true;
-			return this;
-		}
+        /**
+         * @return
+         */
+        public Builder<K, V> enableRemoveReturnsNull() {
+            this.removeReturnsNull = true;
+            return this;
+        }
 
-		/**
-		 * 
-		 * @return
-		 */
-		public Builder<K, V> enableRecover() {
-			this.recover = true;
-			return this;
-		}
+        /**
+         * @return
+         */
+        public Builder<K, V> enableRecover() {
+            this.recover = true;
+            return this;
+        }
 
-		/**
-		 * 
-		 * @param persistent
-		 * @return
-		 */
-		public Builder<K, V> persistent(boolean persistent) {
-			this.persistent = persistent;
-			return this;
-		}
+        /**
+         * @param persistent
+         * @return
+         */
+        public Builder<K, V> persistent(boolean persistent) {
+            this.persistent = persistent;
+            return this;
+        }
 
-		/**
-		 * 
-		 * @param actualChunkSize
-		 * @return
-		 */
-		public Builder<K, V> actualChunkSize(int actualChunkSize) {
-			this.actualChunkSize = actualChunkSize;
-			return this;
-		}
+        /**
+         * @param actualChunkSize
+         * @return
+         */
+        public Builder<K, V> actualChunkSize(int actualChunkSize) {
+            this.actualChunkSize = actualChunkSize;
+            return this;
+        }
 
-		/**
-		 * 
-		 * @param entries
-		 * @return
-		 */
-		public Builder<K, V> entries(long entries) {
-			this.entries = entries;
-			return this;
-		}
+        /**
+         * @param entries
+         * @return
+         */
+        public Builder<K, V> entries(long entries) {
+            this.entries = entries;
+            return this;
+        }
 
-		/**
-		 * 
-		 * @param capacity
-		 * @return
-		 */
-		public Builder<K, V> entries(Capacity capacity) {
-			this.entries = capacity.value();
-			return this;
-		}
+        /**
+         * @param capacity
+         * @return
+         */
+        public Builder<K, V> entries(Capacity capacity) {
+            this.entries = capacity.value();
+            return this;
+        }
 
-		/**
-		 * 
-		 * @return
-		 */
-		public ChronicleMapConfigurator<K, V> build() {
-			return new ChronicleMapConfigurator<>(this);
-		}
-	}
+        /**
+         * @return
+         */
+        public ChronicleMapConfigurator<K, V> build() {
+            return new ChronicleMapConfigurator<>(this);
+        }
+    }
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		ChronicleMapConfigurator<String, Long> configurator = ChronicleMapConfigurator
-				.newBuilder(String.class, Long.class, SysProperties.USER_HOME, "/user").build();
+        ChronicleMapConfigurator<String, Long> configurator = ChronicleMapConfigurator
+                .newBuilder(String.class, Long.class, SysProperties.USER_HOME, "/user").build();
 
-		System.out.println(configurator.getConfigInfo());
+        System.out.println(configurator.getConfigInfo());
 
-	}
+    }
 
 }

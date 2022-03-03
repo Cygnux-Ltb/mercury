@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.codec.Envelope;
-import io.mercury.common.serialization.Serializer;
+import io.mercury.common.serialization.basic.Serializer;
 import io.mercury.persistence.chronicle.exception.ChronicleAppendException;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleAppender;
 import net.openhft.chronicle.queue.ExcerptAppender;
@@ -22,88 +22,91 @@ import net.openhft.chronicle.queue.ExcerptAppender;
 @Immutable
 @NotThreadSafe
 public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN> extends AbstractChronicleAppender<IN>
-		implements Runnable {
+        implements Runnable {
 
-	protected AbstractChronicleMultitypeAppender(long allocateSeq, String appenderName, Logger logger,
-			ExcerptAppender appender, Supplier<IN> dataProducer) {
-		super(allocateSeq, appenderName, logger, appender, dataProducer);
-	}
+    protected AbstractChronicleMultitypeAppender(long allocateSeq,
+                                                 String appenderName,
+                                                 Logger logger,
+                                                 ExcerptAppender appender,
+                                                 Supplier<IN> dataProducer) {
+        super(allocateSeq, appenderName, logger, appender, dataProducer);
+    }
 
-	/**
-	 * 
-	 * @param t
-	 * @throws IllegalStateException
-	 * @throws ChronicleAppendException
-	 */
-	public void append(@Nonnull E envelope, @Nullable IN t) throws IllegalStateException, ChronicleAppendException {
-		if (isClose) {
-			throw new IllegalStateException("Unable to append data, Chronicle queue is closed");
-		}
-		try {
-			if (t != null) {
-				append0(envelope, t);
-			} else {
-				logger.warn("appenderName -> {} : received null object, Not written to the queue.", appenderName());
-			}
-		} catch (Exception e) {
-			throw new ChronicleAppendException(e.getMessage(), e);
-		}
-	}
+    /**
+     * @param t
+     * @throws IllegalStateException
+     * @throws ChronicleAppendException
+     */
+    public void append(@Nonnull E envelope, @Nullable IN t)
+            throws IllegalStateException, ChronicleAppendException {
+        if (isClose) {
+            throw new IllegalStateException("Unable to append data, Chronicle queue is closed");
+        }
+        try {
+            if (t != null) {
+                append0(envelope, t);
+            } else {
+                logger.warn("appenderName -> {} : received null object, Not written to the queue.", appenderName());
+            }
+        } catch (Exception e) {
+            throw new ChronicleAppendException(e.getMessage(), e);
+        }
+    }
 
-	/**
-	 * 
-	 * @param obj
-	 * @param serializer
-	 * @throws IllegalStateException
-	 * @throws ChronicleAppendException
-	 */
-	public void append(@Nonnull E envelope, @Nonnull Object obj, Serializer<Object, IN> serializer)
-			throws IllegalStateException, ChronicleAppendException {
-		append(envelope, serializer.serialization(obj));
-	}
+    /**
+     * @param obj
+     * @param serializer
+     * @throws IllegalStateException
+     * @throws ChronicleAppendException
+     */
+    public void append(@Nonnull E envelope,
+                       @Nonnull Object obj,
+                       Serializer<Object, IN> serializer)
+            throws IllegalStateException, ChronicleAppendException {
+        append(envelope, serializer.serialization(obj));
+    }
 
-	@AbstractFunction
-	protected abstract void append0(@Nonnull E envelope, @Nonnull IN t);
+    @AbstractFunction
+    protected abstract void append0(@Nullable E envelope, @Nonnull IN t);
 
-	@Override
-	protected void append0(@Nonnull IN in) {
-		append0(envelope, in);
-	}
+    @Override
+    protected void append0(@Nonnull IN in) {
+        append0(envelope, in);
+    }
 
-	@Nullable
-	private E envelope;
+    @Nullable
+    private E envelope;
 
-	/**
-	 * 设置默认信封
-	 * 
-	 * @param envelope
-	 */
-	public void setEnvelope(E envelope) {
-		this.envelope = envelope;
-	}
+    /**
+     * 设置默认信封
+     *
+     * @param envelope
+     */
+    public void setEnvelope(@Nonnull E envelope) {
+        this.envelope = envelope;
+    }
 
-	@Override
-	public void run() {
-		if (dataProducer == null) {
-			logger.error("Supplier is null, Thread exit");
-			return;
-		}
-		if (envelope != null) {
-			for (;;) {
-				if (isClose) {
-					logger.info("Chronicle queue is closed, {} Thread exit", appenderName());
-					break;
-				} else {
-					IN t = dataProducer.get();
-					if (t != null)
-						append(envelope, t);
-				}
-			}
-		} else {
-			logger.error("ChronicleMultitypeAppender -> [{}] Default envelope is null, Thread exit at {}",
-					appenderName(), formatDateTime(YY_MM_DD_HH_MM_SS_SSS));
-			return;
-		}
-	}
+    @Override
+    public void run() {
+        if (dataProducer == null) {
+            logger.error("Supplier is null, Thread exit");
+            return;
+        }
+        if (envelope != null) {
+            for (; ; ) {
+                if (isClose) {
+                    logger.info("Chronicle queue is closed, {} Thread exit", appenderName());
+                    break;
+                } else {
+                    IN t = dataProducer.get();
+                    if (t != null)
+                        append(envelope, t);
+                }
+            }
+        } else {
+            logger.error("ChronicleMultitypeAppender -> [{}] Default envelope is null, Thread exit at {}",
+                    appenderName(), formatDateTime(YY_MM_DD_HH_MM_SS_SSS));
+        }
+    }
 
 }

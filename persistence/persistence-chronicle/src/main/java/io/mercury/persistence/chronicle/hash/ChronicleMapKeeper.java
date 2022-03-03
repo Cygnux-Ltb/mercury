@@ -17,7 +17,7 @@ import net.openhft.chronicle.map.ChronicleMapBuilder;
 @ThreadSafe
 public class ChronicleMapKeeper<K, V> extends AbstractKeeper<String, ChronicleMap<K, V>> implements Closeable {
 
-	private ChronicleMapConfigurator<K, V> cfg;
+	private final ChronicleMapConfigurator<K, V> cfg;
 
 	public ChronicleMapKeeper(@Nonnull ChronicleMapConfigurator<K, V> cfg) {
 		Assertor.nonNull(cfg, "cfg");

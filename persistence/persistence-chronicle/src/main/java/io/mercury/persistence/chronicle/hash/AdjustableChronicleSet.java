@@ -4,7 +4,7 @@ import net.openhft.chronicle.set.ChronicleSet;
 
 public final class AdjustableChronicleSet<K> implements AdjustableChronicle<ChronicleSet<K>> {
 
-	private ChronicleSet<K> entity;
+	private final ChronicleSet<K> entity;
 
 	public AdjustableChronicleSet(ChronicleSet<K> entity) {
 		this.entity = entity;

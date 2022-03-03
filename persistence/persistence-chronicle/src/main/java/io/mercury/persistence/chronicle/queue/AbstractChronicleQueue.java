@@ -136,7 +136,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
             this.lastCycle = new AtomicInteger();
             this.cycleFileMap = MutableMaps.newConcurrentHashMap();
             // 周期文件清理间隔
-            long delay = fileCycle.getSeconds() * fileClearCycle;
+            long delay = (long) fileCycle.getSeconds() * fileClearCycle;
             // 创建文件清理线程
             this.fileClearThread = ThreadSupport.startNewThread(queueName + "-FileClearThread", () -> {
                 do {
@@ -272,7 +272,8 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
      * @return
      * @throws IllegalStateException
      */
-    public RT createReader(@Nonnull Consumer<T> dataConsumer) throws IllegalStateException {
+    public RT createReader(@Nonnull Consumer<T> dataConsumer)
+            throws IllegalStateException {
         return createReader(generateReaderName(), ReaderParams.defaultParams(), dataConsumer);
     }
 
@@ -282,7 +283,9 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
      * @return
      * @throws IllegalStateException
      */
-    public RT createReader(@Nonnull String readerName, @Nonnull Consumer<T> dataConsumer) throws IllegalStateException {
+    public RT createReader(@Nonnull String readerName,
+                           @Nonnull Consumer<T> dataConsumer)
+            throws IllegalStateException {
         return createReader(readerName, ReaderParams.defaultParams(), dataConsumer);
     }
 
@@ -320,13 +323,15 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
     /**
      * @param readerName
      * @param param
-     * @param log
+     * @param logger
      * @param dataConsumer
      * @return
      * @throws IllegalStateException
      */
     @AbstractFunction
-    protected abstract RT createReader(@Nonnull String readerName, @Nonnull ReaderParams param, @Nonnull Logger log,
+    protected abstract RT createReader(@Nonnull String readerName,
+                                       @Nonnull ReaderParams param,
+                                       @Nonnull Logger logger,
                                        @Nonnull Consumer<T> dataConsumer) throws IllegalStateException;
 
     /**
@@ -370,7 +375,8 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
      * @return
      * @throws IllegalStateException
      */
-    public AT acquireAppender(@Nonnull String appenderName, @CheckForNull Supplier<T> dataProducer)
+    public AT acquireAppender(@Nonnull String appenderName,
+                              @CheckForNull Supplier<T> dataProducer)
             throws IllegalStateException {
         if (isClosed())
             throw new IllegalStateException("Cannot be acquire appender, Chronicle queue is closed");
@@ -388,8 +394,10 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
      * @throws IllegalStateException
      */
     @AbstractFunction
-    protected abstract AT acquireAppender(@Nonnull String appenderName, @Nonnull Logger logger,
-                                          @CheckForNull Supplier<T> dataProducer) throws IllegalStateException;
+    protected abstract AT acquireAppender(@Nonnull String appenderName,
+                                          @Nonnull Logger logger,
+                                          @CheckForNull Supplier<T> dataProducer)
+            throws IllegalStateException;
 
     /**
      * 已分配的访问器
@@ -434,13 +442,11 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
         private Logger logger;
 
         public B saveToUserHome() {
-            rootPath(USER_HOME);
-            return self();
+            return rootPath(USER_HOME);
         }
 
         public B saveToTmpDir() {
-            rootPath(JAVA_IO_TMPDIR);
-            return self();
+            return rootPath(JAVA_IO_TMPDIR);
         }
 
         public B rootPath(@Nonnull String rootPath) {

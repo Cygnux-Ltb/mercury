@@ -129,7 +129,7 @@ public final class ChronicleSetConfigurator<E> implements Configurator {
 		private Builder(@Nonnull Class<E> elementClass, @Nonnull String rootPath, @Nonnull String folder) {
 			this.elementClass = elementClass;
 			this.rootPath = fixPath(rootPath);
-			this.folder = fixPath(rootPath);
+			this.folder = fixPath(folder);
 		}
 
 		public Builder<E> averageElement(E averageElement) {
