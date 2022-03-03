@@ -10,7 +10,6 @@ import java.lang.annotation.Target;
  * 
  * 
  * @author yellow013
- *
  */
 @Documented
 @Target({ ElementType.FIELD, ElementType.METHOD })
