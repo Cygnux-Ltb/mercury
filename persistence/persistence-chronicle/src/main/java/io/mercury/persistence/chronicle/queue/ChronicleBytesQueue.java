@@ -24,7 +24,7 @@ import net.openhft.chronicle.queue.ExcerptTailer;
 
 @Immutable
 public class ChronicleBytesQueue
-        extends AbstractChronicleQueue<ByteBuffer, ChronicleBytesReader, ChronicleBytesAppender> {
+        extends AbstractChronicleQueue<ByteBuffer, ByteBuffer, ChronicleBytesAppender, ChronicleBytesReader> {
 
     private final int bufferSize;
     private final boolean useDirectMemory;
@@ -106,7 +106,10 @@ public class ChronicleBytesQueue
     @NotThreadSafe
     public static final class ChronicleBytesAppender extends AbstractChronicleAppender<ByteBuffer> {
 
-        ChronicleBytesAppender(long allocateSeq, String appenderName, Logger logger, ExcerptAppender appender,
+        ChronicleBytesAppender(long allocateSeq,
+                               String appenderName,
+                               Logger logger,
+                               ExcerptAppender appender,
                                Supplier<ByteBuffer> dataProducer) {
             super(allocateSeq, appenderName, logger, appender, dataProducer);
         }
@@ -129,8 +132,14 @@ public class ChronicleBytesQueue
         private final int bufferSize;
         private final boolean useDirectMemory;
 
-        ChronicleBytesReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParams params,
-                             Logger logger, int bufferSize, boolean useDirectMemory, ExcerptTailer tailer,
+        ChronicleBytesReader(long allocateSeq,
+                             String readerName,
+                             FileCycle fileCycle,
+                             ReaderParams params,
+                             Logger logger,
+                             int bufferSize,
+                             boolean useDirectMemory,
+                             ExcerptTailer tailer,
                              Consumer<ByteBuffer> dataConsumer) {
             super(allocateSeq, readerName, fileCycle, params, logger, tailer, dataConsumer);
             this.bufferSize = bufferSize;

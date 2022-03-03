@@ -110,35 +110,35 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
     /**
      * @return int
      */
-    public int cycle() {
+    public int getCycle() {
         return tailer.cycle();
     }
 
     /**
      * @return long
      */
-    public long epochSecond() {
+    public long getEpochSecond() {
         return ((long) tailer.cycle()) * fileCycle.getSeconds();
     }
 
     /**
      * @return long
      */
-    public long index() {
+    public long getIndex() {
         return tailer.index();
     }
 
     /**
      * @return TailerState
      */
-    public TailerState state() {
+    public TailerState getState() {
         return tailer.state();
     }
 
     /**
      * @return String
      */
-    public String readerName() {
+    public String getReaderName() {
         return readerName;
     }
 
@@ -242,7 +242,7 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
 
     @Override
     protected void close0() {
-        // TODO NONE
+        logger.info("Reader -> {} is closed.", readerName);
     }
 
 }

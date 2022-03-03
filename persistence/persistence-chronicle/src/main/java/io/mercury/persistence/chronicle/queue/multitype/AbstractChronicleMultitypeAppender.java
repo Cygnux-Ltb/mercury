@@ -46,7 +46,7 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN>
             if (t != null) {
                 append0(envelope, t);
             } else {
-                logger.warn("appenderName -> {} : received null object, Not written to the queue.", appenderName());
+                logger.warn("Appender -> {} : received null object, Not written to the queue.", getAppenderName());
             }
         } catch (Exception e) {
             throw new ChronicleAppendException(e.getMessage(), e);
@@ -95,7 +95,7 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN>
         if (envelope != null) {
             for (; ; ) {
                 if (isClose) {
-                    logger.info("Chronicle queue is closed, {} Thread exit", appenderName());
+                    logger.info("Chronicle queue is closed, {} Thread exit", getAppenderName());
                     break;
                 } else {
                     IN t = dataProducer.get();
@@ -104,8 +104,8 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN>
                 }
             }
         } else {
-            logger.error("ChronicleMultitypeAppender -> [{}] Default envelope is null, Thread exit at {}",
-                    appenderName(), formatDateTime(YY_MM_DD_HH_MM_SS_SSS));
+            logger.error("MultitypeAppender -> [{}] Default envelope is null, Thread exit at {}",
+                    getAppenderName(), formatDateTime(YY_MM_DD_HH_MM_SS_SSS));
         }
     }
 

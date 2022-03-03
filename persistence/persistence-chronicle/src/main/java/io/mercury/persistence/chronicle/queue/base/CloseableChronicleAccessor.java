@@ -28,11 +28,6 @@ public abstract class CloseableChronicleAccessor implements net.openhft.chronicl
 		return allocateSeq;
 	}
 
-//	@Override
-//	public void notifyClosing() {
-//		// TODO 添加关闭访问器回调通知
-//	}
-
 	@Override
 	public boolean isClosed() {
 		return isClose;

@@ -43,15 +43,15 @@ public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAc
         return appender;
     }
 
-    public int cycle() {
+    public int getCycle() {
         return appender.cycle();
     }
 
-    public int sourceId() {
+    public int getSourceId() {
         return appender.sourceId();
     }
 
-    public String appenderName() {
+    public String getAppenderName() {
         return appenderName;
     }
 
@@ -97,7 +97,7 @@ public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAc
     public void run() {
         if (dataProducer != null) {
             for (; ; ) {
-                if (isClose) {
+                if (!isClose) {
                     logger.info("Chronicle queue is closed, {} Thread exit", appenderName);
                     break;
                 } else {
@@ -111,7 +111,7 @@ public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAc
     }
 
     protected void close0() {
-
+        logger.info("Appender -> {} is closed.", appenderName);
     }
 
 }

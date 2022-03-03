@@ -1,7 +1,7 @@
 package io.mercury.persistence.chronicle.queue;
 
 import static io.mercury.common.datetime.DateTimeUtil.datetimeOfSecond;
-import static io.mercury.common.number.ThreadSafeRandoms.randomUnsignedInt;
+import static io.mercury.common.file.FileUtil.mkdir;
 import static io.mercury.common.sys.SysProperties.JAVA_IO_TMPDIR;
 import static io.mercury.common.sys.SysProperties.USER_HOME;
 
@@ -21,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import io.mercury.common.file.PermissionDeniedException;
 import org.slf4j.Logger;
 
 import io.mercury.common.annotation.AbstractFunction;
@@ -38,35 +39,44 @@ import net.openhft.chronicle.queue.impl.RollingChronicleQueue;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
 
 @Immutable
-public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleReader<T>, AT extends AbstractChronicleAppender<T>>
+public abstract class AbstractChronicleQueue<
+        // 写入类型
+        IN,
+        // 读取类型
+        OUT,
+        // 添加器类型
+        AT extends AbstractChronicleAppender<IN>,
+        // 读取器类型
+        RT extends AbstractChronicleReader<OUT>>
+        // 实现特定关闭对象
         implements net.openhft.chronicle.core.io.Closeable {
 
-    private final String rootPath;
-    private final String folder;
-    private final boolean readOnly;
-    private final long epoch;
-    private final FileCycle fileCycle;
+    protected final String rootPath;
+    protected final String folder;
+    protected final boolean readOnly;
+    protected final long epoch;
+    protected final FileCycle fileCycle;
 
     // 文件清理周期
     private final int fileClearCycle;
     // 存储文件释放回调
     private final ObjIntConsumer<File> storeFileListener;
 
-    private final File savePath;
-    private final String queueName;
+    protected final File savePath;
+    protected final String queueName;
 
     protected final RollingChronicleQueue internalQueue;
 
     protected Logger logger = Log4j2LoggerFactory.getLogger(getClass());
 
-    AbstractChronicleQueue(AbstractQueueBuilder<?> builder) {
+    protected AbstractChronicleQueue(AbstractQueueBuilder<?> builder) {
         this.rootPath = builder.rootPath;
         this.folder = builder.folder;
         this.readOnly = builder.readOnly;
         this.epoch = builder.epoch;
         this.fileCycle = builder.fileCycle;
         this.fileClearCycle = builder.fileClearCycle <= 0 ? 0 :
-                Math.max(7, builder.fileClearCycle);
+                Math.max(10, builder.fileClearCycle);
         this.storeFileListener = builder.storeFileListener;
         if (builder.logger != null) {
             this.logger = builder.logger;
@@ -82,7 +92,9 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
     private RollingChronicleQueue buildChronicleQueue() {
         if (!savePath.exists()) {
             // 创建存储路径
-            savePath.mkdirs();
+            boolean succeeded = mkdir(savePath);
+            if (!succeeded)
+                throw new PermissionDeniedException(savePath);
         }
         final SingleChronicleQueueBuilder builder = SingleChronicleQueueBuilder.single(savePath)
                 // 文件滚动周期
@@ -105,19 +117,17 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
      * 关闭
      */
     private void shutdownHandle() {
-        // System.out.println("ChronicleQueue ShutdownHook of " + name + " start");
         logger.info("ChronicleQueue [{}] shutdown hook started", queueName);
         try {
             close();
         } catch (Exception e) {
             logger.error("ChronicleQueue [{}] shutdown hook throw exception: {}", queueName, e.getMessage(), e);
         }
-        // System.out.println("ChronicleQueue ShutdownHook of " + name + " finished");
         logger.info("ChronicleQueue [{}] shutdown hook finished", queueName);
     }
 
     /**
-     * ******************************* 文件清理程序 START ********************************
+     * ******************************* 文件清理 START ********************************
      */
     // 最后文件周期
     private AtomicInteger lastCycle;
@@ -207,19 +217,19 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
         }
     }
 
-    public String queueName() {
+    public String getQueueName() {
         return queueName;
     }
 
-    public String rootPath() {
+    public String getRootPath() {
         return rootPath;
     }
 
-    public String folder() {
+    public String getFolder() {
         return folder;
     }
 
-    public File savePath() {
+    public File getSavePath() {
         return savePath;
     }
 
@@ -227,7 +237,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
         return fileCycle;
     }
 
-    public RollingChronicleQueue internalQueue() {
+    public RollingChronicleQueue getInternalQueue() {
         return internalQueue;
     }
 
@@ -253,18 +263,27 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
         }
     }
 
-    private String generateReaderName() {
-        return queueName + "-reader-" + randomUnsignedInt();
+    /**
+     * Reader counter
+     */
+    private final AtomicInteger readerCounter = new AtomicInteger(0);
+
+    public int getReaderCount() {
+        return readerCounter.get();
     }
 
-    private static final String EMPTY_CONSUMER_MSG = "Reader consumer is an empty implementation.";
+    private String generateReaderName() {
+        return queueName + "-reader-" + readerCounter.getAndIncrement();
+    }
+
+    private static final String EMPTY_CONSUMER_MSG = "Reader consumer is an empty implementation";
 
     /**
      * @return
      * @throws IllegalStateException
      */
     public RT createReader() throws IllegalStateException {
-        return createReader(generateReaderName(), ReaderParams.defaultParams(), t -> logger.info(EMPTY_CONSUMER_MSG));
+        return createReader(generateReaderName(), ReaderParams.defaultParams(), out -> logger.info(EMPTY_CONSUMER_MSG));
     }
 
     /**
@@ -272,7 +291,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
      * @return
      * @throws IllegalStateException
      */
-    public RT createReader(@Nonnull Consumer<T> dataConsumer)
+    public RT createReader(@Nonnull Consumer<OUT> dataConsumer)
             throws IllegalStateException {
         return createReader(generateReaderName(), ReaderParams.defaultParams(), dataConsumer);
     }
@@ -284,7 +303,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
      * @throws IllegalStateException
      */
     public RT createReader(@Nonnull String readerName,
-                           @Nonnull Consumer<T> dataConsumer)
+                           @Nonnull Consumer<OUT> dataConsumer)
             throws IllegalStateException {
         return createReader(readerName, ReaderParams.defaultParams(), dataConsumer);
     }
@@ -295,7 +314,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
      * @return
      * @throws IllegalStateException
      */
-    public RT createReader(@Nonnull ReaderParams param, @Nonnull Consumer<T> dataConsumer)
+    public RT createReader(@Nonnull ReaderParams param, @Nonnull Consumer<OUT> dataConsumer)
             throws IllegalStateException {
         return createReader(generateReaderName(), param, dataConsumer);
     }
@@ -307,7 +326,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
      * @return
      * @throws IllegalStateException
      */
-    public RT createReader(@Nonnull String readerName, @Nonnull ReaderParams param, @Nonnull Consumer<T> dataConsumer)
+    public RT createReader(@Nonnull String readerName, @Nonnull ReaderParams param, @Nonnull Consumer<OUT> dataConsumer)
             throws IllegalStateException {
         if (isClosed()) {
             throw new IllegalStateException("Cannot be create reader, Chronicle queue is closed");
@@ -332,13 +351,22 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
     protected abstract RT createReader(@Nonnull String readerName,
                                        @Nonnull ReaderParams param,
                                        @Nonnull Logger logger,
-                                       @Nonnull Consumer<T> dataConsumer) throws IllegalStateException;
+                                       @Nonnull Consumer<OUT> dataConsumer) throws IllegalStateException;
+
+    /**
+     * Appender counter
+     */
+    private final AtomicInteger appenderCounter = new AtomicInteger(0);
+
+    public int getAppenderCount() {
+        return appenderCounter.get();
+    }
 
     /**
      * @return
      */
     private String generateAppenderName() {
-        return queueName + "-appender-" + randomUnsignedInt();
+        return queueName + "-appender-" + appenderCounter.getAndIncrement();
     }
 
     /**
@@ -364,7 +392,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
      * @return
      * @throws IllegalStateException
      */
-    public AT acquireAppender(@Nonnull Supplier<T> dataProducer) throws IllegalStateException {
+    public AT acquireAppender(@Nonnull Supplier<IN> dataProducer) throws IllegalStateException {
         Assertor.nonNull(dataProducer, "dataProducer");
         return acquireAppender(generateAppenderName(), dataProducer);
     }
@@ -376,7 +404,7 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
      * @throws IllegalStateException
      */
     public AT acquireAppender(@Nonnull String appenderName,
-                              @CheckForNull Supplier<T> dataProducer)
+                              @CheckForNull Supplier<IN> dataProducer)
             throws IllegalStateException {
         if (isClosed())
             throw new IllegalStateException("Cannot be acquire appender, Chronicle queue is closed");
@@ -396,13 +424,13 @@ public abstract class AbstractChronicleQueue<T, RT extends AbstractChronicleRead
     @AbstractFunction
     protected abstract AT acquireAppender(@Nonnull String appenderName,
                                           @Nonnull Logger logger,
-                                          @CheckForNull Supplier<T> dataProducer)
+                                          @CheckForNull Supplier<IN> dataProducer)
             throws IllegalStateException;
 
     /**
      * 已分配的访问器
      */
-    private ConcurrentMap<Long, CloseableChronicleAccessor> allocatedAccessor = MutableMaps.newConcurrentHashMap();
+    private final ConcurrentMap<Long, CloseableChronicleAccessor> allocatedAccessor = MutableMaps.newConcurrentHashMap();
 
     /**
      * 添加访问器

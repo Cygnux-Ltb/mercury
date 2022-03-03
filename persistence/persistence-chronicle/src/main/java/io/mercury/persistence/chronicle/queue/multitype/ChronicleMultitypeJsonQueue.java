@@ -24,14 +24,24 @@ import net.openhft.chronicle.queue.ExcerptTailer;
 
 @Immutable
 public class ChronicleMultitypeJsonQueue<E extends Envelope> extends
-        AbstractChronicleMultitypeQueue<E, String, JsonMsg, ChronicleMultitypeJsonAppender<E>, ChronicleMultitypeJsonReader> {
+        AbstractChronicleMultitypeQueue<
+                // 信封类型
+                E,
+                // 写入类型
+                String,
+                // 读取类型
+                JsonMsg,
+                // 追加器类型
+                ChronicleMultitypeJsonAppender<E>,
+                // 读取器类型
+                ChronicleMultitypeJsonReader> {
 
-    private ChronicleMultitypeJsonQueue(Builder<E> builder) {
+    private ChronicleMultitypeJsonQueue(MultitypeJsonQueueBuilder<E> builder) {
         super(builder);
     }
 
-    public static <E extends Envelope> Builder<E> newBuilder(Class<E> envelopeType) {
-        return new Builder<>();
+    public static <E extends Envelope> MultitypeJsonQueueBuilder<E> newBuilder() {
+        return new MultitypeJsonQueueBuilder<>();
     }
 
     @Override
@@ -56,9 +66,9 @@ public class ChronicleMultitypeJsonQueue<E extends Envelope> extends
     /**
      * @author yellow013
      */
-    public static final class Builder<E extends Envelope> extends QueueBuilder<Builder<E>> {
+    public static final class MultitypeJsonQueueBuilder<E extends Envelope> extends AbstractQueueBuilder<MultitypeJsonQueueBuilder<E>> {
 
-        private Builder() {
+        private MultitypeJsonQueueBuilder() {
         }
 
         public ChronicleMultitypeJsonQueue<E> build() {
@@ -66,7 +76,7 @@ public class ChronicleMultitypeJsonQueue<E extends Envelope> extends
         }
 
         @Override
-        protected Builder<E> self() {
+        protected MultitypeJsonQueueBuilder<E> self() {
             return this;
         }
 
@@ -108,8 +118,13 @@ public class ChronicleMultitypeJsonQueue<E extends Envelope> extends
     @NotThreadSafe
     public static final class ChronicleMultitypeJsonReader extends AbstractChronicleReader<JsonMsg> {
 
-        ChronicleMultitypeJsonReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParams params,
-                                     Logger logger, ExcerptTailer tailer, Consumer<JsonMsg> dataConsumer) {
+        ChronicleMultitypeJsonReader(long allocateSeq,
+                                     String readerName,
+                                     FileCycle fileCycle,
+                                     ReaderParams params,
+                                     Logger logger,
+                                     ExcerptTailer tailer,
+                                     Consumer<JsonMsg> dataConsumer) {
             super(allocateSeq, readerName, fileCycle, params, logger, tailer, dataConsumer);
         }
 

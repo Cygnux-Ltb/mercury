@@ -21,7 +21,7 @@ import net.openhft.chronicle.wire.Marshallable;
 
 @Immutable
 public class ChronicleDocumentQueue<T extends Marshallable>
-        extends AbstractChronicleQueue<T, ChronicleDocumentReader<T>, ChronicleDocumentAppender<T>> {
+        extends AbstractChronicleQueue<T, T, ChronicleDocumentAppender<T>, ChronicleDocumentReader<T>> {
 
     private final Supplier<T> marshallableSupplier;
 
@@ -85,7 +85,10 @@ public class ChronicleDocumentQueue<T extends Marshallable>
     @NotThreadSafe
     public static final class ChronicleDocumentAppender<T extends Marshallable> extends AbstractChronicleAppender<T> {
 
-        ChronicleDocumentAppender(long allocateSeq, String appenderName, Logger logger, ExcerptAppender appender,
+        ChronicleDocumentAppender(long allocateSeq,
+                                  String appenderName,
+                                  Logger logger,
+                                  ExcerptAppender appender,
                                   Supplier<T> dataProducer) {
             super(allocateSeq, appenderName, logger, appender, dataProducer);
         }
@@ -103,8 +106,14 @@ public class ChronicleDocumentQueue<T extends Marshallable>
 
         private final Supplier<T> marshallableSupplier;
 
-        ChronicleDocumentReader(long allocateSeq, String readerName, FileCycle fileCycle, ReaderParams param,
-                                Logger logger, ExcerptTailer tailer, Consumer<T> dataConsumer, Supplier<T> marshallableSupplier) {
+        ChronicleDocumentReader(long allocateSeq,
+                                String readerName,
+                                FileCycle fileCycle,
+                                ReaderParams param,
+                                Logger logger,
+                                ExcerptTailer tailer,
+                                Consumer<T> dataConsumer,
+                                Supplier<T> marshallableSupplier) {
             super(allocateSeq, readerName, fileCycle, param, logger, tailer, dataConsumer);
             this.marshallableSupplier = marshallableSupplier;
         }

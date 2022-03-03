@@ -17,7 +17,7 @@ import javax.annotation.concurrent.Immutable;
  * @author yellow013
  */
 @Immutable
-public abstract class AbstractChronicleMultitypeQueue2<
+public abstract class AbstractChronicleMultitypeQueue<
         // 信封类型
         E extends Envelope,
         // 写入类型
@@ -30,9 +30,7 @@ public abstract class AbstractChronicleMultitypeQueue2<
         RT extends AbstractChronicleReader<OUT>>
         extends AbstractChronicleQueue<IN, OUT, AT, RT> {
 
-    protected Logger logger = Log4j2LoggerFactory.getLogger(getClass());
-
-    protected AbstractChronicleMultitypeQueue2(AbstractQueueBuilder<?> builder) {
+    protected AbstractChronicleMultitypeQueue(AbstractQueueBuilder<?> builder) {
         super(builder);
     }
 
