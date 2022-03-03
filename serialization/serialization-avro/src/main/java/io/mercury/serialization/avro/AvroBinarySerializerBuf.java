@@ -12,7 +12,7 @@ import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
 
 import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.common.serialization.ByteBufferSerializer;
+import io.mercury.common.serialization.specific.ByteBufferSerializer;
 
 @ThreadSafe
 public final class AvroBinarySerializerBuf<T extends SpecificRecord> implements ByteBufferSerializer<T> {

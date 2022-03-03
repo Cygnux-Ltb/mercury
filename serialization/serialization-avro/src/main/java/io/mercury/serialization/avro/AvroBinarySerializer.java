@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 
 import io.mercury.common.annotation.thread.ThreadSafeVariable;
 import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.common.serialization.ByteBufferSerializer;
+import io.mercury.common.serialization.specific.ByteBufferSerializer;
 
 @NotThreadSafe
 public final class AvroBinarySerializer<T extends SpecificRecord> implements ByteBufferSerializer<T> {

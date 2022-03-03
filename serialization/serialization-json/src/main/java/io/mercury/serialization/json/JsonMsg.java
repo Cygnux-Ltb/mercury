@@ -3,7 +3,7 @@ package io.mercury.serialization.json;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import io.mercury.common.serialization.JsonSerializable;
+import io.mercury.common.serialization.specific.JsonSerializable;
 
 public final class JsonMsg implements JsonSerializable {
 

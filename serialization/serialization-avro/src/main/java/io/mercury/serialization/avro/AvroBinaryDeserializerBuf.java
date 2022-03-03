@@ -12,7 +12,7 @@ import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
 
 import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.common.serialization.BytesDeserializer;
+import io.mercury.common.serialization.specific.BytesDeserializer;
 
 /**
  * 

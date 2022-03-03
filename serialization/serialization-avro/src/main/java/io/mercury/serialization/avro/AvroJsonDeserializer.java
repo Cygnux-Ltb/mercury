@@ -14,7 +14,7 @@ import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
 
 import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.common.serialization.JsonDeserializer;
+import io.mercury.common.serialization.specific.JsonDeserializer;
 
 @NotThreadSafe
 public final class AvroJsonDeserializer<T extends SpecificRecord> implements JsonDeserializer<T> {
