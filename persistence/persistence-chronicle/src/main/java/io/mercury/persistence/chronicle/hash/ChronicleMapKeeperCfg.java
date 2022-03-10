@@ -1,20 +1,19 @@
 package io.mercury.persistence.chronicle.hash;
 
-import static io.mercury.common.util.StringSupport.fixPath;
-
-import java.io.File;
-
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.config.Configurator;
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.lang.Assertor;
 import io.mercury.common.sys.SysProperties;
 
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
+import java.io.File;
+
+import static io.mercury.common.util.StringSupport.fixPath;
+
 @Immutable
-public final class ChronicleMapConfigurator<K, V> implements Configurator {
+public final class ChronicleMapKeeperCfg<K, V> implements Configurator {
 
     private final Class<K> keyClass;
     private final Class<V> valueClass;
@@ -93,7 +92,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
     // extended use
     private Builder<K, V> builder;
 
-    private ChronicleMapConfigurator(Builder<K, V> builder) {
+    private ChronicleMapKeeperCfg(Builder<K, V> builder) {
         this.builder = builder;
         this.keyClass = builder.keyClass;
         this.valueClass = builder.valueClass;
@@ -108,7 +107,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
         this.rootPath = builder.rootPath;
         this.folder = builder.folder;
         this.savePath = new File(rootPath + FixedFolder + folder);
-        this.cfgInfo = "[SaveTo->" + savePath.getAbsolutePath() + "]:[KeyType==" + keyClass.getSimpleName()
+        this.cfgInfo = "[SavedFile->" + savePath.getAbsolutePath() + "]:[KeyType==" + keyClass.getSimpleName()
                 + ",ValueType==" + valueClass.getSimpleName() + "]";
     }
 
@@ -179,7 +178,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
      * @return
      * @throws NullPointerException
      */
-    public static <K, V> Builder<K, V> reset(@Nonnull ChronicleMapConfigurator<K, V> original)
+    public static <K, V> Builder<K, V> reset(@Nonnull ChronicleMapKeeperCfg<K, V> original)
             throws NullPointerException {
         Assertor.nonNull(original, "original");
         return original.builder;
@@ -304,14 +303,14 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
         /**
          * @return
          */
-        public ChronicleMapConfigurator<K, V> build() {
-            return new ChronicleMapConfigurator<>(this);
+        public ChronicleMapKeeperCfg<K, V> build() {
+            return new ChronicleMapKeeperCfg<>(this);
         }
     }
 
     public static void main(String[] args) {
 
-        ChronicleMapConfigurator<String, Long> configurator = ChronicleMapConfigurator
+        ChronicleMapKeeperCfg<String, Long> configurator = ChronicleMapKeeperCfg
                 .newBuilder(String.class, Long.class, SysProperties.USER_HOME, "/user").build();
 
         System.out.println(configurator.getConfigInfo());
