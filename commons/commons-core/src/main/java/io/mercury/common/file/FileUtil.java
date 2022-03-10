@@ -29,12 +29,16 @@ public final class FileUtil {
         // do nothing
     }
 
-    public static boolean mkdir(File file) {
+    public static boolean mkdir(File file) throws PermissionDeniedException {
         Assertor.nonNull(file, "file");
-        if (file.isDirectory())
-            return file.mkdirs();
-        else
-            return file.getParentFile().mkdirs();
+        try {
+            if (file.isDirectory())
+                return file.mkdirs();
+            else
+                return file.getParentFile().mkdirs();
+        } catch (Exception e) {
+            throw new PermissionDeniedException(file);
+        }
     }
 
     /**
@@ -109,12 +113,10 @@ public final class FileUtil {
 
     private static boolean equals(InputStream is0, InputStream is1) throws IOException {
         int size = 1024;
-        byte buf0[] = new byte[size];
-        byte buf1[] = new byte[size];
+        byte[] buf0 = new byte[size];
+        byte[] buf1 = new byte[size];
 
         if (is0 == is1)
-            return true;
-        if (is0 == null && is1 == null)
             return true;
         if (is0 == null || is1 == null)
             return false;

@@ -3,6 +3,7 @@ package io.mercury.common.collections.keeper;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
+import java.io.Closeable;
 
 /**
  * 
@@ -12,7 +13,7 @@ import javax.annotation.concurrent.ThreadSafe;
  * @param <V>
  */
 @ThreadSafe
-public interface Keeper<K, V> {
+public interface Keeper<K, V> extends Closeable {
 
 	@Nonnull
 	V acquire(@Nonnull K k);
