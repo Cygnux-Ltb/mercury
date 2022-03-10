@@ -5,7 +5,7 @@ package net.openhft.chronicle.queue.simple.translator;
  */
 public class SimpleTranslator implements MessageConsumer {
 	
-    private MessageConsumer out;
+    private final MessageConsumer out;
 
     public SimpleTranslator(MessageConsumer out) {
         this.out = out;

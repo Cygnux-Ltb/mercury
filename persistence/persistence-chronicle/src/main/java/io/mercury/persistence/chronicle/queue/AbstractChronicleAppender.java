@@ -13,16 +13,12 @@ import org.slf4j.Logger;
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.serialization.basic.Serializer;
 import io.mercury.persistence.chronicle.exception.ChronicleAppendException;
-import io.mercury.persistence.chronicle.queue.base.CloseableChronicleAccessor;
 import net.openhft.chronicle.queue.ExcerptAppender;
 
 @Immutable
 @NotThreadSafe
 public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAccessor implements Runnable {
 
-    private final String appenderName;
-
-    protected final Logger logger;
     protected final ExcerptAppender appender;
 
     protected final Supplier<IN> dataProducer;
@@ -32,9 +28,7 @@ public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAc
                                         Logger logger,
                                         ExcerptAppender appender,
                                         Supplier<IN> dataProducer) {
-        super(allocateSeq);
-        this.appenderName = appenderName;
-        this.logger = logger;
+        super(allocateSeq, appenderName, logger);
         this.appender = appender;
         this.dataProducer = dataProducer;
     }
@@ -52,7 +46,7 @@ public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAc
     }
 
     public String getAppenderName() {
-        return appenderName;
+        return accessorName;
     }
 
     /**
@@ -82,7 +76,7 @@ public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAc
             if (in != null) {
                 append0(in);
             } else {
-                logger.warn("ChronicleAppender -> [{}] : received null object, Not written to the queue", appenderName);
+                logger.warn("ChronicleAppender -> [{}] : received null object, Not written to the queue", getAppenderName());
             }
         } catch (Exception e) {
             throw new ChronicleAppendException(e.getMessage(), e);
@@ -98,7 +92,7 @@ public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAc
         if (dataProducer != null) {
             for (; ; ) {
                 if (!isClose) {
-                    logger.info("Chronicle queue is closed, {} Thread exit", appenderName);
+                    logger.info("Chronicle queue is closed, {} Thread exit", getAppenderName());
                     break;
                 } else {
                     IN in = dataProducer.get();
@@ -111,7 +105,7 @@ public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAc
     }
 
     protected void close0() {
-        logger.info("Appender -> {} is closed.", appenderName);
+        logger.info("Appender -> {} is closed.", getAppenderName());
     }
 
 }

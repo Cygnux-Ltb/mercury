@@ -90,7 +90,7 @@ public final class ChronicleMapKeeperCfg<K, V> implements Configurator {
     }
 
     // extended use
-    private Builder<K, V> builder;
+    private final Builder<K, V> builder;
 
     private ChronicleMapKeeperCfg(Builder<K, V> builder) {
         this.builder = builder;
@@ -106,12 +106,10 @@ public final class ChronicleMapKeeperCfg<K, V> implements Configurator {
         this.actualChunkSize = builder.actualChunkSize;
         this.rootPath = builder.rootPath;
         this.folder = builder.folder;
-        this.savePath = new File(rootPath + FixedFolder + folder);
-        this.cfgInfo = "[SavedFile->" + savePath.getAbsolutePath() + "]:[KeyType==" + keyClass.getSimpleName()
-                + ",ValueType==" + valueClass.getSimpleName() + "]";
+        this.savePath = new File(rootPath + "chronicle-map/" + folder);
+        this.cfgInfo = "[SavedFile==" + savePath.getAbsolutePath() + "]:" +
+                ":[KeyType==" + keyClass.getSimpleName() + ",ValueType==" + valueClass.getSimpleName() + "]";
     }
-
-    private static final String FixedFolder = "chronicle-map/";
 
     /**
      * @param <K>
@@ -124,10 +122,8 @@ public final class ChronicleMapKeeperCfg<K, V> implements Configurator {
     public static <K, V> Builder<K, V> newBuilder(@Nonnull Class<K> keyClass,
                                                   @Nonnull Class<V> valueClass)
             throws NullPointerException {
-        Assertor.nonNull(keyClass, "keyClass");
-        Assertor.nonNull(valueClass, "valueClass");
-        return new Builder<>(keyClass, valueClass, SysProperties.JAVA_IO_TMPDIR,
-                "auto-create-" + DateTimeUtil.datetimeOfSecond());
+        return newBuilder(keyClass, valueClass, SysProperties.JAVA_IO_TMPDIR,
+                "auto-create-folder-" + DateTimeUtil.datetimeOfSecond());
     }
 
     /**
@@ -143,10 +139,7 @@ public final class ChronicleMapKeeperCfg<K, V> implements Configurator {
                                                   @Nonnull Class<V> valueClass,
                                                   @Nonnull String folder)
             throws NullPointerException {
-        Assertor.nonNull(keyClass, "keyClass");
-        Assertor.nonNull(valueClass, "valueClass");
-        Assertor.nonNull(folder, "folder");
-        return new Builder<>(keyClass, valueClass, SysProperties.JAVA_IO_TMPDIR, folder);
+        return newBuilder(keyClass, valueClass, SysProperties.JAVA_IO_TMPDIR, folder);
     }
 
     /**
@@ -209,7 +202,7 @@ public final class ChronicleMapKeeperCfg<K, V> implements Configurator {
         private boolean recover = false;
         private boolean persistent = true;
 
-        private long entries = 65536;
+        private long entries = 4096;
         private int actualChunkSize;
 
         private Builder(@Nonnull Class<K> keyClass,

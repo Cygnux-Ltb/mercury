@@ -26,12 +26,12 @@ public class ChronicleMapKeeperOfLRU<K, V> extends ChronicleMapKeeper<K, V> {
 	// 存储路径
 	private final File savePath;
 
-	public ChronicleMapKeeperOfLRU(@Nonnull ChronicleMapConfigurator<K, V> cfg, @Nonnull Duration expire) {
+	public ChronicleMapKeeperOfLRU(@Nonnull ChronicleMapKeeperCfg<K, V> cfg, @Nonnull Duration expire) {
 		this(cfg, expire, 65536);
 	}
 
-	public ChronicleMapKeeperOfLRU(@Nonnull ChronicleMapConfigurator<K, V> cfg, @Nonnull Duration expire,
-			int fileTotal) {
+	public ChronicleMapKeeperOfLRU(@Nonnull ChronicleMapKeeperCfg<K, V> cfg, @Nonnull Duration expire,
+								   int fileTotal) {
 		super(cfg);
 		final long millis = expire.toMillis();
 		// 定义最小过期时间为两小时

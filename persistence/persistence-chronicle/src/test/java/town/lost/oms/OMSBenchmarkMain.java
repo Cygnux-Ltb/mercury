@@ -91,7 +91,7 @@ public class OMSBenchmarkMain {
 
 			// processing thread
 			Thread processor = new Thread(() -> {
-				try (AffinityLock lock = AffinityLock.acquireCore()) {
+				try (AffinityLock ignored = AffinityLock.acquireCore()) {
 					OMSOut out = output.acquireAppender().methodWriter(OMSOut.class);
 					OMSImpl oms = new OMSImpl(out);
 					MethodReader in = input.createTailer("test").methodReader(oms);
@@ -128,9 +128,9 @@ public class OMSBenchmarkMain {
 
 	private static class MyJLBHTask implements JLBHTask {
 		private JLBH jlbh;
-		private NewOrderSingle nos;
-		private ExcerptTailer tailer;
-		private OMSIn in;
+		private final NewOrderSingle nos;
+		private final ExcerptTailer tailer;
+		private final OMSIn in;
 
 		public MyJLBHTask(ChronicleQueue input) {
 			nos = new NewOrderSingle().sender(BASE85.parse("client")).target(BASE85.parse("OMS")).clOrdID("clOrdId")

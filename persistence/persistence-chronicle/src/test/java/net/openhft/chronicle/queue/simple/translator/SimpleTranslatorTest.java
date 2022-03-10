@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class SimpleTranslatorTest {
     @Test
-    public void onMessage() throws Exception {
+    public void onMessage() {
         StringBuilder sb = new StringBuilder();
 
         SimpleTranslator trans = new SimpleTranslator(m -> sb.append(m).append(","));
@@ -25,9 +25,8 @@ public class SimpleTranslatorTest {
     }
 
     @Test
-    public void onMessage2() throws Exception {
+    public void onMessage2() {
         StringBuilder sb = new StringBuilder();
-
         SimpleTranslator trans = new SimpleTranslator(sb::append);
 
         doTest(trans, sb, "hello apple", "salut pomme");
@@ -36,9 +35,7 @@ public class SimpleTranslatorTest {
 
     private void doTest(SimpleTranslator trans, StringBuilder sb, String in, String out) {
         sb.setLength(0);
-
         trans.onMessage(in);
-
         assertEquals(out, sb.toString());
     }
 }

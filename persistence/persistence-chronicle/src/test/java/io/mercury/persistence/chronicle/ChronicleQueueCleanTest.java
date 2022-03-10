@@ -21,7 +21,7 @@ public class ChronicleQueueCleanTest {
 				.fileCycle(FileCycle.MINUTELY).build();
 
 		ChronicleStringAppender appender = persistence.acquireAppender();
-		ChronicleStringReader reader = persistence.createReader(text -> System.out.println(text));
+		ChronicleStringReader reader = persistence.createReader(System.out::println);
 
 		// boolean moved = reader.moveTo(LocalDateTime.now().minusMinutes(20),
 		// TimeZones.SYSTEM_DEFAULT);

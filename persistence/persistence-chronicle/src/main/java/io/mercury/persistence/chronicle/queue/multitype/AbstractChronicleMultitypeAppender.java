@@ -21,8 +21,8 @@ import net.openhft.chronicle.queue.ExcerptAppender;
 
 @Immutable
 @NotThreadSafe
-public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN> extends AbstractChronicleAppender<IN>
-        implements Runnable {
+public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN>
+        extends AbstractChronicleAppender<IN> implements Runnable {
 
     protected AbstractChronicleMultitypeAppender(long allocateSeq,
                                                  String appenderName,

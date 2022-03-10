@@ -1,16 +1,16 @@
 package io.mercury.persistence.chronicle;
 
-import java.io.IOException;
-
-import org.junit.Ignore;
-import org.junit.Test;
-
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.sys.SysProperties;
 import io.mercury.common.thread.SleepSupport;
-import io.mercury.persistence.chronicle.hash.ChronicleMapConfigurator;
+import io.mercury.persistence.chronicle.hash.ChronicleMapKeeper;
+import io.mercury.persistence.chronicle.hash.ChronicleMapKeeperCfg;
 import io.mercury.persistence.chronicle.hash.ChronicleMapKeeperOfDate;
 import net.openhft.chronicle.map.ChronicleMap;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import java.io.IOException;
 
 public class ChronicleMapTest {
 
@@ -18,7 +18,7 @@ public class ChronicleMapTest {
 	@Test
 	public void test0() {
 
-		ChronicleMapConfigurator<String, byte[]> options = ChronicleMapConfigurator
+		ChronicleMapKeeperCfg<String, byte[]> options = ChronicleMapKeeperCfg
 				.newBuilder(String.class, byte[].class, SysProperties.USER_HOME, "test")
 				.entries(Capacity.L16_SIZE).averageKey(new String(new byte[32])).averageValue(new byte[128])
 				.build();

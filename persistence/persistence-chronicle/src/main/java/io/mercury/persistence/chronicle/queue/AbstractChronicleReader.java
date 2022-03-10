@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.datetime.TimeConst;
 import io.mercury.persistence.chronicle.exception.ChronicleReadException;
-import io.mercury.persistence.chronicle.queue.base.CloseableChronicleAccessor;
 import io.mercury.persistence.chronicle.queue.params.ReaderParams;
 import net.openhft.chronicle.queue.ExcerptTailer;
 import net.openhft.chronicle.queue.TailerState;
@@ -32,12 +31,10 @@ import net.openhft.chronicle.queue.TailerState;
 @NotThreadSafe
 public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAccessor implements Runnable {
 
-    private final String readerName;
-    private final FileCycle fileCycle;
+    protected final FileCycle fileCycle;
 
     protected final ReaderParams params;
 
-    protected final Logger logger;
     protected final ExcerptTailer tailer;
 
     protected final Consumer<OUT> dataConsumer;
@@ -58,11 +55,9 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
                                       Logger logger,
                                       ExcerptTailer tailer,
                                       Consumer<OUT> dataConsumer) {
-        super(allocateSeq);
-        this.readerName = readerName;
+        super(allocateSeq, readerName, logger);
         this.fileCycle = fileCycle;
         this.params = params;
-        this.logger = logger;
         this.tailer = tailer;
         this.dataConsumer = dataConsumer;
     }
@@ -139,14 +134,14 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
      * @return String
      */
     public String getReaderName() {
-        return readerName;
+        return accessorName;
     }
 
     /**
      * @return Thread
      */
     public Thread runWithNewThread() {
-        return runWithNewThread(readerName);
+        return runWithNewThread(accessorName);
     }
 
     /**
@@ -184,7 +179,7 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
 
     @Override
     public void run() {
-        logger.info("ChronicleReader -> [{}] is running at [{}]", readerName, formatDateTime(YY_MM_DD_HH_MM_SS_SSS));
+        logger.info("ChronicleReader -> [{}] is running at [{}]", getReaderName(), formatDateTime(YY_MM_DD_HH_MM_SS_SSS));
         if (params.getDelayReadTime() > 0)
             sleep(params.getDelayReadUnit(), params.getDelayReadTime());
         boolean waitingData = params.isWaitingData();
@@ -193,7 +188,7 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
         long readIntervalTime = params.getReadIntervalTime();
         for (; ; ) {
             if (isClose) {
-                logger.info("ChronicleReader -> [{}] is closed, execute exit function at [{}]", readerName,
+                logger.info("ChronicleReader -> [{}] is closed, execute exit function at [{}]", getReaderName(),
                         formatDateTime(YY_MM_DD_HH_MM_SS_SSS));
                 exit();
                 break;
@@ -203,7 +198,7 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
                 next = next();
             } catch (ChronicleReadException e) {
                 if (params.isReadFailLogging())
-                    logger.error("ChronicleReader -> [{}] call next throw exception: [{}] at [{}]", readerName,
+                    logger.error("ChronicleReader -> [{}] call next throw exception: [{}] at [{}]", getReaderName(),
                             e.getMessage(), formatDateTime(YY_MM_DD_HH_MM_SS_SSS), e);
                 if (params.isReadFailCrash())
                     throw e;
@@ -231,18 +226,18 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
         if (exitTask != null) {
             if (params.isAsyncExit())
                 // 异步执行退出函数
-                startNewThread(readerName + "-exit", exitTask);
+                startNewThread(getReaderName() + "-exit", exitTask);
             else
                 // 同步执行退出函数
                 exitTask.run();
 
         }
-        logger.info("ChronicleReader -> [{}] running exit at {}", readerName, formatDateTime(YY_MM_DD_HH_MM_SS_SSS));
+        logger.info("ChronicleReader -> [{}] running exit at {}", getReaderName(), formatDateTime(YY_MM_DD_HH_MM_SS_SSS));
     }
 
     @Override
     protected void close0() {
-        logger.info("Reader -> {} is closed.", readerName);
+        logger.info("Reader -> {} is closed.", getReaderName());
     }
 
 }

@@ -1,39 +1,44 @@
-package io.mercury.persistence.chronicle.queue.base;
+package io.mercury.persistence.chronicle.queue;
 
 import io.mercury.common.annotation.AbstractFunction;
+import org.slf4j.Logger;
 
 /**
  * 通用访问器抽象类
- * 
- * @author yellow013
  *
+ * @author yellow013
  */
 public abstract class CloseableChronicleAccessor implements net.openhft.chronicle.core.io.Closeable {
 
-	protected volatile boolean isClose = false;
+    protected volatile boolean isClose = false;
 
-	private final long allocateSeq;
+    private final long allocateSeq;
 
-	protected CloseableChronicleAccessor(long allocateSeq) {
-		this.allocateSeq = allocateSeq;
-	}
+    protected final String accessorName;
+    protected final Logger logger;
 
-	@Override
-	public void close() {
-		this.isClose = true;
-		close0();
-	}
+    protected CloseableChronicleAccessor(long allocateSeq, String accessorName, Logger logger) {
+        this.allocateSeq = allocateSeq;
+        this.accessorName = accessorName;
+        this.logger = logger;
+    }
 
-	public long getAllocateSeq() {
-		return allocateSeq;
-	}
+    @Override
+    public void close() {
+        this.isClose = true;
+        close0();
+    }
 
-	@Override
-	public boolean isClosed() {
-		return isClose;
-	}
+    public long getAllocateSeq() {
+        return allocateSeq;
+    }
 
-	@AbstractFunction
-	protected abstract void close0();
+    @Override
+    public boolean isClosed() {
+        return isClose;
+    }
+
+    @AbstractFunction
+    protected abstract void close0();
 
 }

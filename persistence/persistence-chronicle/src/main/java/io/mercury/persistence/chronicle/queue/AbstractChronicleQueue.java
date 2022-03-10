@@ -33,7 +33,6 @@ import io.mercury.common.thread.ShutdownHooks;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.ThreadSupport;
 import io.mercury.common.util.StringSupport;
-import io.mercury.persistence.chronicle.queue.base.CloseableChronicleAccessor;
 import io.mercury.persistence.chronicle.queue.params.ReaderParams;
 import net.openhft.chronicle.queue.impl.RollingChronicleQueue;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
