@@ -51,7 +51,7 @@ public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 	 */
 	public static <E> RmqBuffer<E> newQueue(RmqConnection connection, String queueName,
 											BytesSerializer<E> serializer, BytesDeserializer<E> deserializer) throws DeclareException {
-		return new RmqBuffer<>(connection, queueName, MutableLists.emptyFastList(), MutableLists.emptyFastList(),
+		return new RmqBuffer<>(connection, queueName, MutableLists.newFastList(), MutableLists.newFastList(),
 				serializer, deserializer);
 	}
 
