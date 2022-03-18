@@ -3,8 +3,7 @@ package io.mercury.persistence.chronicle;
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.sys.SysProperties;
 import io.mercury.common.thread.SleepSupport;
-import io.mercury.persistence.chronicle.hash.ChronicleMapKeeper;
-import io.mercury.persistence.chronicle.hash.ChronicleMapKeeperCfg;
+import io.mercury.persistence.chronicle.hash.ChronicleMapConfigurator;
 import io.mercury.persistence.chronicle.hash.ChronicleMapKeeperOfDate;
 import net.openhft.chronicle.map.ChronicleMap;
 import org.junit.Ignore;
@@ -18,7 +17,7 @@ public class ChronicleMapTest {
 	@Test
 	public void test0() {
 
-		ChronicleMapKeeperCfg<String, byte[]> options = ChronicleMapKeeperCfg
+		ChronicleMapConfigurator<String, byte[]> options = ChronicleMapConfigurator
 				.newBuilder(String.class, byte[].class, SysProperties.USER_HOME, "test")
 				.entries(Capacity.L16_SIZE).averageKey(new String(new byte[32])).averageValue(new byte[128])
 				.build();

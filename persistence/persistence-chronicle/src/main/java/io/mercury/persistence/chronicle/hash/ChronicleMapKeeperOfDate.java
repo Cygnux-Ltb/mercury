@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 
 public final class ChronicleMapKeeperOfDate<K, V> extends ChronicleMapKeeper<K, V> {
 
-	public ChronicleMapKeeperOfDate(ChronicleMapKeeperCfg<K, V> cfg) {
+	public ChronicleMapKeeperOfDate(ChronicleMapConfigurator<K, V> cfg) {
 		super(cfg);
 	}
 

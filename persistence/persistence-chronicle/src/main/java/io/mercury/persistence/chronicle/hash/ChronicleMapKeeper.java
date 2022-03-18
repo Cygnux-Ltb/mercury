@@ -13,14 +13,14 @@ import java.util.Set;
 @ThreadSafe
 public class ChronicleMapKeeper<K, V> extends FilesKeeper<String, ChronicleMap<K, V>> {
 
-    private final ChronicleMapKeeperCfg<K, V> cfg;
+    private final ChronicleMapConfigurator<K, V> cfg;
 
-    public ChronicleMapKeeper(@Nonnull ChronicleMapKeeperCfg<K, V> cfg) {
+    public ChronicleMapKeeper(@Nonnull ChronicleMapConfigurator<K, V> cfg) {
         Assertor.nonNull(cfg, "cfg");
         this.cfg = cfg;
     }
 
-    public ChronicleMapKeeperCfg<K, V> getConfigurator() {
+    public ChronicleMapConfigurator<K, V> getConfigurator() {
         return cfg;
     }
 

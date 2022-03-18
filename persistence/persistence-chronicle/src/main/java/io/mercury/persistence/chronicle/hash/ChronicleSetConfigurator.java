@@ -9,10 +9,9 @@ import io.mercury.common.sys.SysProperties;
 import javax.annotation.Nonnull;
 import java.io.File;
 
-import static io.mercury.common.collections.Capacity.L16_SIZE;
 import static io.mercury.common.util.StringSupport.fixPath;
 
-public final class ChronicleSetKeeperCfg<E> implements Configurator {
+public final class ChronicleSetConfigurator<E> implements Configurator {
 
     private final Class<E> elementClass;
     private final E averageElement;
@@ -67,7 +66,7 @@ public final class ChronicleSetKeeperCfg<E> implements Configurator {
         return savePath;
     }
 
-    private ChronicleSetKeeperCfg(Builder<E> builder) {
+    private ChronicleSetConfigurator(Builder<E> builder) {
         this.elementClass = builder.elementClass;
         this.averageElement = builder.averageElement;
         this.recover = builder.recover;
@@ -159,8 +158,8 @@ public final class ChronicleSetKeeperCfg<E> implements Configurator {
             return this;
         }
 
-        public ChronicleSetKeeperCfg<E> build() {
-            return new ChronicleSetKeeperCfg<>(this);
+        public ChronicleSetConfigurator<E> build() {
+            return new ChronicleSetConfigurator<>(this);
         }
     }
 

@@ -18,7 +18,7 @@ public class ChronicleMapKeeperOfLRUTest {
 
     public static void main(String[] args) {
 
-        ChronicleMapKeeperCfg.Builder<Long, String> builder = ChronicleMapKeeperCfg
+        ChronicleMapConfigurator.Builder<Long, String> builder = ChronicleMapConfigurator
                 .newBuilder(Long.class, String.class, SysProperties.USER_HOME, "test")
                 .averageValue(Long.toString(Long.MIN_VALUE)).entries(56636);
 

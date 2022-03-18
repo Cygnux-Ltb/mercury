@@ -5,6 +5,8 @@ import io.mercury.persistence.rocksdb.map.RocksMap;
 import io.mercury.persistence.rocksdb.map.kv.RocksKey;
 import io.mercury.persistence.rocksdb.map.kv.RocksValue;
 
+import java.io.IOException;
+
 public class RocksMapKeeper<K extends RocksKey, V extends RocksValue> extends AbstractKeeper<String, RocksMap<K, V>> {
 
 	@Override
@@ -13,4 +15,8 @@ public class RocksMapKeeper<K extends RocksKey, V extends RocksValue> extends Ab
 		return null;
 	}
 
+	@Override
+	public void close() throws IOException {
+
+	}
 }

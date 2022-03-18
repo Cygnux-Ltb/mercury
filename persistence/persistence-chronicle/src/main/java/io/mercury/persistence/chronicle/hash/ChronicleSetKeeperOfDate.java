@@ -9,7 +9,7 @@ import net.openhft.chronicle.set.ChronicleSet;
 
 public final class ChronicleSetKeeperOfDate<E> extends ChronicleSetKeeper<E> {
 
-	public ChronicleSetKeeperOfDate(ChronicleSetKeeperCfg<E> cfg) {
+	public ChronicleSetKeeperOfDate(ChronicleSetConfigurator<E> cfg) {
 		super(cfg);
 	}
 

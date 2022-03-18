@@ -15,9 +15,9 @@ import java.io.IOException;
 @ThreadSafe
 public class ChronicleSetKeeper<E> extends FilesKeeper<String, ChronicleSet<E>> {
 
-    private final ChronicleSetKeeperCfg<E> cfg;
+    private final ChronicleSetConfigurator<E> cfg;
 
-    public ChronicleSetKeeper(@Nonnull ChronicleSetKeeperCfg<E> cfg) {
+    public ChronicleSetKeeper(@Nonnull ChronicleSetConfigurator<E> cfg) {
         Assertor.nonNull(cfg, "cfg");
         this.cfg = cfg;
     }
