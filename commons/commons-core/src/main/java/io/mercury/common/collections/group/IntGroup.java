@@ -32,6 +32,7 @@ public abstract class IntGroup<V> {
 		this.savedMap = getIntObjectMapFactory().withAll(map);
 	}
 
+	@Nonnull
 	public V getMember(int key) throws MemberNotExistException {
 		V value = savedMap.get(key);
 		if (value == null)

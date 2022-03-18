@@ -28,7 +28,7 @@ import java.util.Map;
  * this representation is also very space efficient because only pointers need
  * to be stored.
  */
-public final class ArtNode256<V> implements IArtNode<V> {
+public final class ArtNode256<V> implements ArtNode<V> {
 
 	private static final int NODE48_SWITCH_THRESHOLD = 37;
 
@@ -73,16 +73,16 @@ public final class ArtNode256<V> implements IArtNode<V> {
 		final short idx = (short) ((key >>> nodeLevel) & 0xFF);
 		final Object node = nodes[idx];
 		if (node != null) {
-			return nodeLevel == 0 ? (V) node : ((IArtNode<V>) node).getValue(key, nodeLevel - 8);
+			return nodeLevel == 0 ? (V) node : ((ArtNode<V>) node).getValue(key, nodeLevel - 8);
 		}
 		return null;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public IArtNode<V> put(final long key, final int level, final V value) {
+	public ArtNode<V> put(final long key, final int level, final V value) {
 		if (level != nodeLevel) {
-			final IArtNode<V> branch = LongAdaptiveRadixTreeMap.branchIfRequired(key, value, nodeKey, nodeLevel, this);
+			final ArtNode<V> branch = LongAdaptiveRadixTreeMap.branchIfRequired(key, value, nodeKey, nodeLevel, this);
 			if (branch != null) {
 				return branch;
 			}
@@ -96,9 +96,9 @@ public final class ArtNode256<V> implements IArtNode<V> {
 		if (nodeLevel == 0) {
 			nodes[idx] = value;
 		} else {
-			IArtNode<V> node = (IArtNode<V>) nodes[idx];
+			ArtNode<V> node = (ArtNode<V>) nodes[idx];
 			if (node != null) {
-				final IArtNode<V> resizedNode = node.put(key, nodeLevel - 8, value);
+				final ArtNode<V> resizedNode = node.put(key, nodeLevel - 8, value);
 				if (resizedNode != null) {
 					// TODO put old into the pool
 					// update resized node if capacity has increased
@@ -117,7 +117,7 @@ public final class ArtNode256<V> implements IArtNode<V> {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public IArtNode<V> remove(long key, int level) {
+	public ArtNode<V> remove(long key, int level) {
 		if (level != nodeLevel && ((key ^ nodeKey) & (-1L << (nodeLevel + 8))) != 0) {
 			return this;
 		}
@@ -130,8 +130,8 @@ public final class ArtNode256<V> implements IArtNode<V> {
 			nodes[idx] = null;
 			numChildren--;
 		} else {
-			final IArtNode<V> node = (IArtNode<V>) nodes[idx];
-			final IArtNode<V> resizedNode = node.remove(key, nodeLevel - 8);
+			final ArtNode<V> node = (ArtNode<V>) nodes[idx];
+			final ArtNode<V> resizedNode = node.remove(key, nodeLevel - 8);
 			if (resizedNode != node) {
 				// TODO put old into the pool
 				// update resized node if capacity has decreased
@@ -175,7 +175,7 @@ public final class ArtNode256<V> implements IArtNode<V> {
 		Object node = nodes[idx];
 		if (node != null) {
 			// if exact key found
-			final V res = nodeLevel == 0 ? (V) node : ((IArtNode<V>) node).getCeilingValue(key, nodeLevel - 8);
+			final V res = nodeLevel == 0 ? (V) node : ((ArtNode<V>) node).getCeilingValue(key, nodeLevel - 8);
 			if (res != null) {
 				// return if found ceiling, otherwise will try next one
 				return res;
@@ -187,7 +187,7 @@ public final class ArtNode256<V> implements IArtNode<V> {
 //            log.debug("idx+ = {}", String.format("%Xh", idx));
 			node = nodes[idx];
 			if (node != null) {
-				return (nodeLevel == 0) ? (V) node : ((IArtNode<V>) node).getCeilingValue(0, nodeLevel - 8);// find
+				return (nodeLevel == 0) ? (V) node : ((ArtNode<V>) node).getCeilingValue(0, nodeLevel - 8);// find
 																											// first
 																											// lowest
 																											// key
@@ -222,7 +222,7 @@ public final class ArtNode256<V> implements IArtNode<V> {
 		Object node = nodes[idx];
 		if (node != null) {
 			// if exact key found
-			final V res = nodeLevel == 0 ? (V) node : ((IArtNode<V>) node).getFloorValue(key, nodeLevel - 8);
+			final V res = nodeLevel == 0 ? (V) node : ((ArtNode<V>) node).getFloorValue(key, nodeLevel - 8);
 			if (res != null) {
 				// return if found floor, otherwise will try prev one
 				return res;
@@ -234,7 +234,7 @@ public final class ArtNode256<V> implements IArtNode<V> {
 //            log.debug("idx+ = {}", String.format("%Xh", idx));
 			node = nodes[idx];
 			if (node != null) {
-				return (nodeLevel == 0) ? (V) node : ((IArtNode<V>) node).getFloorValue(Long.MAX_VALUE, nodeLevel - 8);// find
+				return (nodeLevel == 0) ? (V) node : ((ArtNode<V>) node).getFloorValue(Long.MAX_VALUE, nodeLevel - 8);// find
 																														// first
 																														// highest
 																														// key
@@ -264,7 +264,7 @@ public final class ArtNode256<V> implements IArtNode<V> {
 		} else {
 			int numLeft = limit;
 			for (short i = 0; i < 256 && numLeft > 0; i++) {
-				final IArtNode<V> node = (IArtNode<V>) nodes[i];
+				final ArtNode<V> node = (ArtNode<V>) nodes[i];
 				if (node != null) {
 					numLeft -= node.forEach(consumer, numLeft);
 				}
@@ -293,7 +293,7 @@ public final class ArtNode256<V> implements IArtNode<V> {
 		} else {
 			int numLeft = limit;
 			for (short i = 255; i >= 0 && numLeft > 0; i--) {
-				final IArtNode<V> node = (IArtNode<V>) nodes[i];
+				final ArtNode<V> node = (ArtNode<V>) nodes[i];
 				if (node != null) {
 					numLeft -= node.forEachDesc(consumer, numLeft);
 				}
@@ -310,7 +310,7 @@ public final class ArtNode256<V> implements IArtNode<V> {
 		} else {
 			int numLeft = limit;
 			for (short i = 0; i < 256 && numLeft > 0; i++) {
-				final IArtNode<V> node = (IArtNode<V>) nodes[i];
+				final ArtNode<V> node = (ArtNode<V>) nodes[i];
 				if (node != null) {
 					numLeft -= node.size(numLeft);
 				}
@@ -327,10 +327,10 @@ public final class ArtNode256<V> implements IArtNode<V> {
 		for (int i = 0; i < 256; i++) {
 			Object node = nodes[i];
 			if (node != null) {
-				if (node instanceof IArtNode) {
+				if (node instanceof ArtNode) {
 					if (nodeLevel == 0)
 						throw new IllegalStateException("unexpected node type");
-					IArtNode<?> artNode = (IArtNode<?>) node;
+					ArtNode<?> artNode = (ArtNode<?>) node;
 					artNode.validateInternalState(nodeLevel - 8);
 				} else {
 					if (nodeLevel != 0)
@@ -357,7 +357,7 @@ public final class ArtNode256<V> implements IArtNode<V> {
 			if (nodeLevel == 0) {
 				list.add(new LongAdaptiveRadixTreeMap.Entry<>(keyPrefix + keys[i], (V) nodes[keys[i]]));
 			} else {
-				list.addAll(((IArtNode<V>) nodes[keys[i]]).entries());
+				list.addAll(((ArtNode<V>) nodes[keys[i]]).entries());
 			}
 		}
 		return list;

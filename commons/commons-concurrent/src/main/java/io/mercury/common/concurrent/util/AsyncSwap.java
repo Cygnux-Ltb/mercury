@@ -22,7 +22,7 @@ public final class AsyncSwap<E> implements Runnable {
 		try {
 			E e = swap.take();
 			consumer.accept(e);
-		} catch (InterruptedException e) {
+		} catch (InterruptedException ignored) {
 			
 		}
 

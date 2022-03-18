@@ -23,8 +23,8 @@ public interface LongObjConsumer<T> extends LongObjectProcedure<T> {
 	/**
 	 * Performs this operation on the given arguments.
 	 *
-	 * @param a the first input argument
-	 * @param b the second input argument
+	 * @param l the first input argument
+	 * @param t the second input argument
 	 */
 	void accept(long l, T t);
 

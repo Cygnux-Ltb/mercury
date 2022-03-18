@@ -1,10 +1,12 @@
 package io.mercury.common.concurrent.queue;
 
+import io.mercury.common.thread.SleepSupport;
+import io.mercury.common.thread.ThreadSupport;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpmcArrayQueue;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -31,7 +33,7 @@ public final class ConcurrentPriorityQueue<E> implements Comparable<ConcurrentPr
         return sequence;
     }
 
-    public boolean rematchWithdraw(@Nonnull E e) {
+    public boolean priorityOffer(@Nonnull E e) {
         boolean offer = priorityQueue.offer(e);
         if (offer) {
             counter.incrementAndGet();
@@ -39,7 +41,7 @@ public final class ConcurrentPriorityQueue<E> implements Comparable<ConcurrentPr
         return offer;
     }
 
-    public boolean addWithdraw(@Nonnull E e) {
+    public boolean offer(@Nonnull E e) {
         boolean offer = normalQueue.offer(e);
         if (offer) {
             counter.incrementAndGet();
@@ -47,30 +49,65 @@ public final class ConcurrentPriorityQueue<E> implements Comparable<ConcurrentPr
         return offer;
     }
 
-    public int count() {
-        return counter.get();
+    public int size() {
+        return priorityQueue.size() + normalQueue.size();
     }
 
-    @Nullable
-    public E getFirst() {
+    @CheckForNull
+    public E poll() {
         if (!priorityQueue.isEmpty()) {
             return priorityQueue.poll();
-        }
-        if (!normalQueue.isEmpty()) {
+        } else if (!normalQueue.isEmpty()) {
             return normalQueue.poll();
+        } else {
+            return null;
         }
-        return null;
+    }
+
+    public boolean isEmpty() {
+        return priorityQueue.isEmpty() && normalQueue.isEmpty();
+    }
+
+    @Override
+    public int compareTo(ConcurrentPriorityQueue<E> o) {
+        return Long.compare(sequence, o.sequence);
     }
 
 
     public static void main(String[] args) {
 
+        ConcurrentPriorityQueue<String> queue = new ConcurrentPriorityQueue<>(0, 256, 1024);
 
-    }
-
-
-    @Override
-    public int compareTo(ConcurrentPriorityQueue<E> o) {
-        return Long.compare(sequence, o.sequence);
+        ThreadSupport.startNewMaxPriorityThread("test0", () -> {
+            for (int i = 0; i < 50; i++) {
+                if (i % 6 == 0) {
+                    queue.priorityOffer("TEST[0] priority put : " + i);
+                } else {
+                    queue.offer("TEST[0] put : " + i);
+                }
+                SleepSupport.sleep(2);
+            }
+        });
+        ThreadSupport.startNewMaxPriorityThread("test1", () -> {
+            for (int i = 0; i < 50; i++) {
+                if (i % 7 == 0) {
+                    queue.priorityOffer("TEST[1] priority put : " + i);
+                } else {
+                    queue.offer("TEST[1] put : " + i);
+                }
+                SleepSupport.sleep(3);
+            }
+        });
+        ThreadSupport.startNewMaxPriorityThread("test2", () -> {
+            do {
+                String e = queue.poll();
+                if (e != null) {
+                    System.out.println(e);
+                } else {
+                    System.out.println("Grab null sleep 1 ms");
+                    SleepSupport.sleep(1);
+                }
+            } while (true);
+        });
     }
 }

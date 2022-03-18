@@ -22,93 +22,94 @@ import java.util.function.Supplier;
 
 public final class ObjectsPool {
 
-	public static final int ORDER = 0;
+    public static final int ORDER = 0;
 
-	public static final int DIRECT_ORDER = 1;
-	public static final int DIRECT_BUCKET = 2;
-	public static final int ART_NODE_4 = 8;
-	public static final int ART_NODE_16 = 9;
-	public static final int ART_NODE_48 = 10;
-	public static final int ART_NODE_256 = 11;
-	public static final int SYMBOL_POSITION_RECORD = 12;
+    public static final int DIRECT_ORDER = 1;
+    public static final int DIRECT_BUCKET = 2;
+    public static final int ART_NODE_4 = 8;
+    public static final int ART_NODE_16 = 9;
+    public static final int ART_NODE_48 = 10;
+    public static final int ART_NODE_256 = 11;
 
-	private final ArrayStack[] pools;
+    public static final int SYMBOL_POSITION_RECORD = 12;
 
-	public static ObjectsPool createDefaultPool() {
+    private final ArrayStack[] pools;
 
-		// initialize object pools
-		final HashMap<Integer, Integer> objectsPoolConfig = new HashMap<>();
-		objectsPoolConfig.put(ObjectsPool.DIRECT_ORDER, 512);
-		objectsPoolConfig.put(ObjectsPool.DIRECT_BUCKET, 256);
-		objectsPoolConfig.put(ObjectsPool.ART_NODE_4, 256);
-		objectsPoolConfig.put(ObjectsPool.ART_NODE_16, 128);
-		objectsPoolConfig.put(ObjectsPool.ART_NODE_48, 64);
-		objectsPoolConfig.put(ObjectsPool.ART_NODE_256, 32);
+    public static ObjectsPool createDefaultPool() {
 
-		return new ObjectsPool(objectsPoolConfig);
-	}
+        // initialize object pools
+        final HashMap<Integer, Integer> objectsPoolConfig = new HashMap<>();
+        objectsPoolConfig.put(ObjectsPool.DIRECT_ORDER, 512);
+        objectsPoolConfig.put(ObjectsPool.DIRECT_BUCKET, 256);
+        objectsPoolConfig.put(ObjectsPool.ART_NODE_4, 256);
+        objectsPoolConfig.put(ObjectsPool.ART_NODE_16, 128);
+        objectsPoolConfig.put(ObjectsPool.ART_NODE_48, 64);
+        objectsPoolConfig.put(ObjectsPool.ART_NODE_256, 32);
 
-	public ObjectsPool(final Map<Integer, Integer> sizesConfig) {
-		int maxStack = sizesConfig.keySet().stream().max(Integer::compareTo).orElse(0);
-		this.pools = new ArrayStack[maxStack + 1];
-		sizesConfig.forEach((type, size) -> this.pools[type] = new ArrayStack(size));
-	}
+        return new ObjectsPool(objectsPoolConfig);
+    }
 
-	@SuppressWarnings("unchecked")
-	public <T> T get(final int type, final Supplier<T> supplier) {
-		final T obj = (T) pools[type].pop(); // pollFirst is cheaper for empty pool
+    public ObjectsPool(final Map<Integer, Integer> sizesConfig) {
+        int maxStack = sizesConfig.keySet().stream().max(Integer::compareTo).orElse(0);
+        this.pools = new ArrayStack[maxStack + 1];
+        sizesConfig.forEach((type, size) -> this.pools[type] = new ArrayStack(size));
+    }
 
-		if (obj == null) {
+    @SuppressWarnings("unchecked")
+    public <T> T get(final int type, final Supplier<T> supplier) {
+        final T obj = (T) pools[type].pop(); // pollFirst is cheaper for empty pool
+
+        if (obj == null) {
 //            log.debug("MISS {}", type);
-			return supplier.get();
-		} else {
+            return supplier.get();
+        } else {
 //            log.debug("HIT {} (count={})", type, pools[type].count);
-			return obj;
-		}
-	}
+            return obj;
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	public <T> T get(final int type, final Function<ObjectsPool, T> constructor) {
-		final T obj = (T) pools[type].pop(); // pollFirst is cheaper for empty pool
-		if (obj == null) {
+    @SuppressWarnings("unchecked")
+    public <T> T get(final int type, final Function<ObjectsPool, T> constructor) {
+        final T obj = (T) pools[type].pop(); // pollFirst is cheaper for empty pool
+        if (obj == null) {
 //            log.debug("MISS {}", type);
-			return constructor.apply(this);
-		} else {
+            return constructor.apply(this);
+        } else {
 //            log.debug("HIT {} (count={})", type, pools[type].count);
-			return obj;
-		}
-	}
+            return obj;
+        }
+    }
 
-	public void put(final int type, Object object) {
+    public void put(final int type, Object object) {
 //        log.debug("RETURN {} (count={})", type, pools[type].count);
-		pools[type].add(object);
-	}
+        pools[type].add(object);
+    }
 
-	private final static class ArrayStack {
-		private int count;
-		private Object[] objs;
+    private final static class ArrayStack {
+        private int count;
+        private final Object[] objs;
 
-		ArrayStack(int size) {
-			this.objs = new Object[size];
-			this.count = 0;
-		}
+        ArrayStack(int size) {
+            this.objs = new Object[size];
+            this.count = 0;
+        }
 
-		void add(Object obj) {
-			if (count != objs.length) {
-				objs[count] = obj;
-				count++;
-			}
-		}
+        void add(Object obj) {
+            if (count != objs.length) {
+                objs[count] = obj;
+                count++;
+            }
+        }
 
-		Object pop() {
-			if (count != 0) {
-				count--;
-				Object obj = objs[count];
-				objs[count] = null;
-				return obj;
-			}
-			return null;
-		}
-	}
+        Object pop() {
+            if (count != 0) {
+                count--;
+                Object obj = objs[count];
+                objs[count] = null;
+                return obj;
+            }
+            return null;
+        }
+    }
 
 }

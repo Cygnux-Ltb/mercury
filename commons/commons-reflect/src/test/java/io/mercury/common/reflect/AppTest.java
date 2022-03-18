@@ -1,4 +1,4 @@
-package io.mercury.commons.reflect;
+package io.mercury.common.reflect;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

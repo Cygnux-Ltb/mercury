@@ -24,7 +24,7 @@ public final class MutableLists {
 	}
 
 	/*
-	 **************** primitive list ****************
+	 * ******************** primitive list ********************
 	 */
 	/**
 	 * 
@@ -45,13 +45,13 @@ public final class MutableLists {
 
 	/**
 	 * 
-	 * @param bytes
+	 * @param values
 	 * @return MutableByteList
 	 */
-	public static MutableByteList newByteArrayListWith(byte... bytes) {
-		if (ArrayUtil.isNullOrEmpty(bytes))
+	public static MutableByteList newByteArrayListWith(byte... values) {
+		if (ArrayUtil.isNullOrEmpty(values))
 			return new ByteArrayList();
-		return new ByteArrayList(bytes);
+		return new ByteArrayList(values);
 	}
 
 	/**
@@ -73,13 +73,13 @@ public final class MutableLists {
 
 	/**
 	 * 
-	 * @param chars
+	 * @param values
 	 * @return MutableCharList
 	 */
-	public static MutableCharList newCharArrayList(char... chars) {
-		if (ArrayUtil.isNullOrEmpty(chars))
+	public static MutableCharList newCharArrayList(char... values) {
+		if (ArrayUtil.isNullOrEmpty(values))
 			return new CharArrayList();
-		return new CharArrayList(chars);
+		return new CharArrayList(values);
 	}
 
 	/**
@@ -101,13 +101,13 @@ public final class MutableLists {
 
 	/**
 	 * 
-	 * @param ints
+	 * @param values
 	 * @return MutableIntList
 	 */
-	public static MutableIntList newIntArrayListWith(int... ints) {
-		if (ArrayUtil.isNullOrEmpty(ints))
+	public static MutableIntList newIntArrayListWith(int... values) {
+		if (ArrayUtil.isNullOrEmpty(values))
 			return newIntArrayList();
-		return new IntArrayList(ints);
+		return new IntArrayList(values);
 	}
 
 	/**
@@ -129,13 +129,13 @@ public final class MutableLists {
 
 	/**
 	 * 
-	 * @param longs
+	 * @param values
 	 * @return MutableLongList
 	 */
-	public static MutableLongList newLongArrayListWith(long... longs) {
-		if (ArrayUtil.isNullOrEmpty(longs))
+	public static MutableLongList newLongArrayListWith(long... values) {
+		if (ArrayUtil.isNullOrEmpty(values))
 			return newLongArrayList();
-		return new LongArrayList(longs);
+		return new LongArrayList(values);
 	}
 
 	/**
@@ -157,26 +157,18 @@ public final class MutableLists {
 
 	/**
 	 * 
-	 * @param doubles
+	 * @param values
 	 * @return MutableDoubleList
 	 */
-	public static MutableDoubleList newDoubleArrayListWith(double... doubles) {
-		if (ArrayUtil.isNullOrEmpty(doubles))
+	public static MutableDoubleList newDoubleArrayListWith(double... values) {
+		if (ArrayUtil.isNullOrEmpty(values))
 			return newDoubleArrayList();
-		return new DoubleArrayList(doubles);
+		return new DoubleArrayList(values);
 	}
 
 	/*
-	 **************** object list ****************
+	 * ******************** object list ********************
 	 */
-	/**
-	 * 
-	 * @param <E>
-	 * @return MutableList
-	 */
-	public static <E> MutableList<E> emptyFastList() {
-		return new FastList<>();
-	}
 
 	/**
 	 * 

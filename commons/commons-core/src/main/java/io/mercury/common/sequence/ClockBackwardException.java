@@ -1,16 +1,14 @@
 package io.mercury.common.sequence;
 
 /**
+ *
  * 时钟回退抛出此异常
  * 
  * @author yellow013
  *
  */
-public final class ClockBackwardException extends RuntimeException {
+public final class ClockBackwardException extends IllegalStateException {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -5012855755917563428L;
 
 	private final long lastEpochMillis;

@@ -442,7 +442,7 @@ public final class ThreadSupport {
 		System.out.println(getCurrentThreadName());
 		startNewThread("Test0", () -> System.out.println(getCurrentThreadName()));
 		SleepSupport.sleep(2000);
-		startNewThread("Test22", () -> System.out.println(dumpThreadInfo()));
+		startNewThread("Test1", () -> System.out.println(dumpThreadInfo()));
 		SleepSupport.sleep(2000);
 	}
 

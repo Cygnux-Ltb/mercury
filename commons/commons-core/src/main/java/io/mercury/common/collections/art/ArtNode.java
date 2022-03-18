@@ -19,13 +19,13 @@ package io.mercury.common.collections.art;
 import java.util.List;
 import java.util.Map;
 
-public interface IArtNode<V> {
+public interface ArtNode<V> {
 
     V getValue(long key, int level);
 
-    IArtNode<V> put(long key, int level, V value);
+    ArtNode<V> put(long key, int level, V value);
 
-    IArtNode<V> remove(long key, int level);
+    ArtNode<V> remove(long key, int level);
 
     V getCeilingValue(long key, int level);
 

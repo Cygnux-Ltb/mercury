@@ -1,6 +1,7 @@
 package io.mercury.common.collections;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.IntFunction;
@@ -44,8 +45,7 @@ public final class CollectionUtil {
 		Assertor.nonNull(collection, "collection");
 		if (ArrayUtil.isNullOrEmpty(values))
 			return collection;
-		for (E e : values)
-			collection.add(e);
+		Collections.addAll(collection, values);
 		return collection;
 	}
 
