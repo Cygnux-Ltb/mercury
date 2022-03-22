@@ -1,6 +1,6 @@
 package com.conversantmedia.util.concurrent;
 
-/*
+/**
  * #%L
  * Conversant Disruptor
  * ~~
@@ -23,7 +23,7 @@ package com.conversantmedia.util.concurrent;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 
-/*
+/**
  * Return true once a condition is satisfied
  * Created by jcairns on 12/11/14.
  */
@@ -45,7 +45,7 @@ interface Condition {
 	// tell threads waiting on condition to wake up
 	void signal();
 
-	/*
+	/**
 	 * progressively transition from spin to yield over time
 	 */
 	static int progressiveYield(final int n) {

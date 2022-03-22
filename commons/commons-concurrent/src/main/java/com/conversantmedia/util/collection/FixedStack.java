@@ -35,6 +35,7 @@ package com.conversantmedia.util.collection;
  * @author John Cairns {@literal <john@2ad.com>} Date: 7/9/12 Time: 8:53 AM
  */
 public class FixedStack<N> implements Stack<N> {
+
 	private final int size;
 	private final int mask;
 	private final N[] stack;

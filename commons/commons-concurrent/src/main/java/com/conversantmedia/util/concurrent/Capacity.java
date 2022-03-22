@@ -48,7 +48,7 @@ final class Capacity {
 		}
 	}
 
-	/*
+	/**
 	 * define power of 2 slightly strangely to include 1, i.e. capacity 1 is allowed
 	 */
 	private static boolean isPowerOf2(final int p) {

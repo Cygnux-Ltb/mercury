@@ -1,5 +1,7 @@
 package io.mercury.common.concurrent.util;
 
+import net.openhft.chronicle.ticker.NanoTicker;
+
 import java.util.concurrent.SynchronousQueue;
 import java.util.function.Consumer;
 
@@ -25,7 +27,16 @@ public final class AsyncSwap<E> implements Runnable {
 		} catch (InterruptedException ignored) {
 			
 		}
+	}
+
+	public static void main(String[] args) {
+		System.out.println(System.currentTimeMillis());
+		System.out.println(NanoTicker.INSTANCE.countFromEpoch());
+
+
+
 
 	}
+
 
 }

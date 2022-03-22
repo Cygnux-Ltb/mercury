@@ -17,7 +17,7 @@ public final class ConcurrentPriorityQueue<E> implements Comparable<ConcurrentPr
 
     private final long sequence;
 
-    private final AtomicInteger counter = new AtomicInteger(0);
+    //private final AtomicInteger counter = new AtomicInteger(0);
 
     private final MessagePassingQueue<E> priorityQueue;
 
@@ -34,19 +34,21 @@ public final class ConcurrentPriorityQueue<E> implements Comparable<ConcurrentPr
     }
 
     public boolean priorityOffer(@Nonnull E e) {
-        boolean offer = priorityQueue.offer(e);
-        if (offer) {
-            counter.incrementAndGet();
-        }
-        return offer;
+//        boolean offer = priorityQueue.offer(e);
+//        if (offer) {
+//            counter.incrementAndGet();
+//        }
+//        return offer;
+        return priorityQueue.offer(e);
     }
 
     public boolean offer(@Nonnull E e) {
-        boolean offer = normalQueue.offer(e);
-        if (offer) {
-            counter.incrementAndGet();
-        }
-        return offer;
+//        boolean offer = normalQueue.offer(e);
+//        if (offer) {
+//            counter.incrementAndGet();
+//        }
+//        return offer;
+        return normalQueue.offer(e);
     }
 
     public int size() {
