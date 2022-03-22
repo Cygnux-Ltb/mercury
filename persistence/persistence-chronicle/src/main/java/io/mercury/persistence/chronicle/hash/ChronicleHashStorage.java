@@ -1,5 +1,6 @@
 package io.mercury.persistence.chronicle.hash;
 
+import io.mercury.common.collections.Capacity;
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.file.FileUtil;
 import io.mercury.persistence.chronicle.exception.ChronicleIOException;
@@ -80,6 +81,11 @@ public class ChronicleHashStorage {
 
         public B setEntries(long entries) {
             this.entries = entries;
+            return self();
+        }
+
+        public B setEntries(Capacity capacity) {
+            this.entries = Capacity.checkAndGet(capacity);
             return self();
         }
 
