@@ -100,7 +100,7 @@ public final class Log4j2Configurator {
 	 *         capture all levels when used in logging configurations.
 	 *
 	 */
-	public static enum LogLevel implements Comparable<LogLevel> {
+	public enum LogLevel implements Comparable<LogLevel> {
 
 		DEBUG(1, org.apache.logging.log4j.Level.DEBUG),
 

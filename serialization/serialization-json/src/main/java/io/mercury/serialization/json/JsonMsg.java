@@ -7,98 +7,111 @@ import io.mercury.common.serialization.specific.JsonSerializable;
 
 public final class JsonMsg implements JsonSerializable {
 
-	private long sequence;
-	private long epoch;
-	private int envelope;
-	private int version;
-	private ContentType contentType;
-	private String content;
+    private long sequence;
+    private long epoch;
+    private EpochType epochType = EpochType.MILLISECOND;
+    private int envelope;
+    private int version = 1;
+    private ContentType contentType;
+    private String content;
 
-	public long getSequence() {
-		return sequence;
-	}
+    public long getSequence() {
+        return sequence;
+    }
 
-	public long getEpoch() {
-		return epoch;
-	}
+    public long getEpoch() {
+        return epoch;
+    }
 
-	public int getEnvelope() {
-		return envelope;
-	}
+    public EpochType getEpochType() {
+        return epochType;
+    }
 
-	public int getVersion() {
-		return version;
-	}
+    public int getEnvelope() {
+        return envelope;
+    }
 
-	public ContentType getContentType() {
-		return contentType;
-	}
+    public int getVersion() {
+        return version;
+    }
 
-	public String getContent() {
-		return content;
-	}
+    public ContentType getContentType() {
+        return contentType;
+    }
 
-	public JsonMsg setSequence(long sequence) {
-		this.sequence = sequence;
-		return this;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public void setEpoch(long epoch) {
-		this.epoch = epoch;
-	}
+    public JsonMsg setSequence(long sequence) {
+        this.sequence = sequence;
+        return this;
+    }
 
-	public JsonMsg setEnvelope(int envelope) {
-		this.envelope = envelope;
-		return this;
-	}
+    public void setEpoch(long epoch) {
+        this.epoch = epoch;
+    }
 
-	public JsonMsg setVersion(int version) {
-		this.version = version;
-		return this;
-	}
+    public JsonMsg setEpochType(EpochType epochType) {
+        this.epochType = epochType;
+        return this;
+    }
 
-	public JsonMsg setContentType(ContentType contentType) {
-		this.contentType = contentType;
-		return this;
-	}
+    public JsonMsg setEnvelope(int envelope) {
+        this.envelope = envelope;
+        return this;
+    }
 
-	public JsonMsg setContent(String content) {
-		this.content = content;
-		return this;
-	}
+    public JsonMsg setVersion(int version) {
+        this.version = version;
+        return this;
+    }
 
-	@Override
-	public String toString() {
-		return toJson();
-	}
+    public JsonMsg setContentType(ContentType contentType) {
+        this.contentType = contentType;
+        return this;
+    }
 
-	@Nonnull
-	@Override
-	public String toJson() {
-		return JsonWrapper.toJson(this);
-	}
+    public JsonMsg setContent(String content) {
+        this.content = content;
+        return this;
+    }
 
-	/**
-	 * 
-	 * @param json
-	 * @return
-	 */
-	@Nullable
-	public static JsonMsg fromJson(String json) {
-		return JsonParser.toObject(json, JsonMsg.class);
-	}
+    @Override
+    public String toString() {
+        return toJson();
+    }
 
-	/**
-	 * 
-	 * @author yellow013
-	 *
-	 */
-	public enum ContentType {
+    @Nonnull
+    @Override
+    public String toJson() {
+        return JsonWrapper.toJson(this);
+    }
 
-		INT, LONG, DOUBLE, STRING, OBJECT,
+    /**
+     * @param json
+     * @return
+     */
+    @Nullable
+    public static JsonMsg fromJson(String json) {
+        return JsonParser.toObject(json, JsonMsg.class);
+    }
 
-		LIST, MAP,
+    /**
+     * @author yellow013
+     */
+    public enum ContentType {
 
-	}
+        INT, LONG, DOUBLE, STRING, OBJECT,
+
+        LIST, MAP
+
+    }
+
+    public enum EpochType {
+
+        MILLISECOND, MICROSECONDS, NANOSECOND
+
+    }
 
 }

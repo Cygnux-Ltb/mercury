@@ -1,42 +1,69 @@
 package io.mercury.common.concurrent.util;
 
+import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.thread.RunnableComponent;
 import net.openhft.chronicle.ticker.NanoTicker;
+import org.slf4j.Logger;
 
 import java.util.concurrent.SynchronousQueue;
 import java.util.function.Consumer;
 
-public final class AsyncSwap<E> implements Runnable {
+import static io.mercury.common.datetime.DateTimeUtil.datetimeOfMillisecond;
 
-	private final SynchronousQueue<E> swap = new SynchronousQueue<>();
+public final class AsyncSwap<E> extends RunnableComponent implements Runnable {
 
-	private final Consumer<E> consumer;
-	
-	private AsyncSwap(Consumer<E> consumer) {
-		this.consumer = consumer;
-	}
-	
-	public boolean put(E e) {
-		return swap.offer(e);
-	}
+    private final SynchronousQueue<E> swap = new SynchronousQueue<>();
 
-	@Override
-	public void run() {
-		try {
-			E e = swap.take();
-			consumer.accept(e);
-		} catch (InterruptedException ignored) {
-			
-		}
-	}
+    private final String name;
+    private final Consumer<E> consumer;
 
-	public static void main(String[] args) {
-		System.out.println(System.currentTimeMillis());
-		System.out.println(NanoTicker.INSTANCE.countFromEpoch());
+    private static final Logger log = Log4j2LoggerFactory.getLogger(AsyncSwap.class);
+
+    public AsyncSwap(Consumer<E> consumer) {
+        this("swap-" + datetimeOfMillisecond(), consumer);
+    }
+
+    public AsyncSwap(String name, Consumer<E> consumer) {
+        this.name = name;
+        this.consumer = consumer;
+    }
+
+    public boolean put(E e) {
+        log.debug("Swap {} -> put obj : {}", name, e);
+        return swap.offer(e);
+    }
+
+    @Override
+    public void run() {
+        try {
+            E e = swap.take();
+            log.debug("Swap {} -> handle obj : {}", name, e);
+            consumer.accept(e);
+        } catch (InterruptedException e) {
+            log.error("Swap {} -> Throws InterruptedException", name, e);
+        }
+    }
+
+    @Override
+    protected void start0() throws Exception {
+        log.info("Swap {} -> Starting", name);
+        // TODO
+        new Thread(this, name).start();
+    }
+
+    @Override
+    protected void stop0() throws Exception {
+
+    }
+
+    @Override
+    protected String getComponentType() {
+        return AsyncSwap.class.getSimpleName();
+    }
 
 
-
-
-	}
-
-
+    public static void main(String[] args) {
+        System.out.println(System.currentTimeMillis());
+        System.out.println(NanoTicker.INSTANCE.countFromEpoch());
+    }
 }
