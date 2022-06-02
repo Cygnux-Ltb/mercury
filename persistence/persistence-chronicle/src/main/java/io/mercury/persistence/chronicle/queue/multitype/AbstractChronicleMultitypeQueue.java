@@ -1,12 +1,10 @@
 package io.mercury.persistence.chronicle.queue.multitype;
 
+import javax.annotation.concurrent.Immutable;
+
 import io.mercury.common.codec.Envelope;
-import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleQueue;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleReader;
-import org.slf4j.Logger;
-
-import javax.annotation.concurrent.Immutable;
 
 /**
  * @param <E>

@@ -60,7 +60,6 @@ public final class RingMulticaster<E, I> extends AbstractRingBuffer<E, I> {
 	 * @param translator
 	 * @param handlers
 	 */
-	@SuppressWarnings("unchecked")
 	private RingMulticaster(String name, int size, @Nonnull EventFactory<E> factory, @Nonnull ProducerType type,
 			@Nonnull WaitStrategy strategy, @Nonnull StartMode mode, @Nonnull EventTranslatorOneArg<E, I> translator,
 			@Nonnull List<EventHandler<E>> handlers) {

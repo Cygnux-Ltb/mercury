@@ -1,9 +1,5 @@
 package io.mercury.common.collections.map;
 
-import static io.mercury.common.datetime.DateTimeUtil.timeOfHour;
-import static io.mercury.common.datetime.DateTimeUtil.timeOfMinute;
-import static io.mercury.common.datetime.DateTimeUtil.timeOfSecond;
-
 import java.time.LocalTime;
 import java.util.function.BiPredicate;
 import java.util.function.Function;

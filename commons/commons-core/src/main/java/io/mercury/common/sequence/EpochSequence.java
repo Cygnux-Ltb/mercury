@@ -46,14 +46,17 @@ public final class EpochSequence {
 	private static final EpochSequence INSTANCE = new EpochSequence();
 
 	// 第一组占位
+	@SuppressWarnings("unused")
 	private long p0, p1, p2, p3, p4, p5, p6;
 	// 最后使用的Epoch毫秒
 	private volatile long lastEpochMillis;
 	// 第二组占位
+	@SuppressWarnings("unused")
 	private long p7, p8, p9, p10, p11, p12, p13;
 	// 自增位
 	private volatile long incr;
 	// 第三组占位
+	@SuppressWarnings("unused")
 	private long p14, p15, p16, p17, p18, p19, p20;
 
 	private EpochSequence() {

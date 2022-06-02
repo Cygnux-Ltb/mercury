@@ -38,7 +38,6 @@ public class RingProcessChain<E, I> extends AbstractRingBuffer<E, I> {
 
 	private static final Logger log = Log4j2LoggerFactory.getLogger(RingProcessChain.class);
 
-	@SuppressWarnings("unchecked")
 	private RingProcessChain(String name, int size, @Nonnull EventFactory<E> factory, @Nonnull ProducerType type,
 			@Nonnull WaitStrategy strategy, @Nonnull StartMode mode, @Nonnull EventTranslatorOneArg<E, I> translator,
 			@Nonnull MutableIntObjectMap<List<EventHandler<E>>> handlersMap) {

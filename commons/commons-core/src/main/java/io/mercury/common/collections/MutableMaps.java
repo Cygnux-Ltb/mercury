@@ -1,16 +1,13 @@
 package io.mercury.common.collections;
 
-import static io.mercury.common.collections.Capacity.checkAndGet;
 import static io.mercury.common.collections.MapUtil.optimizationCapacity;
 
-import java.util.Arrays;
 import java.util.Map;
-import java.util.function.IntFunction;
 import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 
-import io.mercury.common.lang.Assertor;
-import io.mercury.common.util.ArrayUtil;
+import javax.annotation.Nonnull;
+
 import org.eclipse.collections.api.bimap.MutableBiMap;
 import org.eclipse.collections.api.map.ConcurrentMutableMap;
 import org.eclipse.collections.api.map.MutableMap;
@@ -55,7 +52,8 @@ import org.eclipse.collections.impl.map.mutable.primitive.ObjectIntHashMap;
 import org.eclipse.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import org.eclipse.collections.impl.map.sorted.mutable.TreeSortedMap;
 
-import javax.annotation.Nonnull;
+import io.mercury.common.lang.Assertor;
+import io.mercury.common.util.ArrayUtil;
 
 public final class MutableMaps {
 
