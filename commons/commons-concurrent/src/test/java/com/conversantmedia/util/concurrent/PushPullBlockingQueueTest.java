@@ -740,7 +740,7 @@ public class PushPullBlockingQueueTest {
 					try {
 						for (int i = 0; i < feedCount / nFeeders; i++) {
 							while (!dbq.offer(i, 50L, TimeUnit.MICROSECONDS))
-								yield();
+								Thread.yield();
 							nFed.incrementAndGet();
 						}
 					} catch (InterruptedException ex) {
@@ -763,7 +763,7 @@ public class PushPullBlockingQueueTest {
 							do {
 								r = dbq.poll(50, TimeUnit.MILLISECONDS);
 								if (r == null)
-									yield();
+									Thread.yield();
 							} while ((r == null) && (nRead.get() < feedCount));
 							if (r != null) {
 								// we can't control which thread will return

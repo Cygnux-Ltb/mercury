@@ -15,7 +15,6 @@
  */
 package com.lmax.disruptor.dsl;
 
-import static java.lang.Thread.yield;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -731,7 +730,7 @@ public class DisruptorTest {
 		long loopStart = System.currentTimeMillis();
 		while (stubPublisher.getPublicationCount() < expectedPublicationCount
 				&& System.currentTimeMillis() - loopStart < 5000) {
-			yield();
+			Thread.yield();
 		}
 
 		if (strict) {
@@ -773,7 +772,7 @@ public class DisruptorTest {
 
 	private Throwable waitFor(final AtomicReference<Throwable> reference) {
 		while (reference.get() == null) {
-			yield();
+			Thread.yield();
 		}
 
 		return reference.get();

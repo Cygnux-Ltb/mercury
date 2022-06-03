@@ -1,5 +1,16 @@
 package com.conversantmedia.util.concurrent;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /*
  * #%L
  * Conversant Disruptor
@@ -19,19 +30,11 @@ package com.conversantmedia.util.concurrent;
  * limitations under the License.
  * #L%
  */
-
-import org.junit.*;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * @author John Cairns <jcairns@dotomi.com> Date: 4//25/12 Time: 3:27 PM
@@ -857,7 +860,7 @@ public class DisruptorBlockingQueueTest {
 					try {
 						for (int i = 0; i < feedCount / nFeeders; i++) {
 							while (!dbq.offer(i, 50L, TimeUnit.MICROSECONDS))
-								yield();
+								Thread.yield();
 							nFed.incrementAndGet();
 						}
 					} catch (InterruptedException ex) {
@@ -879,7 +882,7 @@ public class DisruptorBlockingQueueTest {
 							do {
 								r = dbq.poll(50, TimeUnit.MILLISECONDS);
 								if (r == null)
-									yield();
+									Thread.yield();
 							} while ((r == null) && (nRead.get() < feedCount));
 							if (r != null) {
 								// we can't control which thread will return
