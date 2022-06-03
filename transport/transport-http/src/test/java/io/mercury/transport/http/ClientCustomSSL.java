@@ -59,7 +59,7 @@ public class ClientCustomSSL {
 			@Override
 			public boolean isTrusted(final X509Certificate[] chain, final String authType) throws CertificateException {
 				final X509Certificate cert = chain[0];
-				return "CN=httpbin.org".equalsIgnoreCase(cert.getSubjectDN().getName());
+				return "CN=httpbin.org".equalsIgnoreCase(cert.getSubjectX500Principal().getName());
 			}
 
 		}).build();

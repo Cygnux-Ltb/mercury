@@ -17,9 +17,9 @@
 package io.netty.example.ocsp;
 
 import java.math.BigInteger;
+import java.security.cert.Certificate;
 
 import javax.net.ssl.SSLSession;
-import javax.security.cert.X509Certificate;
 
 import org.bouncycastle.asn1.ocsp.OCSPResponseStatus;
 import org.bouncycastle.cert.ocsp.BasicOCSPResp;
@@ -62,8 +62,8 @@ import io.netty.util.concurrent.Promise;
  * The client connects to an HTTPS server that has OCSP stapling enabled and
  * then uses BC to parse and validate it.
  */
-@SuppressWarnings("deprecation")
 public class OcspClientExample {
+
 	public static void main(String[] args) throws Exception {
 		if (!OpenSsl.isAvailable()) {
 			throw new IllegalStateException("OpenSSL is not available!");
@@ -215,8 +215,8 @@ public class OcspClientExample {
 			}
 
 			SSLSession session = engine.getSession();
-			X509Certificate[] chain = session.getPeerCertificateChain();
-			BigInteger certSerial = chain[0].getSerialNumber();
+			Certificate[] chain = session.getPeerCertificates();
+			BigInteger certSerial = ((java.security.cert.X509Certificate) chain[0]).getSerialNumber();
 
 			BasicOCSPResp basicResponse = (BasicOCSPResp) response.getResponseObject();
 			SingleResp first = basicResponse.getResponses()[0];
