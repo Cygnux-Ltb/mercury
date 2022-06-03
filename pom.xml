@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- This is commons pom.xml -->
@@ -31,16 +29,22 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		 <java.version>1.8</java.version>
-		 <maven.compiler.target>1.8</maven.compiler.target>
-		 <maven.compiler.source>1.8</maven.compiler.source>
-		<!--<java.version>11</java.version>
-		<maven.compiler.target>11</maven.compiler.target>
-		<maven.compiler.source>11</maven.compiler.source>-->
+		<!-- Java 1.8 -->
+		<!-- <java.version>1.8</java.version> -->
+		<!-- <maven.compiler.target>1.8</maven.compiler.target> -->
+		<!-- <maven.compiler.source>1.8</maven.compiler.source> -->
+		<!-- Java 11 -->
+		<!-- <java.version>11</java.version> -->
+		<!-- <maven.compiler.target>11</maven.compiler.target> -->
+		<!-- <maven.compiler.source>11</maven.compiler.source> -->
+		<!-- Java 17 -->
+		<java.version>17</java.version>
+		<maven.compiler.target>17</maven.compiler.target>
+		<maven.compiler.source>17</maven.compiler.source>
 		<slf4j.version>1.7.32</slf4j.version>
 		<junit.version>4.13.2</junit.version>
-		<netty.version>4.1.74.Final</netty.version>
-		<jackson.version>2.13.1</jackson.version>
+		<netty.version>4.1.77.Final</netty.version>
+		<jackson.version>2.13.3</jackson.version>
 	</properties>
 
 	<build>
