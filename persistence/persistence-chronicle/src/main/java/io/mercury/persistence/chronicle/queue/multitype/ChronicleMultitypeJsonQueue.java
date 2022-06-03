@@ -40,7 +40,7 @@ public class ChronicleMultitypeJsonQueue<E extends Envelope> extends
         super(builder);
     }
 
-    public static <E extends Envelope> MultitypeJsonQueueBuilder<E> newBuilder() {
+    public static <E extends Envelope> MultitypeJsonQueueBuilder<E> newBuilder(Class<E> envelopeType) {
         return new MultitypeJsonQueueBuilder<>();
     }
 
