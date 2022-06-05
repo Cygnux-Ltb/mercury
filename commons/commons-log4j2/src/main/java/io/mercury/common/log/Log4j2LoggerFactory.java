@@ -148,6 +148,7 @@ public final class Log4j2LoggerFactory {
 
 		appender.start();
 
+		@SuppressWarnings("deprecation")
 		LoggerConfig loggerConfig = LoggerConfig.createLogger(false, logLevel.getLevel(), loggerName, "true",
 				new AppenderRef[] { AppenderRef.createAppenderRef(loggerName, null, null) }, null, CONF, null);
 		loggerConfig.addAppender(appender, logLevel.getLevel(), null);

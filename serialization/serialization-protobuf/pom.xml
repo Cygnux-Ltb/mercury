@@ -14,8 +14,8 @@
 	<name>serialization-proto</name>
 
 	<properties>
-		<protobuf.version>3.19.4</protobuf.version>
-		<protostuff.version>1.7.4</protostuff.version>
+		<protobuf.version>3.21.1</protobuf.version>
+		<protostuff.version>1.8.0</protostuff.version>
 	</properties>
 
 	<dependencies>
