@@ -15,7 +15,7 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<akka.version>2.6.18</akka.version>
+		<akka.version>2.6.19</akka.version>
 		<avro.version>1.11.0</avro.version>
 	</properties>
 
@@ -29,26 +29,6 @@
 					<source>${java.version}</source>
 					<target>${java.version}</target>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.avro</groupId>
-				<artifactId>avro-maven-plugin</artifactId>
-				<version>${avro.version}</version>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>schema</goal>
-						</goals>
-						<configuration>
-							<templateDirectory>${project.basedir}/src/main/resources/template/</templateDirectory>
-							<sourceDirectory>${project.basedir}/src/main/resources/schema</sourceDirectory>
-							<outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
-							<stringType>String</stringType>
-							<createOptionalGetters>true</createOptionalGetters>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -96,40 +76,14 @@
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-http_2.13</artifactId>
-			<version>10.2.8</version>
+			<version>10.2.9</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-http-core_2.13</artifactId>
-			<version>10.2.8</version>
+			<version>10.2.9</version>
 		</dependency>
-
-
-		<dependency>
-			<groupId>com.typesafe.akka</groupId>
-			<artifactId>akka-http-jackson-experimental_2.11</artifactId>
-			<version>2.4.11.2</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>scala-library</artifactId>
-					<groupId>org.scala-lang</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>config</artifactId>
-					<groupId>com.typesafe</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>reactive-streams</artifactId>
-					<groupId>org.reactivestreams</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>jackson-databind</artifactId>
-					<groupId>com.fasterxml.jackson.core</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
 
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>

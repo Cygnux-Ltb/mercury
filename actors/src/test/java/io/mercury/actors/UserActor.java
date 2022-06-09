@@ -2,7 +2,7 @@ package io.mercury.actors;
 
 import akka.actor.Props;
 
-public class UserActor extends CommonActorT1<User> {
+public class UserActor extends BaseActorT1<User> {
 //    private Object parameters;
 
 	public static Props props() {

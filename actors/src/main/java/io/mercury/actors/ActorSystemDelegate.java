@@ -14,54 +14,54 @@ import scala.concurrent.Future;
 
 public final class ActorSystemDelegate {
 
-	private final ActorSystem actorSystem;
+    private final ActorSystem actorSystem;
 
-	private final LoggingAdapter logger;
+    private final LoggingAdapter logger;
 
-	public static final ActorSystemDelegate newSystem(String name) {
-		return new ActorSystemDelegate(name);
-	}
+    public static ActorSystemDelegate newSystem(String name) {
+        return new ActorSystemDelegate(name);
+    }
 
-	private ActorSystemDelegate(String name) {
-		this.actorSystem = ActorSystem.create(name);
-		this.logger = Logging.getLogger(actorSystem, this);
-		// Add ShutdownHook
-		ShutdownHooks.addShutdownHook("ActorSystemTerminateThread", this::terminateActorSystem);
-	}
+    private ActorSystemDelegate(String name) {
+        this.actorSystem = ActorSystem.create(name);
+        this.logger = Logging.getLogger(actorSystem, this);
+        // Add ShutdownHook
+        ShutdownHooks.addShutdownHook("ActorSystemTerminateThread", this::terminateActorSystem);
+    }
 
-	private void terminateActorSystem() {
-		logger.info("ActorSystem {} is terminated...", actorSystem.name());
-		Future<Terminated> terminate = actorSystem.terminate();
-		while (!terminate.isCompleted())
-			SleepSupport.sleep(100);
-	}
+    private void terminateActorSystem() {
+        logger.info("ActorSystem {} is terminated...", actorSystem.name());
+        Future<Terminated> terminate = actorSystem.terminate();
+        while (!terminate.isCompleted())
+            SleepSupport.sleep(100);
+    }
 
-	public ActorSystem get() {
-		return actorSystem;
-	}
+    public ActorSystem get() {
+        return actorSystem;
+    }
 
-	public String name() {
-		return actorSystem.name();
-	}
+    public String name() {
+        return actorSystem.name();
+    }
 
-	public ActorRef actorOf(Props props) {
-		return actorSystem.actorOf(props);
-	}
+    public ActorRef actorOf(Props props) {
+        return actorSystem.actorOf(props);
+    }
 
-	public ActorRef actorOf(Props props, String name) {
-		return actorSystem.actorOf(props, name);
-	}
+    public ActorRef actorOf(Props props, String name) {
+        return actorSystem.actorOf(props, name);
+    }
 
-	public ActorRef deadLetters() {
-		return actorSystem.deadLetters();
-	}
+    public ActorRef deadLetters() {
+        return actorSystem.deadLetters();
+    }
 
-	public ActorSelection actorSelectionOf(String path) {
-		return actorSystem.actorSelection(path);
-	}
+    public ActorSelection actorSelectionOf(String path) {
+        return actorSystem.actorSelection(path);
+    }
 
-	public ActorSelection actorSelectionOf(ActorPath path) {
-		return actorSystem.actorSelection(path);
-	}
+    public ActorSelection actorSelectionOf(ActorPath path) {
+        return actorSystem.actorSelection(path);
+    }
 
 }

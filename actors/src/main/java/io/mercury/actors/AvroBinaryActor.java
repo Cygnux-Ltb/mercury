@@ -1,28 +1,28 @@
 package io.mercury.actors;
 
+import io.mercury.serialization.avro.msg.AvroBinaryMsg;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import io.mercury.actors.msg.AvroMsg;
+public abstract class AvroBinaryActor extends BaseActorT1<ByteBuffer> {
 
-public abstract class AvroBinaryActor extends CommonActorT1<ByteBuffer> {
+    @Override
+    protected Class<ByteBuffer> eventType() {
+        return ByteBuffer.class;
+    }
 
-	@Override
-	protected Class<ByteBuffer> eventType() {
-		return ByteBuffer.class;
-	}
+    @Override
+    protected final void onEvent(ByteBuffer binary) {
+        try {
+            AvroBinaryMsg msg = AvroBinaryMsg.fromByteBuffer(binary);
+            handleMsg(msg);
+        } catch (IOException e) {
+            log.error("Binary deserialization throw IOException, message -> {}, binary.capacity=={}",
+                    e.getMessage(), binary.capacity(), e);
+        }
+    }
 
-	@Override
-	protected final void onEvent(ByteBuffer binary) {
-		try {
-			AvroMsg msg = AvroMsg.fromByteBuffer(binary);
-			onAvroMsg(msg);
-		} catch (IOException e) {
-			log.error("ByteBuffer deserialization throw IOException, message==[{}], binary.capacity==[{}]",
-					e.getMessage(), binary.capacity(), e);
-		}
-	}
-
-	protected abstract void onAvroMsg(AvroMsg msg);
+    protected abstract void handleMsg(AvroBinaryMsg msg);
 
 }

@@ -1,11 +1,11 @@
 package io.mercury.actors;
 
-public abstract class CommonActorT2<T0, T1> extends CommonActor {
+public abstract class BaseActorT2<T0, T1> extends BaseActor {
 
 	protected final Class<T0> type0;
 	protected final Class<T1> type1;
 
-	protected CommonActorT2() {
+	protected BaseActorT2() {
 		this.type0 = eventType0();
 		this.type1 = eventType1();
 	}

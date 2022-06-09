@@ -6,7 +6,7 @@ import org.eclipse.collections.api.list.MutableList;
 
 import akka.actor.ActorRef;
 
-public abstract class SimpleDealerActor<T> extends CommonActorT2<ActorRef, T> {
+public abstract class SimpleDealerActor<T> extends BaseActorT2<ActorRef, T> {
 
 	private MutableList<ActorRef> registered;
 	private int turn = -1;
