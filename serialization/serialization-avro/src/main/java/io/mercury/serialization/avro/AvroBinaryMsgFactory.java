@@ -3,7 +3,6 @@ package io.mercury.serialization.avro;
 import java.nio.ByteBuffer;
 
 import com.lmax.disruptor.EventFactory;
-
 import io.mercury.serialization.avro.msg.AvroBinaryMsg;
 import io.mercury.serialization.avro.msg.ContentType;
 import io.mercury.serialization.avro.msg.Envelope;

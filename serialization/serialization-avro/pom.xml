@@ -51,7 +51,6 @@
 							<sourceDirectory>${project.basedir}/src/main/resources/schema</sourceDirectory>
 							<outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
 							<stringType>String</stringType>
-							<createOptionalGetters>true</createOptionalGetters>
 						</configuration>
 					</execution>
 				</executions>

@@ -4,8 +4,6 @@ import java.util.Collection;
 
 import javax.annotation.Nonnull;
 
-import io.mercury.serialization.avro.msg.AvroTextMsg;
-
 public class AvroMsgUtil {
 
 	// TODO

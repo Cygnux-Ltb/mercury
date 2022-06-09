@@ -8,9 +8,6 @@ import java.util.List;
 import org.junit.Test;
 
 import io.mercury.common.sys.SysProperties;
-import io.mercury.serialization.avro.msg.AvroTextMsg;
-import io.mercury.serialization.avro.msg.ContentType;
-import io.mercury.serialization.avro.msg.Envelope;
 
 public class AvroMsgFileWriterTest {
 

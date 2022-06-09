@@ -2,12 +2,12 @@ package io.mercury.serialization.avro;
 
 import java.io.File;
 
+import io.mercury.serialization.avro.msg.AvroTextMsg;
 import org.apache.avro.file.DataFileReader;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.specific.SpecificDatumReader;
 
 import io.mercury.common.sys.SysProperties;
-import io.mercury.serialization.avro.msg.AvroTextMsg;
 
 public class ReadFromAvro {
 

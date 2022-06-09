@@ -5,8 +5,6 @@ import java.nio.ByteBuffer;
 import org.junit.Test;
 
 import io.mercury.common.datetime.EpochTime;
-import io.mercury.serialization.avro.msg.AvroBinaryMsg;
-import io.mercury.serialization.avro.msg.ContentType;
 
 public class AvroBinaryDeserializerTest {
 

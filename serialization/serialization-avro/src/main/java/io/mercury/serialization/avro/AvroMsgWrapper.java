@@ -4,9 +4,6 @@ import java.nio.ByteBuffer;
 
 import io.mercury.common.codec.Envelope;
 import io.mercury.common.sequence.EpochSequence;
-import io.mercury.serialization.avro.msg.AvroBinaryMsg;
-import io.mercury.serialization.avro.msg.AvroTextMsg;
-import io.mercury.serialization.avro.msg.ContentType;
 
 public final class AvroMsgWrapper {
 
