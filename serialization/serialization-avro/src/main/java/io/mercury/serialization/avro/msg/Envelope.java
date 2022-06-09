@@ -9,7 +9,7 @@ import org.apache.avro.specific.SpecificData;
 import org.apache.avro.message.BinaryMessageEncoder;
 import org.apache.avro.message.BinaryMessageDecoder;
 import org.apache.avro.message.SchemaStore;
-import java.util.Optional;
+
 @org.apache.avro.specific.AvroGenerated
 public class Envelope extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   private static final long serialVersionUID = -2256428233676866711L;
@@ -124,13 +124,6 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase implem
     return code;
   }
 
-  /**
-   * Gets the value of the 'code' field as an Optional&lt;java.lang.Integer&gt;.
-   * @return The value wrapped in an Optional&lt;java.lang.Integer&gt;.
-   */
-  public Optional<java.lang.Integer> getOptionalCode() {
-    return Optional.<java.lang.Integer>ofNullable(code);
-  }
 
   /**
    * Sets the value of the 'code' field.
@@ -149,13 +142,6 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase implem
     return version;
   }
 
-  /**
-   * Gets the value of the 'version' field as an Optional&lt;java.lang.Integer&gt;.
-   * @return The value wrapped in an Optional&lt;java.lang.Integer&gt;.
-   */
-  public Optional<java.lang.Integer> getOptionalVersion() {
-    return Optional.<java.lang.Integer>ofNullable(version);
-  }
 
   /**
    * Sets the value of the 'version' field.
@@ -174,13 +160,6 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase implem
     return contentType;
   }
 
-  /**
-   * Gets the value of the 'contentType' field as an Optional&lt;io.mercury.serialization.avro.msg.ContentType&gt;.
-   * @return The value wrapped in an Optional&lt;io.mercury.serialization.avro.msg.ContentType&gt;.
-   */
-  public Optional<io.mercury.serialization.avro.msg.ContentType> getOptionalContentType() {
-    return Optional.<io.mercury.serialization.avro.msg.ContentType>ofNullable(contentType);
-  }
 
   /**
    * Sets the value of the 'contentType' field.
@@ -289,13 +268,6 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase implem
       return code;
     }
 
-    /**
-      * Gets the value of the 'code' field as an Optional&lt;java.lang.Integer&gt;.
-      * @return The value wrapped in an Optional&lt;java.lang.Integer&gt;.
-      */
-    public Optional<java.lang.Integer> getOptionalCode() {
-      return Optional.<java.lang.Integer>ofNullable(code);
-    }
 
     /**
       * Sets the value of the 'code' field.
@@ -335,13 +307,6 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase implem
       return version;
     }
 
-    /**
-      * Gets the value of the 'version' field as an Optional&lt;java.lang.Integer&gt;.
-      * @return The value wrapped in an Optional&lt;java.lang.Integer&gt;.
-      */
-    public Optional<java.lang.Integer> getOptionalVersion() {
-      return Optional.<java.lang.Integer>ofNullable(version);
-    }
 
     /**
       * Sets the value of the 'version' field.
@@ -381,13 +346,6 @@ public class Envelope extends org.apache.avro.specific.SpecificRecordBase implem
       return contentType;
     }
 
-    /**
-      * Gets the value of the 'contentType' field as an Optional&lt;io.mercury.serialization.avro.msg.ContentType&gt;.
-      * @return The value wrapped in an Optional&lt;io.mercury.serialization.avro.msg.ContentType&gt;.
-      */
-    public Optional<io.mercury.serialization.avro.msg.ContentType> getOptionalContentType() {
-      return Optional.<io.mercury.serialization.avro.msg.ContentType>ofNullable(contentType);
-    }
 
     /**
       * Sets the value of the 'contentType' field.

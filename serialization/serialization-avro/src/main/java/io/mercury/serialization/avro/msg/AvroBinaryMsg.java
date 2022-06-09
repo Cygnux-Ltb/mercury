@@ -9,7 +9,7 @@ import org.apache.avro.specific.SpecificData;
 import org.apache.avro.message.BinaryMessageEncoder;
 import org.apache.avro.message.BinaryMessageDecoder;
 import org.apache.avro.message.SchemaStore;
-import java.util.Optional;
+
 @org.apache.avro.specific.AvroGenerated
 public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
   private static final long serialVersionUID = -6880100571120899769L;
@@ -129,13 +129,6 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
     return envelope;
   }
 
-  /**
-   * Gets the value of the 'envelope' field as an Optional&lt;io.mercury.serialization.avro.msg.Envelope&gt;.
-   * @return The value wrapped in an Optional&lt;io.mercury.serialization.avro.msg.Envelope&gt;.
-   */
-  public Optional<io.mercury.serialization.avro.msg.Envelope> getOptionalEnvelope() {
-    return Optional.<io.mercury.serialization.avro.msg.Envelope>ofNullable(envelope);
-  }
 
   /**
    * Sets the value of the 'envelope' field.
@@ -154,13 +147,6 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
     return sequence;
   }
 
-  /**
-   * Gets the value of the 'sequence' field as an Optional&lt;java.lang.Long&gt;.
-   * @return The value wrapped in an Optional&lt;java.lang.Long&gt;.
-   */
-  public Optional<java.lang.Long> getOptionalSequence() {
-    return Optional.<java.lang.Long>ofNullable(sequence);
-  }
 
   /**
    * Sets the value of the 'sequence' field.
@@ -179,13 +165,6 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
     return epoch;
   }
 
-  /**
-   * Gets the value of the 'epoch' field as an Optional&lt;java.lang.Long&gt;.
-   * @return The value wrapped in an Optional&lt;java.lang.Long&gt;.
-   */
-  public Optional<java.lang.Long> getOptionalEpoch() {
-    return Optional.<java.lang.Long>ofNullable(epoch);
-  }
 
   /**
    * Sets the value of the 'epoch' field.
@@ -204,13 +183,6 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
     return content;
   }
 
-  /**
-   * Gets the value of the 'content' field as an Optional&lt;java.nio.ByteBuffer&gt;.
-   * @return The value wrapped in an Optional&lt;java.nio.ByteBuffer&gt;.
-   */
-  public Optional<java.nio.ByteBuffer> getOptionalContent() {
-    return Optional.<java.nio.ByteBuffer>ofNullable(content);
-  }
 
   /**
    * Sets the value of the 'content' field.
@@ -333,13 +305,6 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
       return envelope;
     }
 
-    /**
-      * Gets the value of the 'envelope' field as an Optional&lt;io.mercury.serialization.avro.msg.Envelope&gt;.
-      * @return The value wrapped in an Optional&lt;io.mercury.serialization.avro.msg.Envelope&gt;.
-      */
-    public Optional<io.mercury.serialization.avro.msg.Envelope> getOptionalEnvelope() {
-      return Optional.<io.mercury.serialization.avro.msg.Envelope>ofNullable(envelope);
-    }
 
     /**
       * Sets the value of the 'envelope' field.
@@ -416,13 +381,6 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
       return sequence;
     }
 
-    /**
-      * Gets the value of the 'sequence' field as an Optional&lt;java.lang.Long&gt;.
-      * @return The value wrapped in an Optional&lt;java.lang.Long&gt;.
-      */
-    public Optional<java.lang.Long> getOptionalSequence() {
-      return Optional.<java.lang.Long>ofNullable(sequence);
-    }
 
     /**
       * Sets the value of the 'sequence' field.
@@ -462,13 +420,6 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
       return epoch;
     }
 
-    /**
-      * Gets the value of the 'epoch' field as an Optional&lt;java.lang.Long&gt;.
-      * @return The value wrapped in an Optional&lt;java.lang.Long&gt;.
-      */
-    public Optional<java.lang.Long> getOptionalEpoch() {
-      return Optional.<java.lang.Long>ofNullable(epoch);
-    }
 
     /**
       * Sets the value of the 'epoch' field.
@@ -508,13 +459,6 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
       return content;
     }
 
-    /**
-      * Gets the value of the 'content' field as an Optional&lt;java.nio.ByteBuffer&gt;.
-      * @return The value wrapped in an Optional&lt;java.nio.ByteBuffer&gt;.
-      */
-    public Optional<java.nio.ByteBuffer> getOptionalContent() {
-      return Optional.<java.nio.ByteBuffer>ofNullable(content);
-    }
 
     /**
       * Sets the value of the 'content' field.

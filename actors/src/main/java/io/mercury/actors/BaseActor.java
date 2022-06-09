@@ -20,8 +20,8 @@ public abstract class CommonActor extends AbstractActor {
 		return receiveBuilder().matchAny(this::handleUnknown);
 	}
 
-	private final void handleUnknown(Object obj) {
-		log.error("Received unmatch message -> class==[{}] obj -> {}", obj.getClass().getName(), obj);
+	private void handleUnknown(Object obj) {
+		log.error("Received unmatched message -> object type -> {}", obj.getClass().getName());
 		handleUnknown0(obj);
 	}
 
