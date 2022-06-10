@@ -16,7 +16,7 @@ abstract class BaseActor extends AbstractActor {
         log.info("Created Actor -> {}", self);
     }
 
-    protected final ReceiveBuilder baseReceiveBuilder() {
+    protected final ReceiveBuilder getReceiveBuilder() {
         return receiveBuilder().matchAny(this::handleUnknown);
     }
 

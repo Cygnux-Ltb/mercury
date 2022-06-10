@@ -10,7 +10,7 @@ public abstract class BaseActorT1<T> extends BaseActor {
 
 	@Override
 	public final Receive createReceive() {
-		return baseReceiveBuilder()
+		return getReceiveBuilder()
 				// match type
 				.match(type, this::onEvent)
 				// build
