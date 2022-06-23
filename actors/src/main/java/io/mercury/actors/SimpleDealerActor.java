@@ -8,7 +8,7 @@ import akka.actor.ActorRef;
 
 public abstract class SimpleDealerActor<T> extends BaseActorT2<ActorRef, T> {
 
-	private MutableList<ActorRef> registered;
+	private final MutableList<ActorRef> registered;
 	private int turn = -1;
 
 	protected SimpleDealerActor() {

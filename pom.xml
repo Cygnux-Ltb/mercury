@@ -1,109 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<!-- This is commons pom.xml -->
-	<groupId>io.mercury</groupId>
-	<artifactId>mercury</artifactId>
-	<version>1.0-SNAPSHOT</version>
+    <!-- This is commons pom.xml -->
+    <groupId>io.mercury</groupId>
+    <artifactId>mercury</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
-	<inceptionYear>2015</inceptionYear>
-	<url>https://github.com/yellow013/mercury.git</url>
-	<developers>
-		<developer>
-			<name>yellow013</name>
-		</developer>
-	</developers>
+    <inceptionYear>2015</inceptionYear>
+    <url>https://github.com/yellow013/mercury.git</url>
+    <developers>
+        <developer>
+            <name>yellow013</name>
+        </developer>
+    </developers>
 
-	<name>mercury</name>
-	<packaging>pom</packaging>
+    <name>mercury</name>
+    <packaging>pom</packaging>
 
-	<modules>
-		<module>actors</module>
-		<module>commons</module>
-		<module>libraries</module>
-		<module>persistence</module>
-		<module>serialization</module>
-		<module>transport</module>
-	</modules>
+    <modules>
+        <module>actors</module>
+        <module>commons</module>
+        <module>libraries</module>
+        <module>persistence</module>
+        <module>serialization</module>
+        <module>transport</module>
+    </modules>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!-- Java 1.8 -->
-		<!-- <java.version>1.8</java.version> -->
-		<!-- <maven.compiler.target>1.8</maven.compiler.target> -->
-		<!-- <maven.compiler.source>1.8</maven.compiler.source> -->
-		<!-- Java 11 -->
-		<!-- <java.version>11</java.version> -->
-		<!-- <maven.compiler.target>11</maven.compiler.target> -->
-		<!-- <maven.compiler.source>11</maven.compiler.source> -->
-		<!-- Java 17 -->
-		<java.version>17</java.version>
-		<maven.compiler.target>17</maven.compiler.target>
-		<maven.compiler.source>17</maven.compiler.source>
-		<slf4j.version>1.7.32</slf4j.version>
-		<junit.version>4.13.2</junit.version>
-		<netty.version>4.1.77.Final</netty.version>
-		<jackson.version>2.13.3</jackson.version>
-	</properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Java 1.8 -->
+        <!-- <java.version>1.8</java.version> -->
+        <!-- <maven.compiler.target>1.8</maven.compiler.target> -->
+        <!-- <maven.compiler.source>1.8</maven.compiler.source> -->
+        <!-- Java 11 -->
+        <!-- <java.version>11</java.version> -->
+        <!-- <maven.compiler.target>11</maven.compiler.target> -->
+        <!-- <maven.compiler.source>11</maven.compiler.source> -->
+        <!-- Java 17 -->
+        <java.version>17</java.version>
+        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <!-- Common library version -->
+        <slf4j.version>1.7.36</slf4j.version>
+        <junit.version>4.13.2</junit.version>
+        <netty.version>4.1.77.Final</netty.version>
+        <jackson.version>2.13.3</jackson.version>
+    </properties>
 
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.9.0</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<compilerArgument>-parameters</compilerArgument>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-					<!-- <release>11</release> -->
-				</configuration>
-			</plugin>
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-source-plugin</artifactId> 
-				<version>3.2.1</version> <configuration> <attach>true</attach> </configuration> 
-				<executions> <execution> <phase>compile</phase> <goals> <goal>jar</goal> 
-				</goals> </execution> </executions> </plugin> -->
-		</plugins>
-	</build>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.10.1</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <compilerArgument>-parameters</compilerArgument>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <!-- <release>11</release> -->
+                </configuration>
+            </plugin>
+            <!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version> <configuration> <attach>true</attach> </configuration>
+                <executions> <execution> <phase>compile</phase> <goals> <goal>jar</goal>
+                </goals> </execution> </executions> </plugin> -->
+        </plugins>
+    </build>
 
-	<dependencyManagement>
-		<dependencies>
-			<!-- Junit4 dependency -->
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>${junit.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<!-- JSR305 Annotations for Find bugs -->
-			<dependency>
-				<groupId>com.google.code.findbugs</groupId>
-				<artifactId>jsr305</artifactId>
-				<version>3.0.2</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+    <dependencyManagement>
+        <dependencies>
+            <!-- Junit4 dependency -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- JSR305 Annotations for Find bugs -->
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>3.0.2</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-	<distributionManagement>
-		<repository>
-			<id>releases</id>
-			<name>releases</name>
-			<url>http://203.60.1.16:10000/nexus/repository/maven-releases/</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>snapshots</name>
-			<url>http://203.60.1.16:10000/nexus/repository/maven-snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <name>releases</name>
+            <url>http://203.60.1.16:10000/nexus/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>snapshots</name>
+            <url>http://203.60.1.16:10000/nexus/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
