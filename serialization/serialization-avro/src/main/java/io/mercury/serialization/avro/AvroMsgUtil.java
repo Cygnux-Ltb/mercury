@@ -1,8 +1,9 @@
 package io.mercury.serialization.avro;
 
-import java.util.Collection;
+import io.mercury.serialization.avro.msg.AvroTextMsg;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
 
 public class AvroMsgUtil {
 
