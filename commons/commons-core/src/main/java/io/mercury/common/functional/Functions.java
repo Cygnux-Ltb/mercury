@@ -19,6 +19,19 @@ public final class Functions {
     }
 
     /**
+     * @param <T>
+     * @param supplier
+     * @param successFunc
+     * @param failureFunc
+     * @return
+     */
+    public static <T> List<T> exec(@Nonnull final Supplier<List<T>> supplier,
+                                   @Nullable final Function<List<T>, List<T>> successFunc,
+                                   @Nullable final ThrowableHandler<? super Exception> failureFunc) {
+        return exec(supplier, successFunc, failureFunc, FastList::new);
+    }
+
+    /**
      * @param <R>
      * @param supplier    : Parameterless function to be executed
      * @param successFunc : After the function succeeds...
@@ -40,19 +53,6 @@ public final class Functions {
                 failureFunc.handle(e);
             return defSupplier != null ? defSupplier.get() : null;
         }
-    }
-
-    /**
-     * @param <T>
-     * @param supplier
-     * @param successFunc
-     * @param failureFunc
-     * @return
-     */
-    public static <T> List<T> exec(@Nonnull final Supplier<List<T>> supplier,
-                                   @Nullable final Function<List<T>, List<T>> successFunc,
-                                   @Nullable final ThrowableHandler<? super Exception> failureFunc) {
-        return exec(supplier, successFunc, failureFunc, FastList::new);
     }
 
 
@@ -145,7 +145,8 @@ public final class Functions {
      * @throws E
      */
     public static <R, E extends Exception> R getOrThrows(@Nonnull BooleanSupplier isHas,
-                                                         @Nonnull Supplier<R> supplier, E exception) throws E {
+                                                         @Nonnull Supplier<R> supplier, E exception)
+            throws E {
         if (isHas.getAsBoolean())
             return supplier.get();
         else
