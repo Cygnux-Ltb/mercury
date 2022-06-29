@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.thread.RuntimeInterruptedException;
 import io.mercury.common.thread.ShutdownHooks;
@@ -330,9 +330,9 @@ public abstract class AbstractChronicleQueue<
         if (isClosed()) {
             throw new IllegalStateException("Cannot be create reader, Chronicle queue is closed");
         }
-        Assertor.nonNull(readerName, "readerName");
-        Assertor.nonNull(param, "param");
-        Assertor.nonNull(dataConsumer, "dataConsumer");
+        Asserter.nonNull(readerName, "readerName");
+        Asserter.nonNull(param, "param");
+        Asserter.nonNull(dataConsumer, "dataConsumer");
         RT reader = createReader(readerName, param, logger, dataConsumer);
         addAccessor(reader);
         return reader;
@@ -382,7 +382,7 @@ public abstract class AbstractChronicleQueue<
      * @throws IllegalStateException
      */
     public AT acquireAppender(@Nonnull String appenderName) throws IllegalStateException {
-        Assertor.nonNull(appenderName, "appenderName");
+        Asserter.nonNull(appenderName, "appenderName");
         return acquireAppender(appenderName, null);
     }
 
@@ -392,7 +392,7 @@ public abstract class AbstractChronicleQueue<
      * @throws IllegalStateException
      */
     public AT acquireAppender(@Nonnull Supplier<IN> dataProducer) throws IllegalStateException {
-        Assertor.nonNull(dataProducer, "dataProducer");
+        Asserter.nonNull(dataProducer, "dataProducer");
         return acquireAppender(generateAppenderName(), dataProducer);
     }
 
@@ -407,7 +407,7 @@ public abstract class AbstractChronicleQueue<
             throws IllegalStateException {
         if (isClosed())
             throw new IllegalStateException("Cannot be acquire appender, Chronicle queue is closed");
-        Assertor.nonNull(appenderName, "appenderName");
+        Asserter.nonNull(appenderName, "appenderName");
         AT appender = acquireAppender(appenderName, logger, dataProducer);
         addAccessor(appender);
         return appender;
@@ -506,7 +506,7 @@ public abstract class AbstractChronicleQueue<
         }
 
         public B fileCycle(@Nonnull FileCycle fileCycle) {
-            Assertor.nonNull(fileCycle, "fileCycle");
+            Asserter.nonNull(fileCycle, "fileCycle");
             this.fileCycle = fileCycle;
             return self();
         }
@@ -517,13 +517,13 @@ public abstract class AbstractChronicleQueue<
         }
 
         public B storeFileListener(@Nonnull ObjIntConsumer<File> storeFileListener) {
-            Assertor.nonNull(storeFileListener, "storeFileListener");
+            Asserter.nonNull(storeFileListener, "storeFileListener");
             this.storeFileListener = storeFileListener;
             return self();
         }
 
         public B logger(@Nonnull Logger logger) {
-            Assertor.nonNull(logger, "logger");
+            Asserter.nonNull(logger, "logger");
             this.logger = logger;
             return self();
         }

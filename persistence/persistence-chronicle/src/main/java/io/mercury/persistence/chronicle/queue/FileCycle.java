@@ -4,7 +4,7 @@ import static io.mercury.common.datetime.TimeConst.MILLIS_PER_SECONDS;
 
 import java.time.Instant;
 
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import net.openhft.chronicle.queue.RollCycle;
 import net.openhft.chronicle.queue.RollCycles;
 
@@ -131,7 +131,7 @@ public enum FileCycle {
      * @return
      */
     public long toIndex(long epochSecond) throws IllegalArgumentException {
-        Assertor.greaterOrEqualThan(epochSecond, 0, "epochSecond");
+        Asserter.greaterOrEqualThan(epochSecond, 0, "epochSecond");
         return rollCycle.toIndex((int) (epochSecond / seconds), 0);
     }
 

@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.sys.SysProperties;
 import io.mercury.common.util.StringSupport;
@@ -33,7 +33,7 @@ public final class SqliteUtil {
 
 	public static final <T> List<T> query(@Nonnull Connection connection, @Nonnull String sql,
 			@Nonnull ResultSetProcessor processor, Class<T> type) throws SQLException {
-		Assertor.nonNull(connection, "connection");
+		Asserter.nonNull(connection, "connection");
 		try (// create a database connection
 				Statement statement = connection.createStatement();
 				ResultSet rs = statement.executeQuery(sql);) {

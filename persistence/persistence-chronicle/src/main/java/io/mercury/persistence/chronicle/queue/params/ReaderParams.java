@@ -1,7 +1,7 @@
 package io.mercury.persistence.chronicle.queue.params;
 
-import static io.mercury.common.lang.Assertor.greaterThan;
-import static io.mercury.common.lang.Assertor.nonNull;
+import static io.mercury.common.lang.Asserter.greaterThan;
+import static io.mercury.common.lang.Asserter.nonNull;
 
 import java.util.concurrent.TimeUnit;
 

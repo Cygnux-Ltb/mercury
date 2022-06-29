@@ -9,14 +9,14 @@ import java.io.IOException;
 
 public class RocksMapKeeper<K extends RocksKey, V extends RocksValue> extends AbstractKeeper<String, RocksMap<K, V>> {
 
-	@Override
-	protected RocksMap<K, V> createWithKey(String k) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    protected RocksMap<K, V> createWithKey(String k) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public void close() throws IOException {
+    @Override
+    public void close() {
 
-	}
+    }
 }

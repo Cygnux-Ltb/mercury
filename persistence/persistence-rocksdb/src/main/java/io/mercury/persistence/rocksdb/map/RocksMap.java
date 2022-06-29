@@ -22,98 +22,96 @@ import io.mercury.persistence.rocksdb.map.kv.RocksValue;
 
 public class RocksMap<K extends RocksKey, V extends RocksValue> implements Closeable {
 
-	private final Options options;
-	private final RocksDB rocksdb;
+    private final Options options;
+    private final RocksDB rocksdb;
 
-	public RocksMap(String savePath) throws RocksRuntimeException {
-		DBOptions dbOptions = new DBOptions();
-		ColumnFamilyOptions columnFamilyOptions = new ColumnFamilyOptions();
-		this.options = new Options(dbOptions, columnFamilyOptions);
-		Statistics statistics = new Statistics();
-		statistics.setStatsLevel(StatsLevel.ALL);
-		options.setStatistics(statistics);
-		options.setCreateIfMissing(true);
-		try {
-			this.rocksdb = RocksDB.open(options, savePath);
-		} catch (RocksDBException e) {
-			throw new RocksRuntimeException(e);
-		}
-		ShutdownHooks.closeResourcesWhenShutdown(this);
-	}
+    public RocksMap(String savePath) throws RocksRuntimeException {
+        DBOptions dbOptions = new DBOptions();
+        ColumnFamilyOptions columnFamilyOptions = new ColumnFamilyOptions();
+        this.options = new Options(dbOptions, columnFamilyOptions);
+        Statistics statistics = new Statistics();
+        statistics.setStatsLevel(StatsLevel.ALL);
+        options.setStatistics(statistics);
+        options.setCreateIfMissing(true);
+        try {
+            this.rocksdb = RocksDB.open(options, savePath);
+        } catch (RocksDBException e) {
+            throw new RocksRuntimeException(e);
+        }
+        ShutdownHooks.closeResourcesWhenShutdown(this);
+    }
 
-	public static void main(String[] args) {
-		Options options = new Options();
-		ShutdownHooks.addShutdownHook("RocksContainerCloseThread", () -> options.close());
-	}
+    public static void main(String[] args) {
+        try (Options options = new Options()) {
+            ShutdownHooks.addShutdownHook("RocksContainerCloseThread",
+                    options::close);
+        }
 
-	public void scan() {
+    }
 
-	}
+    public void scan() {
 
-	public boolean notExist(K key) {
-		return !rocksdb.keyMayExist(key.key(), new Holder<>());
-	}
+    }
 
-	/**
-	 * 
-	 * @param key
-	 * @return
-	 */
-	public V get(K key) {
-		return null;
-	}
+    public boolean notExist(K key) {
+        return !rocksdb.keyMayExist(key.key(), new Holder<>());
+    }
 
-	/**
-	 * 
-	 * @param key0
-	 * @param key1
-	 * @return
-	 */
-	public Collection<V> scan(K key0, K key1) {
-		return null;
-	}
+    /**
+     * @param key
+     * @return
+     */
+    public V get(K key) {
+        return null;
+    }
 
-	/**
-	 * 
-	 * @param key
-	 * @param value
-	 * @return
-	 */
-	public V put(K key, V value) {
-		return null;
-	}
+    /**
+     * @param key0
+     * @param key1
+     * @return
+     */
+    public Collection<V> scan(K key0, K key1) {
+        return null;
+    }
 
-	/**
-	 * 
-	 * @param key
-	 * @return
-	 */
-	public V remove(K key) {
-		return null;
-	}
+    /**
+     * @param key
+     * @param value
+     * @return
+     */
+    public V put(K key, V value) {
+        return null;
+    }
 
-	/**
-	 * 
-	 * @param keyValues
-	 */
-	public void put(MutableSet<Pair<K, V>> keyValues) {
+    /**
+     * @param key
+     * @return
+     */
+    public V remove(K key) {
+        return null;
+    }
 
-	}
+    /**
+     * @param keyValues
+     */
+    public void put(MutableSet<Pair<K, V>> keyValues) {
 
-	/**
-	 * 
-	 */
-	public void clear() {
+    }
 
-	}
+    /**
+     *
+     */
+    public void clear() {
 
-	@Override
-	public void close() throws IOException {
-		if (options != null)
-			options.close();
+    }
 
-		if (rocksdb != null)
-			rocksdb.close();
-	}
+    @Override
+    public void close() throws IOException {
+        if (options != null)
+            options.close();
+
+        if (rocksdb != null)
+            rocksdb.close();
+    }
 
 }

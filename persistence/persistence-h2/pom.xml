@@ -48,7 +48,6 @@
 			</exclusions>
 		</dependency>
 
-
 		<!-- H2 Database Engine -->
 		<dependency>
 			<groupId>com.h2database</groupId>

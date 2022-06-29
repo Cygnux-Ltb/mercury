@@ -19,7 +19,7 @@ public interface RocksKey {
 
 	/**
 	 * 
-	 * @return
+	 * @return int
 	 */
 	default int length() {
 		return key().length;

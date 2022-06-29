@@ -3,7 +3,7 @@ package io.mercury.persistence.chronicle.hash;
 import java.time.LocalDate;
 
 import io.mercury.common.datetime.DateTimeUtil;
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.persistence.chronicle.exception.ChronicleIOException;
 import net.openhft.chronicle.map.ChronicleMap;
 
@@ -16,7 +16,7 @@ public final class ChronicleMapKeeperOfDate<K, V> extends ChronicleMapKeeper<K, 
 	}
 
 	public ChronicleMap<K, V> acquire(@Nonnull LocalDate date) throws ChronicleIOException {
-		Assertor.nonNull(date, "date");
+		Asserter.nonNull(date, "date");
 		return super.acquire(Integer.toString(DateTimeUtil.date(date)));
 	}
 

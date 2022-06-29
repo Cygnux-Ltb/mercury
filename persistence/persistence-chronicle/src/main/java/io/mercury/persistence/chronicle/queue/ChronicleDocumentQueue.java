@@ -10,7 +10,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
 
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.sequence.EpochSequence;
 import io.mercury.persistence.chronicle.queue.ChronicleDocumentQueue.ChronicleDocumentAppender;
 import io.mercury.persistence.chronicle.queue.ChronicleDocumentQueue.ChronicleDocumentReader;
@@ -27,7 +27,7 @@ public class ChronicleDocumentQueue<T extends Marshallable>
 
     private ChronicleDocumentQueue(DocumentQueueBuilder<T> builder) {
         super(builder);
-        Assertor.nonNull(builder.marshallableSupplier, "builder.marshallableSupplier");
+        Asserter.nonNull(builder.marshallableSupplier, "builder.marshallableSupplier");
         this.marshallableSupplier = builder.marshallableSupplier;
     }
 
