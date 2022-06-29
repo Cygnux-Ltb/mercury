@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 import org.eclipse.collections.api.set.MutableSet;
 
 import io.mercury.common.collections.MutableSets;
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 
 public final class FileScanner {
 
@@ -24,7 +24,7 @@ public final class FileScanner {
 	 */
 	@Nonnull
 	public static MutableSet<File> depthFirst(@Nonnull File path) {
-		Assertor.nonNull(path, "path");
+		Asserter.nonNull(path, "path");
 		return depthFirst(path, any -> true);
 	}
 
@@ -37,7 +37,7 @@ public final class FileScanner {
 	 */
 	@Nonnull
 	public static MutableSet<File> depthFirst(@Nonnull File path, @Nullable FileFilter filter) {
-		Assertor.nonNull(path, "path");
+		Asserter.nonNull(path, "path");
 		if (filter == null)
 			filter = any -> true;
 		MutableSet<File> files = MutableSets.newUnifiedSet();

@@ -16,16 +16,16 @@ package io.mercury.common.graph.dag;
  * limitations under the License.
  */
 
+import java.io.Serial;
 import java.util.Iterator;
 import java.util.List;
 
 public class CycleDetectedException extends Exception {
-	/**
-	 * 
-	 */
+
+	@Serial
 	private static final long serialVersionUID = 8005551382082574971L;
 
-	private List<String> cycle;
+	private final List<String> cycle;
 
 	public CycleDetectedException(final String message, final List<String> cycle) {
 		super(message);

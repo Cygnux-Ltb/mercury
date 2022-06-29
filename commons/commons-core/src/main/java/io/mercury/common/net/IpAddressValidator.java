@@ -1,5 +1,6 @@
 package io.mercury.common.net;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +15,7 @@ import io.mercury.common.util.RegexValidator;
  */
 public final class IpAddressValidator implements Serializable {
 
+	@Serial
 	private static final long serialVersionUID = -919201640201914789L;
 
 	private static final int IPV4_SEGMENT_MAX_VALUE = 255;

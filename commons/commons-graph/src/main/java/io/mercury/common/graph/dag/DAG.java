@@ -16,6 +16,7 @@ package io.mercury.common.graph.dag;
  * limitations under the License.
  */
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,9 +33,7 @@ import org.eclipse.collections.api.list.ImmutableList;
  */
 public class DAG implements Cloneable, Serializable {
 
-	/**
-	 * 
-	 */
+	@Serial
 	private static final long serialVersionUID = -8639632777005175375L;
 
 	// ------------------------------------------------------------
@@ -47,12 +46,12 @@ public class DAG implements Cloneable, Serializable {
 	/**
 	 * Maps vertex's label to vertex
 	 */
-	private final Map<String, Vertex> vertexMap = new HashMap<String, Vertex>();
+	private final Map<String, Vertex> vertexMap = new HashMap<>();
 
 	/**
 	 * Conatin list of all vertices
 	 */
-	private final List<Vertex> vertexList = new ArrayList<Vertex>();
+	private final List<Vertex> vertexList = new ArrayList<>();
 
 	// ------------------------------------------------------------
 	// Constructors

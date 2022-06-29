@@ -21,6 +21,7 @@ package com.conversantmedia.util.estimation;
  */
 
 import java.io.PrintStream;
+import java.io.Serial;
 import java.util.Arrays;
 
 /**
@@ -280,6 +281,7 @@ public class Percentile {
 	 */
 	public static class InsufficientSamplesException extends Exception {
 
+		@Serial
 		private static final long serialVersionUID = 5843257020225380888L;
 
 		private InsufficientSamplesException() {

@@ -18,6 +18,7 @@ import static org.eclipse.collections.impl.collector.Collectors2.toImmutableList
  * limitations under the License.
  */
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import org.eclipse.collections.api.list.ImmutableList;
@@ -31,9 +32,8 @@ import io.mercury.common.collections.MutableLists;
  * 
  */
 public class Vertex implements Cloneable, Serializable {
-	/**
-	 * 
-	 */
+
+	@Serial
 	private static final long serialVersionUID = 6226650981773662643L;
 
 	// ------------------------------------------------------------
@@ -116,7 +116,7 @@ public class Vertex implements Cloneable, Serializable {
 	 * @return the labels used by the most direct children.
 	 */
 	public ImmutableList<String> getChildLabels() {
-		return children.stream().map(v -> v.getLabel()).collect(toImmutableList());
+		return children.stream().map(Vertex::getLabel).collect(toImmutableList());
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class Vertex implements Cloneable, Serializable {
 	 * @return the labels used parents
 	 */
 	public ImmutableList<String> getParentLabels() {
-		return parents.stream().map(v -> v.getLabel()).collect(toImmutableList());
+		return parents.stream().map(Vertex::getLabel).collect(toImmutableList());
 	}
 
 	/**

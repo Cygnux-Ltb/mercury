@@ -69,16 +69,12 @@ public enum CommonWaitStrategy implements Supplier<WaitStrategy> {
 
 	@Override
 	public WaitStrategy get() {
-		switch (this) {
-		case BusySpin:
-			return new BusySpinWaitStrategy();
-		case Blocking:
-			return new BlockingWaitStrategy();
-		case Yielding:
-			return new YieldingWaitStrategy();
-		default:
-			return new SleepingWaitStrategy();
-		}
+		return switch (this) {
+			case BusySpin -> new BusySpinWaitStrategy();
+			case Blocking -> new BlockingWaitStrategy();
+			case Yielding -> new YieldingWaitStrategy();
+			default -> new SleepingWaitStrategy();
+		};
 	}
 
 }

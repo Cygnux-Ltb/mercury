@@ -21,6 +21,7 @@ package com.conversantmedia.util.concurrent;
  */
 
 import javax.annotation.Nonnull;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
@@ -37,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 public final class PushPullBlockingQueue<E> extends PushPullConcurrentQueue<E>
 		implements Serializable, Iterable<E>, Collection<E>, BlockingQueue<E>, Queue<E> {
 
+	@Serial
 	private static final long serialVersionUID = 5553142203892135792L;
 
 	// locking objects used for independent locking

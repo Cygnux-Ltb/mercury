@@ -2,7 +2,7 @@ package io.mercury.common.config;
 
 import static io.mercury.common.functional.Functions.getOrDefault;
 import static io.mercury.common.functional.Functions.getOrThrows;
-import static io.mercury.common.lang.Assertor.nonNull;
+import static io.mercury.common.lang.Asserter.nonNull;
 import static io.mercury.common.util.StringSupport.nonEmpty;
 
 import java.util.function.DoublePredicate;

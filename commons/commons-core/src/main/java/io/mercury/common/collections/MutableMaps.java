@@ -52,7 +52,7 @@ import org.eclipse.collections.impl.map.mutable.primitive.ObjectIntHashMap;
 import org.eclipse.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import org.eclipse.collections.impl.map.sorted.mutable.TreeSortedMap;
 
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.util.ArrayUtil;
 
 public final class MutableMaps {
@@ -153,7 +153,7 @@ public final class MutableMaps {
      */
     @SafeVarargs
     public static <V> MutableIntObjectMap<V> newIntObjectHashMap(@Nonnull ToIntFunction<V> keyFunc, V... values) {
-        Assertor.nonNull(keyFunc, "keyFunc");
+        Asserter.nonNull(keyFunc, "keyFunc");
         if (ArrayUtil.isNullOrEmpty(values)) {
             return newIntObjectHashMap();
         }

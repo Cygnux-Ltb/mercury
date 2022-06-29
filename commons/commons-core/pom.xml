@@ -1,103 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>io.mercury</groupId>
-		<artifactId>commons</artifactId>
-		<version>1.0-SNAPSHOT</version>
-	</parent>
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.mercury</groupId>
+        <artifactId>commons</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>commons-core</artifactId>
-	<name>commons-core</name>
+    <artifactId>commons-core</artifactId>
+    <name>commons-core</name>
 
-	<packaging>jar</packaging>
+    <packaging>jar</packaging>
 
-	<properties>
-		<commons-lang3.version>3.12.0</commons-lang3.version>
-		<commons-collections4.version>4.4</commons-collections4.version>
-		<commons-io.version>2.11.0</commons-io.version>
-		<guava.version>31.1-jre</guava.version>
-		<eclipse-collections.version>11.0.0</eclipse-collections.version>
-	</properties>
+    <properties>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
+        <commons-io.version>2.11.0</commons-io.version>
+        <guava.version>31.1-jre</guava.version>
+        <eclipse-collections.version>11.0.0</eclipse-collections.version>
+    </properties>
 
-	<dependencies>
-		<!-- JSR305 Annotations for Find bugs -->
-		<dependency>
-			<groupId>com.google.code.findbugs</groupId>
-			<artifactId>jsr305</artifactId>
-		</dependency>
+    <dependencies>
+        <!-- JSR305 Annotations for Find bugs -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+        </dependency>
 
-		<!-- Apache Commons a package of Java utility classes for the classes that 
-			are in java.l hierarchy, or are considered to be so standard as to justify 
-			existence in java.lang. -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${commons-lang3.version}</version>
-		</dependency>
+        <!-- Apache Commons a package of Java utility classes for the classes that
+            are in java.l hierarchy, or are considered to be so standard as to justify
+            existence in java.lang. -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
 
-		<!-- The Apache ons Collections package contains types that extend and 
-			augment the Java Collections Framework. -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-collections4</artifactId>
-			<version>${commons-collections4.version}</version>
-		</dependency>
+        <!-- The Apache ons Collections package contains types that extend and
+            augment the Java Collections Framework. -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${commons-collections4.version}</version>
+        </dependency>
 
-		<!-- The Apache Commons IO library contains utility classes, stream implementations, 
-			file filters, file comparators, endian transformation classes, and much more. -->
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>${commons-io.version}</version>
-		</dependency>
+        <!-- The Apache Commons IO library contains utility classes, stream implementations,
+            file filters, file comparators, endian transformation classes, and much more. -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
 
-		<!-- ##### Eclipse Collections Library ##### -->
-		<!-- Eclipse Collections API -->
-		<dependency>
-			<groupId>org.eclipse.collections</groupId>
-			<artifactId>eclipse-collections-api</artifactId>
-			<version>${eclipse-collections.version}</version>
-		</dependency>
-		<!-- Eclipse Collections Main Library -->
-		<dependency>
-			<groupId>org.eclipse.collections</groupId>
-			<artifactId>eclipse-collections</artifactId>
-			<version>${eclipse-collections.version}</version>
-		</dependency>
-		<!-- Eclipse Collections Fork Join Utilities -->
-		<dependency>
-			<groupId>org.eclipse.collections</groupId>
-			<artifactId>eclipse-collections-forkjoin</artifactId>
-			<version>${eclipse-collections.version}</version>
-		</dependency>
+        <!-- ##### Eclipse Collections Library ##### -->
+        <!-- Eclipse Collections API -->
+        <dependency>
+            <groupId>org.eclipse.collections</groupId>
+            <artifactId>eclipse-collections-api</artifactId>
+            <version>${eclipse-collections.version}</version>
+        </dependency>
+        <!-- Eclipse Collections Main Library -->
+        <dependency>
+            <groupId>org.eclipse.collections</groupId>
+            <artifactId>eclipse-collections</artifactId>
+            <version>${eclipse-collections.version}</version>
+        </dependency>
+        <!-- Eclipse Collections Fork Join Utilities -->
+        <dependency>
+            <groupId>org.eclipse.collections</groupId>
+            <artifactId>eclipse-collections-forkjoin</artifactId>
+            <version>${eclipse-collections.version}</version>
+        </dependency>
 
-		<!-- Guava is a suite of core and expanded libraries that include utility 
-			classes, google's collections, io classes, and much much more. -->
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>${guava.version}</version>
-		</dependency>
+        <!-- Guava is a suite of core and expanded libraries that include utility
+            classes, google's collections, io classes, and much much more. -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
 
-		<!-- commons log4j2 logger -->
-		<dependency>
-			<groupId>io.mercury</groupId>
-			<artifactId>commons-log4j2</artifactId>
-		</dependency>
+        <!-- Non-Blocking Reactive Foundation for the JVM -->
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
+            <version>3.4.18</version>
+        </dependency>
 
-		<!-- ####### Unit test mock tool ####### -->
-		<!-- Mockito mock objects library core API and implementation -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>4.2.0</version>
-			<scope>test</scope>
-		</dependency>
+        <!-- commons log4j2 logger -->
+        <dependency>
+            <groupId>io.mercury</groupId>
+            <artifactId>commons-log4j2</artifactId>
+        </dependency>
 
-	</dependencies>
+        <!-- ####### Unit test mock tool ####### -->
+        <!-- Mockito mock objects library core API and implementation -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>4.6.1</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
 
 </project>

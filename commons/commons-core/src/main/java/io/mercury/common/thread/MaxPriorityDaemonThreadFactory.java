@@ -1,5 +1,7 @@
 package io.mercury.common.thread;
 
+import javax.annotation.Nonnull;
+
 public class MaxPriorityDaemonThreadFactory extends MaxPriorityThreadFactory {
 
 	public MaxPriorityDaemonThreadFactory(String name) {
@@ -7,7 +9,7 @@ public class MaxPriorityDaemonThreadFactory extends MaxPriorityThreadFactory {
 	}
 
 	@Override
-	public Thread newThread(Runnable runnable) {
+	public Thread newThread(@Nonnull Runnable runnable) {
 		Thread thread = super.newThread(runnable);
 		thread.setDaemon(true);
 		return thread;

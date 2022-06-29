@@ -15,7 +15,7 @@ import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
 
 import io.mercury.common.collections.MutableLists;
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 
 /**
  * 时间窗口序列
@@ -35,9 +35,9 @@ public class TimeWindow implements Serial<TimeWindow> {
 	private final Duration duration;
 
 	protected TimeWindow(@Nonnull LocalDateTime start, @Nonnull LocalDateTime end, @Nonnull ZoneOffset offset) {
-		Assertor.nonNull(start, "start");
-		Assertor.nonNull(end, "end");
-		Assertor.nonNull(offset, "offset");
+		Asserter.nonNull(start, "start");
+		Asserter.nonNull(end, "end");
+		Asserter.nonNull(offset, "offset");
 		this.start = start;
 		this.end = end;
 		this.offset = offset;

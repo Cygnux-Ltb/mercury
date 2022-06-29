@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 import io.mercury.common.collections.queue.Queue;
 import io.mercury.common.functional.Processor;
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.thread.RunnableComponent;
 
 /**
@@ -22,7 +22,7 @@ public abstract class AbstractSingleConsumerQueue<E> extends RunnableComponent i
 	protected final Processor<E> processor;
 
 	protected AbstractSingleConsumerQueue(Processor<E> processor) {
-		Assertor.nonNull(processor, "processor");
+		Asserter.nonNull(processor, "processor");
 		this.processor = processor;
 		this.name = "queue-" + "[" + YYYYMMDD_L_HHMMSSSSS.format(LocalDateTime.now()) + "]";
 	}

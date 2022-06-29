@@ -56,8 +56,8 @@ public final class AsyncCacheMap<K, V> {
 
 	private final class QueryResult {
 
-		private V value;
-		private long nanoTime;
+		private final V value;
+		private final long nanoTime;
 
 		public QueryResult(V value, long nanoTime) {
 			this.value = value;
@@ -72,6 +72,10 @@ public final class AsyncCacheMap<K, V> {
 				.process(event -> asyncExec(event));
 		this.queryQueue = JctSingleConsumerQueue.mpscQueue(this.cacheName + "-QueryQueue").setCapacity(64)
 				.process(result -> consumerMap.remove(result.nanoTime).accept(result.value));
+	}
+
+	public String getCacheName() {
+		return cacheName;
 	}
 
 	private void asyncExec(ExecEvent event) {
@@ -98,7 +102,7 @@ public final class AsyncCacheMap<K, V> {
 		AsyncCacheMap<Integer, String> asyncCacheMap = new AsyncCacheMap<>("TEST");
 		for (int i = 0; i < 100; i++) {
 			asyncCacheMap.asyncPut(i, i + "%%^");
-			asyncCacheMap.asyncGet(i, v -> System.out.println(v));
+			asyncCacheMap.asyncGet(i, System.out::println);
 		}
 		System.out.println(1111);
 	}

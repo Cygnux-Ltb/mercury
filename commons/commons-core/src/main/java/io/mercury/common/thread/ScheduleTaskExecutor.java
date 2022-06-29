@@ -18,10 +18,10 @@ import io.mercury.common.sys.CurrentRuntime;
 
 public final class ScheduleTaskExecutor {
 
+    private static final Logger log = Log4j2LoggerFactory.getLogger(ScheduleTaskExecutor.class);
+
     private ScheduleTaskExecutor() {
     }
-
-    private static final Logger log = Log4j2LoggerFactory.getLogger(ScheduleTaskExecutor.class);
 
     /**
      * @param firstTime

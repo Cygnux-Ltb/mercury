@@ -21,6 +21,7 @@ package com.conversantmedia.util.concurrent;
  */
 
 import javax.annotation.Nonnull;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
@@ -37,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
 		implements Serializable, Iterable<E>, Collection<E>, BlockingQueue<E>, Queue<E>, ConcurrentQueue<E> {
 
+	@Serial
 	private static final long serialVersionUID = 6924345034690664781L;
 
 	// locking objects used for independent locking

@@ -74,7 +74,7 @@ public final class Functions {
      */
     public static <R> boolean execBool(@Nonnull final Supplier<R> supplier,
                                        @Nonnull final BooleanFunction<R> successFunc,
-                                       @Nullable final BooleanFunction<? super Exception> failureFunc) {
+                                       @Nullable final BooleanFunction<Exception> failureFunc) {
         try {
             return successFunc.booleanValueOf(supplier.get());
         } catch (Exception e) {
@@ -126,14 +126,15 @@ public final class Functions {
      * @param <R>
      * @param isHas
      * @param supplier
-     * @param defaultVal
+     * @param val
      * @return
      */
-    public static <R> R getOrDefault(@Nonnull BooleanSupplier isHas, @Nonnull Supplier<R> supplier,
-                                     @Nonnull R defaultVal) {
+    public static <R> R getOrDefault(@Nonnull BooleanSupplier isHas,
+                                     @Nonnull Supplier<R> supplier,
+                                     @Nonnull R val) {
         if (isHas.getAsBoolean())
             return supplier.get();
-        return defaultVal;
+        return val;
     }
 
     /**
@@ -144,8 +145,9 @@ public final class Functions {
      * @return
      * @throws E
      */
-    public static <R, E extends Exception> R getOrThrows(@Nonnull BooleanSupplier isHas,
-                                                         @Nonnull Supplier<R> supplier, E exception)
+    public static <R, E extends Exception> R getOrThrows(@Nonnull final BooleanSupplier isHas,
+                                                         @Nonnull final Supplier<R> supplier,
+                                                         @Nonnull final E exception)
             throws E {
         if (isHas.getAsBoolean())
             return supplier.get();

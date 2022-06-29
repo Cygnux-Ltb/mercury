@@ -14,7 +14,7 @@ import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.thread.MaxPriorityThreadFactory;
 import io.mercury.common.thread.RunnableComponent;
@@ -43,9 +43,9 @@ public abstract class SingleProducerRingBuffer<E, I> extends RunnableComponent {
 
 	protected SingleProducerRingBuffer(String name, int size, @Nonnull EventFactory<E> factory,
 			@Nonnull WaitStrategy strategy, @Nonnull EventTranslatorOneArg<E, I> translator) {
-		Assertor.nonNull(factory, "factory");
-		Assertor.nonNull(strategy, "strategy");
-		Assertor.nonNull(translator, "translator");
+		Asserter.nonNull(factory, "factory");
+		Asserter.nonNull(strategy, "strategy");
+		Asserter.nonNull(translator, "translator");
 		if (StringSupport.nonEmpty(name))
 			super.name = name;
 		else

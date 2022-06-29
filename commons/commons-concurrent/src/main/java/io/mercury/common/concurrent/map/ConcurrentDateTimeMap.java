@@ -19,7 +19,7 @@ import io.mercury.common.collections.MutableLists;
 import io.mercury.common.datetime.DateTimeUtil;
 
 @ThreadSafe
-public class ConcurrentDateTimeMap<K extends Temporal, V> {
+public final class ConcurrentDateTimeMap<K extends Temporal, V> {
 
 	private final ToLongFunction<K> keyFunc;
 
@@ -42,7 +42,7 @@ public class ConcurrentDateTimeMap<K extends Temporal, V> {
 	 * @param <V>
 	 * @return
 	 */
-	public final static <V> ConcurrentDateTimeMap<LocalDate, V> newDateMap() {
+	public static <V> ConcurrentDateTimeMap<LocalDate, V> newDateMap() {
 		return newDateMap(128);
 	}
 
@@ -52,7 +52,7 @@ public class ConcurrentDateTimeMap<K extends Temporal, V> {
 	 * @param initialCapacity
 	 * @return
 	 */
-	public final static <V> ConcurrentDateTimeMap<LocalDate, V> newDateMap(int initialCapacity) {
+	public static <V> ConcurrentDateTimeMap<LocalDate, V> newDateMap(int initialCapacity) {
 		return new ConcurrentDateTimeMap<>(DateTimeUtil::date, key -> key.plusDays(1),
 				(nextKey, endPoint) -> nextKey.isBefore(endPoint) || nextKey.equals(endPoint), initialCapacity);
 	}
@@ -62,7 +62,7 @@ public class ConcurrentDateTimeMap<K extends Temporal, V> {
 	 * @param <V>
 	 * @return
 	 */
-	public final static <V> ConcurrentDateTimeMap<LocalTime, V> newTimeMapWithHour() {
+	public static <V> ConcurrentDateTimeMap<LocalTime, V> newTimeMapWithHour() {
 		return newTimeMapWithHour(128);
 	}
 
@@ -72,7 +72,7 @@ public class ConcurrentDateTimeMap<K extends Temporal, V> {
 	 * @param initialCapacity
 	 * @return
 	 */
-	public final static <V> ConcurrentDateTimeMap<LocalTime, V> newTimeMapWithHour(int initialCapacity) {
+	public static <V> ConcurrentDateTimeMap<LocalTime, V> newTimeMapWithHour(int initialCapacity) {
 		return new ConcurrentDateTimeMap<>(DateTimeUtil::timeOfHour, key -> key.plusHours(1),
 				(nextKey, endPoint) -> nextKey.isBefore(endPoint) || nextKey.equals(endPoint), initialCapacity);
 	}
@@ -82,7 +82,7 @@ public class ConcurrentDateTimeMap<K extends Temporal, V> {
 	 * @param <V>
 	 * @return
 	 */
-	public final static <V> ConcurrentDateTimeMap<LocalTime, V> newTimeMapWithMinute() {
+	public static <V> ConcurrentDateTimeMap<LocalTime, V> newTimeMapWithMinute() {
 		return newTimeMapWithMinute(128);
 	}
 
@@ -92,7 +92,7 @@ public class ConcurrentDateTimeMap<K extends Temporal, V> {
 	 * @param initialCapacity
 	 * @return
 	 */
-	public final static <V> ConcurrentDateTimeMap<LocalTime, V> newTimeMapWithMinute(int initialCapacity) {
+	public static <V> ConcurrentDateTimeMap<LocalTime, V> newTimeMapWithMinute(int initialCapacity) {
 		return new ConcurrentDateTimeMap<>(DateTimeUtil::timeOfMinute, key -> key.plusMinutes(1),
 				(nextKey, endPoint) -> nextKey.isBefore(endPoint) || nextKey.equals(endPoint), initialCapacity);
 	}
@@ -102,7 +102,7 @@ public class ConcurrentDateTimeMap<K extends Temporal, V> {
 	 * @param <V>
 	 * @return
 	 */
-	public final static <V> ConcurrentDateTimeMap<LocalTime, V> newTimeMapWithSecond() {
+	public static <V> ConcurrentDateTimeMap<LocalTime, V> newTimeMapWithSecond() {
 		return newTimeMapWithSecond(128);
 	}
 
@@ -112,7 +112,7 @@ public class ConcurrentDateTimeMap<K extends Temporal, V> {
 	 * @param initialCapacity
 	 * @return
 	 */
-	public final static <V> ConcurrentDateTimeMap<LocalTime, V> newTimeMapWithSecond(int initialCapacity) {
+	public static <V> ConcurrentDateTimeMap<LocalTime, V> newTimeMapWithSecond(int initialCapacity) {
 		return new ConcurrentDateTimeMap<>(DateTimeUtil::timeOfSecond, key -> key.plusSeconds(1),
 				(nextKey, endPoint) -> nextKey.isBefore(endPoint) || nextKey.equals(endPoint), initialCapacity);
 	}
@@ -122,7 +122,7 @@ public class ConcurrentDateTimeMap<K extends Temporal, V> {
 	 * @param <V>
 	 * @return
 	 */
-	public final static <V> ConcurrentDateTimeMap<LocalDateTime, V> newDateTimeMapWithHour() {
+	public static <V> ConcurrentDateTimeMap<LocalDateTime, V> newDateTimeMapWithHour() {
 		return newDateTimeMapWithHour(128);
 	}
 
@@ -132,7 +132,7 @@ public class ConcurrentDateTimeMap<K extends Temporal, V> {
 	 * @param initialCapacity
 	 * @return
 	 */
-	public final static <V> ConcurrentDateTimeMap<LocalDateTime, V> newDateTimeMapWithHour(int initialCapacity) {
+	public static <V> ConcurrentDateTimeMap<LocalDateTime, V> newDateTimeMapWithHour(int initialCapacity) {
 		return new ConcurrentDateTimeMap<>(DateTimeUtil::datetimeOfHour, key -> key.plusHours(1),
 				(nextKey, endPoint) -> nextKey.isBefore(endPoint) || nextKey.equals(endPoint), initialCapacity);
 	}
@@ -142,7 +142,7 @@ public class ConcurrentDateTimeMap<K extends Temporal, V> {
 	 * @param <V>
 	 * @return
 	 */
-	public final static <V> ConcurrentDateTimeMap<LocalDateTime, V> newDateTimeMapWithMinute() {
+	public static <V> ConcurrentDateTimeMap<LocalDateTime, V> newDateTimeMapWithMinute() {
 		return newDateTimeMapWithMinute(128);
 	}
 
@@ -152,7 +152,7 @@ public class ConcurrentDateTimeMap<K extends Temporal, V> {
 	 * @param initialCapacity
 	 * @return
 	 */
-	public final static <V> ConcurrentDateTimeMap<LocalDateTime, V> newDateTimeMapWithMinute(int initialCapacity) {
+	public static <V> ConcurrentDateTimeMap<LocalDateTime, V> newDateTimeMapWithMinute(int initialCapacity) {
 		return new ConcurrentDateTimeMap<>(DateTimeUtil::datetimeOfMinute, key -> key.plusMinutes(1),
 				(nextKey, endPoint) -> nextKey.isBefore(endPoint) || nextKey.equals(endPoint), initialCapacity);
 	}
@@ -162,7 +162,7 @@ public class ConcurrentDateTimeMap<K extends Temporal, V> {
 	 * @param <V>
 	 * @return
 	 */
-	public final static <V> ConcurrentDateTimeMap<LocalDateTime, V> newDateTimeMapWithSecond() {
+	public static <V> ConcurrentDateTimeMap<LocalDateTime, V> newDateTimeMapWithSecond() {
 		return newDateTimeMapWithSecond(128);
 	}
 
@@ -172,7 +172,7 @@ public class ConcurrentDateTimeMap<K extends Temporal, V> {
 	 * @param initialCapacity
 	 * @return
 	 */
-	public final static <V> ConcurrentDateTimeMap<LocalDateTime, V> newDateTimeMapWithSecond(int initialCapacity) {
+	public static <V> ConcurrentDateTimeMap<LocalDateTime, V> newDateTimeMapWithSecond(int initialCapacity) {
 		return new ConcurrentDateTimeMap<>(DateTimeUtil::datetimeOfSecond, key -> key.plusSeconds(1),
 				(nextKey, endPoint) -> nextKey.isBefore(endPoint) || nextKey.equals(endPoint), initialCapacity);
 	}

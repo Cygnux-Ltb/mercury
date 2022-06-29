@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 
 import io.mercury.common.character.Charsets;
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.sys.LibraryPathManager;
 import io.mercury.common.util.StringSupport;
 
@@ -34,7 +34,7 @@ public final class PropertiesUtil {
 	 * @throws IOException
 	 */
 	public static Properties load(final URL url) throws IOException {
-		Assertor.nonNull(url, "url");
+		Asserter.nonNull(url, "url");
 		return load(url.openStream());
 	}
 
@@ -45,7 +45,7 @@ public final class PropertiesUtil {
 	 * @throws IOException
 	 */
 	public static Properties load(@Nonnull final File file) throws IOException {
-		Assertor.nonNull(file, "file");
+		Asserter.nonNull(file, "file");
 		return load(new FileInputStream(file));
 	}
 
@@ -55,7 +55,7 @@ public final class PropertiesUtil {
 	 * @return
 	 * @throws IOException
 	 */
-	public static final Properties load(@Nonnull final String text) throws IOException {
+	public static Properties load(@Nonnull final String text) throws IOException {
 		return load(text, Charsets.UTF8);
 	}
 
@@ -66,9 +66,9 @@ public final class PropertiesUtil {
 	 * @return
 	 * @throws IOException
 	 */
-	public static final Properties load(@Nonnull final String text, @Nonnull final Charset charset) throws IOException {
-		Assertor.nonNull(text, "text");
-		Assertor.nonNull(charset, "charset");
+	public static Properties load(@Nonnull final String text, @Nonnull final Charset charset) throws IOException {
+		Asserter.nonNull(text, "text");
+		Asserter.nonNull(charset, "charset");
 		if (StringSupport.nonEmpty(text))
 			return load(new ByteArrayInputStream(text.getBytes(charset)));
 		return new Properties();
@@ -81,7 +81,7 @@ public final class PropertiesUtil {
 	 * @throws IOException
 	 */
 	public static Properties load(@Nonnull final InputStream stream) throws IOException {
-		Assertor.nonNull(stream, "stream");
+		Asserter.nonNull(stream, "stream");
 		Properties props = new Properties();
 		try (final InputStream in = stream) {
 			props.load(in);
@@ -97,7 +97,7 @@ public final class PropertiesUtil {
 	 * @param key
 	 * @return
 	 */
-	public static final String getString(@Nonnull final Properties props, final String key) {
+	public static String getString(@Nonnull final Properties props, final String key) {
 		return props.getProperty(key, "");
 	}
 
@@ -108,7 +108,7 @@ public final class PropertiesUtil {
 	 * @return
 	 * @throws NumberFormatException
 	 */
-	public static final boolean getBooble(@Nonnull final Properties props, final String key)
+	public static boolean getBooble(@Nonnull final Properties props, final String key)
 			throws NumberFormatException {
 		String prop = props.getProperty(key);
 		return StringSupport.isNullOrEmpty(prop) ? false : parseBoolean(prop);
@@ -121,7 +121,7 @@ public final class PropertiesUtil {
 	 * @return
 	 * @throws NumberFormatException
 	 */
-	public static final int getInt(@Nonnull final Properties props, final String key) throws NumberFormatException {
+	public static int getInt(@Nonnull final Properties props, final String key) throws NumberFormatException {
 		String prop = props.getProperty(key);
 		return StringSupport.isNullOrEmpty(prop) ? 0 : parseInt(prop);
 	}
@@ -133,7 +133,7 @@ public final class PropertiesUtil {
 	 * @return
 	 * @throws NumberFormatException
 	 */
-	public static final double getDouble(@Nonnull final Properties props, final String key)
+	public static double getDouble(@Nonnull final Properties props, final String key)
 			throws NumberFormatException {
 		String prop = props.getProperty(key);
 		return StringSupport.isNullOrEmpty(prop) ? 0.0D : parseDouble(prop);
@@ -143,7 +143,7 @@ public final class PropertiesUtil {
 	 * 
 	 * @param props
 	 */
-	public static final void show(@Nonnull final Properties props) {
+	public static void show(@Nonnull final Properties props) {
 		show(props, null);
 	}
 
@@ -152,7 +152,7 @@ public final class PropertiesUtil {
 	 * @param props
 	 * @param log
 	 */
-	public static final void show(@Nonnull final Properties props, @Nullable final Logger log) {
+	public static void show(@Nonnull final Properties props, @Nullable final Logger log) {
 		ArrayList<Entry<Object, Object>> list = new ArrayList<>(props.entrySet());
 		for (int i = 0; i < list.size(); i++) {
 			Entry<Object, Object> entry = list.get(i);

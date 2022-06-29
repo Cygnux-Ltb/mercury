@@ -37,7 +37,7 @@ public class CycleDetector {
 	public static List<String> hasCycle(final DAG graph) {
 		List<Vertex> vertices = graph.getVertices();
 
-		Map<Vertex, Integer> vertexStateMap = new HashMap<Vertex, Integer>();
+		Map<Vertex, Integer> vertexStateMap = new HashMap<>();
 
 		List<String> retValue = null;
 
@@ -62,7 +62,7 @@ public class CycleDetector {
 	 * @return
 	 */
 	public static List<String> introducesCycle(final Vertex vertex, final Map<Vertex, Integer> vertexStateMap) {
-		LinkedList<String> cycleStack = new LinkedList<String>();
+		LinkedList<String> cycleStack = new LinkedList<>();
 		boolean hasCycle = dfsVisit(vertex, cycleStack, vertexStateMap);
 		if (hasCycle) {
 			// we have a situation like: [b, a, c, d, b, f, g, h].
@@ -83,7 +83,7 @@ public class CycleDetector {
 	}
 
 	public static List<String> introducesCycle(final Vertex vertex) {
-		Map<Vertex, Integer> vertexStateMap = new HashMap<Vertex, Integer>();
+		Map<Vertex, Integer> vertexStateMap = new HashMap<>();
 		return introducesCycle(vertex, vertexStateMap);
 	}
 

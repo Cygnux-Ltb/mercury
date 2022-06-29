@@ -24,6 +24,9 @@ public class FileCompressionUtil {
 
     private static final Logger log = Log4j2LoggerFactory.getLogger(FileCompressionUtil.class);
 
+    private FileCompressionUtil() {
+    }
+
     /**
      * Enumeration of all supported compression algorithms by this utility.
      */

@@ -1,6 +1,6 @@
 package io.mercury.common.file.filter;
 
-import static io.mercury.common.lang.Assertor.requiredLength;
+import static io.mercury.common.lang.Asserter.requiredLength;
 
 import java.io.File;
 import java.io.FileFilter;

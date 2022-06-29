@@ -45,14 +45,14 @@ public final class AsyncSwap<E> extends RunnableComponent implements Runnable {
     }
 
     @Override
-    protected void start0() throws Exception {
+    protected void start0() {
         log.info("Swap {} -> Starting", name);
         // TODO
         new Thread(this, name).start();
     }
 
     @Override
-    protected void stop0() throws Exception {
+    protected void stop0() {
 
     }
 

@@ -44,15 +44,15 @@ public class TopologicalSorter {
 
 	public static List<String> sort(final Vertex vertex) {
 		// we need to use addFirst method so we will use LinkedList explicitly
-		final List<String> retValue = new LinkedList<String>();
-		dfsVisit(vertex, new HashMap<Vertex, Integer>(), retValue);
+		final List<String> retValue = new LinkedList<>();
+		dfsVisit(vertex, new HashMap<>(), retValue);
 		return retValue;
 	}
 
 	private static List<String> dfs(final DAG graph) {
 		// we need to use addFirst method so we will use LinkedList explicitly
-		List<String> retValue = new LinkedList<String>();
-		Map<Vertex, Integer> vertexStateMap = new HashMap<Vertex, Integer>();
+		List<String> retValue = new LinkedList<>();
+		Map<Vertex, Integer> vertexStateMap = new HashMap<>();
 		for (Vertex vertex : graph.getVertices()) {
 			if (isNotVisited(vertex, vertexStateMap)) {
 				dfsVisit(vertex, vertexStateMap, retValue);

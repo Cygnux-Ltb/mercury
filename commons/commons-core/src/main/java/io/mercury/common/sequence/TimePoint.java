@@ -5,7 +5,7 @@ import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HH_M
 import java.time.ZonedDateTime;
 
 import io.mercury.common.datetime.EpochTime;
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 
 /**
  * 时间点序列
@@ -41,7 +41,7 @@ public class TimePoint implements Serial<TimePoint> {
 	 * @return
 	 */
 	public static TimePoint with(ZonedDateTime datetime) {
-		Assertor.nonNull(datetime, "datetime");
+		Asserter.nonNull(datetime, "datetime");
 		return new TimePoint(datetime, 0);
 	}
 
@@ -52,7 +52,7 @@ public class TimePoint implements Serial<TimePoint> {
 	 * @return
 	 */
 	public static TimePoint with(TimePoint previous) {
-		Assertor.nonNull(previous, "previous");
+		Asserter.nonNull(previous, "previous");
 		return new TimePoint(previous.datetime, previous.repeat + 1);
 	}
 

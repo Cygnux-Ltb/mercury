@@ -63,7 +63,7 @@ public final class CacheList<T> {
 	 * @param saved
 	 * @return
 	 */
-	private final ImmutableList<T> extractValue(Saved saved) {
+	private ImmutableList<T> extractValue(Saved saved) {
 		if (saved.available) {
 			return saved.value;
 		} else {
