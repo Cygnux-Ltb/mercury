@@ -1,5 +1,6 @@
 package io.mercury.library.ignite;
 
+import java.io.Serial;
 import java.util.Collections;
 
 import org.apache.ignite.Ignite;
@@ -53,9 +54,8 @@ public class HelloWorld {
 	 * compute task.
 	 */
 	private static class RemoteTask implements IgniteRunnable {
-		/**
-		 * 
-		 */
+
+		@Serial
 		private static final long serialVersionUID = -2816115717453185083L;
 
 		@IgniteInstanceResource

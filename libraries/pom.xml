@@ -1,58 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>io.mercury</groupId>
-		<artifactId>mercury</artifactId>
-		<version>1.0-SNAPSHOT</version>
-	</parent>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.mercury</groupId>
+        <artifactId>mercury</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>libraries</artifactId>
-	<name>libraries</name>
+    <artifactId>libraries</artifactId>
+    <name>libraries</name>
 
-	<packaging>pom</packaging>
+    <packaging>pom</packaging>
 
-	<modules>
-		<module>library-arangodb</module>
-		<module>library-cryption</module>
-		<module>library-hypersql</module>
-		<module>library-ignite</module>
-		<module>library-jmx</module>
-		<module>library-nacos</module>
-		<module>library-redis</module>
-	</modules>
+    <modules>
+        <module>library-arangodb</module>
+        <module>library-encryption</module>
+        <module>library-hypersql</module>
+        <module>library-ignite</module>
+        <module>library-jmx</module>
+        <module>library-nacos</module>
+        <module>library-redis</module>
+    </modules>
 
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>io.mercury</groupId>
-				<artifactId>commons-core</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.mercury</groupId>
-				<artifactId>commons-config</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-
-			<!-- A set of annotations used for code inspection support and code documentation -->
-			<dependency>
-				<groupId>org.jetbrains</groupId>
-				<artifactId>annotations</artifactId>
-				<version>19.0.0</version>
-			</dependency>
-
-		</dependencies>
-	</dependencyManagement>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.mercury</groupId>
+                <artifactId>commons-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mercury</groupId>
+                <artifactId>commons-config</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- A set of annotations used for code inspection support
+                    and code documentation -->
+            <dependency>
+                <groupId>org.jetbrains</groupId>
+                <artifactId>annotations</artifactId>
+                <version>23.0.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>

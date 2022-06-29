@@ -15,16 +15,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>com.j256.simplejmx</groupId>
 			<artifactId>simplejmx</artifactId>
 			<version>1.19</version>
 		</dependency>
-
 	</dependencies>
 </project>

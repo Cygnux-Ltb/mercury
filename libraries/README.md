@@ -2,11 +2,9 @@
 
 Libraries module
  - library-arangodb
- - library-cassandra
- - library-cryption
+ - library-encryption
  - library-hypersql
  - library-ignite
- - library-janusgraph
  - library-jmx
  - library-nacos
  - library-redis
