@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.zeromq.SocketType;
 import org.zeromq.ZMQ;
 
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.specific.BytesSerializer;
 import io.mercury.common.thread.SleepSupport;
@@ -33,8 +33,8 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
 	 */
 	ZmqPublisher(@Nonnull ZmqConfigurator cfg, @Nonnull String topic, @Nonnull BytesSerializer<T> ser) {
 		super(cfg);
-		Assertor.nonNull(topic, "topic");
-		Assertor.nonNull(ser, "ser");
+		Asserter.nonNull(topic, "topic");
+		Asserter.nonNull(ser, "ser");
 		this.sendMore = topic.getBytes(ZMQ.CHARSET);
 		this.ser = ser;
 		String addr = cfg.getAddr().toString();

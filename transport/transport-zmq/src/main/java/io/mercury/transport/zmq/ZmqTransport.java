@@ -10,7 +10,7 @@ import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
 import io.mercury.common.annotation.AbstractFunction;
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Transport;
@@ -48,7 +48,7 @@ public abstract class ZmqTransport extends TransportComponent implements Transpo
 	protected String name;
 
 	protected ZmqTransport(final ZmqConfigurator cfg) {
-		Assertor.nonNull(cfg, "cfg");
+		Asserter.nonNull(cfg, "cfg");
 		this.cfg = cfg;
 		this.context = new ZContext(cfg.getIoThreads());
 		log.info("ZMQ context initialized, ioThreads=={}", cfg.getIoThreads());

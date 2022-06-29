@@ -5,7 +5,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import io.mercury.common.collections.MapUtil;
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.serialization.json.JsonWrapper;
 
 public final class AmqpQueue {
@@ -36,7 +36,7 @@ public final class AmqpQueue {
 	 * @return
 	 */
 	public static AmqpQueue named(@Nonnull String name) {
-		Assertor.nonEmpty(name, "name");
+		Asserter.nonEmpty(name, "name");
 		return new AmqpQueue(name);
 	}
 

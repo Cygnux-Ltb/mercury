@@ -18,7 +18,7 @@ import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.ConfirmCallback;
 
 import io.mercury.common.character.Charsets;
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.specific.BytesSerializer;
 import io.mercury.common.thread.SleepSupport;
@@ -225,7 +225,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
 			@Nonnull BytesSerializer<T> serializer, @Nullable AckCallback ackCallback,
 			@Nullable NoAckCallback noAckCallback) {
 		super(nonEmpty(tag) ? tag : "adv-pub-" + datetimeOfMillisecond(), config.getConnection());
-		Assertor.nonNull(config.getPublishExchange(), "exchangeRelation");
+		Asserter.nonNull(config.getPublishExchange(), "exchangeRelation");
 		this.publishExchange = config.getPublishExchange();
 		this.exchangeName = publishExchange.getExchangeName();
 		this.defaultRoutingKey = config.getDefaultRoutingKey();

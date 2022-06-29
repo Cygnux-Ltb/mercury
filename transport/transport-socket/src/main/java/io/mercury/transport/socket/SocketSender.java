@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 
 import io.mercury.common.concurrent.queue.AbstractSingleConsumerQueue;
 import io.mercury.common.concurrent.queue.jct.JctSingleConsumerQueue;
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.api.TransportComponent;
@@ -26,7 +26,7 @@ public final class SocketSender extends TransportComponent implements Sender<byt
 	protected static final Logger log = Log4j2LoggerFactory.getLogger(SocketSender.class);
 
 	public SocketSender(SocketConfigurator configurator) {
-		Assertor.nonNull(configurator, "configurator");
+		Asserter.nonNull(configurator, "configurator");
 		this.configurator = configurator;
 		init();
 	}

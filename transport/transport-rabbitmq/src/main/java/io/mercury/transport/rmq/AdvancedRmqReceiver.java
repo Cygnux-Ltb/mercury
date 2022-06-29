@@ -18,7 +18,7 @@ import com.rabbitmq.client.ConsumerShutdownSignalCallback;
 import com.rabbitmq.client.Envelope;
 
 import io.mercury.common.codec.DecodeException;
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.specific.BytesDeserializer;
 import io.mercury.common.util.StringSupport;
@@ -115,8 +115,8 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 	 */
 	public static AdvancedRmqReceiver<byte[]> create(@Nonnull RmqReceiverConfig config,
 			@Nonnull Consumer<byte[]> consumer) {
-		Assertor.nonNull(config, "config");
-		Assertor.nonNull(consumer, "consumer");
+		Asserter.nonNull(config, "config");
+		Asserter.nonNull(consumer, "consumer");
 		return new AdvancedRmqReceiver<>(null, config, (msg, reuse) -> msg, consumer, null);
 	}
 
@@ -129,8 +129,8 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 	 */
 	public static AdvancedRmqReceiver<byte[]> create(String tag, @Nonnull RmqReceiverConfig config,
 			@Nonnull Consumer<byte[]> consumer) {
-		Assertor.nonNull(config, "config");
-		Assertor.nonNull(consumer, "consumer");
+		Asserter.nonNull(config, "config");
+		Asserter.nonNull(consumer, "consumer");
 		return new AdvancedRmqReceiver<>(tag, config, (msg, reuse) -> msg, consumer, null);
 	}
 
@@ -145,9 +145,9 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 	 */
 	public static <T> AdvancedRmqReceiver<T> create(String tag, @Nonnull RmqReceiverConfig config,
 			@Nonnull BytesDeserializer<T> deserializer, @Nonnull Consumer<T> consumer) {
-		Assertor.nonNull(config, "config");
-		Assertor.nonNull(deserializer, "deserializer");
-		Assertor.nonNull(consumer, "consumer");
+		Asserter.nonNull(config, "config");
+		Asserter.nonNull(deserializer, "deserializer");
+		Asserter.nonNull(consumer, "consumer");
 		return new AdvancedRmqReceiver<>(tag, config, deserializer, consumer, null);
 	}
 
@@ -159,8 +159,8 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 	 */
 	public static AdvancedRmqReceiver<byte[]> createWithSelfAck(@Nonnull RmqReceiverConfig config,
 			@Nonnull SelfAckConsumer<byte[]> selfAckConsumer) {
-		Assertor.nonNull(config, "config");
-		Assertor.nonNull(selfAckConsumer, "selfAckConsumer");
+		Asserter.nonNull(config, "config");
+		Asserter.nonNull(selfAckConsumer, "selfAckConsumer");
 		return new AdvancedRmqReceiver<>(null, config, (msg, reuse) -> msg, null, selfAckConsumer);
 	}
 
@@ -173,8 +173,8 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 	 */
 	public static AdvancedRmqReceiver<byte[]> createWithSelfAck(String tag, @Nonnull RmqReceiverConfig config,
 			@Nonnull SelfAckConsumer<byte[]> selfAckConsumer) {
-		Assertor.nonNull(config, "config");
-		Assertor.nonNull(selfAckConsumer, "selfAckConsumer");
+		Asserter.nonNull(config, "config");
+		Asserter.nonNull(selfAckConsumer, "selfAckConsumer");
 		return new AdvancedRmqReceiver<>(tag, config, (msg, reuse) -> msg, null, selfAckConsumer);
 	}
 
@@ -189,9 +189,9 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 	 */
 	public static <T> AdvancedRmqReceiver<T> createWithSelfAck(String tag, @Nonnull RmqReceiverConfig config,
 			@Nonnull BytesDeserializer<T> deserializer, @Nonnull SelfAckConsumer<T> selfAckConsumer) {
-		Assertor.nonNull(config, "config");
-		Assertor.nonNull(deserializer, "deserializer");
-		Assertor.nonNull(selfAckConsumer, "selfAckConsumer");
+		Asserter.nonNull(config, "config");
+		Asserter.nonNull(deserializer, "deserializer");
+		Asserter.nonNull(selfAckConsumer, "selfAckConsumer");
 		return new AdvancedRmqReceiver<>(tag, config, deserializer, null, selfAckConsumer);
 	}
 
@@ -316,7 +316,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
 
 	@Override
 	public void receive() throws ReceiverStartException {
-		Assertor.nonNull(deserializer, "deserializer");
+		Asserter.nonNull(deserializer, "deserializer");
 		// 检测Consumer或SelfAckConsumer, 必须有一个不为null
 		if (consumer == null && selfAckConsumer == null) {
 			throw new NullPointerException("[Consumer] or [SelfAckConsumer] cannot be all null");

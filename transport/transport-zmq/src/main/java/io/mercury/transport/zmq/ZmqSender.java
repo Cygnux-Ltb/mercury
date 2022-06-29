@@ -9,7 +9,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import org.slf4j.Logger;
 import org.zeromq.SocketType;
 
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.serialization.specific.BytesSerializer;
 import io.mercury.transport.api.Sender;
@@ -28,7 +28,7 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 	 */
 	ZmqSender(@Nonnull ZmqConfigurator cfg, @Nonnull BytesSerializer<T> serializer) {
 		super(cfg);
-		Assertor.nonNull(serializer, "serializer");
+		Asserter.nonNull(serializer, "serializer");
 		this.serializer = serializer;
 		String addr = cfg.getAddr().toString();
 		if (socket.connect(addr))

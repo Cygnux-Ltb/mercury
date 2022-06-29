@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import com.rabbitmq.client.AMQP.BasicProperties;
 
 import io.mercury.common.character.Charsets;
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.ThreadSupport;
@@ -71,7 +71,7 @@ public class RmqPublisher extends RmqTransport implements Publisher<String, byte
 	 */
 	public RmqPublisher(@Nullable String tag, @Nonnull RmqPublisherConfig cfg) {
 		super(nonEmpty(tag) ? tag : "publisher-" + datetimeOfMillisecond(), cfg.getConnection());
-		Assertor.nonNull(cfg.getPublishExchange(), "exchangeRelation");
+		Asserter.nonNull(cfg.getPublishExchange(), "exchangeRelation");
 		this.publishExchange = cfg.getPublishExchange();
 		this.exchangeName = publishExchange.getExchangeName();
 		this.defaultRoutingKey = cfg.getDefaultRoutingKey();

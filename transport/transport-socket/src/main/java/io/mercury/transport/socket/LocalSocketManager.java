@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
 
 public class LocalSocketManager {
@@ -24,7 +24,7 @@ public class LocalSocketManager {
 		if (ServerSocketMap.containsKey(socketName))
 			return ServerSocketMap.get(socketName);
 		else {
-			Assertor.atWithinRange(port, 7000, 8000, "port");
+			Asserter.atWithinRange(port, 7000, 8000, "port");
 			SocketTransceiver transceiver = new SocketTransceiver(SocketConfigurator.builder().port(port).build(),
 					callback);
 			ServerSocketMap.put(socketName, transceiver);

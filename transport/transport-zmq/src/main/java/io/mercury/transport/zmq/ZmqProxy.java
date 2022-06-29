@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.zeromq.ZMQ;
 
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.transport.api.TransportComponent;
 import io.mercury.transport.zmq.exception.ZmqProxyException;
@@ -26,8 +26,8 @@ public final class ZmqProxy extends TransportComponent {
 
 	ZmqProxy(@Nonnull ZmqTransport frontend, @Nonnull ZmqTransport backend, @Nullable ZmqTransport capture,
 			@Nullable ZmqTransport control) {
-		Assertor.nonNull(frontend, "frontend");
-		Assertor.nonNull(backend, "backend");
+		Asserter.nonNull(frontend, "frontend");
+		Asserter.nonNull(backend, "backend");
 		this.frontend = frontend;
 		this.backend = backend;
 		this.name = "[" + frontend.getName() + "]->[" + backend.getName() + "]";

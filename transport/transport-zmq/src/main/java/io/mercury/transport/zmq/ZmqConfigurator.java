@@ -21,7 +21,7 @@ import com.typesafe.config.Config;
 
 import io.mercury.common.annotation.OnlyOverrideEquals;
 import io.mercury.common.config.ConfigWrapper;
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.net.IpAddressIllegalException;
 import io.mercury.common.net.IpAddressValidator;
@@ -97,7 +97,7 @@ public final class ZmqConfigurator
 	 * @return
 	 */
 	public static ZmqConfigurator withConfig(String module, @Nonnull Config config) {
-		Assertor.nonNull(config, "config");
+		Asserter.nonNull(config, "config");
 		ConfigWrapper<ZmqConfigOption> delegate = new ConfigWrapper<>(module, config);
 		ZmqProtocol protocol = ZmqProtocol.of(delegate.getStringOrThrows(Protocol));
 		ZmqConfigurator conf = null;
@@ -106,7 +106,7 @@ public final class ZmqConfigurator
 			int port = delegate.getIntOrThrows(Port);
 			if (delegate.hasOption(Addr)) {
 				String tcpAddr = delegate.getStringOrThrows(Addr);
-				Assertor.isValid(tcpAddr, IpAddressValidator::isIpAddress, new IpAddressIllegalException(tcpAddr));
+				Asserter.isValid(tcpAddr, IpAddressValidator::isIpAddress, new IpAddressIllegalException(tcpAddr));
 				conf = ZmqConfigurator.tcp(tcpAddr, port);
 			} else {
 				// 没有addr配置项, 使用本地地址
@@ -174,7 +174,7 @@ public final class ZmqConfigurator
 	 * @return
 	 */
 	public ZmqConfigurator ioThreads(int ioThreads) {
-		Assertor.greaterThan(ioThreads, 0, "ioThreads");
+		Asserter.greaterThan(ioThreads, 0, "ioThreads");
 		this.ioThreads = ioThreads < availableProcessors() ? ioThreads : availableProcessors();
 		return this;
 	}
@@ -196,7 +196,7 @@ public final class ZmqConfigurator
 	 * @return
 	 */
 	public ZmqConfigurator tcpKeepAlive(@Nonnull TcpKeepAlive tcpKeepAlive) {
-		Assertor.nonNull(tcpKeepAlive, "tcpKeepAlive");
+		Asserter.nonNull(tcpKeepAlive, "tcpKeepAlive");
 		this.tcpKeepAlive = tcpKeepAlive;
 		return this;
 	}
@@ -216,7 +216,7 @@ public final class ZmqConfigurator
 	 * @return ZmqSender<T>
 	 */
 	public <T> ZmqSender<T> newSender(@Nonnull BytesSerializer<T> ser) {
-		Assertor.nonNull(ser, "ser");
+		Asserter.nonNull(ser, "ser");
 		return new ZmqSender<>(this, ser);
 	}
 
@@ -226,7 +226,7 @@ public final class ZmqConfigurator
 	 * @return ZmqReceiver
 	 */
 	public ZmqReceiver newReceiver(@Nonnull Function<byte[], byte[]> handler) {
-		Assertor.nonNull(handler, "handler");
+		Asserter.nonNull(handler, "handler");
 		return new ZmqReceiver(this, handler);
 	}
 
@@ -246,8 +246,8 @@ public final class ZmqConfigurator
 	 * @return ZmqSubscriber
 	 */
 	public ZmqSubscriber newSubscriber(@Nonnull Topics topics, @Nonnull BiConsumer<byte[], byte[]> consumer) {
-		Assertor.nonNull(topics, "topics");
-		Assertor.nonNull(consumer, "consumer");
+		Asserter.nonNull(topics, "topics");
+		Asserter.nonNull(consumer, "consumer");
 		return new ZmqSubscriber(this, topics, consumer);
 	}
 
@@ -301,7 +301,7 @@ public final class ZmqConfigurator
 	 * @return ZmqPublisher
 	 */
 	public ZmqPublisher<String> newPublisherWithString(@Nonnull String topic, @Nonnull Charset encode) {
-		Assertor.nonNull(encode, "encode");
+		Asserter.nonNull(encode, "encode");
 		return newPublisher(topic, str -> str.getBytes(encode));
 	}
 
@@ -323,8 +323,8 @@ public final class ZmqConfigurator
 	 * @return ZmqPublisher
 	 */
 	public <T> ZmqPublisher<T> newPublisher(@Nonnull String topic, @Nonnull BytesSerializer<T> ser) {
-		Assertor.nonNull(topic, "topic");
-		Assertor.nonNull(ser, "ser");
+		Asserter.nonNull(topic, "topic");
+		Asserter.nonNull(ser, "ser");
 		return new ZmqPublisher<>(this, topic, ser);
 	}
 
@@ -455,8 +455,8 @@ public final class ZmqConfigurator
 		 * @return
 		 */
 		public static ZmqAddr tcp(@Nonnull String addr, int port) {
-			Assertor.nonEmpty(addr, "addr");
-			Assertor.atWithinRange(port, 4096, 65536, "port");
+			Asserter.nonEmpty(addr, "addr");
+			Asserter.atWithinRange(port, 4096, 65536, "port");
 			if (!addr.equals("*"))
 				IpAddressValidator.assertIpAddress(addr);
 			return new ZmqAddr(ZmqProtocol.TCP, addr + ":" + port);
@@ -469,7 +469,7 @@ public final class ZmqConfigurator
 		 * @return
 		 */
 		public static ZmqAddr ipc(@Nonnull String addr) {
-			Assertor.nonEmpty(addr, "addr");
+			Asserter.nonEmpty(addr, "addr");
 			return new ZmqAddr(ZmqProtocol.IPC, addr);
 		}
 
@@ -480,7 +480,7 @@ public final class ZmqConfigurator
 		 * @return
 		 */
 		public static ZmqAddr inproc(@Nonnull String addr) {
-			Assertor.nonEmpty(addr, "addr");
+			Asserter.nonEmpty(addr, "addr");
 			return new ZmqAddr(ZmqProtocol.INPROC, addr);
 		}
 

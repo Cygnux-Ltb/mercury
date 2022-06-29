@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.zeromq.SocketType;
 
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.ThreadSupport;
@@ -24,7 +24,7 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 
 	ZmqReceiver(@Nonnull ZmqConfigurator cfg, @Nonnull Function<byte[], byte[]> handler) {
 		super(cfg);
-		Assertor.nonNull(handler, "handler");
+		Asserter.nonNull(handler, "handler");
 		this.handler = handler;
 		String addr = cfg.getAddr().toString();
 		if (socket.bind(addr))

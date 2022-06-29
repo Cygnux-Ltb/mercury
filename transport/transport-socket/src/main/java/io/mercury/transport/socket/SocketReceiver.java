@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.ThreadSupport;
@@ -34,8 +34,8 @@ public class SocketReceiver extends TransportComponent implements Receiver {
 	 * @param callback
 	 */
 	public SocketReceiver(SocketConfigurator configurator, Consumer<byte[]> callback) {
-		Assertor.nonNull(configurator, "configurator");
-		Assertor.nonNull(callback, "callback");
+		Asserter.nonNull(configurator, "configurator");
+		Asserter.nonNull(callback, "callback");
 		this.configurator = configurator;
 		this.callback = callback;
 		init();

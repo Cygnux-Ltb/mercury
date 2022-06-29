@@ -8,7 +8,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.typesafe.config.Config;
 
 import io.mercury.common.config.ConfigWrapper;
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.util.StringSupport;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.TransportConfigurator;
@@ -257,10 +257,10 @@ public final class RmqConnection implements TransportConfigurator {
 		}
 
 		private Builder(String host, int port, String username, String password, String virtualHost) {
-			Assertor.nonNull(host, "host");
-			Assertor.atWithinRange(port, 4096, 65536, "port");
-			Assertor.nonNull(username, "username");
-			Assertor.nonNull(password, "password");
+			Asserter.nonNull(host, "host");
+			Asserter.atWithinRange(port, 4096, 65536, "port");
+			Asserter.nonNull(username, "username");
+			Asserter.nonNull(password, "password");
 			this.host = host;
 			this.port = port;
 			this.username = username;

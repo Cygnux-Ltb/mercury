@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rmq.RmqOperator;
 import io.mercury.transport.rmq.exception.DeclareException;
@@ -70,7 +70,7 @@ public final class ExchangeRelationship extends Relationship {
 	 * @return
 	 */
 	public static ExchangeRelationship withExchange(@Nonnull AmqpExchange exchange) {
-		Assertor.nonNull(exchange, "exchange");
+		Asserter.nonNull(exchange, "exchange");
 		return new ExchangeRelationship(exchange);
 	}
 

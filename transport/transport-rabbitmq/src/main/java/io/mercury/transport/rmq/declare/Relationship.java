@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.collections.MutableLists;
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.transport.rmq.RmqOperator;
 import io.mercury.transport.rmq.exception.DeclareException;
@@ -24,7 +24,7 @@ public abstract class Relationship {
 	 * @throws DeclareException
 	 */
 	public void declare(@Nonnull RmqOperator operator) throws DeclareException {
-		Assertor.nonNull(operator, "operator");
+		Asserter.nonNull(operator, "operator");
 		declare0(operator);
 		for (Binding binding : bindings) {
 			declareBinding(operator, binding);

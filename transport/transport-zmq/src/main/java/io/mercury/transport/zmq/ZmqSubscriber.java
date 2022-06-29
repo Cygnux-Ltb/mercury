@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.zeromq.SocketType;
 import org.zeromq.ZMQ;
 
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.attr.TcpKeepAlive;
@@ -34,8 +34,8 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber {
 	ZmqSubscriber(@Nonnull ZmqConfigurator cfg, @Nonnull Topics topics, @Nonnull BiConsumer<byte[], byte[]> consumer)
 			throws ZmqConnectionException {
 		super(cfg);
-		Assertor.nonNull(topics, "topics");
-		Assertor.nonNull(consumer, "consumer");
+		Asserter.nonNull(topics, "topics");
+		Asserter.nonNull(consumer, "consumer");
 		this.topics = topics;
 		this.consumer = consumer;
 		String addr = cfg.getAddr().toString();

@@ -5,7 +5,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import io.mercury.common.collections.MapUtil;
-import io.mercury.common.lang.Assertor;
+import io.mercury.common.lang.Asserter;
 import io.mercury.serialization.json.JsonWrapper;
 
 public final class AmqpExchange {
@@ -50,7 +50,7 @@ public final class AmqpExchange {
 	 * @return
 	 */
 	public static AmqpExchange fanout(@Nonnull String name) {
-		Assertor.nonEmpty(name, "name");
+		Asserter.nonEmpty(name, "name");
 		return new AmqpExchange(ExchangeType.Fanout, name);
 	}
 
@@ -61,7 +61,7 @@ public final class AmqpExchange {
 	 * @return
 	 */
 	public static AmqpExchange direct(@Nonnull String name) {
-		Assertor.nonEmpty(name, "name");
+		Asserter.nonEmpty(name, "name");
 		return new AmqpExchange(ExchangeType.Direct, name);
 	}
 
@@ -72,7 +72,7 @@ public final class AmqpExchange {
 	 * @return
 	 */
 	public static AmqpExchange topic(@Nonnull String name) {
-		Assertor.nonEmpty(name, "name");
+		Asserter.nonEmpty(name, "name");
 		return new AmqpExchange(ExchangeType.Topic, name);
 	}
 
