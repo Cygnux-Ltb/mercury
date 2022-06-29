@@ -5,22 +5,19 @@
  */
 package io.mercury.serialization.wire;
 
-import org.jetbrains.annotations.NotNull;
-
 import net.openhft.chronicle.wire.Marshallable;
 import net.openhft.chronicle.wire.WireIn;
 import net.openhft.chronicle.wire.WireKey;
 import net.openhft.chronicle.wire.WireOut;
 
 /**
- *
  * @author gadei
  */
 public class WireModel implements Marshallable {
 
     enum Values implements WireKey {
         ID, REVISION, KEY
-    };
+    }
 
     private long id;
     private int revision;
@@ -36,7 +33,7 @@ public class WireModel implements Marshallable {
     }
 
     @Override
-    public void readMarshallable(@NotNull WireIn wire) throws IllegalStateException {
+    public void readMarshallable(WireIn wire) throws IllegalStateException {
         this.id = wire.read(WireModel.Values.ID).int64();
         this.revision = wire.read(WireModel.Values.REVISION).int32();
         this.key = wire.read(WireModel.Values.KEY).text();

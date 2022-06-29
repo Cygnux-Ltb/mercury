@@ -1,11 +1,11 @@
 package io.mercury.serialization.wire;
 
-import org.jetbrains.annotations.NotNull;
-
 import net.openhft.chronicle.wire.Marshallable;
 import net.openhft.chronicle.wire.WireIn;
 import net.openhft.chronicle.wire.WireKey;
 import net.openhft.chronicle.wire.WireOut;
+
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -15,7 +15,7 @@ public class WireProperty extends WireModel implements Marshallable {
 
     enum Values implements WireKey {
         REFERENCE, PATH, NAME, VALUE
-    };
+    }
 
     private String reference;
     private String path;
@@ -34,7 +34,7 @@ public class WireProperty extends WireModel implements Marshallable {
     }
 
     @Override
-    public void readMarshallable(@NotNull WireIn wire) throws IllegalStateException {
+    public void readMarshallable(@Nonnull WireIn wire) throws IllegalStateException {
         super.readMarshallable(wire);
         this.reference = wire.read(WireProperty.Values.REFERENCE).text();
         this.path = wire.read(WireProperty.Values.PATH).text();
@@ -43,7 +43,7 @@ public class WireProperty extends WireModel implements Marshallable {
     }
 
     @Override
-    public void writeMarshallable(WireOut wire) {
+    public void writeMarshallable(@Nonnull WireOut wire) {
         super.writeMarshallable(wire);
         wire
                 .write(WireProperty.Values.REFERENCE).text(reference)

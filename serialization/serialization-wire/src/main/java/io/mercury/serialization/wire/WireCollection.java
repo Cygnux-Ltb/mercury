@@ -10,6 +10,8 @@ import net.openhft.chronicle.wire.WireIn;
 import net.openhft.chronicle.wire.WireKey;
 import net.openhft.chronicle.wire.WireOut;
 
+import javax.annotation.Nonnull;
+
 /**
  *
  * @author gadei
@@ -18,7 +20,7 @@ public class WireCollection extends WireModel implements Marshallable {
 
 	enum Values implements WireKey {
 		REFERENCE, PATH, NAME, PROPERTIES, COLLECTIONS
-	};
+	}
 
 	private String reference;
 	private String path;
@@ -49,7 +51,7 @@ public class WireCollection extends WireModel implements Marshallable {
 	}
 
 	@Override
-	public void writeMarshallable(WireOut wire) {
+	public void writeMarshallable(@Nonnull WireOut wire) {
 		super.writeMarshallable(wire);
 		wire.write(WireCollection.Values.REFERENCE).text(reference).write(WireCollection.Values.PATH).text(path)
 				.write(WireCollection.Values.NAME).text(name);
