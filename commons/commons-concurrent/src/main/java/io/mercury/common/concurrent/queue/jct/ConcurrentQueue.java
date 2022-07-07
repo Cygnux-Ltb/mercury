@@ -65,7 +65,7 @@ public final class ConcurrentQueue<E> implements MultiConsumerQueue<E> {
 
 	@Override
 	public QueueType getQueueType() {
-		return QueueType.MPMC;
+		return QueueType.ManyToMany;
 	}
 
 }

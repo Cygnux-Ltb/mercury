@@ -94,14 +94,14 @@ public class RingProcessChain<E, I> extends AbstractRingBuffer<E, I> {
                 newFactory(eventType, log), eventTranslator);
     }
 
-    public static <E, I> Builder<E, I> withSingleProducer(EventFactory<E> eventFactory,
+    public static <E, I> Builder<E, I> withSingleProducer(@Nonnull EventFactory<E> eventFactory,
                                                           @Nonnull RingEventPublisher<E, I> publisher) {
         return withSingleProducer(eventFactory,
                 // EventTranslator实现函数, 负责调用处理In对象到Event对象之间的转换
                 (event, sequence, in) -> publisher.accept(event, in));
     }
 
-    public static <E, I> Builder<E, I> withSingleProducer(EventFactory<E> eventFactory,
+    public static <E, I> Builder<E, I> withSingleProducer(@Nonnull EventFactory<E> eventFactory,
                                                           @Nonnull EventTranslatorOneArg<E, I> eventTranslator) {
         return new Builder<>(ProducerType.SINGLE, eventFactory, eventTranslator);
     }
@@ -122,14 +122,14 @@ public class RingProcessChain<E, I> extends AbstractRingBuffer<E, I> {
                 newFactory(eventType, log), eventTranslator);
     }
 
-    public static <E, I> Builder<E, I> withMultiProducer(EventFactory<E> eventFactory,
+    public static <E, I> Builder<E, I> withMultiProducer(@Nonnull EventFactory<E> eventFactory,
                                                          @Nonnull RingEventPublisher<E, I> publisher) {
         return withMultiProducer(eventFactory,
                 // EventTranslator实现函数, 负责调用处理In对象到Event对象之间的转换
                 (event, sequence, in) -> publisher.accept(event, in));
     }
 
-    public static <E, I> Builder<E, I> withMultiProducer(EventFactory<E> eventFactory,
+    public static <E, I> Builder<E, I> withMultiProducer(@Nonnull EventFactory<E> eventFactory,
                                                          @Nonnull EventTranslatorOneArg<E, I> eventTranslator) {
         return new Builder<>(ProducerType.SINGLE, eventFactory, eventTranslator);
     }

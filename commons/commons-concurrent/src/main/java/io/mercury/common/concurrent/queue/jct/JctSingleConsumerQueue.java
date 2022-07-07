@@ -58,7 +58,7 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
 	 * @return
 	 */
 	public static Builder spscQueue() {
-		return new Builder(QueueType.SPSC);
+		return new Builder(QueueType.OneToOne);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
 	 * @return
 	 */
 	public static Builder spscQueue(String name) {
-		return new Builder(QueueType.SPSC).setQueueName(name);
+		return new Builder(QueueType.OneToOne).setQueueName(name);
 	}
 
 	/**
@@ -77,7 +77,7 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
 	 * @return
 	 */
 	public static Builder mpscQueue() {
-		return new Builder(QueueType.MPSC);
+		return new Builder(QueueType.ManyToOne);
 	}
 
 	/**
@@ -87,7 +87,7 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
 	 * @return
 	 */
 	public static Builder mpscQueue(String name) {
-		return new Builder(QueueType.MPSC).setQueueName(name);
+		return new Builder(QueueType.ManyToOne).setQueueName(name);
 	}
 
 	/**
@@ -197,7 +197,7 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
 
 		@Override
 		public QueueType getQueueType() {
-			return QueueType.SPSC;
+			return QueueType.OneToOne;
 		}
 
 	}
@@ -228,7 +228,7 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
 
 		@Override
 		public QueueType getQueueType() {
-			return QueueType.MPSC;
+			return QueueType.ManyToOne;
 		}
 	}
 
@@ -280,9 +280,9 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
 
 		public final <E> JctSingleConsumerQueue<E> process(Processor<E> processor) {
 			switch (type) {
-			case SPSC:
+			case OneToOne:
 				return new JctSpscQueue<>(queueName, capacity, mode, strategy, sleepMillis, processor);
-			case MPSC:
+			case ManyToOne:
 				return new JctMpscQueue<>(queueName, capacity, mode, strategy, sleepMillis, processor);
 			default:
 				throw new IllegalArgumentException("Error enum item");

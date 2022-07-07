@@ -30,10 +30,17 @@ public abstract class AbstractRingBuffer<E, I> extends RunnableComponent {
 
     protected final EventPublisherWrapper<E, I> publisherWrapper;
 
-    protected AbstractRingBuffer(
-            @Nonnull String name, int size, @Nonnull EventFactory<E> factory,
-            @Nonnull ProducerType type, @Nonnull WaitStrategy strategy,
-            @Nonnull EventTranslatorOneArg<E, I> translator) {
+    /**
+     * @param name
+     * @param size
+     * @param factory
+     * @param type
+     * @param strategy
+     * @param translator
+     */
+    protected AbstractRingBuffer(@Nonnull String name, int size, @Nonnull EventFactory<E> factory,
+                                 @Nonnull ProducerType type, @Nonnull WaitStrategy strategy,
+                                 @Nonnull EventTranslatorOneArg<E, I> translator) {
         Asserter.nonNull(factory, "EventFactory");
         Asserter.nonNull(type, "ProducerType");
         Asserter.nonNull(strategy, "WaitStrategy");
