@@ -219,7 +219,7 @@ public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 
 	@Override
 	public QueueType getQueueType() {
-		return QueueType.MPMC;
+		return QueueType.ManyToMany;
 	}
 
 }
