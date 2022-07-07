@@ -79,11 +79,18 @@
                 <version>23.0.0</version>
             </dependency>
 
-            <!-- Java Persistence API (JPA) -->
+            <!-- Jakarta Persistence API -->
             <dependency>
                 <groupId>jakarta.persistence</groupId>
                 <artifactId>jakarta.persistence-api</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
+            </dependency>
+
+            <!-- Jakarta Transactions -->
+            <dependency>
+                <groupId>jakarta.transaction</groupId>
+                <artifactId>jakarta.transaction-api</artifactId>
+                <version>2.0.1</version>
             </dependency>
 
             <!-- The Apache Commons DbUtils package is a set of Java utility classes

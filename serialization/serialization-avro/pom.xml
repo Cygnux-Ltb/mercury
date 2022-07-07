@@ -17,7 +17,7 @@
 		<avro.version>1.11.0</avro.version>
 	</properties>
 
-<!-- 	<repositories>
+	<!-- <repositories>
 		<repository>
 			<id>avro-util</id>
 			<url>https://linkedin.jfrog.io/artifactory/avro-util/</url>
@@ -91,6 +91,10 @@
 				<exclusion>
 					<groupId>com.fasterxml.jackson.core</groupId>
 					<artifactId>jackson-databind</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
