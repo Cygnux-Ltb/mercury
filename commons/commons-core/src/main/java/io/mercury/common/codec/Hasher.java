@@ -54,7 +54,7 @@ public final class Hasher {
     /**
      * Enum that represents each different algorithm supported by the Hasher.
      */
-    public static enum Algorithm {
+    public enum Algorithm {
 
         /**
          * Message Digest Algorithm - 128 bit
@@ -75,7 +75,7 @@ public final class Hasher {
 
         private final String algoName;
 
-        private Algorithm(final String algoName) {
+        Algorithm(final String algoName) {
             this.algoName = algoName;
         }
 
@@ -86,7 +86,7 @@ public final class Hasher {
 
     }
 
-    private Algorithm algorithm;
+    private final Algorithm algorithm;
 
     public Hasher() {
         this.algorithm = Algorithm.MD5;
@@ -107,7 +107,7 @@ public final class Hasher {
      *
      * @param str The String to hash. This assumes its an ASCII string.
      * @return The hex encoded hashed String
-     * @throws NoSuchAlgorithmException
+     * @throws NoSuchAlgorithmException exception
      */
     public String toHashedHexString(String str) throws NoSuchAlgorithmException {
         return this.toHashedHexString(StringSupport.getAsciiBytes(str));
@@ -124,7 +124,7 @@ public final class Hasher {
      *
      * @param bytes The bytes to hash
      * @return The hex encoded hashed String
-     * @throws NoSuchAlgorithmException
+     * @throws NoSuchAlgorithmException exception
      */
     public String toHashedHexString(byte[] bytes) throws NoSuchAlgorithmException {
         return HexUtil.toHex(toHashedBytes(bytes));
@@ -142,7 +142,7 @@ public final class Hasher {
      *
      * @param str The String to hash. This assumes its an ASCII string.
      * @return The Base-64 encoded hashed String
-     * @throws NoSuchAlgorithmException
+     * @throws NoSuchAlgorithmException exception
      */
     public String toHashedBase64String(String str) throws NoSuchAlgorithmException {
         return this.toHashedBase64String(StringSupport.getAsciiBytes(str));
@@ -159,7 +159,7 @@ public final class Hasher {
      *
      * @param bytes The bytes to hash
      * @return The Base-64 encoded hashed String
-     * @throws NoSuchAlgorithmException
+     * @throws NoSuchAlgorithmException exception
      */
     public String toHashedBase64String(byte[] bytes) throws NoSuchAlgorithmException {
         byte[] hashedBytes = toHashedBytes(bytes);
@@ -178,7 +178,7 @@ public final class Hasher {
      *
      * @param bytes The bytes to hash
      * @return The Base-64 encoded hashed byte[]
-     * @throws NoSuchAlgorithmException
+     * @throws NoSuchAlgorithmException exception
      */
     public byte[] toHashedBase64Bytes(byte[] bytes) throws
             NoSuchAlgorithmException {
@@ -196,11 +196,11 @@ public final class Hasher {
      *
      * @param bytes The bytes to hash
      * @return The hashed byte[]
-     * @throws NoSuchAlgorithmException
+     * @throws NoSuchAlgorithmException exception
      */
     public byte[] toHashedBytes(byte[] bytes) throws NoSuchAlgorithmException {
-        MessageDigest messageDigest = MessageDigest.getInstance(algorithm.toString());
-        return messageDigest.digest(bytes);
+        MessageDigest digest = MessageDigest.getInstance(algorithm.toString());
+        return digest.digest(bytes);
     }
 
 }

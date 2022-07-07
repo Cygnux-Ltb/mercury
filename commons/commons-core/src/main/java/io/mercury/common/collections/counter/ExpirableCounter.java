@@ -42,15 +42,15 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
     private final long expireNanos;
 
     /**
-     * @param expireTime
+     * @param expireTime Duration
      */
     public ExpirableCounter(Duration expireTime) {
         this(expireTime, Capacity.L12_SIZE);
     }
 
     /**
-     * @param expireTime
-     * @param capacity
+     * @param expireTime Duration
+     * @param capacity   Capacity
      */
     public ExpirableCounter(Duration expireTime, Capacity capacity) {
         this.expireNanos = expireTime.toNanos();
@@ -62,12 +62,17 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
     /**
      * 更新计算值
      *
-     * @param delta
+     * @param delta long
      */
     private void updateValue(long delta) {
         value += delta;
     }
 
+    /**
+     * @param tag   long
+     * @param delta long
+     * @return ExpirableCounter
+     */
     @Override
     public ExpirableCounter add(long tag, long delta) {
         if (!tagToDelta.containsKey(tag)) {
@@ -80,6 +85,9 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
         return this;
     }
 
+    /**
+     * @return long
+     */
     @Override
     public long getValue() {
         final long baseline = System.nanoTime() - expireNanos;
@@ -96,6 +104,9 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
         return value;
     }
 
+    /**
+     * @param time long
+     */
     private void clear(long time) {
         long tag = timeToTag.get(time);
         long delta = tagToDelta.get(tag);
@@ -105,7 +116,8 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
     }
 
     /**
-     *
+     * @param tag long
+     * @return ExpirableCounter
      */
     @Override
     public ExpirableCounter removeDelta(long tag) {
@@ -118,7 +130,9 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
     }
 
     /**
-     *
+     * @param tag   long
+     * @param delta long
+     * @return ExpirableCounter
      */
     @Override
     public ExpirableCounter addDelta(long tag, long delta) {

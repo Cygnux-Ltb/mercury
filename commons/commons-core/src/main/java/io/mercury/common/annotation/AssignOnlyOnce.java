@@ -7,11 +7,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- *
  * @author yellow013
  */
 @Documented
-@Target({ ElementType.FIELD })
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.SOURCE)
 public @interface AssignOnlyOnce {
 }

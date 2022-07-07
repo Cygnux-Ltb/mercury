@@ -10,20 +10,20 @@ public final class ResourceUtil {
     }
 
     /**
-     * @param o
+     * @param obj Object
      * @throws Exception
      */
-    public static <O> void close(@Nullable O o) throws Exception {
-        if (o != null) {
-            if (o instanceof AutoCloseable)
-                close((AutoCloseable) o);
-            if (o instanceof Closeable)
-                close((Closeable) o);
+    public static <O> void close(@Nullable O obj) throws Exception {
+        if (obj != null) {
+            if (obj instanceof AutoCloseable)
+                close((AutoCloseable) obj);
+            if (obj instanceof Closeable)
+                close((Closeable) obj);
         }
     }
 
     /**
-     * @param closeable
+     * @param closeable AutoCloseable
      * @throws Exception
      */
     public static void close(@Nullable AutoCloseable closeable) throws Exception {
@@ -32,7 +32,7 @@ public final class ResourceUtil {
     }
 
     /**
-     * @param closeable
+     * @param closeable Closeable
      * @throws IOException
      */
     public static void close(@Nullable Closeable closeable) throws IOException {

@@ -6,19 +6,17 @@ import javax.annotation.concurrent.ThreadSafe;
 import java.io.Closeable;
 
 /**
- * 
- * @author yellow013
- *
  * @param <K>
  * @param <V>
+ * @author yellow013
  */
 @ThreadSafe
 public interface Keeper<K, V> extends Closeable {
 
-	@Nonnull
-	V acquire(@Nonnull K k);
+    @Nonnull
+    V acquire(@Nonnull K k);
 
-	@CheckForNull
-	V get(@Nonnull K k);
+    @CheckForNull
+    V get(@Nonnull K k);
 
 }

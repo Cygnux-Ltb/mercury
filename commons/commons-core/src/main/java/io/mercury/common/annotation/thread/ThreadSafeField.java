@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Documented
-@Target({ ElementType.FIELD, ElementType.LOCAL_VARIABLE })
+@Target({ElementType.FIELD})
 @Retention(RetentionPolicy.CLASS)
-public @interface ThreadSafeVariable {
+public @interface ThreadSafeField {
 }

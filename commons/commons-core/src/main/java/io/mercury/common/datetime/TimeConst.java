@@ -3,6 +3,7 @@ package io.mercury.common.datetime;
 public interface TimeConst {
 
 	/******************** Hours ********************/
+
 	/**
 	 * Hours per day.
 	 */

@@ -8,11 +8,11 @@ import java.lang.annotation.Target;
 
 /**
  * 抽象函数标识
- * 
+ *
  * @author yellow013
  */
 @Documented
-@Target({ ElementType.METHOD })
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.SOURCE)
 public @interface AbstractFunction {
 }

@@ -7,26 +7,26 @@ import javax.annotation.concurrent.NotThreadSafe;
 @NotThreadSafe
 public class PreloadingQueue<T> {
 
-	private final LinkedList<T> list = new LinkedList<>();
+    private final LinkedList<T> list = new LinkedList<>();
 
-	public T next() {
-		return list.removeFirst();
-	}
+    public T next() {
+        return list.removeFirst();
+    }
 
-	public void add(T content) {
-		list.addLast(content);
-	}
+    public void add(T content) {
+        list.addLast(content);
+    }
 
-	public boolean isEmpty() {
-		return list.isEmpty();
-	}
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
 
-	public boolean notEmpty() {
-		return !isEmpty();
-	}
+    public boolean notEmpty() {
+        return !isEmpty();
+    }
 
-	public LinkedList<T> getLinkedList() {
-		return list;
-	}
+    public LinkedList<T> getLinkedList() {
+        return list;
+    }
 
 }

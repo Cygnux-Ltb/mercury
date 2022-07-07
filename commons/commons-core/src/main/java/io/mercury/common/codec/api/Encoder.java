@@ -4,25 +4,23 @@ import java.util.function.Function;
 
 /**
  * 编码器
- * 
- * @author yellow013
  *
  * @param <T>
  * @param <R>
+ * @author yellow013
  */
 @FunctionalInterface
 public interface Encoder<T, R> extends Function<T, R> {
 
-	/**
-	 * 
-	 * @param t
-	 * @return
-	 */
-	R encode(T t);
+    /**
+     * @param t type
+     * @return R
+     */
+    R encode(T t);
 
-	@Override
-	default R apply(T t) {
-		return encode(t);
-	}
+    @Override
+    default R apply(T t) {
+        return encode(t);
+    }
 
 }

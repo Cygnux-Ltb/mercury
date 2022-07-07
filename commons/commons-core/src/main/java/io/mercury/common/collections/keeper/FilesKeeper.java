@@ -9,7 +9,8 @@ import static io.mercury.common.file.FileUtil.mkdir;
 
 public abstract class FilesKeeper<K, V> extends AbstractKeeper<K, V> {
 
-    protected void createFile(File file) throws IOException, PermissionDeniedException {
+    protected void createFile(File file) throws IOException,
+            PermissionDeniedException {
         if (!file.exists()) {
             // 创建文件目录
             if (!mkdir(file.getParentFile())) {

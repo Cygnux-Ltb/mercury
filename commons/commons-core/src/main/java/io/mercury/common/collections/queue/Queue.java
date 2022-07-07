@@ -2,18 +2,18 @@ package io.mercury.common.collections.queue;
 
 public interface Queue<E> {
 
-	boolean enqueue(E e);
+    boolean enqueue(E e);
 
-	String getQueueName();
+    String getQueueName();
 
-	boolean isEmpty();
+    boolean isEmpty();
 
-	QueueType getQueueType();
+    QueueType getQueueType();
 
-	public static enum QueueType {
+    enum QueueType {
 
-		SPSC, SPMC, MPSC, MPMC
+        OneToOne, OneToMany, ManyToOne, ManyToMany
 
-	}
+    }
 
 }

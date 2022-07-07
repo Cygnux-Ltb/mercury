@@ -20,224 +20,204 @@ import io.mercury.common.util.ArrayUtil;
 
 public final class MutableLists {
 
-	private MutableLists() {
-	}
+    private MutableLists() {
+    }
 
-	/*
-	 * ******************** primitive list ********************
-	 */
-	/**
-	 * 
-	 * @return MutableByteList
-	 */
-	public static MutableByteList newByteArrayList() {
-		return new ByteArrayList();
-	}
+    /*
+     * ******************** primitive list ********************
+     */
 
-	/**
-	 * 
-	 * @param capacity
-	 * @return MutableByteList
-	 */
-	public static MutableByteList newByteArrayList(int capacity) {
-		return new ByteArrayList(capacity);
-	}
+    /**
+     * @return MutableByteList
+     */
+    public static MutableByteList newByteArrayList() {
+        return new ByteArrayList();
+    }
 
-	/**
-	 * 
-	 * @param values
-	 * @return MutableByteList
-	 */
-	public static MutableByteList newByteArrayListWith(byte... values) {
-		if (ArrayUtil.isNullOrEmpty(values))
-			return new ByteArrayList();
-		return new ByteArrayList(values);
-	}
+    /**
+     * @param capacity int
+     * @return MutableByteList
+     */
+    public static MutableByteList newByteArrayList(int capacity) {
+        return new ByteArrayList(capacity);
+    }
 
-	/**
-	 * 
-	 * @return MutableCharList
-	 */
-	public static MutableCharList newCharArrayList() {
-		return new CharArrayList();
-	}
+    /**
+     * @param values byte[]
+     * @return MutableByteList
+     */
+    public static MutableByteList newByteArrayListWith(byte... values) {
+        if (ArrayUtil.isNullOrEmpty(values))
+            return new ByteArrayList();
+        return new ByteArrayList(values);
+    }
 
-	/**
-	 * 
-	 * @param capacity
-	 * @return MutableCharList
-	 */
-	public static MutableCharList newCharArrayList(int capacity) {
-		return new CharArrayList(capacity);
-	}
+    /**
+     * @return MutableCharList
+     */
+    public static MutableCharList newCharArrayList() {
+        return new CharArrayList();
+    }
 
-	/**
-	 * 
-	 * @param values
-	 * @return MutableCharList
-	 */
-	public static MutableCharList newCharArrayList(char... values) {
-		if (ArrayUtil.isNullOrEmpty(values))
-			return new CharArrayList();
-		return new CharArrayList(values);
-	}
+    /**
+     * @param capacity int
+     * @return MutableCharList
+     */
+    public static MutableCharList newCharArrayList(int capacity) {
+        return new CharArrayList(capacity);
+    }
 
-	/**
-	 * 
-	 * @return MutableIntList
-	 */
-	public static MutableIntList newIntArrayList() {
-		return new IntArrayList();
-	}
+    /**
+     * @param values char[]
+     * @return MutableCharList
+     */
+    public static MutableCharList newCharArrayList(char... values) {
+        if (ArrayUtil.isNullOrEmpty(values))
+            return new CharArrayList();
+        return new CharArrayList(values);
+    }
 
-	/**
-	 * 
-	 * @param capacity
-	 * @return MutableIntList
-	 */
-	public static MutableIntList newIntArrayList(int capacity) {
-		return new IntArrayList(capacity);
-	}
+    /**
+     * @return MutableIntList
+     */
+    public static MutableIntList newIntArrayList() {
+        return new IntArrayList();
+    }
 
-	/**
-	 * 
-	 * @param values
-	 * @return MutableIntList
-	 */
-	public static MutableIntList newIntArrayListWith(int... values) {
-		if (ArrayUtil.isNullOrEmpty(values))
-			return newIntArrayList();
-		return new IntArrayList(values);
-	}
+    /**
+     * @param capacity int
+     * @return MutableIntList
+     */
+    public static MutableIntList newIntArrayList(int capacity) {
+        return new IntArrayList(capacity);
+    }
 
-	/**
-	 * 
-	 * @return MutableLongList
-	 */
-	public static MutableLongList newLongArrayList() {
-		return new LongArrayList();
-	}
+    /**
+     * @param values int[]
+     * @return MutableIntList
+     */
+    public static MutableIntList newIntArrayListWith(int... values) {
+        if (ArrayUtil.isNullOrEmpty(values))
+            return newIntArrayList();
+        return new IntArrayList(values);
+    }
 
-	/**
-	 * 
-	 * @param capacity
-	 * @return MutableLongList
-	 */
-	public static MutableLongList newLongArrayList(int capacity) {
-		return new LongArrayList(capacity);
-	}
+    /**
+     * @return MutableLongList
+     */
+    public static MutableLongList newLongArrayList() {
+        return new LongArrayList();
+    }
 
-	/**
-	 * 
-	 * @param values
-	 * @return MutableLongList
-	 */
-	public static MutableLongList newLongArrayListWith(long... values) {
-		if (ArrayUtil.isNullOrEmpty(values))
-			return newLongArrayList();
-		return new LongArrayList(values);
-	}
+    /**
+     * @param capacity int
+     * @return MutableLongList
+     */
+    public static MutableLongList newLongArrayList(int capacity) {
+        return new LongArrayList(capacity);
+    }
 
-	/**
-	 * 
-	 * @return MutableDoubleList
-	 */
-	public static MutableDoubleList newDoubleArrayList() {
-		return new DoubleArrayList();
-	}
+    /**
+     * @param values long[]
+     * @return MutableLongList
+     */
+    public static MutableLongList newLongArrayListWith(long... values) {
+        if (ArrayUtil.isNullOrEmpty(values))
+            return newLongArrayList();
+        return new LongArrayList(values);
+    }
 
-	/**
-	 * 
-	 * @param capacity
-	 * @return MutableDoubleList
-	 */
-	public static MutableDoubleList newDoubleArrayList(int capacity) {
-		return new DoubleArrayList(capacity);
-	}
+    /**
+     * @return MutableDoubleList
+     */
+    public static MutableDoubleList newDoubleArrayList() {
+        return new DoubleArrayList();
+    }
 
-	/**
-	 * 
-	 * @param values
-	 * @return MutableDoubleList
-	 */
-	public static MutableDoubleList newDoubleArrayListWith(double... values) {
-		if (ArrayUtil.isNullOrEmpty(values))
-			return newDoubleArrayList();
-		return new DoubleArrayList(values);
-	}
+    /**
+     * @param capacity int
+     * @return MutableDoubleList
+     */
+    public static MutableDoubleList newDoubleArrayList(int capacity) {
+        return new DoubleArrayList(capacity);
+    }
 
-	/*
-	 * ******************** object list ********************
-	 */
+    /**
+     * @param values double[]
+     * @return MutableDoubleList
+     */
+    public static MutableDoubleList newDoubleArrayListWith(double... values) {
+        if (ArrayUtil.isNullOrEmpty(values))
+            return newDoubleArrayList();
+        return new DoubleArrayList(values);
+    }
 
-	/**
-	 * 
-	 * @param <E>
-	 * @return MutableList
-	 */
-	public static <E> MutableList<E> newFastList() {
-		return new FastList<>();
-	}
+    /*
+     * ******************** object list ********************
+     */
 
-	/**
-	 * 
-	 * @param <E>
-	 * @param capacity
-	 * @return MutableList
-	 */
-	public static <E> MutableList<E> newFastList(int capacity) {
-		return new FastList<>(capacity);
-	}
+    /**
+     * @param <E> type
+     * @return MutableList
+     */
+    public static <E> MutableList<E> newFastList() {
+        return new FastList<>();
+    }
 
-	/**
-	 * 
-	 * @param <E>
-	 * @param collection
-	 * @return MutableList
-	 */
-	public static <E> MutableList<E> newFastList(Collection<E> collection) {
-		return new FastList<>(collection);
-	}
+    /**
+     * @param <E>      type
+     * @param capacity int
+     * @return MutableList
+     */
+    public static <E> MutableList<E> newFastList(int capacity) {
+        return new FastList<>(capacity);
+    }
 
-	/**
-	 * 
-	 * @param <E>
-	 * @param iterator
-	 * @return MutableList
-	 */
-	public static <E> MutableList<E> newFastList(Iterator<E> iterator) {
-		if (iterator != null && iterator.hasNext()) {
-			MutableList<E> list = newFastList(Capacity.DEFAULT_SIZE);
-			while (iterator.hasNext())
-				list.add(iterator.next());
-			return list;
-		} else
-			return newFastList();
-	}
+    /**
+     * @param <E>        type
+     * @param collection Collection
+     * @return MutableList
+     */
+    public static <E> MutableList<E> newFastList(Collection<E> collection) {
+        return new FastList<>(collection);
+    }
 
-	/**
-	 * 
-	 * @param <E>
-	 * @param iterable
-	 * @return MutableList
-	 */
-	public static <E> MutableList<E> newFastList(Iterable<E> iterable) {
-		if (iterable == null)
-			return newFastList();
-		return FastList.newList(iterable);
-	}
+    /**
+     * @param <E>      type
+     * @param iterator Iterator
+     * @return MutableList
+     */
+    public static <E> MutableList<E> newFastList(Iterator<E> iterator) {
+        if (iterator != null && iterator.hasNext()) {
+            MutableList<E> list = newFastList(Capacity.DEFAULT_SIZE);
+            while (iterator.hasNext())
+                list.add(iterator.next());
+            return list;
+        } else
+            return newFastList();
+    }
 
-	/**
-	 * 
-	 * @param <E>
-	 * @param values
-	 * @return MutableList
-	 */
-	@SafeVarargs
-	public static <E> MutableList<E> newFastList(E... values) {
-		if (ArrayUtil.isNullOrEmpty(values))
-			return newFastList();
-		return FastList.newListWith(values);
-	}
+    /**
+     * @param <E>      type
+     * @param iterable Iterable
+     * @return MutableList
+     */
+    public static <E> MutableList<E> newFastList(Iterable<E> iterable) {
+        if (iterable == null)
+            return newFastList();
+        return FastList.newList(iterable);
+    }
+
+    /**
+     * @param <E>    type
+     * @param values Object[]
+     * @return MutableList
+     */
+    @SafeVarargs
+    public static <E> MutableList<E> newFastList(E... values) {
+        if (ArrayUtil.isNullOrEmpty(values))
+            return newFastList();
+        return FastList.newListWith(values);
+    }
 
 }

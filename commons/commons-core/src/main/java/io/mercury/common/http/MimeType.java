@@ -1,4 +1,4 @@
-package io.mercury.transport.http.base;
+package io.mercury.common.http;
 
 public interface MimeType {
 

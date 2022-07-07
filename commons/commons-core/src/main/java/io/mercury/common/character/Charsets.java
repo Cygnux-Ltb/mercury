@@ -8,18 +8,13 @@ import io.mercury.common.util.StringSupport;
 public interface Charsets {
 
     /**
-     * @param charsetName
-     * @return
-     * @throws UnsupportedCharsetsException
+     * @param charsetName String
+     * @return Charset
      */
-    static Charset forName(String charsetName) throws UnsupportedCharsetsException {
+    static Charset forName(String charsetName) {
         if (StringSupport.isNullOrEmpty(charsetName))
             return SYS_DEFAULT;
-        try {
-            return Charset.forName(charsetName);
-        } catch (Exception e) {
-            throw new UnsupportedCharsetsException(charsetName);
-        }
+        return Charset.forName(charsetName);
     }
 
     Charset SYS_DEFAULT = Charset.defaultCharset();

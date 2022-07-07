@@ -1,16 +1,15 @@
 package io.mercury.common.util;
 
-import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
-
-import java.nio.charset.Charset;
+import io.mercury.common.character.Charsets;
+import io.mercury.common.character.Separator;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.nio.charset.Charset;
+import java.util.Objects;
 
-import org.apache.commons.lang3.builder.ToStringStyle;
-
-import io.mercury.common.character.Charsets;
-import io.mercury.common.character.Separator;
+import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
 
 public final class StringSupport {
 
@@ -62,7 +61,7 @@ public final class StringSupport {
      * @return
      */
     @Nonnull
-    public static String toString(@Nullable double d) {
+    public static String toString(double d) {
         return Double.toString(d);
     }
 
@@ -127,7 +126,7 @@ public final class StringSupport {
      * @return
      */
     @Nonnull
-    public static String toString(@Nonnull byte[] bs) {
+    public static String toString(byte[] bs) {
         return toString(Charsets.UTF8, bs);
     }
 
@@ -137,7 +136,7 @@ public final class StringSupport {
      * @return
      */
     @Nonnull
-    public static String toString(@Nonnull Charset charset, @Nonnull byte[] bs) {
+    public static String toString(Charset charset, byte[] bs) {
         return bs == null ? CONST_NULL : new String(bs, charset == null ? Charsets.UTF8 : charset);
     }
 
@@ -146,7 +145,7 @@ public final class StringSupport {
      * @return
      */
     @Nonnull
-    public static String toString(@Nonnull char[] cs) {
+    public static String toString(char[] cs) {
         return cs == null ? CONST_NULL : new String(cs);
     }
 
@@ -221,7 +220,7 @@ public final class StringSupport {
      * @return
      */
     public static boolean isEquals(String str1, String str2) {
-        return str1 != null ? str1.equals(str2) : str2 != null ? str2.equals(str1) : true;
+        return Objects.equals(str1, str2);
     }
 
     /**

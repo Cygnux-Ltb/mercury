@@ -72,7 +72,7 @@ public final class MutableMaps {
     }
 
     /**
-     * @param capacity
+     * @param capacity int
      * @return MutableIntIntMap
      */
     public static MutableIntIntMap newIntIntHashMap(int capacity) {
@@ -88,7 +88,7 @@ public final class MutableMaps {
     }
 
     /**
-     * @param capacity
+     * @param capacity int
      * @return MutableIntLongMap
      */
     public static MutableIntLongMap newIntLongHashMap(int capacity) {
@@ -104,7 +104,7 @@ public final class MutableMaps {
     }
 
     /**
-     * @param capacity
+     * @param capacity int
      * @return MutableIntDoubleMap
      */
     public static MutableIntDoubleMap newIntDoubleHashMap(int capacity) {
@@ -120,7 +120,7 @@ public final class MutableMaps {
     }
 
     /**
-     * @param capacity
+     * @param capacity int
      * @return MutableIntBooleanMap
      */
     public static MutableIntBooleanMap newIntBooleanHashMap(int capacity) {
@@ -129,7 +129,7 @@ public final class MutableMaps {
 
 
     /**
-     * @param <V>
+     * @param <V> type
      * @return MutableIntObjectMap<V>
      */
     public static <V> MutableIntObjectMap<V> newIntObjectHashMap() {
@@ -137,7 +137,7 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <V>
+     * @param <V> type
      * @param capacity
      * @return MutableIntObjectMap<V>
      */
@@ -148,7 +148,7 @@ public final class MutableMaps {
     /**
      * @param keyFunc
      * @param values
-     * @param <V>
+     * @param <V> type
      * @return MutableIntObjectMap<V>
      */
     @SafeVarargs
@@ -176,7 +176,7 @@ public final class MutableMaps {
     }
 
     /**
-     * @param capacity
+     * @param capacity int
      * @return MutableLongLongMap
      */
     public static MutableLongLongMap newLongLongHashMap(int capacity) {

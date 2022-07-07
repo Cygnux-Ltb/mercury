@@ -4,5 +4,4 @@ import java.nio.ByteBuffer;
 
 @FunctionalInterface
 public interface ByteBufferEncoder<T> extends Encoder<T, ByteBuffer> {
-
 }

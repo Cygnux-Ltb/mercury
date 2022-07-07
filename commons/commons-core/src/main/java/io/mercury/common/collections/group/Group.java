@@ -1,5 +1,6 @@
 package io.mercury.common.collections.group;
 
+import java.io.Serial;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -19,9 +20,7 @@ public interface Group<K, V> {
 
     class MemberNotExistException extends RuntimeException {
 
-        /**
-         *
-         */
+        @Serial
         private static final long serialVersionUID = -6229705929334610236L;
 
         public MemberNotExistException(String msg) {

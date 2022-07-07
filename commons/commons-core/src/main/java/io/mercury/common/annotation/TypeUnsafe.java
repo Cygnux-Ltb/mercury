@@ -8,11 +8,11 @@ import java.lang.annotation.Target;
 
 /**
  * 标识不安全的类型
- * 
+ *
  * @author yellow013
  */
 @Documented
-@Target({ ElementType.FIELD, ElementType.METHOD, ElementType.LOCAL_VARIABLE })
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.LOCAL_VARIABLE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface TypeUnsafe {
 }
