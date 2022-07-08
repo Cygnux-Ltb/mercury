@@ -10,7 +10,7 @@ public final class LibraryPathManager {
 	/**
 	 * 获取LibraryPath, System.getProperty("java.library.path")
 	 * 
-	 * @return
+	 * @return String
 	 */
 	public static String getLibraryPath() {
 		return SysProperties.JAVA_LIBRARY_PATH;
@@ -19,7 +19,7 @@ public final class LibraryPathManager {
 	/**
 	 * 添加java.library.path
 	 * 
-	 * @param libraryFile
+	 * @param libraryFile File
 	 * @throws Exception
 	 */
 	public static void addLibraryDir(File libraryFile) throws Exception {
@@ -28,7 +28,7 @@ public final class LibraryPathManager {
 
 	/**
 	 * 
-	 * @param libraryPath
+	 * @param libraryPath String
 	 * @throws Exception
 	 */
 	public static void addLibraryDir(String libraryPath) throws Exception {

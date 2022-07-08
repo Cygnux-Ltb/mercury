@@ -97,8 +97,8 @@ public final class SleepSupport {
     }
 
     /**
-     * @param timeUnit
-     * @param time
+     * @param timeUnit TimeUnit
+     * @param time     long
      * @throws RuntimeInterruptedException
      */
     public static void sleep(@Nonnull TimeUnit timeUnit, long time) throws RuntimeInterruptedException {

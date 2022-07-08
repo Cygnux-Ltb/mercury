@@ -3,15 +3,15 @@ package io.mercury.common.lang;
 public final class Throws {
 
     /**
-     * @throws RuntimeException
+     * @throws RuntimeException exception
      */
     public static void runtimeException() throws RuntimeException {
         throw new RuntimeException();
     }
 
     /**
-     * @param msg
-     * @throws RuntimeException
+     * @param msg String
+     * @throws RuntimeException exception
      */
     public static void runtimeException(String msg) throws RuntimeException {
         throw new RuntimeException(msg);
@@ -19,38 +19,38 @@ public final class Throws {
 
     /**
      * @param t
-     * @throws RuntimeException
+     * @throws RuntimeException exception
      */
     public static void runtimeException(Throwable t) throws RuntimeException {
         throw new RuntimeException(t);
     }
 
     /**
-     * @param msg
+     * @param msg String
      * @param t
-     * @throws RuntimeException
+     * @throws RuntimeException exception
      */
     public static void runtimeException(String msg, Throwable t) throws RuntimeException {
         throw new RuntimeException(msg, t);
     }
 
     /**
-     * @throws NullPointerException
+     * @throws NullPointerException exception
      */
     public static void nullPointer() throws NullPointerException {
         throw new NullPointerException();
     }
 
     /**
-     * @param obj
-     * @throws NullPointerException
+     * @param objName
+     * @throws NullPointerException exception
      */
-    public static void nullPointer(String obj) throws NullPointerException {
-        throw new NullPointerException("object name -> " + obj);
+    public static void nullPointer(String objName) throws NullPointerException {
+        throw new NullPointerException("object name -> " + objName);
     }
 
     /**
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException exception
      */
     public static void illegalArgument() throws IllegalArgumentException {
         throw new IllegalArgumentException();
@@ -58,7 +58,7 @@ public final class Throws {
 
     /**
      * @param msg
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException exception
      */
     public static void illegalArgument(String msg) throws IllegalArgumentException {
         throw new IllegalArgumentException("illegal argument -> " + msg);
@@ -66,7 +66,7 @@ public final class Throws {
 
     /**
      * @param t
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException exception
      */
     public static void illegalArgument(Throwable t) throws IllegalArgumentException {
         throw new IllegalArgumentException(t);
@@ -75,14 +75,14 @@ public final class Throws {
     /**
      * @param msg
      * @param t
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException exception
      */
     public static void illegalArgument(String msg, Throwable t) throws IllegalArgumentException {
         throw new IllegalArgumentException("illegal argument -> " + msg, t);
     }
 
     /**
-     * @throws IllegalStateException
+     * @throws IllegalStateException exception
      */
     public static void illegalState() throws IllegalStateException {
         throw new IllegalStateException();
@@ -90,7 +90,7 @@ public final class Throws {
 
     /**
      * @param state
-     * @throws IllegalStateException
+     * @throws IllegalStateException exception
      */
     public static void illegalState(String state) throws IllegalStateException {
         throw new IllegalStateException("state -> " + state);
@@ -98,7 +98,7 @@ public final class Throws {
 
     /**
      * @param t
-     * @throws IllegalStateException
+     * @throws IllegalStateException exception
      */
     public static void illegalState(Throwable t) throws IllegalStateException {
         throw new IllegalStateException(t);
@@ -107,7 +107,7 @@ public final class Throws {
     /**
      * @param state
      * @param t
-     * @throws IllegalStateException
+     * @throws IllegalStateException exception
      */
     public static void illegalState(String state, Throwable t) throws IllegalStateException {
         throw new IllegalStateException("state -> " + state, t);

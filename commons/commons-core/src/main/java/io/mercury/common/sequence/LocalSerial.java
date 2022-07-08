@@ -10,65 +10,61 @@ import io.mercury.common.thread.ThreadSupport;
 @ThreadSafe
 public final class LocalSerial {
 
-	private final AtomicLong serial;
+    private final AtomicLong serial;
 
-	private LocalSerial(long initValue) {
-		this.serial = new AtomicLong(initValue);
-	}
+    private LocalSerial(long initValue) {
+        this.serial = new AtomicLong(initValue);
+    }
 
-	/**
-	 * 
-	 * @param initValue
-	 * @return
-	 */
-	public static LocalSerial newInstance(long initValue) {
-		return new LocalSerial(initValue);
-	}
+    /**
+     * @param initValue long
+     * @return LocalSerial
+     */
+    public static LocalSerial newInstance(long initValue) {
+        return new LocalSerial(initValue);
+    }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public static LocalSerial newInstance() {
-		return new LocalSerial(0L);
-	}
+    /**
+     * @return LocalSerial
+     */
+    public static LocalSerial newInstance() {
+        return new LocalSerial(0L);
+    }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public long incrementAndGet() {
-		return serial.incrementAndGet();
-	}
+    /**
+     * @return long
+     */
+    public long incrementAndGet() {
+        return serial.incrementAndGet();
+    }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public long getAndIncrement() {
-		return serial.getAndIncrement();
-	}
+    /**
+     * @return long
+     */
+    public long getAndIncrement() {
+        return serial.getAndIncrement();
+    }
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		AtomicLong atomicLong = new AtomicLong(50);
+        AtomicLong atomicLong = new AtomicLong(50);
 
-		SecureRandom random = new SecureRandom();
-		
-		ThreadSupport.startNewThread(() -> {
-			if (atomicLong.get() < 0) {
-				return;
-			} else if (atomicLong.get() > 100) {
-				return;
-			} else {
-				if (random.nextLong() % 2 == 0) {
-					atomicLong.getAndAdd(1);
-				} else {
-					atomicLong.getAndAdd(-1);
-				}
-			}
-		});
+        SecureRandom random = new SecureRandom();
 
-	}
+        ThreadSupport.startNewThread(() -> {
+            if (atomicLong.get() < 0) {
+                return;
+            } else if (atomicLong.get() > 100) {
+                return;
+            } else {
+                if (random.nextLong() % 2 == 0) {
+                    atomicLong.getAndAdd(1);
+                } else {
+                    atomicLong.getAndAdd(-1);
+                }
+            }
+        });
+
+    }
 
 }

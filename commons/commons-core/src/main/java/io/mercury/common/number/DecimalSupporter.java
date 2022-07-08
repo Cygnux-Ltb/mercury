@@ -96,64 +96,64 @@ public final class DecimalSupporter {
     public static final double DOUBLE_MULTIPLIER_100000000D = 100000000.0d;
 
     /**
-     * @param d
-     * @return
+     * @param d double
+     * @return long
      */
     public static long doubleToLong2(double d) {
         return (long) (d * LONG_MULTIPLIER_100L);
     }
 
     /**
-     * @param l
-     * @return
+     * @param l long
+     * @return double
      */
     public static double longToDouble2(long l) {
         return l / DOUBLE_MULTIPLIER_100D;
     }
 
     /**
-     * @param d
-     * @return
+     * @param d double
+     * @return long
      */
     public static long doubleToLong4(double d) {
         return (long) (d * LONG_MULTIPLIER_10000L);
     }
 
     /**
-     * @param l
-     * @return
+     * @param l long
+     * @return double
      */
     public static double longToDouble4(long l) {
         return l / DOUBLE_MULTIPLIER_10000D;
     }
 
     /**
-     * @param d
-     * @return
+     * @param d double
+     * @return long
      */
     public static long doubleToLong6(double d) {
         return (long) (d * LONG_MULTIPLIER_1000000L);
     }
 
     /**
-     * @param l
-     * @return
+     * @param l long
+     * @return double
      */
     public static double longToDouble6(long l) {
         return l / DOUBLE_MULTIPLIER_1000000D;
     }
 
     /**
-     * @param d
-     * @return
+     * @param d double
+     * @return long
      */
     public static long doubleToLong8(double d) {
         return (long) (d * LONG_MULTIPLIER_100000000L);
     }
 
     /**
-     * @param l
-     * @return
+     * @param l long
+     * @return double
      */
     public static double longToDouble8(long l) {
         return l / DOUBLE_MULTIPLIER_100000000D;

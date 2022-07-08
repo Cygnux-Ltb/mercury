@@ -1,5 +1,7 @@
 package io.mercury.common.sequence;
 
+import java.io.Serial;
+
 /**
  *
  * 时钟回退抛出此异常
@@ -9,6 +11,7 @@ package io.mercury.common.sequence;
  */
 public final class ClockBackwardException extends IllegalStateException {
 
+	@Serial
 	private static final long serialVersionUID = -5012855755917563428L;
 
 	private final long lastEpochMillis;

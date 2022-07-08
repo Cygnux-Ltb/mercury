@@ -19,7 +19,7 @@ public final class Asserter {
      * @param min
      * @param objName
      * @return
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException exception
      */
     public static int greaterThan(int i, int min, String objName) throws IllegalArgumentException {
         if (i > min)
@@ -32,7 +32,7 @@ public final class Asserter {
      * @param min
      * @param objName
      * @return
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException exception
      */
     public static long greaterThan(long l, long min, String objName) throws IllegalArgumentException {
         if (l > min)
@@ -45,7 +45,7 @@ public final class Asserter {
      * @param min
      * @param objName
      * @return
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException exception
      */
     public static int greaterOrEqualThan(int i, int min, String objName) throws IllegalArgumentException {
         if (i >= min)
@@ -58,7 +58,7 @@ public final class Asserter {
      * @param min
      * @param objName
      * @return
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException exception
      */
     public static long greaterOrEqualThan(long l, long min, String objName) throws IllegalArgumentException {
         if (l >= min)
@@ -71,7 +71,7 @@ public final class Asserter {
      * @param max
      * @param objName
      * @return
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException exception
      */
     public static int lessThan(int i, int max, String objName) throws IllegalArgumentException {
         if (i < max)
@@ -84,7 +84,7 @@ public final class Asserter {
      * @param max
      * @param objName
      * @return
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException exception
      */
     public static long lessThan(long l, long max, String objName) throws IllegalArgumentException {
         if (l < max)
@@ -97,7 +97,7 @@ public final class Asserter {
      * @param max
      * @param objName
      * @return
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException exception
      */
     public static int lessOrEqualThan(int i, int max, String objName) throws IllegalArgumentException {
         if (i <= max)
@@ -110,7 +110,7 @@ public final class Asserter {
      * @param max
      * @param objName
      * @return
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException exception
      */
     public static long lessOrEqualThan(long l, long max, String objName) throws IllegalArgumentException {
         if (l <= max)
@@ -124,7 +124,7 @@ public final class Asserter {
      * @param max
      * @param objName
      * @return
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException exception
      */
     public static int atWithinRange(int i, int min, int max, String objName) throws IllegalArgumentException {
         if (i >= min && i <= max)
@@ -139,7 +139,7 @@ public final class Asserter {
      * @param max
      * @param objName
      * @return
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException exception
      */
     public static long atWithinRange(long l, long min, long max, String objName) throws IllegalArgumentException {
         if (l >= min && l <= max)
@@ -151,7 +151,7 @@ public final class Asserter {
      * @param <T>
      * @param t
      * @return
-     * @throws NullPointerException
+     * @throws NullPointerException exception
      */
     public static <T> T nonNull(T t) throws NullPointerException {
         return nonNull(t, "");
@@ -162,7 +162,7 @@ public final class Asserter {
      * @param t
      * @param objName
      * @return
-     * @throws NullPointerException
+     * @throws NullPointerException exception
      */
     public static <T> T nonNull(T t, @Nonnull String objName) throws NullPointerException {
         if (t == null)
@@ -179,7 +179,7 @@ public final class Asserter {
      * @param t
      * @param e
      * @return
-     * @throws E
+     * @throws E exception
      */
     public static <T, E extends Throwable> T nonNull(T t, E e) throws E {
         if (t == null)
@@ -191,8 +191,8 @@ public final class Asserter {
      * @param str
      * @param objName
      * @return
-     * @throws NullPointerException
-     * @throws IllegalArgumentException
+     * @throws NullPointerException     exception
+     * @throws IllegalArgumentException exception
      */
     public static String nonEmpty(String str, String objName) throws NullPointerException, IllegalArgumentException {
         if (str == null)
@@ -207,8 +207,8 @@ public final class Asserter {
      * @param collection
      * @param objName
      * @return
-     * @throws NullPointerException
-     * @throws IllegalArgumentException
+     * @throws NullPointerException     exception
+     * @throws IllegalArgumentException exception
      */
     public static <T extends Collection<E>, E> T nonEmptyCollection(T collection, String objName)
             throws NullPointerException, IllegalArgumentException {
@@ -224,8 +224,8 @@ public final class Asserter {
      * @param map
      * @param objName
      * @return
-     * @throws NullPointerException
-     * @throws IllegalArgumentException
+     * @throws NullPointerException     exception
+     * @throws IllegalArgumentException exception
      */
     public static <T extends Map<?, ?>> T nonEmptyMap(T map, String objName)
             throws NullPointerException, IllegalArgumentException {
@@ -242,8 +242,8 @@ public final class Asserter {
      * @param requiredLength
      * @param arrayName
      * @return
-     * @throws NullPointerException
-     * @throws IllegalArgumentException
+     * @throws NullPointerException     exception
+     * @throws IllegalArgumentException exception
      */
     public static <T> T[] requiredLength(T[] array, int requiredLength, String arrayName)
             throws NullPointerException, IllegalArgumentException {
@@ -261,8 +261,8 @@ public final class Asserter {
      * @param requiredLength
      * @param arrayName
      * @return
-     * @throws NullPointerException
-     * @throws IllegalArgumentException
+     * @throws NullPointerException     exception
+     * @throws IllegalArgumentException exception
      */
     public static <E> Collection<E> requiredLength(Collection<E> collection, int requiredLength, String arrayName)
             throws NullPointerException, IllegalArgumentException {
@@ -280,8 +280,8 @@ public final class Asserter {
      * @param requiredLength
      * @param listName
      * @return
-     * @throws NullPointerException
-     * @throws IllegalArgumentException
+     * @throws NullPointerException     exception
+     * @throws IllegalArgumentException exception
      */
     public static <T> List<T> requiredLength(List<T> list, int requiredLength, String listName)
             throws NullPointerException, IllegalArgumentException {
@@ -298,8 +298,8 @@ public final class Asserter {
      * @param requiredLength
      * @param arrayName
      * @return
-     * @throws NullPointerException
-     * @throws IllegalArgumentException
+     * @throws NullPointerException     exception
+     * @throws IllegalArgumentException exception
      */
     public static boolean[] requiredLength(boolean[] array, int requiredLength, String arrayName)
             throws NullPointerException, IllegalArgumentException {
@@ -316,8 +316,8 @@ public final class Asserter {
      * @param requiredLength
      * @param arrayName
      * @return
-     * @throws NullPointerException
-     * @throws IllegalArgumentException
+     * @throws NullPointerException     exception
+     * @throws IllegalArgumentException exception
      */
     public static byte[] requiredLength(byte[] array, int requiredLength, String arrayName)
             throws NullPointerException, IllegalArgumentException {
@@ -334,8 +334,8 @@ public final class Asserter {
      * @param requiredLength
      * @param arrayName
      * @return
-     * @throws NullPointerException
-     * @throws IllegalArgumentException
+     * @throws NullPointerException     exception
+     * @throws IllegalArgumentException exception
      */
     public static char[] requiredLength(char[] array, int requiredLength, String arrayName)
             throws NullPointerException, IllegalArgumentException {
@@ -352,8 +352,8 @@ public final class Asserter {
      * @param requiredLength
      * @param arrayName
      * @return
-     * @throws NullPointerException
-     * @throws IllegalArgumentException
+     * @throws NullPointerException     exception
+     * @throws IllegalArgumentException exception
      */
     public static int[] requiredLength(int[] array, int requiredLength, String arrayName)
             throws NullPointerException, IllegalArgumentException {
@@ -370,8 +370,8 @@ public final class Asserter {
      * @param requiredLength
      * @param arrayName
      * @return
-     * @throws NullPointerException
-     * @throws IllegalArgumentException
+     * @throws NullPointerException     exception
+     * @throws IllegalArgumentException exception
      */
     public static long[] requiredLength(long[] array, int requiredLength, String arrayName)
             throws NullPointerException, IllegalArgumentException {
@@ -388,8 +388,8 @@ public final class Asserter {
      * @param requiredLength
      * @param arrayName
      * @return
-     * @throws NullPointerException
-     * @throws IllegalArgumentException
+     * @throws NullPointerException     exception
+     * @throws IllegalArgumentException exception
      */
     public static float[] requiredLength(float[] array, int requiredLength, String arrayName)
             throws NullPointerException, IllegalArgumentException {
@@ -406,8 +406,8 @@ public final class Asserter {
      * @param requiredLength
      * @param arrayName
      * @return
-     * @throws NullPointerException
-     * @throws IllegalArgumentException
+     * @throws NullPointerException     exception
+     * @throws IllegalArgumentException exception
      */
     public static double[] requiredLength(double[] array, int requiredLength, String arrayName)
             throws NullPointerException, IllegalArgumentException {
@@ -425,7 +425,7 @@ public final class Asserter {
      * @param predicate
      * @param paramName
      * @return
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException exception
      */
     public static <T> T isValid(T param, Predicate<T> predicate, String paramName) throws IllegalArgumentException {
         return isValid(param, predicate, new IllegalArgumentException("Param: [" + paramName + "] is illegal"));
@@ -438,7 +438,7 @@ public final class Asserter {
      * @param predicate
      * @param exception
      * @return
-     * @throws E
+     * @throws E exception
      */
     public static <T, E extends Exception> T isValid(T param, Predicate<T> predicate, E exception) throws E {
         if (predicate.test(param))

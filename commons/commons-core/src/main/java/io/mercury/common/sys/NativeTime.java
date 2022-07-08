@@ -5,169 +5,166 @@ import java.net.URL;
 import java.security.CodeSource;
 
 public class NativeTime {
-	
-	public static final boolean LOADED;
-	private static double ticks_per_nanosecond = 1.0;
 
-	static {
-		boolean loaded = false;
-		try {
-			String destDir = System.getProperty("java.io.tmpdir");
-			String osname = System.getProperty("os.name");
-			String arch = System.getProperty("os.arch");
-			String pattern = osname + java.io.File.separator + arch;
+    public static final boolean LOADED;
+    private static double ticks_per_nanosecond = 1.0;
 
-			try {
-				// TODO
-				// unpack .so from jar to tmpdir/os/arch
-				CodeSource src = NativeTime.class.getProtectionDomain().getCodeSource();
-				if (src != null) {
-					String jarFile = src.getLocation().getFile();
-					java.util.jar.JarFile jar = new java.util.jar.JarFile(jarFile);
-					java.util.Enumeration<?> enumEntries = jar.entries();
-					while (enumEntries.hasMoreElements()) {
-						java.util.jar.JarEntry file = (java.util.jar.JarEntry) enumEntries.nextElement();
+    static {
+        boolean loaded;
+        try {
+            String destDir = System.getProperty("java.io.tmpdir");
+            String osname = System.getProperty("os.name");
+            String arch = System.getProperty("os.arch");
+            String pattern = osname + java.io.File.separator + arch;
 
-						if (!containsIgnoreCase(file.getName(), pattern))
-							continue;
+            try {
+                // TODO
+                // unpack .so from jar to tmpdir/os/arch
+                CodeSource src = NativeTime.class.getProtectionDomain().getCodeSource();
+                if (src != null) {
+                    String jarFile = src.getLocation().getFile();
+                    java.util.jar.JarFile jar = new java.util.jar.JarFile(jarFile);
+                    java.util.Enumeration<?> enumEntries = jar.entries();
+                    while (enumEntries.hasMoreElements()) {
+                        java.util.jar.JarEntry file = (java.util.jar.JarEntry) enumEntries.nextElement();
 
-						java.io.File f = new java.io.File(destDir + java.io.File.separator + file.getName());
+                        if (!containsIgnoreCase(file.getName(), pattern))
+                            continue;
 
-						if (!f.exists()) {
-							java.io.File parent = f.getParentFile();
-							if (parent != null) {
-								parent.mkdirs();
-								f = new java.io.File(destDir + java.io.File.separator + file.getName());
-							}
-						}
+                        java.io.File f = new java.io.File(destDir + java.io.File.separator + file.getName());
 
-						if (file.isDirectory()) { // if its a directory, create it
-							continue;
-						}
+                        if (!f.exists()) {
+                            java.io.File parent = f.getParentFile();
+                            if (parent != null) {
+                                parent.mkdirs();
+                                f = new java.io.File(destDir + java.io.File.separator + file.getName());
+                            }
+                        }
 
-						System.out.println("Unpacking " + file.getName() + " to " + f.toString());
+                        if (file.isDirectory()) { // if its a directory, create it
+                            continue;
+                        }
 
-						java.io.InputStream is = jar.getInputStream(file); // get the input stream
-						java.io.FileOutputStream fos = new java.io.FileOutputStream(f);
-						while (is.available() > 0) { // write contents of 'is' to 'fos'
-							fos.write(is.read());
-						}
-						fos.close();
-						is.close();
+                        System.out.println("Unpacking " + file.getName() + " to " + f);
 
-						// update java.library.path to include tmpdir/os/arch
-						// Note, java.library.path is cached by the JVM at startup, so force via
-						// reflective access
-						// This may be an issue with Java 10+
-						// See
-						// https://stackoverflow.com/questions/5419039/is-djava-library-path-equivalent-to-system-setpropertyjava-library-path
-						String libpath = System.getProperty("java.library.path");
-						libpath = libpath + java.io.File.pathSeparator + destDir + java.io.File.separator + pattern;
+                        java.io.InputStream is = jar.getInputStream(file); // get the input stream
+                        java.io.FileOutputStream fos = new java.io.FileOutputStream(f);
+                        while (is.available() > 0) { // write contents of 'is' to 'fos'
+                            fos.write(is.read());
+                        }
+                        fos.close();
+                        is.close();
 
-						try {
-							System.setProperty("java.library.path", libpath);
-							Field fieldSysPath = ClassLoader.class.getDeclaredField("sys_paths");
-							fieldSysPath.setAccessible(true);
-							fieldSysPath.set(null, null);
-						} catch (java.lang.IllegalAccessException e) {
-							e.printStackTrace();
-							// ignored
-						} catch (java.lang.NoSuchFieldException e) {
-							e.printStackTrace();
-							// ignored
-						}
+                        // update java.library.path to include tmpdir/os/arch
+                        // Note, java.library.path is cached by the JVM at startup, so force via
+                        // reflective access
+                        // This may be an issue with Java 10+
+                        // See
+                        // https://stackoverflow.com/questions/5419039/is-djava-library-path-equivalent-to-system-setpropertyjava-library-path
+                        String libpath = System.getProperty("java.library.path");
+                        libpath = libpath + java.io.File.pathSeparator + destDir + java.io.File.separator + pattern;
 
-						System.load(f.toString());
-						loaded = true;
-					}
-					jar.close();
-				}
-			} catch (java.io.FileNotFoundException unused) {
-				unused.printStackTrace();
-			} catch (java.io.IOException unused) {
-				unused.printStackTrace();
-			}
+                        try {
+                            System.setProperty("java.library.path", libpath);
+                            Field fieldSysPath = ClassLoader.class.getDeclaredField("sys_paths");
+                            fieldSysPath.setAccessible(true);
+                            fieldSysPath.set(null, null);
+                        } catch (IllegalAccessException | NoSuchFieldException e) {
+                            e.printStackTrace();
+                            // ignored
+                        }
 
-			loaded = tryLoad("libnativetime.so");
-			if (!loaded)
-				loaded = tryLoad(pattern + java.io.File.separator + "libnativetime.so");
-			if (!loaded)
-				System.loadLibrary("nativetime");
+                        System.load(f.toString());
+                        loaded = true;
+                    }
+                    jar.close();
+                }
+            } catch (java.io.FileNotFoundException unused) {
+                unused.printStackTrace();
+            } catch (java.io.IOException unused) {
+                unused.printStackTrace();
+            }
 
-			// initial calibration
-			calibrate(10);
+            loaded = tryLoad("libnativetime.so");
+            if (!loaded)
+                loaded = tryLoad(pattern + java.io.File.separator + "libnativetime.so");
+            if (!loaded)
+                System.loadLibrary("nativetime");
 
-			// background thread for finer-grained calibration
-			Thread t = new Thread(() -> {
-				calibrate(1000);
-			});
-			t.setDaemon(true);
-			t.start();
+            // initial calibration
+            calibrate(10);
 
-			loaded = true;
-		} catch (UnsatisfiedLinkError ule) {
-			ule.printStackTrace();
-			loaded = false;
-		}
+            // background thread for finer-grained calibration
+            Thread t = new Thread(() -> {
+                calibrate(1000);
+            });
+            t.setDaemon(true);
+            t.start();
 
-		LOADED = loaded;
-	}
+            loaded = true;
+        } catch (UnsatisfiedLinkError ule) {
+            ule.printStackTrace();
+            loaded = false;
+        }
 
-	private static boolean tryLoad(String path) {
-		try {
-			URL url = NativeTime.class.getClassLoader().getResource(path);
-			if (url != null) {
-				System.load(url.getFile());
-				return true;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			// ignored.
-		}
-		return false;
-	}
+        LOADED = loaded;
+    }
 
-	private static boolean containsIgnoreCase(String s1, String s2) {
-		return s1.toLowerCase().contains(s2.toLowerCase());
-	}
+    private static boolean tryLoad(String path) {
+        try {
+            URL url = NativeTime.class.getClassLoader().getResource(path);
+            if (url != null) {
+                System.load(url.getFile());
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // ignored.
+        }
+        return false;
+    }
 
-	/**
-	 * Spin for given number of ms to calibrate ticks per nanosecond
-	 * 
-	 * @param ms = time in milliseconds to spin
-	 */
-	private static void calibrate(int ms) {
-		long ticks1 = cpuid_rdtsc();
-		long nanos1 = System.nanoTime();
+    private static boolean containsIgnoreCase(String s1, String s2) {
+        return s1.toLowerCase().contains(s2.toLowerCase());
+    }
 
-		// spin for 10ms
-		long end = nanos1 + ms * 1000000L;
-		while (System.nanoTime() < end)
-			;
+    /**
+     * Spin for given number of ms to calibrate ticks per nanosecond
+     *
+     * @param ms = time in milliseconds to spin
+     */
+    private static void calibrate(int ms) {
+        long ticks1 = cpuid_rdtsc();
+        long nanos1 = System.nanoTime();
 
-		long ticks2 = cpuid_rdtsc();
-		long nanos2 = System.nanoTime();
+        // spin for 10ms
+        long end = nanos1 + ms * 1000000L;
+        while (System.nanoTime() < end)
+            ;
 
-		ticks_per_nanosecond = ((double) (ticks2 - ticks1)) / (nanos2 - nanos1);
-	}
+        long ticks2 = cpuid_rdtsc();
+        long nanos2 = System.nanoTime();
 
-	public static double ticksPerNanosecond() {
-		return ticks_per_nanosecond;
-	}
+        ticks_per_nanosecond = ((double) (ticks2 - ticks1)) / (nanos2 - nanos1);
+    }
 
-	public native static long rdtsc();
+    public static double ticksPerNanosecond() {
+        return ticks_per_nanosecond;
+    }
 
-	public native static long cpuid_rdtsc();
+    public native static long rdtsc();
 
-	public native static long rdtscp();
+    public native static long cpuid_rdtsc();
 
-	public native static long clocknanos();
-	
-	public static void main(String[] args) {
-		
-		System.out.println(NativeTime.clocknanos());
-		
-		
-	}
+    public native static long rdtscp();
+
+    public native static long clocknanos();
+
+    public static void main(String[] args) {
+
+        System.out.println(NativeTime.clocknanos());
+
+
+    }
 
 }

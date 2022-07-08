@@ -10,7 +10,7 @@ public final class BytesUtil {
     }
 
     /**
-     * @param bytes
+     * @param bytes byte[]
      * @throws IllegalArgumentException
      */
     public static void checkBytesNotNull(byte[] bytes) throws IllegalArgumentException {
@@ -52,10 +52,10 @@ public final class BytesUtil {
     }
 
     /**
-     * @param bytes
-     * @param offset
-     * @param length
-     * @param expectedLength
+     * @param bytes          byte[]
+     * @param offset         int
+     * @param length         int
+     * @param expectedLength int
      */
     public static void checkBytes(byte[] bytes, int offset, int length, int expectedLength)
             throws IllegalArgumentException {
@@ -67,16 +67,16 @@ public final class BytesUtil {
     }
 
     /**
-     * @param value
-     * @return
+     * @param value byte
+     * @return byte[]
      */
     public static byte[] toByteArray(byte value) {
         return new byte[]{value};
     }
 
     /**
-     * @param value
-     * @return
+     * @param value short
+     * @return byte[]
      */
     public static byte[] toBytes(short value) {
         byte[] buf = new byte[2];
@@ -86,8 +86,8 @@ public final class BytesUtil {
     }
 
     /**
-     * @param value
-     * @return
+     * @param value int
+     * @return byte[]
      */
     public static byte[] toBytes(int value) {
         byte[] buf = new byte[4];
@@ -99,8 +99,8 @@ public final class BytesUtil {
     }
 
     /**
-     * @param value
-     * @return
+     * @param value long
+     * @return byte[]
      */
     public static byte[] toBytes(long value) {
         byte[] buf = new byte[8];
@@ -116,8 +116,8 @@ public final class BytesUtil {
     }
 
     /**
-     * @param bytes
-     * @return
+     * @param bytes byte[]
+     * @return byte
      */
     public static byte toByte(byte[] bytes) {
         checkBytesNotNull(bytes);
@@ -125,10 +125,10 @@ public final class BytesUtil {
     }
 
     /**
-     * @param bytes
-     * @param offset
-     * @param length
-     * @return
+     * @param bytes  byte[]
+     * @param offset int
+     * @param length int
+     * @return byte
      */
     public static byte toByte(byte[] bytes, int offset, int length) {
         checkBytes(bytes, offset, length, 1);
@@ -136,8 +136,8 @@ public final class BytesUtil {
     }
 
     /**
-     * @param bytes
-     * @return
+     * @param bytes byte[]
+     * @return short
      */
     public static short toUnsignedByte(byte[] bytes) {
         checkBytesNotNull(bytes);
@@ -145,10 +145,10 @@ public final class BytesUtil {
     }
 
     /**
-     * @param bytes
-     * @param offset
-     * @param length
-     * @return
+     * @param bytes  byte[]
+     * @param offset int
+     * @param length int
+     * @return short
      */
     public static short toUnsignedByte(byte[] bytes, int offset, int length) {
         checkBytes(bytes, offset, length, 1);
@@ -158,8 +158,8 @@ public final class BytesUtil {
     }
 
     /**
-     * @param bytes
-     * @return
+     * @param bytes byte[]
+     * @return short
      */
     public static short toShort(byte[] bytes) {
         checkBytesNotNull(bytes);
@@ -167,10 +167,10 @@ public final class BytesUtil {
     }
 
     /**
-     * @param bytes
-     * @param offset
-     * @param length
-     * @return
+     * @param bytes  byte[]
+     * @param offset int
+     * @param length int
+     * @return short
      */
     public static short toShort(byte[] bytes, int offset, int length) {
         checkBytes(bytes, offset, length, 2);
@@ -182,8 +182,8 @@ public final class BytesUtil {
     }
 
     /**
-     * @param bytes
-     * @return
+     * @param bytes byte[]
+     * @return int
      */
     public static int toUnsignedShort(byte[] bytes) {
         checkBytesNotNull(bytes);
@@ -191,10 +191,10 @@ public final class BytesUtil {
     }
 
     /**
-     * @param bytes
-     * @param offset
-     * @param length
-     * @return
+     * @param bytes  byte[]
+     * @param offset int
+     * @param length int
+     * @return int
      */
     public static int toUnsignedShort(byte[] bytes, int offset, int length) {
         checkBytes(bytes, offset, length, 2);
@@ -206,8 +206,8 @@ public final class BytesUtil {
     }
 
     /**
-     * @param bytes
-     * @return
+     * @param bytes byte[]
+     * @return int
      */
     public static int toInt(byte[] bytes) {
         checkBytesNotNull(bytes);
@@ -215,10 +215,10 @@ public final class BytesUtil {
     }
 
     /**
-     * @param bytes
-     * @param offset
-     * @param length
-     * @return
+     * @param bytes  byte[]
+     * @param offset int
+     * @param length int
+     * @return int
      */
     public static int toInt(byte[] bytes, int offset, int length) {
         checkBytes(bytes, offset, length, 4);
@@ -234,8 +234,8 @@ public final class BytesUtil {
     }
 
     /**
-     * @param bytes
-     * @return
+     * @param bytes byte[]
+     * @return long
      */
     public static long toUnsignedInt(byte[] bytes) {
         checkBytesNotNull(bytes);
@@ -243,10 +243,10 @@ public final class BytesUtil {
     }
 
     /**
-     * @param bytes
-     * @param offset
-     * @param length
-     * @return
+     * @param bytes  byte[]
+     * @param offset int
+     * @param length int
+     * @return long
      */
     public static long toUnsignedInt(byte[] bytes, int offset, int length) {
         checkBytes(bytes, offset, length, 4);
@@ -262,8 +262,8 @@ public final class BytesUtil {
     }
 
     /**
-     * @param bytes
-     * @return
+     * @param bytes byte[]
+     * @return long
      */
     public static long toLong(byte[] bytes) {
         checkBytesNotNull(bytes);
@@ -271,10 +271,10 @@ public final class BytesUtil {
     }
 
     /**
-     * @param bytes
-     * @param offset
-     * @param length
-     * @return
+     * @param bytes  byte[]
+     * @param offset int
+     * @param length int
+     * @return long
      */
     public static long toLong(byte[] bytes, int offset, int length) {
         checkBytes(bytes, offset, length, 8);

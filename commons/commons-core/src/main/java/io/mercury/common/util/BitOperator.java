@@ -12,9 +12,9 @@ public final class BitOperator {
     }
 
     /**
-     * @param bytes
-     * @return
-     * @throws ArrayIndexOutOfBoundsException
+     * @param bytes byte[]
+     * @return char
+     * @throws ArrayIndexOutOfBoundsException exception
      */
     public static char bytesToChar(byte[] bytes) throws ArrayIndexOutOfBoundsException {
         Asserter.requiredLength(bytes, 2, "bytes array");
@@ -22,10 +22,10 @@ public final class BitOperator {
     }
 
     /**
-     * @param bytes
-     * @param offset
-     * @return
-     * @throws ArrayIndexOutOfBoundsException
+     * @param bytes  byte[]
+     * @param offset int
+     * @return char
+     * @throws ArrayIndexOutOfBoundsException exception
      */
     public static char bytesToChar(byte[] bytes, int offset) throws ArrayIndexOutOfBoundsException {
         if (bytes == null || bytes.length < offset + 2)
@@ -34,9 +34,9 @@ public final class BitOperator {
     }
 
     /**
-     * @param bytes
-     * @return
-     * @throws ArrayIndexOutOfBoundsException
+     * @param bytes byte[]
+     * @return int
+     * @throws ArrayIndexOutOfBoundsException exception
      */
     public static int bytesToInt(@Nonnull byte[] bytes) throws ArrayIndexOutOfBoundsException {
         Asserter.requiredLength(bytes, 4, "bytes array");
@@ -44,10 +44,10 @@ public final class BitOperator {
     }
 
     /**
-     * @param bytes
-     * @param offset
-     * @return
-     * @throws ArrayIndexOutOfBoundsException
+     * @param bytes  byte[]
+     * @param offset int
+     * @return int
+     * @throws ArrayIndexOutOfBoundsException exception
      */
     public static int bytesToInt(byte[] bytes, int offset) throws ArrayIndexOutOfBoundsException {
         if (bytes == null || bytes.length < offset + 4)
@@ -59,9 +59,9 @@ public final class BitOperator {
     /**
      * 两个[char]合并为[int]
      *
-     * @param highPos
-     * @param lowPos
-     * @return
+     * @param highPos char
+     * @param lowPos  char
+     * @return int
      */
     public static int merge(char highPos, char lowPos) {
         return (((int) highPos) << 16) | ((int) lowPos);
@@ -70,9 +70,9 @@ public final class BitOperator {
     /**
      * 两个<b> [char] </b>合并为<b> [int] </b>
      *
-     * @param highPos
-     * @param lowPos
-     * @return
+     * @param highPos short
+     * @param lowPos  short
+     * @return int
      */
     public static int merge(short highPos, short lowPos) {
         return (((int) highPos) << 16) | ((int) lowPos);
@@ -81,11 +81,11 @@ public final class BitOperator {
     /**
      * 四个<b> [char] </b>合并为<b> [long] </b>
      *
-     * @param highPos
-     * @param second
-     * @param third
-     * @param lowPos
-     * @return
+     * @param highPos char
+     * @param second  char
+     * @param third   char
+     * @param lowPos  char
+     * @return long
      */
     public static long merge(char highPos, char second, char third, char lowPos) {
         return (((long) highPos) << 48) | ((long) second << 32) | ((long) third << 16) | ((int) lowPos);
@@ -94,11 +94,11 @@ public final class BitOperator {
     /**
      * 四个<b> [short] </b>合并为<b> [long] </b>
      *
-     * @param highPos
-     * @param second
-     * @param third
-     * @param lowPos
-     * @return
+     * @param highPos short
+     * @param second  short
+     * @param third   short
+     * @param lowPos  short
+     * @return long
      */
     public static long merge(short highPos, short second, short third, short lowPos) {
         return (((long) highPos) << 48) | ((long) second << 32) | ((long) third << 16) | ((int) lowPos);
@@ -107,9 +107,9 @@ public final class BitOperator {
     /**
      * 两个<b> [int] </b>合并为<b> [long] </b>
      *
-     * @param highPos
-     * @param lowPos
-     * @return
+     * @param highPos int
+     * @param lowPos  int
+     * @return long
      */
     public static long merge(int highPos, int lowPos) {
         return (((long) highPos) << 32) | ((long) lowPos);
@@ -121,8 +121,8 @@ public final class BitOperator {
     public static final long LongHighPosMask = 0xFFFF_FFFF_0000_0000L;
 
     /**
-     * @param l
-     * @return
+     * @param l long
+     * @return int
      */
     public static int getLongHighPos(long l) {
         return (int) ((l & LongHighPosMask) >> 32);
@@ -134,8 +134,8 @@ public final class BitOperator {
     public static final long LongLowPosMask = 0x0000_0000_FFFF_FFFFL;
 
     /**
-     * @param l
-     * @return
+     * @param l long
+     * @return int
      */
     public static int getLongLowPos(long l) {
         return (int) (l & LongLowPosMask);
@@ -144,8 +144,8 @@ public final class BitOperator {
     /**
      * 奇数
      *
-     * @param i
-     * @return
+     * @param i int
+     * @return boolean
      */
     public static boolean isOdd(int i) {
         return (i & 1) != 0;
@@ -154,8 +154,8 @@ public final class BitOperator {
     /**
      * 偶数
      *
-     * @param i
-     * @return
+     * @param i int
+     * @return boolean
      */
     public static boolean isEven(int i) {
         return !isOdd(i);
@@ -164,8 +164,8 @@ public final class BitOperator {
     /**
      * 奇数
      *
-     * @param l
-     * @return
+     * @param l long
+     * @return boolean
      */
     public static boolean isOdd(long l) {
         return (l & 1) != 0;
@@ -174,8 +174,8 @@ public final class BitOperator {
     /**
      * 偶数
      *
-     * @param l
-     * @return
+     * @param l long
+     * @return boolean
      */
     public static boolean isEven(long l) {
         return !isOdd(l);
@@ -186,8 +186,8 @@ public final class BitOperator {
     /**
      * 返回最接近参数的2的幂
      *
-     * @param i
-     * @return
+     * @param i int
+     * @return int
      */
     public static int minPow2(int i) {
         int n = i - 1;
@@ -202,8 +202,8 @@ public final class BitOperator {
     /**
      * 获取n位所能表示的最大值
      *
-     * @param n
-     * @return
+     * @param n int
+     * @return long
      */
     public static long maxValueOfBit(int n) {
         return n < 1 || n > 63 ? 0 : ~(-1L << n);
@@ -212,8 +212,8 @@ public final class BitOperator {
     /**
      * 交换两个变量的值
      *
-     * @param x
-     * @param y
+     * @param x int
+     * @param y int
      */
     public static void swap(int x, int y) {
         x ^= y;
@@ -224,8 +224,8 @@ public final class BitOperator {
     /**
      * 交换两个变量的值
      *
-     * @param x
-     * @param y
+     * @param x long
+     * @param y long
      */
     public static void swap(long x, long y) {
         x ^= y;
