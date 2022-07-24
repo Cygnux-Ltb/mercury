@@ -1,11 +1,8 @@
 package io.mercury.serialization.avro;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.NotThreadSafe;
-
+import io.mercury.common.annotation.thread.ThreadSafeField;
+import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.serialization.specific.ByteBufferSerializer;
 import org.apache.avro.io.BinaryEncoder;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.EncoderFactory;
@@ -14,9 +11,10 @@ import org.apache.avro.specific.SpecificRecord;
 import org.apache.avro.util.NonCopyingByteArrayOutputStream;
 import org.slf4j.Logger;
 
-import io.mercury.common.annotation.thread.ThreadSafeVariable;
-import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.common.serialization.specific.ByteBufferSerializer;
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 @NotThreadSafe
 public final class AvroBinarySerializer<T extends SpecificRecord> implements ByteBufferSerializer<T> {
@@ -25,7 +23,7 @@ public final class AvroBinarySerializer<T extends SpecificRecord> implements Byt
 
 	private final Class<T> type;
 
-	@ThreadSafeVariable
+	@ThreadSafeField
 	private final DatumWriter<T> writer;
 
 	private final NonCopyingByteArrayOutputStream outputStream;

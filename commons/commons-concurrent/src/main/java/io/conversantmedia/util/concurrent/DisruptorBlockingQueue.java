@@ -21,6 +21,7 @@ package com.conversantmedia.util.concurrent;
  */
 
 import javax.annotation.Nonnull;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
@@ -81,6 +82,7 @@ import java.util.concurrent.TimeUnit;
 public final class DisruptorBlockingQueue<E> extends MultithreadConcurrentQueue<E>
 		implements Serializable, Iterable<E>, Collection<E>, BlockingQueue<E>, Queue<E> {
 
+	@Serial
 	private static final long serialVersionUID = -5295829512798811833L;
 
 	// locking objects used for independent locking

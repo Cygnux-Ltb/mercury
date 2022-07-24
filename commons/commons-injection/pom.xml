@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>io.mercury</groupId>
-		<artifactId>commons</artifactId>
-		<version>1.0-SNAPSHOT</version>
-	</parent>
-	<artifactId>commons-injection</artifactId>
-	<name>commons-injection</name>
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.mercury</groupId>
+        <artifactId>commons</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>commons-injection</artifactId>
+    <name>commons-injection</name>
 
-	<properties>
-		<spring.version>5.3.20</spring.version>
-	</properties>
+    <properties>
+        <spring.version>5.3.21</spring.version>
+    </properties>
 
-	<dependencies>
-		<!-- Jakarta Annotations API -->
-		<dependency>
-			<groupId>jakarta.annotation</groupId>
-			<artifactId>jakarta.annotation-api</artifactId>
-			<version>2.1.0</version>
-		</dependency>
+    <dependencies>
+        <!-- Jakarta Annotations API -->
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <version>2.1.1</version>
+        </dependency>
 
-		<!-- Spring Context -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-	</dependencies>
+        <!-- Spring Context -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

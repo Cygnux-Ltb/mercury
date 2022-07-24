@@ -6,7 +6,5 @@ import java.lang.annotation.Documented;
 
 @Component
 @Documented
-public @interface Version{
-
-
+public @interface Version {
 }

@@ -27,153 +27,144 @@ import io.mercury.common.util.StringSupport;
 
 public final class PropertiesUtil {
 
-	/**
-	 * 
-	 * @param url
-	 * @return
-	 * @throws IOException
-	 */
-	public static Properties load(final URL url) throws IOException {
-		Asserter.nonNull(url, "url");
-		return load(url.openStream());
-	}
+    /**
+     * @param url
+     * @return
+     * @throws IOException
+     */
+    public static Properties load(final URL url) throws IOException {
+        Asserter.nonNull(url, "url");
+        return load(url.openStream());
+    }
 
-	/**
-	 * 
-	 * @param file
-	 * @return
-	 * @throws IOException
-	 */
-	public static Properties load(@Nonnull final File file) throws IOException {
-		Asserter.nonNull(file, "file");
-		return load(new FileInputStream(file));
-	}
+    /**
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    public static Properties load(@Nonnull final File file) throws IOException {
+        Asserter.nonNull(file, "file");
+        return load(new FileInputStream(file));
+    }
 
-	/**
-	 * 
-	 * @param text
-	 * @return
-	 * @throws IOException
-	 */
-	public static Properties load(@Nonnull final String text) throws IOException {
-		return load(text, Charsets.UTF8);
-	}
+    /**
+     * @param text
+     * @return
+     * @throws IOException
+     */
+    public static Properties load(@Nonnull final String text) throws IOException {
+        return load(text, Charsets.UTF8);
+    }
 
-	/**
-	 * 
-	 * @param text
-	 * @param charset
-	 * @return
-	 * @throws IOException
-	 */
-	public static Properties load(@Nonnull final String text, @Nonnull final Charset charset) throws IOException {
-		Asserter.nonNull(text, "text");
-		Asserter.nonNull(charset, "charset");
-		if (StringSupport.nonEmpty(text))
-			return load(new ByteArrayInputStream(text.getBytes(charset)));
-		return new Properties();
-	}
+    /**
+     * @param text
+     * @param charset
+     * @return
+     * @throws IOException
+     */
+    public static Properties load(@Nonnull final String text, @Nonnull final Charset charset) throws IOException {
+        Asserter.nonNull(text, "text");
+        Asserter.nonNull(charset, "charset");
+        if (StringSupport.nonEmpty(text))
+            return load(new ByteArrayInputStream(text.getBytes(charset)));
+        return new Properties();
+    }
 
-	/**
-	 * 
-	 * @param stream
-	 * @return
-	 * @throws IOException
-	 */
-	public static Properties load(@Nonnull final InputStream stream) throws IOException {
-		Asserter.nonNull(stream, "stream");
-		Properties props = new Properties();
-		try (final InputStream in = stream) {
-			props.load(in);
-		} catch (Exception e) {
-			// noop
-		}
-		return props;
-	}
+    /**
+     * @param stream
+     * @return
+     * @throws IOException
+     */
+    public static Properties load(@Nonnull final InputStream stream) throws IOException {
+        Asserter.nonNull(stream, "stream");
+        Properties props = new Properties();
+        try (final InputStream in = stream) {
+            props.load(in);
+        } catch (Exception e) {
+            // noop
+        }
+        return props;
+    }
 
-	/**
-	 * 
-	 * @param props
-	 * @param key
-	 * @return
-	 */
-	public static String getString(@Nonnull final Properties props, final String key) {
-		return props.getProperty(key, "");
-	}
+    /**
+     * @param props
+     * @param key
+     * @return
+     */
+    public static String getString(@Nonnull final Properties props, final String key) {
+        return props.getProperty(key, "");
+    }
 
-	/**
-	 * 
-	 * @param props
-	 * @param key
-	 * @return
-	 * @throws NumberFormatException
-	 */
-	public static boolean getBooble(@Nonnull final Properties props, final String key)
-			throws NumberFormatException {
-		String prop = props.getProperty(key);
-		return StringSupport.isNullOrEmpty(prop) ? false : parseBoolean(prop);
-	}
+    /**
+     * @param props
+     * @param key
+     * @return
+     * @throws NumberFormatException
+     */
+    public static boolean getBoolean(@Nonnull final Properties props, final String key)
+            throws NumberFormatException {
+        String prop = props.getProperty(key);
+        if (StringSupport.isNullOrEmpty(prop))
+            return false;
+        return parseBoolean(prop);
+    }
 
-	/**
-	 * 
-	 * @param props
-	 * @param key
-	 * @return
-	 * @throws NumberFormatException
-	 */
-	public static int getInt(@Nonnull final Properties props, final String key) throws NumberFormatException {
-		String prop = props.getProperty(key);
-		return StringSupport.isNullOrEmpty(prop) ? 0 : parseInt(prop);
-	}
+    /**
+     * @param props
+     * @param key
+     * @return
+     * @throws NumberFormatException
+     */
+    public static int getInt(@Nonnull final Properties props, final String key) throws NumberFormatException {
+        String prop = props.getProperty(key);
+        return StringSupport.isNullOrEmpty(prop) ? 0 : parseInt(prop);
+    }
 
-	/**
-	 * 
-	 * @param props
-	 * @param key
-	 * @return
-	 * @throws NumberFormatException
-	 */
-	public static double getDouble(@Nonnull final Properties props, final String key)
-			throws NumberFormatException {
-		String prop = props.getProperty(key);
-		return StringSupport.isNullOrEmpty(prop) ? 0.0D : parseDouble(prop);
-	}
+    /**
+     * @param props
+     * @param key
+     * @return
+     * @throws NumberFormatException
+     */
+    public static double getDouble(@Nonnull final Properties props, final String key)
+            throws NumberFormatException {
+        String prop = props.getProperty(key);
+        return StringSupport.isNullOrEmpty(prop) ? 0.0D : parseDouble(prop);
+    }
 
-	/**
-	 * 
-	 * @param props
-	 */
-	public static void show(@Nonnull final Properties props) {
-		show(props, null);
-	}
+    /**
+     * @param props
+     */
+    public static void show(@Nonnull final Properties props) {
+        show(props, null);
+    }
 
-	/**
-	 * 
-	 * @param props
-	 * @param log
-	 */
-	public static void show(@Nonnull final Properties props, @Nullable final Logger log) {
-		ArrayList<Entry<Object, Object>> list = new ArrayList<>(props.entrySet());
-		for (int i = 0; i < list.size(); i++) {
-			Entry<Object, Object> entry = list.get(i);
-			if (log == null)
-				System.out.println("Property " + i + " : key -> " + entry.getKey() + ", value -> " + entry.getValue());
-			else
-				log.info("Property {} : key -> {}, value -> {}", i, entry.getKey(), entry.getValue());
-		}
+    /**
+     * @param props
+     * @param log
+     */
+    public static void show(@Nonnull final Properties props, @Nullable final Logger log) {
+        ArrayList<Entry<Object, Object>> list = new ArrayList<>(props.entrySet());
+        for (int i = 0; i < list.size(); i++) {
+            Entry<Object, Object> entry = list.get(i);
+            if (log == null)
+                System.out.println("Property " + i + " : key -> " + entry.getKey() + ", value -> " + entry.getValue());
+            else
+                log.info("Property {} : key -> {}, value -> {}", i, entry.getKey(), entry.getValue());
+        }
 
-	}
+    }
 
-	public static void main(String[] args) {
-		System.out.println("---old---");
-		PropertiesUtil.show(System.getProperties());
-		try {
-			LibraryPathManager.addLibraryDir("~/java_lib");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println("---new---");
-		PropertiesUtil.show(System.getProperties());
-	}
+    public static void main(String[] args) {
+        System.out.println("---old---");
+        PropertiesUtil.show(System.getProperties());
+        try {
+            LibraryPathManager.addLibraryDir("~/java_lib");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("---new---");
+        PropertiesUtil.show(System.getProperties());
+    }
 
 }

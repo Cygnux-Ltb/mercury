@@ -3,6 +3,7 @@
  */
 package com.lightbend.akkasample.sample4;
 
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import java.util.Random;
 public class SynchronousDatabaseConnection {
 
 	public static class ConnectionLost extends RuntimeException {
+		@Serial
 		private static final long serialVersionUID = 23808501218949286L;
 
 		public ConnectionLost() {
@@ -23,6 +25,7 @@ public class SynchronousDatabaseConnection {
 	}
 
 	public static class RequestTimedOut extends RuntimeException {
+		@Serial
 		private static final long serialVersionUID = -2105302329668141685L;
 
 		public RequestTimedOut() {
@@ -34,7 +37,7 @@ public class SynchronousDatabaseConnection {
 	private final Random failureRandom = new Random();
 
 	public SynchronousDatabaseConnection() {
-		inMemoryDb = new HashMap<Long, Product>();
+		inMemoryDb = new HashMap<>();
 		inMemoryDb.put(1L, new Product(1, "Clean Socks", "Socks for both feet, that are clean"));
 		inMemoryDb.put(2L, new Product(2, "Hat", "A thing you wear on your head"));
 		inMemoryDb.put(3L, new Product(3, "Gloves", "Keeps your hands warm on cold days"));
