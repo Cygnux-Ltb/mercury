@@ -1,9 +1,9 @@
 package io.mercury.actor.test;
 
-import io.mercury.actor.Actor;
-import io.mercury.actor.IActorRef;
-import io.mercury.actor.IActorSystem;
-import io.mercury.actor.Schedulers;
+import io.mercury.actors.Actor;
+import io.mercury.actors.IActorRef;
+import io.mercury.actors.IActorSystem;
+import io.mercury.actors.Schedulers;
 import org.junit.Before;
 import org.junit.Test;
 

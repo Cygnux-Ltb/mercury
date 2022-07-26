@@ -9,21 +9,21 @@ import java.io.InputStreamReader;
 
 public class StdIn {
 
-	public static String readLine() {
-		// written to make it work in intellij as System.console() is null
-		// when run inside the IDE
-		try (BufferedReader in = new BufferedReader(new InputStreamReader(System.in))) {
-			return in.readLine();
-		} catch (IOException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-	
-	
-	public static void main(String[] args) {
-		
-		System.out.println(StdIn.readLine());
-		
-	}
-	
+    public static String readLine() {
+        // written to make it work in intellij as System.console() is null
+        // when run inside the IDE
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(System.in))) {
+            return in.readLine();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+
+    public static void main(String[] args) {
+
+        System.out.println(StdIn.readLine());
+
+    }
+
 }

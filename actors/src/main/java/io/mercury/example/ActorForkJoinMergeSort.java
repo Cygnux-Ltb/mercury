@@ -7,9 +7,9 @@ import java.util.Random;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-import io.mercury.actor.Actor;
-import io.mercury.actor.IActorRef;
-import io.mercury.actor.IActorSystem;
+import io.mercury.actors.Actor;
+import io.mercury.actors.IActorRef;
+import io.mercury.actors.IActorSystem;
 
 public class ActorForkJoinMergeSort {
 

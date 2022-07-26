@@ -1,8 +1,8 @@
 package io.mercury.actor.test;
 
-import io.mercury.actor.Actor;
-import io.mercury.actor.IActorSystem;
-import io.mercury.actor.IActorRef;
+import io.mercury.actors.Actor;
+import io.mercury.actors.IActorSystem;
+import io.mercury.actors.IActorRef;
 import org.junit.Test;
 
 import java.util.function.Consumer;

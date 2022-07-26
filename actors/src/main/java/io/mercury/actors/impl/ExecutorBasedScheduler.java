@@ -1,11 +1,11 @@
-package io.mercury.actor.impl;
+package io.mercury.actors.impl;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import io.mercury.actor.IActorScheduler;
+import io.mercury.actors.IActorScheduler;
 
 /**
  * Scheduler based on a provided executor service.

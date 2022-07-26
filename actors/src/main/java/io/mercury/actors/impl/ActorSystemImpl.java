@@ -1,4 +1,4 @@
-package io.mercury.actor.impl;
+package io.mercury.actors.impl;
 
 import java.util.Collection;
 import java.util.Map;
@@ -15,12 +15,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import io.mercury.actor.IActorBuilder;
-import io.mercury.actor.IActorScheduler;
-import io.mercury.actor.IActorSystem;
-import io.mercury.actor.IForkBuilder;
-import io.mercury.actor.IActorRef;
-import io.mercury.actor.Schedulers;
+import io.mercury.actors.IActorBuilder;
+import io.mercury.actors.IActorScheduler;
+import io.mercury.actors.IActorSystem;
+import io.mercury.actors.IForkBuilder;
+import io.mercury.actors.IActorRef;
+import io.mercury.actors.Schedulers;
 
 public class ActorSystemImpl implements IActorSystem {
 

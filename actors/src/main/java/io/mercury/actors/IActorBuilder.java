@@ -1,4 +1,4 @@
-package io.mercury.actor;
+package io.mercury.actors;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -16,7 +16,7 @@ public interface IActorBuilder<T> {
 
     /**
      * Adds a factory for POJO class instance creation to be used with the actor being constructed.
-     *
+     * <p>
      * Constructor will be called during {@link #build()} call in a synchronous manner
      *
      * @param constructor POJO class instance factory
@@ -50,7 +50,7 @@ public interface IActorBuilder<T> {
 
     /**
      * Sets an exception handler for the actor being constructed.
-     *
+     * <p>
      * Exception handler is triggered in actor's thread context whenever an exception occurs in actor's <i>ask</i>, <i>tell</i> or <i>later</i> call. Note that the exception handler is ignored when calling methods returning CallableFuture as in that
      * case the exception is passed directly to the future.
      *

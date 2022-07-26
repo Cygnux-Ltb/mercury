@@ -1,4 +1,4 @@
-package io.mercury.actor;
+package io.mercury.actors;
 
 public interface IActorScheduler extends AutoCloseable {
 

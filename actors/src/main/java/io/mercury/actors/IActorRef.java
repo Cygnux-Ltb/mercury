@@ -1,4 +1,4 @@
-package io.mercury.actor;
+package io.mercury.actors;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;

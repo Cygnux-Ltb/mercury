@@ -1,6 +1,6 @@
 package io.mercury.actor.test;
 
-import io.mercury.actor.*;
+import io.mercury.actors.*;
 import io.zakgof.actor.*;
 import org.junit.Test;
 

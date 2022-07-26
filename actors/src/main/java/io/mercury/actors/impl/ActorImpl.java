@@ -1,4 +1,4 @@
-package io.mercury.actor.impl;
+package io.mercury.actors.impl;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -7,11 +7,11 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import io.mercury.actor.Actor;
-import io.mercury.actor.IActorRef;
-import io.mercury.actor.IActorScheduler;
-import io.mercury.actor.IActorSystem;
-import io.mercury.actor.impl.IRegSet.IRegistration;
+import io.mercury.actors.Actor;
+import io.mercury.actors.IActorRef;
+import io.mercury.actors.IActorScheduler;
+import io.mercury.actors.IActorSystem;
+import io.mercury.actors.impl.IRegSet.IRegistration;
 
 public class ActorImpl<T> implements IActorRef<T> {
 

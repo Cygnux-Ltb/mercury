@@ -1,4 +1,4 @@
-package io.mercury.actor.impl;
+package io.mercury.actors.impl;
 
 /*
  * Written by Doug Lea with assistance from members of JCP JSR-166

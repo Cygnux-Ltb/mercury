@@ -1,4 +1,4 @@
-package io.mercury.actor;
+package io.mercury.actors;
 
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;

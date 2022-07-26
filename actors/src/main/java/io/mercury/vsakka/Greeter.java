@@ -1,6 +1,6 @@
 package io.mercury.vsakka;
 
-import io.mercury.actor.IActorRef;
+import io.mercury.actors.IActorRef;
 
 public class Greeter {
 

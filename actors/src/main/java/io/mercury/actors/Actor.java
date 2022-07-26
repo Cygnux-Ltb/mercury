@@ -1,6 +1,6 @@
-package io.mercury.actor;
+package io.mercury.actors;
 
-import io.mercury.actor.impl.ActorSystemImpl;
+import io.mercury.actors.impl.ActorSystemImpl;
 
 /**
  * Helper class to work with actor contexts

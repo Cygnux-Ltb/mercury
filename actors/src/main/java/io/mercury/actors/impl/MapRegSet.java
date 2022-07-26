@@ -1,4 +1,4 @@
-package io.mercury.actor.impl;
+package io.mercury.actors.impl;
 
 import java.util.Collection;
 import java.util.Map;

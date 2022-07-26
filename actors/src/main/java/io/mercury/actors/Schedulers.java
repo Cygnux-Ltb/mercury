@@ -1,9 +1,9 @@
-package io.mercury.actor;
+package io.mercury.actors;
 
-import io.mercury.actor.impl.BlockingThreadScheduler;
-import io.mercury.actor.impl.ExecutorBasedScheduler;
-import io.mercury.actor.impl.SingleThreadScheduler;
-import io.mercury.actor.impl.ThreadPerActorScheduler;
+import io.mercury.actors.impl.BlockingThreadScheduler;
+import io.mercury.actors.impl.ExecutorBasedScheduler;
+import io.mercury.actors.impl.SingleThreadScheduler;
+import io.mercury.actors.impl.ThreadPerActorScheduler;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

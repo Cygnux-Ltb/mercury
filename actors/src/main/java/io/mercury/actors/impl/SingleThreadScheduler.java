@@ -1,9 +1,9 @@
-package io.mercury.actor.impl;
+package io.mercury.actors.impl;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import io.mercury.actor.IActorScheduler;
+import io.mercury.actors.IActorScheduler;
 
 /**
  * Scheduler that processed all the actors messages sequentially in a
