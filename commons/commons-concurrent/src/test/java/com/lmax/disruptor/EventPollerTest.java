@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.ArrayList;
 
+import com.lmax.disruptor.*;
 import org.junit.Test;
 
 import com.lmax.disruptor.EventPoller.PollState;

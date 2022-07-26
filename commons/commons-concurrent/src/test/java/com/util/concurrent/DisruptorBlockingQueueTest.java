@@ -1,4 +1,4 @@
-package com.conversantmedia.util.concurrent;
+package com.util.concurrent;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * limitations under the License.
  * #L%
  */
+import com.conversantmedia.util.concurrent.DisruptorBlockingQueue;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

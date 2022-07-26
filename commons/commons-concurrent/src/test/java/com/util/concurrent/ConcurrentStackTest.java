@@ -1,4 +1,4 @@
-package com.conversantmedia.util.concurrent;
+package com.util.concurrent;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.conversantmedia.util.concurrent.ConcurrentStack;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

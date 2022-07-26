@@ -2,6 +2,7 @@ package com.lmax.disruptor;
 
 import java.util.Random;
 
+import com.lmax.disruptor.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

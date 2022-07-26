@@ -22,10 +22,10 @@ import static org.junit.Assert.assertTrue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Test;
-
 import com.lmax.disruptor.support.DummyEventProcessor;
 import com.lmax.disruptor.support.StubEvent;
+import org.junit.Test;
+
 import com.lmax.disruptor.util.Util;
 
 public final class SequenceBarrierTest {

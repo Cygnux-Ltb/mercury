@@ -1,4 +1,4 @@
-package com.conversantmedia.util.concurrent;
+package com.util.concurrent;
 
 /*
  * #%L
@@ -20,6 +20,8 @@ package com.conversantmedia.util.concurrent;
  * #L%
  */
 
+import com.conversantmedia.util.concurrent.DisruptorBlockingQueue;
+import com.conversantmedia.util.concurrent.MPMCBlockingQueue;
 import org.junit.*;
 
 import java.util.*;

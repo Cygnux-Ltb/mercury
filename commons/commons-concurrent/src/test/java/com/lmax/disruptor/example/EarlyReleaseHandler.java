@@ -1,8 +1,8 @@
 package com.lmax.disruptor.example;
 
+import com.lmax.disruptor.support.LongEvent;
 import com.lmax.disruptor.Sequence;
 import com.lmax.disruptor.SequenceReportingEventHandler;
-import com.lmax.disruptor.support.LongEvent;
 
 public class EarlyReleaseHandler implements SequenceReportingEventHandler<LongEvent> {
 	

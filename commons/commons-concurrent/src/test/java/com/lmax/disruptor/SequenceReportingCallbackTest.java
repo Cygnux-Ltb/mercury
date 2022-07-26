@@ -20,9 +20,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.concurrent.CountDownLatch;
 
-import org.junit.Test;
-
 import com.lmax.disruptor.support.StubEvent;
+import org.junit.Test;
 
 public class SequenceReportingCallbackTest {
 	

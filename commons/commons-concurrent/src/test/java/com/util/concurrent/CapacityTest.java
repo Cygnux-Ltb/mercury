@@ -1,4 +1,4 @@
-package com.conversantmedia.util.concurrent;
+package com.util.concurrent;
 
 /*
  * #%L
@@ -21,6 +21,7 @@ package com.conversantmedia.util.concurrent;
  * #L%
  */
 
+import com.conversantmedia.util.concurrent.Capacity;
 import org.junit.Assert;
 import org.junit.Test;
 

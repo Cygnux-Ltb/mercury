@@ -18,6 +18,8 @@ package com.lmax.disruptor;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import com.lmax.disruptor.FixedSequenceGroup;
+import com.lmax.disruptor.Sequence;
 import org.junit.Test;
 
 public class FixedSequenceGroupTest {

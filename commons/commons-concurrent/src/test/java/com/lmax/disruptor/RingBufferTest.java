@@ -34,6 +34,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.lmax.disruptor.support.StubEvent;
@@ -52,7 +53,7 @@ public class RingBufferTest {
 
 	@Test
 	public void shouldClaimAndGet() throws Exception {
-		assertEquals(SingleProducerSequencer.INITIAL_CURSOR_VALUE, ringBuffer.getCursor());
+		Assert.assertEquals(SingleProducerSequencer.INITIAL_CURSOR_VALUE, ringBuffer.getCursor());
 
 		StubEvent expectedEvent = new StubEvent(2701);
 		ringBuffer.publishEvent(StubEvent.TRANSLATOR, expectedEvent.getValue(), expectedEvent.getTestString());

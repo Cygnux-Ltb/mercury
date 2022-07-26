@@ -21,9 +21,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.concurrent.CountDownLatch;
 
-import org.junit.Test;
-
 import com.lmax.disruptor.support.StubEvent;
+import org.junit.Test;
 
 public final class LifecycleAwareTest {
 	

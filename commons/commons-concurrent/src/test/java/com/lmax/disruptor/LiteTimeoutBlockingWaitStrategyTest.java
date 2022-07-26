@@ -5,9 +5,8 @@ import static org.junit.Assert.fail;
 
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Test;
-
 import com.lmax.disruptor.support.DummySequenceBarrier;
+import org.junit.Test;
 
 public class LiteTimeoutBlockingWaitStrategyTest {
 	@Test

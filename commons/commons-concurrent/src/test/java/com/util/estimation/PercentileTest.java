@@ -1,7 +1,8 @@
-package com.conversantmedia.util.estimation;
+package com.util.estimation;
 
 import java.util.Random;
 
+import com.conversantmedia.util.estimation.Percentile;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
