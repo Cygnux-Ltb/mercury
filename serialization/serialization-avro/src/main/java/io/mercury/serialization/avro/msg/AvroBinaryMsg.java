@@ -101,23 +101,23 @@ public class AvroBinaryMsg extends org.apache.avro.specific.SpecificRecordBase i
   public org.apache.avro.Schema getSchema() { return SCHEMA$; }
   // Used by DatumWriter.  Applications should not call.
   public java.lang.Object get(int field$) {
-    return switch (field$) {
-      case 0 -> envelope;
-      case 1 -> sequence;
-      case 2 -> epoch;
-      case 3 -> content;
-      default -> throw new IndexOutOfBoundsException("Invalid index: " + field$);
-    };
+    switch (field$) {
+    case 0: return envelope;
+    case 1: return sequence;
+    case 2: return epoch;
+    case 3: return content;
+    default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
+    }
   }
 
   // Used by DatumReader.  Applications should not call.
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
-      case 0 -> envelope = (Envelope) value$;
-      case 1 -> sequence = (Long) value$;
-      case 2 -> epoch = (Long) value$;
-      case 3 -> content = (java.nio.ByteBuffer) value$;
-      default -> throw new IndexOutOfBoundsException("Invalid index: " + field$);
+    case 0: envelope = (io.mercury.serialization.avro.msg.Envelope)value$; break;
+    case 1: sequence = (java.lang.Long)value$; break;
+    case 2: epoch = (java.lang.Long)value$; break;
+    case 3: content = (java.nio.ByteBuffer)value$; break;
+    default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
 

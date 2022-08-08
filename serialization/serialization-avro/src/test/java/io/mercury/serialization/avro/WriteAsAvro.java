@@ -2,6 +2,9 @@ package io.mercury.serialization.avro;
 
 import java.io.File;
 
+import io.mercury.serialization.avro.msg.AvroTextMsg;
+import io.mercury.serialization.avro.msg.ContentType;
+import io.mercury.serialization.avro.msg.Envelope;
 import org.apache.avro.file.CodecFactory;
 import org.apache.avro.file.DataFileWriter;
 import org.apache.avro.io.DatumWriter;

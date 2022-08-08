@@ -2,6 +2,8 @@ package io.mercury.serialization.avro;
 
 import java.nio.ByteBuffer;
 
+import io.mercury.serialization.avro.msg.AvroBinaryMsg;
+import io.mercury.serialization.avro.msg.ContentType;
 import org.junit.Test;
 
 import io.mercury.common.datetime.EpochTime;
