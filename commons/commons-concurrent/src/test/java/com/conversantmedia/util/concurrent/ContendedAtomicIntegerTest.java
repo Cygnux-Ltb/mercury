@@ -1,4 +1,4 @@
-package com.util.concurrent;
+package com.conversantmedia.util.concurrent;
 
 import com.conversantmedia.util.concurrent.ContendedAtomicInteger;
 import org.junit.Assert;

@@ -10,14 +10,13 @@ public class ActorQuickstart {
 
     public static void main(String[] args) {
         final IActorSystem system = Actor.newSystem("hello-actor");
-        try {
-            // #create-actors
-            final IActorRef<Printer> printerActor = system.actorOf(Printer::new, "printerActor");
-            final IActorRef<Greeter> howdyGreeter = system.actorOf(() -> new Greeter("Howdy", printerActor), "howdyGreeter");
-            final IActorRef<Greeter> helloGreeter = system.actorOf(() -> new Greeter("Hello", printerActor), "helloGreeter");
-            final IActorRef<Greeter> goodDayGreeter = system.actorOf(() -> new Greeter("Good day", printerActor), "goodDayGreeter");
-            // #create-actors
-
+        try (// #create-actors
+             final IActorRef<Printer> printerActor = system.actorOf(Printer::new, "printerActor");
+             final IActorRef<Greeter> howdyGreeter = system.actorOf(() -> new Greeter("Howdy", printerActor), "howdyGreeter");
+             final IActorRef<Greeter> helloGreeter = system.actorOf(() -> new Greeter("Hello", printerActor), "helloGreeter");
+             final IActorRef<Greeter> goodDayGreeter = system.actorOf(() -> new Greeter("Good day", printerActor), "goodDayGreeter");
+             // #create-actors
+        ) {
             // #main-send-messages
             howdyGreeter.tell(gr -> gr.setWhoToGreet("Actr"));
             howdyGreeter.tell(Greeter::greet);
@@ -33,8 +32,9 @@ public class ActorQuickstart {
             // #main-send-messages
 
             System.out.println(">>> Press ENTER to exit <<<");
+
             System.in.read();
-        } catch (IOException ioe) {
+        } catch (IOException ignored) {
         } finally {
             system.shutdown();
         }

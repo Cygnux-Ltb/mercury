@@ -1,4 +1,4 @@
-package com.util.concurrent;
+package com.conversantmedia.util.concurrent;
 
 /*
  * #%L

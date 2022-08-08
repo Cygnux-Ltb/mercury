@@ -2,9 +2,9 @@ package io.mercury.persistence.sqlite;
 
 import java.sql.Connection;
 
-public final class DatebaseTableScanner {
+public final class DatabaseTableScanner {
 
-	private DatebaseTableScanner() {
+	private DatabaseTableScanner() {
 	}
 
 	public static void scanPackage(String packageName, Connection connection) {

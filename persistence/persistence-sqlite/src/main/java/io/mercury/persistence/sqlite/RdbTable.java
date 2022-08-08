@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-public @interface DatebaseTable {
+public @interface DatabaseTable {
 
 	boolean ignoreExisted() default true;
 

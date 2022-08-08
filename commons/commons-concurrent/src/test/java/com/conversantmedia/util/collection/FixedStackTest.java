@@ -1,4 +1,4 @@
-package com.util.collection;
+package com.conversantmedia.util.collection;
 
 import com.conversantmedia.util.collection.FixedStack;
 import org.junit.Assert;

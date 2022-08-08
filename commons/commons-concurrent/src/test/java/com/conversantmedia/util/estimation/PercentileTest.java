@@ -1,4 +1,4 @@
-package com.util.estimation;
+package com.conversantmedia.util.estimation;
 
 import java.util.Random;
 

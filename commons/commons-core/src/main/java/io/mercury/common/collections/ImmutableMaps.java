@@ -2,7 +2,9 @@ package io.mercury.common.collections;
 
 import java.util.Map;
 import java.util.SortedMap;
+import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,6 +20,9 @@ import org.eclipse.collections.api.factory.map.primitive.ImmutableLongLongMapFac
 import org.eclipse.collections.api.factory.map.primitive.ImmutableLongObjectMapFactory;
 import org.eclipse.collections.api.factory.map.sorted.ImmutableSortedMapFactory;
 import org.eclipse.collections.api.map.ImmutableMap;
+import org.eclipse.collections.api.map.MutableMap;
+import org.eclipse.collections.api.map.primitive.ImmutableIntObjectMap;
+import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
 import org.eclipse.collections.api.map.sorted.ImmutableSortedMap;
 import org.eclipse.collections.api.tuple.Pair;
 import org.eclipse.collections.impl.map.immutable.ImmutableMapFactoryImpl;
@@ -31,6 +36,8 @@ import org.eclipse.collections.impl.map.immutable.primitive.ImmutableLongLongMap
 import org.eclipse.collections.impl.map.immutable.primitive.ImmutableLongObjectMapFactoryImpl;
 import org.eclipse.collections.impl.map.sorted.immutable.ImmutableSortedMapFactoryImpl;
 import org.eclipse.collections.impl.map.sorted.mutable.TreeSortedMap;
+
+import javax.annotation.Nonnull;
 
 public final class ImmutableMaps {
 
@@ -63,6 +70,12 @@ public final class ImmutableMaps {
      */
     public static ImmutableIntObjectMapFactory getIntObjectMapFactory() {
         return ImmutableIntObjectMapFactoryImpl.INSTANCE;
+    }
+
+
+    @SafeVarargs
+    public static <E extends Enum<E>> ImmutableIntObjectMap<E> toImmutableIntObjectMap(@Nonnull ToIntFunction<E> keyFunc, E... enums) {
+        return MutableMaps.newIntObjectHashMap(keyFunc, enums).toImmutable();
     }
 
     /**

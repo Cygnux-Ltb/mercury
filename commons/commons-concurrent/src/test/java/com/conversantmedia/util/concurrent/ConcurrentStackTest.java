@@ -1,4 +1,4 @@
-package com.util.concurrent;
+package com.conversantmedia.util.concurrent;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

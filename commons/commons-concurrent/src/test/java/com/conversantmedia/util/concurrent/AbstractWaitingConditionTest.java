@@ -1,4 +1,4 @@
-package com.util.concurrent;
+package com.conversantmedia.util.concurrent;
 
 /*
  * #%L
@@ -20,7 +20,7 @@ package com.util.concurrent;
  * #L%
  */
 
-import com.conversantmedia.util.concurrent.AbstractCondition;
+import com.conversantmedia.util.concurrent.AbstractWaitingCondition;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ import org.junit.Test;
 /**
  * Created by jcairns on 12/11/14.
  */
-public class AbstractConditionTest {
+public class AbstractWaitingConditionTest {
 
 	private volatile boolean isCondition = true;
 
@@ -101,7 +101,7 @@ public class AbstractConditionTest {
 
 	}
 
-	final class TestQueueCondition extends AbstractCondition {
+	final class TestQueueCondition extends AbstractWaitingCondition {
 
 		@Override
 		public boolean test() {

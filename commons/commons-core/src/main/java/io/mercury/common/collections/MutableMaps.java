@@ -137,8 +137,8 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <V> type
-     * @param capacity
+     * @param <V>      type
+     * @param capacity int
      * @return MutableIntObjectMap<V>
      */
     public static <V> MutableIntObjectMap<V> newIntObjectHashMap(int capacity) {
@@ -148,7 +148,7 @@ public final class MutableMaps {
     /**
      * @param keyFunc
      * @param values
-     * @param <V> type
+     * @param <V>     type
      * @return MutableIntObjectMap<V>
      */
     @SafeVarargs
@@ -157,7 +157,7 @@ public final class MutableMaps {
         if (ArrayUtil.isNullOrEmpty(values)) {
             return newIntObjectHashMap();
         }
-        MutableIntObjectMap<V> map = newIntObjectHashMap(values.length);
+        MutableIntObjectMap<V> map = newIntObjectHashMap(values.length * 2);
         for (V value : values) {
             if (value != null) map.put(keyFunc.applyAsInt(value), value);
         }
