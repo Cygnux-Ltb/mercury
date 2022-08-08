@@ -1,4 +1,4 @@
-package io.mercury.actors;
+package io.mercury.actors.def;
 
 public abstract class BaseActorT1<T> extends BaseActor {
 

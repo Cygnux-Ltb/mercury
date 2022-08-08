@@ -8,13 +8,7 @@ package io.mercury.actors.impl;
 
 import javax.annotation.Nonnull;
 import java.io.Serial;
-import java.util.AbstractCollection;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.ConcurrentModificationException;
-import java.util.Deque;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.function.IntFunction;
 
 /**
@@ -67,20 +61,20 @@ public class ConcurrentDoublyLinkedList<E> extends AbstractCollection<E>
     /**
      * Returns true if given reference is non-null and isn't a header, trailer, or marker.
      *
-     * @param n (possibly null) node
+     * @param node (possibly null) node
      * @return true if n exists as a user node
      */
-    private static boolean usable(Node<?> n) {
-        return n != null && !n.isSpecial();
+    private static boolean usable(Node<?> node) {
+        return node != null && !node.isSpecial();
     }
 
     /**
      * Throws NullPointerException if argument is null
      *
-     * @param v the element
+     * @param obj the element
      */
-    private static void checkNullArg(Object v) {
-        if (v == null)
+    private static void checkNullArg(Object obj) {
+        if (obj == null)
             throw new NullPointerException();
     }
 
@@ -115,11 +109,11 @@ public class ConcurrentDoublyLinkedList<E> extends AbstractCollection<E>
      * Constructs an empty deque.
      */
     ConcurrentDoublyLinkedList() {
-        Node<E> h = new Node<>(null, null, null);
-        Node<E> t = new Node<>(null, null, h);
-        h.setNext(t);
-        header = h;
-        trailer = t;
+        Node<E> header0 = new Node<>(null, null, null);
+        Node<E> trailer0 = new Node<>(null, null, header0);
+        header0.setNext(trailer0);
+        this.header = header0;
+        this.trailer = trailer0;
     }
 
     /**

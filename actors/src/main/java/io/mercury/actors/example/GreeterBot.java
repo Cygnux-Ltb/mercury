@@ -34,11 +34,11 @@ public class GreeterBot extends AbstractBehavior<Greeted> {
 
 	private Behavior<Greeted> onGreeted(Greeted message) {
 		greetingCounter++;
-		getContext().getLog().info("Greeting {} for {}", greetingCounter, message.getWhom());
+		getContext().getLog().info("Greeting {} for {}", greetingCounter, message.whom());
 		if (greetingCounter == max) {
 			return Behaviors.stopped();
 		} else {
-			message.getFrom().tell(new Greet(message.getWhom(), getContext().getSelf()));
+			message.from().tell(new Greet(message.whom(), getContext().getSelf()));
 			return this;
 		}
 	}

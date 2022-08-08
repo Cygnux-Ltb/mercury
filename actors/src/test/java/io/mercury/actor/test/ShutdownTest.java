@@ -1,7 +1,6 @@
 package io.mercury.actor.test;
 
 import io.mercury.actors.*;
-import io.zakgof.actor.*;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

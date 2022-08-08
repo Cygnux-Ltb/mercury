@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 
 class BasicTest {
 
-    private final IActorSystem system = Actor.newSystem("test", Schedulers.newThreadPerActorScheduler());
+    private final IActorSystem system = Actor.newSystem("kilim", Schedulers.newThreadPerActorScheduler());
 
     private final IActorRef<Master> master = system.<Master>actorBuilder()
             .constructor(Master::new)

@@ -11,22 +11,22 @@ import io.mercury.actors.IActorScheduler;
  */
 public class SingleThreadScheduler implements IActorScheduler {
 
-	private final ExecutorService executor;
+    private final ExecutorService executor;
 
-	public SingleThreadScheduler() {
-		this.executor = Executors.newSingleThreadExecutor(runnable -> new Thread(runnable, "actr:single"));
-	}
+    public SingleThreadScheduler() {
+        this.executor = Executors.newSingleThreadExecutor(runnable -> new Thread(runnable, "actor:single"));
+    }
 
-	@Override
-	public void schedule(Runnable task, Object actorId) {
-		if (!executor.isShutdown() && !executor.isTerminated()) {
-			executor.submit(task);
-		}
-	}
+    @Override
+    public void schedule(Runnable task, Object actorId) {
+        if (!executor.isShutdown() && !executor.isTerminated()) {
+            executor.submit(task);
+        }
+    }
 
-	@Override
-	public void close() {
-		executor.shutdown();
-	}
+    @Override
+    public void close() {
+        executor.shutdown();
+    }
 
 }

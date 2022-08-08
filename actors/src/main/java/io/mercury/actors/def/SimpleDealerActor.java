@@ -1,7 +1,8 @@
-package io.mercury.actors;
+package io.mercury.actors.def;
 
 import static io.mercury.common.collections.MutableLists.newFastList;
 
+import io.mercury.actors.def.BaseActorT2;
 import org.eclipse.collections.api.list.MutableList;
 
 import akka.actor.ActorRef;

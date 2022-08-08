@@ -1,28 +1,28 @@
 package io.mercury.example;
 
-import java.util.Random;
-
 import io.mercury.actors.Actor;
 import io.mercury.actors.IActorRef;
 import io.mercury.actors.IActorSystem;
+
+import java.util.Random;
+
+import static java.util.Objects.requireNonNull;
 
 public class AskTellLaterExample {
 
     public static void main(String[] args) throws InterruptedException {
         final IActorSystem system = Actor.newSystem("example");
-        final IActorRef<Printer> printerActor = system.actorOf(Printer::new);
-        final IActorRef<Randomizer> randomizerActor = system.actorOf(Randomizer::new);
-        final IActorRef<Looper> looperActor = system.actorOf(() -> new Looper(printerActor, randomizerActor));
-
-        looperActor.tell(Looper::run);
-
-        system.shutdownCompletable().join();
-
+        try (final IActorRef<Printer> printerActor = system.actorOf(Printer::new);
+             final IActorRef<Randomizer> randomizerActor = system.actorOf(Randomizer::new);
+             final IActorRef<Looper> looperActor = system.actorOf(() -> new Looper(printerActor, randomizerActor))) {
+            looperActor.tell(Looper::run);
+            system.shutdownCompletable().join();
+        }
     }
 
     private static class Printer {
         public void print(String s) {
-            System.err.println("[Printer] " + s);
+            System.out.println("[Printer] " + s);
         }
     }
 
@@ -31,11 +31,11 @@ public class AskTellLaterExample {
         private final Random random = new Random();
 
         public int random() {
-            System.err.println("[Randomizer] >>> ");
+            System.out.println("[Randomizer] >>> ");
             try {
                 return random.nextInt(10000);
             } finally {
-                System.err.println("[Randomizer] <<< ");
+                System.out.println("[Randomizer] <<< ");
             }
         }
     }
@@ -57,9 +57,11 @@ public class AskTellLaterExample {
             printerActor.tell(printer -> printer.print("Looper: iteration " + iteration));
             randomizerActor.ask(Randomizer::random, this::showRandom);
             if (iteration < 10) {
-                Actor.<Looper> current().later(Looper::run, 1000);
+                try (IActorRef<Looper> actorRef = Actor.current()) {
+                    actorRef.later(Looper::run, 1000);
+                }
             } else {
-                Actor.system().shutdown();
+                requireNonNull(Actor.system()).shutdown();
             }
         }
 

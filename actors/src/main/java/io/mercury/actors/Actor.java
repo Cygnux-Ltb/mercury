@@ -8,6 +8,7 @@ import io.mercury.actors.impl.ActorSystemImpl;
 public class Actor {
 
     private static final ThreadLocal<IActorRef<?>> currentActor = new ThreadLocal<>();
+
     private static final ThreadLocal<IActorRef<?>> callerActor = new ThreadLocal<>();
 
     private Actor() {

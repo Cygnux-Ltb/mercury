@@ -39,11 +39,9 @@ public class ExecutorBasedScheduler implements IActorScheduler {
 
     @Override
     public void schedule(Runnable raw, Object actorId) {
-
         if (shutdown) {
             return;
         }
-
         Runnable task = () -> {
             Mailbox mailbox = (Mailbox) ((ActorImpl<?>) actorId).box();
             mailbox.queue.add(raw);
@@ -57,7 +55,7 @@ public class ExecutorBasedScheduler implements IActorScheduler {
 
     private void processMailbox(Mailbox mailbox) {
         int processed = 0;
-        for (;;) {
+        for (; ; ) {
             Runnable runnable = mailbox.queue.poll();
             if (runnable == null)
                 break;

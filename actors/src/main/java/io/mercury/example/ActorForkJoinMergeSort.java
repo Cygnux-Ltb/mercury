@@ -1,21 +1,23 @@
 package io.mercury.example;
 
+import io.mercury.actors.Actor;
+import io.mercury.actors.IActorRef;
+import io.mercury.actors.IActorSystem;
+
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
-import io.mercury.actors.Actor;
-import io.mercury.actors.IActorRef;
-import io.mercury.actors.IActorSystem;
+import static java.util.Objects.requireNonNull;
 
 public class ActorForkJoinMergeSort {
 
     public static void main(String[] args) throws InterruptedException {
         Random random = new Random(0L);
-        int[] input = IntStream.range(0, 1 << 10).map(i -> random.nextInt(1 << 20)).toArray();
+        int[] input = IntStream.range(0, 1 << 10)
+                .map(i -> random.nextInt(1 << 20)).toArray();
         System.err.println("Actor merge sort started...");
         long start = System.currentTimeMillis();
         sort(input);
@@ -24,23 +26,22 @@ public class ActorForkJoinMergeSort {
     }
 
     public static void sort(int[] input) {
-
         final IActorSystem system = Actor.newSystem("actor-sort");
-
-        final IActorRef<MasterActor> master = system.actorOf(MasterActor::new, "master");
-        master.tell(m -> m.start(input));
-        system.shutdownCompletable().join();
+        try (final IActorRef<MasterActor> master = system.actorOf(MasterActor::new, "master")) {
+            master.tell(m -> m.start(input));
+            system.shutdownCompletable().join();
+        }
     }
 
     private static class MasterActor {
-
         public void start(int[] array) {
-            IActorRef<Sorter> sorter = Actor.system().actorOf(Sorter::new, "c");
-            sorter.ask((s, cb) -> s.run(array, cb), this::result);
+            try (IActorRef<Sorter> sorter = requireNonNull(Actor.system()).actorOf(Sorter::new, "c")) {
+                sorter.ask((s, cb) -> s.run(array, cb), this::result);
+            }
         }
 
         public void result(int[] array) {
-            Actor.system().shutdown();
+            requireNonNull(Actor.system()).shutdown();
             System.out.println(Arrays.toString(array));
         }
 
@@ -54,7 +55,7 @@ public class ActorForkJoinMergeSort {
             } else {
                 int[] left = Arrays.copyOfRange(array, 0, array.length / 2);
                 int[] right = Arrays.copyOfRange(array, array.length / 2, array.length);
-                Objects.requireNonNull(Actor.system()).<Integer, Sorter>forkBuilder(Arrays.asList(0, 1)).constructor(id -> new Sorter()).<int[]>ask((id, sorter, cb) -> sorter.run(id == 0 ? left : right, cb), map -> join(map, callback));
+                requireNonNull(Actor.system()).<Integer, Sorter>forkBuilder(Arrays.asList(0, 1)).constructor(id -> new Sorter()).<int[]>ask((id, sorter, cb) -> sorter.run(id == 0 ? left : right, cb), map -> join(map, callback));
             }
         }
 

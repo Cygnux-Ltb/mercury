@@ -1,4 +1,4 @@
-package io.mercury.actors;
+package io.mercury.actors.def;
 
 import io.mercury.serialization.avro.msg.AvroBinaryMsg;
 

@@ -3,21 +3,6 @@
  */
 package com.lightbend.akkasample.sample4;
 
-import static akka.http.javadsl.server.Directives.complete;
-import static akka.http.javadsl.server.Directives.completeOK;
-import static akka.http.javadsl.server.Directives.get;
-import static akka.http.javadsl.server.Directives.logRequest;
-import static akka.http.javadsl.server.Directives.onComplete;
-import static akka.http.javadsl.server.Directives.path;
-import static akka.http.javadsl.server.PathMatchers.longSegment;
-import static akka.http.javadsl.server.PathMatchers.segment;
-import static akka.pattern.PatternsCS.ask;
-import static akka.pattern.PatternsCS.pipe;
-import static com.lightbend.akkasample.sample4.CompletionStageUtils.withRetries;
-
-import java.net.InetSocketAddress;
-import java.util.concurrent.CompletionStage;
-
 import akka.actor.AbstractLoggingActor;
 import akka.actor.ActorRef;
 import akka.actor.Props;
@@ -26,7 +11,7 @@ import akka.event.Logging;
 import akka.http.javadsl.ConnectHttp;
 import akka.http.javadsl.Http;
 import akka.http.javadsl.ServerBinding;
-import akka.http.javadsl.marshallers.jackson.Jackson;
+//import akka.http.javadsl.marshallers.jackson.Jackson;
 import akka.http.javadsl.marshalling.Marshaller;
 import akka.http.javadsl.model.RequestEntity;
 import akka.http.javadsl.model.StatusCodes;
@@ -35,10 +20,20 @@ import akka.stream.ActorMaterializer;
 import akka.stream.Materializer;
 import scala.util.Try;
 
+import java.net.InetSocketAddress;
+import java.util.concurrent.CompletionStage;
+
+import static akka.http.javadsl.server.Directives.*;
+import static akka.http.javadsl.server.PathMatchers.longSegment;
+import static akka.http.javadsl.server.PathMatchers.segment;
+import static akka.pattern.PatternsCS.ask;
+import static akka.pattern.PatternsCS.pipe;
+import static com.lightbend.akkasample.sample4.CompletionStageUtils.withRetries;
+
 @SuppressWarnings("deprecation")
 public class WebServer extends AbstractLoggingActor {
 
-    private final static Marshaller<Product, RequestEntity> productMarshaller = Jackson.<Product>marshaller();
+    private static Marshaller<Product, RequestEntity> productMarshaller;// = Jackson.<Product>marshaller();
 
     // internal protocol
     @SuppressWarnings("unused")

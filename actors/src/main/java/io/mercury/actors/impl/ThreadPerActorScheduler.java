@@ -16,7 +16,7 @@ public class ThreadPerActorScheduler implements IActorScheduler {
 
     @Override
     public void actorCreated(Object actorId) {
-        executors.put(actorId, Executors.newSingleThreadExecutor(runnable -> new Thread(runnable, "actr:" + actorId)));
+        executors.put(actorId, Executors.newSingleThreadExecutor(runnable -> new Thread(runnable, "actor:" + actorId)));
     }
 
     @Override

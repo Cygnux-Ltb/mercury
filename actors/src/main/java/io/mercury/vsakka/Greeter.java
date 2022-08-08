@@ -5,12 +5,12 @@ import io.mercury.actors.IActorRef;
 public class Greeter {
 
     private final String message;
-    private final IActorRef<Printer> printerActor;
+    private final IActorRef<Printer> printerActorRef;
     private String greeting;
 
-    public Greeter(String message, IActorRef<Printer> printerActor) {
+    public Greeter(String message, IActorRef<Printer> printerIActorRef) {
         this.message = message;
-        this.printerActor = printerActor;
+        this.printerActorRef = printerIActorRef;
     }
 
     public void setWhoToGreet(String whoToGreet) {
@@ -19,7 +19,7 @@ public class Greeter {
 
     public void greet() {
         String greetingMsg = greeting;
-        printerActor.tell(printer -> printer.print(greetingMsg));
+        printerActorRef.tell(printer -> printer.print(greetingMsg));
     }
 
 }

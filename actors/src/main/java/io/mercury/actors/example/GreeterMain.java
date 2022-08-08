@@ -70,8 +70,8 @@ public class GreeterMain extends AbstractBehavior<SayHello> {
 
 	private Behavior<SayHello> onSayHello(SayHello command) {
 		// #create-actors
-		ActorRef<Greeted> replyTo = getContext().spawn(GreeterBot.create(3), command.getName());
-		greeter.tell(new Greet(command.getName(), replyTo));
+		ActorRef<Greeted> replyTo = getContext().spawn(GreeterBot.create(3), command.name());
+		greeter.tell(new Greet(command.name(), replyTo));
 		// #create-actors
 		return this;
 	}

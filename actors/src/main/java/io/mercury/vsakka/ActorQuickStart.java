@@ -6,7 +6,7 @@ import io.mercury.actors.Actor;
 import io.mercury.actors.IActorRef;
 import io.mercury.actors.IActorSystem;
 
-public class ActorQuickstart {
+public class ActorQuickStart {
 
     public static void main(String[] args) {
         final IActorSystem system = Actor.newSystem("hello-actor");
@@ -18,16 +18,16 @@ public class ActorQuickstart {
              // #create-actors
         ) {
             // #main-send-messages
-            howdyGreeter.tell(gr -> gr.setWhoToGreet("Actr"));
+            howdyGreeter.tell(greeter -> greeter.setWhoToGreet("Actor"));
             howdyGreeter.tell(Greeter::greet);
 
-            howdyGreeter.tell(gr -> gr.setWhoToGreet("Zakgof"));
+            howdyGreeter.tell(greeter -> greeter.setWhoToGreet("Mercury"));
             howdyGreeter.tell(Greeter::greet);
 
-            helloGreeter.tell(gr -> gr.setWhoToGreet("Java"));
+            helloGreeter.tell(greeter -> greeter.setWhoToGreet("Java"));
             helloGreeter.tell(Greeter::greet);
 
-            goodDayGreeter.tell(gr -> gr.setWhoToGreet("Lambda"));
+            goodDayGreeter.tell(greeter -> greeter.setWhoToGreet("Lambda"));
             goodDayGreeter.tell(Greeter::greet);
             // #main-send-messages
 

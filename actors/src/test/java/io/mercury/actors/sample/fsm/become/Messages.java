@@ -3,46 +3,27 @@ package io.mercury.actors.sample.fsm.become;
 import akka.actor.ActorRef;
 
 public class Messages {
-	public static final class Busy {
-		public final ActorRef chopstick;
 
-		public Busy(ActorRef chopstick) {
-			this.chopstick = chopstick;
-		}
+	public record Busy(ActorRef chopstick) {
 	}
 
-	public static final class Put {
-		public final ActorRef hakker;
-
-		public Put(ActorRef hakker) {
-			this.hakker = hakker;
-		}
+	public record Put(ActorRef hakker) {
 	}
 
-	public static final class Take {
-		public final ActorRef hakker;
-
-		public Take(ActorRef hakker) {
-			this.hakker = hakker;
-		}
+	public record Take(ActorRef hakker) {
 	}
 
-	public static final class Taken {
-		public final ActorRef chopstick;
-
-		public Taken(ActorRef chopstick) {
-			this.chopstick = chopstick;
-		}
+	public record Taken(ActorRef chopstick) {
 	}
 
-	private static interface EatMessage {
-	};
+	private interface EatMessage {
+	}
 
 	public static final Object Eat = new EatMessage() {
 	};
 
-	private static interface ThinkMessage {
-	};
+	private interface ThinkMessage {
+	}
 
 	public static final Object Think = new ThinkMessage() {
 	};

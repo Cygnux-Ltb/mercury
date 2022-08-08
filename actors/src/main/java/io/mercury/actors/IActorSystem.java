@@ -54,4 +54,5 @@ public interface IActorSystem {
     <I, T> IForkBuilder<I, T> forkBuilder(Collection<I> ids);
 
     String name();
+
 }

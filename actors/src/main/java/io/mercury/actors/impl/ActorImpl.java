@@ -24,10 +24,16 @@ public class ActorImpl<T> implements IActorRef<T> {
     private volatile Object box;
     private volatile IRegistration reg;
 
-    ActorImpl(T object, Supplier<T> constructor, IActorScheduler scheduler, ActorSystemImpl actorSystem, String name, BiConsumer<T, Exception> exceptionHandler, Consumer<T> destructor) {
+    ActorImpl(T object,
+              Supplier<T> constructor,
+              IActorScheduler scheduler,
+              ActorSystemImpl actorSystem,
+              String name,
+              BiConsumer<T, Exception> exceptionHandler,
+              Consumer<T> destructor) {
         this.actorSystem = actorSystem;
         this.exceptionHandler = exceptionHandler;
-        this.name = name == null ? getClass().getSimpleName().toLowerCase() + "_" + UUID.randomUUID() : name;
+        this.name = name == null ? getClass().getSimpleName() + "-" + UUID.randomUUID() : name;
         this.destructor = destructor;
         if (object != null) {
             this.object = object;
