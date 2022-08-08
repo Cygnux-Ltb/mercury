@@ -32,9 +32,8 @@ public class EchoHandler<T extends VanillaNetworkContext<T>> extends AbstractClo
     protected void performClose() {
     }
 
-    @SuppressWarnings("rawtypes")
-	@Override
-    public void process(@NotNull final Bytes in, @NotNull final Bytes out, T nc) {
+    @Override
+    public void process(@NotNull final Bytes<?> in, @NotNull final Bytes<?> out, T nc) {
 //        System.out.println(in.readRemaining());
         if (in.readRemaining() == 0)
             return;
