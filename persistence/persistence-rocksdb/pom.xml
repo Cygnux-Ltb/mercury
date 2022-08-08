@@ -26,7 +26,7 @@
 		<dependency>
 			<groupId>org.rocksdb</groupId>
 			<artifactId>rocksdbjni</artifactId>
-			<version>7.3.1</version>
+			<version>7.4.4</version>
 		</dependency>
 
 		<!-- Netty/Buffer -->

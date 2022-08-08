@@ -11,12 +11,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-public @interface DatabaseTable {
+public @interface RdbTable {
 
-	boolean ignoreExisted() default true;
+    boolean ignoreExisted() default true;
 
-	String tableName();
+    String tableName();
 
-	String createTableStatement();
+    String createTableStatement();
 
 }

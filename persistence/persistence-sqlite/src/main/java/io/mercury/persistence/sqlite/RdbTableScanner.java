@@ -2,13 +2,13 @@ package io.mercury.persistence.sqlite;
 
 import java.sql.Connection;
 
-public final class DatabaseTableScanner {
+public final class RdbTableScanner {
 
-	private DatabaseTableScanner() {
-	}
+    private RdbTableScanner() {
+    }
 
-	public static void scanPackage(String packageName, Connection connection) {
+    public static void scanPackage(String packageName, Connection connection) {
 
-	}
+    }
 
 }
