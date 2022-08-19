@@ -18,7 +18,7 @@ public final class Throws {
     }
 
     /**
-     * @param t
+     * @param t Throwable
      * @throws RuntimeException exception
      */
     public static void runtimeException(Throwable t) throws RuntimeException {
@@ -27,7 +27,7 @@ public final class Throws {
 
     /**
      * @param msg String
-     * @param t
+     * @param t   Throwable
      * @throws RuntimeException exception
      */
     public static void runtimeException(String msg, Throwable t) throws RuntimeException {
@@ -42,7 +42,7 @@ public final class Throws {
     }
 
     /**
-     * @param objName
+     * @param objName String
      * @throws NullPointerException exception
      */
     public static void nullPointer(String objName) throws NullPointerException {
@@ -57,7 +57,7 @@ public final class Throws {
     }
 
     /**
-     * @param msg
+     * @param msg String
      * @throws IllegalArgumentException exception
      */
     public static void illegalArgument(String msg) throws IllegalArgumentException {
@@ -65,7 +65,7 @@ public final class Throws {
     }
 
     /**
-     * @param t
+     * @param t Throwable
      * @throws IllegalArgumentException exception
      */
     public static void illegalArgument(Throwable t) throws IllegalArgumentException {
@@ -73,8 +73,8 @@ public final class Throws {
     }
 
     /**
-     * @param msg
-     * @param t
+     * @param msg String
+     * @param t   Throwable
      * @throws IllegalArgumentException exception
      */
     public static void illegalArgument(String msg, Throwable t) throws IllegalArgumentException {
@@ -89,7 +89,7 @@ public final class Throws {
     }
 
     /**
-     * @param state
+     * @param state String
      * @throws IllegalStateException exception
      */
     public static void illegalState(String state) throws IllegalStateException {
@@ -97,7 +97,7 @@ public final class Throws {
     }
 
     /**
-     * @param t
+     * @param t Throwable
      * @throws IllegalStateException exception
      */
     public static void illegalState(Throwable t) throws IllegalStateException {
@@ -105,8 +105,8 @@ public final class Throws {
     }
 
     /**
-     * @param state
-     * @param t
+     * @param state String
+     * @param t     Throwable
      * @throws IllegalStateException exception
      */
     public static void illegalState(String state, Throwable t) throws IllegalStateException {

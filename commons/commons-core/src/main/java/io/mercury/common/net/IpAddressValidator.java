@@ -1,12 +1,12 @@
 package io.mercury.common.net;
 
+import io.mercury.common.util.RegexValidator;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import io.mercury.common.util.RegexValidator;
 
 /**
  * @author yellow013
@@ -42,7 +42,7 @@ public final class IpAddressValidator implements Serializable {
     /**
      * @param address String
      * @return String
-     * @throws IpAddressIllegalException
+     * @throws IpAddressIllegalException exception
      */
     public static synchronized String assertIpAddress(String address) throws IpAddressIllegalException {
         if (!isIpAddress(address))
@@ -147,7 +147,7 @@ public final class IpAddressValidator implements Serializable {
             } else if (address.startsWith("::") && !octetList.isEmpty()) {
                 octetList.remove(0);
             }
-            octets = octetList.toArray(new String[octetList.size()]);
+            octets = octetList.toArray(new String[0]);
         }
 
         if (octets.length > IPV6_MAX_HEX_GROUPS)

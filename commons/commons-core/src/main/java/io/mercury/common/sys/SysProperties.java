@@ -1,136 +1,134 @@
 package io.mercury.common.sys;
 
-import java.io.File;
-
 import org.slf4j.Logger;
+
+import java.io.File;
 
 public final class SysProperties {
 
-	/**
-	 * 
-	 * @param key
-	 * @return
-	 */
-	public static String get(String key) {
-		return System.getProperty(key);
-	}
+    /**
+     * @param key
+     * @return
+     */
+    public static String get(String key) {
+        return System.getProperty(key);
+    }
 
-	/**
-	 * System.getProperty("os.name")
-	 */
-	public static final String OS_NAME = System.getProperty("os.name");
+    /**
+     * System.getProperty("os.name")
+     */
+    public static final String OS_NAME = System.getProperty("os.name");
 
-	/**
-	 * System.getProperty("java.home")
-	 */
-	public static final String JAVA_HOME = System.getProperty("java.home");
+    /**
+     * System.getProperty("java.home")
+     */
+    public static final String JAVA_HOME = System.getProperty("java.home");
 
-	/**
-	 * System.getProperty("java.class.path")
-	 */
-	public static final String JAVA_CLASS_PATH = System.getProperty("java.class.path");
+    /**
+     * System.getProperty("java.class.path")
+     */
+    public static final String JAVA_CLASS_PATH = System.getProperty("java.class.path");
 
-	/**
-	 * System.getProperty("java.version")
-	 */
-	public static final String JAVA_VERSION = System.getProperty("java.version");
+    /**
+     * System.getProperty("java.version")
+     */
+    public static final String JAVA_VERSION = System.getProperty("java.version");
 
-	/**
-	 * System.getProperty("java.vm.name")
-	 */
-	public static final String JAVA_VM_NAME = System.getProperty("java.vm.name");
+    /**
+     * System.getProperty("java.vm.name")
+     */
+    public static final String JAVA_VM_NAME = System.getProperty("java.vm.name");
 
-	/**
-	 * System.getProperty("java.runtime.name")
-	 */
-	public static final String JAVA_RUNTIME_NAME = System.getProperty("java.runtime.name");
+    /**
+     * System.getProperty("java.runtime.name")
+     */
+    public static final String JAVA_RUNTIME_NAME = System.getProperty("java.runtime.name");
 
-	/**
-	 * System.getProperty("java.runtime.version")
-	 */
-	public static final String JAVA_RUNTIME_VERSION = System.getProperty("java.runtime.version");
+    /**
+     * System.getProperty("java.runtime.version")
+     */
+    public static final String JAVA_RUNTIME_VERSION = System.getProperty("java.runtime.version");
 
-	/*
-	 * System.getProperty("java.library.path")
-	 */
-	public static final String JAVA_LIBRARY_PATH = System.getProperty("java.library.path");
+    /*
+     * System.getProperty("java.library.path")
+     */
+    public static final String JAVA_LIBRARY_PATH = System.getProperty("java.library.path");
 
-	/**
-	 * System.getProperty("java.io.tmpdir")
-	 */
-	public static final String JAVA_IO_TMPDIR = System.getProperty("java.io.tmpdir");
+    /**
+     * System.getProperty("java.io.tmpdir")
+     */
+    public static final String JAVA_IO_TMPDIR = System.getProperty("java.io.tmpdir");
 
-	/**
-	 * tmpdir file
-	 */
-	public static final File JAVA_IO_TMPDIR_FILE = new File(JAVA_IO_TMPDIR + "/");
+    /**
+     * tmpdir file
+     */
+    public static final File JAVA_IO_TMPDIR_FILE = new File(JAVA_IO_TMPDIR + "/");
 
-	/**
-	 * System.getProperty("user.name")
-	 */
-	public static final String USER_NAME = System.getProperty("user.name");
+    /**
+     * System.getProperty("user.name")
+     */
+    public static final String USER_NAME = System.getProperty("user.name");
 
-	/**
-	 * System.getProperty("user.home")
-	 */
-	public static final String USER_HOME = System.getProperty("user.home");
+    /**
+     * System.getProperty("user.home")
+     */
+    public static final String USER_HOME = System.getProperty("user.home");
 
-	/**
-	 * user.home file
-	 */
-	public static final File USER_HOME_FILE = new File(USER_HOME + "/");
+    /**
+     * user.home file
+     */
+    public static final File USER_HOME_FILE = new File(USER_HOME + "/");
 
-	/**
-	 * ${user.home}/.config/
-	 */
-	public static final File USER_HOME_CONFIG_FOLDER = new File(USER_HOME_FILE + "/.config/");
+    /**
+     * ${user.home}/.config/
+     */
+    public static final File USER_HOME_CONFIG_FOLDER = new File(USER_HOME_FILE + "/.config/");
 
-	/**
-	 * System.getProperty("user.dir")
-	 */
-	public static final String USER_DIR = System.getProperty("user.dir");
+    /**
+     * System.getProperty("user.dir")
+     */
+    public static final String USER_DIR = System.getProperty("user.dir");
 
-	/**
-	 * user.dir file
-	 */
-	public static final File USER_DIR_FILE = new File(USER_DIR + "/");
+    /**
+     * user.dir file
+     */
+    public static final File USER_DIR_FILE = new File(USER_DIR + "/");
 
-	/**
-	 * System.getProperty("user.timezone")
-	 */
-	public static final String USER_TIMEZONE = System.getProperty("user.timezone");
+    /**
+     * System.getProperty("user.timezone")
+     */
+    public static final String USER_TIMEZONE = System.getProperty("user.timezone");
 
-	/**
-	 * System.getProperty("user.language")
-	 */
-	public static final String USER_LANGUAGE = System.getProperty("user.language");
+    /**
+     * System.getProperty("user.language")
+     */
+    public static final String USER_LANGUAGE = System.getProperty("user.language");
 
-	/**
-	 * System.getProperty("user.country")
-	 */
-	public static final String USER_COUNTRY = System.getProperty("user.country");
+    /**
+     * System.getProperty("user.country")
+     */
+    public static final String USER_COUNTRY = System.getProperty("user.country");
 
-	/**
-	 * 
-	 */
-	public static void showAll() {
-		showAll(null);
-	}
+    /**
+     *
+     */
+    public static void showAll() {
+        showAll(null);
+    }
 
-	/**
-	 * 
-	 * @param log
-	 */
-	public static void showAll(Logger log) {
-		if (log != null) {
-			System.getProperties().forEach((key, value) -> log.info("{} -> {}", key, value));
-		} else {
-			System.getProperties().forEach((key, value) -> System.out.println(key + " -> " + value));
-		}
-	}
+    /**
+     * @param log
+     */
+    public static void showAll(Logger log) {
+        if (log != null) {
+            System.getProperties().forEach((key, value) -> log.info("{} -> {}", key, value));
+        } else {
+            System.getProperties().forEach((key, value) -> System.out.println(key + " -> " + value));
+        }
+    }
 
-	public static void main(String[] args) {
-		showAll();
-	}
+    public static void main(String[] args) {
+        showAll();
+    }
 
 }

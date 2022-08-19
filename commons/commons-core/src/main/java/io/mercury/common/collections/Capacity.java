@@ -229,15 +229,15 @@ public enum Capacity {
     }
 
     /**
-     * @param capacity
-     * @return
+     * @param capacity Capacity
+     * @return int
      */
     public static int checkAndGet(Capacity capacity) {
         return capacity == null ? Capacity.DEFAULT_SIZE : capacity.value();
     }
 
     /**
-     * @return
+     * @return int
      */
     public int value() {
         return value;
@@ -258,8 +258,8 @@ public enum Capacity {
     }
 
     /**
-     * @param value
-     * @return
+     * @param value int
+     * @return Capacity
      */
     public Capacity get(int value) {
         int pow2 = BitOperator.minPow2(value);

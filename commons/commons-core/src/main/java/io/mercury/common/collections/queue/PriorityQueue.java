@@ -1,13 +1,11 @@
 package io.mercury.common.collections.queue;
 
-import java.util.Collection;
-import java.util.Optional;
-
-import javax.annotation.concurrent.NotThreadSafe;
-
+import io.mercury.common.collections.MutableSets;
 import org.eclipse.collections.api.set.sorted.MutableSortedSet;
 
-import io.mercury.common.collections.MutableSets;
+import javax.annotation.concurrent.NotThreadSafe;
+import java.util.Collection;
+import java.util.Optional;
 
 @NotThreadSafe
 public class PriorityQueue<E> {
@@ -62,7 +60,8 @@ public class PriorityQueue<E> {
      */
     public Optional<E> next() {
         return prioritySet.notEmpty() ? Optional.of(prioritySet.first())
-                : secondarySet.notEmpty() ? Optional.of(secondarySet.first()) : Optional.empty();
+                : secondarySet.notEmpty() ? Optional.of(secondarySet.first())
+                : Optional.empty();
     }
 
 }

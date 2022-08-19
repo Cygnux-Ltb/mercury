@@ -1,59 +1,25 @@
 package io.mercury.common.collections;
 
-import static io.mercury.common.collections.MapUtil.optimizationCapacity;
-
-import java.util.Map;
-import java.util.function.Supplier;
-import java.util.function.ToIntFunction;
-
-import javax.annotation.Nonnull;
-
+import io.mercury.common.lang.Asserter;
+import io.mercury.common.util.ArrayUtil;
 import org.eclipse.collections.api.bimap.MutableBiMap;
 import org.eclipse.collections.api.map.ConcurrentMutableMap;
 import org.eclipse.collections.api.map.MutableMap;
-import org.eclipse.collections.api.map.primitive.MutableDoubleBooleanMap;
-import org.eclipse.collections.api.map.primitive.MutableDoubleIntMap;
-import org.eclipse.collections.api.map.primitive.MutableDoubleLongMap;
-import org.eclipse.collections.api.map.primitive.MutableIntBooleanMap;
-import org.eclipse.collections.api.map.primitive.MutableIntDoubleMap;
-import org.eclipse.collections.api.map.primitive.MutableIntIntMap;
-import org.eclipse.collections.api.map.primitive.MutableIntLongMap;
-import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
-import org.eclipse.collections.api.map.primitive.MutableLongBooleanMap;
-import org.eclipse.collections.api.map.primitive.MutableLongDoubleMap;
-import org.eclipse.collections.api.map.primitive.MutableLongIntMap;
-import org.eclipse.collections.api.map.primitive.MutableLongLongMap;
-import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
-import org.eclipse.collections.api.map.primitive.MutableObjectBooleanMap;
-import org.eclipse.collections.api.map.primitive.MutableObjectDoubleMap;
-import org.eclipse.collections.api.map.primitive.MutableObjectIntMap;
-import org.eclipse.collections.api.map.primitive.MutableObjectLongMap;
+import org.eclipse.collections.api.map.primitive.*;
 import org.eclipse.collections.api.map.sorted.MutableSortedMap;
 import org.eclipse.collections.impl.bimap.mutable.HashBiMap;
 import org.eclipse.collections.impl.map.mutable.ConcurrentHashMap;
 import org.eclipse.collections.impl.map.mutable.ConcurrentHashMapUnsafe;
 import org.eclipse.collections.impl.map.mutable.UnifiedMap;
-import org.eclipse.collections.impl.map.mutable.primitive.DoubleBooleanHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.DoubleIntHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.DoubleLongHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.IntBooleanHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.IntDoubleHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.IntIntHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.IntLongHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.LongBooleanHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.LongDoubleHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.LongIntHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.LongLongHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.LongObjectHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.ObjectBooleanHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.ObjectIntHashMap;
-import org.eclipse.collections.impl.map.mutable.primitive.ObjectLongHashMap;
+import org.eclipse.collections.impl.map.mutable.primitive.*;
 import org.eclipse.collections.impl.map.sorted.mutable.TreeSortedMap;
 
-import io.mercury.common.lang.Asserter;
-import io.mercury.common.util.ArrayUtil;
+import javax.annotation.Nonnull;
+import java.util.Map;
+import java.util.function.Supplier;
+import java.util.function.ToIntFunction;
+
+import static io.mercury.common.collections.MapUtil.optimizationCapacity;
 
 public final class MutableMaps {
 

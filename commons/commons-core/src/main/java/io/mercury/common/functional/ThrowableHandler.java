@@ -1,7 +1,6 @@
 package io.mercury.common.functional;
 
 /**
- * 
  * @author yellow013
  */
 @FunctionalInterface

@@ -1,8 +1,7 @@
 package io.mercury.common.collections.queue;
 
-import java.util.LinkedList;
-
 import javax.annotation.concurrent.NotThreadSafe;
+import java.util.LinkedList;
 
 @NotThreadSafe
 public class PreloadingQueue<T> {

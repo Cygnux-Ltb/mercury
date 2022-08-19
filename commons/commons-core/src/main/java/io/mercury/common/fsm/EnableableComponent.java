@@ -1,8 +1,7 @@
 package io.mercury.common.fsm;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import javax.annotation.concurrent.ThreadSafe;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @ThreadSafe
 public abstract class EnableableComponent implements Enableable {

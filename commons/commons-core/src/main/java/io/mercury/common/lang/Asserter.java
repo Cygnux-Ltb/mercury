@@ -106,10 +106,10 @@ public final class Asserter {
     }
 
     /**
-     * @param l
-     * @param max
-     * @param objName
-     * @return
+     * @param l       long
+     * @param max     long
+     * @param objName String
+     * @return long
      * @throws IllegalArgumentException exception
      */
     public static long lessOrEqualThan(long l, long max, String objName) throws IllegalArgumentException {
@@ -119,11 +119,11 @@ public final class Asserter {
     }
 
     /**
-     * @param i
-     * @param min
-     * @param max
-     * @param objName
-     * @return
+     * @param i       int
+     * @param min     int
+     * @param max     int
+     * @param objName String
+     * @return int
      * @throws IllegalArgumentException exception
      */
     public static int atWithinRange(int i, int min, int max, String objName) throws IllegalArgumentException {
@@ -134,11 +134,11 @@ public final class Asserter {
     }
 
     /**
-     * @param l
-     * @param min
-     * @param max
-     * @param objName
-     * @return
+     * @param l       long
+     * @param min     long
+     * @param max     long
+     * @param objName String
+     * @return long
      * @throws IllegalArgumentException exception
      */
     public static long atWithinRange(long l, long min, long max, String objName) throws IllegalArgumentException {
@@ -148,9 +148,9 @@ public final class Asserter {
     }
 
     /**
-     * @param <T>
-     * @param t
-     * @return
+     * @param <T> T
+     * @param t   T
+     * @return T
      * @throws NullPointerException exception
      */
     public static <T> T nonNull(T t) throws NullPointerException {
@@ -158,10 +158,10 @@ public final class Asserter {
     }
 
     /**
-     * @param <T>
-     * @param t
-     * @param objName
-     * @return
+     * @param <T>     T
+     * @param t       T
+     * @param objName String
+     * @return T
      * @throws NullPointerException exception
      */
     public static <T> T nonNull(T t, @Nonnull String objName) throws NullPointerException {

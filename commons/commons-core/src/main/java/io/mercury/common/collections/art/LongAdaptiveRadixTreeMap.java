@@ -31,7 +31,7 @@ import java.util.function.Supplier;
  * Viktor Leis, Alfons Kemper, Thomas Neumann Fakultat fur Informatik Technische
  * Universitat Munchen Boltzmannstrae 3, D-85748 Garching
  * <p>
- * https://db.in.tum.de/~leis/papers/ART.pdf
+ * <a href="https://db.in.tum.de/~leis/papers/ART.pdf">The Adaptive Radix Tree: ARTful Indexing for Main-Memory Databases</a>
  * <p>
  * Target operations: - GET or (PUT + GET_LOWER/HIGHER) -
  * placing/moving/bulkload order - often GET, more rare PUT ??cache - REMOVE -

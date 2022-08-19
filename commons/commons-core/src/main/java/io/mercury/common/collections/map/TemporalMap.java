@@ -1,19 +1,17 @@
 package io.mercury.common.collections.map;
 
+import io.mercury.common.collections.Capacity;
+import io.mercury.common.collections.MutableLists;
+import io.mercury.common.collections.MutableMaps;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
+
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 import java.time.temporal.Temporal;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.ToLongFunction;
-
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.NotThreadSafe;
-
-import org.eclipse.collections.api.list.MutableList;
-import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
-
-import io.mercury.common.collections.Capacity;
-import io.mercury.common.collections.MutableLists;
-import io.mercury.common.collections.MutableMaps;
 
 @NotThreadSafe
 public abstract class TemporalMap<K extends Temporal, V, T extends TemporalMap<K, V, T>> {

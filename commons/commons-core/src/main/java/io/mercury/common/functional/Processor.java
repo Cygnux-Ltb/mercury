@@ -1,8 +1,8 @@
 package io.mercury.common.functional;
 
-import javax.annotation.Nonnull;
-
 import io.mercury.common.collections.queue.LoadContainer;
+
+import javax.annotation.Nonnull;
 
 /**
  * @param <T>
@@ -12,8 +12,7 @@ import io.mercury.common.collections.queue.LoadContainer;
 public interface Processor<T> {
 
     /**
-     * @param t
-     * @throws Exception
+     * @param t T
      */
     void process(@Nonnull T t) throws Exception;
 

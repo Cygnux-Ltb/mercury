@@ -1,21 +1,11 @@
 package io.mercury.common.file;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.FileAlreadyExistsException;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
-
+import io.mercury.common.log.Log4j2LoggerFactory;
 import org.slf4j.Logger;
 
-import io.mercury.common.log.Log4j2LoggerFactory;
+import java.io.*;
+import java.nio.file.FileAlreadyExistsException;
+import java.util.zip.*;
 
 /**
  * Utility methods for compressing and uncompressing a file.

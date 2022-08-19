@@ -20,20 +20,20 @@ public final class DirectedGraph<V, E extends Edge> {
     }
 
     /**
-     * @param <V>
-     * @param vClass
-     * @return
+     * @param <V>    V
+     * @param vClass Class<V>
+     * @return DirectedGraph<V, Edge>
      */
     public static <V> DirectedGraph<V, Edge> newWith(Class<V> vClass) {
         return new DirectedGraph<>(vClass, Edge::new);
     }
 
     /**
-     * @param <V>
-     * @param <E>
-     * @param vClass
-     * @param edgeSupplier
-     * @return
+     * @param <V>          V
+     * @param <E>          E
+     * @param vClass       Class<V>
+     * @param edgeSupplier Supplier<E>
+     * @return DirectedGraph<V, E>
      */
     public static <V, E extends Edge> DirectedGraph<V, E> newWith(Class<V> vClass, Supplier<E> edgeSupplier) {
         return new DirectedGraph<>(vClass, edgeSupplier);
@@ -47,7 +47,7 @@ public final class DirectedGraph<V, E extends Edge> {
     }
 
     /**
-     * @param vertex
+     * @param vertex V
      * @return DirectedGraph<V, E>
      */
     public DirectedGraph<V, E> addVertex(V vertex) {
@@ -58,8 +58,8 @@ public final class DirectedGraph<V, E extends Edge> {
     }
 
     /**
-     * @param source
-     * @param target
+     * @param source V
+     * @param target V
      * @return DirectedGraph<V, E>
      */
     public DirectedGraph<V, E> addEdge(V source, V target) {
@@ -68,9 +68,9 @@ public final class DirectedGraph<V, E extends Edge> {
     }
 
     /**
-     * @param source
-     * @param target
-     * @param edge
+     * @param source V
+     * @param target V
+     * @param edge   E
      * @return DirectedGraph<V, E>
      */
     public DirectedGraph<V, E> addEdge(V source, V target, E edge) {
@@ -79,25 +79,25 @@ public final class DirectedGraph<V, E extends Edge> {
     }
 
     /**
-     * @param v
-     * @return
+     * @param v V type
+     * @return boolean
      */
     public boolean containsVertex(V v) {
         return savedGraph.containsVertex(v);
     }
 
     /**
-     * @param e
-     * @return
+     * @param e E
+     * @return boolean
      */
     public boolean containsEdge(E e) {
         return savedGraph.containsEdge(e);
     }
 
     /**
-     * @param source
-     * @param target
-     * @return
+     * @param source V
+     * @param target V
+     * @return boolean
      */
     public boolean containsEdge(V source, V target) {
         return savedGraph.containsEdge(source, target);
@@ -118,7 +118,7 @@ public final class DirectedGraph<V, E extends Edge> {
     }
 
     /**
-     * @param startVertex
+     * @param startVertex V
      * @return ImmutableSet<V>
      */
     public ImmutableSet<V> allChildVertex(V startVertex) {

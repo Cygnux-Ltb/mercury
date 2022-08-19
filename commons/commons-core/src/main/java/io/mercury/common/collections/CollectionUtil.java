@@ -1,15 +1,14 @@
 package io.mercury.common.collections;
 
+import io.mercury.common.lang.Asserter;
+import io.mercury.common.util.ArrayUtil;
+
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.IntFunction;
-
-import javax.annotation.Nonnull;
-
-import io.mercury.common.lang.Asserter;
-import io.mercury.common.util.ArrayUtil;
 
 public final class CollectionUtil {
 

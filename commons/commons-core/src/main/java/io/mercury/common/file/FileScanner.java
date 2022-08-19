@@ -1,15 +1,13 @@
 package io.mercury.common.file;
 
-import java.io.File;
-import java.io.FileFilter;
+import io.mercury.common.collections.MutableSets;
+import io.mercury.common.lang.Asserter;
+import org.eclipse.collections.api.set.MutableSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import org.eclipse.collections.api.set.MutableSet;
-
-import io.mercury.common.collections.MutableSets;
-import io.mercury.common.lang.Asserter;
+import java.io.File;
+import java.io.FileFilter;
 
 public final class FileScanner {
 

@@ -26,7 +26,7 @@ import java.text.ParseException;
 /**
  * Code originally copied from the OpenDS Java project.
  * <p>
- * http://www.opends.org/
+ * <a href="http://www.opends.org/">www.opends.org</a>
  * <p>
  * This class removes the dependency on the Jakarta commons-codec library. Since
  * this utility package is used in every Cloudhopper Java project, providing our
@@ -119,216 +119,85 @@ public class Base64Codec {
 
             for (int j = 0; j < 4; j++) {
                 switch (encodedData.charAt(i + j)) {
-                    case 'A':
-                        value <<= 6;
-                        break;
-                    case 'B':
-                        value = (value << 6) | 0x01;
-                        break;
-                    case 'C':
-                        value = (value << 6) | 0x02;
-                        break;
-                    case 'D':
-                        value = (value << 6) | 0x03;
-                        break;
-                    case 'E':
-                        value = (value << 6) | 0x04;
-                        break;
-                    case 'F':
-                        value = (value << 6) | 0x05;
-                        break;
-                    case 'G':
-                        value = (value << 6) | 0x06;
-                        break;
-                    case 'H':
-                        value = (value << 6) | 0x07;
-                        break;
-                    case 'I':
-                        value = (value << 6) | 0x08;
-                        break;
-                    case 'J':
-                        value = (value << 6) | 0x09;
-                        break;
-                    case 'K':
-                        value = (value << 6) | 0x0A;
-                        break;
-                    case 'L':
-                        value = (value << 6) | 0x0B;
-                        break;
-                    case 'M':
-                        value = (value << 6) | 0x0C;
-                        break;
-                    case 'N':
-                        value = (value << 6) | 0x0D;
-                        break;
-                    case 'O':
-                        value = (value << 6) | 0x0E;
-                        break;
-                    case 'P':
-                        value = (value << 6) | 0x0F;
-                        break;
-                    case 'Q':
-                        value = (value << 6) | 0x10;
-                        break;
-                    case 'R':
-                        value = (value << 6) | 0x11;
-                        break;
-                    case 'S':
-                        value = (value << 6) | 0x12;
-                        break;
-                    case 'T':
-                        value = (value << 6) | 0x13;
-                        break;
-                    case 'U':
-                        value = (value << 6) | 0x14;
-                        break;
-                    case 'V':
-                        value = (value << 6) | 0x15;
-                        break;
-                    case 'W':
-                        value = (value << 6) | 0x16;
-                        break;
-                    case 'X':
-                        value = (value << 6) | 0x17;
-                        break;
-                    case 'Y':
-                        value = (value << 6) | 0x18;
-                        break;
-                    case 'Z':
-                        value = (value << 6) | 0x19;
-                        break;
-                    case 'a':
-                        value = (value << 6) | 0x1A;
-                        break;
-                    case 'b':
-                        value = (value << 6) | 0x1B;
-                        break;
-                    case 'c':
-                        value = (value << 6) | 0x1C;
-                        break;
-                    case 'd':
-                        value = (value << 6) | 0x1D;
-                        break;
-                    case 'e':
-                        value = (value << 6) | 0x1E;
-                        break;
-                    case 'f':
-                        value = (value << 6) | 0x1F;
-                        break;
-                    case 'g':
-                        value = (value << 6) | 0x20;
-                        break;
-                    case 'h':
-                        value = (value << 6) | 0x21;
-                        break;
-                    case 'i':
-                        value = (value << 6) | 0x22;
-                        break;
-                    case 'j':
-                        value = (value << 6) | 0x23;
-                        break;
-                    case 'k':
-                        value = (value << 6) | 0x24;
-                        break;
-                    case 'l':
-                        value = (value << 6) | 0x25;
-                        break;
-                    case 'm':
-                        value = (value << 6) | 0x26;
-                        break;
-                    case 'n':
-                        value = (value << 6) | 0x27;
-                        break;
-                    case 'o':
-                        value = (value << 6) | 0x28;
-                        break;
-                    case 'p':
-                        value = (value << 6) | 0x29;
-                        break;
-                    case 'q':
-                        value = (value << 6) | 0x2A;
-                        break;
-                    case 'r':
-                        value = (value << 6) | 0x2B;
-                        break;
-                    case 's':
-                        value = (value << 6) | 0x2C;
-                        break;
-                    case 't':
-                        value = (value << 6) | 0x2D;
-                        break;
-                    case 'u':
-                        value = (value << 6) | 0x2E;
-                        break;
-                    case 'v':
-                        value = (value << 6) | 0x2F;
-                        break;
-                    case 'w':
-                        value = (value << 6) | 0x30;
-                        break;
-                    case 'x':
-                        value = (value << 6) | 0x31;
-                        break;
-                    case 'y':
-                        value = (value << 6) | 0x32;
-                        break;
-                    case 'z':
-                        value = (value << 6) | 0x33;
-                        break;
-                    case '0':
-                        value = (value << 6) | 0x34;
-                        break;
-                    case '1':
-                        value = (value << 6) | 0x35;
-                        break;
-                    case '2':
-                        value = (value << 6) | 0x36;
-                        break;
-                    case '3':
-                        value = (value << 6) | 0x37;
-                        break;
-                    case '4':
-                        value = (value << 6) | 0x38;
-                        break;
-                    case '5':
-                        value = (value << 6) | 0x39;
-                        break;
-                    case '6':
-                        value = (value << 6) | 0x3A;
-                        break;
-                    case '7':
-                        value = (value << 6) | 0x3B;
-                        break;
-                    case '8':
-                        value = (value << 6) | 0x3C;
-                        break;
-                    case '9':
-                        value = (value << 6) | 0x3D;
-                        break;
-                    case '+':
-                        value = (value << 6) | 0x3E;
-                        break;
-                    case '/':
-                        value = (value << 6) | 0x3F;
-                        break;
-                    case '=':
+                    case 'A' -> value <<= 6;
+                    case 'B' -> value = (value << 6) | 0x01;
+                    case 'C' -> value = (value << 6) | 0x02;
+                    case 'D' -> value = (value << 6) | 0x03;
+                    case 'E' -> value = (value << 6) | 0x04;
+                    case 'F' -> value = (value << 6) | 0x05;
+                    case 'G' -> value = (value << 6) | 0x06;
+                    case 'H' -> value = (value << 6) | 0x07;
+                    case 'I' -> value = (value << 6) | 0x08;
+                    case 'J' -> value = (value << 6) | 0x09;
+                    case 'K' -> value = (value << 6) | 0x0A;
+                    case 'L' -> value = (value << 6) | 0x0B;
+                    case 'M' -> value = (value << 6) | 0x0C;
+                    case 'N' -> value = (value << 6) | 0x0D;
+                    case 'O' -> value = (value << 6) | 0x0E;
+                    case 'P' -> value = (value << 6) | 0x0F;
+                    case 'Q' -> value = (value << 6) | 0x10;
+                    case 'R' -> value = (value << 6) | 0x11;
+                    case 'S' -> value = (value << 6) | 0x12;
+                    case 'T' -> value = (value << 6) | 0x13;
+                    case 'U' -> value = (value << 6) | 0x14;
+                    case 'V' -> value = (value << 6) | 0x15;
+                    case 'W' -> value = (value << 6) | 0x16;
+                    case 'X' -> value = (value << 6) | 0x17;
+                    case 'Y' -> value = (value << 6) | 0x18;
+                    case 'Z' -> value = (value << 6) | 0x19;
+                    case 'a' -> value = (value << 6) | 0x1A;
+                    case 'b' -> value = (value << 6) | 0x1B;
+                    case 'c' -> value = (value << 6) | 0x1C;
+                    case 'd' -> value = (value << 6) | 0x1D;
+                    case 'e' -> value = (value << 6) | 0x1E;
+                    case 'f' -> value = (value << 6) | 0x1F;
+                    case 'g' -> value = (value << 6) | 0x20;
+                    case 'h' -> value = (value << 6) | 0x21;
+                    case 'i' -> value = (value << 6) | 0x22;
+                    case 'j' -> value = (value << 6) | 0x23;
+                    case 'k' -> value = (value << 6) | 0x24;
+                    case 'l' -> value = (value << 6) | 0x25;
+                    case 'm' -> value = (value << 6) | 0x26;
+                    case 'n' -> value = (value << 6) | 0x27;
+                    case 'o' -> value = (value << 6) | 0x28;
+                    case 'p' -> value = (value << 6) | 0x29;
+                    case 'q' -> value = (value << 6) | 0x2A;
+                    case 'r' -> value = (value << 6) | 0x2B;
+                    case 's' -> value = (value << 6) | 0x2C;
+                    case 't' -> value = (value << 6) | 0x2D;
+                    case 'u' -> value = (value << 6) | 0x2E;
+                    case 'v' -> value = (value << 6) | 0x2F;
+                    case 'w' -> value = (value << 6) | 0x30;
+                    case 'x' -> value = (value << 6) | 0x31;
+                    case 'y' -> value = (value << 6) | 0x32;
+                    case 'z' -> value = (value << 6) | 0x33;
+                    case '0' -> value = (value << 6) | 0x34;
+                    case '1' -> value = (value << 6) | 0x35;
+                    case '2' -> value = (value << 6) | 0x36;
+                    case '3' -> value = (value << 6) | 0x37;
+                    case '4' -> value = (value << 6) | 0x38;
+                    case '5' -> value = (value << 6) | 0x39;
+                    case '6' -> value = (value << 6) | 0x3A;
+                    case '7' -> value = (value << 6) | 0x3B;
+                    case '8' -> value = (value << 6) | 0x3C;
+                    case '9' -> value = (value << 6) | 0x3D;
+                    case '+' -> value = (value << 6) | 0x3E;
+                    case '/' -> value = (value << 6) | 0x3F;
+                    case '=' -> {
                         append = false;
                         switch (j) {
-                            case 2:
-                                buf.put((byte) ((value >>> 4) & 0xFF));
-                                break;
-                            case 3:
+                            case 2 -> buf.put((byte) ((value >>> 4) & 0xFF));
+                            case 3 -> {
                                 buf.put((byte) ((value >>> 10) & 0xFF));
                                 buf.put((byte) ((value >>> 2) & 0xFF));
-                                break;
+                            }
                         }
-                        break;
-                    default:
+                    }
+                    default ->
                         // Message message = ERR_BASE64_DECODE_INVALID_CHARACTER.get(encodedData,
                         // encodedData.charAt(i + j));
-                        throw new ParseException("Invalid Base64 character '" + encodedData.charAt(i + j) + "'", i + j);
+                            throw new ParseException("Invalid Base64 character '" + encodedData.charAt(i + j) + "'", i + j);
                 }
-
                 if (!append) {
                     break;
                 }

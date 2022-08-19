@@ -13,11 +13,13 @@ public final class MapUtil {
     }
 
     /**
-     * @param map0
-     * @param map1
-     * @return
+     * @param <K>  Key type
+     * @param <V>  Value type
+     * @param map0 Map<K, V>
+     * @param map1 Map<K, V>
+     * @return boolean
      */
-    public static boolean isEquals(Map<?, ?> map0, Map<?, ?> map1) {
+    public static <K, V> boolean isEquals(Map<K, V> map0, Map<K, V> map1) {
         if (map0 == map1)
             return true;
         else if (map0 == null)
@@ -29,11 +31,11 @@ public final class MapUtil {
     }
 
     /**
-     * @param <K>
-     * @param <V>
-     * @param key
-     * @param value
-     * @return
+     * @param <K>   K
+     * @param <V>   V
+     * @param key   K
+     * @param value V
+     * @return Map<K, V>
      */
     public static <K, V> Map<K, V> map(@Nonnull K key, @Nonnull V value) {
         Map<K, V> map = new HashMap<>(1);
@@ -42,17 +44,17 @@ public final class MapUtil {
     }
 
     /**
-     * @param capacity
-     * @return
+     * @param capacity int
+     * @return int
      */
     public static int optimizationCapacity(int capacity) {
         return optimizationCapacity(Capacity.DEFAULT_SIZE, capacity);
     }
 
     /**
-     * @param minCapacity
-     * @param capacity
-     * @return
+     * @param minCapacity int
+     * @param capacity    int
+     * @return int
      */
     public static int optimizationCapacity(int minCapacity, int capacity) {
         minCapacity = BitOperator.minPow2(minCapacity);

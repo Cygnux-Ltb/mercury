@@ -42,8 +42,8 @@ public final class FileUtil {
     }
 
     /**
-     * @param file
-     * @return
+     * @param file File
+     * @return File
      */
     public static File mkdirInTmp(@Nonnull File file) throws NullPointerException {
         Asserter.nonNull(file, "file");
@@ -51,7 +51,7 @@ public final class FileUtil {
     }
 
     /**
-     * @param path
+     * @param path String
      * @return
      */
     public static File mkdirInTmp(@Nonnull String path) throws NullPointerException, IllegalArgumentException {
@@ -200,9 +200,9 @@ public final class FileUtil {
      * it throws an error if the directory does not exist or is not a directory.
      * Also, this method only finds files and will skip including directories.
      *
-     * @param dir
-     * @param filter
-     * @return
+     * @param dir    File
+     * @param filter FileFilter
+     * @return File[]
      * @throws FileNotFoundException
      */
     public static File[] findFiles(File dir, FileFilter filter) throws FileNotFoundException {
@@ -231,7 +231,7 @@ public final class FileUtil {
         }
 
         // based on filesystem, order of files not guaranteed -- sort now
-        File[] r = files.toArray(new File[files.size()]);
+        File[] r = files.toArray(new File[0]);
         Arrays.sort(r);
         return r;
     }
@@ -245,23 +245,24 @@ public final class FileUtil {
     public static Set<File> getRecursiveFiles(File dir) throws IOException {
         if
         (!dir.isDirectory()) {
-            HashSet<File> one = new HashSet<File>();
+            HashSet<File> one = new HashSet<>();
             one.add(dir);
             return one;
         } else {
-            Set<File> ret = recurseDir(dir);
-            return ret;
+            return recurseDir(dir);
         }
     }
 
-    private static Set<File> recurseDir(File dir) throws IOException {
+    private static Set<File> recurseDir(File dir) {
         HashSet<File> c = new HashSet<>();
         File[] files = dir.listFiles();
-        for (int i = 0; i < files.length; i++) {
-            if (files[i].isDirectory()) {
-                c.addAll(recurseDir(files[i]));
-            } else {
-                c.add(files[i]);
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    c.addAll(recurseDir(file));
+                } else {
+                    c.add(file);
+                }
             }
         }
         return c;
@@ -400,8 +401,8 @@ public final class FileUtil {
     }
 
     /**
-     * @param data
-     * @param file
+     * @param data byte[]
+     * @param file File
      * @throws IOException
      */
     public static void flush(byte[] data, File file) throws IOException {
@@ -414,7 +415,7 @@ public final class FileUtil {
     /**
      * Read <CODE>f</CODE> and return as byte[]
      *
-     * @param file
+     * @param file File
      * @return bytes from <CODE>f</CODE>
      * @throws IOException
      */
@@ -427,8 +428,8 @@ public final class FileUtil {
     /**
      * Copy the contents of is to the returned byte array.
      *
-     * @param is
-     * @param close If true, is is closed after the copy.
+     * @param is    InputStream
+     * @param close If true, InputStream is closed after the copy.
      * @throws IOException
      */
 
@@ -444,8 +445,8 @@ public final class FileUtil {
      */
     public static class FileNameDateTimeComparator implements Comparator<File> {
 
-        private TemporalPattern pattern;
-        private ZoneId zoneId;
+        private final TemporalPattern pattern;
+        private final ZoneId zoneId;
 
         /**
          * Creates a default instance where the pattern is "yyyy-MM-dd" and the default
@@ -456,10 +457,7 @@ public final class FileUtil {
         }
 
         public FileNameDateTimeComparator(TemporalPattern pattern, ZoneId zoneId) {
-            if (pattern == null)
-                this.pattern = DatePattern.YYYY_MM_DD;
-            else
-                this.pattern = pattern;
+            this.pattern = (pattern == null) ? DatePattern.YYYY_MM_DD : pattern;
 
             if (zoneId == null)
                 this.zoneId = ZoneOffset.UTC;

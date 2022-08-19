@@ -69,8 +69,7 @@ public final class FileChannelWriter {
                              int capacity, boolean append) throws NullPointerException, IOException {
         return write(lines,
                 line -> line.endsWith(LINE_SEPARATOR) ? line.getBytes(charset)
-                        : new StringBuilder(line.length() + LINE_SEPARATOR.length()).append(line).append(LINE_SEPARATOR)
-                        .toString().getBytes(charset),
+                        : (line + LINE_SEPARATOR).getBytes(charset),
                 target, capacity, append);
     }
 

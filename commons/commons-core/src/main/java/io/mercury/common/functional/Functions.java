@@ -1,17 +1,12 @@
 package io.mercury.common.functional;
 
-import java.util.List;
-import java.util.function.BooleanSupplier;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.function.ToIntFunction;
-import java.util.function.ToLongFunction;
+import org.eclipse.collections.api.block.function.primitive.BooleanFunction;
+import org.eclipse.collections.impl.list.mutable.FastList;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import org.eclipse.collections.api.block.function.primitive.BooleanFunction;
-import org.eclipse.collections.impl.list.mutable.FastList;
+import java.util.List;
+import java.util.function.*;
 
 public final class Functions {
 
@@ -19,11 +14,11 @@ public final class Functions {
     }
 
     /**
-     * @param <T>
-     * @param supplier
-     * @param successFunc
-     * @param failureFunc
-     * @return
+     * @param <T>         : T
+     * @param supplier    : Supplier<List<T>>
+     * @param successFunc : Function<List<T>, List<T>>
+     * @param failureFunc : ThrowableHandler<? super Exception>
+     * @return List<T>
      */
     public static <T> List<T> exec(@Nonnull final Supplier<List<T>> supplier,
                                    @Nullable final Function<List<T>, List<T>> successFunc,
@@ -32,15 +27,17 @@ public final class Functions {
     }
 
     /**
-     * @param <R>
+     * @param <R>         : Return type
      * @param supplier    : Parameterless function to be executed
      * @param successFunc : After the function succeeds...
      * @param failureFunc : After the function fails...
      * @param defSupplier : default return value supplier...
-     * @return
+     * @return R
      */
-    public static <R> R exec(@Nonnull final Supplier<R> supplier, @Nullable final Function<R, R> successFunc,
-                             @Nullable final ThrowableHandler<? super Exception> failureFunc, @Nullable final Supplier<R> defSupplier) {
+    public static <R> R exec(@Nonnull final Supplier<R> supplier,
+                             @Nullable final Function<R, R> successFunc,
+                             @Nullable final ThrowableHandler<? super Exception> failureFunc,
+                             @Nullable final Supplier<R> defSupplier) {
         try {
             R r = supplier.get();
             if (successFunc != null)
@@ -66,14 +63,14 @@ public final class Functions {
     }
 
     /**
-     * @param <R>
+     * @param <T>         : Supplier<T> return type
      * @param supplier    : Parameterless function to be executed
      * @param successFunc : After the boolean function succeeds...
      * @param failureFunc : After the boolean function fails...
-     * @return
+     * @return R
      */
-    public static <R> boolean execBool(@Nonnull final Supplier<R> supplier,
-                                       @Nonnull final BooleanFunction<R> successFunc,
+    public static <T> boolean execBool(@Nonnull final Supplier<T> supplier,
+                                       @Nonnull final BooleanFunction<T> successFunc,
                                        @Nullable final BooleanFunction<Exception> failureFunc) {
         try {
             return successFunc.booleanValueOf(supplier.get());
@@ -85,14 +82,14 @@ public final class Functions {
     }
 
     /**
-     * @param <R>
+     * @param <T>          : Supplier<T> return type
      * @param supplier     : Parameterless function to be executed
      * @param successFunc  : After the int function succeeds...
      * @param afterFailure : After the int function fails...
-     * @return
+     * @return int
      */
-    public static <R> int execInt(@Nonnull final Supplier<R> supplier,
-                                  @Nonnull final ToIntFunction<R> successFunc,
+    public static <T> int execInt(@Nonnull final Supplier<T> supplier,
+                                  @Nonnull final ToIntFunction<T> successFunc,
                                   @Nullable final ToIntFunction<Exception> afterFailure) {
         try {
             return successFunc.applyAsInt(supplier.get());
@@ -104,14 +101,14 @@ public final class Functions {
     }
 
     /**
-     * @param <R>
+     * @param <T>          : Supplier<T> return type
      * @param supplier     : Parameterless function to be executed
      * @param successFunc  : After the int function succeeds...
      * @param afterFailure : After the int function fails...
-     * @return
+     * @return long
      */
-    public static <R> long execLong(@Nonnull final Supplier<R> supplier,
-                                    @Nonnull final ToLongFunction<R> successFunc,
+    public static <T> long execLong(@Nonnull final Supplier<T> supplier,
+                                    @Nonnull final ToLongFunction<T> successFunc,
                                     @Nullable final ToLongFunction<Exception> afterFailure) {
         try {
             return successFunc.applyAsLong(supplier.get());
@@ -123,11 +120,11 @@ public final class Functions {
     }
 
     /**
-     * @param <R>
-     * @param isHas
-     * @param supplier
-     * @param val
-     * @return
+     * @param <R>      : Return type
+     * @param isHas    :
+     * @param supplier :
+     * @param val      :
+     * @return R
      */
     public static <R> R getOrDefault(@Nonnull BooleanSupplier isHas,
                                      @Nonnull Supplier<R> supplier,
@@ -138,17 +135,16 @@ public final class Functions {
     }
 
     /**
-     * @param <R>
-     * @param isHas
-     * @param supplier
-     * @param exception
-     * @return
-     * @throws E
+     * @param <R>       : Return type
+     * @param isHas     :
+     * @param supplier  :
+     * @param exception :
+     * @return R
+     * @throws E extends Exception
      */
     public static <R, E extends Exception> R getOrThrows(@Nonnull final BooleanSupplier isHas,
                                                          @Nonnull final Supplier<R> supplier,
-                                                         @Nonnull final E exception)
-            throws E {
+                                                         @Nonnull final E exception) throws E {
         if (isHas.getAsBoolean())
             return supplier.get();
         else

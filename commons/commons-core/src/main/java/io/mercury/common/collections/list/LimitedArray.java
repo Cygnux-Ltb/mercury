@@ -19,7 +19,7 @@ public final class LimitedArray<E> extends LimitedContainer<E> {
 		super(capacity);
 		final E[] array = supplier.apply(capacity);
 		if (array.length != capacity)
-			throw new IllegalStateException("setting capacity annd array length not equal");
+			throw new IllegalStateException("setting capacity and array length not equal");
 		this.array = array;
 	}
 

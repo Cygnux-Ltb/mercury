@@ -3,19 +3,17 @@ package io.mercury.common.functional;
 import java.util.function.Supplier;
 
 /**
- * 
- * @author yellow013
- *
  * @param <T>
+ * @author yellow013
  */
 @FunctionalInterface
 public interface Formatter<T> extends Supplier<T> {
 
-	T format();
+    T format();
 
-	@Override
-	default T get() {
-		return format();
-	}
+    @Override
+    default T get() {
+        return format();
+    }
 
 }

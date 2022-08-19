@@ -1,14 +1,13 @@
 package io.mercury.common.io;
 
-import static java.util.Optional.ofNullable;
+import io.mercury.common.character.Charsets;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
-import io.mercury.common.character.Charsets;
-
-import javax.annotation.Nonnull;
+import static java.util.Optional.ofNullable;
 
 /**
  * 基于快速缓冲FastByteBuffer的OutputStream，随着数据的增长自动扩充缓冲区

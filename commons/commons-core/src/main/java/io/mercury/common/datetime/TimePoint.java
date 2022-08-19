@@ -1,10 +1,9 @@
 package io.mercury.common.datetime;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 public final class TimePoint implements Comparable<TimePoint> {
 

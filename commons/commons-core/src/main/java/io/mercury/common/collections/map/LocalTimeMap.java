@@ -1,13 +1,12 @@
 package io.mercury.common.collections.map;
 
+import io.mercury.common.datetime.DateTimeUtil;
+
+import javax.annotation.concurrent.NotThreadSafe;
 import java.time.LocalTime;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.ToLongFunction;
-
-import javax.annotation.concurrent.NotThreadSafe;
-
-import io.mercury.common.datetime.DateTimeUtil;
 
 @NotThreadSafe
 public final class LocalTimeMap<V> extends TemporalMap<LocalTime, V, LocalTimeMap<V>> {
@@ -18,8 +17,9 @@ public final class LocalTimeMap<V> extends TemporalMap<LocalTime, V, LocalTimeMa
         super(keyFunc, nextKeyFunc, hasNextKey);
     }
 
-    private static final BiPredicate<LocalTime, LocalTime> HasNextKey
-            = (nextKey, endPoint) -> nextKey.isBefore(endPoint) || nextKey.equals(endPoint);
+    private static final BiPredicate<LocalTime, LocalTime> HasNextKey =
+            (nextKey, endPoint) -> nextKey.isBefore(endPoint)
+                    || nextKey.equals(endPoint);
 
     /**
      * @return V

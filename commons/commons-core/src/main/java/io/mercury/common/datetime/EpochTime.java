@@ -64,18 +64,12 @@ public final class EpochTime {
 	 */
 	public static long getEpochs(@Nonnull EpochUnit unit) {
 		nonNull(unit, "unit");
-		switch (unit) {
-		case SECOND:
-			return getEpochSeconds();
-		case MILLIS:
-			return getEpochMillis();
-		case MICROS:
-			return getEpochMicros();
-		case NANOS:
-			return getEpochNanos();
-		default:
-			return 0L;
-		}
+		return switch (unit) {
+			case SECOND -> getEpochSeconds();
+			case MILLIS -> getEpochMillis();
+			case MICROS -> getEpochMicros();
+			case NANOS -> getEpochNanos();
+		};
 	}
 
 	/**
