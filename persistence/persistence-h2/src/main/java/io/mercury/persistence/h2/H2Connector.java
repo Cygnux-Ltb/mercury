@@ -36,7 +36,7 @@ public class H2Connector {
 	 * 
 	 * @return H2Connector
 	 */
-	public static final H2Connector mem() {
+	public static H2Connector mem() {
 		return new H2Connector(MemMode);
 	}
 

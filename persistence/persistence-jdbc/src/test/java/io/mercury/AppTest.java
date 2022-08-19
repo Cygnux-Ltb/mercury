@@ -1,5 +1,6 @@
 package io.mercury;
 
+import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -29,7 +30,7 @@ public class AppTest extends TestCase {
      * Rigourous Test :-)
      */
     public void testApp() {
-        assertTrue(true);
+        Assert.assertTrue(true);
     }
 
 }

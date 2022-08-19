@@ -47,7 +47,7 @@ public class ChronicleMapKeeper<K, V> extends FilesKeeper<String, ChronicleMap<K
         //构建器
         return ChronicleHashStorage
                 // 设置KeyClass, ValueClass, SavePath, filename
-                .newMapBuilder(cfg.getKeyClass(), cfg.getValueClass(), cfg.getSavePath().getAbsolutePath(), filename)
+                .newMap(cfg.getKeyClass(), cfg.getValueClass(), cfg.getSavePath().getAbsolutePath(), filename)
                 // 持久化选项
                 .setPersistent(cfg.isPersistent())
                 // 恢复选项

@@ -32,7 +32,7 @@ public final class H2Util {
 	 * @param dbName
 	 * @return
 	 */
-	public static final String getH2UrlInHome(@Nonnull String dir, @Nonnull String dbName) {
+	public static String getH2UrlInHome(@Nonnull String dir, @Nonnull String dbName) {
 		if (!dbName.endsWith(".db"))
 			dbName = dbName + ".db";
 		mkdirInHome(dir);
@@ -49,8 +49,8 @@ public final class H2Util {
 	 * @return
 	 * @throws SQLException
 	 */
-	public static final <T> List<T> query(@Nonnull Connection connection, @Nonnull String sql,
-			@Nonnull ResultSetProcessor processor, @Nonnull Class<T> type) throws SQLException {
+	public static <T> List<T> query(@Nonnull Connection connection, @Nonnull String sql,
+									@Nonnull ResultSetProcessor processor, @Nonnull Class<T> type) throws SQLException {
 		Asserter.nonNull(connection, "connection");
 		try (// create a database connection
 				Statement st = connection.createStatement();

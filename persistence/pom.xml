@@ -18,6 +18,7 @@
     <modules>
         <module>persistence-chronicle</module>
         <module>persistence-h2</module>
+        <module>persistence-jdbc</module>
         <module>persistence-log4j2-hp</module>
         <!-- <module>persistence-kyotocabinet</module> -->
         <module>persistence-rocksdb</module>

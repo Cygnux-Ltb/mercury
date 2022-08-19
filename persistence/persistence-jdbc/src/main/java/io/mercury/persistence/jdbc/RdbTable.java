@@ -1,4 +1,4 @@
-package io.mercury.persistence.sqlite;
+package io.mercury.persistence.jdbc;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

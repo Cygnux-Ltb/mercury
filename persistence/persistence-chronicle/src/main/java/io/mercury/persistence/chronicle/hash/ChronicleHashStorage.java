@@ -19,32 +19,32 @@ import static io.mercury.common.util.StringSupport.fixPath;
 public class ChronicleHashStorage {
 
 
-    public static <K, V> MapBuilder<K, V> newMapBuilder(@Nonnull Class<K> keyType, @Nonnull Class<V> valueType) {
-        return newMapBuilder(keyType, valueType, "auto-create-map-" + DateTimeUtil.datetimeOfSecond());
+    public static <K, V> MapBuilder<K, V> newMap(@Nonnull Class<K> keyType, @Nonnull Class<V> valueType) {
+        return newMap(keyType, valueType, "auto-create-map-" + DateTimeUtil.datetimeOfSecond());
     }
 
-    public static <K, V> MapBuilder<K, V> newMapBuilder(@Nonnull Class<K> keyType, @Nonnull Class<V> valueType,
-                                                        @Nonnull String filename) {
-        return newMapBuilder(keyType, valueType, JAVA_IO_TMPDIR + "/chronicle-map/", filename);
+    public static <K, V> MapBuilder<K, V> newMap(@Nonnull Class<K> keyType, @Nonnull Class<V> valueType,
+                                                 @Nonnull String filename) {
+        return newMap(keyType, valueType, JAVA_IO_TMPDIR + "/chronicle-map/", filename);
     }
 
-    public static <K, V> MapBuilder<K, V> newMapBuilder(@Nonnull Class<K> keyType, @Nonnull Class<V> valueType,
-                                                        @Nonnull String savePath, @Nonnull String filename) {
+    public static <K, V> MapBuilder<K, V> newMap(@Nonnull Class<K> keyType, @Nonnull Class<V> valueType,
+                                                 @Nonnull String savePath, @Nonnull String filename) {
         return new MapBuilder<>(keyType, valueType, savePath, filename);
     }
 
 
-    public static <E> SetBuilder<E> newSetBuilder(@Nonnull Class<E> elementType) {
-        return newSetBuilder(elementType, "auto-create-set-" + DateTimeUtil.datetimeOfSecond());
+    public static <E> SetBuilder<E> newSet(@Nonnull Class<E> elementType) {
+        return newSet(elementType, "auto-create-set-" + DateTimeUtil.datetimeOfSecond());
     }
 
-    public static <E> SetBuilder<E> newSetBuilder(@Nonnull Class<E> elementType,
-                                                  @Nonnull String filename) {
-        return newSetBuilder(elementType, JAVA_IO_TMPDIR + "/chronicle-set/", filename);
+    public static <E> SetBuilder<E> newSet(@Nonnull Class<E> elementType,
+                                           @Nonnull String filename) {
+        return newSet(elementType, JAVA_IO_TMPDIR + "/chronicle-set/", filename);
     }
 
-    public static <E> SetBuilder<E> newSetBuilder(@Nonnull Class<E> elementType,
-                                                  @Nonnull String savePath, @Nonnull String filename) {
+    public static <E> SetBuilder<E> newSet(@Nonnull Class<E> elementType,
+                                           @Nonnull String savePath, @Nonnull String filename) {
         return new SetBuilder<E>(elementType, savePath, filename);
     }
 
