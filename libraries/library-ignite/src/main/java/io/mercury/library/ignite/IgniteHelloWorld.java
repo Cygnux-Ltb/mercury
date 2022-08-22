@@ -1,8 +1,5 @@
 package io.mercury.library.ignite;
 
-import java.io.Serial;
-import java.util.Collections;
-
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.IgniteException;
@@ -12,6 +9,9 @@ import org.apache.ignite.lang.IgniteRunnable;
 import org.apache.ignite.resources.IgniteInstanceResource;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder;
+
+import java.io.Serial;
+import java.util.Collections;
 
 /**
  *
@@ -49,7 +49,7 @@ public class IgniteHelloWorld {
     }
 
     /**
-     * A compute tasks that prints out a node ID and some details about its OS and
+     * A Compute tasks that prints out a node ID and some details about its OS and
      * JRE. Plus, the code shows how to access data stored in a cache from the
      * compute task.
      */
@@ -72,5 +72,6 @@ public class IgniteHelloWorld {
 
             System.out.println(">> " + cache.get(1) + " " + cache.get(2));
         }
+
     }
 }
