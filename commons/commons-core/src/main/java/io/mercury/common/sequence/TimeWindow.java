@@ -54,7 +54,8 @@ public class TimeWindow implements Serial<TimeWindow> {
         return new TimeWindow(window);
     }
 
-    public static TimeWindow with(@Nonnull LocalDateTime start, @Nonnull LocalDateTime end,
+    public static TimeWindow with(@Nonnull LocalDateTime start,
+                                  @Nonnull LocalDateTime end,
                                   @Nonnull ZoneOffset offset) {
         return new TimeWindow(start, end, offset);
     }
@@ -65,8 +66,9 @@ public class TimeWindow implements Serial<TimeWindow> {
      * @param duration Duration
      * @return ImmutableList<TimeWindow>
      */
-    public static ImmutableList<TimeWindow> segmentationWindow(LocalTime start, LocalTime end,
-                                                               Duration duration) {
+    public static ImmutableList<TimeWindow> segmentationWindow(@Nonnull LocalTime start,
+                                                               @Nonnull LocalTime end,
+                                                               @Nonnull Duration duration) {
         return segmentationWindow(start, end, SYS_DEFAULT, duration);
     }
 
@@ -77,8 +79,10 @@ public class TimeWindow implements Serial<TimeWindow> {
      * @param duration Duration
      * @return ImmutableList<TimeWindow>
      */
-    public static ImmutableList<TimeWindow> segmentationWindow(LocalTime start, LocalTime end, ZoneOffset offset,
-                                                               Duration duration) {
+    public static ImmutableList<TimeWindow> segmentationWindow(@Nonnull LocalTime start,
+                                                               @Nonnull LocalTime end,
+                                                               @Nonnull ZoneOffset offset,
+                                                               @Nonnull Duration duration) {
         return segmentationWindow(LocalDate.now(offset), start, end, offset, duration);
     }
 
@@ -89,8 +93,10 @@ public class TimeWindow implements Serial<TimeWindow> {
      * @param duration  Duration
      * @return ImmutableList<TimeWindow>
      */
-    public static ImmutableList<TimeWindow> segmentationWindow(LocalDate startDate, LocalTime start,
-                                                               LocalTime end, Duration duration) {
+    public static ImmutableList<TimeWindow> segmentationWindow(@Nonnull LocalDate startDate,
+                                                               @Nonnull LocalTime start,
+                                                               @Nonnull LocalTime end,
+                                                               @Nonnull Duration duration) {
         return segmentationWindow(startDate, start, end, SYS_DEFAULT, duration);
     }
 
@@ -102,10 +108,14 @@ public class TimeWindow implements Serial<TimeWindow> {
      * @param duration  Duration
      * @return ImmutableList<TimeWindow>
      */
-    public static ImmutableList<TimeWindow> segmentationWindow(LocalDate startDate, LocalTime start,
-                                                               LocalTime end, ZoneOffset offset, Duration duration) {
+    public static ImmutableList<TimeWindow> segmentationWindow(@Nonnull LocalDate startDate,
+                                                               @Nonnull LocalTime start,
+                                                               @Nonnull LocalTime end,
+                                                               @Nonnull ZoneOffset offset,
+                                                               @Nonnull Duration duration) {
         return segmentationWindow(LocalDateTime.of(startDate, start),
-                LocalDateTime.of(start.isAfter(end) ? startDate.plusDays(1) : startDate, end), offset, duration);
+                LocalDateTime.of(start.isAfter(end)
+                        ? startDate.plusDays(1) : startDate, end), offset, duration);
     }
 
     /**
@@ -114,8 +124,9 @@ public class TimeWindow implements Serial<TimeWindow> {
      * @param duration Duration
      * @return ImmutableList<TimeWindow>
      */
-    public static ImmutableList<TimeWindow> segmentationWindow(LocalDateTime start, LocalDateTime end,
-                                                               Duration duration) {
+    public static ImmutableList<TimeWindow> segmentationWindow(@Nonnull LocalDateTime start,
+                                                               @Nonnull LocalDateTime end,
+                                                               @Nonnull Duration duration) {
         return segmentationWindow(start, end, SYS_DEFAULT, duration);
     }
 
@@ -126,8 +137,10 @@ public class TimeWindow implements Serial<TimeWindow> {
      * @param duration Duration
      * @return ImmutableList<TimeWindow>
      */
-    public static ImmutableList<TimeWindow> segmentationWindow(LocalDateTime start, LocalDateTime end,
-                                                               ZoneOffset offset, Duration duration) {
+    public static ImmutableList<TimeWindow> segmentationWindow(@Nonnull LocalDateTime start,
+                                                               @Nonnull LocalDateTime end,
+                                                               @Nonnull ZoneOffset offset,
+                                                               @Nonnull Duration duration) {
         if (end.isBefore(start))
             throw new IllegalArgumentException("the end time can not before start time");
         Duration between = Duration.between(start, end);
@@ -162,7 +175,7 @@ public class TimeWindow implements Serial<TimeWindow> {
      * @param time LocalDateTime
      * @return boolean
      */
-    public boolean isPeriod(LocalDateTime time) {
+    public boolean isPeriod(@Nonnull LocalDateTime time) {
         return start.equals(time) || (start.isBefore(time) && end.isAfter(time));
     }
 
@@ -198,8 +211,9 @@ public class TimeWindow implements Serial<TimeWindow> {
     }
 
     public static void main(String[] args) {
-        ImmutableList<TimeWindow> windows = TimeWindow.segmentationWindow(LocalDate.now(), LocalTime.NOON,
-                LocalTime.of(9, 17), Duration.ofMinutes(5));
+        ImmutableList<TimeWindow> windows =
+                TimeWindow.segmentationWindow(LocalDate.now(), LocalTime.NOON,
+                        LocalTime.of(9, 17), Duration.ofMinutes(5));
 
         windows.each(System.out::println);
         System.out.println();

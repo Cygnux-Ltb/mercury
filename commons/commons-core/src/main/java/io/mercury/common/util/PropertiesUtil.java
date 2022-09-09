@@ -1,29 +1,22 @@
-package io.mercury.common.config;
+package io.mercury.common.util;
 
-import static java.lang.Boolean.parseBoolean;
-import static java.lang.Double.parseDouble;
-import static java.lang.Integer.parseInt;
+import io.mercury.common.character.Charsets;
+import io.mercury.common.lang.Asserter;
+import io.mercury.common.sys.LibraryPathManager;
+import org.slf4j.Logger;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.slf4j.Logger;
-
-import io.mercury.common.character.Charsets;
-import io.mercury.common.lang.Asserter;
-import io.mercury.common.sys.LibraryPathManager;
-import io.mercury.common.util.StringSupport;
+import static java.lang.Boolean.parseBoolean;
+import static java.lang.Double.parseDouble;
+import static java.lang.Integer.parseInt;
 
 public final class PropertiesUtil {
 

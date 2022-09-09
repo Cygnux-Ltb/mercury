@@ -1,8 +1,10 @@
 package io.mercury.common.thread;
 
-import static io.mercury.common.thread.ThreadSupport.newMaxPriorityThread;
-import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
+import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.sys.CurrentRuntime;
+import org.slf4j.Logger;
 
+import javax.annotation.Nonnull;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Timer;
@@ -11,10 +13,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-
-import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.common.sys.CurrentRuntime;
+import static io.mercury.common.thread.ThreadSupport.newMaxPriorityThread;
+import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 
 public final class ScheduleTaskExecutor {
 
@@ -24,24 +24,27 @@ public final class ScheduleTaskExecutor {
     }
 
     /**
-     * @param firstTime
-     * @param runnable
-     * @return
+     * @param firstTime LocalDateTime
+     * @param runnable  Runnable
+     * @return Timer
      */
     @Deprecated
-    public static Timer startDelayTask(LocalDateTime firstTime, Runnable runnable) {
+    public static Timer startDelayTask(@Nonnull LocalDateTime firstTime,
+                                       @Nonnull Runnable runnable) {
         return startDelayTask(Duration.between(LocalDateTime.now(), firstTime).toMillis(), TimeUnit.MILLISECONDS,
                 runnable);
     }
 
     /**
-     * @param delay
-     * @param unit
-     * @param runnable
-     * @return
+     * @param delay    long
+     * @param unit     TimeUnit
+     * @param runnable Runnable
+     * @return Timer
      */
     @Deprecated
-    public static Timer startDelayTask(long delay, TimeUnit unit, Runnable runnable) {
+    public static Timer startDelayTask(long delay,
+                                       @Nonnull TimeUnit unit,
+                                       @Nonnull Runnable runnable) {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -57,27 +60,32 @@ public final class ScheduleTaskExecutor {
     }
 
     /**
-     * @param firstTime
-     * @param period
-     * @param unit
-     * @param runnable
-     * @return
+     * @param firstTime LocalDateTime
+     * @param period    long
+     * @param unit      TimeUnit
+     * @param runnable  Runnable
+     * @return Timer
      */
     @Deprecated
-    public static Timer startCycleTask(LocalDateTime firstTime, long period, TimeUnit unit, Runnable runnable) {
-        return startCycleTask(Duration.between(LocalDateTime.now(), firstTime).toMillis(), unit.toMillis(period),
-                TimeUnit.MILLISECONDS, runnable);
+    public static Timer startCycleTask(@Nonnull LocalDateTime firstTime, long period,
+                                       @Nonnull TimeUnit unit,
+                                       @Nonnull Runnable runnable) {
+        return startCycleTask(
+                Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+                unit.toMillis(period), TimeUnit.MILLISECONDS, runnable);
     }
 
     /**
-     * @param delay
-     * @param period
-     * @param unit
-     * @param runnable
-     * @return
+     * @param delay    long
+     * @param period   long
+     * @param unit     TimeUnit
+     * @param runnable Runnable
+     * @return Timer
      */
     @Deprecated
-    public static Timer startCycleTask(long delay, long period, TimeUnit unit, Runnable runnable) {
+    public static Timer startCycleTask(long delay, long period,
+                                       @Nonnull TimeUnit unit,
+                                       @Nonnull Runnable runnable) {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -93,28 +101,32 @@ public final class ScheduleTaskExecutor {
     }
 
     /**
-     * @param firstTime
-     * @param period
-     * @param unit
-     * @param runnable
-     * @return
+     * @param firstTime LocalDateTime
+     * @param period    long
+     * @param unit      TimeUnit
+     * @param runnable  Runnable
+     * @return Timer
      */
     @Deprecated
-    public static Timer startFixedRateCycleTask(LocalDateTime firstTime, long period, TimeUnit unit,
-                                                Runnable runnable) {
-        return startFixedRateCycleTask(Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+    public static Timer startFixedRateCycleTask(@Nonnull LocalDateTime firstTime, long period,
+                                                @Nonnull TimeUnit unit,
+                                                @Nonnull Runnable runnable) {
+        return startFixedRateCycleTask(
+                Duration.between(LocalDateTime.now(), firstTime).toMillis(),
                 unit.toMillis(period), TimeUnit.MILLISECONDS, runnable);
     }
 
     /**
-     * @param delay
-     * @param period
-     * @param unit
-     * @param runnable
-     * @return
+     * @param delay    long
+     * @param period   long
+     * @param unit     TimeUnit
+     * @param runnable Runnable
+     * @return Timer
      */
     @Deprecated
-    public static Timer startFixedRateCycleTask(long delay, long period, TimeUnit unit, Runnable runnable) {
+    public static Timer startFixedRateCycleTask(long delay, long period,
+                                                @Nonnull TimeUnit unit,
+                                                @Nonnull Runnable runnable) {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate((new TimerTask() {
             @Override
@@ -132,30 +144,35 @@ public final class ScheduleTaskExecutor {
     /**
      * SingleThreadExecutor
      */
-    public static final ScheduledExecutorService SINGLE_THREAD_SCHEDULED_EXECUTOR = newSingleThreadScheduledExecutor(
-            runnable -> newMaxPriorityThread("SingleThreadScheduledExecutor", runnable));
+    public static final ScheduledExecutorService SINGLE_THREAD_SCHEDULED_EXECUTOR =
+            newSingleThreadScheduledExecutor(
+                    runnable ->
+                            newMaxPriorityThread("SingleThreadScheduledExecutor", runnable));
 
     /**
      * Creates and executes a one-shot action that becomes enabled after the given
      * delay.
      *
-     * @param firstTime
-     * @param runnable
+     * @param firstTime LocalDateTime
+     * @param runnable  Runnable
      */
-    public static void singleThreadSchedule(LocalDateTime firstTime, Runnable runnable) {
-        singleThreadSchedule(Duration.between(LocalDateTime.now(), firstTime).toMillis(), TimeUnit.MILLISECONDS,
-                runnable);
+    public static void singleThreadSchedule(@Nonnull LocalDateTime firstTime,
+                                            @Nonnull Runnable runnable) {
+        singleThreadSchedule(Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+                TimeUnit.MILLISECONDS, runnable);
     }
 
     /**
      * Creates and executes a one-shot action that becomes enabled after the given
      * delay.
      *
-     * @param timeUnit
-     * @param delay
-     * @param runnable
+     * @param delay    long
+     * @param timeUnit TimeUnit
+     * @param runnable Runnable
      */
-    public static void singleThreadSchedule(long delay, TimeUnit timeUnit, Runnable runnable) {
+    public static void singleThreadSchedule(long delay,
+                                            @Nonnull TimeUnit timeUnit,
+                                            @Nonnull Runnable runnable) {
         SINGLE_THREAD_SCHEDULED_EXECUTOR.schedule(runnable, delay, timeUnit);
     }
 
@@ -169,14 +186,16 @@ public final class ScheduleTaskExecutor {
      * The given delay between the termination of one execution <br>
      * and the commencement of the next.
      *
-     * @param firstTime
-     * @param unit
-     * @param period
-     * @param runnable
+     * @param firstTime LocalDateTime
+     * @param period    long
+     * @param unit      TimeUnit
+     * @param runnable  Runnable
      */
-    public static void singleThreadScheduleWithFixedDelay(LocalDateTime firstTime, long period, TimeUnit unit,
-                                                          Runnable runnable) {
-        singleThreadScheduleWithFixedDelay(Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+    public static void singleThreadScheduleWithFixedDelay(@Nonnull LocalDateTime firstTime, long period,
+                                                          @Nonnull TimeUnit unit,
+                                                          @Nonnull Runnable runnable) {
+        singleThreadScheduleWithFixedDelay(
+                Duration.between(LocalDateTime.now(), firstTime).toMillis(),
                 unit.toMillis(period), TimeUnit.MILLISECONDS, runnable);
     }
 
@@ -190,13 +209,14 @@ public final class ScheduleTaskExecutor {
      * The given delay between the termination of one execution <br>
      * and the commencement of the next.
      *
-     * @param initialDelay
-     * @param delay
-     * @param unit
-     * @param runnable
+     * @param initialDelay long
+     * @param delay        long
+     * @param unit         TimeUnit
+     * @param runnable     Runnable
      */
-    public static void singleThreadScheduleWithFixedDelay(long initialDelay, long delay, TimeUnit unit,
-                                                          Runnable runnable) {
+    public static void singleThreadScheduleWithFixedDelay(long initialDelay, long delay,
+                                                          @Nonnull TimeUnit unit,
+                                                          @Nonnull Runnable runnable) {
         SINGLE_THREAD_SCHEDULED_EXECUTOR.scheduleWithFixedDelay(runnable, initialDelay, delay, unit);
     }
 
@@ -211,14 +231,16 @@ public final class ScheduleTaskExecutor {
      * That is executions will commence after initialDelay <br>
      * then initialDelay + period, then initialDelay + 2 * period, and so on. <br>
      *
-     * @param firstTime
-     * @param period
-     * @param period
-     * @param runnable
+     * @param firstTime LocalDateTime
+     * @param period    long
+     * @param unit      TimeUnit
+     * @param runnable  Runnable
      */
-    public static void singleThreadScheduleAtFixedRate(LocalDateTime firstTime, long period, TimeUnit unit,
-                                                       Runnable runnable) {
-        singleThreadScheduleAtFixedRate(Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+    public static void singleThreadScheduleAtFixedRate(@Nonnull LocalDateTime firstTime, long period,
+                                                       @Nonnull TimeUnit unit,
+                                                       @Nonnull Runnable runnable) {
+        singleThreadScheduleAtFixedRate(
+                Duration.between(LocalDateTime.now(), firstTime).toMillis(),
                 unit.toMillis(period), TimeUnit.MILLISECONDS, runnable);
     }
 
@@ -233,13 +255,14 @@ public final class ScheduleTaskExecutor {
      * That is executions will commence after initialDelay <br>
      * then initialDelay + period, then initialDelay + 2 * period, and so on. <br>
      *
-     * @param initialDelay
-     * @param period
-     * @param unit
-     * @param runnable
+     * @param initialDelay long
+     * @param period       long
+     * @param unit         TimeUnit
+     * @param runnable     Runnable
      */
-    public static void singleThreadScheduleAtFixedRate(long initialDelay, long period, TimeUnit unit,
-                                                       Runnable runnable) {
+    public static void singleThreadScheduleAtFixedRate(long initialDelay, long period,
+                                                       @Nonnull TimeUnit unit,
+                                                       @Nonnull Runnable runnable) {
         SINGLE_THREAD_SCHEDULED_EXECUTOR.scheduleAtFixedRate(runnable, initialDelay, period, unit);
     }
 
@@ -247,30 +270,34 @@ public final class ScheduleTaskExecutor {
      * MultiThreadExecutor 线程数为: 核心数量 * 2
      */
     public static final ScheduledExecutorService MULTIPLE_THREAD_SCHEDULED_EXECUTOR =
-            Executors.newScheduledThreadPool(CurrentRuntime.availableProcessors() * 2,
+            Executors.newScheduledThreadPool(
+                    CurrentRuntime.availableProcessors() * 2,
                     runnable -> new Thread(runnable, "MultipleThreadScheduledExecutor"));
 
     /**
      * Creates and executes a one-shot action that becomes enabled after the given
      * delay.
      *
-     * @param firstTime
-     * @param runnable
+     * @param firstTime LocalDateTime
+     * @param runnable  Runnable
      */
-    public static void multiThreadSchedule(LocalDateTime firstTime, Runnable runnable) {
-        multiThreadSchedule(Duration.between(LocalDateTime.now(), firstTime).toMillis(), TimeUnit.MILLISECONDS,
-                runnable);
+    public static void multiThreadSchedule(@Nonnull LocalDateTime firstTime,
+                                           @Nonnull Runnable runnable) {
+        multiThreadSchedule(
+                Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+                TimeUnit.MILLISECONDS, runnable);
     }
 
     /**
      * Creates and executes a one-shot action that becomes enabled after the given
      * delay.
      *
-     * @param delay
-     * @param unit
-     * @param runnable
+     * @param delay    long
+     * @param unit     TimeUnit
+     * @param runnable Runnable
      */
-    public static void multiThreadSchedule(long delay, TimeUnit unit, Runnable runnable) {
+    public static void multiThreadSchedule(long delay, @Nonnull TimeUnit unit,
+                                           @Nonnull Runnable runnable) {
         MULTIPLE_THREAD_SCHEDULED_EXECUTOR.schedule(runnable, delay, unit);
     }
 
@@ -284,14 +311,16 @@ public final class ScheduleTaskExecutor {
      * The given delay between the termination of one execution <br>
      * and the commencement of the next.
      *
-     * @param firstTime
-     * @param period
-     * @param unit
-     * @param runnable
+     * @param firstTime LocalDateTime
+     * @param period    long
+     * @param unit      TimeUnit
+     * @param runnable  Runnable
      */
-    public static void multiThreadScheduleWithFixedDelay(LocalDateTime firstTime, long period, TimeUnit unit,
-                                                         Runnable runnable) {
-        multiThreadScheduleWithFixedDelay(Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+    public static void multiThreadScheduleWithFixedDelay(@Nonnull LocalDateTime firstTime, long period,
+                                                         @Nonnull TimeUnit unit,
+                                                         @Nonnull Runnable runnable) {
+        multiThreadScheduleWithFixedDelay(
+                Duration.between(LocalDateTime.now(), firstTime).toMillis(),
                 unit.toMillis(period), TimeUnit.MILLISECONDS, runnable);
     }
 
@@ -305,12 +334,14 @@ public final class ScheduleTaskExecutor {
      * The given delay between the termination of one execution <br>
      * and the commencement of the next.
      *
-     * @param delay
-     * @param period
-     * @param unit
-     * @param runnable
+     * @param delay    long
+     * @param period   long
+     * @param unit     TimeUnit
+     * @param runnable Runnable
      */
-    public static void multiThreadScheduleWithFixedDelay(long delay, long period, TimeUnit unit, Runnable runnable) {
+    public static void multiThreadScheduleWithFixedDelay(long delay, long period,
+                                                         @Nonnull TimeUnit unit,
+                                                         @Nonnull Runnable runnable) {
         MULTIPLE_THREAD_SCHEDULED_EXECUTOR.scheduleWithFixedDelay(runnable, delay, period, unit);
     }
 
@@ -325,13 +356,14 @@ public final class ScheduleTaskExecutor {
      * That is executions will commence after initialDelay <br>
      * then initialDelay + period, then initialDelay + 2 * period, and so on. <br>
      *
-     * @param firstTime
-     * @param period
-     * @param unit
-     * @param runnable
+     * @param firstTime LocalDateTime
+     * @param period    long
+     * @param unit      TimeUnit
+     * @param runnable  Runnable
      */
-    public static void multiThreadScheduleAtFixedRate(LocalDateTime firstTime, long period, TimeUnit unit,
-                                                      Runnable runnable) {
+    public static void multiThreadScheduleAtFixedRate(@Nonnull LocalDateTime firstTime, long period,
+                                                      @Nonnull TimeUnit unit,
+                                                      @Nonnull Runnable runnable) {
         multiThreadScheduleAtFixedRate(Duration.between(LocalDateTime.now(), firstTime).toMillis(),
                 unit.toMillis(period), TimeUnit.MILLISECONDS, runnable);
     }
@@ -347,12 +379,14 @@ public final class ScheduleTaskExecutor {
      * That is executions will commence after initialDelay <br>
      * then initialDelay + period, then initialDelay + 2 * period, and so on. <br>
      *
-     * @param delay
-     * @param period
-     * @param unit
-     * @param runnable
+     * @param delay    long
+     * @param period   long
+     * @param unit     TimeUnit
+     * @param runnable Runnable
      */
-    public static void multiThreadScheduleAtFixedRate(long delay, long period, TimeUnit unit, Runnable runnable) {
+    public static void multiThreadScheduleAtFixedRate(long delay, long period,
+                                                      @Nonnull TimeUnit unit,
+                                                      @Nonnull Runnable runnable) {
         MULTIPLE_THREAD_SCHEDULED_EXECUTOR.scheduleAtFixedRate(runnable, delay, period, unit);
     }
 

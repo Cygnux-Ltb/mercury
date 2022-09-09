@@ -29,30 +29,40 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
     private static final Logger log = LoggerFactory.getLogger(CommonThreadPool.class);
 
     private CommonThreadPool(String threadPoolName, ThreadPoolBuilder builder,
-                             BiConsumer<Thread, Runnable> beforeHandler, BiConsumer<Runnable, Throwable> afterHandler) {
-        super(builder.corePoolSize, builder.maximumPoolSize, builder.keepAliveTime, builder.timeUnit,
-                builder.workQueue);
+                             BiConsumer<Thread, Runnable> beforeHandler,
+                             BiConsumer<Runnable, Throwable> afterHandler) {
+        super(builder.corePoolSize, builder.maximumPoolSize,
+                builder.keepAliveTime, builder.timeUnit, builder.workQueue);
         init(threadPoolName, beforeHandler, afterHandler);
     }
 
-    private CommonThreadPool(String threadPoolName, ThreadPoolBuilder builder, ThreadFactory threadFactory,
-                             BiConsumer<Thread, Runnable> beforeHandler, BiConsumer<Runnable, Throwable> afterHandler) {
-        super(builder.corePoolSize, builder.maximumPoolSize, builder.keepAliveTime, builder.timeUnit, builder.workQueue,
+    private CommonThreadPool(String threadPoolName, ThreadPoolBuilder builder,
+                             ThreadFactory threadFactory,
+                             BiConsumer<Thread, Runnable> beforeHandler,
+                             BiConsumer<Runnable, Throwable> afterHandler) {
+        super(builder.corePoolSize, builder.maximumPoolSize,
+                builder.keepAliveTime, builder.timeUnit, builder.workQueue,
                 threadFactory);
         init(threadPoolName, beforeHandler, afterHandler);
     }
 
-    private CommonThreadPool(String threadPoolName, ThreadPoolBuilder builder, RejectedExecutionHandler rejectedHandler,
-                             BiConsumer<Thread, Runnable> beforeHandler, BiConsumer<Runnable, Throwable> afterHandler) {
-        super(builder.corePoolSize, builder.maximumPoolSize, builder.keepAliveTime, builder.timeUnit, builder.workQueue,
+    private CommonThreadPool(String threadPoolName, ThreadPoolBuilder builder,
+                             RejectedExecutionHandler rejectedHandler,
+                             BiConsumer<Thread, Runnable> beforeHandler,
+                             BiConsumer<Runnable, Throwable> afterHandler) {
+        super(builder.corePoolSize, builder.maximumPoolSize,
+                builder.keepAliveTime, builder.timeUnit, builder.workQueue,
                 rejectedHandler);
         init(threadPoolName, beforeHandler, afterHandler);
     }
 
-    private CommonThreadPool(String threadPoolName, ThreadPoolBuilder builder, ThreadFactory threadFactory,
-                             RejectedExecutionHandler rejectedHandler, BiConsumer<Thread, Runnable> beforeHandler,
+    private CommonThreadPool(String threadPoolName, ThreadPoolBuilder builder,
+                             ThreadFactory threadFactory,
+                             RejectedExecutionHandler rejectedHandler,
+                             BiConsumer<Thread, Runnable> beforeHandler,
                              BiConsumer<Runnable, Throwable> afterHandler) {
-        super(builder.corePoolSize, builder.maximumPoolSize, builder.keepAliveTime, builder.timeUnit, builder.workQueue,
+        super(builder.corePoolSize, builder.maximumPoolSize,
+                builder.keepAliveTime, builder.timeUnit, builder.workQueue,
                 threadFactory, rejectedHandler);
         init(threadPoolName, beforeHandler, afterHandler);
     }
@@ -163,17 +173,21 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
         }
 
         public ThreadPoolExecutor build(String threadPoolName) {
-            threadPoolName = isNullOrEmpty(threadPoolName) ? "CommonThreadPool-" + ThreadSafeRandoms.randomUnsignedInt()
+            threadPoolName = isNullOrEmpty(threadPoolName)
+                    ? "CommonThreadPool-" + ThreadSafeRandoms.randomUnsignedInt()
                     : threadPoolName;
             if (factory != null && rejectedHandler != null)
-                return new CommonThreadPool(threadPoolName, this, factory, rejectedHandler, beforeHandler,
-                        afterHandler);
+                return new CommonThreadPool(threadPoolName, this,
+                        factory, rejectedHandler, beforeHandler, afterHandler);
             if (factory != null)
-                return new CommonThreadPool(threadPoolName, this, factory, beforeHandler, afterHandler);
+                return new CommonThreadPool(threadPoolName, this,
+                        factory, beforeHandler, afterHandler);
             if (rejectedHandler != null)
-                return new CommonThreadPool(threadPoolName, this, rejectedHandler, beforeHandler, afterHandler);
+                return new CommonThreadPool(threadPoolName, this,
+                        rejectedHandler, beforeHandler, afterHandler);
             else
-                return new CommonThreadPool(threadPoolName, this, beforeHandler, afterHandler);
+                return new CommonThreadPool(threadPoolName, this,
+                        beforeHandler, afterHandler);
         }
 
     }

@@ -65,7 +65,7 @@ public abstract class RunnableComponent {
                 start0();
             } catch (Exception e) {
                 isRunning.set(false);
-                log.error("Component -> {} start0 throw exception -> {}", name, e.getMessage(), e);
+                log.error("Component -> [{}] start0 throw exception -> {}", name, e.getMessage(), e);
                 throw new ComponentStartException(name, e.getMessage(), e);
             }
         } else

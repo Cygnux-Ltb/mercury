@@ -27,7 +27,7 @@ public class JointKeyParams<K extends JointKey> {
     /**
      * @param key K
      * @param b   boolean
-     * @return this
+     * @return JointKeyParams<K>
      */
     public JointKeyParams<K> put(K key, boolean b) {
         param.put(mergeJointKey(key.key0(), key.key1()), Boolean.toString(b));
@@ -43,9 +43,9 @@ public class JointKeyParams<K extends JointKey> {
     }
 
     /**
-     * @param key
-     * @param i
-     * @return
+     * @param key K
+     * @param i   int
+     * @return JointKeyParams<K>
      */
     public JointKeyParams<K> put(K key, int i) {
         param.put(mergeJointKey(key.key0(), key.key1()), Integer.toString(i));
@@ -53,17 +53,17 @@ public class JointKeyParams<K extends JointKey> {
     }
 
     /**
-     * @param key
-     * @return
+     * @param key K
+     * @return int
      */
     public int getInt(K key) {
         return parseInt(param.get(mergeJointKey(key.key0(), key.key1())));
     }
 
     /**
-     * @param key
-     * @param l
-     * @return
+     * @param key K
+     * @param l   long
+     * @return JointKeyParams<K>
      */
     public JointKeyParams<K> put(K key, long l) {
         param.put(mergeJointKey(key.key0(), key.key1()), Long.toString(l));
@@ -71,17 +71,17 @@ public class JointKeyParams<K extends JointKey> {
     }
 
     /**
-     * @param key
-     * @return
+     * @param key K
+     * @return long
      */
     public long getLong(K key) {
         return parseLong(param.get(mergeJointKey(key.key0(), key.key1())));
     }
 
     /**
-     * @param key
-     * @param d
-     * @return
+     * @param key K
+     * @param d   double
+     * @return JointKeyParams<K>
      */
     public JointKeyParams<K> put(K key, double d) {
         param.put(mergeJointKey(key.key0(), key.key1()), Double.toString(d));
@@ -89,17 +89,17 @@ public class JointKeyParams<K extends JointKey> {
     }
 
     /**
-     * @param key
-     * @return
+     * @param key K
+     * @return double
      */
     public double getDouble(K key) {
         return parseDouble(param.get(mergeJointKey(key.key0(), key.key1())));
     }
 
     /**
-     * @param key
-     * @param str
-     * @return
+     * @param key K
+     * @param str String
+     * @return JointKeyParams<K>
      */
     public JointKeyParams<K> put(K key, String str) {
         param.put(mergeJointKey(key.key0(), key.key1()), str);
@@ -107,17 +107,17 @@ public class JointKeyParams<K extends JointKey> {
     }
 
     /**
-     * @param key
-     * @return
+     * @param key K
+     * @return String
      */
     public String getString(K key) {
         return param.get(mergeJointKey(key.key0(), key.key1()));
     }
 
     /**
-     * @param key
-     * @param date
-     * @return
+     * @param key  K
+     * @param date LocalDate
+     * @return JointKeyParams<K>
      */
     public JointKeyParams<K> put(K key, LocalDate date) {
         put(key, date(date));
@@ -125,17 +125,17 @@ public class JointKeyParams<K extends JointKey> {
     }
 
     /**
-     * @param key
-     * @return
+     * @param key K
+     * @return LocalDate
      */
     public LocalDate getLocalDate(K key) {
         return toLocalDate(parseInt(param.get(mergeJointKey(key.key0(), key.key1()))));
     }
 
     /**
-     * @param key
-     * @param time
-     * @return
+     * @param key  K
+     * @param time LocalTime
+     * @return JointKeyParams<K>
      */
     public JointKeyParams<K> put(K key, LocalTime time) {
         put(key, timeOfSecond(time));
@@ -143,17 +143,17 @@ public class JointKeyParams<K extends JointKey> {
     }
 
     /**
-     * @param key
-     * @return
+     * @param key K
+     * @return LocalTime
      */
     public LocalTime getLocalTime(K key) {
         return toLocalTime(parseInt(param.get(mergeJointKey(key.key0(), key.key1()))));
     }
 
     /**
-     * @param key
-     * @param datetime
-     * @return
+     * @param key      K
+     * @param datetime LocalDateTime
+     * @return JointKeyParams<K>
      */
     public JointKeyParams<K> put(K key, LocalDateTime datetime) {
         put(key, datetimeOfSecond(datetime));
@@ -161,8 +161,8 @@ public class JointKeyParams<K extends JointKey> {
     }
 
     /**
-     * @param key
-     * @return
+     * @param key K
+     * @return LocalDateTime
      */
     public LocalDateTime getLocalDateTime(K key) {
         return toLocalDateTime(parseInt(param.get(mergeJointKey(key.key0(), key.key1()))));
@@ -171,6 +171,10 @@ public class JointKeyParams<K extends JointKey> {
     /**
      * 将两个int value合并为long value<br>
      * long value高32位为第一个int值, 低32位为第二个int值
+     *
+     * @param highPos int
+     * @param lowPos  int
+     * @return long
      */
     public static long mergeJointKey(int highPos, int lowPos) {
         return BitOperator.merge(highPos, lowPos);
@@ -179,8 +183,8 @@ public class JointKeyParams<K extends JointKey> {
     /**
      * 取出高位数值
      *
-     * @param jointKey
-     * @return
+     * @param jointKey long
+     * @return int
      */
     public static int getHighPos(long jointKey) {
         return BitOperator.getLongHighPos(jointKey);
@@ -189,8 +193,8 @@ public class JointKeyParams<K extends JointKey> {
     /**
      * 取出低位数值
      *
-     * @param jointKey
-     * @return
+     * @param jointKey long
+     * @return int
      */
     public static int getLowPos(long jointKey) {
         return BitOperator.getLongLowPos(jointKey);

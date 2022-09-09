@@ -14,7 +14,8 @@ public final class ShutdownHooks {
     private static final ShutdownHooks INSTANCE = new ShutdownHooks();
 
     private ShutdownHooks() {
-        Runtime.getRuntime().addShutdownHook(new Thread(this::executeShutdownHook, "ShutdownHooksQueueHandleThread"));
+        Runtime.getRuntime().addShutdownHook(
+                new Thread(this::executeShutdownHook, "ShutdownHooksQueueHandleThread"));
     }
 
     private final MutableList<Runnable> shutdownTasks = MutableLists.newFastList(64);
@@ -31,20 +32,25 @@ public final class ShutdownHooks {
     }
 
     /**
-     * @param task
+     * @param task Runnable
      */
     public static synchronized void addSubTask(Runnable task) {
         INSTANCE.shutdownTasks.add(task);
     }
 
     /**
-     * @param hook
-     * @return
+     * @param hook Runnable
+     * @return Thread
      */
     public static Thread addShutdownHook(Runnable hook) {
         return addShutdownHook("ShutdownHooksSubThread-" + ThreadSafeRandoms.randomUnsignedInt(), hook);
     }
 
+    /**
+     * @param threadName String
+     * @param hook       Runnable
+     * @return Thread
+     */
     public static Thread addShutdownHook(String threadName, Runnable hook) {
         Thread thread = ThreadSupport.newThread(threadName, hook);
         Runtime.getRuntime().addShutdownHook(thread);
@@ -52,7 +58,7 @@ public final class ShutdownHooks {
     }
 
     /**
-     * @param closeable
+     * @param closeable Closeable
      */
     public static void closeResourcesWhenShutdown(Closeable closeable) {
         addSubTask(() -> {

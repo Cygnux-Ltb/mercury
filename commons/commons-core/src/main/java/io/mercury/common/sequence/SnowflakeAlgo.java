@@ -35,7 +35,8 @@ public final class SnowflakeAlgo {
     /**
      * 最小基线时间, UTC 2000-01-01 00:00:00.000
      */
-    public static final ZonedDateTime MinimumBaseline = ZonedDateTime.of(LocalDate.of(2000, 1, 1), MIN, UTC);
+    public static final ZonedDateTime MinimumBaseline =
+            ZonedDateTime.of(LocalDate.of(2000, 1, 1), MIN, UTC);
 
     /**
      * 所有者在ID中占的位数
@@ -161,7 +162,7 @@ public final class SnowflakeAlgo {
      * 获得下一个ID (该方法是线程安全的)
      *
      * @return SnowflakeId
-     * @throws ClockBackwardException
+     * @throws ClockBackwardException e
      */
     public synchronized long next() throws ClockBackwardException {
         long currentTimestamp = currentTimeMillis();

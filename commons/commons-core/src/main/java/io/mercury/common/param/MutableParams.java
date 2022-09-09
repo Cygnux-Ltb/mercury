@@ -38,56 +38,37 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     }
 
     /**
-     * @param initializer
+     * @param initializer Supplier<Map<K, ?>>
      */
     public MutableParams(@Nonnull Supplier<Map<K, ?>> initializer) {
         this(initializer.get());
     }
 
     /**
-     * @param map
+     * @param map Map<K, ?>
      */
     public MutableParams(Map<K, ?> map) {
         if (map != null) {
             map.forEach((K key, Object value) -> {
                 switch (key.getValueType()) {
-                    case BOOLEAN:
-                        putParam(key, (boolean) value);
-                        break;
-                    case INT:
-                        putParam(key, (int) value);
-                        break;
-                    case LONG:
-                        putParam(key, (long) value);
-                        break;
-                    case DOUBLE:
-                        putParam(key, (double) value);
-                        break;
-                    case STRING:
-                        putParam(key, (String) value);
-                        break;
-                    case DATE:
-                        putParam(key, (LocalDate) value);
-                        break;
-                    case TIME:
-                        putParam(key, (LocalTime) value);
-                        break;
-                    case DATETIME:
-                        putParam(key, (LocalDateTime) value);
-                        break;
-                    case ZONED_DATETIME:
-                        putParam(key, (ZonedDateTime) value);
-                        break;
-                    default:
-                        Throws.illegalArgument("param: " + key.getParamName());
+                    case BOOLEAN -> putParam(key, (boolean) value);
+                    case INT -> putParam(key, (int) value);
+                    case LONG -> putParam(key, (long) value);
+                    case DOUBLE -> putParam(key, (double) value);
+                    case STRING -> putParam(key, (String) value);
+                    case DATE -> putParam(key, (LocalDate) value);
+                    case TIME -> putParam(key, (LocalTime) value);
+                    case DATETIME -> putParam(key, (LocalDateTime) value);
+                    case ZONED_DATETIME -> putParam(key, (ZonedDateTime) value);
+                    default -> Throws.illegalArgument("param: " + key.getParamName());
                 }
             });
         }
     }
 
     /**
-     * @param key
-     * @return
+     * @param key K
+     * @return boolean
      */
     @Override
     public boolean getBoolean(K key) {
@@ -98,8 +79,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     }
 
     /**
-     * @param key
-     * @return
+     * @param key K
+     * @return int
      */
     @Override
     public int getInt(K key) {
@@ -110,8 +91,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     }
 
     /**
-     * @param key
-     * @return
+     * @param key K
+     * @return long
      */
     @Override
     public long getLong(K key) {
@@ -122,8 +103,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     }
 
     /**
-     * @param key
-     * @return
+     * @param key K
+     * @return double
      */
     @Override
     public double getDouble(K key) {
@@ -134,8 +115,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     }
 
     /**
-     * @param key
-     * @return
+     * @param key K
+     * @return String
      */
     @Override
     public String getString(K key) {
@@ -146,8 +127,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     }
 
     /**
-     * @param key
-     * @return
+     * @param key K
+     * @return LocalDate
      */
     @Override
     public LocalDate getDate(K key) {
@@ -158,8 +139,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     }
 
     /**
-     * @param key
-     * @return
+     * @param key K
+     * @return LocalTime
      */
     @Override
     public LocalTime getTime(K key) {
@@ -170,8 +151,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     }
 
     /**
-     * @param key
-     * @return
+     * @param key K
+     * @return LocalDateTime
      */
     @Override
     public LocalDateTime getDateTime(K key) {
@@ -188,8 +169,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     }
 
     /**
-     * @param key
-     * @param value
+     * @param key   K
+     * @param value boolean
      */
     public void putParam(K key, boolean value) {
         keys.add(key);
@@ -197,8 +178,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     }
 
     /**
-     * @param key
-     * @param value
+     * @param key   K
+     * @param value int
      */
     public void putParam(K key, int value) {
         keys.add(key);
@@ -206,8 +187,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     }
 
     /**
-     * @param key
-     * @param value
+     * @param key   K
+     * @param value long
      */
     public void putParam(K key, long value) {
         keys.add(key);
@@ -215,8 +196,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     }
 
     /**
-     * @param key
-     * @param value
+     * @param key   K
+     * @param value double
      */
     public void putParam(K key, double value) {
         keys.add(key);
@@ -224,8 +205,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     }
 
     /**
-     * @param key
-     * @param value
+     * @param key   K
+     * @param value String
      */
     public void putParam(K key, String value) {
         keys.add(key);
@@ -233,8 +214,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     }
 
     /**
-     * @param key
-     * @param value
+     * @param key   K
+     * @param value LocalDate
      */
     public void putParam(K key, LocalDate value) {
         keys.add(key);
@@ -242,8 +223,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     }
 
     /**
-     * @param key
-     * @param value
+     * @param key   K
+     * @param value LocalTime
      */
     public void putParam(K key, LocalTime value) {
         keys.add(key);
@@ -251,8 +232,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     }
 
     /**
-     * @param key
-     * @param value
+     * @param key   K
+     * @param value LocalDateTime
      */
     public void putParam(K key, LocalDateTime value) {
         keys.add(key);
@@ -260,8 +241,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     }
 
     /**
-     * @param key
-     * @param value
+     * @param key   K
+     * @param value ZonedDateTime
      */
     public void putParam(K key, ZonedDateTime value) {
         keys.add(key);

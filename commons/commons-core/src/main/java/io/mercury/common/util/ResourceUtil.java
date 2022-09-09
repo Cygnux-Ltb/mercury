@@ -11,7 +11,7 @@ public final class ResourceUtil {
 
     /**
      * @param obj Object
-     * @throws Exception
+     * @throws Exception e
      */
     public static <O> void close(@Nullable O obj) throws Exception {
         if (obj != null) {
@@ -24,7 +24,7 @@ public final class ResourceUtil {
 
     /**
      * @param closeable AutoCloseable
-     * @throws Exception
+     * @throws Exception e
      */
     public static void close(@Nullable AutoCloseable closeable) throws Exception {
         if (closeable != null)
@@ -33,7 +33,7 @@ public final class ResourceUtil {
 
     /**
      * @param closeable Closeable
-     * @throws IOException
+     * @throws IOException ioe
      */
     public static void close(@Nullable Closeable closeable) throws IOException {
         if (closeable != null)

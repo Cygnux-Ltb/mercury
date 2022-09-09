@@ -34,8 +34,8 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
      *
      * @param map  Map<?, ?>
      * @param keys K[]
-     * @throws NullPointerException     exception
-     * @throws IllegalArgumentException exception
+     * @throws NullPointerException     e
+     * @throws IllegalArgumentException e
      */
     public ImmutableParams(@Nonnull Map<?, ?> map, @Nonnull K[] keys)
             throws NullPointerException, IllegalArgumentException {
@@ -55,8 +55,8 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
      *
      * @param prop Properties
      * @param keys K[]
-     * @throws NullPointerException     exception
-     * @throws IllegalArgumentException exception
+     * @throws NullPointerException     e
+     * @throws IllegalArgumentException e
      */
     public ImmutableParams(@Nonnull Properties prop, @Nonnull K[] keys)
             throws NullPointerException, IllegalArgumentException {
@@ -74,8 +74,8 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
     /**
      * @param key K
      * @return boolean
-     * @throws IllegalArgumentException exception
-     * @throws NullPointerException     exception
+     * @throws IllegalArgumentException e
+     * @throws NullPointerException     e
      */
     @Override
     public boolean getBoolean(K key) throws IllegalArgumentException, NullPointerException {
@@ -88,9 +88,9 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
     /**
      * @param key K
      * @return int
-     * @throws IllegalArgumentException exception
-     * @throws NullPointerException     exception
-     * @throws NumberFormatException    exception
+     * @throws IllegalArgumentException e
+     * @throws NullPointerException     e
+     * @throws NumberFormatException    e
      */
     @Override
     public int getInt(K key) throws IllegalArgumentException, NullPointerException, NumberFormatException {
@@ -103,9 +103,9 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
     /**
      * @param key K
      * @return long
-     * @throws IllegalArgumentException exception
-     * @throws NullPointerException     exception
-     * @throws NumberFormatException    exception
+     * @throws IllegalArgumentException e
+     * @throws NullPointerException     e
+     * @throws NumberFormatException    e
      */
     @Override
     public long getLong(K key) throws IllegalArgumentException, NullPointerException, NumberFormatException {
@@ -118,9 +118,9 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
     /**
      * @param key K
      * @return double
-     * @throws IllegalArgumentException exception
-     * @throws NullPointerException     exception
-     * @throws NumberFormatException    exception
+     * @throws IllegalArgumentException e
+     * @throws NullPointerException     e
+     * @throws NumberFormatException    e
      */
     @Override
     public double getDouble(K key) throws IllegalArgumentException, NullPointerException, NumberFormatException {
@@ -133,8 +133,8 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
     /**
      * @param key K
      * @return String
-     * @throws IllegalArgumentException exception
-     * @throws NullPointerException     exception
+     * @throws IllegalArgumentException e
+     * @throws NullPointerException     e
      */
     @Override
     public String getString(K key) throws IllegalArgumentException, NullPointerException {

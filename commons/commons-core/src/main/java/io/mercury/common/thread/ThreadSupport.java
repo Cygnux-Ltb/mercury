@@ -69,7 +69,7 @@ public final class ThreadSupport {
     }
 
     /**
-     * @return
+     * @return ThreadPoolExecutor
      */
     public static ThreadPoolExecutor newCommonThreadPool() {
         return CommonThreadPool.newBuilder().build();
@@ -77,7 +77,7 @@ public final class ThreadSupport {
 
     /**
      * @param threadName String
-     * @return
+     * @return java.util.concurrent.ThreadFactory
      */
     public static ThreadFactory newThreadFactory(String threadName) {
         return newThreadFactory(threadName, ThreadPriority.NORM);
@@ -86,7 +86,7 @@ public final class ThreadSupport {
     /**
      * @param threadName String
      * @param priority   ThreadPriority
-     * @return
+     * @return java.util.concurrent.ThreadFactory
      */
     public static ThreadFactory newThreadFactory(String threadName, ThreadPriority priority) {
         return runnable -> newThread(threadName, runnable, priority);
@@ -94,7 +94,7 @@ public final class ThreadSupport {
 
     /**
      * @param threadName String
-     * @return
+     * @return java.util.concurrent.ThreadFactory
      */
     public static ThreadFactory newDaemonThreadFactory(String threadName) {
         return newDaemonThreadFactory(threadName, ThreadPriority.NORM);
@@ -103,7 +103,7 @@ public final class ThreadSupport {
     /**
      * @param threadName String
      * @param priority   ThreadPriority
-     * @return
+     * @return java.util.concurrent.ThreadFactory
      */
     public static ThreadFactory newDaemonThreadFactory(String threadName, ThreadPriority priority) {
         return runnable -> setDaemonThread(newThread(threadName, runnable, priority));
@@ -112,7 +112,7 @@ public final class ThreadSupport {
     /**
      * @param thread   Thread
      * @param priority ThreadPriority
-     * @return
+     * @return java.lang.Thread
      */
     public static Thread setThreadPriority(Thread thread, ThreadPriority priority) {
         thread.setPriority(priority != null ? priority.getValue() : ThreadPriority.NORM.getValue());
@@ -120,8 +120,8 @@ public final class ThreadSupport {
     }
 
     /**
-     * @param thread
-     * @return
+     * @param thread Thread
+     * @return java.lang.Thread
      */
     public static Thread setDaemonThread(Thread thread) {
         thread.setDaemon(true);
@@ -129,9 +129,9 @@ public final class ThreadSupport {
     }
 
     /**
-     * @param thread
-     * @param handler
-     * @return
+     * @param thread  Thread
+     * @param handler UncaughtExceptionHandler
+     * @return java.lang.Thread
      */
     public static Thread setThreadExceptionHandler(Thread thread, UncaughtExceptionHandler handler) {
         thread.setUncaughtExceptionHandler(handler);
@@ -139,129 +139,129 @@ public final class ThreadSupport {
     }
 
     /**
-     * @param runnable
-     * @return
+     * @param runnable Runnable
+     * @return java.lang.Thread
      */
     public static Thread newThread(Runnable runnable) {
         return new Thread(runnable);
     }
 
     /**
-     * @param runnable
-     * @param name
-     * @return
+     * @param name     String
+     * @param runnable Runnable
+     * @return java.lang.Thread
      */
     public static Thread newThread(String name, Runnable runnable) {
         return new Thread(runnable, name);
     }
 
     /**
-     * @param runnable
-     * @param priority
-     * @return
+     * @param runnable Runnable
+     * @param priority ThreadPriority
+     * @return java.lang.Thread
      */
     public static Thread newThread(Runnable runnable, ThreadPriority priority) {
         return setThreadPriority(new Thread(runnable), priority);
     }
 
     /**
-     * @param name
-     * @param runnable
-     * @param priority
-     * @return
+     * @param name     String
+     * @param runnable Runnable
+     * @param priority ThreadPriority
+     * @return java.lang.Thread
      */
     public static Thread newThread(String name, Runnable runnable, ThreadPriority priority) {
         return setThreadPriority(new Thread(runnable, name), priority);
     }
 
     /**
-     * @param runnable
-     * @return
+     * @param runnable Runnable
+     * @return java.lang.Thread
      */
     public static Thread newMaxPriorityThread(Runnable runnable) {
         return setThreadPriority(new Thread(runnable), ThreadPriority.MAX);
     }
 
     /**
-     * @param runnable
-     * @param name
-     * @return
+     * @param name     String
+     * @param runnable Runnable
+     * @return java.lang.Thread
      */
     public static Thread newMaxPriorityThread(String name, Runnable runnable) {
         return setThreadPriority(new Thread(runnable, name), ThreadPriority.MAX);
     }
 
     /**
-     * @param runnable
-     * @return
+     * @param runnable Runnable
+     * @return java.lang.Thread
      */
     public static Thread newMinPriorityThread(Runnable runnable) {
         return setThreadPriority(new Thread(runnable), ThreadPriority.MIN);
     }
 
     /**
-     * @param runnable
-     * @param name
-     * @return
+     * @param name     String
+     * @param runnable Runnable
+     * @return java.lang.Thread
      */
     public static Thread newMinPriorityThread(String name, Runnable runnable) {
         return setThreadPriority(new Thread(runnable, name), ThreadPriority.MIN);
     }
 
     /**
-     * @param runnable
-     * @return
+     * @param runnable Runnable
+     * @return java.lang.Thread
      */
     public static Thread startNewThread(Runnable runnable) {
         return startThread(newThread(runnable));
     }
 
     /**
-     * @param runnable
-     * @param name
-     * @return
+     * @param name     String
+     * @param runnable Runnable
+     * @return java.lang.Thread
      */
     public static Thread startNewThread(String name, Runnable runnable) {
         return startThread(new Thread(runnable, name));
     }
 
     /**
-     * @param runnable
-     * @return
+     * @param runnable Runnable
+     * @return java.lang.Thread
      */
     public static Thread startNewMaxPriorityThread(Runnable runnable) {
         return startThread(newMaxPriorityThread(runnable));
     }
 
     /**
-     * @param runnable
-     * @param name
-     * @return
+     * @param name     String
+     * @param runnable Runnable
+     * @return java.lang.Thread
      */
     public static Thread startNewMaxPriorityThread(String name, Runnable runnable) {
         return startThread(newMaxPriorityThread(name, runnable));
     }
 
     /**
-     * @param runnable
-     * @return
+     * @param runnable Runnable
+     * @return java.lang.Thread
      */
     public static Thread startNewMinPriorityThread(Runnable runnable) {
         return startThread(newMinPriorityThread(runnable));
     }
 
     /**
-     * @param runnable
-     * @param name
-     * @return
+     * @param name     String
+     * @param runnable Runnable
+     * @return java.lang.Thread
      */
     public static Thread startNewMinPriorityThread(String name, Runnable runnable) {
         return startThread(newMinPriorityThread(name, runnable));
     }
 
     /**
-     * @param thread
-     * @return
+     * @param thread Thread
+     * @return java.lang.Thread
      */
     public static Thread startThread(Thread thread) {
         thread.start();
@@ -269,34 +269,35 @@ public final class ThreadSupport {
     }
 
     /**
-     *
+     * @throws RuntimeInterruptedException re
      */
-    public static void join() {
+    public static void join() throws RuntimeInterruptedException {
         join(Thread.currentThread());
     }
 
     /**
-     * @param thread
+     * @param thread Thread
+     * @throws RuntimeInterruptedException re
      */
-    public static void join(Thread thread) {
+    public static void join(Thread thread) throws RuntimeInterruptedException {
         try {
             thread.join();
         } catch (InterruptedException e) {
             log.error("Thread join throw InterruptedException from thread -> id==[{}], name==[{}]", thread.getId(),
                     thread.getName(), e);
-            throw new RuntimeException(e.getMessage(), e);
+            throw new RuntimeInterruptedException(e.getMessage(), e);
         }
     }
 
     /**
-     * @return
+     * @return java.lang.Thread
      */
     public static Thread getCurrentThread() {
         return Thread.currentThread();
     }
 
     /**
-     * @return
+     * @return String
      */
     public static String getCurrentThreadName() {
         return Thread.currentThread().getName();
@@ -358,9 +359,9 @@ public final class ThreadSupport {
     /**
      * Gets all threads if its name matches a regular expression. For example, using
      * a regex of "main" will execute a case-sensitive match for threads with the
-     * exact name of "main". A regex of ".*main.*" will execute a case sensitive
+     * exact name of "main". A regex of ".*main.*" will execute a case-sensitive
      * match for threads with "main" anywhere in their name. A regex of
-     * "(?i).*main.*" will execute a case insensitive match of any thread that has
+     * "(?i).*main.*" will execute a case-insensitive match of any thread that has
      * "main" in its name.
      *
      * @param regex The regular expression to use when matching a threads name. Same

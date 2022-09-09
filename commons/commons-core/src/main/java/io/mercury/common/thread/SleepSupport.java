@@ -17,47 +17,56 @@ public final class SleepSupport {
     }
 
     /**
-     *
+     * Use LockSupport.park()
+     */
+    public static void park() {
+        LockSupport.park();
+    }
+
+    /**
+     * Use LockSupport.parkNanos(1)
      */
     public static void parkNano() {
         LockSupport.parkNanos(1);
     }
 
     /**
-     * @param nanos
+     * Use LockSupport.parkNanos(long nanos)
+     *
+     * @param nanos the maximum number of nanoseconds to wait
      */
     public static void parkNanos(long nanos) {
         LockSupport.parkNanos(nanos);
     }
 
     /**
-     * @param millis
+     * @param millis long
      */
     public static void sleepIgnoreInterrupts(long millis) {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
-            log.error("SleepSupport::sleepIgnoreInterrupts(millis==[{}]) throw InterruptedException -> {}", millis,
-                    e.getMessage(), e);
+            log.error("SleepSupport::sleepIgnoreInterrupts(millis==[{}]) throw InterruptedException -> {}",
+                    millis, e.getMessage(), e);
         }
     }
 
     /**
-     * @param millis
-     * @param nanos
+     * @param millis long
+     * @param nanos  int
      */
     public static void sleepIgnoreInterrupts(long millis, int nanos) {
         try {
             Thread.sleep(millis, nanos);
         } catch (InterruptedException e) {
-            log.error("SleepSupport::sleepIgnoreInterrupts(millis==[{}]) throw InterruptedException -> {}", millis,
-                    e.getMessage(), e);
+            log.error("SleepSupport::sleepIgnoreInterrupts(millis==[{}]) throw InterruptedException -> {}",
+                    millis, e.getMessage(), e);
         }
     }
 
     /**
-     * @param timeUnit
-     * @param time
+     * @param timeUnit TimeUnit
+     * @param time     long
      */
     public static void sleepIgnoreInterrupts(@Nonnull TimeUnit timeUnit, long time) {
         try {
@@ -69,29 +78,30 @@ public final class SleepSupport {
     }
 
     /**
-     * @param millis
-     * @throws RuntimeInterruptedException
+     * @param millis long
+     * @throws RuntimeInterruptedException e
      */
     public static void sleep(long millis) throws RuntimeInterruptedException {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
-            log.error("SleepSupport::sleep(millis==[{}]) throw InterruptedException -> {}", millis, e.getMessage(), e);
+            log.error("SleepSupport::sleep(millis==[{}]) throw InterruptedException -> {}",
+                    millis, e.getMessage(), e);
             throw new RuntimeInterruptedException(e);
         }
     }
 
     /**
-     * @param millis
-     * @param nanos
-     * @throws RuntimeInterruptedException
+     * @param millis long
+     * @param nanos  int
+     * @throws RuntimeInterruptedException e
      */
     public static void sleep(long millis, int nanos) throws RuntimeInterruptedException {
         try {
             Thread.sleep(millis, nanos);
         } catch (InterruptedException e) {
-            log.error("SleepSupport::sleep(millis==[{}], nanos==[{}]) throw InterruptedException -> {}", millis, nanos,
-                    e.getMessage(), e);
+            log.error("SleepSupport::sleep(millis==[{}], nanos==[{}]) throw InterruptedException -> {}",
+                    millis, nanos, e.getMessage(), e);
             throw new RuntimeInterruptedException(e);
         }
     }
@@ -99,14 +109,14 @@ public final class SleepSupport {
     /**
      * @param timeUnit TimeUnit
      * @param time     long
-     * @throws RuntimeInterruptedException
+     * @throws RuntimeInterruptedException e
      */
     public static void sleep(@Nonnull TimeUnit timeUnit, long time) throws RuntimeInterruptedException {
         try {
             timeUnit.sleep(time);
         } catch (InterruptedException e) {
-            log.error("SleepSupport::sleep(timeUnit==[{}], time==[{}]) throw InterruptedException -> {}", timeUnit,
-                    time, e.getMessage(), e);
+            log.error("SleepSupport::sleep(timeUnit==[{}], time==[{}]) throw InterruptedException -> {}",
+                    timeUnit, time, e.getMessage(), e);
             throw new RuntimeInterruptedException(e);
         }
     }

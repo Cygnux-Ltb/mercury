@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -19,7 +20,7 @@ public class TimeAtomicBoolean {
     private long updatedTime;
 
     /**
-     * Creates a new instance with the initalValue. This constructor does not setup
+     * Creates a new instance with the initialValue. This constructor does not set up
      * an expectedValue, so either value will be ok.
      *
      * @param initialValue The initial value of the boolean.
@@ -31,7 +32,7 @@ public class TimeAtomicBoolean {
     }
 
     /**
-     * Creates a new instance with the initalValue. The expectedValue is the value
+     * Creates a new instance with the initialValue. The expectedValue is the value
      * we would expect if this is in a good state.
      *
      * @param initialValue  The initial value of the boolean.
@@ -40,8 +41,8 @@ public class TimeAtomicBoolean {
      */
     public TimeAtomicBoolean(boolean initialValue, boolean expectedValue) {
         this.value = new AtomicBoolean(initialValue);
-        this.updatedTime = System.currentTimeMillis();
         this.expectedValue = expectedValue;
+        this.updatedTime = System.currentTimeMillis();
     }
 
     /**
@@ -51,11 +52,7 @@ public class TimeAtomicBoolean {
      * @return boolean
      */
     public boolean getExpected() {
-        if (expectedValue == null) {
-            return get();
-        } else {
-            return this.expectedValue;
-        }
+        return Objects.requireNonNullElseGet(expectedValue, this::get);
     }
 
     /**
@@ -73,7 +70,7 @@ public class TimeAtomicBoolean {
 
     /**
      * Sets to the given value and returns the previous value. If the previous value
-     * is different than the new value, the internal "valueTime" will be updated.
+     * is different from the new value, the internal "valueTime" will be updated.
      *
      * @param newValue The new boolean value
      * @return boolean
@@ -109,7 +106,7 @@ public class TimeAtomicBoolean {
      * Returns the timestamp (num of milliseconds via System.currentTimeMillis) of
      * the last time this boolean changed state. In order to calculate the total
      * number of milliseconds this boolean has retained this value, you'll need to
-     * do your own call to System.currentTimeMillis() and substract this value.
+     * do your own call to System.currentTimeMillis() and subtract this value.
      *
      * @return long
      */
