@@ -16,7 +16,6 @@
     <properties>
         <httpclient.version>5.1.3</httpclient.version>
         <asynchttpclient.version>2.12.3</asynchttpclient.version>
-        <jsoup.version>1.15.1</jsoup.version>
     </properties>
 
     <dependencies>
@@ -45,7 +44,7 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>${jsoup.version}</version>
+            <version>1.15.3</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
