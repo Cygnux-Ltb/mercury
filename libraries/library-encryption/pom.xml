@@ -1,95 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>io.mercury</groupId>
-		<artifactId>libraries</artifactId>
-		<version>1.0-SNAPSHOT</version>
-	</parent>
-	<artifactId>library-encryption</artifactId>
-	<name>library-encryption</name>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.mercury</groupId>
+        <artifactId>libraries</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>library-encryption</artifactId>
+    <name>library-encryption</name>
 
-	<properties>
-		<bouncycastle.version>1.70</bouncycastle.version>
-	</properties>
+    <properties>
+        <bouncycastle.version>1.70</bouncycastle.version>
+    </properties>
 
-	<licenses>
-		<license>
-			<name>Bouncy Castle Licence</name>
-			<url>https://www.bouncycastle.org/licence.html</url>
-			<comments>
-					Copyright (c) 2000 - 2020 The Legion of the Bouncy Castle Inc. 
-								(https://www.bouncycastle.org) 
-				Permission is hereby granted, free of charge, to any person obtaining a copy 
-				of this software and associated documentation files (the "Software"), to 
-				deal in the Software without restriction, including without limitation the 
-				rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
-				sell copies of the Software, and to permit persons to whom the Software is 
-				furnished to do so, subject to the following conditions: The above copyright 
-				notice and this permission notice shall be included in all copies or substantial 
-				portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY 
-				OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
-				OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-				IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, 
-				DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
-				ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
-				DEALINGS IN THE SOFTWARE.
-			</comments>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>Bouncy Castle Licence</name>
+            <url>https://www.bouncycastle.org/licence.html</url>
+            <comments>
+                Copyright (c) 2000 - 2020 The Legion of the Bouncy Castle Inc.
+                (https://www.bouncycastle.org)
+                Permission is hereby granted, free of charge, to any person obtaining a copy
+                of this software and associated documentation files (the "Software"), to
+                deal in the Software without restriction, including without limitation the
+                rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+                sell copies of the Software, and to permit persons to whom the Software is
+                furnished to do so, subject to the following conditions: The above copyright
+                notice and this permission notice shall be included in all copies or substantial
+                portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY
+                OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+                OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+                IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+                DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+                ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+                DEALINGS IN THE SOFTWARE.
+            </comments>
+        </license>
+    </licenses>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>com.google.code.findbugs</groupId>
-			<artifactId>jsr305</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+        </dependency>
 
-		<!-- The Bouncy Castle Java APIs for CMS, PKCS, EAC, TSP, CMP, CRMF, OCSP, 
-			and certificate generation. This jar contains APIs for JDK 1.5 and up. The 
-			APIs can be used in conjunction with a JCE/JCA provider such as the one provided 
-			with the Bouncy Castle Cryptography APIs. -->
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcpkix-jdk15on</artifactId>
-			<version>${bouncycastle.version}</version>
-		</dependency>
+        <!-- The Bouncy Castle Java APIs for CMS, PKCS, EAC, TSP, CMP, CRMF, OCSP,
+            and certificate generation. This jar contains APIs for JDK 1.5 and up. The
+            APIs can be used in conjunction with a JCE/JCA provider such as the one provided
+            with the Bouncy Castle Cryptography APIs. -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk15on</artifactId>
+            <version>${bouncycastle.version}</version>
+        </dependency>
 
-		<!-- The Bouncy Castle Crypto package is a Java implementation of cryptographic 
-			algorithms. This jar contains JCE provider and lightweight API for the Bouncy 
-			Castle Cryptography APIs for JDK 1.5 and up. Note: this package includes 
-			the NTRU encryption algorithms. -->
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcprov-ext-jdk15on</artifactId>
-			<version>${bouncycastle.version}</version>
-		</dependency>
+        <!-- The Bouncy Castle Crypto package is a Java implementation of cryptographic
+            algorithms. This jar contains JCE provider and lightweight API for the Bouncy
+            Castle Cryptography APIs for JDK 1.5 and up. Note: this package includes
+            the NTRU encryption algorithms. -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-ext-jdk15on</artifactId>
+            <version>${bouncycastle.version}</version>
+        </dependency>
 
-		<!-- The Bouncy Castle Java API for handling the OpenPGP protocol. This 
-			jar contains the OpenPGP API for JDK 1.5 and up. The APIs can be used in 
-			conjunction with a JCE/JCA provider such as the one provided with the Bouncy 
-			Castle Cryptography APIs. -->
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcpg-jdk15on</artifactId>
-			<version>${bouncycastle.version}</version>
-		</dependency>
+        <!-- The Bouncy Castle Java API for handling the OpenPGP protocol. This
+            jar contains the OpenPGP API for JDK 1.5 and up. The APIs can be used in
+            conjunction with a JCE/JCA provider such as the one provided with the Bouncy
+            Castle Cryptography APIs. -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpg-jdk15on</artifactId>
+            <version>${bouncycastle.version}</version>
+        </dependency>
 
-		<!-- The Bouncy Castle Java APIs for TLS and DTLS, including a provider 
-			for the JSSE. -->
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bctls-jdk15on</artifactId>
-			<version>${bouncycastle.version}</version>
-		</dependency>
-	</dependencies>
+        <!-- The Bouncy Castle Java APIs for TLS and DTLS, including a provider
+            for the JSSE. -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bctls-jdk15on</artifactId>
+            <version>${bouncycastle.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

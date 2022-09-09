@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import org.junit.Test;
 
-import io.mercury.common.config.PropertiesUtil;
+import io.mercury.common.util.PropertiesUtil;
 import io.mercury.common.log.Log4j2Configurator;
 import io.mercury.common.log.Log4j2Configurator.LogLevel;
 

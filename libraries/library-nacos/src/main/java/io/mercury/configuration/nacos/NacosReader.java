@@ -4,7 +4,7 @@ import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.config.ConfigFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
-import io.mercury.common.config.PropertiesUtil;
+import io.mercury.common.util.PropertiesUtil;
 import io.mercury.common.util.StringSupport;
 
 import java.io.IOException;

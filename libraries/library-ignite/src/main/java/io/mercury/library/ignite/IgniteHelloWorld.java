@@ -13,9 +13,7 @@ import org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMultic
 import java.io.Serial;
 import java.util.Collections;
 
-/**
- *
- */
+
 public class IgniteHelloWorld {
 
     public static void main(String[] args) throws IgniteException {

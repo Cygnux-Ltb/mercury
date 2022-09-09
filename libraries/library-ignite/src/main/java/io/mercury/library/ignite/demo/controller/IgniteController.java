@@ -1,6 +1,5 @@
 package io.mercury.library.ignite.demo.controller;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,6 @@ import javax.annotation.Resource;
  * @description ：ignite控制器
  */
 @RestController
-@Slf4j
 public class IgniteController {
 
     @Resource
