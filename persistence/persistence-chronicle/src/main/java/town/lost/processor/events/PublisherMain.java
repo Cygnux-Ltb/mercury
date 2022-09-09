@@ -5,36 +5,37 @@ import net.openhft.chronicle.queue.ChronicleQueue;
 
 public class PublisherMain {
 
-	private static final int EVENTS = Integer.getInteger("events", 100_000);
-	private static final int RATE = Integer.getInteger("rate", 10_000);
+    private static final int EVENTS = Integer.getInteger("events", 100_000);
+    private static final int RATE = Integer.getInteger("rate", 10_000);
 
-	public static void main(String[] args) {
-		System.out.println("Started");
-		try (ChronicleQueue queue = ChronicleQueue.singleBuilder("in").sourceId(1).build()) {
-			@SuppressWarnings("deprecation")
-			Events build = queue.methodWriterBuilder(Events.class).recordHistory(true).build();
-			long start = System.nanoTime();
-			double interval = 1e9 / RATE;
-			EventTwo two = new EventTwo();
+    public static void main(String[] args) {
+        System.out.println("Started");
+        try (ChronicleQueue queue = ChronicleQueue.singleBuilder("in").sourceId(1).build()) {
+            Events build = queue.methodWriterBuilder(Events.class)
+                    //.recordHistory(true)
+                    .build();
+            long start = System.nanoTime();
+            double interval = 1e9 / RATE;
+            EventTwo two = new EventTwo();
 
-			for (int i = 0; i < EVENTS; i++) {
-				while (System.nanoTime() < start)
-					;
-				publish(build, two, "Hello World");
-				start += interval;
-			}
-			publish(build, two, "Bye");
-		}
-		System.out.println("... Finished");
-		System.exit(0);
-	}
+            for (int i = 0; i < EVENTS; i++) {
+                while (System.nanoTime() < start)
+                    ;
+                publish(build, two, "Hello World");
+                start += interval;
+            }
+            publish(build, two, "Bye");
+        }
+        System.out.println("... Finished");
+        System.exit(0);
+    }
 
-	private static void publish(Events build, EventTwo two, String text) {
-		two.eventSource("publisher");
-		two.eventTimeStamp(UniqueMicroTimeProvider.INSTANCE.currentTimeMicros());
-		two.symbol(text);
-		two.price(two.price + 1);
-		two.quantiity(two.quantiity + 1);
-		build.eventTwo(two);
-	}
+    private static void publish(Events build, EventTwo two, String text) {
+        two.eventSource("publisher");
+        two.eventTimeStamp(UniqueMicroTimeProvider.INSTANCE.currentTimeMicros());
+        two.symbol(text);
+        two.price(two.price + 1);
+        two.quantiity(two.quantiity + 1);
+        build.eventTwo(two);
+    }
 }
