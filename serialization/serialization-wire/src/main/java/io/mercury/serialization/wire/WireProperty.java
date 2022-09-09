@@ -8,7 +8,6 @@ import net.openhft.chronicle.wire.WireOut;
 import javax.annotation.Nonnull;
 
 /**
- *
  * @author Gadi Eichhorn
  */
 public class WireProperty extends WireModel implements Marshallable {
@@ -24,8 +23,9 @@ public class WireProperty extends WireModel implements Marshallable {
 
     public WireProperty() {
     }
-    
-    public WireProperty(String reference, String path, String name, String value, long id, int revision, String key) {
+
+    public WireProperty(String reference, String path, String name, String value,
+                        long id, int revision, String key) {
         super(id, revision, key);
         this.reference = reference;
         this.path = path;
@@ -45,8 +45,7 @@ public class WireProperty extends WireModel implements Marshallable {
     @Override
     public void writeMarshallable(@Nonnull WireOut wire) {
         super.writeMarshallable(wire);
-        wire
-                .write(WireProperty.Values.REFERENCE).text(reference)
+        wire.write(WireProperty.Values.REFERENCE).text(reference)
                 .write(WireProperty.Values.PATH).text(path)
                 .write(WireProperty.Values.NAME).text(name)
                 .write(WireProperty.Values.VALUE).text(value);

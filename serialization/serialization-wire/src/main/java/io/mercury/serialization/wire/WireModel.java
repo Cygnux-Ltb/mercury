@@ -41,8 +41,7 @@ public class WireModel implements Marshallable {
 
     @Override
     public void writeMarshallable(WireOut wire) {
-        wire
-                .write(WireModel.Values.ID).int64(id)
+        wire.write(WireModel.Values.ID).int64(id)
                 .write(WireModel.Values.REVISION).int32(revision)
                 .write(WireModel.Values.KEY).text(key);
     }

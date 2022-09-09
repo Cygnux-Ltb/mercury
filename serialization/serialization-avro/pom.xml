@@ -1,139 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>io.mercury</groupId>
-		<artifactId>serialization</artifactId>
-		<version>1.0-SNAPSHOT</version>
-	</parent>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.mercury</groupId>
+        <artifactId>serialization</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>serialization-avro</artifactId>
-	<name>serialization-avro</name>
+    <artifactId>serialization-avro</artifactId>
+    <name>serialization-avro</name>
 
-	<properties>
-		<avro.version>1.11.1</avro.version>
-	</properties>
+    <properties>
+        <avro.version>1.11.1</avro.version>
+    </properties>
 
-	<!-- <repositories>
-		<repository>
-			<id>avro-util</id>
-			<url>https://linkedin.jfrog.io/artifactory/avro-util/</url>
-		</repository>
-	</repositories> -->
+    <!-- <repositories>
+        <repository>
+            <id>avro-util</id>
+            <url>https://linkedin.jfrog.io/artifactory/avro-util/</url>
+        </repository>
+    </repositories> -->
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<compilerArgument>-parameters</compilerArgument>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.avro</groupId>
-				<artifactId>avro-maven-plugin</artifactId>
-				<version>${avro.version}</version>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>idl-protocol</goal>
-							<goal>schema</goal>
-						</goals>
-						<configuration>
-							<templateDirectory>${project.basedir}/src/main/resources/template/</templateDirectory>
-							<sourceDirectory>${project.basedir}/src/main/resources/schema</sourceDirectory>
-							<outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
-							<stringType>String</stringType>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <compilerArgument>-parameters</compilerArgument>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <version>${avro.version}</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>idl-protocol</goal>
+                            <goal>schema</goal>
+                        </goals>
+                        <configuration>
+                            <templateDirectory>${project.basedir}/src/main/resources/template/</templateDirectory>
+                            <sourceDirectory>${project.basedir}/src/main/resources/schema</sourceDirectory>
+                            <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
+                            <stringType>String</stringType>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
-	<dependencies>
-		<!-- The core functionality of the CodeModel java source code generation 
-			library -->
-		<dependency>
-			<groupId>com.sun.codemodel</groupId>
-			<artifactId>codemodel</artifactId>
-			<version>2.6</version>
-		</dependency>
+    <dependencies>
+        <!-- The core functionality of the CodeModel java source code generation
+            library -->
+        <dependency>
+            <groupId>com.sun.codemodel</groupId>
+            <artifactId>codemodel</artifactId>
+            <version>2.6</version>
+        </dependency>
 
-		<!-- <dependency>
-			<groupId>com.linkedin.avroutil1</groupId>
-			<artifactId>helper-all</artifactId>
-			<version>0.2.71</version>
-		</dependency> -->
+        <!-- <dependency>
+            <groupId>com.linkedin.avroutil1</groupId>
+            <artifactId>helper-all</artifactId>
+            <version>0.2.71</version>
+        </dependency> -->
 
-		<dependency>
-			<groupId>io.mercury</groupId>
-			<artifactId>commons-concurrent</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>io.mercury</groupId>
+            <artifactId>commons-concurrent</artifactId>
+        </dependency>
 
-		<!-- Avro core components -->
-		<dependency>
-			<groupId>org.apache.avro</groupId>
-			<artifactId>avro</artifactId>
-			<version>${avro.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-databind</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <!-- Avro core components -->
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>${avro.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-		<!-- Avro inter-process communication components -->
-		<!-- <dependency> <groupId>org.apache.avro</groupId> <artifactId>avro-ipc</artifactId> 
-			<version>${avro.version}</version> <exclusions> <exclusion> <groupId>org.apache.commons</groupId> 
-			<artifactId>commons-lang3</artifactId> </exclusion> <exclusion> <groupId>com.fasterxml.jackson.core</groupId> 
-			<artifactId>jackson-core</artifactId> </exclusion> <exclusion> <groupId>com.fasterxml.jackson.core</groupId> 
-			<artifactId>jackson-databind</artifactId> </exclusion> </exclusions> </dependency> -->
+        <!-- Avro inter-process communication components -->
+        <!-- <dependency> <groupId>org.apache.avro</groupId> <artifactId>avro-ipc</artifactId>
+            <version>${avro.version}</version> <exclusions> <exclusion> <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId> </exclusion> <exclusion> <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId> </exclusion> <exclusion> <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId> </exclusion> </exclusions> </dependency> -->
 
-		<!-- Compilers for Avro IDL and Avro Specific Java API -->
-		<dependency>
-			<groupId>org.apache.avro</groupId>
-			<artifactId>avro-compiler</artifactId>
-			<version>${avro.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.commons</groupId>
-					<artifactId>commons-lang3</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-databind</artifactId>
-				</exclusion>
-				<exclusion>
-					<artifactId>slf4j-api</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <!-- Compilers for Avro IDL and Avro Specific Java API -->
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro-compiler</artifactId>
+            <version>${avro.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-lang3</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-		<!-- General data-binding functionality for Jackson: works on core streaming 
-			API -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-		</dependency>
+        <!-- General data-binding functionality for Jackson: works on core streaming
+            API -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 </project>

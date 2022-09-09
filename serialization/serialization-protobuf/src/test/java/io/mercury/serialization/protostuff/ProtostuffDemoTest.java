@@ -4,9 +4,9 @@ import org.junit.Test;
 
 public class ProtostuffDemoTest {
 
-	@Test
-	public void test() {
-		ProtostuffDemo.SHORT_ARRAY_DELEGATE.getFieldType();
-	}
+    @Test
+    public void test() {
+        ProtostuffDemo.SHORT_ARRAY_DELEGATE.getFieldType();
+    }
 
 }

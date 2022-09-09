@@ -35,239 +35,240 @@ import uk.co.real_logic.sbe.otf.Types;
  * message to a {@link PrintWriter}.
  */
 public class ExampleTokenListener implements TokenListener {
-	private int compositeLevel = 0;
-	private final PrintWriter out;
-	private final Deque<String> namedScope = new ArrayDeque<>();
-	private final byte[] tempBuffer = new byte[1024];
 
-	/**
-	 * Construct an example {@link TokenListener} that prints tokens out.
-	 *
-	 * @param out to print the tokens to.
-	 */
-	public ExampleTokenListener(final PrintWriter out) {
-		this.out = out;
-	}
+    private int compositeLevel = 0;
+    private final PrintWriter out;
+    private final Deque<String> namedScope = new ArrayDeque<>();
+    private final byte[] tempBuffer = new byte[1024];
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void onBeginMessage(final Token token) {
-		namedScope.push(token.name() + ".");
-	}
+    /**
+     * Construct an example {@link TokenListener} that prints tokens out.
+     *
+     * @param out to print the tokens to.
+     */
+    public ExampleTokenListener(final PrintWriter out) {
+        this.out = out;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void onEndMessage(final Token token) {
-		namedScope.pop();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public void onBeginMessage(final Token token) {
+        namedScope.push(token.name() + ".");
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void onEncoding(final Token fieldToken, final DirectBuffer buffer, final int index, final Token typeToken,
-			final int actingVersion) {
-		final CharSequence value = readEncodingAsString(buffer, index, typeToken, fieldToken.version(), actingVersion);
+    /**
+     * {@inheritDoc}
+     */
+    public void onEndMessage(final Token token) {
+        namedScope.pop();
+    }
 
-		printScope();
-		out.append(compositeLevel > 0 ? typeToken.name() : fieldToken.name()).append('=').append(value).println();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public void onEncoding(final Token fieldToken, final DirectBuffer buffer, final int index, final Token typeToken,
+                           final int actingVersion) {
+        final CharSequence value = readEncodingAsString(buffer, index, typeToken, fieldToken.version(), actingVersion);
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void onEnum(final Token fieldToken, final DirectBuffer buffer, final int bufferIndex,
-			final List<Token> tokens, final int beginIndex, final int endIndex, final int actingVersion) {
-		final Token typeToken = tokens.get(beginIndex + 1);
-		final long encodedValue = readEncodingAsLong(buffer, bufferIndex, typeToken, fieldToken.version(),
-				actingVersion);
+        printScope();
+        out.append(compositeLevel > 0 ? typeToken.name() : fieldToken.name()).append('=').append(value).println();
+    }
 
-		String value = null;
-		if (fieldToken.isConstantEncoding()) {
-			final String refValue = fieldToken.encoding().constValue().toString();
-			final int indexOfDot = refValue.indexOf('.');
-			value = -1 == indexOfDot ? refValue : refValue.substring(indexOfDot + 1);
-		} else {
-			for (int i = beginIndex + 1; i < endIndex; i++) {
-				if (encodedValue == tokens.get(i).encoding().constValue().longValue()) {
-					value = tokens.get(i).name();
-					break;
-				}
-			}
-		}
+    /**
+     * {@inheritDoc}
+     */
+    public void onEnum(final Token fieldToken, final DirectBuffer buffer, final int bufferIndex,
+                       final List<Token> tokens, final int beginIndex, final int endIndex, final int actingVersion) {
+        final Token typeToken = tokens.get(beginIndex + 1);
+        final long encodedValue = readEncodingAsLong(buffer, bufferIndex, typeToken, fieldToken.version(),
+                actingVersion);
 
-		printScope();
-		out.append(determineName(0, fieldToken, tokens, beginIndex)).append('=').append(value).println();
-	}
+        String value = null;
+        if (fieldToken.isConstantEncoding()) {
+            final String refValue = fieldToken.encoding().constValue().toString();
+            final int indexOfDot = refValue.indexOf('.');
+            value = -1 == indexOfDot ? refValue : refValue.substring(indexOfDot + 1);
+        } else {
+            for (int i = beginIndex + 1; i < endIndex; i++) {
+                if (encodedValue == tokens.get(i).encoding().constValue().longValue()) {
+                    value = tokens.get(i).name();
+                    break;
+                }
+            }
+        }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void onBitSet(final Token fieldToken, final DirectBuffer buffer, final int bufferIndex,
-			final List<Token> tokens, final int beginIndex, final int endIndex, final int actingVersion) {
-		final Token typeToken = tokens.get(beginIndex + 1);
-		final long encodedValue = readEncodingAsLong(buffer, bufferIndex, typeToken, fieldToken.version(),
-				actingVersion);
+        printScope();
+        out.append(determineName(0, fieldToken, tokens, beginIndex)).append('=').append(value).println();
+    }
 
-		printScope();
-		out.append(determineName(0, fieldToken, tokens, beginIndex)).append(':');
+    /**
+     * {@inheritDoc}
+     */
+    public void onBitSet(final Token fieldToken, final DirectBuffer buffer, final int bufferIndex,
+                         final List<Token> tokens, final int beginIndex, final int endIndex, final int actingVersion) {
+        final Token typeToken = tokens.get(beginIndex + 1);
+        final long encodedValue = readEncodingAsLong(buffer, bufferIndex, typeToken, fieldToken.version(),
+                actingVersion);
 
-		for (int i = beginIndex + 1; i < endIndex; i++) {
-			out.append(' ').append(tokens.get(i).name()).append('=');
+        printScope();
+        out.append(determineName(0, fieldToken, tokens, beginIndex)).append(':');
 
-			final long bitPosition = tokens.get(i).encoding().constValue().longValue();
-			final boolean flag = (encodedValue & (1L << bitPosition)) != 0;
+        for (int i = beginIndex + 1; i < endIndex; i++) {
+            out.append(' ').append(tokens.get(i).name()).append('=');
 
-			out.append(Boolean.toString(flag));
-		}
+            final long bitPosition = tokens.get(i).encoding().constValue().longValue();
+            final boolean flag = (encodedValue & (1L << bitPosition)) != 0;
 
-		out.println();
-	}
+            out.append(Boolean.toString(flag));
+        }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void onBeginComposite(final Token fieldToken, final List<Token> tokens, final int fromIndex,
-			final int toIndex) {
-		++compositeLevel;
-		namedScope.push(determineName(1, fieldToken, tokens, fromIndex) + ".");
-	}
+        out.println();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void onEndComposite(final Token fieldToken, final List<Token> tokens, final int fromIndex,
-			final int toIndex) {
-		--compositeLevel;
-		namedScope.pop();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public void onBeginComposite(final Token fieldToken, final List<Token> tokens, final int fromIndex,
+                                 final int toIndex) {
+        ++compositeLevel;
+        namedScope.push(determineName(1, fieldToken, tokens, fromIndex) + ".");
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void onGroupHeader(final Token token, final int numInGroup) {
-		printScope();
-		out.append(token.name()).append(" Group Header : numInGroup=").append(Integer.toString(numInGroup)).println();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public void onEndComposite(final Token fieldToken, final List<Token> tokens, final int fromIndex,
+                               final int toIndex) {
+        --compositeLevel;
+        namedScope.pop();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void onBeginGroup(final Token token, final int groupIndex, final int numInGroup) {
-		namedScope.push(token.name() + ".");
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public void onGroupHeader(final Token token, final int numInGroup) {
+        printScope();
+        out.append(token.name()).append(" Group Header : numInGroup=").append(Integer.toString(numInGroup)).println();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void onEndGroup(final Token token, final int groupIndex, final int numInGroup) {
-		namedScope.pop();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public void onBeginGroup(final Token token, final int groupIndex, final int numInGroup) {
+        namedScope.push(token.name() + ".");
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public void onVarData(final Token fieldToken, final DirectBuffer buffer, final int bufferIndex, final int length,
-			final Token typeToken) {
-		final String value;
-		try {
-			final String characterEncoding = typeToken.encoding().characterEncoding();
-			if (null == characterEncoding) {
-				value = length + " bytes of raw data";
-			} else {
-				buffer.getBytes(bufferIndex, tempBuffer, 0, length);
-				value = new String(tempBuffer, 0, length, characterEncoding);
-			}
-		} catch (final UnsupportedEncodingException ex) {
-			ex.printStackTrace();
-			return;
-		}
+    /**
+     * {@inheritDoc}
+     */
+    public void onEndGroup(final Token token, final int groupIndex, final int numInGroup) {
+        namedScope.pop();
+    }
 
-		printScope();
-		out.append(fieldToken.name()).append('=').append(value).println();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public void onVarData(final Token fieldToken, final DirectBuffer buffer, final int bufferIndex, final int length,
+                          final Token typeToken) {
+        final String value;
+        try {
+            final String characterEncoding = typeToken.encoding().characterEncoding();
+            if (null == characterEncoding) {
+                value = length + " bytes of raw data";
+            } else {
+                buffer.getBytes(bufferIndex, tempBuffer, 0, length);
+                value = new String(tempBuffer, 0, length, characterEncoding);
+            }
+        } catch (final UnsupportedEncodingException ex) {
+            ex.printStackTrace();
+            return;
+        }
 
-	private String determineName(final int thresholdLevel, final Token fieldToken, final List<Token> tokens,
-			final int fromIndex) {
-		if (compositeLevel > thresholdLevel) {
-			return tokens.get(fromIndex).name();
-		} else {
-			return fieldToken.name();
-		}
-	}
+        printScope();
+        out.append(fieldToken.name()).append('=').append(value).println();
+    }
 
-	private static CharSequence readEncodingAsString(final DirectBuffer buffer, final int index, final Token typeToken,
-			final int fieldVersion, final int actingVersion) {
-		final PrimitiveValue constOrNotPresentValue = constOrNotPresentValue(typeToken, fieldVersion, actingVersion);
-		if (null != constOrNotPresentValue) {
-			final String characterEncoding = constOrNotPresentValue.characterEncoding();
-			if (constOrNotPresentValue.size() == 1 && null != characterEncoding) {
-				try {
-					final byte[] bytes = { (byte) constOrNotPresentValue.longValue() };
-					return new String(bytes, characterEncoding);
-				} catch (final UnsupportedEncodingException ex) {
-					throw new RuntimeException(ex);
-				}
-			} else {
-				final String value = constOrNotPresentValue.toString();
-				final int size = typeToken.arrayLength();
+    private String determineName(final int thresholdLevel, final Token fieldToken, final List<Token> tokens,
+                                 final int fromIndex) {
+        if (compositeLevel > thresholdLevel) {
+            return tokens.get(fromIndex).name();
+        } else {
+            return fieldToken.name();
+        }
+    }
 
-				if (size < 2) {
-					return value;
-				}
+    private static CharSequence readEncodingAsString(final DirectBuffer buffer, final int index, final Token typeToken,
+                                                     final int fieldVersion, final int actingVersion) {
+        final PrimitiveValue constOrNotPresentValue = constOrNotPresentValue(typeToken, fieldVersion, actingVersion);
+        if (null != constOrNotPresentValue) {
+            final String characterEncoding = constOrNotPresentValue.characterEncoding();
+            if (constOrNotPresentValue.size() == 1 && null != characterEncoding) {
+                try {
+                    final byte[] bytes = {(byte) constOrNotPresentValue.longValue()};
+                    return new String(bytes, characterEncoding);
+                } catch (final UnsupportedEncodingException ex) {
+                    throw new RuntimeException(ex);
+                }
+            } else {
+                final String value = constOrNotPresentValue.toString();
+                final int size = typeToken.arrayLength();
 
-				final StringBuilder sb = new StringBuilder();
+                if (size < 2) {
+                    return value;
+                }
 
-				for (int i = 0; i < size; i++) {
-					sb.append(value).append(", ");
-				}
+                final StringBuilder sb = new StringBuilder();
 
-				sb.setLength(sb.length() - 2);
+                for (int i = 0; i < size; i++) {
+                    sb.append(value).append(", ");
+                }
 
-				return sb;
-			}
-		}
+                sb.setLength(sb.length() - 2);
 
-		final StringBuilder sb = new StringBuilder();
-		final Encoding encoding = typeToken.encoding();
-		final int elementSize = encoding.primitiveType().size();
+                return sb;
+            }
+        }
 
-		for (int i = 0, size = typeToken.arrayLength(); i < size; i++) {
-			Types.appendAsString(sb, buffer, index + (i * elementSize), encoding);
-			sb.append(", ");
-		}
+        final StringBuilder sb = new StringBuilder();
+        final Encoding encoding = typeToken.encoding();
+        final int elementSize = encoding.primitiveType().size();
 
-		sb.setLength(sb.length() - 2);
+        for (int i = 0, size = typeToken.arrayLength(); i < size; i++) {
+            Types.appendAsString(sb, buffer, index + (i * elementSize), encoding);
+            sb.append(", ");
+        }
 
-		return sb;
-	}
+        sb.setLength(sb.length() - 2);
 
-	private static long readEncodingAsLong(final DirectBuffer buffer, final int bufferIndex, final Token typeToken,
-			final int fieldVersion, final int actingVersion) {
-		final PrimitiveValue constOrNotPresentValue = constOrNotPresentValue(typeToken, fieldVersion, actingVersion);
-		if (null != constOrNotPresentValue) {
-			return constOrNotPresentValue.longValue();
-		}
+        return sb;
+    }
 
-		return Types.getLong(buffer, bufferIndex, typeToken.encoding());
-	}
+    private static long readEncodingAsLong(final DirectBuffer buffer, final int bufferIndex, final Token typeToken,
+                                           final int fieldVersion, final int actingVersion) {
+        final PrimitiveValue constOrNotPresentValue = constOrNotPresentValue(typeToken, fieldVersion, actingVersion);
+        if (null != constOrNotPresentValue) {
+            return constOrNotPresentValue.longValue();
+        }
 
-	private static PrimitiveValue constOrNotPresentValue(final Token typeToken, final int fieldVersion,
-			final int actingVersion) {
-		if (typeToken.isConstantEncoding()) {
-			return typeToken.encoding().constValue();
-		} else if (typeToken.isOptionalEncoding() && actingVersion < fieldVersion) {
-			return typeToken.encoding().applicableNullValue();
-		}
+        return Types.getLong(buffer, bufferIndex, typeToken.encoding());
+    }
 
-		return null;
-	}
+    private static PrimitiveValue constOrNotPresentValue(final Token typeToken, final int fieldVersion,
+                                                         final int actingVersion) {
+        if (typeToken.isConstantEncoding()) {
+            return typeToken.encoding().constValue();
+        } else if (typeToken.isOptionalEncoding() && actingVersion < fieldVersion) {
+            return typeToken.encoding().applicableNullValue();
+        }
 
-	private void printScope() {
-		final Iterator<String> i = namedScope.descendingIterator();
-		while (i.hasNext()) {
-			out.print(i.next());
-		}
-	}
+        return null;
+    }
+
+    private void printScope() {
+        final Iterator<String> i = namedScope.descendingIterator();
+        while (i.hasNext()) {
+            out.print(i.next());
+        }
+    }
 }

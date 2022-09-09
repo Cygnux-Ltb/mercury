@@ -28,9 +28,9 @@ import io.mercury.common.util.StringSupport;
 public final class PropertiesUtil {
 
     /**
-     * @param url
-     * @return
-     * @throws IOException
+     * @param url URL
+     * @return Properties
+     * @throws IOException ioe
      */
     public static Properties load(final URL url) throws IOException {
         Asserter.nonNull(url, "url");
@@ -38,9 +38,9 @@ public final class PropertiesUtil {
     }
 
     /**
-     * @param file
-     * @return
-     * @throws IOException
+     * @param file File
+     * @return Properties
+     * @throws IOException ioe
      */
     public static Properties load(@Nonnull final File file) throws IOException {
         Asserter.nonNull(file, "file");
@@ -48,19 +48,19 @@ public final class PropertiesUtil {
     }
 
     /**
-     * @param text
-     * @return
-     * @throws IOException
+     * @param text String
+     * @return Properties
+     * @throws IOException ioe
      */
     public static Properties load(@Nonnull final String text) throws IOException {
         return load(text, Charsets.UTF8);
     }
 
     /**
-     * @param text
-     * @param charset
-     * @return
-     * @throws IOException
+     * @param text    String
+     * @param charset Charset
+     * @return Properties
+     * @throws IOException ioe
      */
     public static Properties load(@Nonnull final String text, @Nonnull final Charset charset) throws IOException {
         Asserter.nonNull(text, "text");
@@ -71,9 +71,9 @@ public final class PropertiesUtil {
     }
 
     /**
-     * @param stream
-     * @return
-     * @throws IOException
+     * @param stream InputStream
+     * @return Properties
+     * @throws IOException ioe
      */
     public static Properties load(@Nonnull final InputStream stream) throws IOException {
         Asserter.nonNull(stream, "stream");
@@ -87,19 +87,19 @@ public final class PropertiesUtil {
     }
 
     /**
-     * @param props
-     * @param key
-     * @return
+     * @param props Properties
+     * @param key   String
+     * @return String
      */
     public static String getString(@Nonnull final Properties props, final String key) {
         return props.getProperty(key, "");
     }
 
     /**
-     * @param props
-     * @param key
-     * @return
-     * @throws NumberFormatException
+     * @param props Properties
+     * @param key   String
+     * @return boolean
+     * @throws NumberFormatException e
      */
     public static boolean getBoolean(@Nonnull final Properties props, final String key)
             throws NumberFormatException {
@@ -110,10 +110,10 @@ public final class PropertiesUtil {
     }
 
     /**
-     * @param props
-     * @param key
-     * @return
-     * @throws NumberFormatException
+     * @param props Properties
+     * @param key   String
+     * @return int
+     * @throws NumberFormatException e
      */
     public static int getInt(@Nonnull final Properties props, final String key) throws NumberFormatException {
         String prop = props.getProperty(key);
@@ -121,10 +121,10 @@ public final class PropertiesUtil {
     }
 
     /**
-     * @param props
-     * @param key
-     * @return
-     * @throws NumberFormatException
+     * @param props Properties
+     * @param key   String
+     * @return double
+     * @throws NumberFormatException e
      */
     public static double getDouble(@Nonnull final Properties props, final String key)
             throws NumberFormatException {
@@ -133,15 +133,15 @@ public final class PropertiesUtil {
     }
 
     /**
-     * @param props
+     * @param props Properties
      */
     public static void show(@Nonnull final Properties props) {
         show(props, null);
     }
 
     /**
-     * @param props
-     * @param log
+     * @param props Properties
+     * @param log   Logger
      */
     public static void show(@Nonnull final Properties props, @Nullable final Logger log) {
         ArrayList<Entry<Object, Object>> list = new ArrayList<>(props.entrySet());

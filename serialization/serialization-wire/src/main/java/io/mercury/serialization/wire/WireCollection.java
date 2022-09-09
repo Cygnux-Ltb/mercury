@@ -53,8 +53,12 @@ public class WireCollection extends WireModel implements Marshallable {
 	@Override
 	public void writeMarshallable(@Nonnull WireOut wire) {
 		super.writeMarshallable(wire);
-		wire.write(WireCollection.Values.REFERENCE).text(reference).write(WireCollection.Values.PATH).text(path)
-				.write(WireCollection.Values.NAME).text(name);
+		wire.write(WireCollection.Values.REFERENCE)
+				.text(reference)
+				.write(WireCollection.Values.PATH)
+				.text(path)
+				.write(WireCollection.Values.NAME)
+				.text(name);
 		if (properties.size() > 0) {
 			wire.write(WireCollection.Values.PROPERTIES).marshallable(properties);
 		}
