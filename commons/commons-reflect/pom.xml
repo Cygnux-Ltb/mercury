@@ -1,38 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.mercury</groupId>
+        <artifactId>commons</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
-	<parent>
-		<groupId>io.mercury</groupId>
-		<artifactId>commons</artifactId>
-		<version>1.0-SNAPSHOT</version>
-	</parent>
+    <artifactId>commons-reflect</artifactId>
+    <name>commons-reflect</name>
 
-	<artifactId>commons-reflect</artifactId>
-	<name>commons-reflect</name>
+    <dependencies>
+        <dependency>
+            <groupId>io.mercury</groupId>
+            <artifactId>commons-core</artifactId>
+        </dependency>
 
-	<dependencies>
-		<dependency>
-			<groupId>io.mercury</groupId>
-			<artifactId>commons-core</artifactId>
-		</dependency>
+        <!-- High performance Java reflection using code generation -->
+        <dependency>
+            <groupId>com.esotericsoftware</groupId>
+            <artifactId>reflectasm</artifactId>
+            <version>1.11.9</version>
+        </dependency>
 
-		<!-- High performance Java reflection using code generation -->
-		<dependency>
-			<groupId>com.esotericsoftware</groupId>
-			<artifactId>reflectasm</artifactId>
-			<version>1.11.9</version>
-		</dependency>
-
-		<!-- Reflections - a Java runtime metadata analysis -->
-		<dependency>
-			<groupId>org.reflections</groupId>
-			<artifactId>reflections</artifactId>
-			<version>0.10.2</version>
-		</dependency>
-	</dependencies>
+        <!-- Reflections - a Java runtime metadata analysis -->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.10.2</version>
+        </dependency>
+    </dependencies>
 
 </project>

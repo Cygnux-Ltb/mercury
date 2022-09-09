@@ -100,7 +100,7 @@ public final class ConfigWrapper<O extends ConfigOption> {
      * 获取[long]配置值, 如果未配置, 默认值[0L]
      *
      * @param option O
-     * @return
+     * @return long
      */
     public long getLong(@Nonnull O option) {
         return getLong(option, 0L);
@@ -109,9 +109,9 @@ public final class ConfigWrapper<O extends ConfigOption> {
     /**
      * 获取[long]配置值, 如果未配置, 使用指定默认值
      *
-     * @param option O
-     * @param defaultVal
-     * @return
+     * @param option     O
+     * @param defaultVal long
+     * @return long
      */
     public long getLong(@Nonnull O option, long defaultVal) {
         return getOrDefault(() -> config.hasPath(option.getConfigName(module)),
@@ -122,7 +122,7 @@ public final class ConfigWrapper<O extends ConfigOption> {
      * 获取[double]配置值, 如果未配置, 默认值[0.0D]
      *
      * @param option O
-     * @return
+     * @return double
      */
     public double getDouble(@Nonnull O option) {
         return getDouble(option, 0.0D);
@@ -131,9 +131,9 @@ public final class ConfigWrapper<O extends ConfigOption> {
     /**
      * 获取[double]配置值, 如果未配置, 使用指定默认值
      *
-     * @param option O
-     * @param defaultVal
-     * @return
+     * @param option     O
+     * @param defaultVal double
+     * @return double
      */
     public double getDouble(@Nonnull O option, double defaultVal) {
         return getOrDefault(() -> config.hasPath(option.getConfigName(module)),
@@ -144,7 +144,7 @@ public final class ConfigWrapper<O extends ConfigOption> {
      * 获取[String]配置值, 如果未配置, 默认值[""]
      *
      * @param option O
-     * @return
+     * @return String
      */
     public String getString(@Nonnull O option) {
         return getString(option, "");
@@ -153,9 +153,9 @@ public final class ConfigWrapper<O extends ConfigOption> {
     /**
      * 获取[String]配置值, 如果未配置, 使用指定默认值
      *
-     * @param option O
-     * @param defaultVal
-     * @return
+     * @param option     O
+     * @param defaultVal String
+     * @return String
      */
     public String getString(@Nonnull O option, @Nonnull String defaultVal) {
         return getOrDefault(() -> config.hasPath(option.getConfigName(module)),
@@ -164,8 +164,8 @@ public final class ConfigWrapper<O extends ConfigOption> {
 
     /**
      * @param option O
-     * @return
-     * @throws ConfigException.Missing
+     * @return boolean
+     * @throws ConfigException.Missing exception
      */
     public boolean getBooleanOrThrows(@Nonnull O option) throws ConfigException.Missing {
         return getOrThrows(() -> config.hasPath(option.getConfigName(module)),
@@ -175,8 +175,8 @@ public final class ConfigWrapper<O extends ConfigOption> {
 
     /**
      * @param option O
-     * @return
-     * @throws ConfigException.Missing
+     * @return int
+     * @throws ConfigException.Missing exception
      */
     public int getIntOrThrows(@Nonnull O option) throws ConfigException.Missing {
         return getOrThrows(() -> config.hasPath(option.getConfigName(module)),
@@ -186,10 +186,10 @@ public final class ConfigWrapper<O extends ConfigOption> {
 
     /**
      * @param option O
-     * @param verify
-     * @return
-     * @throws ConfigException.Missing
-     * @throws ConfigException.BadValue
+     * @param verify IntPredicate
+     * @return int
+     * @throws ConfigException.Missing  exception
+     * @throws ConfigException.BadValue exception
      */
     public int getIntOrThrows(@Nonnull O option, IntPredicate verify)
             throws ConfigException.Missing, ConfigException.BadValue {
@@ -199,11 +199,11 @@ public final class ConfigWrapper<O extends ConfigOption> {
 
     /**
      * @param option O
-     * @param verify
-     * @param ex
-     * @return
-     * @throws ConfigException.Missing
-     * @throws ConfigException.BadValue
+     * @param verify IntPredicate
+     * @param ex     Exception
+     * @return int
+     * @throws ConfigException.Missing  exception
+     * @throws ConfigException.BadValue exception
      */
     public int getIntOrThrows(@Nonnull O option, IntPredicate verify, Exception ex)
             throws ConfigException.Missing, ConfigException.BadValue {
@@ -211,13 +211,14 @@ public final class ConfigWrapper<O extends ConfigOption> {
         if (verify.test(value))
             return value;
         else
-            throw new ConfigException.BadValue(option.getConfigName(module), "value == " + value, ex);
+            throw new ConfigException.BadValue(
+                    option.getConfigName(module), "value == " + value, ex);
     }
 
     /**
-     * @param option
-     * @return
-     * @throws ConfigException.Missing
+     * @param option O
+     * @return long
+     * @throws ConfigException.Missing exception
      */
     public long getLongOrThrows(@Nonnull O option) throws ConfigException.Missing {
         return getOrThrows(() -> config.hasPath(option.getConfigName(module)),
@@ -226,11 +227,11 @@ public final class ConfigWrapper<O extends ConfigOption> {
     }
 
     /**
-     * @param option
-     * @param verify
-     * @return
-     * @throws ConfigException.Missing
-     * @throws ConfigException.BadValue
+     * @param option O
+     * @param verify LongPredicate
+     * @return long
+     * @throws ConfigException.Missing  exception
+     * @throws ConfigException.BadValue exception
      */
     public long getLongOrThrows(@Nonnull O option, LongPredicate verify)
             throws ConfigException.Missing, ConfigException.BadValue {
@@ -239,12 +240,12 @@ public final class ConfigWrapper<O extends ConfigOption> {
     }
 
     /**
-     * @param option
-     * @param verify
-     * @param ex
-     * @return
-     * @throws ConfigException.Missing
-     * @throws ConfigException.BadValue
+     * @param option O
+     * @param verify LongPredicate
+     * @param ex     Exception
+     * @return long
+     * @throws ConfigException.Missing  exception
+     * @throws ConfigException.BadValue exception
      */
     public long getLongOrThrows(@Nonnull O option, LongPredicate verify, Exception ex)
             throws ConfigException.Missing, ConfigException.BadValue {
@@ -252,13 +253,14 @@ public final class ConfigWrapper<O extends ConfigOption> {
         if (verify.test(value))
             return value;
         else
-            throw new ConfigException.BadValue(option.getConfigName(module), "value == " + value, ex);
+            throw new ConfigException.BadValue(
+                    option.getConfigName(module), "value == " + value, ex);
     }
 
     /**
-     * @param option
-     * @return
-     * @throws ConfigException.Missing
+     * @param option O
+     * @return double
+     * @throws ConfigException.Missing exception
      */
     public double getDoubleOrThrows(@Nonnull O option) throws ConfigException.Missing {
         return getOrThrows(() -> config.hasPath(option.getConfigName(module)),
@@ -267,11 +269,11 @@ public final class ConfigWrapper<O extends ConfigOption> {
     }
 
     /**
-     * @param option
-     * @param verify
-     * @return
-     * @throws ConfigException.Missing
-     * @throws ConfigException.BadValue
+     * @param option O
+     * @param verify DoublePredicate
+     * @return double
+     * @throws ConfigException.Missing  exception
+     * @throws ConfigException.BadValue exception
      */
     public double getDoubleOrThrows(@Nonnull O option, DoublePredicate verify)
             throws ConfigException.Missing, ConfigException.BadValue {
@@ -280,12 +282,12 @@ public final class ConfigWrapper<O extends ConfigOption> {
     }
 
     /**
-     * @param option
-     * @param verify
-     * @param ex
-     * @return
-     * @throws ConfigException.Missing
-     * @throws ConfigException.BadValue
+     * @param option O
+     * @param verify DoublePredicate
+     * @param ex     Exception
+     * @return double
+     * @throws ConfigException.Missing  exception
+     * @throws ConfigException.BadValue exception
      */
     public double getDoubleOrThrows(@Nonnull O option, DoublePredicate verify, Exception ex)
             throws ConfigException.Missing, ConfigException.BadValue {
@@ -293,13 +295,14 @@ public final class ConfigWrapper<O extends ConfigOption> {
         if (verify.test(value))
             return value;
         else
-            throw new ConfigException.BadValue(option.getConfigName(module), "value == " + value, ex);
+            throw new ConfigException.BadValue(
+                    option.getConfigName(module), "value == " + value, ex);
     }
 
     /**
-     * @param option
-     * @return
-     * @throws ConfigException.Missing
+     * @param option O
+     * @return String
+     * @throws ConfigException.Missing exception
      */
     public String getStringOrThrows(@Nonnull O option) throws ConfigException.Missing {
         return getOrThrows(() -> config.hasPath(option.getConfigName(module)),
@@ -308,11 +311,11 @@ public final class ConfigWrapper<O extends ConfigOption> {
     }
 
     /**
-     * @param option
-     * @param verify
-     * @return
-     * @throws ConfigException.Missing
-     * @throws ConfigException.BadValue
+     * @param option O
+     * @param verify Predicate<String>
+     * @return String
+     * @throws ConfigException.Missing  exception
+     * @throws ConfigException.BadValue exception
      */
     public String getStringOrThrows(@Nonnull O option, Predicate<String> verify)
             throws ConfigException.Missing, ConfigException.BadValue {
@@ -321,12 +324,12 @@ public final class ConfigWrapper<O extends ConfigOption> {
     }
 
     /**
-     * @param option
-     * @param verify
-     * @param ex
-     * @return
-     * @throws ConfigException.Missing
-     * @throws ConfigException.BadValue
+     * @param option O
+     * @param verify Predicate<String>
+     * @param ex     Exception
+     * @return String
+     * @throws ConfigException.Missing  exception
+     * @throws ConfigException.BadValue exception
      */
     public String getStringOrThrows(@Nonnull O option, Predicate<String> verify, Exception ex)
             throws ConfigException.Missing, ConfigException.BadValue {
@@ -334,7 +337,8 @@ public final class ConfigWrapper<O extends ConfigOption> {
         if (verify.test(value))
             return value;
         else
-            throw new ConfigException.BadValue(option.getConfigName(module), "value == " + value, ex);
+            throw new ConfigException.BadValue(
+                    option.getConfigName(module), "value == " + value, ex);
     }
 
 }
