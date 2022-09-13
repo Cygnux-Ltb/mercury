@@ -1,5 +1,25 @@
 package io.mercury.common.concurrent.disruptor;
 
+import com.lmax.disruptor.EventFactory;
+import com.lmax.disruptor.EventHandler;
+import com.lmax.disruptor.EventTranslatorOneArg;
+import com.lmax.disruptor.WaitStrategy;
+import com.lmax.disruptor.dsl.EventHandlerGroup;
+import com.lmax.disruptor.dsl.ProducerType;
+import io.mercury.common.collections.MutableLists;
+import io.mercury.common.collections.MutableMaps;
+import io.mercury.common.functional.Processor;
+import io.mercury.common.lang.Throws;
+import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.util.StringSupport;
+import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
+import org.slf4j.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import static io.mercury.common.collections.CollectionUtil.toArray;
 import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Sleeping;
 import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Yielding;
@@ -7,29 +27,6 @@ import static io.mercury.common.concurrent.disruptor.ReflectionEventFactory.newF
 import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
 import static io.mercury.common.lang.Asserter.nonNull;
 import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.NotThreadSafe;
-
-import io.mercury.common.util.StringSupport;
-import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
-import org.slf4j.Logger;
-
-import com.lmax.disruptor.EventFactory;
-import com.lmax.disruptor.EventHandler;
-import com.lmax.disruptor.EventTranslatorOneArg;
-import com.lmax.disruptor.WaitStrategy;
-import com.lmax.disruptor.dsl.EventHandlerGroup;
-import com.lmax.disruptor.dsl.ProducerType;
-
-import io.mercury.common.collections.MutableLists;
-import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.functional.Processor;
-import io.mercury.common.lang.Throws;
-import io.mercury.common.log.Log4j2LoggerFactory;
 
 /**
  * @param <E>
@@ -40,14 +37,14 @@ public class RingProcessChain<E, I> extends AbstractRingBuffer<E, I> {
     private static final Logger log = Log4j2LoggerFactory.getLogger(RingProcessChain.class);
 
     /**
-     * @param name
-     * @param size
-     * @param factory
-     * @param type
-     * @param strategy
-     * @param mode
-     * @param translator
-     * @param handlersMap
+     * @param name        String
+     * @param size        int
+     * @param factory     EventFactory<E>
+     * @param type        ProducerType
+     * @param strategy    WaitStrategy
+     * @param mode        StartMode
+     * @param translator  EventTranslatorOneArg<E, I>
+     * @param handlersMap MutableIntObjectMap<List<EventHandler<E>>>
      */
     @SuppressWarnings("unchecked")
     private RingProcessChain(@Nonnull String name, int size, @Nonnull EventFactory<E> factory,
@@ -60,7 +57,9 @@ public class RingProcessChain<E, I> extends AbstractRingBuffer<E, I> {
         if (keys.length == 1) {
             disruptor.handleEventsWith(toArray(handlers0, EventHandler[]::new));
         } else {
-            EventHandlerGroup<E> handlerGroup = disruptor.handleEventsWith(toArray(handlers0, EventHandler[]::new));
+            EventHandlerGroup<E> handlerGroup = disruptor
+                    .handleEventsWith(toArray(handlers0, EventHandler[]::new));
+
             for (int i = 1; i < keys.length; i++) {
                 // 将处理器以处理链的方式添加进Disruptor
                 List<EventHandler<E>> handlers = handlersMap.get(keys[i]);
@@ -73,10 +72,6 @@ public class RingProcessChain<E, I> extends AbstractRingBuffer<E, I> {
         startWith(mode);
     }
 
-    @Override
-    protected String getComponentType() {
-        return "RingProcessChain";
-    }
 
     // **************** 单生产者处理链 ****************//
 
@@ -144,7 +139,8 @@ public class RingProcessChain<E, I> extends AbstractRingBuffer<E, I> {
         private final ProducerType producerType;
         private final EventFactory<E> eventFactory;
         private final EventTranslatorOneArg<E, I> eventTranslator;
-        private final MutableIntObjectMap<List<EventHandler<E>>> handlersMap = MutableMaps.newIntObjectHashMap();
+        private final MutableIntObjectMap<List<EventHandler<E>>> handlersMap =
+                MutableMaps.newIntObjectHashMap();
 
         private Builder(ProducerType producerType, EventFactory<E> eventFactory,
                         EventTranslatorOneArg<E, I> eventTranslator) {
@@ -218,12 +214,13 @@ public class RingProcessChain<E, I> extends AbstractRingBuffer<E, I> {
             if (handlersMap.isEmpty())
                 Throws.illegalArgument("handlersMap");
             if (waitStrategy == null)
-                waitStrategy = handlersMap.stream().mapToInt(List::size).sum() > availableProcessors() ? Sleeping.get()
+                waitStrategy = handlersMap.stream().mapToInt(List::size).sum() > availableProcessors()
+                        ? Sleeping.get()
                         : Yielding.get();
             if (StringSupport.isNullOrEmpty(name))
                 name = "RingProcessChain-" + YYYYMMDD_L_HHMMSSSSS.format(LocalDateTime.now());
-            return new RingProcessChain<>(name, size, eventFactory, producerType, waitStrategy, mode, eventTranslator,
-                    handlersMap);
+            return new RingProcessChain<>(name, size, eventFactory, producerType,
+                    waitStrategy, mode, eventTranslator, handlersMap);
         }
 
     }

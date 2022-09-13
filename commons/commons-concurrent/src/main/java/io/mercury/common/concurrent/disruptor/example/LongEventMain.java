@@ -1,10 +1,10 @@
 package io.mercury.common.concurrent.disruptor.example;
 
-import java.nio.ByteBuffer;
-
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.util.DaemonThreadFactory;
+
+import java.nio.ByteBuffer;
 
 public class LongEventMain {
 

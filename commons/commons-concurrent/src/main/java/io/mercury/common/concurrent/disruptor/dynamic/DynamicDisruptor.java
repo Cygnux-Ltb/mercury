@@ -1,13 +1,6 @@
 package io.mercury.common.concurrent.disruptor.dynamic;
 
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicIntegerArray;
-
 import com.lmax.disruptor.EventTranslatorVararg;
 import com.lmax.disruptor.ExceptionHandler;
 import com.lmax.disruptor.RingBuffer;
@@ -16,7 +9,6 @@ import com.lmax.disruptor.Sequencer;
 import com.lmax.disruptor.WorkProcessor;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ExceptionHandlerWrapper;
-
 import io.mercury.common.concurrent.disruptor.dynamic.core.AbstractSentinelHandler;
 import io.mercury.common.concurrent.disruptor.dynamic.core.DynamicConsumer;
 import io.mercury.common.concurrent.disruptor.dynamic.core.HandlerEvent;
@@ -27,11 +19,18 @@ import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelListener;
 import io.mercury.common.concurrent.disruptor.dynamic.strategy.PidStrategy;
 import io.mercury.common.concurrent.disruptor.dynamic.strategy.RegulateStrategy;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicIntegerArray;
+
 /**
- * @Author : Rookiex
- * @Date : Created in 2019/11/8 10:16
- * @Describe :
- * @version:
+ * @author : Rookiex
+ * @date : Created in 2019/11/8 10:16
+ * @describe :
+ * @version :
  */
 public class DynamicDisruptor implements DynamicConsumer, SentinelListener {
 

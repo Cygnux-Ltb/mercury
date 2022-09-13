@@ -56,11 +56,6 @@ public final class AsyncSwap<E> extends RunnableComponent implements Runnable {
 
     }
 
-    @Override
-    protected String getComponentType() {
-        return AsyncSwap.class.getSimpleName();
-    }
-
 
     public static void main(String[] args) {
         System.out.println(System.currentTimeMillis());

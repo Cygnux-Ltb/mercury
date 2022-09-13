@@ -1,15 +1,10 @@
 package io.mercury.common.concurrent.disruptor;
 
-import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Sleeping;
-
-import org.slf4j.Logger;
-
 import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
-
 import io.mercury.common.collections.queue.LoadContainer;
 import io.mercury.common.concurrent.queue.AbstractSingleConsumerQueue;
 import io.mercury.common.functional.Processor;
@@ -17,6 +12,9 @@ import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.thread.MaxPriorityThreadFactory;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.ThreadSupport;
+import org.slf4j.Logger;
+
+import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Sleeping;
 
 /**
  * @param <E>

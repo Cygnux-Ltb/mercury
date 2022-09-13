@@ -10,31 +10,25 @@ import io.mercury.common.lang.Asserter;
 import io.mercury.common.thread.RunnableComponent;
 
 /**
- * @author yellow013
- *
  * @param <E> Single Consumer Queue base implements
+ * @author yellow013
  */
 public abstract class AbstractSingleConsumerQueue<E> extends RunnableComponent implements Queue<E> {
 
-	/**
-	 * Processor Function
-	 */
-	protected final Processor<E> processor;
+    /**
+     * Processor Function
+     */
+    protected final Processor<E> processor;
 
-	protected AbstractSingleConsumerQueue(Processor<E> processor) {
-		Asserter.nonNull(processor, "processor");
-		this.processor = processor;
-		this.name = "queue-" + "[" + YYYYMMDD_L_HHMMSSSSS.format(LocalDateTime.now()) + "]";
-	}
+    protected AbstractSingleConsumerQueue(Processor<E> processor) {
+        Asserter.nonNull(processor, "processor");
+        this.processor = processor;
+        this.name = "queue-" + "[" + YYYYMMDD_L_HHMMSSSSS.format(LocalDateTime.now()) + "]";
+    }
 
-	@Override
-	public String getQueueName() {
-		return name;
-	}
-
-	@Override
-	protected String getComponentType() {
-		return "ScQueue";
-	}
+    @Override
+    public String getQueueName() {
+        return name;
+    }
 
 }

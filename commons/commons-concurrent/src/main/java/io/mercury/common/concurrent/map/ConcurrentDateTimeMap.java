@@ -29,8 +29,8 @@ public final class ConcurrentDateTimeMap<K extends Temporal, V> {
 
 	private final ConcurrentMap<Long, V> savedMap;
 
-	protected ConcurrentDateTimeMap(ToLongFunction<K> keyFunc, Function<K, K> nextKeyFunc, BiPredicate<K, K> hasNextKey,
-			int initialCapacity) {
+	private ConcurrentDateTimeMap(ToLongFunction<K> keyFunc, Function<K, K> nextKeyFunc, BiPredicate<K, K> hasNextKey,
+								  int initialCapacity) {
 		this.keyFunc = keyFunc;
 		this.nextKeyFunc = nextKeyFunc;
 		this.hasNextKey = hasNextKey;

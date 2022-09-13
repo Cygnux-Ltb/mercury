@@ -137,10 +137,6 @@ public final class RingMulticaster<E, I> extends AbstractRingBuffer<E, I> {
         return new Builder<>(ProducerType.MULTI, eventFactory, translator);
     }
 
-    @Override
-    protected String getComponentType() {
-        return "RingMulticaster";
-    }
 
     public static class Builder<E, I> {
 
@@ -204,8 +200,8 @@ public final class RingMulticaster<E, I> extends AbstractRingBuffer<E, I> {
                 waitStrategy = handlers.size() > availableProcessors() ? Sleeping.get() : Yielding.get();
             if (StringSupport.isNullOrEmpty(name))
                 name = "RingMulticaster-" + YYYYMMDD_L_HHMMSSSSS.format(LocalDateTime.now());
-            return new RingMulticaster<>(name, size, eventFactory, producerType, waitStrategy, mode, eventTranslator,
-                    handlers);
+            return new RingMulticaster<>(name, size, eventFactory, producerType,
+                    waitStrategy, mode, eventTranslator, handlers);
         }
 
     }

@@ -1,16 +1,14 @@
 package io.mercury.common.concurrent.disruptor;
 
-import static io.mercury.common.util.JreReflection.invokeConstructor;
-
-import javax.annotation.Nonnull;
-
-import org.slf4j.Logger;
-
 import com.lmax.disruptor.EventFactory;
-
 import io.mercury.common.concurrent.disruptor.example.LongEvent;
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.util.JreReflection.RuntimeReflectionException;
+import org.slf4j.Logger;
+
+import javax.annotation.Nonnull;
+
+import static io.mercury.common.util.JreReflection.invokeConstructor;
 
 /**
  * @param <T>
@@ -27,21 +25,20 @@ public final class ReflectionEventFactory<T> implements EventFactory<T> {
     }
 
     /**
-     * @param <T>
-     * @param type
-     * @return
-     * @throws RuntimeReflectionException
+     * @param type Event class type
+     * @return ReflectionEventFactory<T>
+     * @throws RuntimeReflectionException re
      */
-    public static <T> ReflectionEventFactory<T> newFactory(@Nonnull Class<T> type) throws RuntimeReflectionException {
+    public static <T> ReflectionEventFactory<T> newFactory(@Nonnull Class<T> type)
+            throws RuntimeReflectionException {
         return newFactory(type, null);
     }
 
     /**
-     * @param type Event class
+     * @param type Event class type
      * @param log  Error logger
-     * @param <T>  Event class type
-     * @return ReflectionEventFactory
-     * @throws RuntimeReflectionException RuntimeException
+     * @return ReflectionEventFactory<T>
+     * @throws RuntimeReflectionException re
      */
     public static <T> ReflectionEventFactory<T> newFactory(@Nonnull Class<T> type, Logger log)
             throws RuntimeReflectionException {

@@ -31,12 +31,12 @@ public abstract class AbstractRingBuffer<E, I> extends RunnableComponent {
     protected final EventPublisherWrapper<E, I> publisherWrapper;
 
     /**
-     * @param name
-     * @param size
-     * @param factory
-     * @param type
-     * @param strategy
-     * @param translator
+     * @param name       String
+     * @param size       int
+     * @param factory    EventFactory<E>
+     * @param type       ProducerType
+     * @param strategy   WaitStrategy
+     * @param translator EventTranslatorOneArg<E, I>
      */
     protected AbstractRingBuffer(@Nonnull String name, int size, @Nonnull EventFactory<E> factory,
                                  @Nonnull ProducerType type, @Nonnull WaitStrategy strategy,

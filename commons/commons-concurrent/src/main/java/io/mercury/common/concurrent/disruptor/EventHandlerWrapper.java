@@ -1,10 +1,8 @@
 package io.mercury.common.concurrent.disruptor;
 
-import org.slf4j.Logger;
-
 import com.lmax.disruptor.EventHandler;
-
 import io.mercury.common.functional.Processor;
+import org.slf4j.Logger;
 
 /**
  * 事件处理器的包装
@@ -27,8 +25,8 @@ public class EventHandlerWrapper<E> implements EventHandler<E> {
         try {
             processor.process(event);
         } catch (Exception e) {
-            log.error("process event -> {}, sequence==[{}], endOfBatch==[{}], Throw exception -> [{}]", event, sequence,
-                    endOfBatch, e.getMessage(), e);
+            log.error("process event -> {}, sequence==[{}], endOfBatch==[{}], Throw exception -> [{}]",
+                    event, sequence, endOfBatch, e.getMessage(), e);
             throw e;
         }
     }

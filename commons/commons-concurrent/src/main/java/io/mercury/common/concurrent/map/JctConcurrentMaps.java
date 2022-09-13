@@ -10,87 +10,91 @@ import java.util.concurrent.ConcurrentMap;
 public final class JctConcurrentMaps {
 
     /**
-     * @param <K>
-     * @param <V>
-     * @return
+     * @param <K> Key type
+     * @param <V> Value type
+     * @return ConcurrentMap<K, V>
      */
     public static <K, V> ConcurrentMap<K, V> newNonBlockingHashMap() {
         return new NonBlockingHashMap<>();
     }
 
     /**
-     * @param <K>
-     * @param <V>
-     * @param capacity
-     * @return
+     * @param <K>      Key type
+     * @param <V>      Value type
+     * @param capacity int
+     * @return ConcurrentMap<K, V>
      */
     public static <K, V> ConcurrentMap<K, V> newNonBlockingHashMap(int capacity) {
         return new NonBlockingHashMap<>(MapUtil.optimizationCapacity(8, capacity));
     }
 
     /**
-     * @param capacity
-     * @param <K>
-     * @param <V>
-     * @return
+     * @param <K>      Key type
+     * @param <V>      Value type
+     * @param capacity Capacity
+     * @return ConcurrentMap<K, V>
      */
     public static <K, V> ConcurrentMap<K, V> newNonBlockingHashMap(Capacity capacity) {
         return new NonBlockingHashMap<>(Capacity.checkAndGet(capacity));
     }
 
     /**
-     * @param <V>
-     * @return
+     * @param <V> Value type
+     * @return NonBlockingHashMapLong<V>
      */
     public static <V> NonBlockingHashMapLong<V> newNonBlockingLongMap() {
         return new NonBlockingHashMapLong<>();
     }
 
     /**
-     * @param <V>
-     * @param capacity
-     * @return
+     * @param <V>      Value type
+     * @param capacity int
+     * @return NonBlockingHashMapLong<V>
      */
     public static <V> NonBlockingHashMapLong<V> newNonBlockingLongMap(int capacity) {
         return new NonBlockingHashMapLong<>(MapUtil.optimizationCapacity(8, capacity));
     }
 
     /**
-     * @param capacity
-     * @param <V>
-     * @return
+     * @param <V>      Value type
+     * @param capacity Capacity
+     * @return NonBlockingHashMapLong<V>
      */
     public static <V> NonBlockingHashMapLong<V> newNonBlockingLongMap(Capacity capacity) {
         return new NonBlockingHashMapLong<>(Capacity.checkAndGet(capacity));
     }
 
     /**
-     * @param <V>
-     * @param spaceOptimization
-     * @return
+     * @param <V>               Value type
+     * @param spaceOptimization boolean
+     * @return NonBlockingHashMapLong<V>
      */
     public static <V> NonBlockingHashMapLong<V> newNonBlockingLongMap(boolean spaceOptimization) {
         return new NonBlockingHashMapLong<>(spaceOptimization);
     }
 
     /**
-     * @param <V>
-     * @param capacity
-     * @param spaceOptimization
-     * @return
+     * @param <V>               Value type
+     * @param capacity          int
+     * @param spaceOptimization boolean
+     * @return NonBlockingHashMapLong<V>
      */
-    public static <V> NonBlockingHashMapLong<V> newNonBlockingLongMap(int capacity, boolean spaceOptimization) {
-        return new NonBlockingHashMapLong<>(MapUtil.optimizationCapacity(8, capacity), spaceOptimization);
+    public static <V> NonBlockingHashMapLong<V> newNonBlockingLongMap(int capacity,
+                                                                      boolean spaceOptimization) {
+        return new NonBlockingHashMapLong<>(MapUtil.optimizationCapacity(8, capacity),
+                spaceOptimization);
     }
 
     /**
-     * @param capacity
-     * @param spaceOptimization
-     * @param <V>
-     * @return
+     * @param <V>               Value type
+     * @param capacity          Capacity
+     * @param spaceOptimization boolean
+     * @return NonBlockingHashMapLong<V>
      */
-    public static <V> NonBlockingHashMapLong<V> newNonBlockingLongMap(Capacity capacity, boolean spaceOptimization) {
-        return new NonBlockingHashMapLong<>(Capacity.checkAndGet(capacity), spaceOptimization);
+    public static <V> NonBlockingHashMapLong<V> newNonBlockingLongMap(Capacity capacity,
+                                                                      boolean spaceOptimization) {
+        return new NonBlockingHashMapLong<>(Capacity.checkAndGet(capacity),
+                spaceOptimization);
     }
 
 }

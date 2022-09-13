@@ -11,90 +11,90 @@ import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelClient;
 import io.mercury.common.concurrent.disruptor.dynamic.sentinel.ThreadStatusInfo;
 
 /**
- * @Author : Rookiex
- * @Date : Created in 2019/11/8 11:20
- * @Describe :
- * @version:
+ * @author : Rookiex
+ * @version :
+ * @date : Created in 2019/11/8 11:20
+ * @describe :
  */
 public abstract class AbstractSentinelHandler
-		implements WorkHandler<HandlerEvent>, LifecycleAware, ThreadStatusInfo, ConsumeStatusInfo {
-	private final SentinelClient sentinelClient;
+        implements WorkHandler<HandlerEvent>, LifecycleAware, ThreadStatusInfo, ConsumeStatusInfo {
 
-	public AbstractSentinelHandler(SentinelClient sentinelClient) {
-		this.sentinelClient = sentinelClient;
-	}
+    private final SentinelClient sentinelClient;
 
-	/**
-	 * Callback to indicate a unit of work needs to be processed.
-	 *
-	 * @param event published to the {@link RingBuffer}
-	 * @throws Exception if the {@link WorkHandler} would like the exception handled
-	 *                   further up the chain.
-	 */
-	@Override
-	public void onEvent(HandlerEvent event) throws Exception {
-		try {
-			threadRun();
-			deal(event);
-		} catch (Exception e) {
-			System.out.println("deal transmit err ");
-		} finally {
-			addConsumeCount();
-			threadWait();
-		}
-	}
+    public AbstractSentinelHandler(SentinelClient sentinelClient) {
+        this.sentinelClient = sentinelClient;
+    }
 
-	/**
-	 * @param event e
-	 * @throws Exception
-	 *
-	 */
-	public abstract void deal(HandlerEvent event) throws Exception;
+    /**
+     * Callback to indicate a unit of work needs to be processed.
+     *
+     * @param event published to the {@link RingBuffer}
+     * @throws Exception if the {@link WorkHandler} would like the exception handled
+     *                   further up the chain.
+     */
+    @Override
+    public void onEvent(HandlerEvent event) throws Exception {
+        try {
+            threadRun();
+            deal(event);
+        } catch (Exception e) {
+            System.out.println("deal transmit err ");
+        } finally {
+            addConsumeCount();
+            threadWait();
+        }
+    }
 
-	private final CountDownLatch shutdownLatch = new CountDownLatch(1);
+    /**
+     * @param event e
+     * @throws Exception
+     */
+    public abstract void deal(HandlerEvent event) throws Exception;
 
-	@Override
-	public void onStart() {
-		threadReady();
-	}
+    private final CountDownLatch shutdownLatch = new CountDownLatch(1);
 
-	@Override
-	public void onShutdown() {
-		threadShutDown();
-		shutdownLatch.countDown();
-	}
+    @Override
+    public void onStart() {
+        threadReady();
+    }
 
-	public void awaitShutdown() throws InterruptedException {
-		shutdownLatch.await();
-	}
+    @Override
+    public void onShutdown() {
+        threadShutDown();
+        shutdownLatch.countDown();
+    }
 
-	@Override
-	public void threadRun() {
-		sentinelClient.threadRun();
-	}
+    public void awaitShutdown() throws InterruptedException {
+        shutdownLatch.await();
+    }
 
-	@Override
-	public void threadWait() {
-		sentinelClient.threadWait();
-	}
+    @Override
+    public void threadRun() {
+        sentinelClient.threadRun();
+    }
 
-	@Override
-	public void threadReady() {
-		sentinelClient.threadReady();
-	}
+    @Override
+    public void threadWait() {
+        sentinelClient.threadWait();
+    }
 
-	@Override
-	public void threadShutDown() {
-		sentinelClient.threadShutDown();
-	}
+    @Override
+    public void threadReady() {
+        sentinelClient.threadReady();
+    }
 
-	@Override
-	public void addConsumeCount() {
-		sentinelClient.addConsumeCount();
-	}
+    @Override
+    public void threadShutDown() {
+        sentinelClient.threadShutDown();
+    }
 
-	@Override
-	public void addProduceCount() {
+    @Override
+    public void addConsumeCount() {
+        sentinelClient.addConsumeCount();
+    }
 
-	}
+    @Override
+    public void addProduceCount() {
+
+    }
 }

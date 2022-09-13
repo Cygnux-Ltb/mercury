@@ -1,12 +1,12 @@
 package io.mercury.common.concurrent.disruptor;
 
-import java.util.function.Supplier;
-
 import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.BusySpinWaitStrategy;
 import com.lmax.disruptor.SleepingWaitStrategy;
 import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.YieldingWaitStrategy;
+
+import java.util.function.Supplier;
 
 public enum CommonWaitStrategy implements Supplier<WaitStrategy> {
 
