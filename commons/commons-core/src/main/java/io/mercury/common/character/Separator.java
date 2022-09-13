@@ -20,11 +20,11 @@ public interface Separator {
     /**
      * char = '-';
      */
-    String CHAR_LINE = "-";
+    String LINE = "-";
 
     /**
      * char = ' ';
      */
-    String CHAR_BLANK = " ";
+    String BLANK = " ";
 
 }

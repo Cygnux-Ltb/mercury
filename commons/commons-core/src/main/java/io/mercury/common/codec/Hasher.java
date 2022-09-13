@@ -1,33 +1,11 @@
 package io.mercury.common.codec;
 
-/*
- * #%L
- * ch-commons-util
- * %%
- * Copyright (C) 2012 Cloudhopper by Twitter
- * %%
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * #L%
- */
-
-// java imports
+import io.mercury.common.util.HexUtil;
+import io.mercury.common.util.StringSupport;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
-
-import io.mercury.common.util.HexUtil;
-import io.mercury.common.util.StringSupport;
 
 /**
  * Utility class to hash strings (such as passwords). <br>
@@ -44,10 +22,13 @@ public final class Hasher {
 
     // Message Digest Algorithm - 128 bit
     private static final String ALGO_MD5 = "MD5";
+
     // Secure Hash Algorithm - 160 bit
     private static final String ALGO_SHA1 = "SHA-1";
+
     // Secure Hash Algorithm - 256 bit
     private static final String ALGO_SHA256 = "SHA-256";
+
     // Secure Hash Algorithm - 512 bit
     private static final String ALGO_SHA512 = "SHA-512";
 
@@ -60,14 +41,17 @@ public final class Hasher {
          * Message Digest Algorithm - 128 bit
          */
         MD5(ALGO_MD5),
+
         /**
          * Secure Hash Algorithm - 160 bit
          */
         SHA1(ALGO_SHA1),
+
         /**
          * Secure Hash Algorithm - 256 bit
          */
         SHA256(ALGO_SHA256),
+
         /**
          * Secure Hash Algorithm - 512 bit
          */
@@ -105,7 +89,7 @@ public final class Hasher {
      * <li>SHA512 - hash is always 128 char hex string
      * </ul>
      *
-     * @param str The String to hash. This assumes its an ASCII string.
+     * @param str The String to hash. This assumes it's an ASCII string.
      * @return The hex encoded hashed String
      * @throws NoSuchAlgorithmException exception
      */
@@ -140,7 +124,7 @@ public final class Hasher {
      * <li>SHA512 - hash is always 88 char base-64
      * </ul>
      *
-     * @param str The String to hash. This assumes its an ASCII string.
+     * @param str The String to hash. This assumes it's an ASCII string.
      * @return The Base-64 encoded hashed String
      * @throws NoSuchAlgorithmException exception
      */

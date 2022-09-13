@@ -69,7 +69,9 @@ public class Base64Codec {
         int pos = 0;
         int iterations = rawData.length / 3;
         for (int i = 0; i < iterations; i++) {
-            int value = ((rawData[pos++] & 0xFF) << 16) | ((rawData[pos++] & 0xFF) << 8) | (rawData[pos++] & 0xFF);
+            int value = ((rawData[pos++] & 0xFF) << 16)
+                    | ((rawData[pos++] & 0xFF) << 8)
+                    | (rawData[pos++] & 0xFF);
 
             buf.append(BASE64_ALPHABET[(value >>> 18) & 0x3F]);
             buf.append(BASE64_ALPHABET[(value >>> 12) & 0x3F]);

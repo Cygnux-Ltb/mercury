@@ -51,7 +51,7 @@ public abstract class RunnableComponent {
     }
 
     /**
-     * @throws Exception
+     * @throws Exception e
      */
     @AbstractFunction
     protected abstract void start0() throws Exception;
@@ -73,7 +73,7 @@ public abstract class RunnableComponent {
     }
 
     /**
-     * @throws Exception
+     * @throws Exception e
      */
     @AbstractFunction
     protected abstract void stop0() throws Exception;
@@ -98,11 +98,6 @@ public abstract class RunnableComponent {
         return name;
     }
 
-    /**
-     * @return
-     */
-    @AbstractFunction
-    protected abstract String getComponentType();
 
     protected void startWith(StartMode mode) {
         if (mode.immediately) {
@@ -110,7 +105,7 @@ public abstract class RunnableComponent {
         } else if (mode.delayMillis > 0) {
             //TODO 添加延迟启动
         } else {
-            log.info("{} -> {}, Start mode is [Manual], waiting call start...", getComponentType(), name);
+            log.info("{}, Start mode is [Manual], waiting call start...", name);
         }
     }
 
@@ -128,7 +123,7 @@ public abstract class RunnableComponent {
         }
 
         public static StartMode delay(long delayMillis) {
-            return new StartMode(false, delayMillis);
+            return new StartMode(false, delayMillis < 1 ? 1 : delayMillis);
         }
 
         private final boolean immediately;

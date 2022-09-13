@@ -1,13 +1,5 @@
 package io.mercury.common.collections;
 
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.function.ToIntFunction;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import io.mercury.common.util.ArrayUtil;
 import org.eclipse.collections.api.factory.map.ImmutableMapFactory;
 import org.eclipse.collections.api.factory.map.primitive.ImmutableIntDoubleMapFactory;
@@ -20,9 +12,7 @@ import org.eclipse.collections.api.factory.map.primitive.ImmutableLongLongMapFac
 import org.eclipse.collections.api.factory.map.primitive.ImmutableLongObjectMapFactory;
 import org.eclipse.collections.api.factory.map.sorted.ImmutableSortedMapFactory;
 import org.eclipse.collections.api.map.ImmutableMap;
-import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.collections.api.map.primitive.ImmutableIntObjectMap;
-import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
 import org.eclipse.collections.api.map.sorted.ImmutableSortedMap;
 import org.eclipse.collections.api.tuple.Pair;
 import org.eclipse.collections.impl.map.immutable.ImmutableMapFactoryImpl;
@@ -38,6 +28,12 @@ import org.eclipse.collections.impl.map.sorted.immutable.ImmutableSortedMapFacto
 import org.eclipse.collections.impl.map.sorted.mutable.TreeSortedMap;
 
 import javax.annotation.Nonnull;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.function.Supplier;
+import java.util.function.ToIntFunction;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class ImmutableMaps {
 

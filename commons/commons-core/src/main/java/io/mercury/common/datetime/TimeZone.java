@@ -5,9 +5,10 @@ import org.slf4j.Logger;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 
-import static java.lang.System.out;
 import static java.time.Instant.EPOCH;
-import static java.time.ZoneId.*;
+import static java.time.ZoneId.getAvailableZoneIds;
+import static java.time.ZoneId.of;
+import static java.time.ZoneId.systemDefault;
 import static java.time.ZonedDateTime.ofInstant;
 import static java.util.Comparator.naturalOrder;
 

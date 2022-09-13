@@ -1,7 +1,6 @@
 package io.mercury.common.collections;
 
-import javax.annotation.Nonnull;
-
+import io.mercury.common.util.ArrayUtil;
 import org.eclipse.collections.api.factory.set.ImmutableSetFactory;
 import org.eclipse.collections.api.factory.set.primitive.ImmutableDoubleSetFactory;
 import org.eclipse.collections.api.factory.set.primitive.ImmutableIntSetFactory;
@@ -18,7 +17,7 @@ import org.eclipse.collections.impl.set.immutable.primitive.ImmutableIntSetFacto
 import org.eclipse.collections.impl.set.immutable.primitive.ImmutableLongSetFactoryImpl;
 import org.eclipse.collections.impl.set.sorted.immutable.ImmutableSortedSetFactoryImpl;
 
-import io.mercury.common.util.ArrayUtil;
+import javax.annotation.Nonnull;
 
 public final class ImmutableSets {
 
@@ -61,7 +60,7 @@ public final class ImmutableSets {
     }
 
     /**
-     * @param values
+     * @param values int...
      * @return ImmutableIntSet
      */
     public static ImmutableIntSet newImmutableIntSet(@Nonnull int... values) {
@@ -71,7 +70,7 @@ public final class ImmutableSets {
     }
 
     /**
-     * @param values
+     * @param values long...
      * @return ImmutableLongSet
      */
     public static ImmutableLongSet newImmutableLongSet(@Nonnull long... values) {
@@ -81,7 +80,7 @@ public final class ImmutableSets {
     }
 
     /**
-     * @param values
+     * @param values double...
      * @return ImmutableDoubleSet
      */
     public static ImmutableDoubleSet newImmutableDoubleSet(@Nonnull double... values) {
@@ -91,8 +90,8 @@ public final class ImmutableSets {
     }
 
     /**
-     * @param <E>
-     * @param iterable
+     * @param <E>      E type
+     * @param iterable Iterable<E>
      * @return ImmutableSet
      */
     public static <E> ImmutableSet<E> newImmutableSet(Iterable<E> iterable) {
@@ -102,8 +101,8 @@ public final class ImmutableSets {
     }
 
     /**
-     * @param <E>
-     * @param values
+     * @param <E>    E type
+     * @param values E...
      * @return ImmutableSet
      */
     @SafeVarargs
@@ -114,8 +113,8 @@ public final class ImmutableSets {
     }
 
     /**
-     * @param <E>
-     * @param iterable
+     * @param <E>      E type
+     * @param iterable Iterable<E>
      * @return ImmutableSortedSet
      */
     public static <E> ImmutableSortedSet<E> newImmutableSortedSet(Iterable<E> iterable) {
@@ -125,8 +124,8 @@ public final class ImmutableSets {
     }
 
     /**
-     * @param <E>
-     * @param values
+     * @param <E>    E type
+     * @param values E...
      * @return ImmutableSortedSet
      */
     @SafeVarargs

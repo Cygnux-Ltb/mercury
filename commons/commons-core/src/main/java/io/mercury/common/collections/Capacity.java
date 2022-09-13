@@ -215,7 +215,7 @@ public enum Capacity {
 
     public static final int DEFAULT_SIZE = 16;
 
-    private static final MutableIntObjectMap<Capacity> ValueMap = new IntObjectHashMap<Capacity>();
+    private static final MutableIntObjectMap<Capacity> ValueMap = new IntObjectHashMap<>();
 
     static {
         for (Capacity capacity : Capacity.values())
