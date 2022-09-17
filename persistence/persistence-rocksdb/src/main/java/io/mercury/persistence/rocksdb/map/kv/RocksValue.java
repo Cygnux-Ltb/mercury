@@ -7,27 +7,24 @@ import io.netty.buffer.Unpooled;
 
 public interface RocksValue {
 
-	/**
-	 * 
-	 * @return RocksDB value ByteBuf
-	 */
-	@Nonnull
-	default ByteBuf value() {
-		return value(Unpooled.buffer(valueLength()));
-	}
+    /**
+     * @return RocksDB value ByteBuf
+     */
+    @Nonnull
+    default ByteBuf value() {
+        return value(Unpooled.buffer(valueLength()));
+    }
 
-	/**
-	 * 
-	 * @param useBuf
-	 * @return
-	 */
-	@Nonnull
-	ByteBuf value(@Nonnull ByteBuf useBuf);
+    /**
+     * @param buf ByteBuf
+     * @return ByteBuf
+     */
+    @Nonnull
+    ByteBuf value(@Nonnull ByteBuf buf);
 
-	/**
-	 * 
-	 * @return
-	 */
-	int valueLength();
+    /**
+     * @return int
+     */
+    int valueLength();
 
 }

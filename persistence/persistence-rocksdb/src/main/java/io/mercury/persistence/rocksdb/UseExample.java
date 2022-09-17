@@ -1,12 +1,5 @@
 package io.mercury.persistence.rocksdb;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.rocksdb.ColumnFamilyDescriptor;
 import org.rocksdb.ColumnFamilyHandle;
 import org.rocksdb.ColumnFamilyOptions;
@@ -15,6 +8,12 @@ import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
 import org.rocksdb.RocksIterator;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UseExample {
 
@@ -36,9 +35,7 @@ public class UseExample {
             Files.createDirectories(Paths.get(dbPath));
         rocksdb = RocksDB.open(options, dbPath);
 
-        /**
-         * 简单key-value
-         */
+        //简单key-value
         byte[] key = "Hello".getBytes();
         byte[] value = "World".getBytes();
         rocksdb.put(key, value);
@@ -46,9 +43,7 @@ public class UseExample {
         byte[] getValue = rocksdb.get(key);
         System.out.println(new String(getValue));
 
-        /**
-         * 通过List做主键查询
-         */
+        //通过List做主键查询
         rocksdb.put("SecondKey".getBytes(), "SecondValue".getBytes());
 
         List<byte[]> keys = new ArrayList<>();
@@ -60,17 +55,13 @@ public class UseExample {
             System.out.println(new String(keys.get(i)) + ":" + new String(values.get(i)));
         }
 
-        /**
-         * 打印全部[key - value]
-         */
+        //打印全部[key - value]
         RocksIterator iter = rocksdb.newIterator();
         for (iter.seekToFirst(); iter.isValid(); iter.next()) {
             System.out.println("iter key:" + new String(iter.key()) + ", iter value:" + new String(iter.value()));
         }
 
-        /**
-         * 删除一个key
-         */
+        //删除一个key
         rocksdb.delete(key);
         System.out.println("after remove key:" + new String(key));
 

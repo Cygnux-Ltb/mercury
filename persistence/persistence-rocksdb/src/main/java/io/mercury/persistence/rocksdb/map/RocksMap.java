@@ -20,7 +20,8 @@ import io.mercury.persistence.rocksdb.exception.RocksRuntimeException;
 import io.mercury.persistence.rocksdb.map.kv.RocksKey;
 import io.mercury.persistence.rocksdb.map.kv.RocksValue;
 
-public class RocksMap<K extends RocksKey, V extends RocksValue> implements Closeable {
+public class RocksMap<K extends RocksKey, V extends RocksValue>
+        implements Closeable {
 
     private final Options options;
     private final RocksDB rocksdb;
@@ -58,41 +59,41 @@ public class RocksMap<K extends RocksKey, V extends RocksValue> implements Close
     }
 
     /**
-     * @param key
-     * @return
+     * @param key K
+     * @return V
      */
     public V get(K key) {
         return null;
     }
 
     /**
-     * @param key0
-     * @param key1
-     * @return
+     * @param key0 K
+     * @param key1 K
+     * @return Collection<V>
      */
     public Collection<V> scan(K key0, K key1) {
         return null;
     }
 
     /**
-     * @param key
-     * @param value
-     * @return
+     * @param key   K
+     * @param value V
+     * @return V
      */
     public V put(K key, V value) {
         return null;
     }
 
     /**
-     * @param key
-     * @return
+     * @param key K
+     * @return V
      */
     public V remove(K key) {
         return null;
     }
 
     /**
-     * @param keyValues
+     * @param keyValues MutableSet<Pair<K, V>> keyValues
      */
     public void put(MutableSet<Pair<K, V>> keyValues) {
 

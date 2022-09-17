@@ -5,14 +5,11 @@ import java.io.Serial;
 
 public class RocksIOException extends IOException {
 
-	/**
-	 * 
-	 */
-	@Serial
-	private static final long serialVersionUID = -4712312419639419833L;
+    @Serial
+    private static final long serialVersionUID = -4712312419639419833L;
 
-	public RocksIOException(String message, IOException exception) {
-		super(message, exception);
-	}
+    public RocksIOException(String msg, IOException ioe) {
+        super(msg, ioe);
+    }
 
 }

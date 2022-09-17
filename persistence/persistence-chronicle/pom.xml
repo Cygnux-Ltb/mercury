@@ -17,15 +17,15 @@
     <properties>
         <!-- v chronicle storage basic v -->
         <chronicle-core.version>2.22.34</chronicle-core.version>
-        <chronicle-bytes.version>2.22.24</chronicle-bytes.version>
-        <chronicle-threads.version>2.22.15</chronicle-threads.version>
-        <chronicle-wire.version>2.22.20</chronicle-wire.version>
+        <chronicle-bytes.version>2.22.25</chronicle-bytes.version>
+        <chronicle-threads.version>2.22.16</chronicle-threads.version>
+        <chronicle-wire.version>2.22.22</chronicle-wire.version>
         <chronicle-analytics.version>2.22.4</chronicle-analytics.version>
         <!-- ^ chronicle storage basic ^ -->
         <chronicle-values.version>2.22.2</chronicle-values.version>
         <chronicle-algorithms.version>2.22.3</chronicle-algorithms.version>
-        <chronicle-queue.version>5.22.21</chronicle-queue.version>
-        <chronicle-map.version>3.22.8</chronicle-map.version>
+        <chronicle-queue.version>5.22.25</chronicle-queue.version>
+        <chronicle-map.version>3.22.9</chronicle-map.version>
     </properties>
 
     <dependencies>
