@@ -1,15 +1,17 @@
 package io.mercury.transport.rmq.exception;
 
+import java.io.Serial;
+
 public final class DeclareRuntimeException extends RuntimeException {
 
-	private static final long serialVersionUID = -3951956735581216086L;
+    @Serial
+    private static final long serialVersionUID = -3951956735581216086L;
 
-	/**
-	 * 
-	 * @param cause
-	 */
-	public DeclareRuntimeException(DeclareException cause) {
-		super(cause);
-	}
+    /**
+     * @param cause
+     */
+    public DeclareRuntimeException(DeclareException cause) {
+        super(cause);
+    }
 
 }

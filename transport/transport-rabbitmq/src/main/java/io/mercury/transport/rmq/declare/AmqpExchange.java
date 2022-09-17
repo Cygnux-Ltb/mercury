@@ -141,7 +141,7 @@ public final class AmqpExchange {
 				&& MapUtil.isEquals(args, another.args);
 	}
 
-	public static enum ExchangeType {
+	public enum ExchangeType {
 		Direct, Fanout, Topic, Anonymous
 	}
 

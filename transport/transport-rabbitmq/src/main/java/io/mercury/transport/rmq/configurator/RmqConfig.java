@@ -1,23 +1,21 @@
 package io.mercury.transport.rmq.configurator;
 
 /**
- * 
  * @author yellow013
- *
  */
 public abstract class RmqConfig {
 
-	/**
-	 * 连接配置信息
-	 */
-	private final RmqConnection connection;
+    /**
+     * 连接配置信息
+     */
+    private final RmqConnection connection;
 
-	protected RmqConfig(RmqConnection connection) {
-		this.connection = connection;
-	}
+    protected RmqConfig(RmqConnection connection) {
+        this.connection = connection;
+    }
 
-	public RmqConnection getConnection() {
-		return connection;
-	}
+    public RmqConnection getConnection() {
+        return connection;
+    }
 
 }

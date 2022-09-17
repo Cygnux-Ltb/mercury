@@ -1,12 +1,7 @@
 package io.mercury.transport.rmq.configurator;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-import javax.net.ssl.SSLContext;
-
 import com.rabbitmq.client.ConnectionFactory;
 import com.typesafe.config.Config;
-
 import io.mercury.common.config.ConfigWrapper;
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.util.StringSupport;
@@ -14,313 +9,316 @@ import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.TransportConfigurator;
 import io.mercury.transport.rmq.RmqTransport.ShutdownSignalHandler;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import javax.net.ssl.SSLContext;
+
 public final class RmqConnection implements TransportConfigurator {
 
-	// 连接地址
-	private final String host;
+    // 连接地址
+    private final String host;
 
-	// 端口号
-	private final int port;
+    // 端口号
+    private final int port;
 
-	// 用户名
-	private final String username;
+    // 用户名
+    private final String username;
 
-	// 密码
-	private final String password;
+    // 密码
+    private final String password;
 
-	// 虚拟主机
-	private final String virtualHost;
+    // 虚拟主机
+    private final String virtualHost;
 
-	// SSL
-	private final SSLContext sslContext;
+    // SSL
+    private final SSLContext sslContext;
 
-	// 连接超时时间
-	private final int connectionTimeout;
+    // 连接超时时间
+    private final int connectionTimeout;
 
-	// 自动恢复连接
-	private final boolean automaticRecovery;
+    // 自动恢复连接
+    private final boolean automaticRecovery;
 
-	// 重试连接间隔
-	private final long recoveryInterval;
+    // 重试连接间隔
+    private final long recoveryInterval;
 
-	// 握手通信超时时间
-	private final int handshakeTimeout;
+    // 握手通信超时时间
+    private final int handshakeTimeout;
 
-	// 关闭超时时间
-	private final int shutdownTimeout;
+    // 关闭超时时间
+    private final int shutdownTimeout;
 
-	// 请求心跳超时时间
-	private final int requestedHeartbeat;
+    // 请求心跳超时时间
+    private final int requestedHeartbeat;
 
-	// 停机处理回调函数
-	private final transient ShutdownSignalHandler shutdownSignalHandler;
+    // 停机处理回调函数
+    private final transient ShutdownSignalHandler shutdownSignalHandler;
 
-	// 配置连接信息
-	private final String connectionInfo;
+    // 配置连接信息
+    private final String connectionInfo;
 
-	private RmqConnection(Builder builder) {
-		this.host = builder.host;
-		this.port = builder.port;
-		this.username = builder.username;
-		this.password = builder.password;
-		this.virtualHost = builder.virtualHost;
-		this.sslContext = builder.sslContext;
-		this.connectionTimeout = builder.connectionTimeout;
-		this.automaticRecovery = builder.automaticRecovery;
-		this.recoveryInterval = builder.recoveryInterval;
-		this.handshakeTimeout = builder.handshakeTimeout;
-		this.shutdownTimeout = builder.shutdownTimeout;
-		this.requestedHeartbeat = builder.requestedHeartbeat;
-		this.shutdownSignalHandler = builder.shutdownSignalHandler;
-		this.connectionInfo = username + "@" + host + ":" + port
-				+ (virtualHost.equals("/") ? virtualHost : "/" + virtualHost);
-	}
+    private RmqConnection(Builder builder) {
+        this.host = builder.host;
+        this.port = builder.port;
+        this.username = builder.username;
+        this.password = builder.password;
+        this.virtualHost = builder.virtualHost;
+        this.sslContext = builder.sslContext;
+        this.connectionTimeout = builder.connectionTimeout;
+        this.automaticRecovery = builder.automaticRecovery;
+        this.recoveryInterval = builder.recoveryInterval;
+        this.handshakeTimeout = builder.handshakeTimeout;
+        this.shutdownTimeout = builder.shutdownTimeout;
+        this.requestedHeartbeat = builder.requestedHeartbeat;
+        this.shutdownSignalHandler = builder.shutdownSignalHandler;
+        this.connectionInfo = username + "@" + host + ":" + port
+                + (virtualHost.equals("/") ? virtualHost : "/" + virtualHost);
+    }
 
-	/**
-	 * 
-	 * @param host
-	 * @param port
-	 * @param username
-	 * @param password
-	 * @return
-	 */
-	public static Builder with(@Nonnull String host, int port, @Nonnull String username, @Nonnull String password) {
-		return new Builder(host, port, username, password);
-	}
+    /**
+     * @param host     String
+     * @param port     int
+     * @param username String
+     * @param password String
+     * @return Builder
+     */
+    public static Builder with(@Nonnull String host, int port,
+                               @Nonnull String username, @Nonnull String password) {
+        return new Builder(host, port, username, password);
+    }
 
-	/**
-	 * 
-	 * @param host
-	 * @param port
-	 * @param username
-	 * @param password
-	 * @param virtualHost
-	 * @return
-	 */
-	public static Builder with(@Nonnull String host, int port, @Nonnull String username, @Nonnull String password,
-			@CheckForNull String virtualHost) {
-		return new Builder(host, port, username, password, virtualHost);
-	}
+    /**
+     * @param host        String
+     * @param port        int
+     * @param username    String
+     * @param password    String
+     * @param virtualHost String
+     * @return Builder
+     */
+    public static Builder with(@Nonnull String host, int port,
+                               @Nonnull String username, @Nonnull String password,
+                               @CheckForNull String virtualHost) {
+        return new Builder(host, port, username, password, virtualHost);
+    }
 
-	/**
-	 * 
-	 * @param config
-	 * @return
-	 */
-	public static Builder with(@Nonnull Config config) {
-		return with("", config);
-	}
+    /**
+     * @param config Config
+     * @return Builder
+     */
+    public static Builder with(@Nonnull Config config) {
+        return with("", config);
+    }
 
-	/**
-	 * 
-	 * @param module
-	 * @param config
-	 * @return
-	 */
-	public static Builder with(@Nonnull String module, @Nonnull Config config) {
-		ConfigWrapper<RmqConfigOption> delegate = new ConfigWrapper<>(module, config);
-		return new Builder(delegate.getString(RmqConfigOption.Host), delegate.getInt(RmqConfigOption.Port),
-				delegate.getString(RmqConfigOption.Username), delegate.getString(RmqConfigOption.Password));
-	}
+    /**
+     * @param module String
+     * @param config Config
+     * @return Builder
+     */
+    public static Builder with(@Nonnull String module, @Nonnull Config config) {
+        ConfigWrapper<RmqConfigOption> delegate = new ConfigWrapper<>(module, config);
+        return new Builder(delegate.getString(RmqConfigOption.Host),
+                delegate.getInt(RmqConfigOption.Port),
+                delegate.getString(RmqConfigOption.Username),
+                delegate.getString(RmqConfigOption.Password));
+    }
 
-	public String getHost() {
-		return host;
-	}
+    public String getHost() {
+        return host;
+    }
 
-	public int getPort() {
-		return port;
-	}
+    public int getPort() {
+        return port;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public String getVirtualHost() {
-		return virtualHost;
-	}
+    public String getVirtualHost() {
+        return virtualHost;
+    }
 
-	public SSLContext getSslContext() {
-		return sslContext;
-	}
+    public SSLContext getSslContext() {
+        return sslContext;
+    }
 
-	public int getConnectionTimeout() {
-		return connectionTimeout;
-	}
+    public int getConnectionTimeout() {
+        return connectionTimeout;
+    }
 
-	public boolean isAutomaticRecovery() {
-		return automaticRecovery;
-	}
+    public boolean isAutomaticRecovery() {
+        return automaticRecovery;
+    }
 
-	public long getRecoveryInterval() {
-		return recoveryInterval;
-	}
+    public long getRecoveryInterval() {
+        return recoveryInterval;
+    }
 
-	public int getHandshakeTimeout() {
-		return handshakeTimeout;
-	}
+    public int getHandshakeTimeout() {
+        return handshakeTimeout;
+    }
 
-	public int getShutdownTimeout() {
-		return shutdownTimeout;
-	}
+    public int getShutdownTimeout() {
+        return shutdownTimeout;
+    }
 
-	public int getRequestedHeartbeat() {
-		return requestedHeartbeat;
-	}
+    public int getRequestedHeartbeat() {
+        return requestedHeartbeat;
+    }
 
-	public ShutdownSignalHandler getShutdownSignalHandler() {
-		return shutdownSignalHandler;
-	}
+    public ShutdownSignalHandler getShutdownSignalHandler() {
+        return shutdownSignalHandler;
+    }
 
-	@Override
-	public String getConnectionInfo() {
-		return connectionInfo;
-	}
+    @Override
+    public String getConnectionInfo() {
+        return connectionInfo;
+    }
 
-	@Override
-	public String getConfigInfo() {
-		return toString();
-	}
+    @Override
+    public String getConfigInfo() {
+        return toString();
+    }
 
-	private transient String cache;
+    private transient String cache;
 
-	@Override
-	public String toString() {
-		if (cache == null)
-			cache = JsonWrapper.toJsonHasNulls(this);
-		return cache;
-	}
+    @Override
+    public String toString() {
+        if (cache == null)
+            cache = JsonWrapper.toJsonHasNulls(this);
+        return cache;
+    }
 
-	/**
-	 * 
-	 * @return ConnectionFactory
-	 */
-	public ConnectionFactory createConnectionFactory() {
-		ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost(host);
-		factory.setPort(port);
-		factory.setUsername(username);
-		factory.setPassword(password);
-		factory.setVirtualHost(virtualHost);
-		factory.setAutomaticRecoveryEnabled(automaticRecovery);
-		factory.setNetworkRecoveryInterval(recoveryInterval);
-		factory.setHandshakeTimeout(handshakeTimeout);
-		factory.setConnectionTimeout(connectionTimeout);
-		factory.setShutdownTimeout(shutdownTimeout);
-		factory.setRequestedHeartbeat(requestedHeartbeat);
-		if (sslContext != null)
-			factory.useSslProtocol(sslContext);
-		return factory;
-	}
+    /**
+     * @return ConnectionFactory
+     */
+    public ConnectionFactory createConnectionFactory() {
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(host);
+        factory.setPort(port);
+        factory.setUsername(username);
+        factory.setPassword(password);
+        factory.setVirtualHost(virtualHost);
+        factory.setAutomaticRecoveryEnabled(automaticRecovery);
+        factory.setNetworkRecoveryInterval(recoveryInterval);
+        factory.setHandshakeTimeout(handshakeTimeout);
+        factory.setConnectionTimeout(connectionTimeout);
+        factory.setShutdownTimeout(shutdownTimeout);
+        factory.setRequestedHeartbeat(requestedHeartbeat);
+        if (sslContext != null)
+            factory.useSslProtocol(sslContext);
+        return factory;
+    }
 
-	public static class Builder {
-		// 连接地址
-		private final String host;
-		// 端口号
-		private final int port;
-		// 用户名
-		private final String username;
-		// 密码
-		private final String password;
-		// 虚拟主机
-		private String virtualHost = "/";
+    public static class Builder {
+        // 连接地址
+        private final String host;
+        // 端口号
+        private final int port;
+        // 用户名
+        private final String username;
+        // 密码
+        private final String password;
+        // 虚拟主机
+        private String virtualHost = "/";
 
-		// SSL上下文
-		private SSLContext sslContext;
+        // SSL上下文
+        private SSLContext sslContext;
 
-		// 连接超时时间
-		private int connectionTimeout = 60 * 1000;
+        // 连接超时时间
+        private int connectionTimeout = 60 * 1000;
 
-		// 自动恢复连接
-		private boolean automaticRecovery = true;
+        // 自动恢复连接
+        private boolean automaticRecovery = true;
 
-		// 重试连接间隔(毫秒)
-		private long recoveryInterval = 10 * 1000;
+        // 重试连接间隔(毫秒)
+        private long recoveryInterval = 10 * 1000;
 
-		// 握手通信超时时间(毫秒)
-		private int handshakeTimeout = 10 * 1000;
+        // 握手通信超时时间(毫秒)
+        private int handshakeTimeout = 10 * 1000;
 
-		// 关闭超时时间(毫秒)
-		private int shutdownTimeout = 10 * 1000;
+        // 关闭超时时间(毫秒)
+        private int shutdownTimeout = 10 * 1000;
 
-		// 请求心跳超时时间(秒)
-		private int requestedHeartbeat = 20;
+        // 请求心跳超时时间(秒)
+        private int requestedHeartbeat = 20;
 
-		// 停机处理回调函数
-		private ShutdownSignalHandler shutdownSignalHandler;
+        // 停机处理回调函数
+        private ShutdownSignalHandler shutdownSignalHandler;
 
-		private Builder(String host, int port, String username, String password) {
-			this(host, port, username, password, "/");
-		}
+        private Builder(String host, int port, String username, String password) {
+            this(host, port, username, password, "/");
+        }
 
-		private Builder(String host, int port, String username, String password, String virtualHost) {
-			Asserter.nonNull(host, "host");
-			Asserter.atWithinRange(port, 4096, 65536, "port");
-			Asserter.nonNull(username, "username");
-			Asserter.nonNull(password, "password");
-			this.host = host;
-			this.port = port;
-			this.username = username;
-			this.password = password;
-			if (StringSupport.nonEmpty(virtualHost) && !virtualHost.equals("/"))
-				this.virtualHost = virtualHost;
-		}
+        private Builder(String host, int port, String username, String password, String virtualHost) {
+            Asserter.nonNull(host, "host");
+            Asserter.atWithinRange(port, 4096, 65536, "port");
+            Asserter.nonNull(username, "username");
+            Asserter.nonNull(password, "password");
+            this.host = host;
+            this.port = port;
+            this.username = username;
+            this.password = password;
+            if (StringSupport.nonEmpty(virtualHost) && !virtualHost.equals("/"))
+                this.virtualHost = virtualHost;
+        }
 
-		public Builder setSslContext(SSLContext sslContext) {
-			this.sslContext = sslContext;
-			return this;
-		}
+        public Builder setSslContext(SSLContext sslContext) {
+            this.sslContext = sslContext;
+            return this;
+        }
 
-		public Builder setConnectionTimeout(int connectionTimeout) {
-			this.connectionTimeout = connectionTimeout;
-			return this;
-		}
+        public Builder setConnectionTimeout(int connectionTimeout) {
+            this.connectionTimeout = connectionTimeout;
+            return this;
+        }
 
-		public Builder setAutomaticRecovery(boolean automaticRecovery) {
-			this.automaticRecovery = automaticRecovery;
-			return this;
-		}
+        public Builder setAutomaticRecovery(boolean automaticRecovery) {
+            this.automaticRecovery = automaticRecovery;
+            return this;
+        }
 
-		public Builder setRecoveryInterval(long recoveryInterval) {
-			this.recoveryInterval = recoveryInterval;
-			return this;
-		}
+        public Builder setRecoveryInterval(long recoveryInterval) {
+            this.recoveryInterval = recoveryInterval;
+            return this;
+        }
 
-		public Builder setHandshakeTimeout(int handshakeTimeout) {
-			this.handshakeTimeout = handshakeTimeout;
-			return this;
-		}
+        public Builder setHandshakeTimeout(int handshakeTimeout) {
+            this.handshakeTimeout = handshakeTimeout;
+            return this;
+        }
 
-		public Builder setShutdownTimeout(int shutdownTimeout) {
-			this.shutdownTimeout = shutdownTimeout;
-			return this;
-		}
+        public Builder setShutdownTimeout(int shutdownTimeout) {
+            this.shutdownTimeout = shutdownTimeout;
+            return this;
+        }
 
-		public Builder setRequestedHeartbeat(int requestedHeartbeat) {
-			this.requestedHeartbeat = requestedHeartbeat;
-			return this;
-		}
+        public Builder setRequestedHeartbeat(int requestedHeartbeat) {
+            this.requestedHeartbeat = requestedHeartbeat;
+            return this;
+        }
 
-		public Builder setShutdownSignalHandler(ShutdownSignalHandler shutdownSignalHandler) {
-			this.shutdownSignalHandler = shutdownSignalHandler;
-			return this;
-		}
+        public Builder setShutdownSignalHandler(ShutdownSignalHandler shutdownSignalHandler) {
+            this.shutdownSignalHandler = shutdownSignalHandler;
+            return this;
+        }
 
-		public RmqConnection build() {
-			return new RmqConnection(this);
-		}
+        public RmqConnection build() {
+            return new RmqConnection(this);
+        }
 
-	}
+    }
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		RmqConnection configuration = with("localhost", 5672, "admin", "admin", "report").build();
-		System.out.println(configuration);
-		System.out.println(configuration.getConfigInfo());
+        RmqConnection configuration = with("localhost", 5672, "admin", "admin", "report").build();
+        System.out.println(configuration);
+        System.out.println(configuration.getConfigInfo());
 
-	}
+    }
 
 }

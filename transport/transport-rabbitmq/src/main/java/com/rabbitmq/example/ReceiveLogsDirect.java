@@ -2,6 +2,8 @@ package com.rabbitmq.example;
 
 import com.rabbitmq.client.*;
 
+import java.nio.charset.StandardCharsets;
+
 public class ReceiveLogsDirect {
 
 	private static final String EXCHANGE_NAME = "direct_logs";
@@ -26,7 +28,7 @@ public class ReceiveLogsDirect {
 		System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
 		DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-			String message = new String(delivery.getBody(), "UTF-8");
+			String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
 			System.out.println(" [x] Received '" + delivery.getEnvelope().getRoutingKey() + "':'" + message + "'");
 		};
 		channel.basicConsume(queueName, true, deliverCallback, consumerTag -> {

@@ -2,22 +2,22 @@ package io.mercury.transport.exception;
 
 import java.io.Serial;
 
-public final class ReceiverStartException extends RuntimeException {
+public final class ConnectionFailedException extends RuntimeException {
 
     @Serial
-    private static final long serialVersionUID = 5792361596324344884L;
+    private static final long serialVersionUID = -410726947350896210L;
 
     /**
      * @param msg String
      */
-    public ReceiverStartException(String msg) {
+    public ConnectionFailedException(String msg) {
         super(msg);
     }
 
     /**
      * @param cause Throwable
      */
-    public ReceiverStartException(Throwable cause) {
+    public ConnectionFailedException(Throwable cause) {
         super(cause);
     }
 
@@ -25,7 +25,7 @@ public final class ReceiverStartException extends RuntimeException {
      * @param msg   String
      * @param cause Throwable
      */
-    public ReceiverStartException(String msg, Throwable cause) {
+    public ConnectionFailedException(String msg, Throwable cause) {
         super(msg, cause);
     }
 

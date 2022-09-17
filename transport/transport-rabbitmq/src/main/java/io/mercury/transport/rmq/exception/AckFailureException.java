@@ -1,7 +1,10 @@
 package io.mercury.transport.rmq.exception;
 
+import java.io.Serial;
+
 public class AckFailureException extends Exception {
 
+	@Serial
 	private static final long serialVersionUID = -197190157920481972L;
 
 	/**

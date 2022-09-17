@@ -81,7 +81,7 @@ public class RmqPublisher extends RmqTransport implements Publisher<String, byte
 		this.confirmTimeout = cfg.getConfirmOptions().getConfirmTimeout();
 		this.confirmRetry = cfg.getConfirmOptions().getConfirmRetry();
 		this.hasPropsSupplier = msgPropsSupplier != null;
-		this.publisherName = "publisher::" + rabbitConnection.getConnectionInfo() + "$" + exchangeName;
+		this.publisherName = "publisher::" + rmqConnection.getConnectionInfo() + "$" + exchangeName;
 		createConnection();
 		declare();
 	}
@@ -97,7 +97,7 @@ public class RmqPublisher extends RmqTransport implements Publisher<String, byte
 		} catch (DeclareException e) {
 			// 在定义Exchange和进行绑定时抛出任何异常都需要终止程序
 			log.error("Exchange declare throw exception -> connection configurator info : {}, " + "error message : {}",
-					rabbitConnection.getConfigInfo(), e.getMessage(), e);
+					rmqConnection.getConfigInfo(), e.getMessage(), e);
 			closeIgnoreException();
 			throw new DeclareRuntimeException(e);
 		}
@@ -134,7 +134,7 @@ public class RmqPublisher extends RmqTransport implements Publisher<String, byte
 		while (!isConnected()) {
 			log.error("Detect connection isConnected() == false, retry {}", (++retry));
 			closeIgnoreException();
-			SleepSupport.sleep(rabbitConnection.getRecoveryInterval());
+			SleepSupport.sleep(rmqConnection.getRecoveryInterval());
 			createConnection();
 		}
 		if (confirm) {

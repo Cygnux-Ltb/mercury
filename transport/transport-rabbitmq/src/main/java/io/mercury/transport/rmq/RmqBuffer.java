@@ -26,200 +26,194 @@ import javax.annotation.Nonnull;
 
 public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 
-	private static final Logger log = Log4j2LoggerFactory.getLogger(RmqBuffer.class);
+    private static final Logger log = Log4j2LoggerFactory.getLogger(RmqBuffer.class);
 
-	private final RmqConnection connection;
-	private final RmqChannel channel;
-	private final String queueName;
-	private final List<String> exchangeNames;
-	private final List<String> routingKeys;
+    private final RmqConnection connection;
+    private final RmqChannel channel;
+    private final String queueName;
+    private final List<String> exchangeNames;
+    private final List<String> routingKeys;
 
-	private final BytesSerializer<E> serializer;
-	private final BytesDeserializer<E> deserializer;
+    private final BytesSerializer<E> serializer;
+    private final BytesDeserializer<E> deserializer;
 
-	private final String name;
+    private final String name;
 
-	/**
-	 * 
-	 * @param <E>
-	 * @param connection
-	 * @param queueName
-	 * @param serializer
-	 * @param deserializer
-	 * @return
-	 * @throws DeclareException
-	 */
-	public static <E> RmqBuffer<E> newQueue(RmqConnection connection, String queueName,
-											BytesSerializer<E> serializer, BytesDeserializer<E> deserializer) throws DeclareException {
-		return new RmqBuffer<>(connection, queueName, MutableLists.newFastList(), MutableLists.newFastList(),
-				serializer, deserializer);
-	}
+    /**
+     * @param <E>
+     * @param connection
+     * @param queueName
+     * @param serializer
+     * @param deserializer
+     * @return
+     * @throws DeclareException
+     */
+    public static <E> RmqBuffer<E> newQueue(RmqConnection connection, String queueName,
+                                            BytesSerializer<E> serializer, BytesDeserializer<E> deserializer) throws DeclareException {
+        return new RmqBuffer<>(connection, queueName, MutableLists.newFastList(), MutableLists.newFastList(),
+                serializer, deserializer);
+    }
 
-	/**
-	 * 
-	 * @param <E>
-	 * @param connection
-	 * @param queueName
-	 * @param exchangeNames
-	 * @param routingKeys
-	 * @param serializer
-	 * @param deserializer
-	 * @return
-	 * @throws DeclareException
-	 */
-	public static <E> RmqBuffer<E> newQueue(RmqConnection connection, String queueName,
-											List<String> exchangeNames, List<String> routingKeys, BytesSerializer<E> serializer,
-											BytesDeserializer<E> deserializer) throws DeclareException {
-		return new RmqBuffer<>(connection, queueName, exchangeNames, routingKeys, serializer, deserializer);
-	}
+    /**
+     * @param <E>
+     * @param connection
+     * @param queueName
+     * @param exchangeNames
+     * @param routingKeys
+     * @param serializer
+     * @param deserializer
+     * @return
+     * @throws DeclareException
+     */
+    public static <E> RmqBuffer<E> newQueue(RmqConnection connection, String queueName,
+                                            List<String> exchangeNames, List<String> routingKeys, BytesSerializer<E> serializer,
+                                            BytesDeserializer<E> deserializer) throws DeclareException {
+        return new RmqBuffer<>(connection, queueName, exchangeNames, routingKeys, serializer, deserializer);
+    }
 
-	/**
-	 * 
-	 * @param connection
-	 * @param queueName
-	 * @param exchangeNames
-	 * @param routingKeys
-	 * @param serializer
-	 * @param deserializer
-	 * @throws DeclareException
-	 */
-	private RmqBuffer(RmqConnection connection, String queueName, List<String> exchangeNames, List<String> routingKeys,
-			BytesSerializer<E> serializer, BytesDeserializer<E> deserializer) throws DeclareException {
-		this.connection = connection;
-		this.queueName = queueName;
-		this.exchangeNames = exchangeNames;
-		this.routingKeys = routingKeys;
-		this.serializer = serializer;
-		this.deserializer = deserializer;
-		this.channel = RmqChannel.with(connection);
-		this.name = "rabbitmq-buffer::" + connection.getConnectionInfo() + "/" + queueName + "";
-		declareQueue();
-	}
+    /**
+     * @param connection
+     * @param queueName
+     * @param exchangeNames
+     * @param routingKeys
+     * @param serializer
+     * @param deserializer
+     * @throws DeclareException
+     */
+    private RmqBuffer(RmqConnection connection, String queueName, List<String> exchangeNames, List<String> routingKeys,
+                      BytesSerializer<E> serializer, BytesDeserializer<E> deserializer) throws DeclareException {
+        this.connection = connection;
+        this.queueName = queueName;
+        this.exchangeNames = exchangeNames;
+        this.routingKeys = routingKeys;
+        this.serializer = serializer;
+        this.deserializer = deserializer;
+        this.channel = RmqChannel.with(connection);
+        this.name = "rabbitmq-buffer::" + connection.getConnectionInfo() + "/" + queueName + "";
+        declareQueue();
+    }
 
-	/**
-	 * 
-	 * @throws DeclareException
-	 */
-	private void declareQueue() throws DeclareException {
-		QueueRelationship relationship = QueueRelationship.named(queueName).binding(
-				// 如果routingKeys为空集合, 则创建fanout交换器, 否则创建直接交换器
-				exchangeNames.stream().map(exchangeName -> routingKeys.isEmpty() ? AmqpExchange.fanout(exchangeName)
-						: AmqpExchange.direct(exchangeName)).collect(Collectors.toList()),
-				routingKeys);
-		relationship.declare(RmqOperator.with(channel.internalChannel()));
-	}
+    /**
+     * @throws DeclareException
+     */
+    private void declareQueue() throws DeclareException {
+        QueueRelationship relationship = QueueRelationship.named(queueName).binding(
+                // 如果routingKeys为空集合, 则创建fanout交换器, 否则创建直接交换器
+                exchangeNames.stream().map(exchangeName -> routingKeys.isEmpty() ? AmqpExchange.fanout(exchangeName)
+                        : AmqpExchange.direct(exchangeName)).collect(Collectors.toList()),
+                routingKeys);
+        relationship.declare(RmqOperator.with(channel.internalChannel()));
+    }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public RmqConnection getConnection() {
-		return connection;
-	}
+    /**
+     * @return
+     */
+    public RmqConnection getConnection() {
+        return connection;
+    }
 
-	@Override
-	public boolean enqueue(E e) {
-		byte[] msg = serializer.serialization(e);
-		try {
-			channel.internalChannel().basicPublish("", queueName, null, msg);
-			return true;
-		} catch (IOException ioe) {
-			log.error("enqueue basicPublish throw -> {}", ioe.getMessage(), ioe);
-			return false;
-		}
-	}
+    @Override
+    public boolean enqueue(E e) {
+        byte[] msg = serializer.serialization(e);
+        try {
+            channel.internalChannel().basicPublish("", queueName, null, msg);
+            return true;
+        } catch (IOException ioe) {
+            log.error("enqueue basicPublish throw -> {}", ioe.getMessage(), ioe);
+            return false;
+        }
+    }
 
-	@Override
-	public E dequeue() {
-		GetResponse response = basicGet();
-		if (response == null)
-			return null;
-		byte[] body = response.getBody();
-		if (body == null)
-			return null;
-		basicAck(response.getEnvelope());
-		return deserializer.deserialization(body);
-	}
+    @Override
+    public E dequeue() {
+        GetResponse response = basicGet();
+        if (response == null)
+            return null;
+        byte[] body = response.getBody();
+        if (body == null)
+            return null;
+        basicAck(response.getEnvelope());
+        return deserializer.deserialization(body);
+    }
 
-	@Override
-	public boolean pollAndApply(@Nonnull PollFunction<E> function) {
-		GetResponse response = basicGet();
-		if (response == null)
-			return false;
-		byte[] body = response.getBody();
-		if (body == null)
-			return false;
-		if (!function.apply(deserializer.deserialization(body))) {
-			log.error("PollFunction failure, no ack");
-			return false;
-		}
-		return basicAck(response.getEnvelope());
-	}
+    @Override
+    public boolean pollAndApply(@Nonnull PollFunction<E> function) {
+        GetResponse response = basicGet();
+        if (response == null)
+            return false;
+        byte[] body = response.getBody();
+        if (body == null)
+            return false;
+        if (!function.apply(deserializer.deserialization(body))) {
+            log.error("PollFunction failure, no ack");
+            return false;
+        }
+        return basicAck(response.getEnvelope());
+    }
 
-	/**
-	 * 
-	 * @return
-	 */
-	private GetResponse basicGet() {
-		try {
-			return channel.internalChannel().basicGet(queueName, false);
-		} catch (IOException ioe) {
-			log.error("poll basicGet throw -> {}", ioe.getMessage(), ioe);
-			return null;
-		}
-	}
+    /**
+     * @return
+     */
+    private GetResponse basicGet() {
+        try {
+            return channel.internalChannel().basicGet(queueName, false);
+        } catch (IOException ioe) {
+            log.error("poll basicGet throw -> {}", ioe.getMessage(), ioe);
+            return null;
+        }
+    }
 
-	/**
-	 * 
-	 * @param envelope
-	 * @return
-	 */
-	private boolean basicAck(Envelope envelope) {
-		try {
-			channel.internalChannel().basicAck(envelope.getDeliveryTag(), false);
-			return true;
-		} catch (IOException ioe) {
-			log.error("poll basicAck throw -> {}", ioe.getMessage(), ioe);
-			return false;
-		}
-	}
+    /**
+     * @param envelope
+     * @return
+     */
+    private boolean basicAck(Envelope envelope) {
+        try {
+            channel.internalChannel().basicAck(envelope.getDeliveryTag(), false);
+            return true;
+        } catch (IOException ioe) {
+            log.error("poll basicAck throw -> {}", ioe.getMessage(), ioe);
+            return false;
+        }
+    }
 
-	@Override
-	public String getQueueName() {
-		return name;
-	}
+    @Override
+    public String getQueueName() {
+        return name;
+    }
 
-	@Override
-	public void close() throws IOException {
-		channel.close();
-	}
+    @Override
+    public void close() throws IOException {
+        channel.close();
+    }
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		RmqConnection connection = RmqConnection.with("127.0.0.1", 5672, "user", "password").build();
+        RmqConnection connection = RmqConnection.with("127.0.0.1", 5672, "user", "password").build();
 
-		try {
-			RmqBuffer<String> testQueue = newQueue(connection, "rmq_test",
-					e -> JsonWrapper.toJson(e).getBytes(Charsets.UTF8),
-					(bytes, reuuse) -> new String(bytes, Charsets.UTF8));
-			testQueue.pollAndApply(str -> {
-				System.out.println(str);
-				return true;
-			});
-		} catch (DeclareException e) {
-			e.printStackTrace();
-		}
+        try (RmqBuffer<String> testQueue = newQueue(
+                connection, "rmq_test",
+                str -> JsonWrapper.toJson(str).getBytes(Charsets.UTF8),
+                (bytes, reuse) -> new String(bytes, Charsets.UTF8))) {
 
-	}
+            testQueue.pollAndApply(str -> {
+                System.out.println(str);
+                return true;
+            });
+        } catch (DeclareException | IOException e) {
+            e.printStackTrace();
+        }
 
-	@Override
-	public boolean isEmpty() {
-		return false;
-	}
+    }
 
-	@Override
-	public QueueType getQueueType() {
-		return QueueType.ManyToMany;
-	}
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Override
+    public QueueType getQueueType() {
+        return QueueType.ManyToMany;
+    }
 
 }

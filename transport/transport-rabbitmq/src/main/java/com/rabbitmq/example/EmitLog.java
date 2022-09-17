@@ -4,6 +4,8 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
+import java.nio.charset.StandardCharsets;
+
 public class EmitLog {
 
 	private static final String EXCHANGE_NAME = "logs";
@@ -16,7 +18,7 @@ public class EmitLog {
 
 			String message = args.length < 1 ? "info: Hello World!" : String.join(" ", args);
 
-			channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes("UTF-8"));
+			channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes(StandardCharsets.UTF_8));
 			System.out.println(" [x] Sent '" + message + "'");
 		} catch (Exception e) {
 			e.printStackTrace();

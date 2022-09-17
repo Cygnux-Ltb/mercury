@@ -14,7 +14,7 @@
 
     <properties>
         <aeron.version>1.39.0</aeron.version>
-        <byte-buddy.version>1.12.12</byte-buddy.version>
+        <byte-buddy.version>1.12.16</byte-buddy.version>
     </properties>
 
     <dependencies>
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>org.agrona</groupId>
             <artifactId>agrona</artifactId>
-            <version>1.16.0</version>
+            <version>1.17.1</version>
         </dependency>
 
         <!-- Aeron : Efficient reliable UDP unicast, UDP multicast,

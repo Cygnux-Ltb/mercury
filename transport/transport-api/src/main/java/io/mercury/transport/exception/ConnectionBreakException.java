@@ -1,32 +1,32 @@
 package io.mercury.transport.exception;
 
+import java.io.Serial;
+
 public final class ConnectionBreakException extends RuntimeException {
 
-	private static final long serialVersionUID = 1822516879154638625L;
+    @Serial
+    private static final long serialVersionUID = 1822516879154638625L;
 
-	/**
-	 * 
-	 * @param msg
-	 */
-	public ConnectionBreakException(String msg) {
-		super(msg);
-	}
+    /**
+     * @param msg String
+     */
+    public ConnectionBreakException(String msg) {
+        super(msg);
+    }
 
-	/**
-	 * 
-	 * @param cause
-	 */
-	public ConnectionBreakException(Throwable cause) {
-		super(cause);
-	}
+    /**
+     * @param cause Throwable
+     */
+    public ConnectionBreakException(Throwable cause) {
+        super(cause);
+    }
 
-	/**
-	 * 
-	 * @param msg
-	 * @param cause
-	 */
-	public ConnectionBreakException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
+    /**
+     * @param msg   String
+     * @param cause Throwable
+     */
+    public ConnectionBreakException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 
 }
