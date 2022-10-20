@@ -4,14 +4,14 @@ import redis.clients.jedis.Jedis;
 
 public class App {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		Jedis jedis = new Jedis("localhost", 6379);
-		jedis.auth("xxxx");
-		String value = jedis.get("key");
-		System.out.println(value);
-		jedis.close();
+        Jedis jedis = new Jedis("localhost", 6379);
+        jedis.auth("password");
+        String value = jedis.get("key");
+        System.out.println(value);
+        jedis.close();
 
-	}
+    }
 
 }

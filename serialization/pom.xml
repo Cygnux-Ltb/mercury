@@ -63,6 +63,13 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <!-- General data-binding functionality for Jackson: works on core streaming API -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.databind.version}</version>
+            </dependency>
+
             <!-- Core annotations used for value types, used by Jackson data binding
                 package. -->
             <dependency>
@@ -76,14 +83,6 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-
-            <!-- General data-binding functionality for Jackson: works on core streaming
-                API -->
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
                 <version>${jackson.version}</version>
             </dependency>
 

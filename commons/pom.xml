@@ -1,68 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<!-- This is mercury pom.xml -->
-	<parent>
-		<groupId>io.mercury</groupId>
-		<artifactId>mercury</artifactId>
-		<version>1.0-SNAPSHOT</version>
-	</parent>
+    <!-- This is mercury pom.xml -->
+    <parent>
+        <groupId>io.mercury</groupId>
+        <artifactId>mercury</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>commons</artifactId>
-	<name>commons</name>
+    <artifactId>commons</artifactId>
+    <name>commons</name>
 
-	<packaging>pom</packaging>
+    <packaging>pom</packaging>
 
-	<modules>
-		<module>commons-concurrent</module>
-		<module>commons-config</module>
-		<module>commons-core</module>
-		<module>commons-injection</module>
-		<module>commons-graph</module>
-		<module>commons-log4j2</module>
-		<module>commons-reflect</module>
-	</modules>
+    <modules>
+        <module>commons-concurrent</module>
+        <module>commons-config</module>
+        <module>commons-core</module>
+        <module>commons-injection</module>
+        <module>commons-graph</module>
+        <module>commons-log4j2</module>
+        <module>commons-reflect</module>
+    </modules>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<compilerArgument>-parameters</compilerArgument>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <compilerArgument>-parameters</compilerArgument>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-	<dependencyManagement>
-		<dependencies>
-			<!-- commons core -->
-			<dependency>
-				<groupId>io.mercury</groupId>
-				<artifactId>commons-core</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<!-- commons log -->
-			<dependency>
-				<groupId>io.mercury</groupId>
-				<artifactId>commons-log4j2</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+    <dependencyManagement>
+        <dependencies>
+            <!-- commons core -->
+            <dependency>
+                <groupId>io.mercury</groupId>
+                <artifactId>commons-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- commons log -->
+            <dependency>
+                <groupId>io.mercury</groupId>
+                <artifactId>commons-log4j2</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>
