@@ -1,9 +1,9 @@
 package io.mercury.persistence.rocksdb.map.kv;
 
-import javax.annotation.Nonnull;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+
+import javax.annotation.Nonnull;
 
 public interface RocksValue {
 

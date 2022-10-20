@@ -1,9 +1,9 @@
 package io.mercury;
 
-import junit.framework.Assert;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.junit.Assert;
 
 /**
  * Unit test for simple App.
@@ -27,7 +27,7 @@ public class AppTest extends TestCase {
     }
 
     /**
-     * Rigourous Test :-)
+     * Rigorous Test :-)
      */
     public void testApp() {
         Assert.assertTrue(true);

@@ -15,8 +15,8 @@ public @interface RdbTable {
 
     boolean ignoreExisted() default true;
 
-    String tableName();
+    String tableName() default "";
 
-    String createTableStatement();
+    String createTableStatement() default "";
 
 }

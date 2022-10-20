@@ -11,6 +11,7 @@ import org.rocksdb.RocksIterator;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +32,9 @@ public class UseExample {
         options.setCreateIfMissing(true);
 
         // 文件不存在，则先创建文件
-        if (!Files.isSymbolicLink(Paths.get(dbPath)))
-            Files.createDirectories(Paths.get(dbPath));
+        Path path = Paths.get(dbPath);
+        if (!Files.isSymbolicLink(path))
+            Files.createDirectories(path);
         rocksdb = RocksDB.open(options, dbPath);
 
         //简单key-value

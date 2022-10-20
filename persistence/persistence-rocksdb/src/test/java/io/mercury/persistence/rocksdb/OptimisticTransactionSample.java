@@ -5,7 +5,15 @@ package io.mercury.persistence.rocksdb;
 //  COPYING file in the root directory) and Apache 2.0 License
 //  (found in the LICENSE.Apache file in the root directory).
 
-import org.rocksdb.*;
+import org.rocksdb.OptimisticTransactionDB;
+import org.rocksdb.OptimisticTransactionOptions;
+import org.rocksdb.Options;
+import org.rocksdb.ReadOptions;
+import org.rocksdb.RocksDBException;
+import org.rocksdb.Snapshot;
+import org.rocksdb.Status;
+import org.rocksdb.Transaction;
+import org.rocksdb.WriteOptions;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -76,7 +84,7 @@ public class OptimisticTransactionSample {
             value = txnDb.get(readOptions, key1);
             assert (value == null);
 
-            // Write a key OUTSIDE of this transaction.
+            // Write a key OUTSIDE this transaction.
             // Does not affect txn since this is an unrelated key.
             // If we wrote key 'abc' here, the transaction would fail to commit.
             txnDb.put(writeOptions, key2, value2);
@@ -114,7 +122,7 @@ public class OptimisticTransactionSample {
                 txn.commit();
                 throw new IllegalStateException();
             } catch (final RocksDBException e) {
-                // Transaction could not commit since the write outside of the txn
+                // Transaction could not commit since the write outside the txn
                 // conflicted with the read!
                 assert (e.getStatus().getCode() == Status.Code.Busy);
             }
@@ -151,7 +159,7 @@ public class OptimisticTransactionSample {
             byte[] value = txn.get(readOptions, keyX);
             txn.put(valueX, valueX);
 
-            // Do a write outside of the transaction to key "y"
+            // Do write outside the transaction to key "y"
             txnDb.put(writeOptions, keyY, valueY);
 
             // Set a new snapshot in the transaction
@@ -160,12 +168,12 @@ public class OptimisticTransactionSample {
             readOptions.setSnapshot(snapshot);
 
             // Do some reads and writes to key "y"
-            // Since the snapshot was advanced, the write done outside of the
+            // Since the snapshot was advanced, to write done outside the
             // transaction does not conflict.
             txn.getForUpdate(readOptions, keyY, true);
             txn.put(keyY, valueY);
 
-            // Commit. Since the snapshot was advanced, the write done outside of the
+            // Commit. Since the snapshot was advanced, to write done outside the
             // transaction does not prevent this transaction from Committing.
             txn.commit();
 

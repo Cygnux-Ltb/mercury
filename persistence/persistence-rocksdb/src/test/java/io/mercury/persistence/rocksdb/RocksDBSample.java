@@ -1,9 +1,5 @@
 package io.mercury.persistence.rocksdb;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.rocksdb.BlockBasedTableConfig;
 import org.rocksdb.BloomFilter;
 import org.rocksdb.CompactionStyle;
@@ -28,6 +24,10 @@ import org.rocksdb.VectorMemTableConfig;
 import org.rocksdb.WriteBatch;
 import org.rocksdb.WriteOptions;
 import org.rocksdb.util.SizeUnit;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class RocksDBSample {
 
@@ -69,7 +69,7 @@ public class RocksDBSample {
                 assert (false);
             }
 
-            assert (options.createIfMissing() == true);
+            assert (options.createIfMissing());
             assert (options.writeBufferSize() == 8 * SizeUnit.KB);
             assert (options.maxWriteBufferNumber() == 3);
             assert (options.maxBackgroundCompactions() == 10);
@@ -115,7 +115,7 @@ public class RocksDBSample {
             // assert (table_options.cacheNumShardBits() == 6);
             assert (table_options.blockSizeDeviation() == 5);
             assert (table_options.blockRestartInterval() == 10);
-            assert (table_options.cacheIndexAndFilterBlocks() == true);
+            assert (table_options.cacheIndexAndFilterBlocks());
             // assert (table_options.blockCacheCompressedSize() == 64 * SizeUnit.KB);
             // assert (table_options.blockCacheCompressedNumShardBits() == 10);
 
@@ -303,7 +303,7 @@ public class RocksDBSample {
                     assert (value1 != null);
                 }
             } catch (final RocksDBException e) {
-                System.err.println(e);
+                e.printStackTrace();
             }
         }
     }

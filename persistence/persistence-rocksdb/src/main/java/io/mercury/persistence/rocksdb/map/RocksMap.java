@@ -1,9 +1,9 @@
 package io.mercury.persistence.rocksdb.map;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.util.Collection;
-
+import io.mercury.common.thread.ShutdownHooks;
+import io.mercury.persistence.rocksdb.exception.RocksRuntimeException;
+import io.mercury.persistence.rocksdb.map.kv.RocksKey;
+import io.mercury.persistence.rocksdb.map.kv.RocksValue;
 import org.eclipse.collections.api.set.MutableSet;
 import org.eclipse.collections.api.tuple.Pair;
 import org.rocksdb.ColumnFamilyOptions;
@@ -15,10 +15,8 @@ import org.rocksdb.RocksDBException;
 import org.rocksdb.Statistics;
 import org.rocksdb.StatsLevel;
 
-import io.mercury.common.thread.ShutdownHooks;
-import io.mercury.persistence.rocksdb.exception.RocksRuntimeException;
-import io.mercury.persistence.rocksdb.map.kv.RocksKey;
-import io.mercury.persistence.rocksdb.map.kv.RocksValue;
+import java.io.Closeable;
+import java.util.Collection;
 
 public class RocksMap<K extends RocksKey, V extends RocksValue>
         implements Closeable {
@@ -107,7 +105,7 @@ public class RocksMap<K extends RocksKey, V extends RocksValue>
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         if (options != null)
             options.close();
 

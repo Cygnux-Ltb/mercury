@@ -16,16 +16,16 @@
 
     <properties>
         <!-- v chronicle storage basic v -->
-        <chronicle-core.version>2.22.34</chronicle-core.version>
-        <chronicle-bytes.version>2.22.25</chronicle-bytes.version>
-        <chronicle-threads.version>2.22.16</chronicle-threads.version>
-        <chronicle-wire.version>2.22.22</chronicle-wire.version>
-        <chronicle-analytics.version>2.22.4</chronicle-analytics.version>
+        <chronicle-core.version>2.23.35</chronicle-core.version>
+        <chronicle-bytes.version>2.23.30</chronicle-bytes.version>
+        <chronicle-threads.version>2.23.25</chronicle-threads.version>
+        <chronicle-wire.version>2.23.39</chronicle-wire.version>
+        <chronicle-analytics.version>2.23.2</chronicle-analytics.version>
         <!-- ^ chronicle storage basic ^ -->
-        <chronicle-values.version>2.22.2</chronicle-values.version>
-        <chronicle-algorithms.version>2.22.3</chronicle-algorithms.version>
-        <chronicle-queue.version>5.22.25</chronicle-queue.version>
-        <chronicle-map.version>3.22.9</chronicle-map.version>
+        <chronicle-values.version>2.23.3</chronicle-values.version>
+        <chronicle-algorithms.version>2.23.4</chronicle-algorithms.version>
+        <chronicle-queue.version>5.23.35</chronicle-queue.version>
+        <chronicle-map.version>3.23.5</chronicle-map.version>
     </properties>
 
     <dependencies>
@@ -113,6 +113,12 @@
             <groupId>net.openhft</groupId>
             <artifactId>chronicle-wire</artifactId>
             <version>${chronicle-wire.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Chronicle-Analytics -->
@@ -179,12 +185,12 @@
                     <groupId>net.openhft</groupId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>slf4j-api</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-                <exclusion>
                     <artifactId>chronicle-bytes</artifactId>
                     <groupId>net.openhft</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
