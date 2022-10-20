@@ -13,11 +13,11 @@
     <name>serialization-wire</name>
 
     <properties>
-        <chronicle-core.version>2.22.34</chronicle-core.version>
-        <chronicle-bytes.version>2.22.25</chronicle-bytes.version>
-        <chronicle-threads.version>2.22.16</chronicle-threads.version>
-        <chronicle-analytics.version>2.22.4</chronicle-analytics.version>
-        <chronicle-wire.version>2.22.22</chronicle-wire.version>
+        <chronicle-core.version>2.23.35</chronicle-core.version>
+        <chronicle-bytes.version>2.23.30</chronicle-bytes.version>
+        <chronicle-threads.version>2.23.25</chronicle-threads.version>
+        <chronicle-analytics.version>2.23.2</chronicle-analytics.version>
+        <chronicle-wire.version>2.23.39</chronicle-wire.version>
     </properties>
 
     <dependencies>
@@ -121,7 +121,7 @@
         <dependency>
             <groupId>net.openhft</groupId>
             <artifactId>chronicle-ticker</artifactId>
-            <version>2.20.1</version>
+            <version>2.23.3</version>
             <exclusions>
                 <exclusion>
                     <artifactId>slf4j-api</artifactId>

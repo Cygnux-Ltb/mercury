@@ -13,24 +13,32 @@ import javax.annotation.Nullable;
  */
 public final class JsonWrapper {
 
-    // 普通JSON序列化
+    /**
+     * 普通JSON序列化
+     */
     private static final Gson Gson = TypeRegistrar
             .registerAll(new GsonBuilder())
             .create();
 
-    // JSON序列化, 包含Null值
+    /**
+     * JSON序列化, 包含Null值
+     */
     private static final Gson GsonHasNulls = TypeRegistrar
             .registerAll(new GsonBuilder())
             .serializeNulls()
             .create();
 
-    // 以较高可视化的格式返回JSON
+    /**
+     * 以较高可视化的格式返回JSON
+     */
     private final static Gson GsonPretty = TypeRegistrar
             .registerAll(new GsonBuilder())
             .setPrettyPrinting()
             .create();
 
-    // 以漂亮的格式返回JSON, 包含Null值
+    /**
+     * 以漂亮的格式返回JSON, 包含Null值
+     */
     private static final Gson GsonPrettyHasNulls = TypeRegistrar
             .registerAll(new GsonBuilder())
             .serializeNulls()
@@ -38,38 +46,38 @@ public final class JsonWrapper {
             .create();
 
     /**
-     * @param obj Object
+     * @param obj T
      * @return String
      */
-    public static String toJson(@Nullable Object obj) {
+    public static <T> String toJson(@Nullable T obj) {
         return toJson0(Gson, obj);
     }
 
     /**
-     * @param obj Object
+     * @param obj T
      * @return String
      */
-    public static String toPrettyJson(@Nullable Object obj) {
+    public static <T> String toPrettyJson(@Nullable T obj) {
         return toJson0(GsonPretty, obj);
     }
 
     /**
-     * @param obj Object
+     * @param obj T
      * @return String
      */
-    public static String toJsonHasNulls(@Nullable Object obj) {
+    public static <T> String toJsonHasNulls(@Nullable T obj) {
         return toJson0(GsonHasNulls, obj);
     }
 
     /**
-     * @param obj Object
+     * @param obj T
      * @return String
      */
-    public static String toPrettyJsonHasNulls(@Nullable Object obj) {
+    public static <T> String toPrettyJsonHasNulls(@Nullable T obj) {
         return toJson0(GsonPrettyHasNulls, obj);
     }
 
-    private static String toJson0(final Gson gson, final Object obj) {
+    private static <T> String toJson0(final Gson gson, final T obj) {
         if (obj == null)
             return Const.StringConst.NULL_STRING;
         return gson.toJson(obj);

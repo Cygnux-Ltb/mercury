@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>io.mercury</groupId>
         <artifactId>serialization</artifactId>
@@ -12,19 +10,12 @@
 
     <artifactId>serialization-json</artifactId>
     <name>serialization-json</name>
-
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>io.mercury</groupId>
             <artifactId>commons-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.9.0</version>
         </dependency>
 
         <!-- General data-binding functionality for Jackson: works on core streaming API -->
@@ -64,6 +55,13 @@
             </exclusions>
         </dependency>
 
+        <!-- Gson is a Java library that can be used to convert Java Objects into their JSON representation.
+            It can also be used to convert a JSON string to an equivalent Java object. -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.9.1</version>
+        </dependency>
     </dependencies>
 
 </project>
