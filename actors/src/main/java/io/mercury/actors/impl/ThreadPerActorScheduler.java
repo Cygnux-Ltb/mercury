@@ -1,11 +1,11 @@
 package io.mercury.actors.impl;
 
+import io.mercury.actors.IActorScheduler;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import io.mercury.actors.IActorScheduler;
 
 /**
  * Scheduler that creates a single-thread executor for each actor.

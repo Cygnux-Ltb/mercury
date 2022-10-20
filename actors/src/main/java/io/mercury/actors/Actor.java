@@ -1,6 +1,6 @@
 package io.mercury.actors;
 
-import io.mercury.actors.impl.ActorSystemImpl;
+import io.mercury.actors.impl.IActorSystem;
 
 /**
  * Helper class to work with actor contexts
@@ -22,8 +22,8 @@ public class Actor {
      * @param name actor system name
      * @return newly created actor system
      */
-    public static IActorSystem newSystem(String name) {
-        return new ActorSystemImpl(name);
+    public static io.mercury.actors.IActorSystem newSystem(String name) {
+        return new IActorSystem(name);
     }
 
     /**
@@ -35,8 +35,8 @@ public class Actor {
      * @param defaultScheduler default scheduler for new actors
      * @return newly created actor system
      */
-    public static IActorSystem newSystem(String name, IActorScheduler defaultScheduler) {
-        return new ActorSystemImpl(name, defaultScheduler);
+    public static io.mercury.actors.IActorSystem newSystem(String name, IActorScheduler defaultScheduler) {
+        return new IActorSystem(name, defaultScheduler);
     }
 
     /**
@@ -76,7 +76,7 @@ public class Actor {
      *
      * @return current actor system or null if called not from actor context
      */
-    public static IActorSystem system() {
+    public static io.mercury.actors.IActorSystem system() {
         IActorRef<?> actor = current();
         return actor == null ? null : current().system();
     }

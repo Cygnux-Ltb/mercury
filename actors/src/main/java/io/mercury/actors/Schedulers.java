@@ -28,7 +28,7 @@ public class Schedulers {
     }
 
     /**
-     * Creates a scheduler based on a user-provided ExecuterService.
+     * Creates a scheduler based on a user-provided ExecutorService.
      *
      * @param executorService executor service for scheduling the tasks
      * @param throughput      maximum number of pending actor messages to be processed at once
@@ -46,7 +46,7 @@ public class Schedulers {
      * @return scheduler
      */
     public static IActorScheduler newFixedThreadPoolScheduler(int threads, int throughput) {
-        return new ExecutorBasedScheduler(Executors.newFixedThreadPool(threads, runnable -> new Thread(runnable, "actr:fixed")), throughput);
+        return new ExecutorBasedScheduler(Executors.newFixedThreadPool(threads, runnable -> new Thread(runnable, "actor:fixed")), throughput);
     }
 
     /**

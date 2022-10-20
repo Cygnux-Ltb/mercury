@@ -10,13 +10,12 @@ import java.util.function.Supplier;
 import io.mercury.actors.Actor;
 import io.mercury.actors.IActorRef;
 import io.mercury.actors.IActorScheduler;
-import io.mercury.actors.IActorSystem;
 import io.mercury.actors.impl.IRegSet.IRegistration;
 
 public class ActorImpl<T> implements IActorRef<T> {
 
     private volatile T object;
-    private final ActorSystemImpl actorSystem;
+    private final IActorSystem actorSystem;
     private final IActorScheduler scheduler;
     private final String name;
     private final BiConsumer<T, Exception> exceptionHandler;
@@ -24,11 +23,8 @@ public class ActorImpl<T> implements IActorRef<T> {
     private volatile Object box;
     private volatile IRegistration reg;
 
-    ActorImpl(T object,
-              Supplier<T> constructor,
-              IActorScheduler scheduler,
-              ActorSystemImpl actorSystem,
-              String name,
+    ActorImpl(T object, Supplier<T> constructor, IActorScheduler scheduler,
+              IActorSystem actorSystem, String name,
               BiConsumer<T, Exception> exceptionHandler,
               Consumer<T> destructor) {
         this.actorSystem = actorSystem;
@@ -133,7 +129,7 @@ public class ActorImpl<T> implements IActorRef<T> {
     }
 
     @Override
-    public IActorSystem system() {
+    public io.mercury.actors.IActorSystem system() {
         return actorSystem;
     }
 
@@ -149,7 +145,7 @@ public class ActorImpl<T> implements IActorRef<T> {
                     ex.printStackTrace(); // TODO: logging
                 }
             }
-            ((ActorSystemImpl) system()).remove(this);
+            ((IActorSystem) system()).remove(this);
             scheduler.actorDisposed(this);
             object = null;
             whenFinished.run();

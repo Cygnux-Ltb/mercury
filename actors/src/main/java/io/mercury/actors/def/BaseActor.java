@@ -6,7 +6,7 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.japi.pf.ReceiveBuilder;
 
-public abstract class BaseActor extends AbstractActor {
+abstract class BaseActor extends AbstractActor {
 
     protected final ActorRef self = self();
 

@@ -1,6 +1,3 @@
-/*
- * Copyright (C) 2016 Lightbend Inc. <http://www.lightbend.com>
- */
 package com.lightbend.akkasample.sample4;
 
 import akka.actor.AbstractLoggingActor;
@@ -11,7 +8,6 @@ import akka.event.Logging;
 import akka.http.javadsl.ConnectHttp;
 import akka.http.javadsl.Http;
 import akka.http.javadsl.ServerBinding;
-//import akka.http.javadsl.marshallers.jackson.Jackson;
 import akka.http.javadsl.marshalling.Marshaller;
 import akka.http.javadsl.model.RequestEntity;
 import akka.http.javadsl.model.StatusCodes;
@@ -23,7 +19,12 @@ import scala.util.Try;
 import java.net.InetSocketAddress;
 import java.util.concurrent.CompletionStage;
 
-import static akka.http.javadsl.server.Directives.*;
+import static akka.http.javadsl.server.Directives.complete;
+import static akka.http.javadsl.server.Directives.completeOK;
+import static akka.http.javadsl.server.Directives.get;
+import static akka.http.javadsl.server.Directives.logRequest;
+import static akka.http.javadsl.server.Directives.onComplete;
+import static akka.http.javadsl.server.Directives.path;
 import static akka.http.javadsl.server.PathMatchers.longSegment;
 import static akka.http.javadsl.server.PathMatchers.segment;
 import static akka.pattern.PatternsCS.ask;

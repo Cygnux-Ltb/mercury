@@ -249,7 +249,7 @@ public class ConcurrentDoublyLinkedList<E> extends AbstractCollection<E>
     }
 
     /**
-     * Appends all of the elements in the specified collection to the end of this deque, in the order that they are returned by the specified collection's iterator. The behavior of this operation is undefined if the specified collection is modified
+     * Appends all the elements in the specified collection to the end of this deque, in the order that they are returned by the specified collection's iterator. The behavior of this operation is undefined if the specified collection is modified
      * while the operation is in progress. (This implies that the behavior of this call is undefined if the specified Collection is this deque, and this deque is nonempty.)
      *
      * @param c the elements to be inserted into this deque.
@@ -268,7 +268,7 @@ public class ConcurrentDoublyLinkedList<E> extends AbstractCollection<E>
     }
 
     /**
-     * Removes all of the elements from this deque.
+     * Removes all the elements from this deque.
      */
     @Override
     public void clear() {
@@ -277,9 +277,9 @@ public class ConcurrentDoublyLinkedList<E> extends AbstractCollection<E>
     }
 
     /**
-     * Returns an array containing all of the elements in this deque in the correct order.
+     * Returns an array containing all the elements in this deque in the correct order.
      *
-     * @return an array containing all of the elements in this deque in the correct order.
+     * @return an array containing all the elements in this deque in the correct order.
      */
     @Override
     public Object[] toArray() {
@@ -287,7 +287,7 @@ public class ConcurrentDoublyLinkedList<E> extends AbstractCollection<E>
     }
 
     /**
-     * Returns an array containing all of the elements in this deque in the correct order; the runtime type of the returned array is that of the specified array. If the deque fits in the specified array, it is returned therein. Otherwise, a new array
+     * Returns an array containing all the elements in this deque in the correct order; the runtime type of the returned array is that of the specified array. If the deque fits in the specified array, it is returned therein. Otherwise, a new array
      * is allocated with the runtime type of the specified array and the size of this deque.
      * <p>
      * <p>
@@ -296,7 +296,7 @@ public class ConcurrentDoublyLinkedList<E> extends AbstractCollection<E>
      *
      * @param a the array into which the elements of the deque are to be stored, if it is big enough; otherwise, a new array of the same runtime type is allocated for this purpose.
      * @return an array containing the elements of the deque.
-     * @throws ArrayStoreException  if the runtime type of a is not a supertype of the runtime type of every element in this deque.
+     * @throws ArrayStoreException  if the runtime type of is not a supertype of the runtime type of every element in this deque.
      * @throws NullPointerException if the specified array is null.
      */
     @Override

@@ -1,13 +1,4 @@
-/*
- * Copyright (C) 2016 Lightbend Inc. <http://www.lightbend.com>
- */
 package com.lightbend.akkasample.sample4;
-
-import static akka.actor.SupervisorStrategy.restart;
-import static akka.actor.SupervisorStrategy.resume;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import akka.actor.AbstractLoggingActor;
 import akka.actor.ActorRef;
@@ -20,6 +11,12 @@ import akka.routing.RoundRobinRoutingLogic;
 import akka.routing.Routee;
 import akka.routing.Router;
 import scala.concurrent.duration.Duration;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static akka.actor.SupervisorStrategy.restart;
+import static akka.actor.SupervisorStrategy.resume;
 
 public class DbSupervisor extends AbstractLoggingActor {
 

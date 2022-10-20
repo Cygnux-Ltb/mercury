@@ -1,12 +1,9 @@
-/*
- * Copyright (C) 2016 Lightbend Inc. <http://www.lightbend.com>
- */
 package com.lightbend.akkasample.sample4;
-
-import java.util.Optional;
 
 import akka.actor.AbstractActor;
 import akka.actor.Props;
+
+import java.util.Optional;
 
 public class DbActor extends AbstractActor {
 
@@ -30,7 +27,8 @@ public class DbActor extends AbstractActor {
 
     @Override
     public Receive createReceive() {
-        return receiveBuilder().match(GetProduct.class, query -> getProduct(query.id)).build();
+        return receiveBuilder().match(GetProduct.class,
+                query -> getProduct(query.id)).build();
     }
 
 }

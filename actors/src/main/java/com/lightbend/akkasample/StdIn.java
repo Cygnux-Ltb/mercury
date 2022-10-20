@@ -1,6 +1,3 @@
-/*
- * Copyright (C) 2016 Lightbend Inc. <http://www.lightbend.com>
- */
 package com.lightbend.akkasample;
 
 import java.io.BufferedReader;
@@ -19,11 +16,8 @@ public class StdIn {
         }
     }
 
-
     public static void main(String[] args) {
-
         System.out.println(StdIn.readLine());
-
     }
 
 }

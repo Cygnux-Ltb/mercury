@@ -1,9 +1,4 @@
-/*
- * Copyright (C) 2016 Lightbend Inc. <http://www.lightbend.com>
- */
 package com.lightbend.akkasample.sample3;
-
-import static akka.actor.SupervisorStrategy.escalate;
 
 import akka.actor.AbstractLoggingActor;
 import akka.actor.ActorRef;
@@ -12,6 +7,8 @@ import akka.actor.Props;
 import akka.actor.SupervisorStrategy;
 import akka.japi.pf.DeciderBuilder;
 import scala.concurrent.duration.Duration;
+
+import static akka.actor.SupervisorStrategy.escalate;
 
 public class Supervisor extends AbstractLoggingActor {
 

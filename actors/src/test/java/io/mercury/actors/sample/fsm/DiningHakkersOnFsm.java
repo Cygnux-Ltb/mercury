@@ -1,6 +1,10 @@
 package io.mercury.actors.sample.fsm;
 
-import akka.actor.*;
+import akka.actor.AbstractLoggingFSM;
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.actor.FSM;
+import akka.actor.Props;
 import scala.concurrent.duration.Duration;
 import scala.concurrent.duration.FiniteDuration;
 
@@ -8,7 +12,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static io.mercury.actors.sample.fsm.Messages.*;
+import static io.mercury.actors.sample.fsm.Messages.Busy;
+import static io.mercury.actors.sample.fsm.Messages.Put;
+import static io.mercury.actors.sample.fsm.Messages.Take;
+import static io.mercury.actors.sample.fsm.Messages.Taken;
+import static io.mercury.actors.sample.fsm.Messages.Think;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -45,9 +53,9 @@ public class DiningHakkersOnFsm {
             // It will refuse to be taken by other hakkers
             // But the owning hakker can put it back
             when(CS.Taken,
-                    matchEventEquals(Take, (take, data) -> stay().replying(new Busy(self()))).event(
-                            (event, data) -> (event == Put) && (data.hakker == sender()),
-                            (event, data) -> goTo(CS.Available).using(new TakenBy(context().system().deadLetters()))));
+                    matchEventEquals(Take, (take, data) -> stay().replying(new Busy(self())))
+                            .event((event, data) -> (event == Put) && (data.hakker == sender()),
+                                    (event, data) -> goTo(CS.Available).using(new TakenBy(context().system().deadLetters()))));
 
             // Initialize the chopstick
             initialize();

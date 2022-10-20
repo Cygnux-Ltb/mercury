@@ -1,5 +1,6 @@
 package io.mercury.actors.impl;
 
+import java.io.Serial;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -14,6 +15,9 @@ import java.util.concurrent.atomic.AtomicReference;
  * pointers is not guaranteed to see all live nodes since a prev pointer of a deleted node can become unrecoverably stale.
  */
 public class Node<E> extends AtomicReference<Node<E>> {
+
+    @Serial
+    private static final long serialVersionUID = -1476698285296684641L;
 
     private volatile Node<E> prev;
 
@@ -117,7 +121,7 @@ public class Node<E> extends AtomicReference<Node<E>> {
     /**
      * Returns next node, ignoring deletion marker
      */
-    private Node<E> nextNonmarker() {
+    private Node<E> nextNonMarker() {
         Node<E> f = getNext();
         return (f == null || !f.isMarker()) ? f : f.getNext();
     }
@@ -128,7 +132,7 @@ public class Node<E> extends AtomicReference<Node<E>> {
      * @return successor, or null if no such
      */
     Node<E> successor() {
-        Node<E> f = nextNonmarker();
+        Node<E> f = nextNonMarker();
         for (; ; ) {
             if (f == null)
                 return null;
@@ -137,7 +141,7 @@ public class Node<E> extends AtomicReference<Node<E>> {
                     f.setPrev(this); // relink f's prev
                 return f;
             }
-            Node<E> s = f.nextNonmarker();
+            Node<E> s = f.nextNonMarker();
             if (f == getNext())
                 casNext(f, s); // unlink f
             f = s;

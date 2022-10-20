@@ -4,16 +4,28 @@ import io.mercury.actors.Actor;
 import io.mercury.actors.IActorRef;
 import io.mercury.actors.IActorSystem;
 import io.mercury.actors.Schedulers;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import static io.mercury.actor.test.BasicTest.CheckPoints.*;
-import static org.junit.Assert.*;
+import static io.mercury.actor.test.BasicTest.CheckPoints.ActorCallReturning;
+import static io.mercury.actor.test.BasicTest.CheckPoints.ActorCallSimple;
+import static io.mercury.actor.test.BasicTest.CheckPoints.ActorCallThrowing;
+import static io.mercury.actor.test.BasicTest.CheckPoints.ActorConstructor;
+import static io.mercury.actor.test.BasicTest.CheckPoints.ActorDestructor;
+import static io.mercury.actor.test.BasicTest.CheckPoints.ExceptionHandler;
+import static io.mercury.actor.test.BasicTest.CheckPoints.FutureCompleted;
+import static io.mercury.actor.test.BasicTest.CheckPoints.FutureFailed;
+import static io.mercury.actor.test.BasicTest.CheckPoints.NonActorCallback;
+import static io.mercury.actor.test.BasicTest.CheckPoints.ResultReturned;
+import static io.mercury.actor.test.BasicTest.CheckPoints.validate;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class BasicTest {
 
@@ -24,7 +36,7 @@ class BasicTest {
             .build();
     private IActorRef<TestActor> testActor;
 
-    @Before
+    @BeforeAll
     public void before() {
         CheckPoints.clean();
         testActor = system.<TestActor>actorBuilder()

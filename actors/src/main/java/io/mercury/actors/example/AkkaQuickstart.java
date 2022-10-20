@@ -1,11 +1,11 @@
 package io.mercury.actors.example;
 
-import java.io.IOException;
-
 import akka.actor.typed.ActorSystem;
 import io.mercury.actors.example.msg.SayHello;
 import io.mercury.common.log.Log4j2Configurator;
 import io.mercury.common.log.Log4j2Configurator.LogLevel;
+
+import java.io.IOException;
 
 /**
  * @author Akka official

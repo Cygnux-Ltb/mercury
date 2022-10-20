@@ -1,11 +1,5 @@
 package io.mercury.actors.sample.supervision;
 
-import java.util.stream.IntStream;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
@@ -15,6 +9,11 @@ import io.mercury.actors.sample.supervision.Expression.Add;
 import io.mercury.actors.sample.supervision.Expression.Const;
 import io.mercury.actors.sample.supervision.Expression.Divide;
 import io.mercury.actors.sample.supervision.Expression.Multiply;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import java.util.stream.IntStream;
 
 public class ArithmeticServiceTest {
 

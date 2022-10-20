@@ -1,9 +1,13 @@
 package io.mercury.actor.test;
 
-import io.mercury.actors.*;
-import org.junit.Test;
+import io.mercury.actors.Actor;
+import io.mercury.actors.IActorRef;
+import io.mercury.actors.IActorScheduler;
+import io.mercury.actors.IActorSystem;
+import io.mercury.actors.Schedulers;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ShutdownTest {
 

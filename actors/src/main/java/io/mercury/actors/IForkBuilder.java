@@ -1,6 +1,6 @@
 package io.mercury.actors;
 
-import io.mercury.actors.impl.ActorSystemImpl.TernaryConsumer;
+import io.mercury.actors.impl.IActorSystem.TernaryConsumer;
 
 import java.util.Collection;
 import java.util.Map;

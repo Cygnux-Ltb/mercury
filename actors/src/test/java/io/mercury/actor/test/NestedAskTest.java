@@ -1,13 +1,13 @@
 package io.mercury.actor.test;
 
 import io.mercury.actors.Actor;
-import io.mercury.actors.IActorSystem;
 import io.mercury.actors.IActorRef;
-import org.junit.Test;
+import io.mercury.actors.IActorSystem;
+import org.junit.jupiter.api.Test;
 
 import java.util.function.Consumer;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class NestedAskTest {

@@ -5,28 +5,18 @@ import akka.actor.typed.ActorRef;
 public class Messages {
 
 
-	interface ChopstickMessage {
+    interface ChopstickMessage {
 
-        final class Take implements ChopstickMessage {
-            public final ActorRef<ChopstickAnswer> hakker;
-
-            public Take(ActorRef<ChopstickAnswer> hakker) {
-                this.hakker = hakker;
-            }
+        record Take(ActorRef<ChopstickAnswer> hakker) implements ChopstickMessage {
         }
 
-        final class Put implements ChopstickMessage {
-            public final ActorRef<ChopstickAnswer> hakker;
-
-            public Put(ActorRef<ChopstickAnswer> hakker) {
-                this.hakker = hakker;
-            }
+        record Put(ActorRef<ChopstickAnswer> hakker) implements ChopstickMessage {
         }
     }
 
     interface ChopstickAnswer {
 
-        ActorRef<ChopstickMessage> getChopstick();
+        ActorRef<ChopstickMessage> chopstick();
 
         default boolean isTakenBy() {
             return false;
@@ -44,17 +34,7 @@ public class Messages {
             return false;
         }
 
-        final class Taken implements ChopstickAnswer {
-            public final ActorRef<ChopstickMessage> chopstick;
-
-            public Taken(ActorRef<ChopstickMessage> chopstick) {
-                this.chopstick = chopstick;
-            }
-
-            @Override
-            public ActorRef<ChopstickMessage> getChopstick() {
-                return chopstick;
-            }
+        record Taken(ActorRef<ChopstickMessage> chopstick) implements ChopstickAnswer {
 
             @Override
             public boolean isTakenBy(ActorRef<ChopstickMessage> chopstick) {
@@ -67,17 +47,7 @@ public class Messages {
             }
         }
 
-        final class Busy implements ChopstickAnswer {
-            public final ActorRef<ChopstickMessage> chopstick;
-
-            public Busy(ActorRef<ChopstickMessage> chopstick) {
-                this.chopstick = chopstick;
-            }
-
-            @Override
-            public ActorRef<ChopstickMessage> getChopstick() {
-                return chopstick;
-            }
+        record Busy(ActorRef<ChopstickMessage> chopstick) implements ChopstickAnswer {
 
             @Override
             public boolean isBusy() {

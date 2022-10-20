@@ -4,12 +4,7 @@ import akka.actor.ActorRef;
 
 public class Messages {
 
-    public static final class Busy {
-        public final ActorRef chopstick;
-
-        public Busy(ActorRef chopstick) {
-            this.chopstick = chopstick;
-        }
+    public record Busy(ActorRef chopstick) {
     }
 
     private interface PutMessage {

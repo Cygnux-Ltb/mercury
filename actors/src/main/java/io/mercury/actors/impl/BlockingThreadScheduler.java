@@ -1,9 +1,9 @@
 package io.mercury.actors.impl;
 
+import io.mercury.actors.IActorScheduler;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import io.mercury.actors.IActorScheduler;
 
 /**
  * Scheduler that processed all the actors messages sequentially in a single user-supplied thread. Run {@link #start()} from a thread that should become the message processor. The thread will block waiting for messages; once the scheduler is disposed

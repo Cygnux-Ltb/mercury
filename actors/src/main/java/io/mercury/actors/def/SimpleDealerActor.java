@@ -1,11 +1,9 @@
 package io.mercury.actors.def;
 
-import static io.mercury.common.collections.MutableLists.newFastList;
-
-import io.mercury.actors.def.BaseActorT2;
+import akka.actor.ActorRef;
 import org.eclipse.collections.api.list.MutableList;
 
-import akka.actor.ActorRef;
+import static io.mercury.common.collections.MutableLists.newFastList;
 
 public abstract class SimpleDealerActor<T> extends BaseActorT2<ActorRef, T> {
 

@@ -1,10 +1,10 @@
 package io.mercury.vsakka;
 
-import java.io.IOException;
-
 import io.mercury.actors.Actor;
 import io.mercury.actors.IActorRef;
 import io.mercury.actors.IActorSystem;
+
+import java.io.IOException;
 
 public class ActorQuickStart {
 
