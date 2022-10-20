@@ -46,8 +46,9 @@
         <!-- Common library version -->
         <slf4j.version>1.7.36</slf4j.version>
         <junit.version>4.13.2</junit.version>
-        <netty.version>4.1.80.Final</netty.version>
-        <jackson.version>2.13.3</jackson.version>
+        <junit.jupiter.version>5.9.1</junit.jupiter.version>
+        <netty.version>4.1.84.Final</netty.version>
+        <jackson.version>2.13.4</jackson.version>
     </properties>
 
     <build>
@@ -80,11 +81,18 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- Junit4 dependency -->
+            <!-- JUnit 4 -->
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- junit-jupiter of JUnit 5 -->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${junit.jupiter.version}</version>
                 <scope>test</scope>
             </dependency>
             <!-- JSR305 Annotations for Find bugs -->
