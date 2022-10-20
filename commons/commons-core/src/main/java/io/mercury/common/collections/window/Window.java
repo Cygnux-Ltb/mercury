@@ -1,5 +1,8 @@
 package io.mercury.common.collections.window;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,9 +16,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * A utility class to support "windowed" protocols that permit requests to be
@@ -675,7 +675,7 @@ public class Window<K, R, P> {
         if (this.futures.size() <= 0)
             return null;
 
-        List<WindowFuture<K, R, P>> cancelled = new ArrayList<WindowFuture<K, R, P>>();
+        List<WindowFuture<K, R, P>> cancelled = new ArrayList<>();
         long now = System.currentTimeMillis();
         this.lock.lock();
         try {

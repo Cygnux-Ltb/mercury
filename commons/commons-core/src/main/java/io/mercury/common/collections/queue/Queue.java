@@ -12,7 +12,7 @@ public interface Queue<E> {
 
     enum QueueType {
 
-        OneToOne, OneToMany, ManyToOne, ManyToMany
+        OneToOne, ManyToOne, OneToMany, ManyToMany
 
     }
 

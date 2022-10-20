@@ -49,7 +49,7 @@ public abstract class AbstractConcurrentQueue {
     // put(), offer() or add() )
     protected int producerWriteLocation;
 
-    // only set and read by the comumer thread, ( that the thread that's calling
+    // only set and read by the consumer thread, ( that the thread that's calling
     // get(), poll() or peek() )
     protected int consumerReadLocation;
 
@@ -78,12 +78,12 @@ public abstract class AbstractConcurrentQueue {
 
     protected void setWriteLocation(int nextWriteLocation) {
 
-        // putOrderedInt wont immediately make the updates available, even on this
+        // putOrderedInt won't immediately make the updates available, even on this
         // thread, so will update the field so the change is immediately visible to, at
-        // least this thread. ( note the field is non volatile )
+        // least this thread. ( note the field is non-volatile )
         this.producerWriteLocation = nextWriteLocation;
 
-        // the line below, is where the write memory barrier occurs,
+        // the line below, is where to write memory barrier occurs,
         // we have just written back the data in the line above ( which is not require
         // to have a memory barrier as we will be doing that in the line below
 
@@ -93,12 +93,12 @@ public abstract class AbstractConcurrentQueue {
 
     protected void setReadLocation(int nextReadLocation) {
 
-        // putOrderedInt wont immediately make the updates available, even on this
+        // putOrderedInt won't immediately make the updates available, even on this
         // thread, so will update the field so the change is immediately visible to, at
-        // least this thread. ( note the field is non volatile )
+        // least this thread. ( note the field is non-volatile )
         this.consumerReadLocation = nextReadLocation;
 
-        // the write memory barrier will occur here, as we are storing the
+        // to write memory barrier will occur here, as we are storing the
         // nextReadLocation
         UNSAFE.putOrderedInt(this, READ_LOCATION_OFFSET, nextReadLocation);
     }
@@ -154,8 +154,6 @@ public abstract class AbstractConcurrentQueue {
     /**
      * The items will be cleared correctly only if nothing was added or removed from
      * the queue at the time it was called
-     *
-     * @return an approximation of the size
      */
     public void clear() {
         readLocation = writeLocation;
@@ -181,7 +179,7 @@ public abstract class AbstractConcurrentQueue {
         // we want to minimize the number of volatile reads, so we read the
         // writeLocation just once.
 
-        // sets the nextWriteLocation my moving it on by 1, this may cause it it wrap
+        // sets the nextWriteLocation my moving it on by 1, this may cause it is wrap
         // back to the start.
         final int nextWriteLocation = (writeLocation + 1 == capacity) ? 0 : writeLocation + 1;
 
@@ -191,7 +189,7 @@ public abstract class AbstractConcurrentQueue {
 
         } else if (nextWriteLocation == readLocation)
             // this condition handles the case general case where the read is at the start
-            // of the backing array and we are at the end,
+            // of the backing array, and we are at the end,
             // blocks as our backing array is full, we will wait for a read, ( which will
             // cause a change on the read location )
             throw new IllegalStateException("queue is full");
@@ -208,7 +206,7 @@ public abstract class AbstractConcurrentQueue {
         // we want to minimize the number of volatile reads, so we read the
         // writeLocation just once.
 
-        // sets the nextWriteLocation my moving it on by 1, this may cause it it wrap
+        // sets the nextWriteLocation my moving it on by 1, this may cause it is wrap
         // back to the start.
         final int nextWriteLocation = (writeLocation + 1 == capacity) ? 0 : writeLocation + 1;
 
@@ -227,7 +225,7 @@ public abstract class AbstractConcurrentQueue {
                     throw new InterruptedException();
 
                 // this condition handles the case general case where the read is at the start
-                // of the backing array and we are at the end,
+                // of the backing array, and we are at the end,
                 // blocks as our backing array is full, we will wait for a read, ( which will
                 // cause a change on the read location )
                 blockAtAdd();
@@ -243,7 +241,7 @@ public abstract class AbstractConcurrentQueue {
         // we want to minimize the number of volatile reads, so we read the
         // writeLocation just once.
 
-        // sets the nextWriteLocation my moving it on by 1, this may cause it it wrap
+        // sets the nextWriteLocation my moving it on by 1, this may cause it is wrap
         // back to the start.
         final int nextWriteLocation = (writeLocation + 1 == capacity) ? 0 : writeLocation + 1;
         if (nextWriteLocation == capacity)
@@ -255,7 +253,7 @@ public abstract class AbstractConcurrentQueue {
         else
             while (nextWriteLocation == readLocation)
                 // this condition handles the case general case where the read is at the start
-                // of the backing array and we are at the end,
+                // of the backing array, and we are at the end,
                 // blocks as our backing array is full, we will wait for a read, ( which will
                 // cause a change on the read location )
                 blockAtAdd();
@@ -271,11 +269,11 @@ public abstract class AbstractConcurrentQueue {
      * @param readLocation we want to minimize the number of volatile reads, so we
      *                     read the readLocation just once and get it passed in
      * @return int
-     * @throws TimeoutException
+     * @throws TimeoutException e
      */
     protected int blockForReadSpace(long timeout, TimeUnit unit, int readLocation) throws TimeoutException {
 
-        // sets the nextReadLocation my moving it on by 1, this may cause it it wrap
+        // sets the nextReadLocation my moving it on by 1, this may cause it is wrap
         // back to the start.
         final int nextReadLocation = (readLocation + 1 == capacity) ? 0 : readLocation + 1;
 
@@ -302,7 +300,7 @@ public abstract class AbstractConcurrentQueue {
      */
     protected int blockForReadSpace(int readLocation) {
 
-        // sets the nextReadLocation my moving it on by 1, this may cause it it wrap
+        // sets the nextReadLocation my moving it on by 1, this may cause it is wrap
         // back to the start.
         final int nextReadLocation = (readLocation + 1 == capacity) ? 0 : readLocation + 1;
 
@@ -325,7 +323,7 @@ public abstract class AbstractConcurrentQueue {
      */
     protected int blockForReadSpaceThrowNoSuchElementException(int readLocation) {
 
-        // sets the nextReadLocation my moving it on by 1, this may cause it it wrap
+        // sets the nextReadLocation my moving it on by 1, this may cause it is wrap
         // back to the start.
         final int nextReadLocation = (readLocation + 1 == capacity) ? 0 : readLocation + 1;
 

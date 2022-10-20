@@ -24,7 +24,7 @@
         <dependency>
             <groupId>org.agrona</groupId>
             <artifactId>agrona</artifactId>
-            <version>1.16.0</version>
+            <version>1.17.1</version>
         </dependency>
 
         <!-- Java Concurrency Tools Core Library -->
@@ -48,14 +48,15 @@
             <version>1.2.20</version>
         </dependency>
 
+        <!-- A time ticker as a lightweight clock -->
         <dependency>
             <groupId>net.openhft</groupId>
             <artifactId>chronicle-ticker</artifactId>
-            <version>2.20.1</version>
+            <version>2.23.3</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>slf4j-api</artifactId>
                     <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

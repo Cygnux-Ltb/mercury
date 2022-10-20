@@ -9,7 +9,7 @@ import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
 
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.concurrent.queue.AbstractSingleConsumerQueue;
+import io.mercury.common.concurrent.queue.SingleConsumerQueue;
 import io.mercury.common.concurrent.queue.jct.JctSingleConsumerQueue;
 import io.mercury.common.util.StringSupport;
 
@@ -28,9 +28,9 @@ public final class AsyncCacheMap<K, V> {
 
     private final String cacheName;
 
-    private final AbstractSingleConsumerQueue<ExecEvent> execQueue;
+    private final SingleConsumerQueue<ExecEvent> execQueue;
 
-    private final AbstractSingleConsumerQueue<QueryResult> queryQueue;
+    private final SingleConsumerQueue<QueryResult> queryQueue;
 
     // private ExecutorService executor = Executors.newSingleThreadExecutor();
 

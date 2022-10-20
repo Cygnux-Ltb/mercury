@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.annotation.thread.SpinLock;
-import io.mercury.common.concurrent.queue.AbstractSingleConsumerQueue;
+import io.mercury.common.concurrent.queue.SingleConsumerQueue;
 import io.mercury.common.concurrent.queue.QueueWorkingException;
 import io.mercury.common.concurrent.queue.WaitingStrategy;
 import io.mercury.common.functional.Processor;
@@ -18,10 +18,10 @@ import io.mercury.common.thread.ThreadSupport;
 import io.mercury.common.util.StringSupport;
 
 /**
- * @param <E> Single Consumer Queue
+ * @param <E> Single consumer queue use jctools implements
  * @author yellow013
  */
-public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQueue<E> implements Runnable {
+public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> implements Runnable {
 
     /**
      * Logger
@@ -168,10 +168,12 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
      */
     private static final class JctSpscQueue<E> extends JctSingleConsumerQueue<E> {
 
-        private JctSpscQueue(String queueName, int capacity, StartMode mode, WaitingStrategy strategy, long sleepMillis,
+        private JctSpscQueue(String queueName, int capacity, StartMode mode,
+                             WaitingStrategy strategy, long sleepMillis,
                              Processor<E> processor) {
             super(processor, Math.max(capacity, 16), strategy, sleepMillis);
-            super.name = StringSupport.isNullOrEmpty(queueName) ? "JctSpscQueue-" + ThreadSupport.getCurrentThreadName()
+            super.name = StringSupport.isNullOrEmpty(queueName)
+                    ? "JctSpscQueue-" + ThreadSupport.getCurrentThreadName()
                     : queueName;
             startWith(mode);
         }
@@ -265,7 +267,7 @@ public abstract class JctSingleConsumerQueue<E> extends AbstractSingleConsumerQu
             return switch (type) {
                 case OneToOne -> new JctSpscQueue<>(queueName, capacity, mode, strategy, sleepMillis, processor);
                 case ManyToOne -> new JctMpscQueue<>(queueName, capacity, mode, strategy, sleepMillis, processor);
-                default -> throw new IllegalArgumentException("Error enum item");
+                default -> throw new IllegalArgumentException("Error enum value");
             };
         }
     }

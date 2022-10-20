@@ -95,7 +95,7 @@ public final class MutableMaps {
 
 
     /**
-     * @param <V> type
+     * @param <V> Value type
      * @return MutableIntObjectMap<V>
      */
     public static <V> MutableIntObjectMap<V> newIntObjectHashMap() {
@@ -103,7 +103,7 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <V>      type
+     * @param <V>      Value type
      * @param capacity int
      * @return MutableIntObjectMap<V>
      */
@@ -112,17 +112,16 @@ public final class MutableMaps {
     }
 
     /**
-     * @param keyFunc
-     * @param values
-     * @param <V>     type
+     * @param keyFunc ToIntFunction<V>
+     * @param values  V...
+     * @param <V>     Value type
      * @return MutableIntObjectMap<V>
      */
     @SafeVarargs
     public static <V> MutableIntObjectMap<V> newIntObjectHashMap(@Nonnull ToIntFunction<V> keyFunc, V... values) {
         Asserter.nonNull(keyFunc, "keyFunc");
-        if (ArrayUtil.isNullOrEmpty(values)) {
+        if (ArrayUtil.isNullOrEmpty(values))
             return newIntObjectHashMap();
-        }
         MutableIntObjectMap<V> map = newIntObjectHashMap(values.length * 2);
         for (V value : values) {
             if (value != null) map.put(keyFunc.applyAsInt(value), value);
@@ -195,7 +194,7 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <V>
+     * @param <V> Value type
      * @return MutableLongObjectMap<V>
      */
     public static <V> MutableLongObjectMap<V> newLongObjectHashMap() {
@@ -203,7 +202,7 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <V>
+     * @param <V>      Value type
      * @param capacity int
      * @return MutableLongObjectMap<V>
      */
@@ -266,7 +265,7 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <K>
+     * @param <K> Key type
      * @return MutableObjectBooleanMap<K>
      */
     public static <K> MutableObjectBooleanMap<K> newObjectBooleanHashMap() {
@@ -274,7 +273,7 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <K>
+     * @param <K>      Key type
      * @param capacity int
      * @return MutableObjectBooleanMap<K>
      */
@@ -284,7 +283,7 @@ public final class MutableMaps {
 
 
     /**
-     * @param <K>
+     * @param <K> Key type
      * @return MutableObjectIntMap<K>
      */
     public static <K> MutableObjectIntMap<K> newObjectIntHashMap() {
@@ -292,7 +291,7 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <K>
+     * @param <K>      Key type
      * @param capacity int
      * @return MutableObjectIntMap<K>
      */
@@ -302,7 +301,7 @@ public final class MutableMaps {
 
 
     /**
-     * @param <K>
+     * @param <K> Key type
      * @return MutableObjectLongMap<K>
      */
     public static <K> MutableObjectLongMap<K> newObjectLongHashMap() {
@@ -310,7 +309,7 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <K>
+     * @param <K>      Key type
      * @param capacity int
      * @return MutableObjectLongMap<K>
      */
@@ -320,7 +319,7 @@ public final class MutableMaps {
 
 
     /**
-     * @param <K>
+     * @param <K> Key type
      * @return MutableObjectDoubleMap<K>
      */
     public static <K> MutableObjectDoubleMap<K> newObjectDoubleHashMap() {
@@ -328,7 +327,7 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <K>
+     * @param <K>      Key type
      * @param capacity int
      * @return MutableObjectDoubleMap<K>
      */
@@ -338,8 +337,8 @@ public final class MutableMaps {
 
 
     /**
-     * @param <K>
-     * @param <V>
+     * @param <K> Key type
+     * @param <V> Value type
      * @return MutableMap<K, V>
      */
     public static <K, V> MutableMap<K, V> newUnifiedMap() {
@@ -347,8 +346,8 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <K>
-     * @param <V>
+     * @param <K>      Key type
+     * @param <V>      Value type
      * @param capacity int
      * @return MutableMap<K, V>
      */
@@ -358,9 +357,9 @@ public final class MutableMaps {
 
 
     /**
-     * @param map
-     * @param <K>
-     * @param <V>
+     * @param map Map<K, V>
+     * @param <K> Key type
+     * @param <V> Value type
      * @return MutableMap<K, V>
      */
     public static <K, V> MutableMap<K, V> newUnifiedMap(Map<K, V> map) {
@@ -369,9 +368,9 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <K>
-     * @param <V>
-     * @param supplier
+     * @param <K>      Key type
+     * @param <V>      Value type
+     * @param supplier Supplier<Map<K, V>>
      * @return MutableMap<K, V>
      */
     public static <K, V> MutableMap<K, V> newUnifiedMap(Supplier<Map<K, V>> supplier) {
@@ -380,10 +379,10 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <K>
-     * @param <V>
-     * @param key
-     * @param value
+     * @param <K>   Key type
+     * @param <V>   Value type
+     * @param key   key
+     * @param value value
      * @return MutableMap<K, V>
      */
     public static <K, V> MutableMap<K, V> newUnifiedMap(K key, V value) {
@@ -391,44 +390,47 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <K>
-     * @param <V>
-     * @param key0
-     * @param value0
-     * @param key1
-     * @param value1
+     * @param <K>    Key type
+     * @param <V>    Value type
+     * @param key0   key
+     * @param value0 value
+     * @param key1   key
+     * @param value1 value
      * @return MutableMap<K, V>
      */
-    public static <K, V> MutableMap<K, V> newUnifiedMap(K key0, V value0, K key1, V value1) {
+    public static <K, V> MutableMap<K, V> newUnifiedMap(K key0, V value0,
+                                                        K key1, V value1) {
         return UnifiedMap.newWithKeysValues(key0, value0, key1, value1);
     }
 
     /**
-     * @param <K>
-     * @param <V>
-     * @param key0
-     * @param value0
-     * @param key1
-     * @param value1
-     * @param key2
-     * @param value2
+     * @param <K>    Key type
+     * @param <V>    Value type
+     * @param key0   key
+     * @param value0 value
+     * @param key1   key
+     * @param value1 value
+     * @param key2   key
+     * @param value2 value
      * @return MutableMap<K, V>
      */
-    public static <K, V> MutableMap<K, V> newUnifiedMap(K key0, V value0, K key1, V value1, K key2, V value2) {
+    public static <K, V> MutableMap<K, V> newUnifiedMap(K key0, V value0,
+                                                        K key1, V value1,
+                                                        K key2, V value2) {
         return UnifiedMap.newWithKeysValues(key0, value0, key1, value1, key2, value2);
     }
 
     /**
-     * @param <K>
-     * @param <V>
-     * @param key0
-     * @param value0
-     * @param key1
-     * @param value1
-     * @param key2
-     * @param value2
-     * @param key3
-     * @param value3
+     * @param <K>    Key type
+     * @param <V>    Value type
+     * @param key0   key
+     * @param value0 value
+     * @param key1   key
+     * @param value1 value
+     * @param key2   key
+     * @param value2 value
+     * @param key3   key
+     * @param value3 value
      * @return MutableMap<K, V>
      */
     public static <K, V> MutableMap<K, V> newUnifiedMap(K key0, V value0,
@@ -439,8 +441,8 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <K>
-     * @param <V>
+     * @param <K> Key type
+     * @param <V> Value type
      * @return MutableBiMap<K, V>
      */
     public static <K, V> MutableBiMap<K, V> newHashBiMap() {
@@ -448,8 +450,8 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <K>
-     * @param <V>
+     * @param <K>      Key type
+     * @param <V>      Value type
      * @param capacity int
      * @return MutableBiMap<K, V>
      */
@@ -459,8 +461,8 @@ public final class MutableMaps {
 
 
     /**
-     * @param <K>
-     * @param <V>
+     * @param <K> Key type
+     * @param <V> Value type
      * @return MutableSortedMap<K, V>
      */
     public static <K, V> MutableSortedMap<K, V> newTreeSortedMap() {
@@ -468,9 +470,9 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <K>
-     * @param <V>
-     * @param map
+     * @param <K> Key type
+     * @param <V> Value type
+     * @param map Map<K, V>
      * @return MutableSortedMap<K, V>
      */
     public static <K, V> MutableSortedMap<K, V> newTreeSortedMap(Map<K, V> map) {
@@ -479,8 +481,8 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <K>
-     * @param <V>
+     * @param <K>      Key type
+     * @param <V>      Value type
      * @param supplier Supplier<Map<K, V>>
      * @return MutableSortedMap<K, V>
      */
@@ -494,8 +496,8 @@ public final class MutableMaps {
      */
 
     /**
-     * @param <K>
-     * @param <V>
+     * @param <K> Key type
+     * @param <V> Value type
      * @return ConcurrentMutableMap<K, V>
      */
     public static <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMap() {
@@ -503,9 +505,9 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <K>
-     * @param <V>
-     * @param capacity
+     * @param <K>      Key type
+     * @param <V>      Value type
+     * @param capacity int
      * @return ConcurrentMutableMap<K, V>
      */
     public static <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMap(int capacity) {
@@ -514,9 +516,9 @@ public final class MutableMaps {
 
 
     /**
-     * @param <K>
-     * @param <V>
-     * @param map
+     * @param <K> Key type
+     * @param <V> Value type
+     * @param map Map<K, V>
      * @return ConcurrentMutableMap<K, V>
      */
     public static <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMap(Map<K, V> map) {
@@ -525,9 +527,9 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <K>
-     * @param <V>
-     * @param supplier
+     * @param <K>      Key type
+     * @param <V>      Value type
+     * @param supplier Supplier<Map<K, V>>
      * @return ConcurrentMutableMap<K, V>
      */
     public static <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMap(Supplier<Map<K, V>> supplier) {
@@ -536,8 +538,8 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <K>
-     * @param <V>
+     * @param <K> Key type
+     * @param <V> Value type
      * @return ConcurrentMutableMap<K, V>
      */
     public static <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMapUnsafe() {
@@ -545,9 +547,9 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <K>
-     * @param <V>
-     * @param capacity
+     * @param <K>      Key type
+     * @param <V>      Value type
+     * @param capacity int
      * @return ConcurrentMutableMap<K, V>
      */
     public static <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMapUnsafe(int capacity) {
@@ -556,9 +558,9 @@ public final class MutableMaps {
 
 
     /**
-     * @param <K>
-     * @param <V>
-     * @param map
+     * @param <K> Key type
+     * @param <V> Value type
+     * @param map Map<K, V>
      * @return ConcurrentMutableMap<K, V>
      */
     public static <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMapUnsafe(Map<K, V> map) {
@@ -567,9 +569,9 @@ public final class MutableMaps {
     }
 
     /**
-     * @param <K>
-     * @param <V>
-     * @param supplier
+     * @param <K>      Key type
+     * @param <V>      Value type
+     * @param supplier Supplier<Map<K, V>>
      * @return ConcurrentMutableMap<K, V>
      */
     public static <K, V> ConcurrentMutableMap<K, V> newConcurrentHashMapUnsafe(Supplier<Map<K, V>> supplier) {

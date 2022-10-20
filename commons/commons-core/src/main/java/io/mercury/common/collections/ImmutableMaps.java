@@ -70,8 +70,9 @@ public final class ImmutableMaps {
 
 
     @SafeVarargs
-    public static <E extends Enum<E>> ImmutableIntObjectMap<E> toImmutableIntObjectMap(@Nonnull ToIntFunction<E> keyFunc, E... enums) {
-        return MutableMaps.newIntObjectHashMap(keyFunc, enums).toImmutable();
+    public static <V> ImmutableIntObjectMap<V> toImmutableIntObjectMap(
+            @Nonnull ToIntFunction<V> keyFunc, V... values) {
+        return MutableMaps.newIntObjectHashMap(keyFunc, values).toImmutable();
     }
 
     /**

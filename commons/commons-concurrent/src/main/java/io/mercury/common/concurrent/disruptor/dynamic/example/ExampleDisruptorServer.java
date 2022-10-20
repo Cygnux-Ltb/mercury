@@ -14,9 +14,9 @@ public class ExampleDisruptorServer {
     private DynamicDisruptor server;
 
     public void startServer(String name, int bufferSize, int consumeSize, int maxConsumeSize, int windowsLength,
-                            int windowsSzie) {
+                            int windowsSize) {
         server = new DynamicDisruptor(name, consumeSize, consumeSize, maxConsumeSize);
-        SentinelClient sentinelClient = new SentinelClient(windowsLength, windowsSzie);
+        SentinelClient sentinelClient = new SentinelClient(windowsLength, windowsSize);
         server.init(bufferSize, sentinelClient, new ExampleHandlerFactory());
         server.start();
     }

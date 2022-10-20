@@ -1,9 +1,5 @@
 package io.mercury.common.concurrent.queue.jct;
 
-import javax.annotation.concurrent.ThreadSafe;
-
-import org.jctools.queues.MpmcArrayQueue;
-
 import io.mercury.common.annotation.thread.SpinLock;
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.concurrent.queue.MultiConsumerQueue;
@@ -11,6 +7,9 @@ import io.mercury.common.concurrent.queue.WaitingStrategy;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.ThreadSupport;
 import io.mercury.common.util.StringSupport;
+import org.jctools.queues.MpmcArrayQueue;
+
+import javax.annotation.concurrent.ThreadSafe;
 
 @ThreadSafe
 public final class ConcurrentQueue<E> implements MultiConsumerQueue<E> {

@@ -14,6 +14,6 @@ public interface ThreadStatusInfo {
 
     void threadReady();
 
-    void threadShutDown();
+    void threadShutdown();
 
 }

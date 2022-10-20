@@ -1,14 +1,13 @@
 package io.mercury.common.concurrent.disruptor.dynamic.core;
 
-import java.util.concurrent.CountDownLatch;
-
 import com.lmax.disruptor.LifecycleAware;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.WorkHandler;
-
 import io.mercury.common.concurrent.disruptor.dynamic.sentinel.ConsumeStatusInfo;
 import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelClient;
 import io.mercury.common.concurrent.disruptor.dynamic.sentinel.ThreadStatusInfo;
+
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @author : Rookiex
@@ -38,7 +37,7 @@ public abstract class AbstractSentinelHandler
             threadRun();
             deal(event);
         } catch (Exception e) {
-            System.out.println("deal transmit err ");
+            System.out.println("deal transmit err");
         } finally {
             addConsumeCount();
             threadWait();
@@ -47,7 +46,7 @@ public abstract class AbstractSentinelHandler
 
     /**
      * @param event e
-     * @throws Exception
+     * @throws Exception e
      */
     public abstract void deal(HandlerEvent event) throws Exception;
 
@@ -60,7 +59,7 @@ public abstract class AbstractSentinelHandler
 
     @Override
     public void onShutdown() {
-        threadShutDown();
+        threadShutdown();
         shutdownLatch.countDown();
     }
 
@@ -84,8 +83,8 @@ public abstract class AbstractSentinelHandler
     }
 
     @Override
-    public void threadShutDown() {
-        sentinelClient.threadShutDown();
+    public void threadShutdown() {
+        sentinelClient.threadShutdown();
     }
 
     @Override

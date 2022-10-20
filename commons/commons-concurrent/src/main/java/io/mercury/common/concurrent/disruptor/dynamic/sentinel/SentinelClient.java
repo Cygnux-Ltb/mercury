@@ -35,9 +35,9 @@ public class SentinelClient implements ThreadStatusInfo, ConsumeStatusInfo {
 
     private final AtomicInteger millionCount = new AtomicInteger();
 
-    private int windowsLength;
-    private int windowsSize;
-    private int checkInterval;
+    private final int windowsLength;
+    private final int windowsSize;
+    private final int checkInterval;
 
     private Window[] windows;
 
@@ -210,7 +210,7 @@ public class SentinelClient implements ThreadStatusInfo, ConsumeStatusInfo {
     }
 
     @Override
-    public void threadShutDown() {
+    public void threadShutdown() {
         totalThreadCount.decrementAndGet();
     }
 

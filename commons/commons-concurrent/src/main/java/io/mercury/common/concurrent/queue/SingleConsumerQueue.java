@@ -13,14 +13,14 @@ import io.mercury.common.thread.RunnableComponent;
  * @param <E> Single Consumer Queue base implements
  * @author yellow013
  */
-public abstract class AbstractSingleConsumerQueue<E> extends RunnableComponent implements Queue<E> {
+public abstract class SingleConsumerQueue<E> extends RunnableComponent implements Queue<E> {
 
     /**
      * Processor Function
      */
     protected final Processor<E> processor;
 
-    protected AbstractSingleConsumerQueue(Processor<E> processor) {
+    protected SingleConsumerQueue(Processor<E> processor) {
         Asserter.nonNull(processor, "processor");
         this.processor = processor;
         this.name = "queue-" + "[" + YYYYMMDD_L_HHMMSSSSS.format(LocalDateTime.now()) + "]";

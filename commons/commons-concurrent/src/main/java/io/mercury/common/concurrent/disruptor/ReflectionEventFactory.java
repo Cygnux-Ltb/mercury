@@ -3,12 +3,11 @@ package io.mercury.common.concurrent.disruptor;
 import com.lmax.disruptor.EventFactory;
 import io.mercury.common.concurrent.disruptor.example.LongEvent;
 import io.mercury.common.lang.Asserter;
+import io.mercury.common.util.JreReflection;
 import io.mercury.common.util.JreReflection.RuntimeReflectionException;
 import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
-
-import static io.mercury.common.util.JreReflection.invokeConstructor;
 
 /**
  * @param <T>
@@ -45,6 +44,7 @@ public final class ReflectionEventFactory<T> implements EventFactory<T> {
         Asserter.nonNull(type, "type");
         ReflectionEventFactory<T> factory = new ReflectionEventFactory<>(type);
         try {
+            // Try call newInstance() function
             factory.newInstance();
             return factory;
         } catch (RuntimeReflectionException e) {
@@ -56,7 +56,7 @@ public final class ReflectionEventFactory<T> implements EventFactory<T> {
 
     @Override
     public T newInstance() {
-        return invokeConstructor(type);
+        return JreReflection.invokeConstructor(type);
     }
 
     public static void main(String[] args) {
