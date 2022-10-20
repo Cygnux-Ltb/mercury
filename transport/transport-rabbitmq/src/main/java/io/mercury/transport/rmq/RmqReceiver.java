@@ -94,7 +94,7 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
     /**
      * @param config   RmqReceiverConfig
      * @param consumer Consumer<byte[]>
-     * @return
+     * @return RmqReceiver<byte [ ]>
      */
     public static RmqReceiver<byte[]> create(@Nonnull RmqReceiverConfig config,
                                              @Nonnull Consumer<byte[]> consumer) {
@@ -102,10 +102,10 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
     }
 
     /**
-     * @param tag
-     * @param config
-     * @param consumer
-     * @return
+     * @param tag      String
+     * @param config   RmqReceiverConfig
+     * @param consumer Consumer<byte[]>
+     * @return RmqReceiver<byte [ ]>
      */
     public static RmqReceiver<byte[]> create(@Nullable String tag,
                                              @Nonnull RmqReceiverConfig config,
@@ -114,11 +114,11 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
     }
 
     /**
-     * @param <T>
-     * @param config
-     * @param deserializer
-     * @param consumer
-     * @return
+     * @param <T>          T
+     * @param config       RmqReceiverConfig
+     * @param deserializer Function<byte[], T>
+     * @param consumer     Consumer<T>
+     * @return RmqReceiver<T>
      */
     public static <T> RmqReceiver<T> create(@Nonnull RmqReceiverConfig config,
                                             @Nonnull Function<byte[], T> deserializer,
@@ -127,12 +127,12 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
     }
 
     /**
-     * @param <T>
-     * @param tag
-     * @param config
-     * @param deserializer
-     * @param consumer
-     * @return
+     * @param <T>          T
+     * @param tag          String
+     * @param config       RmqReceiverConfig
+     * @param deserializer Function<byte[], T>
+     * @param consumer     Consumer<T>
+     * @return RmqReceiver<T>
      */
     public static <T> RmqReceiver<T> create(@Nullable String tag,
                                             @Nonnull RmqReceiverConfig config,
@@ -294,11 +294,11 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
     }
 
     /**
-     * @param cause
-     * @param consumerTag
-     * @param envelope
-     * @param properties
-     * @param body
+     * @param cause       Throwable
+     * @param consumerTag String
+     * @param envelope    Envelope
+     * @param properties  BasicProperties
+     * @param body        byte[]
      * @throws IOException ioe
      */
     private void dumpUnprocessableMsg(Throwable cause, String consumerTag,
@@ -329,17 +329,17 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
     }
 
     /**
-     * @param deliveryTag
-     * @return
+     * @param deliveryTag long
+     * @return boolean
      */
     private boolean ack(long deliveryTag) {
         return ack0(deliveryTag, 0);
     }
 
     /**
-     * @param deliveryTag
-     * @param retry
-     * @return
+     * @param deliveryTag long
+     * @param retry       int
+     * @return boolean
      */
     private boolean ack0(long deliveryTag, int retry) {
         if (retry == maxAckTotal) {
@@ -393,12 +393,15 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
     }
 
     public static void main(String[] args) {
-        RmqReceiver<byte[]> receiver = RmqReceiver
+        try (RmqReceiver<byte[]> receiver = RmqReceiver
                 .create("test",
                         RmqReceiverConfig.configuration(RmqConnection.with("127.0.0.1", 5672, "user", "u_pass").build(),
                                 QueueRelationship.named("TEST")).build(),
-                        msg -> System.out.println(new String(msg, UTF8)));
-        receiver.receive();
+                        msg -> System.out.println(new String(msg, UTF8)))) {
+            receiver.receive();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

@@ -233,12 +233,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport
         this.serializer = serializer;
         this.hasPropsSupplier = msgPropsSupplier != null;
         this.publisherName = "publisher::[" + rmqConnection.getConnectionInfo() + "$" + exchangeName + "]";
-        try {
-            createConnection();
-        } catch (IOException | TimeoutException e) {
-            throw new ConnectionFailedException("Func -> createConnection() has "
-                    + e.getClass().getSimpleName(), e);
-        }
+        createConnection();
         declareExchange();
         // 如果设置为需要应答确认, 则进行相关设置
         if (confirm) {
@@ -330,11 +325,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport
             log.error("Detect connection isConnected() == false, retry {}", (++retry));
             closeIgnoreException();
             SleepSupport.sleep(rmqConnection.getRecoveryInterval());
-            try {
-                createConnection();
-            } catch (IOException | TimeoutException ignored) {
-                log.error("Try createConnection() count {}", retry);
-            }
+            createConnection();
         }
         if (confirm) {
             try {

@@ -45,8 +45,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -59,7 +59,6 @@
                 <artifactId>annotations</artifactId>
                 <version>23.0.0</version>
             </dependency>
-
             <dependency>
                 <groupId>io.mercury</groupId>
                 <artifactId>transport-api</artifactId>

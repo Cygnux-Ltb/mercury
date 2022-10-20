@@ -103,8 +103,7 @@
         </dependency>
 
 
-        <!-- A barebones WebSocket client and server implementation written 100%
-            in Java -->
+        <!-- A WebSocket client and server implementation written 100% in Java -->
         <!-- <dependency>
             <groupId>org.java-websocket</groupId>
             <artifactId>Java-WebSocket</artifactId>
