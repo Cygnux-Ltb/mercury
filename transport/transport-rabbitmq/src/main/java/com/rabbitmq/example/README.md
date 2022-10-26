@@ -112,7 +112,7 @@ java -cp $CP ReceiveLogsTopic "*.critical"
 # You can create multiple bindings:
 java -cp $CP ReceiveLogsTopic "kern.*" "*.critical"
 
-# And to emit a log with a routing key "kern.critical" type:
+# And to emit a logPoint with a routing key "kern.critical" type:
 java -cp $CP EmitLogTopic "kern.critical" "A critical kernel error"
 ```
 
