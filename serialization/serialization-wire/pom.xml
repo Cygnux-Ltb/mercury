@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.mercury</groupId>
@@ -14,7 +13,7 @@
 
     <properties>
         <chronicle-core.version>2.23.35</chronicle-core.version>
-        <chronicle-bytes.version>2.23.30</chronicle-bytes.version>
+        <chronicle-bytes.version>2.23.32</chronicle-bytes.version>
         <chronicle-threads.version>2.23.25</chronicle-threads.version>
         <chronicle-analytics.version>2.23.2</chronicle-analytics.version>
         <chronicle-wire.version>2.23.39</chronicle-wire.version>
