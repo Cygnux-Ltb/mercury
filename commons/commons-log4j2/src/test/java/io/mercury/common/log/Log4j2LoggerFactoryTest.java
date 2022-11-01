@@ -1,11 +1,10 @@
 package io.mercury.common.log;
 
-import java.time.LocalDateTime;
-
+import io.mercury.common.log.Log4j2Configurator.LogLevel;
 import org.junit.Test;
 import org.slf4j.Logger;
 
-import io.mercury.common.log.Log4j2Configurator.LogLevel;
+import java.time.LocalDateTime;
 
 public class Log4j2LoggerFactoryTest {
 

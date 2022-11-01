@@ -40,11 +40,6 @@
     </build>
 
     <dependencies>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -55,7 +50,7 @@
                 <artifactId>commons-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- commons log -->
+            <!-- commons logPoint -->
             <dependency>
                 <groupId>io.mercury</groupId>
                 <artifactId>commons-log4j2</artifactId>
