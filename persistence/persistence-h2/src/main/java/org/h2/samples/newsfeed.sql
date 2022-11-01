@@ -39,7 +39,7 @@ $$A new version of H2 is available for
 (You may have to click 'Refresh').
 <br />
 For details, see the
-<a href="https://h2database.com/html/changelog.html">change log</a>.
+<a href="https://h2database.com/html/changelog.html">change logPoint</a>.
 <br />
 For future plans, see the
 <a href="https://h2database.com/html/roadmap.html">roadmap</a>.
