@@ -5,12 +5,12 @@
  */
 package org.h2.samples;
 
+import org.h2.tools.DeleteDbFiles;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-
-import org.h2.tools.DeleteDbFiles;
 
 /**
  * A very simple class that shows how to load the driver, create a database,
@@ -18,31 +18,31 @@ import org.h2.tools.DeleteDbFiles;
  */
 public class HelloWorld {
 
-	/**
-	 * Called when ran from command line.
-	 *
-	 * @param args ignored
-	 */
-	public static void main(String... args) throws Exception {
-		// delete the database named 'test' in the user home directory
-		DeleteDbFiles.execute("~", "test", true);
+    /**
+     * Called when ran from command line.
+     *
+     * @param args ignored
+     */
+    public static void main(String... args) throws Exception {
+        // delete the database named 'test' in the user home directory
+        DeleteDbFiles.execute("~", "test", true);
 
-		Class.forName("org.h2.Driver");
-		Connection conn = DriverManager.getConnection("jdbc:h2:~/test");
-		Statement stat = conn.createStatement();
+        Class.forName("org.h2.Driver");
+        Connection conn = DriverManager.getConnection("jdbc:h2:~/test");
+        Statement stat = conn.createStatement();
 
-		// this line would initialize the database
-		// from the SQL script file 'init.sql'
-		// stat.execute("runscript from 'init.sql'");
+        // this line would initialize the database
+        // from the SQL script file 'init.sql'
+        // stat.execute("runscript from 'init.sql'");
 
-		stat.execute("create table test(id int primary key, name varchar(255))");
-		stat.execute("insert into test values(1, 'Hello')");
-		ResultSet rs = stat.executeQuery("select * from test");
-		while (rs.next()) {
-			System.out.println(rs.getString("name"));
-		}
-		stat.close();
-		conn.close();
-	}
+        stat.execute("create table test(id int primary key, name varchar(255))");
+        stat.execute("insert into test values(1, 'Hello')");
+        ResultSet rs = stat.executeQuery("select * from test");
+        while (rs.next()) {
+            System.out.println(rs.getString("name"));
+        }
+        stat.close();
+        conn.close();
+    }
 
 }

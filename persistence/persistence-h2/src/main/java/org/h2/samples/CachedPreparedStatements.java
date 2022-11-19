@@ -17,35 +17,34 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CachedPreparedStatements {
 
-	private Connection conn;
-	private Statement stat;
-	private final ConcurrentHashMap<String, PreparedStatement> prepared = new ConcurrentHashMap<>();
+    private Connection conn;
+    private Statement stat;
+    private final ConcurrentHashMap<String, PreparedStatement> prepared = new ConcurrentHashMap<>();
 
-	/**
-	 * This method is called when executing this sample application from the command
-	 * line.
-	 *
-	 * @param args the command line parameters
-	 */
-	public static void main(String... args) throws Exception {
-		new CachedPreparedStatements().run();
-	}
+    /**
+     * This method is called when executing this sample application from the command
+     * line.
+     *
+     * @param args the command line parameters
+     */
+    public static void main(String... args) throws Exception {
+        new CachedPreparedStatements().run();
+    }
 
-	private void run() throws Exception {
-		Class.forName("org.h2.Driver");
-		conn = DriverManager.getConnection("jdbc:h2:mem:", "sa", "");
-		stat = conn.createStatement();
-		stat.execute("create table test(id int primary key, name varchar)");
-		PreparedStatement prep = prepare("insert into test values(?, ?)");
-		prep.setInt(1, 1);
-		prep.setString(2, "Hello");
-		prep.execute();
-		conn.close();
-	}
+    private void run() throws Exception {
+        Class.forName("org.h2.Driver");
+        conn = DriverManager.getConnection("jdbc:h2:mem:", "sa", "");
+        stat = conn.createStatement();
+        stat.execute("create table test(id int primary key, name varchar)");
+        PreparedStatement prep = prepare("insert into test values(?, ?)");
+        prep.setInt(1, 1);
+        prep.setString(2, "Hello");
+        prep.execute();
+        conn.close();
+    }
 
-	private PreparedStatement prepare(String sql) throws SQLException {
-		PreparedStatement prep = prepared.putIfAbsent(sql, conn.prepareStatement(sql));
-		return prep;
-	}
+    private PreparedStatement prepare(String sql) throws SQLException {
+        return prepared.putIfAbsent(sql, conn.prepareStatement(sql));
+    }
 
 }

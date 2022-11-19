@@ -1,69 +1,66 @@
 package io.mercury.persistence.h2;
 
-import static io.mercury.common.file.FileUtil.mkdirInHome;
+import io.mercury.common.lang.Asserter;
+import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.sys.SysProperties;
+import io.mercury.common.util.StringSupport;
+import org.slf4j.Logger;
 
+import javax.annotation.Nonnull;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
-import org.slf4j.Logger;
-
-import io.mercury.common.lang.Asserter;
-import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.common.sys.SysProperties;
-import io.mercury.common.util.StringSupport;
+import static io.mercury.common.file.FileUtil.mkdirInHome;
 
 public final class H2Util {
 
-	private static final Logger log = Log4j2LoggerFactory.getLogger(H2Util.class);
+    private static final Logger log = Log4j2LoggerFactory.getLogger(H2Util.class);
 
-	public static final String JdbcProtocol = "jdbc:sqlite:";
+    public static final String JdbcProtocol = "jdbc:sqlite:";
 
-	private H2Util() {
-	}
+    private H2Util() {
+    }
 
-	/**
-	 * 
-	 * @param dir
-	 * @param dbName
-	 * @return
-	 */
-	public static String getH2UrlInHome(@Nonnull String dir, @Nonnull String dbName) {
-		if (!dbName.endsWith(".db"))
-			dbName = dbName + ".db";
-		mkdirInHome(dir);
-		return JdbcProtocol + StringSupport.fixPath(SysProperties.USER_HOME) + StringSupport.fixPath(dir) + dbName;
-	}
+    /**
+     * @param dir    String
+     * @param dbName String
+     * @return String
+     */
+    public static String getH2UrlInHome(@Nonnull String dir, @Nonnull String dbName) {
+        if (!dbName.endsWith(".db"))
+            dbName = dbName + ".db";
+        mkdirInHome(dir);
+        return JdbcProtocol + StringSupport.fixPath(SysProperties.USER_HOME) + StringSupport.fixPath(dir) + dbName;
+    }
 
-	/**
-	 * 
-	 * @param <T>
-	 * @param connection
-	 * @param sql
-	 * @param processor
-	 * @param type
-	 * @return
-	 * @throws SQLException
-	 */
-	public static <T> List<T> query(@Nonnull Connection connection, @Nonnull String sql,
-									@Nonnull ResultSetProcessor processor, @Nonnull Class<T> type) throws SQLException {
-		Asserter.nonNull(connection, "connection");
-		try (// create a database connection
-				Statement st = connection.createStatement();
-				ResultSet rs = st.executeQuery(sql);) {
-			return processor.toBeanList(rs, type);
-		} catch (SQLException e) {
-			log.error("error message -> {}", e.getMessage(), e);
-			throw e;
-		}
-	}
+    /**
+     * @param connection Connection
+     * @param sql        String
+     * @param processor  ResultSetProcessor
+     * @param type       Class<T>
+     * @return List<T>
+     * @throws SQLException e
+     */
+    public static <T> List<T> query(@Nonnull Connection connection,
+                                    @Nonnull String sql,
+                                    @Nonnull ResultSetProcessor processor,
+                                    @Nonnull Class<T> type) throws SQLException {
+        Asserter.nonNull(connection, "connection");
+        try (// create a database connection
+             Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery(sql);) {
+            return processor.toBeanList(rs, type);
+        } catch (SQLException e) {
+            log.error("error message -> {}", e.getMessage(), e);
+            throw e;
+        }
+    }
 
-	public static void main(String[] args) {
-		System.out.println(H2Util.getH2UrlInHome("sqlite-file", "example"));
-	}
+    public static void main(String[] args) {
+        System.out.println(H2Util.getH2UrlInHome("sqlite-file", "example"));
+    }
 
 }
