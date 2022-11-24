@@ -9,31 +9,29 @@ import org.jgrapht.traverse.DepthFirstIterator;
 
 public final class VertexScanner {
 
-	private VertexScanner() {
-	}
+    private VertexScanner() {
+    }
 
-	/**
-	 * 
-	 * @param <V>   start
-	 * @param <E>
-	 * @param graph
-	 * @param start
-	 * @return
-	 */
-	public <V, E extends Edge> ImmutableSet<V> breadthFirst(Graph<V, E> graph, V start) {
-		return newUnifiedSet(new BreadthFirstIterator<>(graph, start)).toImmutable();
-	}
+    /**
+     * @param <V>   V
+     * @param <E>   E extends Edge
+     * @param graph Graph<V, E>
+     * @param start V type
+     * @return ImmutableSet<V>
+     */
+    public <V, E extends Edge> ImmutableSet<V> breadthFirst(Graph<V, E> graph, V start) {
+        return newUnifiedSet(new BreadthFirstIterator<>(graph, start)).toImmutable();
+    }
 
-	/**
-	 * 
-	 * @param <V>   start
-	 * @param <E>
-	 * @param graph
-	 * @param start
-	 * @return
-	 */
-	public <V, E extends Edge> ImmutableSet<V> depthFirst(Graph<V, E> graph, V start) {
-		return newUnifiedSet(new DepthFirstIterator<>(graph, start)).toImmutable();
-	}
+    /**
+     * @param <V>   start
+     * @param <E>   E extends Edge
+     * @param graph Graph<V, E>
+     * @param start V
+     * @return ImmutableSet<V>
+     */
+    public <V, E extends Edge> ImmutableSet<V> depthFirst(Graph<V, E> graph, V start) {
+        return newUnifiedSet(new DepthFirstIterator<>(graph, start)).toImmutable();
+    }
 
 }

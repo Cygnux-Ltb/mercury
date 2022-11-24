@@ -22,35 +22,35 @@ import java.util.List;
 
 public class CycleDetectedException extends Exception {
 
-	@Serial
-	private static final long serialVersionUID = 8005551382082574971L;
+    @Serial
+    private static final long serialVersionUID = 8005551382082574971L;
 
-	private final List<String> cycle;
+    private final List<String> cycle;
 
-	public CycleDetectedException(final String message, final List<String> cycle) {
-		super(message);
-		this.cycle = cycle;
-	}
+    public CycleDetectedException(final String message, final List<String> cycle) {
+        super(message);
+        this.cycle = cycle;
+    }
 
-	public List<String> getCycle() {
-		return cycle;
-	}
+    public List<String> getCycle() {
+        return cycle;
+    }
 
-	/**
-	 * @return
-	 */
-	public String cycleToString() {
-		StringBuilder buffer = new StringBuilder();
-		for (Iterator<String> iterator = cycle.iterator(); iterator.hasNext();) {
-			buffer.append(iterator.next());
-			if (iterator.hasNext()) {
-				buffer.append(" --> ");
-			}
-		}
-		return buffer.toString();
-	}
+    /**
+     * @return String
+     */
+    public String cycleToString() {
+        StringBuilder buffer = new StringBuilder();
+        for (Iterator<String> iterator = cycle.iterator(); iterator.hasNext(); ) {
+            buffer.append(iterator.next());
+            if (iterator.hasNext()) {
+                buffer.append(" --> ");
+            }
+        }
+        return buffer.toString();
+    }
 
-	public String getMessage() {
-		return super.getMessage() + " " + cycleToString();
-	}
+    public String getMessage() {
+        return super.getMessage() + " " + cycleToString();
+    }
 }

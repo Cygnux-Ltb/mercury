@@ -6,7 +6,13 @@ import org.eclipse.collections.impl.list.mutable.FastList;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.*;
+import java.util.Objects;
+import java.util.function.BooleanSupplier;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.function.ToIntFunction;
+import java.util.function.ToLongFunction;
 
 public final class Functions {
 
@@ -126,8 +132,7 @@ public final class Functions {
      * @param val      :
      * @return R
      */
-    public static <R> R getOrDefault(@Nonnull BooleanSupplier isHas,
-                                     @Nonnull Supplier<R> supplier,
+    public static <R> R getOrDefault(@Nonnull BooleanSupplier isHas, @Nonnull Supplier<R> supplier,
                                      @Nonnull R val) {
         if (isHas.getAsBoolean())
             return supplier.get();
@@ -150,5 +155,35 @@ public final class Functions {
         else
             throw exception;
     }
+
+
+    /**
+     * Predicate always returning {@code true}.
+     */
+    public static <T> Predicate<T> alwaysTrue() {
+        return t -> true;
+    }
+
+    /**
+     * Predicate always returning {@code false}.
+     */
+    public static <T> Predicate<T> alwaysFalse() {
+        return t -> false;
+    }
+
+    /**
+     * Predicate returning {@code true} if the specified object is {@code null}.
+     */
+    public static <T> Predicate<T> isNull() {
+        return Objects::isNull;
+    }
+
+    /**
+     * Predicate returning {@code true} if the specified object is not {@code null}.
+     */
+    public static <T> Predicate<T> nonNull() {
+        return Objects::nonNull;
+    }
+
 
 }
