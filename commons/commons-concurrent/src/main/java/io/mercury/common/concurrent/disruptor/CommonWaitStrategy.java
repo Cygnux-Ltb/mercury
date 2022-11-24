@@ -39,7 +39,7 @@ public enum CommonWaitStrategy implements Supplier<WaitStrategy> {
     Sleeping,
 
     /**
-     * The YieldingWaitStrategy is one of two WaitStrategys that can be use in
+     * The YieldingWaitStrategy is one of two WaitStrategy's that can be use in
      * low-latency systems. It is designed for cases where there is the option to
      * burn CPU cycles with the goal of improving latency. <br>
      * <br>

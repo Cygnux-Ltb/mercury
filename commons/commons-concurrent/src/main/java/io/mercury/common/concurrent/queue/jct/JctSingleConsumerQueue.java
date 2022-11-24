@@ -1,21 +1,20 @@
 package io.mercury.common.concurrent.queue.jct;
 
-import java.util.Queue;
-
-import org.jctools.queues.MpscArrayQueue;
-import org.jctools.queues.SpscArrayQueue;
-import org.slf4j.Logger;
-
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.annotation.thread.SpinLock;
-import io.mercury.common.concurrent.queue.SingleConsumerQueue;
 import io.mercury.common.concurrent.queue.QueueWorkingException;
+import io.mercury.common.concurrent.queue.SingleConsumerQueue;
 import io.mercury.common.concurrent.queue.WaitingStrategy;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.ThreadSupport;
 import io.mercury.common.util.StringSupport;
+import org.jctools.queues.MpscArrayQueue;
+import org.jctools.queues.SpscArrayQueue;
+import org.slf4j.Logger;
+
+import java.util.Queue;
 
 /**
  * @param <E> Single consumer queue use jctools implements
