@@ -1,10 +1,8 @@
 package com.lmax.disruptor;
 
-import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNot.not;
 
-import com.lmax.disruptor.BusySpinWaitStrategy;
-import com.lmax.disruptor.SingleProducerSequencer;
 import org.junit.Test;
 
 public class SingleProducerSequencerTest {

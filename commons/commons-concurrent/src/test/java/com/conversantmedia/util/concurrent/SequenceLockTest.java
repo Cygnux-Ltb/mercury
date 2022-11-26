@@ -1,11 +1,10 @@
 package com.conversantmedia.util.concurrent;
 
-import com.conversantmedia.util.concurrent.SequenceLock;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Created by jcairns on 2/12/16.

@@ -1,6 +1,5 @@
 package com.conversantmedia.util.concurrent;
 
-import com.conversantmedia.util.concurrent.ContendedAtomicLong;
 import org.junit.Assert;
 import org.junit.Test;
 

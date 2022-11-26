@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.conversantmedia.util.concurrent.ConcurrentStack;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

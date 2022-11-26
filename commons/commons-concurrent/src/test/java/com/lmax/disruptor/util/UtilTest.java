@@ -15,11 +15,10 @@
  */
 package com.lmax.disruptor.util;
 
-import com.lmax.disruptor.Sequence;
-
-import com.lmax.disruptor.util.Util;
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.lmax.disruptor.Sequence;
 
 public final class UtilTest {
 	@Test

@@ -2,11 +2,6 @@ package com.conversantmedia.util.estimation;
 
 import java.util.Random;
 
-import com.conversantmedia.util.estimation.Percentile;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
 /*
  * #%L
  * Conversant Disruptor
@@ -28,6 +23,9 @@ import org.junit.Test;
  */
 
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * Created by jcairns on 5/28/14.
