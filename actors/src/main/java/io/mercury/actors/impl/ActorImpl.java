@@ -112,7 +112,8 @@ public class ActorImpl<T> implements IActorRef<T> {
         return ask((target, callback) -> callback.accept(action.apply(target)));
     }
 
-    private static IActorRef<?> safeCurrent() {
+    @SuppressWarnings("unused")
+	private static IActorRef<?> safeCurrent() {
         IActorRef<?> caller = Actor.current();
         if (caller == null)
             throw new IllegalStateException("It is not allowed to call ask from non-actor context. There's no actor to receive the response");
