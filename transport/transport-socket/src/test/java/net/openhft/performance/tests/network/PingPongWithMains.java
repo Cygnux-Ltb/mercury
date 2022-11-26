@@ -17,15 +17,7 @@
  */
 package net.openhft.performance.tests.network;
 
-import net.openhft.chronicle.bytes.Bytes;
-import net.openhft.chronicle.core.threads.EventLoop;
-import net.openhft.chronicle.network.*;
-import net.openhft.chronicle.network.connection.TcpChannelHub;
-import net.openhft.chronicle.network.tcp.ChronicleSocketChannel;
-import net.openhft.chronicle.threads.EventGroup;
-import net.openhft.chronicle.threads.Pauser;
-import net.openhft.chronicle.wire.*;
-import org.jetbrains.annotations.NotNull;
+import static net.openhft.performance.tests.network.LegacyHanderFactory.simpleTcpEventHandlerFactory;
 
 import java.io.IOException;
 import java.net.StandardSocketOptions;
@@ -34,7 +26,24 @@ import java.util.Arrays;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.Function;
 
-import static net.openhft.performance.tests.network.LegacyHanderFactory.simpleTcpEventHandlerFactory;
+import org.jetbrains.annotations.NotNull;
+
+import net.openhft.chronicle.bytes.Bytes;
+import net.openhft.chronicle.core.threads.EventLoop;
+import net.openhft.chronicle.network.AcceptorEventHandler;
+import net.openhft.chronicle.network.NetworkContext;
+import net.openhft.chronicle.network.TCPRegistry;
+import net.openhft.chronicle.network.VanillaNetworkContext;
+import net.openhft.chronicle.network.WireTcpHandler;
+import net.openhft.chronicle.network.connection.TcpChannelHub;
+import net.openhft.chronicle.network.tcp.ChronicleSocketChannel;
+import net.openhft.chronicle.threads.EventGroup;
+import net.openhft.chronicle.threads.Pauser;
+import net.openhft.chronicle.wire.DocumentContext;
+import net.openhft.chronicle.wire.Wire;
+import net.openhft.chronicle.wire.WireOut;
+import net.openhft.chronicle.wire.WireType;
+import net.openhft.chronicle.wire.Wires;
 
 public class PingPongWithMains {
 
@@ -42,8 +51,7 @@ public class PingPongWithMains {
 
 	private final String serverHostPort = "localhost:8097"; // localhost:8080
 
-	@SuppressWarnings("rawtypes")
-	private static void testLatency(String desc, @NotNull Function<Bytes, Wire> wireWrapper,
+	private static void testLatency(String desc, @NotNull Function<Bytes<?>, Wire> wireWrapper,
 			@NotNull ChronicleSocketChannel... sockets) throws IOException {
 		int tests = 40000;
 		@NotNull
@@ -136,7 +144,9 @@ public class PingPongWithMains {
 	public void testServer() throws IOException {
 
 		try (@NotNull
-		EventLoop eg = new EventGroup(true, Pauser.busy(), true)) {
+		EventLoop eg = EventGroup.builder().withDaemon(true).withPauser(Pauser.busy()).bindingAnyByDefault().build();
+		// new EventGroup(true, Pauser.busy(), true)
+		) {
 			eg.start();
 			TCPRegistry.createServerSocketChannelFor(serverHostPort);
 			@SuppressWarnings({ "rawtypes", "unchecked" })

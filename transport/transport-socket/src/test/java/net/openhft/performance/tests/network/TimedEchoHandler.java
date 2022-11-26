@@ -39,7 +39,7 @@ class TimedEchoHandler<T extends NetworkContext<T>> extends SimpleCloseable impl
 	public static <T extends NetworkContext<T>> void main(String[] args) throws IOException {
 
 		try (@NotNull
-		EventLoop eg = new EventGroup(false)) {
+		EventLoop eg = EventGroup.builder().withDaemon(false).build()) {
 			eg.start();
 			@SuppressWarnings("unchecked")
 			@NotNull

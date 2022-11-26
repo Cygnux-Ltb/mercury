@@ -14,21 +14,21 @@ import net.openhft.chronicle.threads.Pauser;
 import net.openhft.performance.tests.network.EchoHandler;
 
 public class EchoServer2Main {
-    public static <T extends VanillaNetworkContext<T>> void main(String[] args) throws IOException {
-        System.setProperty("pauser.minProcessors", "1");
-        Affinity.acquireCore();
-        @SuppressWarnings("resource")
-		@NotNull EventLoop eg = new EventGroup(false, Pauser.busy(), true);
-        eg.start();
+	public static <T extends VanillaNetworkContext<T>> void main(String[] args) throws IOException {
+		System.setProperty("pauser.minProcessors", "1");
+		Affinity.acquireCore();
+		@NotNull
+		EventLoop eg = EventGroup.builder().withDaemon(false).withPauser(Pauser.busy()).bindingAnyByDefault().build();
+		// new EventGroup(false, Pauser.busy(), true);
+		eg.start();
 
-        @SuppressWarnings({ "rawtypes", "unchecked" })
-		@NotNull AcceptorEventHandler<T> eah = new AcceptorEventHandler<T>("*:" + EchoClientMain.PORT,
-                nc -> {
-                    TcpEventHandler<T> teh = new TcpEventHandler<T>(nc);
-                    teh.tcpHandler(new EchoHandler<>());
-                    return teh;
-                },
-                () -> (T) new VanillaNetworkContext());
-        eg.addHandler(eah);
-    }
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		@NotNull
+		AcceptorEventHandler<T> eah = new AcceptorEventHandler<T>("*:" + EchoClientMain.PORT, nc -> {
+			TcpEventHandler<T> teh = new TcpEventHandler<T>(nc);
+			teh.tcpHandler(new EchoHandler<>());
+			return teh;
+		}, () -> (T) new VanillaNetworkContext());
+		eg.addHandler(eah);
+	}
 }

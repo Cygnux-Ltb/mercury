@@ -67,7 +67,7 @@ public class WireTcpHandlerTest extends NetworkTestCommon {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private static void testLatency(String desc, @NotNull Function<Bytes, Wire> wireWrapper,
+	private static void testLatency(String desc, @NotNull Function<Bytes<?>, Wire> wireWrapper,
 			@NotNull ChronicleSocketChannel... sockets) throws IOException {
 		int tests = 40000;
 		@NotNull
@@ -140,7 +140,7 @@ public class WireTcpHandlerTest extends NetworkTestCommon {
 		AbstractReferenceCounted.disableReferenceTracing();
 
 		try (@NotNull
-		EventLoop eg = new EventGroup(true)) {
+		EventLoop eg = EventGroup.builder().withDaemon(true).build()) {
 			eg.start();
 			TCPRegistry.createServerSocketChannelFor(desc);
 			@SuppressWarnings({ "rawtypes", "unchecked" })
