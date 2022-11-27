@@ -13,6 +13,7 @@ final class StateMachineProcessor implements Runnable {
 	private final SSLContext context;
 	private final SslEngineStateMachine stateMachine;
 	private final Pauser pauser = Pauser.balanced();
+	@SuppressWarnings("unused")
 	private final ChronicleSocketChannel channel;
 	private volatile boolean running = true;
 
@@ -26,8 +27,8 @@ final class StateMachineProcessor implements Runnable {
 	@Override
 	public void run() {
 		try {
-			stateMachine.initialise(context, channel);
-
+			stateMachine.initialise(context);
+			// stateMachine.initialise(context, channel);
 			while (!Thread.currentThread().isInterrupted() && running) {
 				while (running && stateMachine.action()) {
 					pauser.reset();

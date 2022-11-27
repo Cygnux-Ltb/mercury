@@ -52,13 +52,20 @@ import net.openhft.chronicle.threads.Pauser;
  * public ServerThreadingStrategy serverThreadingStrategy() { return
  * ServerThreadingStrategy.MULTI_THREADED_BUSY_WAITING; }
  */
+@SuppressWarnings("deprecation")
 @RunWith(Parameterized.class)
 @Ignore
 public final class NonClusteredSslIntegrationTest extends NetworkTestCommon {
 
 	private static final boolean DEBUG = Jvm.getBoolean("NonClusteredSslIntegrationTest.debug");
-	private final EventGroup client = new EventGroup(true, Pauser.millis(1), false, "client");
-	private final EventGroup server = new EventGroup(true, Pauser.millis(1), false, "server");
+	private final EventGroup client = EventGroup.builder().withDaemon(true).withPauser(Pauser.millis(1))
+			.bindingNoneByDefault().withName("client").build();
+	// private final EventGroup client = new EventGroup(true, Pauser.millis(1),
+	// false, "client");
+	private final EventGroup server = EventGroup.builder().withDaemon(true).withPauser(Pauser.millis(1))
+			.bindingNoneByDefault().withName("server").build();
+	// private final EventGroup server = new EventGroup(true, Pauser.millis(1),
+	// false, "server");
 	private final CountingTcpHandler clientAcceptor = new CountingTcpHandler("client-acceptor");
 	private final CountingTcpHandler serverAcceptor = new CountingTcpHandler("server-acceptor");
 	private final CountingTcpHandler clientInitiator = new CountingTcpHandler("client-initiator");
