@@ -17,7 +17,7 @@ public class FastGenericDatumReader<T> implements DatumReader<T> {
 
 	private Schema writerSchema;
 	private Schema readerSchema;
-	private FastSerdeCache cache;
+	private final FastSerdeCache cache;
 
 	private final AtomicReference<FastDeserializer<T>> cachedFastDeserializer = new AtomicReference<>();
 
@@ -70,7 +70,7 @@ public class FastGenericDatumReader<T> implements DatumReader<T> {
 
 	@Override
 	public T read(T reuse, Decoder in) throws IOException {
-		FastDeserializer<T> fastDeserializer = null;
+		FastDeserializer<T> fastDeserializer;
 
 		if (cachedFastDeserializer.get() != null) {
 			fastDeserializer = cachedFastDeserializer.get();

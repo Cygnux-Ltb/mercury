@@ -1,18 +1,16 @@
 package io.mercury.serialization.avro;
 
-import static io.mercury.common.concurrent.map.JctConcurrentMaps.newNonBlockingLongMap;
-
-import java.util.concurrent.ConcurrentMap;
+import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.serialization.specific.BytesDeserializer;
+import org.apache.avro.specific.SpecificRecord;
+import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
+import java.util.concurrent.ConcurrentMap;
 
-import org.apache.avro.specific.SpecificRecord;
-import org.slf4j.Logger;
-
-import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.common.serialization.specific.BytesDeserializer;
+import static io.mercury.common.concurrent.map.JctConcurrentMaps.newNonBlockingLongMap;
 
 /**
  * 
@@ -31,7 +29,7 @@ public final class AvroBinaryDeserializerBuf<T extends SpecificRecord> implement
 
 	/**
 	 * 
-	 * @param type
+	 * @param type Class<T>
 	 */
 	public AvroBinaryDeserializerBuf(Class<T> type) {
 		this.type = type;
@@ -51,7 +49,7 @@ public final class AvroBinaryDeserializerBuf<T extends SpecificRecord> implement
 	/**
 	 * 根据线程ID获取Deserializer
 	 * 
-	 * @return
+	 * @return AvroBinaryDeserializer<T>
 	 */
 	private AvroBinaryDeserializer<T> getDeserializer() {
 		long threadId = Thread.currentThread().getId();

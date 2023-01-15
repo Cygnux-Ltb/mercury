@@ -8,6 +8,8 @@ import com.esotericsoftware.kryo.io.Output;
 
 import io.mercury.common.serialization.basic.Serializer;
 
+import javax.annotation.Nonnull;
+
 public class KryoSerializer<T> implements Serializer<T, ByteBuffer> {
 
 	private final Kryo kryo;
@@ -24,7 +26,7 @@ public class KryoSerializer<T> implements Serializer<T, ByteBuffer> {
 	}
 
 	@Override
-	public ByteBuffer serialization(T source) {
+	public ByteBuffer serialization(@Nonnull T source) {
 		kryo.writeObject(output, source);
 		return ByteBuffer.wrap(output.toBytes());
 	}

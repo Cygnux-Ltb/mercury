@@ -85,7 +85,7 @@ public class FastGenericDatumWriter<T> implements DatumWriter<T> {
 	/**
 	 * Return a flag to indicate whether fast serializer is being used or not.
 	 * 
-	 * @return
+	 * @return boolean
 	 */
 	public boolean isFastSerializerUsed() {
 		if (cachedFastSerializer == null) {

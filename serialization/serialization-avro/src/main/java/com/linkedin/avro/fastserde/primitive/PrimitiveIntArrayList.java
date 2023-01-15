@@ -4,7 +4,8 @@ import com.linkedin.avro.api.PrimitiveBooleanList;
 import com.linkedin.avro.api.PrimitiveIntList;
 import org.apache.avro.Schema;
 
-public class PrimitiveIntArrayList extends PrimitiveArrayList<Integer, PrimitiveIntList, int[]>
+public class PrimitiveIntArrayList
+		extends PrimitiveArrayList<Integer, PrimitiveIntList, int[]>
 		implements PrimitiveIntList {
 	public static final Schema SCHEMA = Schema.createArray(Schema.create(Schema.Type.INT));
 

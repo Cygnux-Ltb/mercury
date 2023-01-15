@@ -4,7 +4,8 @@ import com.linkedin.avro.api.PrimitiveBooleanList;
 import com.linkedin.avro.api.PrimitiveDoubleList;
 import org.apache.avro.Schema;
 
-public class PrimitiveDoubleArrayList extends PrimitiveArrayList<Double, PrimitiveDoubleList, double[]>
+public class PrimitiveDoubleArrayList
+		extends PrimitiveArrayList<Double, PrimitiveDoubleList, double[]>
 		implements PrimitiveDoubleList {
 	public static final Schema SCHEMA = Schema.createArray(Schema.create(Schema.Type.DOUBLE));
 

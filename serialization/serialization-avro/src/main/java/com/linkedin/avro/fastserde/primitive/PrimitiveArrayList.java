@@ -6,6 +6,8 @@ import org.apache.avro.generic.GenericArray;
 import org.apache.avro.generic.GenericContainer;
 import org.apache.avro.generic.GenericData;
 
+import javax.annotation.Nonnull;
+
 public abstract class PrimitiveArrayList<T, L, A> extends AbstractList<T>
 		implements GenericContainer, Comparable<GenericArray<T>> {
 	private int size = 0;
@@ -86,14 +88,14 @@ public abstract class PrimitiveArrayList<T, L, A> extends AbstractList<T>
 	@Override
 	public T remove(int i) {
 		checkIfLargerThanSize(i);
-		T result = (T) get(i);
+		T result = get(i);
 		--size;
 		System.arraycopy(elementsArray, i + 1, elementsArray, i, (size - i));
 		return result;
 	}
 
 	@Override
-	public int compareTo(GenericArray<T> that) {
+	public int compareTo(@Nonnull GenericArray<T> that) {
 		if (isInstanceOfCorrectPrimitiveList(that)) {
 			@SuppressWarnings("unchecked")
 			L thatPrimitiveList = (L) that;
@@ -154,7 +156,7 @@ public abstract class PrimitiveArrayList<T, L, A> extends AbstractList<T>
 
 	/**
 	 * A function used when appending an element to the end of the list. It
-	 * increments the size as a side-effect.
+	 * increments the size as a side effect.
 	 *
 	 * N.B.: Since {@link #size} is private, this is the only size mutation
 	 * operation allowed for child classes.

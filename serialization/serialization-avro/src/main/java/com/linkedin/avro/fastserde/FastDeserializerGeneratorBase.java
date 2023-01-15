@@ -37,8 +37,8 @@ public abstract class FastDeserializerGeneratorBase<T> extends FastSerdeBase {
 	}
 
 	public static String getClassName(Schema writerSchema, Schema readerSchema, String description) {
-		Long writerSchemaId = Math.abs(Utils.getSchemaFingerprint(writerSchema));
-		Long readerSchemaId = Math.abs(Utils.getSchemaFingerprint(readerSchema));
+		long writerSchemaId = Math.abs(Utils.getSchemaFingerprint(writerSchema));
+		long readerSchemaId = Math.abs(Utils.getSchemaFingerprint(readerSchema));
 		String typeName = SchemaAssistant.getTypeName(readerSchema);
 		return typeName + SEP + description + "Deserializer" + SEP + writerSchemaId + SEP + readerSchemaId;
 	}
@@ -73,7 +73,7 @@ public abstract class FastDeserializerGeneratorBase<T> extends FastSerdeBase {
 	public abstract FastDeserializer<T> generateDeserializer();
 
 	protected ListIterator<Symbol> actionIterator(FieldAction action) {
-		ListIterator<Symbol> actionIterator = null;
+		ListIterator<Symbol> actionIterator;
 
 		if (action.getSymbolIterator() != null) {
 			actionIterator = action.getSymbolIterator();
@@ -185,8 +185,8 @@ public abstract class FastDeserializerGeneratorBase<T> extends FastSerdeBase {
 
 	protected static final class FieldAction {
 
-		private Schema.Type type;
-		private boolean shouldRead;
+		private final Schema.Type type;
+		private final boolean shouldRead;
 		private Symbol symbol;
 		private ListIterator<Symbol> symbolIterator;
 
