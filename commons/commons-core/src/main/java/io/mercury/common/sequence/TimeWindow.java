@@ -1,21 +1,19 @@
 package io.mercury.common.sequence;
 
-import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HH_MM_SS;
+import io.mercury.common.collections.MutableLists;
+import io.mercury.common.lang.Asserter;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
 
+import javax.annotation.Nonnull;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
 
-import javax.annotation.Nonnull;
-
-import org.eclipse.collections.api.list.ImmutableList;
-import org.eclipse.collections.api.list.MutableList;
-
-import io.mercury.common.collections.MutableLists;
-import io.mercury.common.lang.Asserter;
+import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
+import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HH_MM_SS;
 
 /**
  * 时间窗口序列

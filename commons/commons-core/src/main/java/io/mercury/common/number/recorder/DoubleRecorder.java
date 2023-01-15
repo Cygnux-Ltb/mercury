@@ -10,7 +10,7 @@ import static io.mercury.common.collections.MutableMaps.newDoubleIntHashMap;
 import static io.mercury.common.collections.MutableSets.newDoubleHashSet;
 
 /**
- * 有序的记录N个double数值并排序<br>
+ * 有序地记录N个double数值并排序<br>
  * 用于查询最大和最小的值<br>
  * 可以记录重复的值和删除过期的值<br>
  *

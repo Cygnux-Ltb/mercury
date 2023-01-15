@@ -1,22 +1,21 @@
 package io.mercury.common.sequence;
 
-import static io.mercury.common.datetime.EpochTime.EPOCH_ZERO;
-import static io.mercury.common.datetime.TimeZone.UTC;
-import static io.mercury.common.util.BitOperator.maxValueOfBit;
-import static java.lang.System.currentTimeMillis;
-import static java.time.LocalTime.MIN;
+import io.mercury.common.datetime.TimeZone;
+import io.mercury.common.util.BitFormatter;
+import io.mercury.common.util.HexUtil;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import io.mercury.common.datetime.TimeZone;
-import io.mercury.common.util.BitFormatter;
-import io.mercury.common.util.HexUtil;
+import static io.mercury.common.datetime.EpochTime.EPOCH_ZERO;
+import static io.mercury.common.datetime.TimeZone.UTC;
+import static io.mercury.common.util.BitOperator.maxValueOfBit;
+import static java.lang.System.currentTimeMillis;
+import static java.time.LocalTime.MIN;
 
 /**
  * 通过将63位正整数long类型拆分为三部分实现唯一序列 <br>

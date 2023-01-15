@@ -1,11 +1,10 @@
 package io.mercury.common.collections;
 
-import java.util.HashMap;
-import java.util.Map;
+import io.mercury.common.util.BitOperator;
 
 import javax.annotation.Nonnull;
-
-import io.mercury.common.util.BitOperator;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class MapUtil {
 

@@ -20,10 +20,10 @@ public final class Functions {
     }
 
     /**
-     * @param <T>         : T
-     * @param supplier    : Supplier<List<T>>
-     * @param successFunc : Function<List<T>, List<T>>
-     * @param failureFunc : ThrowableHandler<? super Exception>
+     * @param <T>         T
+     * @param supplier    Supplier<List<T>>
+     * @param successFunc Function<List<T>, List<T>>
+     * @param failureFunc ThrowableHandler<? super Exception>
      * @return List<T>
      */
     public static <T> List<T> exec(@Nonnull final Supplier<List<T>> supplier,
@@ -33,11 +33,11 @@ public final class Functions {
     }
 
     /**
-     * @param <R>         : Return type
-     * @param supplier    : Parameterless function to be executed
-     * @param successFunc : After the function succeeds...
-     * @param failureFunc : After the function fails...
-     * @param defSupplier : default return value supplier...
+     * @param <R>         Return type
+     * @param supplier    Parameterless function to be executed
+     * @param successFunc After the function succeeds...
+     * @param failureFunc After the function fails...
+     * @param defSupplier default return value supplier...
      * @return R
      */
     public static <R> R exec(@Nonnull final Supplier<R> supplier,
@@ -69,10 +69,10 @@ public final class Functions {
     }
 
     /**
-     * @param <T>         : Supplier<T> return type
-     * @param supplier    : Parameterless function to be executed
-     * @param successFunc : After the boolean function succeeds...
-     * @param failureFunc : After the boolean function fails...
+     * @param <T>         Supplier<T> return type
+     * @param supplier    Parameterless function to be executed
+     * @param successFunc After the boolean function succeeds...
+     * @param failureFunc After the boolean function fails...
      * @return R
      */
     public static <T> boolean execBool(@Nonnull final Supplier<T> supplier,
@@ -88,10 +88,10 @@ public final class Functions {
     }
 
     /**
-     * @param <T>          : Supplier<T> return type
-     * @param supplier     : Parameterless function to be executed
-     * @param successFunc  : After the int function succeeds...
-     * @param afterFailure : After the int function fails...
+     * @param <T>          Supplier<T> return type
+     * @param supplier     Parameterless function to be executed
+     * @param successFunc  After the int function succeeds...
+     * @param afterFailure After the int function fails...
      * @return int
      */
     public static <T> int execInt(@Nonnull final Supplier<T> supplier,
@@ -107,10 +107,10 @@ public final class Functions {
     }
 
     /**
-     * @param <T>          : Supplier<T> return type
-     * @param supplier     : Parameterless function to be executed
-     * @param successFunc  : After the int function succeeds...
-     * @param afterFailure : After the int function fails...
+     * @param <T>          Supplier<T> return type
+     * @param supplier     Parameterless function to be executed
+     * @param successFunc  After the int function succeeds...
+     * @param afterFailure After the int function fails...
      * @return long
      */
     public static <T> long execLong(@Nonnull final Supplier<T> supplier,
@@ -126,10 +126,10 @@ public final class Functions {
     }
 
     /**
-     * @param <R>      : Return type
-     * @param isHas    :
-     * @param supplier :
-     * @param val      :
+     * @param <R>      Return type
+     * @param isHas    BooleanSupplier
+     * @param supplier Supplier<R>
+     * @param val      R
      * @return R
      */
     public static <R> R getOrDefault(@Nonnull BooleanSupplier isHas, @Nonnull Supplier<R> supplier,

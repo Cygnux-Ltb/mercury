@@ -1,16 +1,15 @@
 package io.mercury.common.sequence;
 
-import static io.mercury.common.util.BitFormatter.longBinaryFormat;
-import static java.lang.System.currentTimeMillis;
-
-import javax.annotation.concurrent.ThreadSafe;
-
-import org.eclipse.collections.api.list.primitive.MutableLongList;
-
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.datetime.EpochTime;
 import io.mercury.common.util.BitFormatter;
 import io.mercury.common.util.BitOperator;
+import org.eclipse.collections.api.list.primitive.MutableLongList;
+
+import javax.annotation.concurrent.ThreadSafe;
+
+import static io.mercury.common.util.BitFormatter.longBinaryFormat;
+import static java.lang.System.currentTimeMillis;
 
 /**
  * Use Epoch Time ID

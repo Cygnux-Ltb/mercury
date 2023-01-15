@@ -1,11 +1,11 @@
 package io.mercury.common.sequence;
 
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HH_MM_SS;
+import io.mercury.common.datetime.EpochTime;
+import io.mercury.common.lang.Asserter;
 
 import java.time.ZonedDateTime;
 
-import io.mercury.common.datetime.EpochTime;
-import io.mercury.common.lang.Asserter;
+import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HH_MM_SS;
 
 /**
  * 时间点序列

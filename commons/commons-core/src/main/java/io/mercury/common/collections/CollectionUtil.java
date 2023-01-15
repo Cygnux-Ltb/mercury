@@ -51,12 +51,13 @@ public final class CollectionUtil {
     }
 
     /**
-     * @param <E>
-     * @param <V>
-     * @param collection
-     * @param converter
-     * @param values
-     * @return
+     * @param <C>        C type
+     * @param <E>        E type
+     * @param <V>        V type
+     * @param collection C
+     * @param converter  Function<V, E>
+     * @param values     V array
+     * @return C object
      */
     @SafeVarargs
     public static <E, V, C extends Collection<E>> C addAll(@Nonnull final C collection,
@@ -72,15 +73,15 @@ public final class CollectionUtil {
     }
 
     /**
-     * @param <E>
-     * @param collection
-     * @param arrayCreator
-     * @return
+     * @param <E>          E type
+     * @param collection   Collection<E>
+     * @param arrayBuilder IntFunction<E[]>
+     * @return E array
      */
     public static <E> E[] toArray(@Nonnull final Collection<E> collection,
-                                  @Nonnull final IntFunction<E[]> arrayCreator) {
+                                  @Nonnull final IntFunction<E[]> arrayBuilder) {
         Asserter.nonNull(collection, "collection");
-        E[] values = arrayCreator.apply(collection.size());
+        E[] values = arrayBuilder.apply(collection.size());
         Iterator<E> iterator = collection.iterator();
         int i = 0;
         while (iterator.hasNext()) {

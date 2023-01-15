@@ -61,11 +61,11 @@ public class NativeTime {
                         // This may be an issue with Java 10+
                         // See
                         // https://stackoverflow.com/questions/5419039/is-djava-library-path-equivalent-to-system-setpropertyjava-library-path
-                        String libpath = System.getProperty("java.library.path");
-                        libpath = libpath + java.io.File.pathSeparator + destDir + java.io.File.separator + pattern;
+                        String libPath = System.getProperty("java.library.path");
+                        libPath = libPath + java.io.File.pathSeparator + destDir + java.io.File.separator + pattern;
 
                         try {
-                            System.setProperty("java.library.path", libpath);
+                            System.setProperty("java.library.path", libPath);
                             Field fieldSysPath = ClassLoader.class.getDeclaredField("sys_paths");
                             fieldSysPath.setAccessible(true);
                             fieldSysPath.set(null, null);

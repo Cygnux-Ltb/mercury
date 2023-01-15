@@ -1,13 +1,11 @@
 package io.mercury.common.thread;
 
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.LockSupport;
-
-import javax.annotation.Nonnull;
-
+import io.mercury.common.log.Log4j2LoggerFactory;
 import org.slf4j.Logger;
 
-import io.mercury.common.log.Log4j2LoggerFactory;
+import javax.annotation.Nonnull;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
 
 public final class SleepSupport {
 

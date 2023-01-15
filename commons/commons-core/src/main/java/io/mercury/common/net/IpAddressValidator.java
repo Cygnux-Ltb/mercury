@@ -123,7 +123,7 @@ public final class IpAddressValidator implements Serializable {
         if (parts.length > 2) {
             return false;
         } else if (parts.length == 2) {
-            // The id syntax is implemenatation independent, but it presumably cannot allow:
+            // The id syntax is implementation independent, but it presumably cannot allow:
             // whitespace, '/' or '%'
             if (!parts[1].matches("[^\\s/%]+")) {
                 return false; // invalid id
@@ -175,7 +175,7 @@ public final class IpAddressValidator implements Serializable {
                 if (octet.length() > IPV6_MAX_HEX_DIGITS_PER_GROUP) {
                     return false;
                 }
-                int octetInt = 0;
+                int octetInt;
                 try {
                     octetInt = Integer.parseInt(octet, BASE_16);
                 } catch (NumberFormatException e) {
@@ -187,10 +187,7 @@ public final class IpAddressValidator implements Serializable {
             }
             validOctets++;
         }
-        if (validOctets > IPV6_MAX_HEX_GROUPS || (validOctets < IPV6_MAX_HEX_GROUPS && !containsCompressedZeroes)) {
-            return false;
-        }
-        return true;
+        return validOctets <= IPV6_MAX_HEX_GROUPS && (validOctets == IPV6_MAX_HEX_GROUPS || containsCompressedZeroes);
     }
 
 }

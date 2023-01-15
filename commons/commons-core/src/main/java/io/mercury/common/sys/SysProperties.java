@@ -7,8 +7,8 @@ import java.io.File;
 public final class SysProperties {
 
     /**
-     * @param key
-     * @return
+     * @param key String
+     * @return String
      */
     public static String get(String key) {
         return System.getProperty(key);
@@ -117,7 +117,7 @@ public final class SysProperties {
     }
 
     /**
-     * @param log
+     * @param log Logger
      */
     public static void showAll(Logger log) {
         if (log != null) {

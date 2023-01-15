@@ -1,15 +1,14 @@
 package io.mercury.common.collections.keeper;
 
-import static io.mercury.common.collections.MutableMaps.newConcurrentHashMap;
+import io.mercury.common.annotation.AbstractFunction;
+import io.mercury.common.collections.Capacity;
+import org.eclipse.collections.api.map.ConcurrentMutableMap;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
-import org.eclipse.collections.api.map.ConcurrentMutableMap;
-
-import io.mercury.common.annotation.AbstractFunction;
-import io.mercury.common.collections.Capacity;
+import static io.mercury.common.collections.MutableMaps.newConcurrentHashMap;
 
 /**
  * 

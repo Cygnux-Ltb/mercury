@@ -53,9 +53,7 @@ public final class LocalSerial {
 
         ThreadSupport.startNewThread(() -> {
             if (atomicLong.get() < 0) {
-                return;
             } else if (atomicLong.get() > 100) {
-                return;
             } else {
                 if (random.nextLong() % 2 == 0) {
                     atomicLong.getAndAdd(1);

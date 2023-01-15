@@ -1,9 +1,12 @@
 package io.mercury.common.thread;
 
-import static java.lang.Thread.MAX_PRIORITY;
-import static java.lang.Thread.MIN_PRIORITY;
-import static java.lang.Thread.NORM_PRIORITY;
+import io.mercury.common.collections.MutableMaps;
+import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.util.StringSupport;
+import org.eclipse.collections.api.map.MutableMap;
+import org.slf4j.Logger;
 
+import javax.annotation.Nonnull;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
@@ -14,14 +17,9 @@ import java.util.List;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import javax.annotation.Nonnull;
-
-import org.eclipse.collections.api.map.MutableMap;
-import org.slf4j.Logger;
-
-import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.common.util.StringSupport;
+import static java.lang.Thread.MAX_PRIORITY;
+import static java.lang.Thread.MIN_PRIORITY;
+import static java.lang.Thread.NORM_PRIORITY;
 
 public final class ThreadSupport {
 

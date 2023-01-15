@@ -417,7 +417,8 @@ public final class MutableMaps {
     public static <K, V> MutableMap<K, V> newUnifiedMap(K key0, V value0,
                                                         K key1, V value1,
                                                         K key2, V value2) {
-        return UnifiedMap.newWithKeysValues(key0, value0, key1, value1, key2, value2);
+        return UnifiedMap.newWithKeysValues(
+                key0, value0, key1, value1, key2, value2);
     }
 
     /**
@@ -437,7 +438,8 @@ public final class MutableMaps {
                                                         K key1, V value1,
                                                         K key2, V value2,
                                                         K key3, V value3) {
-        return UnifiedMap.newWithKeysValues(key0, value0, key1, value1, key2, value2, key3, value3);
+        return UnifiedMap.newWithKeysValues(
+                key0, value0, key1, value1, key2, value2, key3, value3);
     }
 
     /**

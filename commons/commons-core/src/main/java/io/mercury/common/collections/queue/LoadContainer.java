@@ -7,6 +7,7 @@ package io.mercury.common.collections.queue;
 public class LoadContainer<E> {
 
     private int type;
+
     private E e;
 
     /**

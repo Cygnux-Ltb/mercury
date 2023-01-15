@@ -1,5 +1,7 @@
 package io.mercury.common.number.api;
 
+import javax.annotation.Nonnull;
+
 public interface Num<N extends Num<N>> extends Comparable<N> {
 
 	int IntZero = 0;
@@ -82,7 +84,7 @@ public interface Num<N extends Num<N>> extends Comparable<N> {
 	boolean equals(Object obj);
 
 	@Override
-	default int compareTo(N o) {
+	default int compareTo(@Nonnull N o) {
 		return isGreaterThan(o) ? -1 : isLessThan(o) ? 1 : 0;
 	}
 

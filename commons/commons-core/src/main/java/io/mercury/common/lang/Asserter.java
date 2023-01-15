@@ -1,13 +1,12 @@
 package io.mercury.common.lang;
 
+import io.mercury.common.util.StringSupport;
+
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-
-import javax.annotation.Nonnull;
-
-import io.mercury.common.util.StringSupport;
 
 public final class Asserter {
 
@@ -21,7 +20,8 @@ public final class Asserter {
      * @return
      * @throws IllegalArgumentException exception
      */
-    public static int greaterThan(int i, int min, String objName) throws IllegalArgumentException {
+    public static int greaterThan(int i, int min, String objName)
+            throws IllegalArgumentException {
         if (i > min)
             return i;
         throw new IllegalArgumentException("Param: [" + objName + "] must greater than " + min);
@@ -34,7 +34,8 @@ public final class Asserter {
      * @return
      * @throws IllegalArgumentException exception
      */
-    public static long greaterThan(long l, long min, String objName) throws IllegalArgumentException {
+    public static long greaterThan(long l, long min, String objName)
+            throws IllegalArgumentException {
         if (l > min)
             return l;
         throw new IllegalArgumentException("Param: [" + objName + "] must greater than " + min);
@@ -47,7 +48,8 @@ public final class Asserter {
      * @return
      * @throws IllegalArgumentException exception
      */
-    public static int greaterOrEqualThan(int i, int min, String objName) throws IllegalArgumentException {
+    public static int greaterOrEqualThan(int i, int min, String objName)
+            throws IllegalArgumentException {
         if (i >= min)
             return i;
         throw new IllegalArgumentException("Param: [" + objName + "] must greater or equal than " + min);
@@ -60,7 +62,8 @@ public final class Asserter {
      * @return
      * @throws IllegalArgumentException exception
      */
-    public static long greaterOrEqualThan(long l, long min, String objName) throws IllegalArgumentException {
+    public static long greaterOrEqualThan(long l, long min, String objName)
+            throws IllegalArgumentException {
         if (l >= min)
             return l;
         throw new IllegalArgumentException("Param: [" + objName + "] must greater or equal than " + min);
@@ -73,7 +76,8 @@ public final class Asserter {
      * @return
      * @throws IllegalArgumentException exception
      */
-    public static int lessThan(int i, int max, String objName) throws IllegalArgumentException {
+    public static int lessThan(int i, int max, String objName)
+            throws IllegalArgumentException {
         if (i < max)
             return i;
         throw new IllegalArgumentException("Param: [" + objName + "] must less than " + max);
@@ -86,7 +90,8 @@ public final class Asserter {
      * @return
      * @throws IllegalArgumentException exception
      */
-    public static long lessThan(long l, long max, String objName) throws IllegalArgumentException {
+    public static long lessThan(long l, long max, String objName)
+            throws IllegalArgumentException {
         if (l < max)
             return l;
         throw new IllegalArgumentException("Param: [" + objName + "] must less than " + max);
@@ -99,7 +104,8 @@ public final class Asserter {
      * @return
      * @throws IllegalArgumentException exception
      */
-    public static int lessOrEqualThan(int i, int max, String objName) throws IllegalArgumentException {
+    public static int lessOrEqualThan(int i, int max, String objName)
+            throws IllegalArgumentException {
         if (i <= max)
             return i;
         throw new IllegalArgumentException("Param: [" + objName + "] must less or equal than " + max);
@@ -112,7 +118,8 @@ public final class Asserter {
      * @return long
      * @throws IllegalArgumentException exception
      */
-    public static long lessOrEqualThan(long l, long max, String objName) throws IllegalArgumentException {
+    public static long lessOrEqualThan(long l, long max, String objName)
+            throws IllegalArgumentException {
         if (l <= max)
             return l;
         throw new IllegalArgumentException("Param: [" + objName + "] must less or equal than " + max);
@@ -126,7 +133,8 @@ public final class Asserter {
      * @return int
      * @throws IllegalArgumentException exception
      */
-    public static int atWithinRange(int i, int min, int max, String objName) throws IllegalArgumentException {
+    public static int atWithinRange(int i, int min, int max, String objName)
+            throws IllegalArgumentException {
         if (i >= min && i <= max)
             return i;
         throw new IllegalArgumentException(
@@ -141,7 +149,8 @@ public final class Asserter {
      * @return long
      * @throws IllegalArgumentException exception
      */
-    public static long atWithinRange(long l, long min, long max, String objName) throws IllegalArgumentException {
+    public static long atWithinRange(long l, long min, long max, String objName)
+            throws IllegalArgumentException {
         if (l >= min && l <= max)
             return l;
         throw new IllegalArgumentException(objName + " must in the range of [" + min + "] to [" + max + "]");
@@ -164,7 +173,8 @@ public final class Asserter {
      * @return T
      * @throws NullPointerException exception
      */
-    public static <T> T nonNull(T t, @Nonnull String objName) throws NullPointerException {
+    public static <T> T nonNull(T t, @Nonnull String objName)
+            throws NullPointerException {
         if (t == null)
             if (StringSupport.isNullOrEmpty(objName))
                 throw new NullPointerException("param cannot be null");
@@ -194,7 +204,8 @@ public final class Asserter {
      * @throws NullPointerException     exception
      * @throws IllegalArgumentException exception
      */
-    public static String nonEmpty(String str, String objName) throws NullPointerException, IllegalArgumentException {
+    public static String nonEmpty(String str, String objName)
+            throws NullPointerException, IllegalArgumentException {
         if (str == null)
             throw new NullPointerException("Param: [" + objName + "] can not be null");
         if (str.length() <= 0)
@@ -210,7 +221,8 @@ public final class Asserter {
      * @throws NullPointerException     exception
      * @throws IllegalArgumentException exception
      */
-    public static <T extends Collection<E>, E> T nonEmptyCollection(T collection, String objName)
+    public static <T extends Collection<E>, E> T nonEmptyCollection(T collection,
+                                                                    String objName)
             throws NullPointerException, IllegalArgumentException {
         if (collection == null)
             throw new NullPointerException("Param: [" + objName + "] can not be null");
@@ -264,7 +276,9 @@ public final class Asserter {
      * @throws NullPointerException     exception
      * @throws IllegalArgumentException exception
      */
-    public static <E> Collection<E> requiredLength(Collection<E> collection, int requiredLength, String arrayName)
+    public static <E> Collection<E> requiredLength(Collection<E> collection,
+                                                   int requiredLength,
+                                                   String arrayName)
             throws NullPointerException, IllegalArgumentException {
         if (collection == null)
             throw new NullPointerException("Param: [" + arrayName + "] can not be null");
@@ -283,7 +297,9 @@ public final class Asserter {
      * @throws NullPointerException     exception
      * @throws IllegalArgumentException exception
      */
-    public static <T> List<T> requiredLength(List<T> list, int requiredLength, String listName)
+    public static <T> List<T> requiredLength(List<T> list,
+                                             int requiredLength,
+                                             String listName)
             throws NullPointerException, IllegalArgumentException {
         if (list == null)
             throw new NullPointerException("Param: [" + listName + "] can not be null");
@@ -301,7 +317,9 @@ public final class Asserter {
      * @throws NullPointerException     exception
      * @throws IllegalArgumentException exception
      */
-    public static boolean[] requiredLength(boolean[] array, int requiredLength, String arrayName)
+    public static boolean[] requiredLength(boolean[] array,
+                                           int requiredLength,
+                                           String arrayName)
             throws NullPointerException, IllegalArgumentException {
         if (array == null)
             throw new NullPointerException("Param: [" + arrayName + "] can not be null");

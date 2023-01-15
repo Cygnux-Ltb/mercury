@@ -57,11 +57,11 @@ public final class Throws {
     }
 
     /**
-     * @param msg String
+     * @param argumentName String
      * @throws IllegalArgumentException exception
      */
-    public static void illegalArgument(String msg) throws IllegalArgumentException {
-        throw new IllegalArgumentException("illegal argument -> " + msg);
+    public static void illegalArgument(String argumentName) throws IllegalArgumentException {
+        throw new IllegalArgumentException("illegal argument -> " + argumentName);
     }
 
     /**

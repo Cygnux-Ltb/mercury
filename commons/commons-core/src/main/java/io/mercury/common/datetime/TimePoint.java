@@ -45,7 +45,8 @@ public final class TimePoint implements Comparable<TimePoint> {
      * @param offset   ZoneOffset
      * @return TimePoint
      */
-    public static TimePoint now(@Nonnull LocalDateTime datetime, @Nonnull ZoneOffset offset) {
+    public static TimePoint now(@Nonnull LocalDateTime datetime,
+                                @Nonnull ZoneOffset offset) {
         return new TimePoint(DateTimeUtil.date(datetime.toLocalDate()),
                 DateTimeUtil.timeOfSecond(datetime.toLocalTime()), datetime.getNano(), offset);
     }

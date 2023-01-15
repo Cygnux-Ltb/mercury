@@ -1,7 +1,8 @@
 package io.mercury.common.sequence;
 
-import static java.lang.System.currentTimeMillis;
+import io.mercury.common.util.BitFormatter;
 
+import javax.annotation.concurrent.ThreadSafe;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -9,9 +10,7 @@ import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
-import javax.annotation.concurrent.ThreadSafe;
-
-import io.mercury.common.util.BitFormatter;
+import static java.lang.System.currentTimeMillis;
 
 /**
  * @author yellow013

@@ -1,13 +1,12 @@
 package io.mercury.common.thread;
 
+import io.mercury.common.collections.MutableLists;
+import io.mercury.common.number.ThreadSafeRandoms;
+import org.eclipse.collections.api.list.MutableList;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.concurrent.ThreadPoolExecutor;
-
-import org.eclipse.collections.api.list.MutableList;
-
-import io.mercury.common.collections.MutableLists;
-import io.mercury.common.number.ThreadSafeRandoms;
 
 public final class ShutdownHooks {
 
