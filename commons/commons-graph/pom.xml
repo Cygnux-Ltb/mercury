@@ -24,9 +24,9 @@
             <groupId>org.jgrapht</groupId>
             <artifactId>jgrapht-core</artifactId>
             <!-- java 11 -->
-            <!-- <version>1.5.1</version> -->
+            <version>1.5.1</version>
             <!-- java 8 -->
-            <version>1.4.0</version>
+            <!-- <version>1.4.0</version> -->
             <exclusions>
                 <exclusion>
                     <groupId>org.jheaps</groupId>
@@ -40,9 +40,9 @@
             <groupId>org.jgrapht</groupId>
             <artifactId>jgrapht-ext</artifactId>
             <!-- java 11 -->
-            <!-- <version>1.5.1</version> -->
+            <version>1.5.1</version>
             <!-- java 8 -->
-            <version>1.4.0</version>
+            <!-- <version>1.4.0</version> -->
         </dependency>
 
         <!-- A free, production-ready, efficient Java library containing a collection

@@ -52,9 +52,9 @@ public class CycleDetector {
     }
 
     /**
-     * This method will be called when an edge leading to given vertex was added and
-     * we want to check if introduction of this edge has not resulted in apparition
-     * of cycle in the graph
+     * This method will be called when an edge leading to given vertex was added,
+     * and we want to check if introduction of this edge has not resulted
+     * in apparition of cycle in the graph
      *
      * @param vertex         Vertex
      * @param vertexStateMap Map<Vertex, Integer>

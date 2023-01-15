@@ -115,14 +115,14 @@
             </exclusions>
         </dependency>
 
-        <!-- Swing GUI to remotely edit Log4j configurations. This includes a JConsole
-            plugin and a StatusLogger monitor. -->
-        <!-- <dependency>
+        <!-- Swing GUI to remotely edit Log4j configurations. -->
+        <!-- This includes a JConsole plugin and a StatusLogger monitor. -->
+        <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-jmx-gui</artifactId>
             <version>${log4j.version}</version>
             <scope>runtime</scope>
-        </dependency> -->
+        </dependency>
 
     </dependencies>
 </project>
