@@ -17,21 +17,18 @@
             <groupId>io.mercury</groupId>
             <artifactId>commons-concurrent</artifactId>
         </dependency>
-
         <!-- RocksDB fat jar that contains .so files for linux32 and linux64 (glibc
             and musl-libc), jnilib files for Mac OSX, and a .dll for Windows x64. -->
         <dependency>
             <groupId>org.rocksdb</groupId>
             <artifactId>rocksdbjni</artifactId>
-            <version>7.7.3</version>
+            <version>7.8.3</version>
         </dependency>
-
         <!-- Netty/Buffer -->
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-buffer</artifactId>
         </dependency>
-
         <!-- Zero-allocation implementations of fast non-cryptographic hash functions
             for byte sequences or blocks of memory -->
         <dependency>

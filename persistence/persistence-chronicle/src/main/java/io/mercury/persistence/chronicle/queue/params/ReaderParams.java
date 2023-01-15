@@ -1,11 +1,10 @@
 package io.mercury.persistence.chronicle.queue.params;
 
-import static io.mercury.common.lang.Asserter.greaterThan;
-import static io.mercury.common.lang.Asserter.nonNull;
-
+import javax.annotation.Nonnull;
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.Nonnull;
+import static io.mercury.common.lang.Asserter.greaterThan;
+import static io.mercury.common.lang.Asserter.nonNull;
 
 public final class ReaderParams {
 

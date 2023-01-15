@@ -6,7 +6,14 @@ package town.lost.oms.dto;
 
 import net.openhft.chronicle.bytes.BytesIn;
 import net.openhft.chronicle.bytes.BytesOut;
-import net.openhft.chronicle.wire.*;
+import net.openhft.chronicle.wire.Base32LongConverter;
+import net.openhft.chronicle.wire.Base85LongConverter;
+import net.openhft.chronicle.wire.LongConversion;
+import net.openhft.chronicle.wire.MicroTimestampLongConverter;
+import net.openhft.chronicle.wire.WireIn;
+import net.openhft.chronicle.wire.WireOut;
+
+import javax.annotation.Nonnull;
 
 public class ExecutionReport extends AbstractEvent<ExecutionReport> {
 
@@ -152,7 +159,7 @@ public class ExecutionReport extends AbstractEvent<ExecutionReport> {
 	}
 
 	@Override
-	public void writeMarshallable(@SuppressWarnings("rawtypes") BytesOut out) {
+	public void writeMarshallable(BytesOut out) {
 		super.writeMarshallable(out);
 		if (PREGENERATED_MARSHALLABLE) {
 			out.writeStopBit(MASHALLABLE_VERSION);
@@ -174,7 +181,7 @@ public class ExecutionReport extends AbstractEvent<ExecutionReport> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void readMarshallable(@SuppressWarnings("rawtypes") BytesIn in) {
+	public void readMarshallable(BytesIn in) {
 		super.readMarshallable(in);
 		if (PREGENERATED_MARSHALLABLE) {
 			int version = (int) in.readStopBit();
@@ -199,7 +206,7 @@ public class ExecutionReport extends AbstractEvent<ExecutionReport> {
 	}
 
 	@Override
-	public void writeMarshallable(WireOut out) {
+	public void writeMarshallable(@Nonnull WireOut out) {
 		super.writeMarshallable(out);
 		if (PREGENERATED_MARSHALLABLE) {
 			out.write("symbol").writeLong(Base85LongConverter.INSTANCE, symbol);
@@ -219,7 +226,7 @@ public class ExecutionReport extends AbstractEvent<ExecutionReport> {
 	}
 
 	@Override
-	public void readMarshallable(WireIn in) {
+	public void readMarshallable(@Nonnull WireIn in) {
 		super.readMarshallable(in);
 		if (PREGENERATED_MARSHALLABLE) {
 			symbol = in.read("symbol").readLong(Base85LongConverter.INSTANCE);

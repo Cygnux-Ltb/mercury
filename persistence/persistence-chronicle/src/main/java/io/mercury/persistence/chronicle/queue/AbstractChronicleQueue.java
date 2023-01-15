@@ -1,10 +1,24 @@
 package io.mercury.persistence.chronicle.queue;
 
-import static io.mercury.common.datetime.DateTimeUtil.datetimeOfSecond;
-import static io.mercury.common.file.FileUtil.mkdir;
-import static io.mercury.common.sys.SysProperties.JAVA_IO_TMPDIR;
-import static io.mercury.common.sys.SysProperties.USER_HOME;
+import io.mercury.common.annotation.AbstractFunction;
+import io.mercury.common.collections.MutableMaps;
+import io.mercury.common.file.PermissionDeniedException;
+import io.mercury.common.lang.Asserter;
+import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.thread.RuntimeInterruptedException;
+import io.mercury.common.thread.ShutdownHooks;
+import io.mercury.common.thread.SleepSupport;
+import io.mercury.common.thread.ThreadSupport;
+import io.mercury.common.util.StringSupport;
+import io.mercury.persistence.chronicle.queue.params.ReaderParams;
+import net.openhft.chronicle.queue.impl.RollingChronicleQueue;
+import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
+import org.slf4j.Logger;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 import java.io.File;
 import java.lang.Thread.State;
 import java.util.Set;
@@ -16,26 +30,10 @@ import java.util.function.Consumer;
 import java.util.function.ObjIntConsumer;
 import java.util.function.Supplier;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
-
-import io.mercury.common.file.PermissionDeniedException;
-import org.slf4j.Logger;
-
-import io.mercury.common.annotation.AbstractFunction;
-import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.lang.Asserter;
-import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.common.thread.RuntimeInterruptedException;
-import io.mercury.common.thread.ShutdownHooks;
-import io.mercury.common.thread.SleepSupport;
-import io.mercury.common.thread.ThreadSupport;
-import io.mercury.common.util.StringSupport;
-import io.mercury.persistence.chronicle.queue.params.ReaderParams;
-import net.openhft.chronicle.queue.impl.RollingChronicleQueue;
-import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
+import static io.mercury.common.datetime.DateTimeUtil.datetimeOfSecond;
+import static io.mercury.common.file.FileUtil.mkdir;
+import static io.mercury.common.sys.SysProperties.JAVA_IO_TMPDIR;
+import static io.mercury.common.sys.SysProperties.USER_HOME;
 
 @Immutable
 public abstract class AbstractChronicleQueue<
@@ -200,8 +198,8 @@ public abstract class AbstractChronicleQueue<
     }
 
     /**
-     * @param cycle
-     * @param file
+     * @param cycle int
+     * @param file  File
      */
     private void storeFileHandle(int cycle, File file) {
         logger.info("Released file : cycle==[{}], file==[{}]", cycle, file.getAbsolutePath());
@@ -278,17 +276,17 @@ public abstract class AbstractChronicleQueue<
     private static final String EMPTY_CONSUMER_MSG = "Reader consumer is an empty implementation";
 
     /**
-     * @return
-     * @throws IllegalStateException
+     * @return RT
+     * @throws IllegalStateException ise
      */
     public RT createReader() throws IllegalStateException {
         return createReader(generateReaderName(), ReaderParams.defaultParams(), out -> logger.info(EMPTY_CONSUMER_MSG));
     }
 
     /**
-     * @param dataConsumer
-     * @return
-     * @throws IllegalStateException
+     * @param dataConsumer Consumer<OUT>
+     * @return RT
+     * @throws IllegalStateException ise
      */
     public RT createReader(@Nonnull Consumer<OUT> dataConsumer)
             throws IllegalStateException {
@@ -296,10 +294,10 @@ public abstract class AbstractChronicleQueue<
     }
 
     /**
-     * @param readerName
-     * @param dataConsumer
-     * @return
-     * @throws IllegalStateException
+     * @param readerName   String
+     * @param dataConsumer Consumer<OUT>
+     * @return RT
+     * @throws IllegalStateException ise
      */
     public RT createReader(@Nonnull String readerName,
                            @Nonnull Consumer<OUT> dataConsumer)
@@ -308,10 +306,10 @@ public abstract class AbstractChronicleQueue<
     }
 
     /**
-     * @param param
-     * @param dataConsumer
-     * @return
-     * @throws IllegalStateException
+     * @param param        ReaderParams
+     * @param dataConsumer Consumer<OUT>
+     * @return RT
+     * @throws IllegalStateException ise
      */
     public RT createReader(@Nonnull ReaderParams param, @Nonnull Consumer<OUT> dataConsumer)
             throws IllegalStateException {
@@ -319,11 +317,11 @@ public abstract class AbstractChronicleQueue<
     }
 
     /**
-     * @param readerName
-     * @param param
-     * @param dataConsumer
-     * @return
-     * @throws IllegalStateException
+     * @param readerName   String
+     * @param param        ReaderParams
+     * @param dataConsumer Consumer<OUT>
+     * @return RT
+     * @throws IllegalStateException ise
      */
     public RT createReader(@Nonnull String readerName, @Nonnull ReaderParams param, @Nonnull Consumer<OUT> dataConsumer)
             throws IllegalStateException {
@@ -339,12 +337,12 @@ public abstract class AbstractChronicleQueue<
     }
 
     /**
-     * @param readerName
-     * @param param
-     * @param logger
-     * @param dataConsumer
-     * @return
-     * @throws IllegalStateException
+     * @param readerName   String
+     * @param param        ReaderParams
+     * @param logger       Logger
+     * @param dataConsumer Consumer<OUT>
+     * @return RT
+     * @throws IllegalStateException ise
      */
     @AbstractFunction
     protected abstract RT createReader(@Nonnull String readerName,
@@ -362,24 +360,24 @@ public abstract class AbstractChronicleQueue<
     }
 
     /**
-     * @return
+     * @return String
      */
     private String generateAppenderName() {
         return queueName + "-appender-" + appenderCounter.getAndIncrement();
     }
 
     /**
-     * @return
-     * @throws IllegalStateException
+     * @return AT
+     * @throws IllegalStateException ise
      */
     public AT acquireAppender() throws IllegalStateException {
         return acquireAppender(generateAppenderName(), null);
     }
 
     /**
-     * @param appenderName
-     * @return
-     * @throws IllegalStateException
+     * @param appenderName String
+     * @return AT
+     * @throws IllegalStateException ise
      */
     public AT acquireAppender(@Nonnull String appenderName) throws IllegalStateException {
         Asserter.nonNull(appenderName, "appenderName");
@@ -387,9 +385,9 @@ public abstract class AbstractChronicleQueue<
     }
 
     /**
-     * @param dataProducer
-     * @return
-     * @throws IllegalStateException
+     * @param dataProducer Supplier<IN>
+     * @return AT
+     * @throws IllegalStateException ise
      */
     public AT acquireAppender(@Nonnull Supplier<IN> dataProducer) throws IllegalStateException {
         Asserter.nonNull(dataProducer, "dataProducer");
@@ -397,10 +395,10 @@ public abstract class AbstractChronicleQueue<
     }
 
     /**
-     * @param appenderName
-     * @param dataProducer
-     * @return
-     * @throws IllegalStateException
+     * @param appenderName String
+     * @param dataProducer Supplier<IN>
+     * @return AT
+     * @throws IllegalStateException ise
      */
     public AT acquireAppender(@Nonnull String appenderName,
                               @CheckForNull Supplier<IN> dataProducer)
@@ -414,11 +412,11 @@ public abstract class AbstractChronicleQueue<
     }
 
     /**
-     * @param appenderName
-     * @param logger
-     * @param dataProducer
-     * @return
-     * @throws IllegalStateException
+     * @param appenderName String
+     * @param logger       Logger
+     * @param dataProducer Supplier<IN>
+     * @return AT
+     * @throws IllegalStateException ise
      */
     @AbstractFunction
     protected abstract AT acquireAppender(@Nonnull String appenderName,
@@ -434,7 +432,7 @@ public abstract class AbstractChronicleQueue<
     /**
      * 添加访问器
      *
-     * @param accessor
+     * @param accessor CloseableChronicleAccessor
      */
     private void addAccessor(CloseableChronicleAccessor accessor) {
         allocatedAccessor.put(accessor.getAllocateSeq(), accessor);

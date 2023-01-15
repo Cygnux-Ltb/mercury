@@ -13,9 +13,11 @@ import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
 import town.lost.oms.api.OMSIn;
 
 public class OrderViewerMain {
+
     public static void main(String[] args) {
         System.out.println("\nWaiting for messages");
-        try (ChronicleQueue q = SingleChronicleQueueBuilder.binary("in").rollCycle(RollCycles.TEST8_DAILY).build()) {
+        try (ChronicleQueue q = SingleChronicleQueueBuilder.binary("in")
+                .rollCycle(RollCycles.TEST8_DAILY).build()) {
             OMSIn logging = Mocker.logging(OMSIn.class, "read - ", System.out);
             MethodReader reader = q.createTailer().methodReader(logging);
             while (true) {

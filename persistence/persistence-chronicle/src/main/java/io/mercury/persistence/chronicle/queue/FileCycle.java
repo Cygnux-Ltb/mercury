@@ -1,12 +1,12 @@
 package io.mercury.persistence.chronicle.queue;
 
-import static io.mercury.common.datetime.TimeConst.MILLIS_PER_SECONDS;
-
-import java.time.Instant;
-
 import io.mercury.common.lang.Asserter;
 import net.openhft.chronicle.queue.RollCycle;
 import net.openhft.chronicle.queue.RollCycles;
+
+import java.time.Instant;
+
+import static io.mercury.common.datetime.TimeConst.MILLIS_PER_SECONDS;
 
 public enum FileCycle {
 
@@ -103,21 +103,21 @@ public enum FileCycle {
     }
 
     /**
-     * @return
+     * @return int
      */
     public int getSeconds() {
         return seconds;
     }
 
     /**
-     * @return
+     * @return RollCycle
      */
     public RollCycle getRollCycle() {
         return rollCycle;
     }
 
     /**
-     * @return
+     * @return String
      */
     public String getDesc() {
         return desc;
@@ -127,8 +127,8 @@ public enum FileCycle {
      * 输入<b> [epochSecond] </b><br>
      * 计算文件的滚动周期<b> [cycle] </b>
      *
-     * @param epochSecond
-     * @return
+     * @param epochSecond long
+     * @return long
      */
     public long toIndex(long epochSecond) throws IllegalArgumentException {
         Asserter.greaterOrEqualThan(epochSecond, 0, "epochSecond");

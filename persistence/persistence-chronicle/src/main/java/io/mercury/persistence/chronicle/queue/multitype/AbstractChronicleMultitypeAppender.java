@@ -33,9 +33,9 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN>
     }
 
     /**
-     * @param t
-     * @throws IllegalStateException
-     * @throws ChronicleAppendException
+     * @param t IN
+     * @throws IllegalStateException    ise
+     * @throws ChronicleAppendException cae
      */
     public void append(@Nonnull E envelope, @Nullable IN t)
             throws IllegalStateException, ChronicleAppendException {
@@ -54,10 +54,10 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN>
     }
 
     /**
-     * @param obj
-     * @param serializer
-     * @throws IllegalStateException
-     * @throws ChronicleAppendException
+     * @param obj        Object
+     * @param serializer Serializer<Object, IN>
+     * @throws IllegalStateException    ise
+     * @throws ChronicleAppendException cae
      */
     public void append(@Nonnull E envelope,
                        @Nonnull Object obj,
@@ -80,7 +80,7 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN>
     /**
      * 设置默认信封
      *
-     * @param envelope
+     * @param envelope E
      */
     public void setEnvelope(@Nonnull E envelope) {
         this.envelope = envelope;

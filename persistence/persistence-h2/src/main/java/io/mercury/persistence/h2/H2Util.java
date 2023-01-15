@@ -51,7 +51,7 @@ public final class H2Util {
         Asserter.nonNull(connection, "connection");
         try (// create a database connection
              Statement st = connection.createStatement();
-             ResultSet rs = st.executeQuery(sql);) {
+             ResultSet rs = st.executeQuery(sql)) {
             return processor.toBeanList(rs, type);
         } catch (SQLException e) {
             log.error("error message -> {}", e.getMessage(), e);
@@ -60,7 +60,7 @@ public final class H2Util {
     }
 
     public static void main(String[] args) {
-        System.out.println(H2Util.getH2UrlInHome("sqlite-file", "example"));
+        System.out.println(H2Util.getH2UrlInHome("h2-file", "cyg_db"));
     }
 
 }

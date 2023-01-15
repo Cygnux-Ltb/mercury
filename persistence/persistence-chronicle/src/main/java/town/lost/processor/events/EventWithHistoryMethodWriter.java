@@ -7,7 +7,8 @@ import java.lang.reflect.Method;
 import java.util.stream.IntStream;
 
 public class EventWithHistoryMethodWriter
-        implements town.lost.processor.events.EventWithHistory, net.openhft.chronicle.core.io.Closeable {
+        implements town.lost.processor.events.EventWithHistory,
+        net.openhft.chronicle.core.io.Closeable {
 
     private static final int maxArgs = 1;
     private final MethodWriterInvocationHandlerSupplier handler;

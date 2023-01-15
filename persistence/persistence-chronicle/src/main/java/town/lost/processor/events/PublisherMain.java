@@ -35,7 +35,7 @@ public class PublisherMain {
         two.eventTimeStamp(UniqueMicroTimeProvider.INSTANCE.currentTimeMicros());
         two.symbol(text);
         two.price(two.price + 1);
-        two.quantiity(two.quantiity + 1);
+        two.quantity(two.quantity + 1);
         build.eventTwo(two);
     }
 }

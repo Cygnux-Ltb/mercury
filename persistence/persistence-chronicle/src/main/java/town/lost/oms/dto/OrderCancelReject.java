@@ -11,6 +11,8 @@ import net.openhft.chronicle.wire.LongConversion;
 import net.openhft.chronicle.wire.WireIn;
 import net.openhft.chronicle.wire.WireOut;
 
+import javax.annotation.Nonnull;
+
 public class OrderCancelReject extends AbstractEvent<OrderCancelReject> {
 	
 	private static final int MASHALLABLE_VERSION = 1;
@@ -53,7 +55,7 @@ public class OrderCancelReject extends AbstractEvent<OrderCancelReject> {
 	}
 
 	@Override
-	public void writeMarshallable(WireOut out) {
+	public void writeMarshallable(@Nonnull WireOut out) {
 		super.writeMarshallable(out);
 		if (PREGENERATED_MARSHALLABLE) {
 			out.write("clOrdID").object(String.class, clOrdID);
@@ -63,7 +65,7 @@ public class OrderCancelReject extends AbstractEvent<OrderCancelReject> {
 	}
 
 	@Override
-	public void readMarshallable(WireIn in) {
+	public void readMarshallable(@Nonnull WireIn in) {
 		super.readMarshallable(in);
 		if (PREGENERATED_MARSHALLABLE) {
 			clOrdID = in.read("clOrdID").object(clOrdID, String.class);

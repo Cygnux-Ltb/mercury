@@ -1,10 +1,18 @@
 package io.mercury.persistence.chronicle.queue;
 
-import static io.mercury.common.datetime.DateTimeUtil.formatDateTime;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YY_MM_DD_HH_MM_SS_SSS;
-import static io.mercury.common.thread.SleepSupport.sleep;
-import static io.mercury.common.thread.ThreadSupport.startNewThread;
+import io.mercury.common.annotation.AbstractFunction;
+import io.mercury.common.annotation.thread.OnlyAllowSingleThreadAccess;
+import io.mercury.common.datetime.TimeConst;
+import io.mercury.persistence.chronicle.exception.ChronicleReadException;
+import io.mercury.persistence.chronicle.queue.params.ReaderParams;
+import net.openhft.chronicle.queue.ExcerptTailer;
+import net.openhft.chronicle.queue.TailerState;
+import org.slf4j.Logger;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -12,20 +20,10 @@ import java.time.ZonedDateTime;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-import javax.annotation.concurrent.NotThreadSafe;
-
-import io.mercury.common.annotation.thread.OnlyAllowSingleThreadAccess;
-import org.slf4j.Logger;
-
-import io.mercury.common.annotation.AbstractFunction;
-import io.mercury.common.datetime.TimeConst;
-import io.mercury.persistence.chronicle.exception.ChronicleReadException;
-import io.mercury.persistence.chronicle.queue.params.ReaderParams;
-import net.openhft.chronicle.queue.ExcerptTailer;
-import net.openhft.chronicle.queue.TailerState;
+import static io.mercury.common.datetime.DateTimeUtil.formatDateTime;
+import static io.mercury.common.datetime.pattern.DateTimePattern.YY_MM_DD_HH_MM_SS_SSS;
+import static io.mercury.common.thread.SleepSupport.sleep;
+import static io.mercury.common.thread.ThreadSupport.startNewThread;
 
 @Immutable
 @NotThreadSafe
@@ -40,13 +38,13 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
     protected final Consumer<OUT> dataConsumer;
 
     /**
-     * @param allocateSeq
-     * @param readerName
-     * @param fileCycle
-     * @param params
-     * @param logger
-     * @param tailer
-     * @param dataConsumer
+     * @param allocateSeq  long
+     * @param readerName   String
+     * @param fileCycle    FileCycle
+     * @param params       ReaderParams
+     * @param logger       Logger
+     * @param tailer       ExcerptTailer
+     * @param dataConsumer Consumer<OUT>
      */
     protected AbstractChronicleReader(long allocateSeq,
                                       String readerName,
@@ -81,8 +79,8 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
     /**
      * Move cursor to input epoch seconds.
      *
-     * @param epochSecond
-     * @return
+     * @param epochSecond long
+     * @return boolean
      */
     public boolean moveTo(long epochSecond) {
         return tailer.moveToIndex(fileCycle.toIndex(epochSecond));
@@ -145,7 +143,7 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
     }
 
     /**
-     * @param threadName
+     * @param threadName String
      * @return Thread
      */
     public Thread runWithNewThread(String threadName) {
@@ -153,7 +151,7 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
     }
 
     /**
-     * @return
+     * @return OUT
      */
     @AbstractFunction
     protected abstract OUT next0();
@@ -161,9 +159,9 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
     /**
      * Get next element of current cursor position.
      *
-     * @return
-     * @throws IllegalStateException
-     * @throws ChronicleReadException
+     * @return OUT
+     * @throws IllegalStateException  ise
+     * @throws ChronicleReadException cre
      */
     @CheckForNull
     @OnlyAllowSingleThreadAccess

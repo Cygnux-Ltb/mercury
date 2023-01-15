@@ -8,6 +8,8 @@ import net.openhft.chronicle.bytes.BytesIn;
 import net.openhft.chronicle.bytes.BytesOut;
 import net.openhft.chronicle.wire.*;
 
+import javax.annotation.Nonnull;
+
 public class NewOrderSingle extends AbstractEvent<NewOrderSingle> {
 
 	private static final int MASHALLABLE_VERSION = 1;
@@ -124,7 +126,7 @@ public class NewOrderSingle extends AbstractEvent<NewOrderSingle> {
 	}
 
 	@Override
-	public void writeMarshallable(WireOut out) {
+	public void writeMarshallable(@Nonnull WireOut out) {
 		super.writeMarshallable(out);
 		if (PREGENERATED_MARSHALLABLE) {
 			out.write("symbol").writeLong(Base85LongConverter.INSTANCE, symbol);
@@ -138,7 +140,7 @@ public class NewOrderSingle extends AbstractEvent<NewOrderSingle> {
 	}
 
 	@Override
-	public void readMarshallable(WireIn in) {
+	public void readMarshallable(@Nonnull WireIn in) {
 		super.readMarshallable(in);
 		if (PREGENERATED_MARSHALLABLE) {
 			symbol = in.read("symbol").readLong(Base85LongConverter.INSTANCE);

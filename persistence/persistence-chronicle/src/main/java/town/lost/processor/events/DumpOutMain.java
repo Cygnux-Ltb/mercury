@@ -15,7 +15,7 @@ public class DumpOutMain {
 //        DumpQueueMain.dump("out");
         System.out.println("Started");
         try (ChronicleQueue queue2 = ChronicleQueue.singleBuilder("out").sourceId(2).build()) {
-            // raw read so you don't need to know the message types.
+            // raw read, so you don't need to know the message types.
             ExcerptTailer tailer = queue2.createTailer();
             StringBuilder key = new StringBuilder();
             StringBuilder key2 = new StringBuilder();

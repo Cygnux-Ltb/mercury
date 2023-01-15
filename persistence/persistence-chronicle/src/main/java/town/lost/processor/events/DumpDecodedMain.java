@@ -6,6 +6,7 @@ import net.openhft.chronicle.wire.MessageHistory;
 import net.openhft.chronicle.wire.MicroTimestampLongConverter;
 
 public class DumpDecodedMain {
+    
     public static void main(String[] args) {
         try (ChronicleQueue queue2 = ChronicleQueue.singleBuilder("out").sourceId(2).build()) {
             long last = Long.MAX_VALUE / 2;

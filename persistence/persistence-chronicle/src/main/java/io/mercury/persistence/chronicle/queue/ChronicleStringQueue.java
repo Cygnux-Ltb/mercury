@@ -108,20 +108,21 @@ public class ChronicleStringQueue
     }
 
     public static void main(String[] args) {
-        ChronicleStringQueue queue = ChronicleStringQueue.newBuilder().fileCycle(FileCycle.MINUTELY).build();
-        ChronicleStringAppender appender = queue.acquireAppender();
-        ChronicleStringReader reader = queue.createReader(System.out::println);
-        new Thread(() -> {
-            for (; ; ) {
-                try {
-                    appender.append(String.valueOf(Randoms.nextLong()));
-                    SleepSupport.sleep(100);
-                } catch (Exception e) {
-                    e.printStackTrace();
+        try (ChronicleStringQueue queue = ChronicleStringQueue.newBuilder().fileCycle(FileCycle.MINUTELY).build()) {
+            ChronicleStringAppender appender = queue.acquireAppender();
+            ChronicleStringReader reader = queue.createReader(System.out::println);
+            new Thread(() -> {
+                for (; ; ) {
+                    try {
+                        appender.append(String.valueOf(Randoms.nextLong()));
+                        SleepSupport.sleep(100);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        }).start();
-        reader.runWithNewThread();
+            }).start();
+            reader.runWithNewThread();
+        }
     }
 
 }

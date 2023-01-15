@@ -112,12 +112,12 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
     }
 
     /**
-     * @param <K>
-     * @param <V>
-     * @param keyClass
-     * @param valueClass
-     * @return
-     * @throws NullPointerException
+     * @param <K>        K type
+     * @param <V>        V type
+     * @param keyClass   K Class
+     * @param valueClass V Class
+     * @return Builder<K, V>
+     * @throws NullPointerException npe
      */
     public static <K, V> Builder<K, V> newBuilder(@Nonnull Class<K> keyClass,
                                                   @Nonnull Class<V> valueClass)
@@ -127,13 +127,13 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
     }
 
     /**
-     * @param <K>
-     * @param <V>
-     * @param keyClass
-     * @param valueClass
-     * @param folder
-     * @return
-     * @throws NullPointerException
+     * @param <K>        K type
+     * @param <V>        V type
+     * @param keyClass   K Class
+     * @param valueClass V Class
+     * @param folder     String
+     * @return Builder<K, V>
+     * @throws NullPointerException npe
      */
     public static <K, V> Builder<K, V> newBuilder(@Nonnull Class<K> keyClass,
                                                   @Nonnull Class<V> valueClass,
@@ -143,14 +143,14 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
     }
 
     /**
-     * @param <K>
-     * @param <V>
-     * @param keyClass
-     * @param valueClass
-     * @param rootPath
-     * @param folder
-     * @return
-     * @throws NullPointerException
+     * @param <K>        K type
+     * @param <V>        V type
+     * @param keyClass   K Class
+     * @param valueClass V Class
+     * @param rootPath   String
+     * @param folder     String
+     * @return Builder<K, V>
+     * @throws NullPointerException npe
      */
     public static <K, V> Builder<K, V> newBuilder(@Nonnull Class<K> keyClass,
                                                   @Nonnull Class<V> valueClass,
@@ -165,11 +165,11 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
     }
 
     /**
-     * @param <K>
-     * @param <V>
-     * @param original
-     * @return
-     * @throws NullPointerException
+     * @param <K>      K type
+     * @param <V>      V type
+     * @param original ChronicleMapConfigurator<K, V>
+     * @return Builder<K, V>
+     * @throws NullPointerException npe
      */
     public static <K, V> Builder<K, V> reset(@Nonnull ChronicleMapConfigurator<K, V> original)
             throws NullPointerException {
@@ -216,8 +216,8 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
         }
 
         /**
-         * @param averageKey
-         * @return
+         * @param averageKey K
+         * @return Builder<K, V>
          */
         public Builder<K, V> averageKey(K averageKey) {
             this.averageKey = averageKey;
@@ -225,8 +225,8 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
         }
 
         /**
-         * @param averageValue
-         * @return
+         * @param averageValue V
+         * @return Builder<K, V>
          */
         public Builder<K, V> averageValue(V averageValue) {
             this.averageValue = averageValue;
@@ -234,7 +234,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
         }
 
         /**
-         * @return
+         * @return Builder<K, V>
          */
         public Builder<K, V> enablePutReturnsNull() {
             this.putReturnsNull = true;
@@ -242,7 +242,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
         }
 
         /**
-         * @return
+         * @return Builder<K, V>
          */
         public Builder<K, V> enableRemoveReturnsNull() {
             this.removeReturnsNull = true;
@@ -250,7 +250,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
         }
 
         /**
-         * @return
+         * @return Builder<K, V>
          */
         public Builder<K, V> enableRecover() {
             this.recover = true;
@@ -258,8 +258,8 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
         }
 
         /**
-         * @param persistent
-         * @return
+         * @param persistent boolean
+         * @return Builder<K, V>
          */
         public Builder<K, V> persistent(boolean persistent) {
             this.persistent = persistent;
@@ -267,8 +267,8 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
         }
 
         /**
-         * @param actualChunkSize
-         * @return
+         * @param actualChunkSize int
+         * @return Builder<K, V>
          */
         public Builder<K, V> actualChunkSize(int actualChunkSize) {
             this.actualChunkSize = actualChunkSize;
@@ -276,8 +276,8 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
         }
 
         /**
-         * @param entries
-         * @return
+         * @param entries long
+         * @return Builder<K, V>
          */
         public Builder<K, V> entries(long entries) {
             this.entries = entries;
@@ -285,8 +285,8 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
         }
 
         /**
-         * @param capacity
-         * @return
+         * @param capacity Capacity
+         * @return Builder<K, V>
          */
         public Builder<K, V> entries(Capacity capacity) {
             this.entries = capacity.value();
@@ -294,7 +294,7 @@ public final class ChronicleMapConfigurator<K, V> implements Configurator {
         }
 
         /**
-         * @return
+         * @return ChronicleMapConfigurator<K, V>
          */
         public ChronicleMapConfigurator<K, V> build() {
             return new ChronicleMapConfigurator<>(this);

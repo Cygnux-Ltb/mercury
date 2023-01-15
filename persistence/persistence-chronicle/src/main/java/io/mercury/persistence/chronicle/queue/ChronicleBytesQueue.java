@@ -36,7 +36,7 @@ public class ChronicleBytesQueue
     }
 
     /**
-     * @return
+     * @return BytesQueueBuilder
      */
     public static BytesQueueBuilder newBuilder() {
         return new BytesQueueBuilder();
@@ -79,8 +79,8 @@ public class ChronicleBytesQueue
         /**
          * if set size less than 512, use default size the 512
          *
-         * @param bufferSize
-         * @return
+         * @param bufferSize int
+         * @return BytesQueueBuilder
          */
         public BytesQueueBuilder bufferSize(int bufferSize) {
             this.bufferSize = Math.max(bufferSize, 512);

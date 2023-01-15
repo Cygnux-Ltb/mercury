@@ -1,19 +1,17 @@
 package io.mercury.persistence.chronicle.queue;
 
-import java.util.function.Supplier;
+import io.mercury.common.annotation.AbstractFunction;
+import io.mercury.common.annotation.thread.OnlyAllowSingleThreadAccess;
+import io.mercury.common.serialization.basic.Serializer;
+import io.mercury.persistence.chronicle.exception.ChronicleAppendException;
+import net.openhft.chronicle.queue.ExcerptAppender;
+import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.NotThreadSafe;
-
-import io.mercury.common.annotation.thread.OnlyAllowSingleThreadAccess;
-import org.slf4j.Logger;
-
-import io.mercury.common.annotation.AbstractFunction;
-import io.mercury.common.serialization.basic.Serializer;
-import io.mercury.persistence.chronicle.exception.ChronicleAppendException;
-import net.openhft.chronicle.queue.ExcerptAppender;
+import java.util.function.Supplier;
 
 @Immutable
 @NotThreadSafe
@@ -50,10 +48,10 @@ public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAc
     }
 
     /**
-     * @param t
-     * @param serializer
-     * @throws IllegalStateException
-     * @throws ChronicleAppendException
+     * @param t          T
+     * @param serializer Serializer<T, IN>
+     * @throws IllegalStateException    ise
+     * @throws ChronicleAppendException cae
      */
     @OnlyAllowSingleThreadAccess
     public <T> void append(@Nullable T t,
@@ -63,9 +61,9 @@ public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAc
     }
 
     /**
-     * @param in
-     * @throws IllegalStateException
-     * @throws ChronicleAppendException
+     * @param in IN
+     * @throws IllegalStateException    ise
+     * @throws ChronicleAppendException cae
      */
     @OnlyAllowSingleThreadAccess
     public void append(@Nullable IN in) throws IllegalStateException, ChronicleAppendException {

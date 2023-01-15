@@ -45,7 +45,7 @@ public class ChronicleHashStorage {
 
     public static <E> SetBuilder<E> newSet(@Nonnull Class<E> elementType,
                                            @Nonnull String savePath, @Nonnull String filename) {
-        return new SetBuilder<E>(elementType, savePath, filename);
+        return new SetBuilder<>(elementType, savePath, filename);
     }
 
 

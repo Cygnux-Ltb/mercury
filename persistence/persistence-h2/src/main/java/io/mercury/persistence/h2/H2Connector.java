@@ -97,7 +97,7 @@ public class H2Connector {
      * <br>
      * 范例:<br>
      * jdbc:h2:tcp://localhost/~/test （对应内嵌模式下的jdbc:h2:~/test)<br>
-     * jdbc:h2:tcp://dbserv:8084/~/sample （对应内嵌模式下的jdbc:h2:~/sample)<br>
+     * jdbc:h2:tcp://dbserver:8084/~/sample （对应内嵌模式下的jdbc:h2:~/sample)<br>
      * jdbc:h2:tcp://localhost/mem:test （对应内嵌模式下的jdbc:h2:mem:test)<br>
      * <br>
      *

@@ -12,6 +12,7 @@ import town.lost.oms.dto.NewOrderSingle;
 import town.lost.oms.dto.OrderCancelReject;
 
 public class OMSImpl implements OMSIn {
+
     private final OMSOut out;
     private final ExecutionReport er = new ExecutionReport();
     private final OrderCancelReject ocr = new OrderCancelReject();

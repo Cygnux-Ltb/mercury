@@ -4,7 +4,7 @@ public class EventTwo extends AbstractEvent<EventTwo> {
 	
 	String symbol;
 	double price;
-	double quantiity;
+	double quantity;
 
 	public String symbol() {
 		return symbol;
@@ -24,12 +24,12 @@ public class EventTwo extends AbstractEvent<EventTwo> {
 		return this;
 	}
 
-	public double quantiity() {
-		return quantiity;
+	public double quantity() {
+		return quantity;
 	}
 
-	public EventTwo quantiity(double quantiity) {
-		this.quantiity = quantiity;
+	public EventTwo quantity(double quantity) {
+		this.quantity = quantity;
 		return this;
 	}
 
