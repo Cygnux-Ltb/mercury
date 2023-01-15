@@ -13,7 +13,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <httpclient.version>5.1.3</httpclient.version>
+        <httpclient.version>5.2.1</httpclient.version>
         <asynchttpclient.version>2.12.3</asynchttpclient.version>
     </properties>
 

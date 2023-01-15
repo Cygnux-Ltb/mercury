@@ -4,6 +4,8 @@ import io.mercury.common.annotation.OnlyOverrideEquals;
 import io.mercury.common.serialization.specific.JsonSerializable;
 import io.mercury.serialization.json.JsonWrapper;
 
+import javax.annotation.Nonnull;
+
 @OnlyOverrideEquals
 public final class TcpKeepAlive implements JsonSerializable {
 
@@ -112,7 +114,8 @@ public final class TcpKeepAlive implements JsonSerializable {
 
 	}
 
-	@Override
+	@Nonnull
+    @Override
 	public String toJson() {
 		return JsonWrapper.toJson(this);
 	}
