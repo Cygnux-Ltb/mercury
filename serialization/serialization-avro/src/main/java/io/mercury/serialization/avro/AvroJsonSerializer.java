@@ -1,11 +1,8 @@
 package io.mercury.serialization.avro;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.NotThreadSafe;
-
+import io.mercury.common.character.Charsets;
+import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.serialization.specific.JsonSerializer;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.io.JsonEncoder;
@@ -14,9 +11,10 @@ import org.apache.avro.specific.SpecificRecord;
 import org.apache.commons.compress.utils.IOUtils;
 import org.slf4j.Logger;
 
-import io.mercury.common.character.Charsets;
-import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.common.serialization.specific.JsonSerializer;
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 @NotThreadSafe
 public class AvroJsonSerializer<T extends SpecificRecord> implements JsonSerializer<T> {

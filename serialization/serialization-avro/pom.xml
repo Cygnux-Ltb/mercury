@@ -57,18 +57,22 @@
     </build>
 
     <dependencies>
-        <!-- The core functionality of the CodeModel java source code generation
-            library -->
-        <dependency>
-            <groupId>com.sun.codemodel</groupId>
-            <artifactId>codemodel</artifactId>
-            <version>2.6</version>
-        </dependency>
-
+        <!-- avro-fastserde enables faster Avro de/serialization by doing runtime code-generation
+            to provide a faster decoder/encoder implementation. -->
         <dependency>
             <groupId>com.linkedin.avroutil1</groupId>
-            <artifactId>helper-all</artifactId>
+            <artifactId>avro-fastserde</artifactId>
             <version>0.2.133</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-lang3</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -98,29 +102,29 @@
         </dependency>
 
         <!-- Avro inter-process communication components -->
-        <dependency>
-            <groupId>org.apache.avro</groupId>
-            <artifactId>avro-ipc</artifactId>
-            <version>${avro.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-api</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.commons</groupId>
-                    <artifactId>commons-lang3</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                    <artifactId>jackson-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                    <artifactId>jackson-databind</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.avro</groupId>-->
+        <!--            <artifactId>avro-ipc</artifactId>-->
+        <!--            <version>${avro.version}</version>-->
+        <!--            <exclusions>-->
+        <!--                <exclusion>-->
+        <!--                    <artifactId>slf4j-api</artifactId>-->
+        <!--                    <groupId>org.slf4j</groupId>-->
+        <!--                </exclusion>-->
+        <!--                <exclusion>-->
+        <!--                    <groupId>org.apache.commons</groupId>-->
+        <!--                    <artifactId>commons-lang3</artifactId>-->
+        <!--                </exclusion>-->
+        <!--                <exclusion>-->
+        <!--                    <groupId>com.fasterxml.jackson.core</groupId>-->
+        <!--                    <artifactId>jackson-core</artifactId>-->
+        <!--                </exclusion>-->
+        <!--                <exclusion>-->
+        <!--                    <groupId>com.fasterxml.jackson.core</groupId>-->
+        <!--                    <artifactId>jackson-databind</artifactId>-->
+        <!--                </exclusion>-->
+        <!--            </exclusions>-->
+        <!--        </dependency>-->
 
         <!-- Compilers for Avro IDL and Avro Specific Java API -->
         <dependency>

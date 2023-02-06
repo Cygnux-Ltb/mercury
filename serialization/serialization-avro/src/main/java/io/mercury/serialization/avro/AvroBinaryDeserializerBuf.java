@@ -13,48 +13,45 @@ import java.util.concurrent.ConcurrentMap;
 import static io.mercury.common.concurrent.map.JctConcurrentMaps.newNonBlockingLongMap;
 
 /**
- * 
- * @author yellow013
- *
  * @param <T>
+ * @author yellow013
  */
 @ThreadSafe
 public final class AvroBinaryDeserializerBuf<T extends SpecificRecord> implements BytesDeserializer<T> {
 
-	private static final Logger log = Log4j2LoggerFactory.getLogger(AvroBinaryDeserializerBuf.class);
+    private static final Logger log = Log4j2LoggerFactory.getLogger(AvroBinaryDeserializerBuf.class);
 
-	private final Class<T> type;
+    private final Class<T> type;
 
-	private final ConcurrentMap<Long, AvroBinaryDeserializer<T>> deserializers = newNonBlockingLongMap(16);
+    private final ConcurrentMap<Long, AvroBinaryDeserializer<T>> deserializers = newNonBlockingLongMap(16);
 
-	/**
-	 * 
-	 * @param type Class<T>
-	 */
-	public AvroBinaryDeserializerBuf(Class<T> type) {
-		this.type = type;
-	}
+    /**
+     * @param type Class<T>
+     */
+    public AvroBinaryDeserializerBuf(Class<T> type) {
+        this.type = type;
+    }
 
-	@Nonnull
-	@Override
-	public T deserialization(@Nonnull byte[] source, @Nullable T reuse) {
-		try {
-			return getDeserializer().deserialization(source, reuse);
-		} catch (Exception e) {
-			log.error("deserialization func -> {}", e.getMessage(), e);
-			throw e;
-		}
-	}
+    @Nonnull
+    @Override
+    public T deserialization(@Nonnull byte[] source, @Nullable T reuse) {
+        try {
+            return getDeserializer().deserialization(source, reuse);
+        } catch (Exception e) {
+            log.error("deserialization func -> {}", e.getMessage(), e);
+            throw e;
+        }
+    }
 
-	/**
-	 * 根据线程ID获取Deserializer
-	 * 
-	 * @return AvroBinaryDeserializer<T>
-	 */
-	private AvroBinaryDeserializer<T> getDeserializer() {
-		long threadId = Thread.currentThread().getId();
-		return deserializers.putIfAbsent(threadId, new AvroBinaryDeserializer<>(type));
-	}
+    /**
+     * 根据线程ID获取Deserializer
+     *
+     * @return AvroBinaryDeserializer<T>
+     */
+    private AvroBinaryDeserializer<T> getDeserializer() {
+        long threadId = Thread.currentThread().getId();
+        return deserializers.putIfAbsent(threadId, new AvroBinaryDeserializer<>(type));
+    }
 
 //	private int offset;
 //	private byte remainingBytes[];

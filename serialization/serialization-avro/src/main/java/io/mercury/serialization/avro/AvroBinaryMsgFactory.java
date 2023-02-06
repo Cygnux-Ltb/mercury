@@ -14,6 +14,7 @@ import java.nio.ByteBuffer;
  */
 public class AvroBinaryMsgFactory implements EventFactory<AvroBinaryMsg> {
 
+    
     public static final AvroBinaryMsgFactory INSTANCE = new AvroBinaryMsgFactory();
 
     @Override
