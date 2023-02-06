@@ -13,7 +13,9 @@ import static io.mercury.common.util.StringSupport.fixPath;
 public final class RocksDBConfigurator {
 
     private final String rootPath;
+
     private final String folder;
+
     private final File savePath;
 
     private final Options options;

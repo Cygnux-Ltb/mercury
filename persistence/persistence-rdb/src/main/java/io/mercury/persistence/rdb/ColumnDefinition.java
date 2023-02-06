@@ -1,4 +1,4 @@
-package io.cygnux.console.persistence.constant;
+package io.mercury.persistence.rdb;
 
 public interface ColumnDefinition {
 
