@@ -25,11 +25,11 @@ import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
-public class WebSoctek {
+public class WebSocket {
 
 	public static void main(String[] args) {
 
-		final Logger log = Log4j2LoggerFactory.getLogger(WebSoctek.class);
+		final Logger log = Log4j2LoggerFactory.getLogger(WebSocket.class);
 		final EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
 		try {
 			URI uri = new URI("ws://192.168.50.xx:xx/xx/xx");
