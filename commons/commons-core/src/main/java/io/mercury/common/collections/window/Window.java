@@ -1,7 +1,7 @@
 package io.mercury.common.collections.window;
 
+import io.mercury.common.log.Log4j2LoggerFactory;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +59,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class Window<K, R, P> {
 
-    private static final Logger logger = LoggerFactory.getLogger(Window.class);
+    private static final Logger log = Log4j2LoggerFactory.getLogger(Window.class);
 
     private final int maxSize;
     private final ConcurrentHashMap<K, WindowFuture<K, R, P>> futures;
@@ -146,7 +146,7 @@ public class Window<K, R, P> {
             this.monitor = null;
             this.monitorHandle = null;
         }
-        logger.debug("window created");
+        log.debug("window created");
     }
 
     /**

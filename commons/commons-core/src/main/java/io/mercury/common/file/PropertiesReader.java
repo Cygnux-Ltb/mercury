@@ -1,20 +1,20 @@
 package io.mercury.common.file;
 
-import static io.mercury.common.file.FileScanner.depthFirst;
-import static io.mercury.common.util.StringSupport.notDecimal;
+import io.mercury.common.collections.MutableMaps;
+import io.mercury.common.log.Log4j2LoggerFactory;
+import org.eclipse.collections.api.map.MutableMap;
+import org.eclipse.collections.api.set.MutableSet;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Properties;
 
-import org.eclipse.collections.api.map.MutableMap;
-import org.eclipse.collections.api.set.MutableSet;
-import org.slf4j.Logger;
-
-import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.log.Log4j2LoggerFactory;
+import static io.mercury.common.file.FileScanner.depthFirst;
+import static io.mercury.common.util.StringSupport.notDecimal;
 
 public final class PropertiesReader {
 
@@ -30,7 +30,8 @@ public final class PropertiesReader {
     private static final String FILE_SUFFIX = ".properties";
 
     static {
-        MutableSet<File> files = depthFirst(new File(PropertiesReader.class.getResource("/").getPath()),
+        MutableSet<File> files = depthFirst(new File(Objects
+                        .requireNonNull(PropertiesReader.class.getResource("/")).getPath()),
                 file -> file.getName().endsWith(FILE_SUFFIX));
         for (File file : files) {
             try {
@@ -61,17 +62,17 @@ public final class PropertiesReader {
     }
 
     /**
-     * @param fileName
-     * @param propName
-     * @return
+     * @param fileName String
+     * @param propName String
+     * @return String
      */
     private static String mergePropertiesKey(String fileName, String propName) {
         return deleteSuffix(fileName) + "." + propName;
     }
 
     /**
-     * @param fileName
-     * @return
+     * @param fileName String
+     * @return String
      */
     private static String deleteSuffix(String fileName) {
         if (fileName == null)
@@ -82,8 +83,8 @@ public final class PropertiesReader {
     }
 
     /**
-     * @param fileName
-     * @return
+     * @param fileName String
+     * @return Properties
      */
     public static Properties getProperty(String fileName) {
         Properties properties = PropertiesMap.get(deleteSuffix(fileName));
@@ -93,9 +94,9 @@ public final class PropertiesReader {
     }
 
     /**
-     * @param fileName
-     * @param propName
-     * @return
+     * @param fileName String
+     * @param propName String
+     * @return String
      */
     public static String getProperty(String fileName, String propName) {
         String key = mergePropertiesKey(fileName, propName);
@@ -108,9 +109,9 @@ public final class PropertiesReader {
     }
 
     /**
-     * @param fileName
-     * @param propName
-     * @return
+     * @param fileName String
+     * @param propName String
+     * @return int
      */
     public static int getIntProperty(String fileName, String propName) {
         String value = getProperty(fileName, propName);
@@ -128,9 +129,9 @@ public final class PropertiesReader {
     }
 
     /**
-     * @param fileName
-     * @param propName
-     * @return
+     * @param fileName String
+     * @param propName String
+     * @return long
      */
     public static long getLongProperty(String fileName, String propName) {
         String value = getProperty(fileName, propName);
@@ -148,9 +149,9 @@ public final class PropertiesReader {
     }
 
     /**
-     * @param fileName
-     * @param propName
-     * @return
+     * @param fileName String
+     * @param propName String
+     * @return double
      */
     public static double getDoubleProperty(String fileName, String propName) {
         String value = getProperty(fileName, propName);

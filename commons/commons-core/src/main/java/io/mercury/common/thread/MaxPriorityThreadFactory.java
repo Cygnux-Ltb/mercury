@@ -18,8 +18,7 @@ public class MaxPriorityThreadFactory implements ThreadFactory {
 
     @Override
     public Thread newThread(@Nonnull Runnable runnable) {
-        return newMaxPriorityThread(
-                name + "-" + incr.getAndIncrement(), runnable);
+        return newMaxPriorityThread(name + "-" + incr.getAndIncrement(), runnable);
     }
 
 }

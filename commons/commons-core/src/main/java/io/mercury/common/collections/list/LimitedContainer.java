@@ -2,56 +2,58 @@ package io.mercury.common.collections.list;
 
 public abstract class LimitedContainer<E> {
 
-	private int head = 0;
-	private int tail = 0;
-	private int count = 0;
+    private int head = 0;
 
-	private final int capacity;
+    private int tail = 0;
 
-	protected LimitedContainer(int capacity) {
-		this.capacity = capacity;
-	}
+    private int count = 0;
 
-	protected int headIndex() {
-		return head;
-	}
+    private final int capacity;
 
-	protected int tailIndex() {
-		return tail;
-	}
+    protected LimitedContainer(int capacity) {
+        this.capacity = capacity;
+    }
 
-	public int count() {
-		return count;
-	}
+    protected int headIndex() {
+        return head;
+    }
 
-	public void add(E e) {
-		updateTail();
-		setTail(tail, e);
-		updateHead();
-		updateCount();
-	}
+    protected int tailIndex() {
+        return tail;
+    }
 
-	private void updateTail() {
-		if (++tail == capacity)
-			tail = 0;
-	}
+    public int count() {
+        return count;
+    }
 
-	private void updateHead() {
-		if (count == capacity) {
-			if (++head == capacity)
-				head = 0;
-		}
-	}
+    public void add(E e) {
+        updateTail();
+        setTail(tail, e);
+        updateHead();
+        updateCount();
+    }
 
-	private void updateCount() {
-		if (count < capacity)
-			count++;
-	}
+    private void updateTail() {
+        if (++tail == capacity)
+            tail = 0;
+    }
 
-	protected abstract void setTail(int tail, E e);
+    private void updateHead() {
+        if (count == capacity) {
+            if (++head == capacity)
+                head = 0;
+        }
+    }
 
-	public abstract E getTail();
+    private void updateCount() {
+        if (count < capacity)
+            count++;
+    }
 
-	public abstract E getHead();
+    protected abstract void setTail(int tail, E e);
+
+    public abstract E getTail();
+
+    public abstract E getHead();
 
 }

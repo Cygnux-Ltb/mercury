@@ -34,8 +34,8 @@ public final class HexUtil {
     }
 
     /**
-     * @param bytes
-     * @return
+     * @param bytes byte[]
+     * @return String
      */
     public static String toHex(byte[] bytes) {
         if (bytes == null)
@@ -44,10 +44,10 @@ public final class HexUtil {
     }
 
     /**
-     * @param bytes
-     * @param offset
-     * @param length
-     * @return
+     * @param bytes  byte[]
+     * @param offset int
+     * @param length int
+     * @return String
      */
     public static String toHex(byte[] bytes, int offset, int length) {
         if (bytes == null)
@@ -60,10 +60,10 @@ public final class HexUtil {
     }
 
     /**
-     * @param builder
-     * @param bytes
-     * @param offset
-     * @param length
+     * @param builder StringBuilder
+     * @param bytes   byte[]
+     * @param offset  int
+     * @param length  int
      */
     public static void appendHex(@Nonnull StringBuilder builder, byte[] bytes, int offset, int length) {
         Asserter.nonNull(builder, "builder");
@@ -77,8 +77,8 @@ public final class HexUtil {
     }
 
     /**
-     * @param builder
-     * @param bytes
+     * @param builder StringBuilder
+     * @param bytes   byte[]
      */
     public static void appendHex(@Nonnull StringBuilder builder, byte[] bytes) {
         Asserter.nonNull(builder, "builder");
@@ -88,8 +88,8 @@ public final class HexUtil {
     }
 
     /**
-     * @param value
-     * @return
+     * @param value byte
+     * @return String
      */
     public static String toHex(byte value) {
         StringBuilder builder = new StringBuilder(4).append("0x");
@@ -98,8 +98,8 @@ public final class HexUtil {
     }
 
     /**
-     * @param builder
-     * @param value
+     * @param builder StringBuilder
+     * @param value   byte
      */
     public static void appendHex(@Nonnull StringBuilder builder, byte value) {
         Asserter.nonNull(builder, "builder");
@@ -107,8 +107,8 @@ public final class HexUtil {
     }
 
     /**
-     * @param value
-     * @return
+     * @param value short
+     * @return String
      */
     public static String toHex(short value) {
         StringBuilder builder = new StringBuilder(6).append("0x");
@@ -117,8 +117,8 @@ public final class HexUtil {
     }
 
     /**
-     * @param builder
-     * @param value
+     * @param builder StringBuilder
+     * @param value   short
      */
     public static void appendHex(@Nonnull StringBuilder builder, short value) {
         Asserter.nonNull(builder, "builder");
@@ -127,8 +127,8 @@ public final class HexUtil {
     }
 
     /**
-     * @param value
-     * @return
+     * @param value int
+     * @return String
      */
     public static String toHex(int value) {
         StringBuilder builder = new StringBuilder(10).append("0x");
@@ -137,20 +137,24 @@ public final class HexUtil {
     }
 
     /**
-     * @param builder
-     * @param value
+     * @param builder StringBuilder
+     * @param value   int
      */
     public static void appendHex(@Nonnull StringBuilder builder, int value) {
         Asserter.nonNull(builder, "builder");
-        builder.append(HEX_TABLE[(value & 0xF000_0000) >>> 28]).append(HEX_TABLE[(value & 0x0F00_0000) >>> 24])
-                .append(HEX_TABLE[(value & 0x00F0_0000) >>> 20]).append(HEX_TABLE[(value & 0x000F_0000) >>> 16])
-                .append(HEX_TABLE[(value & 0x0000_F000) >>> 12]).append(HEX_TABLE[(value & 0x0000_0F00) >>> 8])
-                .append(HEX_TABLE[(value & 0x0000_00F0) >>> 4]).append(HEX_TABLE[(value & 0x0000_000F)]);
+        builder.append(HEX_TABLE[(value & 0xF000_0000) >>> 28])
+                .append(HEX_TABLE[(value & 0x0F00_0000) >>> 24])
+                .append(HEX_TABLE[(value & 0x00F0_0000) >>> 20])
+                .append(HEX_TABLE[(value & 0x000F_0000) >>> 16])
+                .append(HEX_TABLE[(value & 0x0000_F000) >>> 12])
+                .append(HEX_TABLE[(value & 0x0000_0F00) >>> 8])
+                .append(HEX_TABLE[(value & 0x0000_00F0) >>> 4])
+                .append(HEX_TABLE[(value & 0x0000_000F)]);
     }
 
     /**
-     * @param value
-     * @return
+     * @param value long
+     * @return String
      */
     public static String toHex(long value) {
         StringBuilder builder = new StringBuilder(18).append("0x");
@@ -159,8 +163,8 @@ public final class HexUtil {
     }
 
     /**
-     * @param builder
-     * @param value
+     * @param builder StringBuilder
+     * @param value   long
      */
     public static void appendHex(@Nonnull StringBuilder builder, long value) {
         appendHex(builder, (int) ((value & 0xFFFF_FFFF_0000_0000L) >>> 32));
@@ -168,9 +172,9 @@ public final class HexUtil {
     }
 
     /**
-     * @param offset
-     * @param length
-     * @param arrayLength
+     * @param offset      int
+     * @param length      int
+     * @param arrayLength int
      */
     private static void assertOffsetAndLength(int offset, int length, int arrayLength) {
         if (offset < 0)
@@ -182,57 +186,35 @@ public final class HexUtil {
     }
 
     /**
-     * @param c
-     * @return
+     * @param c char
+     * @return int
      */
     public static int hexCharToInt(char c) {
-        switch (c) {
-            case '0':
-                return 0;
-            case '1':
-                return 1;
-            case '2':
-                return 2;
-            case '3':
-                return 3;
-            case '4':
-                return 4;
-            case '5':
-                return 5;
-            case '6':
-                return 6;
-            case '7':
-                return 7;
-            case '8':
-                return 8;
-            case '9':
-                return 9;
-            case 'A':
-            case 'a':
-                return 10;
-            case 'B':
-            case 'b':
-                return 11;
-            case 'C':
-            case 'c':
-                return 12;
-            case 'D':
-            case 'd':
-                return 13;
-            case 'E':
-            case 'e':
-                return 14;
-            case 'F':
-            case 'f':
-                return 15;
-            default:
-                throw new IllegalArgumentException("The character [" + c + "] does not represent a valid hex digit");
-        }
+        return switch (c) {
+            case '0' -> 0;
+            case '1' -> 1;
+            case '2' -> 2;
+            case '3' -> 3;
+            case '4' -> 4;
+            case '5' -> 5;
+            case '6' -> 6;
+            case '7' -> 7;
+            case '8' -> 8;
+            case '9' -> 9;
+            case 'A', 'a' -> 10;
+            case 'B', 'b' -> 11;
+            case 'C', 'c' -> 12;
+            case 'D', 'd' -> 13;
+            case 'E', 'e' -> 14;
+            case 'F', 'f' -> 15;
+            default ->
+                    throw new IllegalArgumentException("The character [" + c + "] does not represent a valid hex digit");
+        };
     }
 
     /**
-     * @param hex
-     * @return
+     * @param hex CharSequence
+     * @return byte[]
      */
     public static byte[] toByteArray(CharSequence hex) {
         if (hex == null)

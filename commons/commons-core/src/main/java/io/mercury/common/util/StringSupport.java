@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Objects;
 
 import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
@@ -21,8 +22,8 @@ public final class StringSupport {
     }
 
     /**
-     * @param i
-     * @return
+     * @param i int
+     * @return String
      */
     @Nonnull
     public static String toString(int i) {
@@ -30,17 +31,17 @@ public final class StringSupport {
     }
 
     /**
-     * @param is
-     * @return
+     * @param is int[]
+     * @return String
      */
     @Nonnull
     public static String toString(@Nullable int[] is) {
-        return is == null ? CONST_NULL : is.toString();
+        return is == null ? CONST_NULL : Arrays.toString(is);
     }
 
     /**
-     * @param l
-     * @return
+     * @param l long
+     * @return String
      */
     @Nonnull
     public static String toString(long l) {
@@ -48,17 +49,17 @@ public final class StringSupport {
     }
 
     /**
-     * @param ls
-     * @return
+     * @param ls long[]
+     * @return String
      */
     @Nonnull
     public static String toString(@Nullable long[] ls) {
-        return ls == null ? CONST_NULL : ls.toString();
+        return ls == null ? CONST_NULL : Arrays.toString(ls);
     }
 
     /**
-     * @param d
-     * @return
+     * @param d double
+     * @return String
      */
     @Nonnull
     public static String toString(double d) {
@@ -66,19 +67,19 @@ public final class StringSupport {
     }
 
     /**
-     * @param ds
-     * @return
+     * @param ds double[]
+     * @return String
      */
     @Nonnull
     public static String toString(@Nullable double[] ds) {
-        return ds == null ? CONST_NULL : ds.toString();
+        return ds == null ? CONST_NULL : Arrays.toString(ds);
     }
 
     /**
      * call toString() method
      *
-     * @param obj
-     * @return
+     * @param obj Object
+     * @return String
      */
     @Nonnull
     public static String toString(@Nullable Object obj) {
@@ -88,8 +89,8 @@ public final class StringSupport {
     }
 
     /**
-     * @param objs
-     * @return
+     * @param objs Object[]
+     * @return String
      */
     @Nonnull
     public static String toString(@Nullable Object... objs) {
@@ -105,16 +106,16 @@ public final class StringSupport {
     }
 
     /**
-     * @param strs
-     * @return
+     * @param strings String[]
+     * @return String
      */
     @Nonnull
-    public static String toString(@Nullable String... strs) {
-        if (strs == null)
+    public static String toString(@Nullable String... strings) {
+        if (strings == null)
             return CONST_EMPTY;
-        StringBuilder builder = new StringBuilder(strs.length * 16).append('[');
-        for (int i = 0, j = strs.length - 1; i < strs.length; i++) {
-            builder.append(toString(strs[i]));
+        StringBuilder builder = new StringBuilder(strings.length * 16).append('[');
+        for (int i = 0, j = strings.length - 1; i < strings.length; i++) {
+            builder.append(toString(strings[i]));
             if (i < j)
                 builder.append(',');
         }
@@ -122,8 +123,8 @@ public final class StringSupport {
     }
 
     /**
-     * @param bs
-     * @return
+     * @param bs byte[]
+     * @return String
      */
     @Nonnull
     public static String toString(byte[] bs) {
@@ -131,9 +132,9 @@ public final class StringSupport {
     }
 
     /**
-     * @param charset
-     * @param bs
-     * @return
+     * @param charset Charset
+     * @param bs      byte[]
+     * @return String
      */
     @Nonnull
     public static String toString(Charset charset, byte[] bs) {
@@ -141,8 +142,8 @@ public final class StringSupport {
     }
 
     /**
-     * @param cs
-     * @return
+     * @param cs char[]
+     * @return String
      */
     @Nonnull
     public static String toString(char[] cs) {
@@ -150,8 +151,8 @@ public final class StringSupport {
     }
 
     /**
-     * @param obj
-     * @return
+     * @param obj Object
+     * @return String
      */
     @Nonnull
     public static String toText(Object obj) {
@@ -163,7 +164,7 @@ public final class StringSupport {
      * org.apache.commons.lang3.builder.ToStringBuilder <br>
      * .reflectionToString(obj, ToStringStyle.SHORT_PREFIX_STYLE, false)
      *
-     * @param obj
+     * @param obj Object
      * @return String
      */
     @Nonnull
@@ -176,7 +177,7 @@ public final class StringSupport {
      * org.apache.commons.lang3.builder.ToStringBuilder <br>
      * .reflectionToString(obj, ToStringStyle.JSON_STYLE, false)
      *
-     * @param obj
+     * @param obj Object
      * @return String
      */
     @Nonnull
@@ -189,9 +190,9 @@ public final class StringSupport {
      * org.apache.commons.lang3.builder.ToStringBuilder<br>
      * .reflectionToString(obj, style, false)
      *
-     * @param obj
-     * @param style
-     * @return
+     * @param obj   Object
+     * @param style ToStringStyle
+     * @return String
      */
     @Nonnull
     public static String toStringWithStyle(Object obj, ToStringStyle style) {
@@ -199,34 +200,34 @@ public final class StringSupport {
     }
 
     /**
-     * @param cs
-     * @return
+     * @param cs CharSequence
+     * @return boolean
      */
     public static boolean isNullOrEmpty(CharSequence cs) {
         return cs == null || cs.length() == 0;
     }
 
     /**
-     * @param cs
-     * @return
+     * @param cs CharSequence
+     * @return boolean
      */
     public static boolean nonEmpty(CharSequence cs) {
         return cs != null && cs.length() != 0;
     }
 
     /**
-     * @param str1
-     * @param str2
-     * @return
+     * @param str1 String
+     * @param str2 String
+     * @return boolean
      */
     public static boolean isEquals(String str1, String str2) {
         return Objects.equals(str1, str2);
     }
 
     /**
-     * @param str1
-     * @param str2
-     * @return
+     * @param str1 String
+     * @param str2 String
+     * @return boolean
      */
     public static boolean nonEquals(String str1, String str2) {
         return !isEquals(str1, str2);
@@ -271,8 +272,8 @@ public final class StringSupport {
     /**
      * 检查输入参数是否为数字
      *
-     * @param str
-     * @return
+     * @param str String
+     * @return boolean
      */
     public static boolean isDecimal(String str) {
         // null或空字符串
@@ -321,8 +322,8 @@ public final class StringSupport {
     /**
      * 检查输入参数是否非数字
      *
-     * @param str
-     * @return
+     * @param str String
+     * @return boolean
      */
     public static boolean notDecimal(String str) {
         return !isDecimal(str);
@@ -331,8 +332,8 @@ public final class StringSupport {
     /**
      * 删除除字符串中的非数字
      *
-     * @param str
-     * @return
+     * @param str String
+     * @return String
      */
     @Nonnull
     public static String removeNonDigits(String str) {
@@ -350,8 +351,8 @@ public final class StringSupport {
     /**
      * 删除除字符串中的非字母
      *
-     * @param str
-     * @return
+     * @param str String
+     * @return String
      */
     @Nonnull
     public static String removeNonAlphabet(String str) {
@@ -369,8 +370,8 @@ public final class StringSupport {
     /**
      * 去除分割符<b> "." </b>,<b> "-" </b>,<b> "_" </b>,<b> "/" </b>,<b> "\" </b>
      *
-     * @param str
-     * @return
+     * @param str String
+     * @return String
      */
     public static String removeSplitChar(String str) {
         return isNullOrEmpty(str) ? CONST_EMPTY
@@ -378,51 +379,51 @@ public final class StringSupport {
     }
 
     /**
-     * @param gbkStr
-     * @return
+     * @param gbkStr String
+     * @return String
      */
     public static String conversionGbkToUtf8(String gbkStr) {
         return conversionTo(gbkStr, Charsets.GBK, Charsets.UTF8);
     }
 
     /**
-     * @param utf8Str
-     * @return
+     * @param utf8Str String
+     * @return String
      */
     public static String conversionUtf8ToGbk(String utf8Str) {
         return conversionTo(utf8Str, Charsets.UTF8, Charsets.GBK);
     }
 
     /**
-     * @param gbkStr
-     * @return
+     * @param gbkStr String
+     * @return String
      */
     public static String conversionGb2312ToUtf8(String gbkStr) {
         return conversionTo(gbkStr, Charsets.GB2312, Charsets.UTF8);
     }
 
     /**
-     * @param utf8Str
-     * @return
+     * @param utf8Str String
+     * @return String
      */
     public static String conversionUtf8ToGb2312(String utf8Str) {
         return conversionTo(utf8Str, Charsets.UTF8, Charsets.GB2312);
     }
 
     /**
-     * @param str
-     * @param charset
-     * @return
+     * @param str     String
+     * @param charset Charset
+     * @return String
      */
     public static String conversionToUtf8(String str, Charset charset) {
         return conversionTo(str, charset, Charsets.UTF8);
     }
 
     /**
-     * @param str
-     * @param sourceCharset
-     * @param targetCharset
-     * @return
+     * @param str           String
+     * @param sourceCharset Charset
+     * @param targetCharset Charset
+     * @return String
      */
     public static String conversionTo(String str, Charset sourceCharset, Charset targetCharset) {
         return str == null ? null : new String(str.getBytes(sourceCharset), targetCharset);
@@ -431,18 +432,18 @@ public final class StringSupport {
     /**
      * 是否为路径
      *
-     * @param path
-     * @return
+     * @param path String
+     * @return boolean
      */
     public static boolean isPath(String path) {
-        return isNullOrEmpty(path) ? false : path.endsWith("/") || path.endsWith("\\");
+        return !isNullOrEmpty(path) && (path.endsWith("/") || path.endsWith("\\"));
     }
 
     /**
      * 是否为路径
      *
-     * @param path
-     * @return
+     * @param path String
+     * @return boolean
      */
     public static boolean notPath(String path) {
         return !isPath(path);
@@ -451,8 +452,8 @@ public final class StringSupport {
     /**
      * 修补路径
      *
-     * @param path
-     * @return
+     * @param path String
+     * @return String
      */
     public static String fixPath(String path) {
         return isNullOrEmpty(path) ? "/"
@@ -462,33 +463,33 @@ public final class StringSupport {
     /**
      * 使用','将字符串连接
      *
-     * @param strs
-     * @return
+     * @param strings String[]
+     * @return String
      */
-    public static String concatenateStr(String... strs) {
-        return concatenateStr(strs.length * 16 + strs.length, ',', strs);
+    public static String concatenateStr(String... strings) {
+        return concatenateStr(strings.length * 16 + strings.length, ',', strings);
     }
 
     /**
      * 指定缓冲区长度, 使用','将字符串连接
      *
      * @param capacity 缓冲区长度
-     * @param strs     字符串数组
-     * @return
+     * @param strings  字符串数组
+     * @return String
      */
-    public static String concatenateStr(int capacity, String... strs) {
-        return concatenateStr(capacity, ',', strs);
+    public static String concatenateStr(int capacity, String... strings) {
+        return concatenateStr(capacity, ',', strings);
     }
 
     /**
      * 使用指定符号将字符串连接
      *
-     * @param symbol 连接符号
-     * @param strs   字符串数组
-     * @return
+     * @param symbol  连接符号
+     * @param strings 字符串数组
+     * @return String
      */
-    public static String concatenateStr(char symbol, String... strs) {
-        return concatenateStr(strs.length * 16 + strs.length, symbol, strs);
+    public static String concatenateStr(char symbol, String... strings) {
+        return concatenateStr(strings.length * 16 + strings.length, symbol, strings);
     }
 
     /**
@@ -496,16 +497,16 @@ public final class StringSupport {
      *
      * @param capacity 缓冲区长度
      * @param symbol   连接符号
-     * @param strs     字符串数组
-     * @return
+     * @param strings  字符串数组
+     * @return String
      */
-    public static String concatenateStr(int capacity, char symbol, String... strs) {
-        if (strs == null || strs.length == 0)
+    public static String concatenateStr(int capacity, char symbol, String... strings) {
+        if (strings == null || strings.length == 0)
             return CONST_EMPTY;
         StringBuilder builder = new StringBuilder(capacity);
-        for (int i = 0; i < strs.length; i++) {
-            builder.append(strs[i]);
-            if (i < strs.length - 1)
+        for (int i = 0; i < strings.length; i++) {
+            builder.append(strings[i]);
+            if (i < strings.length - 1)
                 builder.append(symbol);
         }
         return builder.toString();
@@ -545,8 +546,8 @@ public final class StringSupport {
     }
 
     /**
-     * @param input
-     * @return
+     * @param input byte[]
+     * @return String
      */
     public static String getAsciiString(byte[] input) {
         StringBuilder builder = new StringBuilder(input.length);

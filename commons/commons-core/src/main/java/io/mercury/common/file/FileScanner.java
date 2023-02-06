@@ -47,7 +47,7 @@ public final class FileScanner {
                                     @Nonnull File path,
                                     @Nonnull FileFilter filter) {
         File[] listFiles = path.listFiles();
-        if (listFiles != null && listFiles.length != 0) {
+        if (listFiles != null) {
             for (File file : listFiles) {
                 if (file.isDirectory())
                     // 如果文件是一个目录, 递归执行

@@ -23,12 +23,10 @@ public class UnwrappedWeakReference<T> extends WeakReference<T> {
     public boolean equals(Object obj) {
         // unwrap both objects!
         T thisObject = this.get();
-
         // if the other object is also a WeakRefe
         if (obj instanceof WeakReference) {
             obj = ((WeakReference<?>) obj).get();
         }
-
         // check if anything is null (was garbage collected)
         if (thisObject == null) {
             return obj == null;
@@ -40,7 +38,6 @@ public class UnwrappedWeakReference<T> extends WeakReference<T> {
     public int hashCode() {
         // unwrap me!
         T thisObject = this.get();
-
         // check if anything is null (was garbage collected)
         if (thisObject == null) {
             return 0;

@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Documented
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.LOCAL_VARIABLE })
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.LOCAL_VARIABLE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LockHeld {
 }

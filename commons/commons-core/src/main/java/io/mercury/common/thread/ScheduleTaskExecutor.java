@@ -31,8 +31,9 @@ public final class ScheduleTaskExecutor {
     @Deprecated
     public static Timer startDelayTask(@Nonnull LocalDateTime firstTime,
                                        @Nonnull Runnable runnable) {
-        return startDelayTask(Duration.between(LocalDateTime.now(), firstTime).toMillis(), TimeUnit.MILLISECONDS,
-                runnable);
+        return startDelayTask(
+                Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+                TimeUnit.MILLISECONDS, runnable);
     }
 
     /**

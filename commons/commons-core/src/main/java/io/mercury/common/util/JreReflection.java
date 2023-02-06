@@ -15,12 +15,12 @@ public final class JreReflection {
     }
 
     /**
-     * @param <R>
-     * @param <T>
-     * @param clazz
-     * @param fieldName
-     * @return
-     * @throws RuntimeReflectionException
+     * @param <R>       R type
+     * @param <T>       T type
+     * @param clazz     Class<T>
+     * @param fieldName String
+     * @return R object
+     * @throws RuntimeReflectionException rre
      */
     public static <R, T> R extractField(Class<T> clazz, String fieldName) throws RuntimeReflectionException {
         return extractField(clazz, null, fieldName);

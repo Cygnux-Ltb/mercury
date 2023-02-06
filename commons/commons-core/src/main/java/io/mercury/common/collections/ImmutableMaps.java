@@ -140,25 +140,29 @@ public final class ImmutableMaps {
         if (ArrayUtil.isNullOrEmpty(pairs))
             return ImmutableMapFactoryImpl.INSTANCE.empty();
         switch (pairs.length) {
-            case 1:
+            case 1 -> {
                 return ImmutableMapFactoryImpl.INSTANCE.with(
                         pairs[0].getOne(), pairs[0].getTwo());
-            case 2:
+            }
+            case 2 -> {
                 return ImmutableMapFactoryImpl.INSTANCE.with(
                         pairs[0].getOne(), pairs[0].getTwo(),
                         pairs[1].getOne(), pairs[1].getTwo());
-            case 3:
+            }
+            case 3 -> {
                 return ImmutableMapFactoryImpl.INSTANCE.with(
                         pairs[0].getOne(), pairs[0].getTwo(),
                         pairs[1].getOne(), pairs[1].getTwo(),
                         pairs[2].getOne(), pairs[2].getTwo());
-            case 4:
+            }
+            case 4 -> {
                 return ImmutableMapFactoryImpl.INSTANCE.with(
                         pairs[0].getOne(), pairs[0].getTwo(),
                         pairs[1].getOne(), pairs[1].getTwo(),
                         pairs[2].getOne(), pairs[2].getTwo(),
                         pairs[3].getOne(), pairs[3].getTwo());
-            default: {
+            }
+            default -> {
                 return newImmutableMap(Stream.of(pairs).collect(
                         Collectors.toMap(Pair::getOne, Pair::getTwo)));
             }

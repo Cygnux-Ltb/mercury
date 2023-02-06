@@ -1,5 +1,13 @@
 package io.mercury.common.param;
 
+import io.mercury.common.util.BitOperator;
+import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
+import org.eclipse.collections.impl.map.mutable.primitive.LongObjectHashMap;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import static io.mercury.common.datetime.DateTimeUtil.date;
 import static io.mercury.common.datetime.DateTimeUtil.datetimeOfSecond;
 import static io.mercury.common.datetime.DateTimeUtil.timeOfSecond;
@@ -10,15 +18,6 @@ import static java.lang.Boolean.parseBoolean;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-
-import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
-import org.eclipse.collections.impl.map.mutable.primitive.LongObjectHashMap;
-
-import io.mercury.common.util.BitOperator;
 
 public class JointKeyParams<K extends JointKey> {
 

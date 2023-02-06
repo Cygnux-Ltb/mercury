@@ -20,17 +20,17 @@ import org.eclipse.collections.api.block.procedure.primitive.LongObjectProcedure
 @FunctionalInterface
 public interface LongObjConsumer<T> extends LongObjectProcedure<T> {
 
-	/**
-	 * Performs this operation on the given arguments.
-	 *
-	 * @param l the first input argument
-	 * @param t the second input argument
-	 */
-	void accept(long l, T t);
+    /**
+     * Performs this operation on the given arguments.
+     *
+     * @param l the first input argument
+     * @param t the second input argument
+     */
+    void accept(long l, T t);
 
-	@Override
-	default void value(long l, T t) {
-		accept(l, t);
-	}
+    @Override
+    default void value(long l, T t) {
+        accept(l, t);
+    }
 
 }

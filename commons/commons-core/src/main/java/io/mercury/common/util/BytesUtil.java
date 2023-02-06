@@ -11,7 +11,7 @@ public final class BytesUtil {
 
     /**
      * @param bytes byte[]
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException iae
      */
     public static void checkBytesNotNull(byte[] bytes) throws IllegalArgumentException {
         if (bytes == null)

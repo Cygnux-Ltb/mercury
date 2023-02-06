@@ -19,7 +19,6 @@
         <module>commons-concurrent</module>
         <module>commons-config</module>
         <module>commons-core</module>
-        <module>commons-injection</module>
         <module>commons-graph</module>
         <module>commons-log4j2</module>
         <module>commons-reflect</module>

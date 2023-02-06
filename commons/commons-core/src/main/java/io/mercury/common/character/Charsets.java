@@ -1,9 +1,9 @@
 package io.mercury.common.character;
 
+import io.mercury.common.util.StringSupport;
+
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-
-import io.mercury.common.util.StringSupport;
 
 public interface Charsets {
 
@@ -36,7 +36,7 @@ public interface Charsets {
     Charset GB2312 = Charset.forName("GB2312");
 
     static void main(String[] args) {
-        Charset.availableCharsets().entrySet().forEach(System.out::println);
+        Charset.availableCharsets().values().forEach(System.out::println);
     }
 
 }

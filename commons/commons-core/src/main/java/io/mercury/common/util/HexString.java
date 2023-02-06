@@ -40,7 +40,7 @@ public final class HexString {
     /**
      * @param hex String
      * @return HexString
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException iae
      */
     private static HexString createHexString(String hex) throws IllegalArgumentException {
         // though method is private, leaving checks in place to show intent
@@ -69,7 +69,7 @@ public final class HexString {
     /**
      * @param bytes byte[]
      * @return HexString
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException iae
      */
     private static HexString createHexString(byte[] bytes) throws IllegalArgumentException {
         // though method is private, leaving checks in place to show intent

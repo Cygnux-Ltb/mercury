@@ -8,8 +8,11 @@ import java.time.ZoneOffset;
 public final class TimePoint implements Comparable<TimePoint> {
 
     private final int date;
+
     private final int time;
+
     private final int nano;
+
     private final ZoneOffset offset;
 
     /**
@@ -90,17 +93,15 @@ public final class TimePoint implements Comparable<TimePoint> {
 
     @Override
     public int compareTo(@Nullable TimePoint o) {
-        return o == null ? -1
-                : date < o.date ? -1
-                : date > o.date ? 1
-                : time < o.time ? -1
-                : time > o.time ? 1
-                : nano < o.nano ? -1
-                : nano > o.nano ? 1
-                : offset.getTotalSeconds() < o.offset.getTotalSeconds()
-                ? -1
-                : offset.getId().equals(o.offset.getId()) ? 0
-                : 1;
+        return o == null ? -1 : date < o.date
+                ? -1 : date > o.date
+                ? 1 : time < o.time
+                ? -1 : time > o.time
+                ? 1 : nano < o.nano
+                ? -1 : nano > o.nano
+                ? 1 : offset.getTotalSeconds() < o.offset.getTotalSeconds()
+                ? -1 : offset.getId().equals(o.offset.getId())
+                ? 0 : 1;
     }
 
     public static void main(String[] args) {

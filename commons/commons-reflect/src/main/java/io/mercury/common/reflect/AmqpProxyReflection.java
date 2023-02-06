@@ -37,7 +37,7 @@ public final class AmqpProxyReflection {
     @SafeVarargs
     public final <A extends Annotation> void initialize(String scanPackage, Class<A>... annotations) {
         if (isInitialized.compareAndSet(false, true)) {
-            MutableMap<Class<?>, ImmutableSet<Method>> tempMap = MutableMaps.newUnifiedMap();
+            MutableMap<Class<? extends Annotation>, ImmutableSet<Method>> tempMap = MutableMaps.newUnifiedMap();
             for (Class<A> annotation : annotations) {
                 tempMap.put(annotation, scanPackage(scanPackage, annotation));
             }
@@ -47,7 +47,7 @@ public final class AmqpProxyReflection {
         }
     }
 
-    private ImmutableMap<Class<?>, ImmutableSet<Method>> annotationMethodMap;
+    private ImmutableMap<Class<? extends Annotation>, ImmutableSet<Method>> annotationMethodMap;
 
     /**
      * @param <A>         Annotation type
@@ -57,11 +57,12 @@ public final class AmqpProxyReflection {
      */
     public <A extends Annotation> ImmutableSet<Method> scanPackage(String scanPackage, Class<A> annotation) {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
-                .setUrls(ClasspathHelper.forPackage(scanPackage)).setScanners(Scanners.SubTypes,
-                        Scanners.MethodsAnnotated, Scanners.MethodsParameter, Scanners.TypesAnnotated));
-        ImmutableSet<Method> immutableSet = newImmutableSet(reflections.getMethodsAnnotatedWith(annotation));
-        immutableSet.each(this::assertionProxyMethod);
-        return immutableSet;
+                .setUrls(ClasspathHelper.forPackage(scanPackage))
+                .setScanners(Scanners.SubTypes, Scanners.MethodsAnnotated,
+                        Scanners.MethodsParameter, Scanners.TypesAnnotated));
+        ImmutableSet<Method> methods = newImmutableSet(reflections.getMethodsAnnotatedWith(annotation));
+        methods.each(this::assertionProxyMethod);
+        return methods;
     }
 
     /**
@@ -70,7 +71,7 @@ public final class AmqpProxyReflection {
      * @param method Method
      */
     private void assertionProxyMethod(Method method) {
-        if (method.getReturnType() != Void.TYPE)
+        if (MethodUtil.notVoidMethod(method))
             throw new IllegalArgumentException("method [" + method + "] return type is not void");
     }
 

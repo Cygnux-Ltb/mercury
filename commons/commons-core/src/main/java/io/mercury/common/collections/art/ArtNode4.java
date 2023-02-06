@@ -441,14 +441,12 @@ public final class ArtNode4<V> implements ArtNode<V> {
                 if (keys[i] == last) throw new IllegalStateException("duplicate key");
                 if (keys[i] < last) throw new IllegalStateException("wrong key order");
                 last = keys[i];
-                if (node instanceof ArtNode) {
+                if (node instanceof ArtNode<?> artNode) {
                     if (nodeLevel == 0) throw new IllegalStateException("unexpected node type");
-                    ArtNode<?> artNode = (ArtNode<?>) node;
                     artNode.validateInternalState(nodeLevel - 8);
                 } else {
                     if (nodeLevel != 0) throw new IllegalStateException("unexpected node type");
                 }
-
             } else {
                 if (node != null) throw new IllegalStateException("not released node");
             }
@@ -459,9 +457,10 @@ public final class ArtNode4<V> implements ArtNode<V> {
 
     @Override
     public String outputDiagram(String prefix, int level) {
-//        log.debug(">>>> {} level={} nodelevel={} nodekey={}", prefix, level, nodeLevel, nodeKey);
-        return LongAdaptiveRadixTreeMap.outputDiagram(prefix, level, nodeLevel, nodeKey, numChildren,
-                idx -> keys[idx], idx -> nodes[idx]);
+        // log.debug(">>>> {} level={} nodelevel={} nodekey={}", prefix, level, nodeLevel, nodeKey);
+        return LongAdaptiveRadixTreeMap
+                .outputDiagram(prefix, level, nodeLevel, nodeKey, numChildren,
+                        idx -> keys[idx], idx -> nodes[idx]);
     }
 
     @Override
@@ -471,11 +470,10 @@ public final class ArtNode4<V> implements ArtNode<V> {
 
         final List<Map.Entry<Long, V>> list = new ArrayList<>();
         for (int i = 0; i < numChildren; i++) {
-            if (nodeLevel == 0) {
+            if (nodeLevel == 0)
                 list.add(new LongAdaptiveRadixTreeMap.Entry<>(keyPrefix + keys[i], (V) nodes[i]));
-            } else {
+            else
                 list.addAll(((ArtNode<V>) nodes[i]).entries());
-            }
         }
         return list;
     }

@@ -27,7 +27,7 @@ public class FileCompressionUtil {
          */
         GZIP("gzip", "gz", new GzipCompressor()),
 
-        /** poorly supported for now */
+        /* poorly supported for now */
         // LZMA("lzma", "7z", new LzmaCompressor()),
 
         /**
@@ -304,7 +304,8 @@ public class FileCompressionUtil {
     }
 
     private static void uncompress(Algorithm a, File sourceFile, File targetFile,
-                                   boolean deleteSourceFileAfterUncompressed) throws FileAlreadyExistsException, IOException {
+                                   boolean deleteSourceFileAfterUncompressed)
+            throws IOException {
         // check if the src file exists
         if (!sourceFile.canRead()) {
             throw new IOException("Source file " + sourceFile + " neither exists or can be read");
@@ -571,10 +572,10 @@ public class FileCompressionUtil {
 
     }
 
-    /**
+    /*
      * Compressor using the LZMA/7-zip compression algorithm.
      */
-    /**
+    /*
      * removed in 6.0.0 private static class LzmaCompressor implements Compressor {
      *
      * @Override public void compress(File srcFile, File destFile) throws

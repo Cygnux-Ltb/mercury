@@ -18,8 +18,8 @@ public final class LocalDateMap<V> extends TemporalMap<LocalDate, V, LocalDateMa
         super(keyFunc, nextKeyFunc, hasNextKey);
     }
 
-    private static final BiPredicate<LocalDate, LocalDate> HasNextKey
-            = (nextKey, endPoint) -> nextKey.isBefore(endPoint) || nextKey.equals(endPoint);
+    private static final BiPredicate<LocalDate, LocalDate> HasNextKey =
+            (nextKey, endPoint) -> nextKey.isBefore(endPoint) || nextKey.equals(endPoint);
 
     /**
      * @return V

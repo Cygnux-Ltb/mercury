@@ -58,7 +58,6 @@ public final class ObjectsPool {
     @SuppressWarnings("unchecked")
     public <T> T get(final int type, final Supplier<T> supplier) {
         final T obj = (T) pools[type].pop(); // pollFirst is cheaper for empty pool
-
         if (obj == null) {
 //            log.debug("MISS {}", type);
             return supplier.get();

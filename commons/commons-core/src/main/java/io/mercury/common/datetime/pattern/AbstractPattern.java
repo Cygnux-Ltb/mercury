@@ -60,6 +60,7 @@ p       pad next                    pad modifier      1
 public abstract class AbstractPattern implements TemporalPattern {
 
 	private final String pattern;
+
 	private final DateTimeFormatter formatter;
 
 	protected AbstractPattern(String pattern) {

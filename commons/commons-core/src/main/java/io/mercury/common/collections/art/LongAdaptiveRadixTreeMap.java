@@ -257,11 +257,7 @@ public final class LongAdaptiveRadixTreeMap<V> {
     }
 
     private static String charRepeat(char x, int n) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < n; i++) {
-            sb.append(x);
-        }
-        return sb.toString();
+        return String.valueOf(x).repeat(Math.max(0, n));
     }
 
     public static final class Entry<V> implements Map.Entry<Long, V> {

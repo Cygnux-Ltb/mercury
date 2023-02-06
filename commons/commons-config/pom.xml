@@ -11,10 +11,6 @@
     <artifactId>commons-config</artifactId>
     <name>commons-config</name>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>io.mercury</groupId>
@@ -27,6 +23,5 @@
             <artifactId>config</artifactId>
             <version>1.4.2</version>
         </dependency>
-
     </dependencies>
 </project>

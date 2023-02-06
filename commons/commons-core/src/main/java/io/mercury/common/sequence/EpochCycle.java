@@ -65,8 +65,9 @@ public final class EpochCycle {
 
         System.out.println(ZonedDateTime.ofInstant(Instant.ofEpochMilli(l), ZoneOffset.UTC));
 
-        System.out.println(BitFormatter.longBinaryFormat(
-                ZonedDateTime.of(LocalDate.of(3000, 1, 1), LocalTime.MIN, ZoneOffset.UTC).toEpochSecond() * 1000));
+        System.out.println(BitFormatter
+                .longBinaryFormat(ZonedDateTime.of(LocalDate.of(3000, 1, 1),
+                        LocalTime.MIN, ZoneOffset.UTC).toEpochSecond() * 1000));
 
     }
 

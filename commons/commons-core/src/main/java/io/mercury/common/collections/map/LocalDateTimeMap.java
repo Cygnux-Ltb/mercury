@@ -17,8 +17,8 @@ public final class LocalDateTimeMap<V> extends TemporalMap<LocalDateTime, V, Loc
         super(keyFunc, nextKeyFunc, hasNextKey);
     }
 
-    private static final BiPredicate<LocalDateTime, LocalDateTime> HasNextKey
-            = (nextKey, endPoint) -> nextKey.isBefore(endPoint) || nextKey.equals(endPoint);
+    private static final BiPredicate<LocalDateTime, LocalDateTime> HasNextKey =
+            (nextKey, endPoint) -> nextKey.isBefore(endPoint) || nextKey.equals(endPoint);
 
     /**
      * @return V

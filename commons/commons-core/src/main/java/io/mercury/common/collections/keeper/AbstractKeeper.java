@@ -11,36 +11,34 @@ import javax.annotation.concurrent.ThreadSafe;
 import static io.mercury.common.collections.MutableMaps.newConcurrentHashMap;
 
 /**
- * 
- * @author yellow013
- *
  * @param <K>
  * @param <V>
+ * @author yellow013
  */
 @ThreadSafe
 public abstract class AbstractKeeper<K, V> implements Keeper<K, V> {
 
-	protected final ConcurrentMutableMap<K, V> savedMap;
+    protected final ConcurrentMutableMap<K, V> savedMap;
 
-	protected AbstractKeeper() {
-		this(Capacity.L06_SIZE);
-	}
+    protected AbstractKeeper() {
+        this(Capacity.L06_SIZE);
+    }
 
-	protected AbstractKeeper(Capacity capacity) {
-		this.savedMap = newConcurrentHashMap(capacity.value());
-	}
+    protected AbstractKeeper(Capacity capacity) {
+        this.savedMap = newConcurrentHashMap(capacity.value());
+    }
 
-	@Nonnull
-	public V acquire(@Nonnull K key) {
-		return savedMap.getIfAbsentPutWithKey(key, this::createWithKey);
-	}
+    @Nonnull
+    public V acquire(@Nonnull K key) {
+        return savedMap.getIfAbsentPutWithKey(key, this::createWithKey);
+    }
 
-	@CheckForNull
-	public V get(@Nonnull K key) {
-		return savedMap.get(key);
-	}
+    @CheckForNull
+    public V get(@Nonnull K key) {
+        return savedMap.get(key);
+    }
 
-	@AbstractFunction
-	protected abstract V createWithKey(K key);
+    @AbstractFunction
+    protected abstract V createWithKey(K key);
 
 }

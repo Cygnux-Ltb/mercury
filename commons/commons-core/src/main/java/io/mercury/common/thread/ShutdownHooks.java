@@ -42,7 +42,8 @@ public final class ShutdownHooks {
      * @return Thread
      */
     public static Thread addShutdownHook(Runnable hook) {
-        return addShutdownHook("ShutdownHooksSubThread-" + ThreadSafeRandoms.randomUnsignedInt(), hook);
+        return addShutdownHook("ShutdownHooksSubThread-" + ThreadSafeRandoms.randomUnsignedInt(),
+                hook);
     }
 
     /**

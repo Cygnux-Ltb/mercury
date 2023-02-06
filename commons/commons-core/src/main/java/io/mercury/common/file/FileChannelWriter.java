@@ -1,9 +1,11 @@
 package io.mercury.common.file;
 
-import static io.mercury.common.character.Charsets.UTF8;
-import static io.mercury.common.character.Separator.LINE_SEPARATOR;
-import static io.mercury.common.sys.SysProperties.JAVA_IO_TMPDIR_FILE;
+import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.serialization.specific.BytesSerializer;
+import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -14,11 +16,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
-import org.apache.commons.collections4.CollectionUtils;
-
-import io.mercury.common.serialization.specific.BytesSerializer;
+import static io.mercury.common.character.Charsets.UTF8;
+import static io.mercury.common.character.Separator.LINE_SEPARATOR;
+import static io.mercury.common.sys.SysProperties.JAVA_IO_TMPDIR_FILE;
 
 /**
  * Use FileChannel
@@ -27,15 +27,17 @@ import io.mercury.common.serialization.specific.BytesSerializer;
  */
 public final class FileChannelWriter {
 
+    private static final Logger log = Log4j2LoggerFactory.getLogger(FileChannelWriter.class);
+
     private FileChannelWriter() {
     }
 
     /**
      * @param lines  : written data
      * @param target : written target file
-     * @return
-     * @throws NullPointerException
-     * @throws IOException
+     * @return File
+     * @throws NullPointerException npe
+     * @throws IOException          ioe
      */
     public static File write(Collection<String> lines, @Nonnull final File target)
             throws NullPointerException, IOException {
@@ -46,9 +48,9 @@ public final class FileChannelWriter {
      * @param lines  : written data
      * @param target : written target file
      * @param append : append file end
-     * @return
-     * @throws NullPointerException
-     * @throws IOException
+     * @return File
+     * @throws NullPointerException npe
+     * @throws IOException          ioe
      */
     public static File write(Collection<String> lines, @Nonnull File target, boolean append)
             throws NullPointerException, IOException {
@@ -61,9 +63,9 @@ public final class FileChannelWriter {
      * @param target   : Written target file
      * @param capacity : Buffer capacity
      * @param append   : Is append to file end
-     * @return
-     * @throws NullPointerException
-     * @throws IOException
+     * @return File
+     * @throws NullPointerException npe
+     * @throws IOException          ioe
      */
     public static File write(Collection<String> lines, @Nonnull Charset charset, @Nonnull File target,
                              int capacity, boolean append) throws NullPointerException, IOException {
@@ -74,27 +76,33 @@ public final class FileChannelWriter {
     }
 
     /**
-     * @param <T>
+     * @param <T>        T type
      * @param data       : Written data
      * @param serializer : Serialization function
      * @param target     : Written target file
      * @param capacity   : Buffer capacity
      * @param append     : Is append to file end
-     * @return
-     * @throws NullPointerException
-     * @throws IOException
+     * @return File
+     * @throws NullPointerException npe
+     * @throws IOException          ioe
      */
-    public static <T> File write(Collection<T> data, @Nonnull BytesSerializer<T> serializer, @Nonnull File target,
-                                       int capacity, boolean append) throws NullPointerException, IOException {
+    public static <T> File write(Collection<T> data,
+                                 @Nonnull BytesSerializer<T> serializer,
+                                 @Nonnull File target, int capacity, boolean append)
+            throws NullPointerException, IOException {
         if (target == null)
             throw new NullPointerException("target file must not be null.");
         if (capacity < 128)
             capacity = 4096;
         File parentFile = target.getParentFile();
-        if (!parentFile.exists())
-            parentFile.mkdirs();
-        if (!target.exists())
-            target.createNewFile();
+        if (!parentFile.exists()) {
+            boolean succeed = parentFile.mkdirs();
+            log.debug("mkdir -> {} is {}", parentFile, succeed);
+        }
+        if (!target.exists()) {
+            boolean succeed = target.createNewFile();
+            log.debug("create File -> {} is {}", parentFile, succeed);
+        }
         if (CollectionUtils.isNotEmpty(data)) {
             try (RandomAccessFile rafile = new RandomAccessFile(target, "rw")) {
                 if (append) {
@@ -137,9 +145,9 @@ public final class FileChannelWriter {
     }
 
     /**
-     * @param buffer
-     * @param channel
-     * @throws IOException
+     * @param buffer  ByteBuffer
+     * @param channel FileChannel
+     * @throws IOException ioe
      */
     private static void flipAndChannelWrite(ByteBuffer buffer, FileChannel channel) throws IOException {
         // Flip buffer to output

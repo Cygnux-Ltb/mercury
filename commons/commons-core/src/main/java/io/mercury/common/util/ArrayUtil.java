@@ -1,11 +1,11 @@
 package io.mercury.common.util;
 
-import static java.lang.System.arraycopy;
+import io.mercury.common.lang.Asserter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import io.mercury.common.lang.Asserter;
+import static java.lang.System.arraycopy;
 
 public final class ArrayUtil {
 
@@ -13,88 +13,88 @@ public final class ArrayUtil {
     }
 
     /**
-     * @param length
-     * @return
+     * @param length int
+     * @return boolean
      */
     public static boolean illegalLength(int length) {
         return length >= 1;
     }
 
     /**
-     * @param booleans
-     * @return
+     * @param booleans boolean[]
+     * @return boolean
      */
     public static boolean isNullOrEmpty(boolean[] booleans) {
         return booleans == null || booleans.length == 0;
     }
 
     /**
-     * @param bytes
-     * @return
+     * @param bytes byte[]
+     * @return boolean
      */
     public static boolean isNullOrEmpty(byte[] bytes) {
         return bytes == null || bytes.length == 0;
     }
 
     /**
-     * @param chars
-     * @return
+     * @param chars char[]
+     * @return boolean
      */
     public static boolean isNullOrEmpty(char[] chars) {
         return chars == null || chars.length == 0;
     }
 
     /**
-     * @param ints
-     * @return
+     * @param ints int[]
+     * @return boolean
      */
     public static boolean isNullOrEmpty(int[] ints) {
         return ints == null || ints.length == 0;
     }
 
     /**
-     * @param longs
-     * @return
+     * @param longs long[]
+     * @return boolean
      */
     public static boolean isNullOrEmpty(long[] longs) {
         return longs == null || longs.length == 0;
     }
 
     /**
-     * @param floats
-     * @return
+     * @param floats float[]
+     * @return boolean
      */
     public static boolean isNullOrEmpty(float[] floats) {
         return floats == null || floats.length == 0;
     }
 
     /**
-     * @param doubles
-     * @return
+     * @param doubles double[]
+     * @return boolean
      */
     public static boolean isNullOrEmpty(double[] doubles) {
         return doubles == null || doubles.length == 0;
     }
 
     /**
-     * @param array
-     * @return
+     * @param array String[]
+     * @return boolean
      */
     public static boolean isNullOrEmpty(String[] array) {
         return array == null || array.length == 0;
     }
 
     /**
-     * @param array
-     * @return
+     * @param array Object[]
+     * @return boolean
      */
     public static boolean isNullOrEmpty(Object[] array) {
         return array == null || array.length == 0;
     }
 
     /**
-     * @param origin
-     * @return
+     * @param origin boolean[]
+     * @return boolean[]
      */
     public static boolean[] newOf(@Nonnull boolean[] origin) {
         boolean[] target = new boolean[origin.length];
@@ -103,8 +103,8 @@ public final class ArrayUtil {
     }
 
     /**
-     * @param origin
-     * @return
+     * @param origin byte[]
+     * @return byte[]
      */
     public static byte[] newOf(@Nonnull byte[] origin) {
         byte[] target = new byte[origin.length];
@@ -113,8 +113,8 @@ public final class ArrayUtil {
     }
 
     /**
-     * @param origin
-     * @return
+     * @param origin char[]
+     * @return char[]
      */
     public static char[] newOf(@Nonnull char[] origin) {
         char[] target = new char[origin.length];
@@ -123,8 +123,8 @@ public final class ArrayUtil {
     }
 
     /**
-     * @param origin
-     * @return
+     * @param origin int[]
+     * @return int[]
      */
     public static int[] newOf(@Nonnull int[] origin) {
         int[] target = new int[origin.length];
@@ -133,8 +133,8 @@ public final class ArrayUtil {
     }
 
     /**
-     * @param origin
-     * @return
+     * @param origin long[]
+     * @return long[]
      */
     public static long[] newOf(@Nonnull long[] origin) {
         long[] target = new long[origin.length];
@@ -143,8 +143,8 @@ public final class ArrayUtil {
     }
 
     /**
-     * @param origin
-     * @return
+     * @param origin float[]
+     * @return float[]
      */
     public static float[] newOf(@Nonnull float[] origin) {
         float[] target = new float[origin.length];
@@ -153,8 +153,8 @@ public final class ArrayUtil {
     }
 
     /**
-     * @param origin
-     * @return
+     * @param origin double[]
+     * @return double[]
      */
     public static double[] newOf(@Nonnull double[] origin) {
         double[] target = new double[origin.length];
@@ -163,8 +163,8 @@ public final class ArrayUtil {
     }
 
     /**
-     * @param origin
-     * @return
+     * @param origin String[]
+     * @return String[]
      */
     public static String[] newOf(@Nonnull String[] origin) {
         String[] target = new String[origin.length];
@@ -173,8 +173,8 @@ public final class ArrayUtil {
     }
 
     /**
-     * @param origin
-     * @return
+     * @param origin Object[]
+     * @return Object[]
      */
     public static Object[] newOf(@Nonnull Object[] origin) {
         Object[] target = new Object[origin.length];
@@ -183,9 +183,9 @@ public final class ArrayUtil {
     }
 
     /**
-     * @param origin
-     * @param target
-     * @return
+     * @param origin boolean[]
+     * @param target boolean[]
+     * @return boolean[]
      */
     public static boolean[] copy(@Nonnull boolean[] origin, @Nullable boolean[] target) {
         Asserter.requiredLength(origin, 1, "origin");
@@ -196,9 +196,9 @@ public final class ArrayUtil {
     }
 
     /**
-     * @param origin
-     * @param target
-     * @return
+     * @param origin byte[]
+     * @param target byte[]
+     * @return byte[]
      */
     public static byte[] copy(@Nonnull byte[] origin, @Nullable byte[] target) {
         Asserter.requiredLength(origin, 1, "origin");
@@ -209,9 +209,9 @@ public final class ArrayUtil {
     }
 
     /**
-     * @param origin
-     * @param target
-     * @return
+     * @param origin char[]
+     * @param target char[]
+     * @return char[]
      */
     public static char[] copy(@Nonnull char[] origin, @Nullable char[] target) {
         Asserter.requiredLength(origin, 1, "origin");
@@ -222,9 +222,9 @@ public final class ArrayUtil {
     }
 
     /**
-     * @param origin
-     * @param target
-     * @return
+     * @param origin int[]
+     * @param target int[]
+     * @return int[]
      */
     public static int[] copy(@Nonnull int[] origin, @Nullable int[] target) {
         Asserter.requiredLength(origin, 1, "origin");
@@ -235,9 +235,9 @@ public final class ArrayUtil {
     }
 
     /**
-     * @param origin
-     * @param target
-     * @return
+     * @param origin long[]
+     * @param target long[]
+     * @return long[]
      */
     public static long[] copy(@Nonnull long[] origin, @Nullable long[] target) {
         Asserter.requiredLength(origin, 1, "origin");
@@ -248,9 +248,9 @@ public final class ArrayUtil {
     }
 
     /**
-     * @param origin
-     * @param target
-     * @return
+     * @param origin float[]
+     * @param target float[]
+     * @return float[]
      */
     public static float[] copy(@Nonnull float[] origin, @Nullable float[] target) {
         Asserter.requiredLength(origin, 1, "origin");
@@ -261,9 +261,9 @@ public final class ArrayUtil {
     }
 
     /**
-     * @param origin
-     * @param target
-     * @return
+     * @param origin double[]
+     * @param target double[]
+     * @return double[]
      */
     public static double[] copy(@Nonnull double[] origin, @Nullable double[] target) {
         Asserter.requiredLength(origin, 1, "origin");
@@ -274,9 +274,9 @@ public final class ArrayUtil {
     }
 
     /**
-     * @param origin
-     * @param target
-     * @return
+     * @param origin String[]
+     * @param target String[]
+     * @return String[]
      */
     public static String[] copy(@Nonnull String[] origin, @Nullable String[] target) {
         Asserter.requiredLength(origin, 1, "origin");
@@ -287,9 +287,9 @@ public final class ArrayUtil {
     }
 
     /**
-     * @param origin
-     * @param target
-     * @return
+     * @param origin Object[]
+     * @param target Object[]
+     * @return Object[]
      */
     public static Object[] copy(@Nonnull Object[] origin, @Nullable Object[] target) {
         Asserter.requiredLength(origin, 1, "origin");

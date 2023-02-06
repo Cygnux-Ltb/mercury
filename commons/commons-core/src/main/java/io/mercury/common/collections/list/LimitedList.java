@@ -1,11 +1,10 @@
 package io.mercury.common.collections.list;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import io.mercury.common.annotation.AbstractFunction;
 import org.eclipse.collections.impl.list.mutable.FastList;
 
-import io.mercury.common.annotation.AbstractFunction;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class LimitedList<L extends List<E>, E> extends LimitedContainer<E> {
 

@@ -45,7 +45,8 @@ public class TimeWindow implements Serial<TimeWindow> {
 
     protected TimeWindow(TimeWindow window) {
         this(window.start.plusSeconds(window.duration.getSeconds()),
-                window.end.plusSeconds(window.duration.getSeconds()), window.offset);
+                window.end.plusSeconds(window.duration.getSeconds()),
+                window.offset);
     }
 
     public static TimeWindow getNext(TimeWindow window) {
@@ -113,7 +114,8 @@ public class TimeWindow implements Serial<TimeWindow> {
                                                                @Nonnull Duration duration) {
         return segmentationWindow(LocalDateTime.of(startDate, start),
                 LocalDateTime.of(start.isAfter(end)
-                        ? startDate.plusDays(1) : startDate, end), offset, duration);
+                        ? startDate.plusDays(1)
+                        : startDate, end), offset, duration);
     }
 
     /**

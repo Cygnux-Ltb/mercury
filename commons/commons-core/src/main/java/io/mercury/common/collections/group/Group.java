@@ -1,9 +1,8 @@
 package io.mercury.common.collections.group;
 
+import javax.annotation.Nonnull;
 import java.io.Serial;
 import java.util.Set;
-
-import javax.annotation.Nonnull;
 
 /**
  * @param <K>

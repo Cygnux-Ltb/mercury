@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class TimeAtomicBoolean {
 
     private final AtomicBoolean value;
+
     private final Boolean expectedValue;
 
     private long updatedTime;

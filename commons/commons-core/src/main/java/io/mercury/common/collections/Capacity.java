@@ -1,10 +1,9 @@
 package io.mercury.common.collections;
 
-import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
-import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
-
 import io.mercury.common.util.BitFormatter;
 import io.mercury.common.util.BitOperator;
+import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
+import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
 
 public enum Capacity {
 

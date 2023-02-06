@@ -17,11 +17,11 @@ public final class SystemUtil {
     private static final String SUN_PID_PROP_NAME = "sun.java.launcher.pid";
 
     private static final String OS_NAME;
+
     private static final long PID;
 
     static {
         OS_NAME = System.getProperty("os.name").toLowerCase();
-
         long pid = PID_NOT_FOUND;
         try {
             final Class<?> processHandleClass = Class.forName("java.lang.ProcessHandle");
@@ -39,7 +39,6 @@ public final class SystemUtil {
                     pid = Long.parseLong(jvmName.split("@")[0]);
                 }
             } catch (final Throwable ignore2) {
-
             }
         }
         PID = pid;
