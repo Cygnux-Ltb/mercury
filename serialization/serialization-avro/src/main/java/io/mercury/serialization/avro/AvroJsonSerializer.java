@@ -3,6 +3,7 @@ package io.mercury.serialization.avro;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.apache.avro.io.DatumWriter;
@@ -41,7 +42,7 @@ public class AvroJsonSerializer<T extends SpecificRecord> implements JsonSeriali
     }
 
     @Override
-    public String serialization(T obj) {
+    public String serialization(@Nonnull T obj) {
         try {
             // TODO 对象可重用
             encoder = EncoderFactory.get().jsonEncoder(obj.getSchema(), outputStream);
