@@ -146,7 +146,8 @@ public abstract class Relationship {
     }
 
     enum DestType {
-        Exchange, Queue
+        Exchange,
+        Queue
     }
 
 }

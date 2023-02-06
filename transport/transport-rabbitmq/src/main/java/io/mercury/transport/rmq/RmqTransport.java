@@ -1,31 +1,28 @@
 package io.mercury.transport.rmq;
 
-import static io.mercury.common.thread.SleepSupport.sleep;
-import static java.lang.System.currentTimeMillis;
-
-import java.io.Closeable;
-import java.io.IOException;
-import java.util.concurrent.TimeoutException;
-
-import javax.annotation.Nonnull;
-
-import io.mercury.transport.exception.ConnectionFailedException;
-import org.slf4j.Logger;
-
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Method;
 import com.rabbitmq.client.ShutdownSignalException;
-
 import io.mercury.common.functional.ThrowableHandler;
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Transport;
 import io.mercury.transport.api.TransportComponent;
+import io.mercury.transport.exception.ConnectionFailedException;
 import io.mercury.transport.rmq.configurator.RmqConnection;
+import org.slf4j.Logger;
+
+import javax.annotation.Nonnull;
+import java.io.Closeable;
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+
+import static io.mercury.common.thread.SleepSupport.sleep;
+import static java.lang.System.currentTimeMillis;
 
 public abstract class RmqTransport extends TransportComponent implements Transport, Closeable {
 
@@ -113,7 +110,7 @@ public abstract class RmqTransport extends TransportComponent implements Transpo
         }
     }
 
-    protected boolean isNormalShutdown(ShutdownSignalException sig) {
+    private boolean isNormalShutdown(ShutdownSignalException sig) {
         Method reason = sig.getReason();
         if (reason instanceof AMQP.Channel.Close channelClose) {
             return channelClose.getReplyCode() == AMQP.REPLY_SUCCESS
@@ -126,7 +123,7 @@ public abstract class RmqTransport extends TransportComponent implements Transpo
     }
 
     protected void closeConnection() {
-        log.info("Call func -> RabbitMqTransport::closeConnection()");
+        log.info("Call Func -> RabbitMqTransport::closeConnection()");
         try {
             if (channel != null && channel.isOpen()) {
                 try {
@@ -149,13 +146,13 @@ public abstract class RmqTransport extends TransportComponent implements Transpo
                 }
             }
         } catch (IOException | TimeoutException e) {
-            log.error("Catch: {}, msg: {}", e.getClass().getSimpleName(), e.getMessage(), e);
+            log.error("Catch Exception: {}, msg: {}", e.getClass().getSimpleName(), e.getMessage(), e);
         }
     }
 
     @Override
     public boolean closeIgnoreException() {
-        log.info("Call func -> RabbitMqTransport::closeIgnoreException(), tag==[{}]", tag);
+        log.info("Call Func -> RabbitMqTransport::closeIgnoreException(), tag==[{}]", tag);
         closeConnection();
         newEndTime();
         return true;

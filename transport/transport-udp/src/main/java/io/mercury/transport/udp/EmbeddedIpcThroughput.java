@@ -15,18 +15,6 @@
  */
 package io.mercury.transport.udp;
 
-import static org.agrona.BitUtil.CACHE_LINE_LENGTH;
-import static org.agrona.SystemUtil.loadPropertiesFiles;
-
-import java.nio.ByteBuffer;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.agrona.BufferUtil;
-import org.agrona.DirectBuffer;
-import org.agrona.concurrent.IdleStrategy;
-import org.agrona.concurrent.SigInt;
-import org.agrona.concurrent.UnsafeBuffer;
-
 import io.aeron.Aeron;
 import io.aeron.CommonContext;
 import io.aeron.ConcurrentPublication;
@@ -34,6 +22,17 @@ import io.aeron.Publication;
 import io.aeron.Subscription;
 import io.aeron.driver.MediaDriver;
 import io.aeron.driver.ThreadingMode;
+import org.agrona.BufferUtil;
+import org.agrona.DirectBuffer;
+import org.agrona.concurrent.IdleStrategy;
+import org.agrona.concurrent.SigInt;
+import org.agrona.concurrent.UnsafeBuffer;
+
+import java.nio.ByteBuffer;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static org.agrona.BitUtil.CACHE_LINE_LENGTH;
+import static org.agrona.SystemUtil.loadPropertiesFiles;
 
 /**
  * Throughput test using
@@ -41,86 +40,87 @@ import io.aeron.driver.ThreadingMode;
  * transport.
  */
 public class EmbeddedIpcThroughput {
-	private static final int BURST_LENGTH = 1_000_000;
-	private static final int MESSAGE_LENGTH = SampleConfiguration.MESSAGE_LENGTH;
-	private static final int FRAGMENT_COUNT_LIMIT = SampleConfiguration.FRAGMENT_COUNT_LIMIT;
-	private static final String CHANNEL = CommonContext.IPC_CHANNEL;
-	private static final int STREAM_ID = SampleConfiguration.STREAM_ID;
+    private static final int BURST_LENGTH = 1_000_000;
+    private static final int MESSAGE_LENGTH = SampleConfiguration.MESSAGE_LENGTH;
+    private static final int FRAGMENT_COUNT_LIMIT = SampleConfiguration.FRAGMENT_COUNT_LIMIT;
+    private static final String CHANNEL = CommonContext.IPC_CHANNEL;
+    private static final int STREAM_ID = SampleConfiguration.STREAM_ID;
 
-	/**
-	 * Main method for launching the process.
-	 *
-	 * @param args passed to the process.
-	 * @throws InterruptedException if the thread is interrupted while waiting on
-	 *                              the threads to join.
-	 */
-	public static void main(final String[] args) throws InterruptedException {
-		loadPropertiesFiles(args);
+    /**
+     * Main method for launching the process.
+     *
+     * @param args passed to the process.
+     * @throws InterruptedException if the thread is interrupted while waiting on
+     *                              the threads to join.
+     */
+    public static void main(final String[] args) throws InterruptedException {
+        loadPropertiesFiles(args);
 
-		final AtomicBoolean running = new AtomicBoolean(true);
-		SigInt.register(() -> running.set(false));
+        final AtomicBoolean running = new AtomicBoolean(true);
+        SigInt.register(() -> running.set(false));
 
-		final MediaDriver.Context ctx = new MediaDriver.Context().threadingMode(ThreadingMode.SHARED);
+        final MediaDriver.Context ctx = new MediaDriver.Context().threadingMode(ThreadingMode.SHARED);
 
-		try (MediaDriver ignore = MediaDriver.launch(ctx);
-				Aeron aeron = Aeron.connect();
-				Subscription subscription = aeron.addSubscription(CHANNEL, STREAM_ID);
-				Publication publication = aeron.addPublication(CHANNEL, STREAM_ID)) {
-			final ImageRateSubscriber subscriber = new ImageRateSubscriber(FRAGMENT_COUNT_LIMIT, running, subscription);
-			final Thread subscriberThread = new Thread(subscriber);
-			subscriberThread.setName("subscriber");
-			final Thread publisherThread = new Thread(new Publisher(running, publication));
-			publisherThread.setName("publisher");
-			final Thread rateReporterThread = new Thread(new ImageRateReporter(MESSAGE_LENGTH, running, subscriber));
-			rateReporterThread.setName("rate-reporter");
+        try (MediaDriver ignore = MediaDriver.launch(ctx);
+             Aeron aeron = Aeron.connect();
+             Subscription subscription = aeron.addSubscription(CHANNEL, STREAM_ID);
+             Publication publication = aeron.addPublication(CHANNEL, STREAM_ID)) {
+            final ImageRateSubscriber subscriber = new ImageRateSubscriber(FRAGMENT_COUNT_LIMIT, running, subscription);
+            final Thread subscriberThread = new Thread(subscriber);
+            subscriberThread.setName("subscriber");
+            final Thread publisherThread = new Thread(new Publisher(running, publication));
+            publisherThread.setName("publisher");
+            final Thread rateReporterThread = new Thread(new ImageRateReporter(MESSAGE_LENGTH, running, subscriber));
+            rateReporterThread.setName("rate-reporter");
 
-			rateReporterThread.start();
-			subscriberThread.start();
-			publisherThread.start();
+            rateReporterThread.start();
+            subscriberThread.start();
+            publisherThread.start();
 
-			subscriberThread.join();
-			publisherThread.join();
-			rateReporterThread.join();
-		}
-	}
+            subscriberThread.join();
+            publisherThread.join();
+            rateReporterThread.join();
+        }
+    }
 
-	static final class Publisher implements Runnable {
-		private final AtomicBoolean running;
-		private final Publication publication;
+    static final class Publisher implements Runnable {
+        private final AtomicBoolean running;
+        private final Publication publication;
 
-		Publisher(final AtomicBoolean running, final Publication publication) {
-			this.running = running;
-			this.publication = publication;
-		}
+        Publisher(final AtomicBoolean running, final Publication publication) {
+            this.running = running;
+            this.publication = publication;
+        }
 
-		public void run() {
-			final IdleStrategy idleStrategy = SampleConfiguration.newIdleStrategy();
-			final Publication publication = this.publication;
-			final AtomicBoolean running = this.running;
-			final ByteBuffer byteBuffer = BufferUtil.allocateDirectAligned(publication.maxMessageLength(),
-					CACHE_LINE_LENGTH);
-			final UnsafeBuffer buffer = new UnsafeBuffer(byteBuffer);
-			long backPressureCount = 0;
-			long totalMessageCount = 0;
+        public void run() {
+            final IdleStrategy idleStrategy = SampleConfiguration.newIdleStrategy();
+            final Publication publication = this.publication;
+            final AtomicBoolean running = this.running;
+            final ByteBuffer byteBuffer = BufferUtil.allocateDirectAligned(publication.maxMessageLength(),
+                    CACHE_LINE_LENGTH);
+            final UnsafeBuffer buffer = new UnsafeBuffer(byteBuffer);
+            long backPressureCount = 0;
+            long totalMessageCount = 0;
 
-			outputResults: while (running.get()) {
-				for (int i = 0; i < BURST_LENGTH; i++) {
-					idleStrategy.reset();
-					while (publication.offer(buffer, 0, MESSAGE_LENGTH) <= 0) {
-						++backPressureCount;
-						if (!running.get()) {
-							break outputResults;
-						}
+            outputResults:
+            while (running.get()) {
+                for (int i = 0; i < BURST_LENGTH; i++) {
+                    idleStrategy.reset();
+                    while (publication.offer(buffer, 0, MESSAGE_LENGTH) <= 0) {
+                        ++backPressureCount;
+                        if (!running.get()) {
+                            break outputResults;
+                        }
 
-						idleStrategy.idle();
-					}
+                        idleStrategy.idle();
+                    }
 
-					++totalMessageCount;
-				}
-			}
+                    ++totalMessageCount;
+                }
+            }
 
-			final double backPressureRatio = backPressureCount / (double) totalMessageCount;
-			System.out.format("Publisher back pressure ratio: %f%n", backPressureRatio);
-		}
-	}
+            final double backPressureRatio = backPressureCount / (double) totalMessageCount;
+            System.out.format("Publisher back pressure ratio: %f%n", backPressureRatio);
+        }
+    }
 }

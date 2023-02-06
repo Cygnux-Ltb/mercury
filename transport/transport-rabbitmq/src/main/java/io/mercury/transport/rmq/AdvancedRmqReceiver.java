@@ -337,7 +337,6 @@ public class AdvancedRmqReceiver<T> extends RmqTransport
             }
             // # Set QOS parameter end *****
         }
-
         // 如果[selfAckConsumer]不为null, 设置selfAckConsumer
         if (selfAckConsumer != null) {
             // # Set SelfAckConsumer start *****
@@ -417,19 +416,24 @@ public class AdvancedRmqReceiver<T> extends RmqTransport
             // # Set Consume start *****
             try {
                 channel.basicConsume(
-                        // queue : the name of the queue
+                        /*
+                         *queue : the name of the queue
+                         */
                         queueName,
-                        // autoAck :
-                        // true if the server should consider messages acknowledged once delivered;
-                        // false if the server should expect explicit acknowledgements
+                        /*
+                         * autoAck : true if the server should consider messages acknowledged once delivered;
+                         * false if the server should expect explicit acknowledgements
+                         */
                         autoAck,
-                        // consumerTag :
-                        // consumerTag a client-generated consumer tag to establish context
+                        /*
+                         * consumerTag : consumerTag a client-generated consumer tag to establish context
+                         */
                         tag,
-                        // noLocal :
-                        // true if the server should not deliver to this consumer messages published on
-                        // this channel's connection.
-                        // Note! that the RabbitMQ server does not support this flag.
+                        /*
+                         * noLocal : true if the server should not deliver to this consumer messages published
+                         * on this channel's connection.
+                         * Note! that the RabbitMQ server does not support this flag.
+                         */
                         false,
                         // exclusive : true if this is an exclusive consumer.
                         exclusive,

@@ -4,84 +4,84 @@ import io.mercury.transport.TransportConfigurator;
 
 public final class SocketConfigurator implements TransportConfigurator {
 
-	private String host;
-	private int port;
-	private long receiveInterval;
-	private int sendQueueSize;
+    private final String host;
+    private final int port;
+    private final long receiveInterval;
+    private final int sendQueueSize;
 
-	private final String configuratorInfo = "SocketConfigurator";
-	private final String connectionInfo = "";
+    private final String configuratorInfo = "SocketConfigurator";
+    private final String connectionInfo = "";
 
-	private SocketConfigurator(Builder builder) {
-		this.host = builder.host;
-		this.port = builder.port;
-		this.receiveInterval = builder.receiveInterval;
-		this.sendQueueSize = builder.sendQueueSize;
-	}
+    private SocketConfigurator(Builder builder) {
+        this.host = builder.host;
+        this.port = builder.port;
+        this.receiveInterval = builder.receiveInterval;
+        this.sendQueueSize = builder.sendQueueSize;
+    }
 
-	public static Builder builder() {
-		return new Builder();
-	}
+    public static Builder builder() {
+        return new Builder();
+    }
 
-	public String getHost() {
-		return host;
-	}
+    public String getHost() {
+        return host;
+    }
 
-	public int getPort() {
-		return port;
-	}
+    public int getPort() {
+        return port;
+    }
 
-	public long receiveInterval() {
-		return receiveInterval;
-	}
+    public long receiveInterval() {
+        return receiveInterval;
+    }
 
-	public int sendQueueSize() {
-		return sendQueueSize;
-	}
+    public int sendQueueSize() {
+        return sendQueueSize;
+    }
 
-	@Override
-	public String getConfigInfo() {
-		return configuratorInfo;
-	}
-	
-	@Override
-	public String getConnectionInfo() {
-		return connectionInfo;
-	}
+    @Override
+    public String getConfigInfo() {
+        return configuratorInfo;
+    }
 
-	public static class Builder {
+    @Override
+    public String getConnectionInfo() {
+        return connectionInfo;
+    }
 
-		private String host = "127.0.0.1";
-		private int port;
-		private long receiveInterval = 100;
-		private int sendQueueSize = 256;
+    public static class Builder {
 
-		private Builder() {
-		}
+        private String host = "127.0.0.1";
+        private int port;
+        private long receiveInterval = 100;
+        private int sendQueueSize = 256;
 
-		public Builder host(String host) {
-			this.host = host;
-			return this;
-		}
+        private Builder() {
+        }
 
-		public Builder port(int port) {
-			this.port = port;
-			return this;
-		}
+        public Builder host(String host) {
+            this.host = host;
+            return this;
+        }
 
-		public Builder receiveInterval(long receiveInterval) {
-			this.receiveInterval = receiveInterval;
-			return this;
-		}
+        public Builder port(int port) {
+            this.port = port;
+            return this;
+        }
 
-		public Builder sendQueueSize(int sendQueueSize) {
-			this.sendQueueSize = sendQueueSize;
-			return this;
-		}
+        public Builder receiveInterval(long receiveInterval) {
+            this.receiveInterval = receiveInterval;
+            return this;
+        }
 
-		public SocketConfigurator build() {
-			return new SocketConfigurator(this);
-		}
+        public Builder sendQueueSize(int sendQueueSize) {
+            this.sendQueueSize = sendQueueSize;
+            return this;
+        }
 
-	}
+        public SocketConfigurator build() {
+            return new SocketConfigurator(this);
+        }
+
+    }
 }

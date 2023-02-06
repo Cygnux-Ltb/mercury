@@ -14,7 +14,7 @@ import java.nio.ByteBuffer;
 public class IpcSample {
 
     public static void main(String[] args) {
-        final String channel = "aeron:ipc";
+        var channel = "aeron:ipc";
         final String message = "my message";
         final IdleStrategy idle = new SleepingIdleStrategy();
         final UnsafeBuffer unsafeBuffer = new UnsafeBuffer(ByteBuffer.allocate(128));

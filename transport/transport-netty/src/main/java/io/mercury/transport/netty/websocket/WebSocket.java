@@ -27,101 +27,99 @@ import io.netty.handler.logging.LoggingHandler;
 
 public class WebSocket {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
+        final Logger log = Log4j2LoggerFactory.getLogger(WebSocket.class);
+        final EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
+        try {
+            URI uri = new URI("ws://192.168.50.xx:xx/xx/xx");
+            Bootstrap bootstrap = new Bootstrap();
+            MockClientHandler webSocketClientHandler = new MockClientHandler(WebSocketClientHandshakerFactory
+                    .newHandshaker(uri, WebSocketVersion.V13, null, false, new DefaultHttpHeaders()));
+            bootstrap.group(eventLoopGroup).channel(NioSocketChannel.class)
+                    .handler(new MockClientInitializer(webSocketClientHandler));
+            Channel channel = bootstrap.connect(uri.getHost(), uri.getPort()).sync().channel();
+            channel.closeFuture().sync();
+        } catch (InterruptedException | URISyntaxException e) {
+            log.error("socket连接异常:{}", e.getMessage(), e);
+        } finally {
+            eventLoopGroup.shutdownGracefully();
+        }
 
-		final Logger log = Log4j2LoggerFactory.getLogger(WebSocket.class);
-		final EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
-		try {
-			URI uri = new URI("ws://192.168.50.xx:xx/xx/xx");
-			Bootstrap bootstrap = new Bootstrap();
-			MockClientHandler webSocketClientHandler = new MockClientHandler(WebSocketClientHandshakerFactory
-					.newHandshaker(uri, WebSocketVersion.V13, null, false, new DefaultHttpHeaders()));
-			bootstrap.group(eventLoopGroup).channel(NioSocketChannel.class)
-					.handler(new MockClientInitializer(webSocketClientHandler));
-			Channel channel = bootstrap.connect(uri.getHost(), uri.getPort()).sync().channel();
-			channel.closeFuture().sync();
-		} catch (InterruptedException | URISyntaxException e) {
-			log.error("socket连接异常:{}", e);
-		} finally {
-			eventLoopGroup.shutdownGracefully();
-		}
+    }
 
-	}
+    /**
+     * @author yellow013
+     */
+    public static class MockClientInitializer extends ChannelInitializer<SocketChannel> {
 
-	/**
-	 * 
-	 * @author yellow013
-	 *
-	 */
-	public static class MockClientInitializer extends ChannelInitializer<SocketChannel> {
+        private final MockClientHandler mockClientHandler;
 
-		private MockClientHandler mockClientHandler;
+        private MockClientInitializer(MockClientHandler mockClientHandler) {
+            this.mockClientHandler = mockClientHandler;
+        }
 
-		private MockClientInitializer(MockClientHandler mockClientHandler) {
-			this.mockClientHandler = mockClientHandler;
-		}
+        @Override
+        protected void initChannel(SocketChannel channel) {
+            channel.pipeline()
+                    // 将请求与应答消息编码或者解码为HTTP消息
+                    .addLast(new HttpClientCodec()).addLast(new LoggingHandler(LogLevel.INFO))
+                    .addLast("decoder", new StringDecoder()).addLast("encoder", new StringEncoder())
+                    // 客户端Handler
+                    .addLast("handler", mockClientHandler);
+        }
+    }
 
-		@Override
-		protected void initChannel(SocketChannel channel) {
-			channel.pipeline()
-					// 将请求与应答消息编码或者解码为HTTP消息
-					.addLast(new HttpClientCodec()).addLast(new LoggingHandler(LogLevel.INFO))
-					.addLast("decoder", new StringDecoder()).addLast("encoder", new StringEncoder())
-					// 客户端Handler
-					.addLast("handler", mockClientHandler);
-		}
-	}
+    /**
+     * @author yellow013
+     */
+    public static class MockClientHandler extends SimpleChannelInboundHandler<String> {
 
-	/**
-	 * 
-	 * @author yellow013
-	 *
-	 */
-	public static class MockClientHandler extends SimpleChannelInboundHandler<String> {
+        private final Logger log = Log4j2LoggerFactory.getLogger(MockClientHandler.class);
 
-		private Logger log = Log4j2LoggerFactory.getLogger(MockClientHandler.class);
+        private final WebSocketClientHandshaker handshaker;
 
-		private final WebSocketClientHandshaker handshaker;
+        private MockClientHandler(WebSocketClientHandshaker handshaker) {
+            this.handshaker = handshaker;
+        }
 
-		private MockClientHandler(WebSocketClientHandshaker handshaker) {
-			this.handshaker = handshaker;
-		}
+        /**
+         * 当客户端主动链接服务端的链接后，调用此方法
+         *
+         * @param context ChannelHandlerContext
+         */
+        @Override
+        public void channelActive(ChannelHandlerContext context) {
+            log.info("""
+                    \t⌜⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓
+                    \t├ [Mock 建立连接]
+                    \t⌞⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓""");
+            final Channel channel = context.channel();
+            // 握手
+            handshaker.handshake(channel);
+        }
 
-		/**
-		 * 当客户端主动链接服务端的链接后，调用此方法
-		 *
-		 * @param context
-		 */
-		@Override
-		public void channelActive(ChannelHandlerContext context) {
-			log.info("\n\t⌜⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓\n" + "\t├ [Mock 建立连接]\n" + "\t⌞⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓");
-			final Channel channel = context.channel();
-			// 握手
-			handshaker.handshake(channel);
-		}
+        @Override
+        protected void channelRead0(ChannelHandlerContext channelHandlerContext, String data) {
+            log.info("接收到客户端的响应为:{}", data);
+            // 自定义处理消息
+        }
 
-		@Override
-		protected void channelRead0(ChannelHandlerContext channelHandlerContext, String data) {
-			log.info("接收到客户端的响应为:{}", data);
-			// 自定义处理消息
-		}
+        @Override
+        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+            log.info("\n\t⌜⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓\n" + "\t├ [exception]: {}\n" + "\t⌞⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓",
+                    cause.getMessage());
+            ctx.close();
+        }
 
-		@Override
-		public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-			log.info("\n\t⌜⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓\n" + "\t├ [exception]: {}\n" + "\t⌞⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓⎓",
-					cause.getMessage());
-			ctx.close();
-		}
+        @Override
+        public void handlerRemoved(ChannelHandlerContext ctx) {
+            System.out.println("与服务器端断开连接");
+        }
 
-		@Override
-		public void handlerRemoved(ChannelHandlerContext ctx) {
-			System.out.println("与服务器端断开连接");
-		}
+        @Override
+        public void channelReadComplete(ChannelHandlerContext channelHandlerContext) {
+            channelHandlerContext.flush();
+        }
 
-		@Override
-		public void channelReadComplete(ChannelHandlerContext channelHandlerContext) {
-			channelHandlerContext.flush();
-		}
-
-	}
+    }
 }

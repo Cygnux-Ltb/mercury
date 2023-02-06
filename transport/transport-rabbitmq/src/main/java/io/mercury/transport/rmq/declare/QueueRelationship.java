@@ -1,15 +1,14 @@
 package io.mercury.transport.rmq.declare;
 
-import java.util.Collection;
-import java.util.Map;
-
-import org.apache.commons.collections4.CollectionUtils;
-
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.lang.Asserter;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rmq.RmqOperator;
 import io.mercury.transport.rmq.exception.DeclareException;
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * 定义Queue和其他实体绑定关系
@@ -24,16 +23,16 @@ public final class QueueRelationship extends Relationship {
     private final AmqpQueue queue;
 
     /**
-     * @param name
-     * @return
+     * @param name String
+     * @return QueueRelationship
      */
     public static QueueRelationship named(String name) {
         return withQueue(AmqpQueue.named(name));
     }
 
     /**
-     * @param queue
-     * @return
+     * @param queue AmqpQueue
+     * @return QueueRelationship
      */
     public static QueueRelationship withQueue(AmqpQueue queue) {
         Asserter.nonNull(queue, "queue");
@@ -68,8 +67,8 @@ public final class QueueRelationship extends Relationship {
     /**
      * 是否持久化, 默认true
      *
-     * @param durable
-     * @return
+     * @param durable boolean
+     * @return QueueRelationship
      */
     public QueueRelationship setDurable(boolean durable) {
         queue.setDurable(durable);
@@ -79,8 +78,8 @@ public final class QueueRelationship extends Relationship {
     /**
      * channel关闭后自动删除队列, 默认false
      *
-     * @param autoDelete
-     * @return
+     * @param autoDelete boolean
+     * @return QueueRelationship
      */
     public QueueRelationship setAutoDelete(boolean autoDelete) {
         queue.setAutoDelete(autoDelete);
@@ -90,8 +89,8 @@ public final class QueueRelationship extends Relationship {
     /**
      * 连接独占此队列, 默认false
      *
-     * @param exclusive
-     * @return
+     * @param exclusive boolean
+     * @return QueueRelationship
      */
     public QueueRelationship setExclusive(boolean exclusive) {
         queue.setExclusive(exclusive);
@@ -99,8 +98,8 @@ public final class QueueRelationship extends Relationship {
     }
 
     /**
-     * @param args
-     * @return
+     * @param args Map<String, Object>
+     * @return QueueRelationship
      */
     public QueueRelationship setArgs(Map<String, Object> args) {
         queue.setArgs(args);
@@ -108,8 +107,8 @@ public final class QueueRelationship extends Relationship {
     }
 
     /**
-     * @param exchanges
-     * @return
+     * @param exchanges AmqpExchange[]
+     * @return QueueRelationship
      */
     public QueueRelationship binding(AmqpExchange... exchanges) {
         return binding(exchanges != null
@@ -117,9 +116,9 @@ public final class QueueRelationship extends Relationship {
     }
 
     /**
-     * @param exchanges
-     * @param routingKeys
-     * @return
+     * @param exchanges   Collection<AmqpExchange>
+     * @param routingKeys Collection<String>
+     * @return QueueRelationship
      */
     public QueueRelationship binding(Collection<AmqpExchange> exchanges, Collection<String> routingKeys) {
         if (exchanges != null) {
@@ -140,8 +139,13 @@ public final class QueueRelationship extends Relationship {
     }
 
     public static void main(String[] args) {
-        System.out
-                .println(QueueRelationship.named("TEST").binding(AmqpExchange.fanout("T0")).binding(AmqpExchange.fanout("T1")));
+        System.out.println(
+                QueueRelationship
+                        .named("TEST")
+                        .binding(AmqpExchange
+                                .fanout("T0"))
+                        .binding(AmqpExchange
+                                .fanout("T1")));
     }
 
 }

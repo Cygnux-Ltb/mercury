@@ -9,56 +9,55 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 
 public abstract class GeneralNettyHandler extends ChannelInboundHandlerAdapter {
 
-	// buffer size
-	protected int byteBufSize;
+    // buffer size
+    protected int byteBufSize;
 
-	private static final Logger log = Log4j2LoggerFactory.getLogger(GeneralNettyHandler.class);
+    private static final Logger log = Log4j2LoggerFactory.getLogger(GeneralNettyHandler.class);
 
-	/**
-	 * Use default bytebufSize;
-	 * 
-	 * Size = 1024 * 8.
-	 */
-	public GeneralNettyHandler() {
-		this(1024 * 8);
-	}
+    /**
+     * Use default bytebufSize;
+     * <p>
+     * Size = 1024 * 8.
+     */
+    public GeneralNettyHandler() {
+        this(1024 * 8);
+    }
 
-	/**
-	 * 
-	 * @param byteBufSize
-	 */
-	public GeneralNettyHandler(int byteBufSize) {
-		this.byteBufSize = byteBufSize;
-	}
+    /**
+     * @param byteBufSize int
+     */
+    public GeneralNettyHandler(int byteBufSize) {
+        this.byteBufSize = byteBufSize;
+    }
 
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-		log.error(cause.getMessage(), cause);
-		ctx.close();
-	}
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        log.error(cause.getMessage(), cause);
+        ctx.close();
+    }
 
-	protected byte[] getRecvBytes(ByteBuf byteBuf) {
-		byte[] bytes = new byte[byteBuf.readableBytes()];
-		byteBuf.retain().readBytes(bytes);
-		byteBuf.release();
-		return bytes;
-	}
+    protected byte[] getRecvBytes(ByteBuf byteBuf) {
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.retain().readBytes(bytes);
+        byteBuf.release();
+        return bytes;
+    }
 
-	protected ByteBuf allocByteBuf(ChannelHandlerContext ctx) {
-		return allocByteBuf(ctx, this.byteBufSize);
-	}
+    protected ByteBuf allocByteBuf(ChannelHandlerContext ctx) {
+        return allocByteBuf(ctx, this.byteBufSize);
+    }
 
-	protected ByteBuf allocByteBuf(ChannelHandlerContext ctx, int byteBufSize) {
-		return ctx.alloc().buffer(byteBufSize);
-	}
+    protected ByteBuf allocByteBuf(ChannelHandlerContext ctx, int byteBufSize) {
+        return ctx.alloc().buffer(byteBufSize);
+    }
 
-	protected void sendBytes(ChannelHandlerContext ctx, byte[] bytes) {
-		ByteBuf byteBuf = ctx.alloc().buffer(bytes.length);
-		byteBuf.writeBytes(bytes);
-		ctx.writeAndFlush(byteBuf.retain()).addListener(future -> {
-			byteBuf.clear();
-			byteBuf.release();
-		});
-	}
+    protected void sendBytes(ChannelHandlerContext ctx, byte[] bytes) {
+        ByteBuf byteBuf = ctx.alloc().buffer(bytes.length);
+        byteBuf.writeBytes(bytes);
+        ctx.writeAndFlush(byteBuf.retain()).addListener(future -> {
+            byteBuf.clear();
+            byteBuf.release();
+        });
+    }
 
 }

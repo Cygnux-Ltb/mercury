@@ -7,7 +7,7 @@ import io.mercury.common.thread.RuntimeInterruptedException;
 
 public class MsgBox {
 
-	private BlockingQueue<byte[]> box = new ArrayBlockingQueue<>(512);
+	private final BlockingQueue<byte[]> box = new ArrayBlockingQueue<>(512);
 
 	private static final MsgBox instance = new MsgBox();
 

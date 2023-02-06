@@ -50,8 +50,9 @@ public final class DeclareException extends Exception {
      * @param cause
      * @return
      */
-    public static DeclareException declareExchangeError(String exchange, BuiltinExchangeType type, boolean durable,
-                                                        boolean autoDelete, boolean internal, Map<String, Object> args, Throwable cause) {
+    public static DeclareException declareExchangeError(String exchange, BuiltinExchangeType type,
+                                                        boolean durable, boolean autoDelete, boolean internal,
+                                                        Map<String, Object> args, Throwable cause) {
         return new DeclareException(
                 "Declare exchange error -> exchange==[" + exchange + "], type==[" + type + "], durable==[" + durable
                         + "], autoDelete==[" + autoDelete + "], internal==[" + internal + "], args==[" + args + "]",

@@ -15,16 +15,15 @@
  */
 package io.mercury.transport.udp;
 
+import io.aeron.CncFileDescriptor;
+import io.aeron.CommonContext;
+import org.agrona.concurrent.AtomicBuffer;
+import org.agrona.concurrent.errors.ErrorLogReader;
+
 import java.io.File;
 import java.nio.MappedByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.agrona.concurrent.AtomicBuffer;
-import org.agrona.concurrent.errors.ErrorLogReader;
-
-import io.aeron.CncFileDescriptor;
-import io.aeron.CommonContext;
 
 /**
  * Application to print out errors recorded in the command-and-control (cnc)
@@ -33,29 +32,29 @@ import io.aeron.CommonContext;
  * described in {@link CncFileDescriptor}.
  */
 public class ErrorStat {
-	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
 
-	/**
-	 * Main method for launching the process.
-	 *
-	 * @param args passed to the process.
-	 */
-	public static void main(final String[] args) {
-		final File cncFile = CommonContext.newDefaultCncFile();
-		System.out.println("Command `n Control file " + cncFile);
+    /**
+     * Main method for launching the process.
+     *
+     * @param args passed to the process.
+     */
+    public static void main(final String[] args) {
+        final File cncFile = CommonContext.newDefaultCncFile();
+        System.out.println("Command `n Control file " + cncFile);
 
-		final MappedByteBuffer cncByteBuffer = SamplesUtil.mapExistingFileReadOnly(cncFile);
+        final MappedByteBuffer cncByteBuffer = SamplesUtil.mapExistingFileReadOnly(cncFile);
 
-		final AtomicBuffer buffer = CommonContext.errorLogBuffer(cncByteBuffer);
-		final int distinctErrorCount = ErrorLogReader.read(buffer, ErrorStat::accept);
+        final AtomicBuffer buffer = CommonContext.errorLogBuffer(cncByteBuffer);
+        final int distinctErrorCount = ErrorLogReader.read(buffer, ErrorStat::accept);
 
-		System.out.format("%n%d distinct errors observed.%n", distinctErrorCount);
-	}
+        System.out.format("%n%d distinct errors observed.%n", distinctErrorCount);
+    }
 
-	private static void accept(final int observationCount, final long firstObservationTimestamp,
-			final long lastObservationTimestamp, final String encodedException) {
-		System.out.format("***%n%d observations from %s to %s for:%n %s%n", observationCount,
-				DATE_FORMAT.format(new Date(firstObservationTimestamp)),
-				DATE_FORMAT.format(new Date(lastObservationTimestamp)), encodedException);
-	}
+    private static void accept(final int observationCount, final long firstObservationTimestamp,
+                               final long lastObservationTimestamp, final String encodedException) {
+        System.out.format("***%n%d observations from %s to %s for:%n %s%n", observationCount,
+                DATE_FORMAT.format(new Date(firstObservationTimestamp)),
+                DATE_FORMAT.format(new Date(lastObservationTimestamp)), encodedException);
+    }
 }

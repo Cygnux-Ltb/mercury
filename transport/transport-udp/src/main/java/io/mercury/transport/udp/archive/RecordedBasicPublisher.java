@@ -15,9 +15,11 @@
  */
 package io.mercury.transport.udp.archive;
 
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-
+import io.aeron.Publication;
+import io.aeron.archive.client.AeronArchive;
+import io.aeron.archive.codecs.SourceLocation;
+import io.aeron.archive.status.RecordingPos;
+import io.mercury.transport.udp.SampleConfiguration;
 import org.agrona.BufferUtil;
 import org.agrona.concurrent.IdleStrategy;
 import org.agrona.concurrent.SigInt;
@@ -25,11 +27,8 @@ import org.agrona.concurrent.UnsafeBuffer;
 import org.agrona.concurrent.YieldingIdleStrategy;
 import org.agrona.concurrent.status.CountersReader;
 
-import io.aeron.Publication;
-import io.aeron.archive.client.AeronArchive;
-import io.aeron.archive.codecs.SourceLocation;
-import io.aeron.archive.status.RecordingPos;
-import io.mercury.transport.udp.SampleConfiguration;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Basic Aeron publisher application which is recorded in an archive. This
@@ -41,97 +40,97 @@ import io.mercury.transport.udp.SampleConfiguration;
  * {@code -Daeron.sample.channel=aeron:udp?endpoint=localhost:5555 -Daeron.sample.streamId=20}
  */
 public class RecordedBasicPublisher {
-	private static final int STREAM_ID = SampleConfiguration.STREAM_ID;
-	private static final String CHANNEL = SampleConfiguration.CHANNEL;
-	private static final long NUMBER_OF_MESSAGES = SampleConfiguration.NUMBER_OF_MESSAGES;
+    private static final int STREAM_ID = SampleConfiguration.STREAM_ID;
+    private static final String CHANNEL = SampleConfiguration.CHANNEL;
+    private static final long NUMBER_OF_MESSAGES = SampleConfiguration.NUMBER_OF_MESSAGES;
 
-	private static final UnsafeBuffer BUFFER = new UnsafeBuffer(BufferUtil.allocateDirectAligned(256, 64));
+    private static final UnsafeBuffer BUFFER = new UnsafeBuffer(BufferUtil.allocateDirectAligned(256, 64));
 
-	/**
-	 * Main method for launching the process.
-	 *
-	 * @param args passed to the process.
-	 * @throws InterruptedException if the thread sleep delay is interrupted.
-	 */
-	public static void main(final String[] args) throws InterruptedException {
-		System.out.println("Publishing to " + CHANNEL + " on stream id " + STREAM_ID);
+    /**
+     * Main method for launching the process.
+     *
+     * @param args passed to the process.
+     * @throws InterruptedException if the thread sleep delay is interrupted.
+     */
+    public static void main(final String[] args) throws InterruptedException {
+        System.out.println("Publishing to " + CHANNEL + " on stream id " + STREAM_ID);
 
-		final AtomicBoolean running = new AtomicBoolean(true);
-		SigInt.register(() -> running.set(false));
+        final AtomicBoolean running = new AtomicBoolean(true);
+        SigInt.register(() -> running.set(false));
 
-		// Create a unique response stream id so not to clash with other archive
-		// clients.
-		final AeronArchive.Context archiveCtx = new AeronArchive.Context()
-				.controlResponseStreamId(AeronArchive.Configuration.controlResponseStreamId() + 1);
+        // Create a unique response stream id so not to clash with other archive
+        // clients.
+        final AeronArchive.Context archiveCtx = new AeronArchive.Context()
+                .controlResponseStreamId(AeronArchive.Configuration.controlResponseStreamId() + 1);
 
-		try (AeronArchive archive = AeronArchive.connect(archiveCtx)) {
-			archive.startRecording(CHANNEL, STREAM_ID, SourceLocation.LOCAL);
+        try (AeronArchive archive = AeronArchive.connect(archiveCtx)) {
+            archive.startRecording(CHANNEL, STREAM_ID, SourceLocation.LOCAL);
 
-			try (Publication publication = archive.context().aeron().addPublication(CHANNEL, STREAM_ID)) {
-				final IdleStrategy idleStrategy = YieldingIdleStrategy.INSTANCE;
-				// Wait for recording to have started before publishing.
-				final CountersReader counters = archive.context().aeron().countersReader();
-				int counterId = RecordingPos.findCounterIdBySession(counters, publication.sessionId());
-				while (CountersReader.NULL_COUNTER_ID == counterId) {
-					if (!running.get()) {
-						return;
-					}
+            try (Publication publication = archive.context().aeron().addPublication(CHANNEL, STREAM_ID)) {
+                final IdleStrategy idleStrategy = YieldingIdleStrategy.INSTANCE;
+                // Wait for recording to have started before publishing.
+                final CountersReader counters = archive.context().aeron().countersReader();
+                int counterId = RecordingPos.findCounterIdBySession(counters, publication.sessionId());
+                while (CountersReader.NULL_COUNTER_ID == counterId) {
+                    if (!running.get()) {
+                        return;
+                    }
 
-					idleStrategy.idle();
-					counterId = RecordingPos.findCounterIdBySession(counters, publication.sessionId());
-				}
+                    idleStrategy.idle();
+                    counterId = RecordingPos.findCounterIdBySession(counters, publication.sessionId());
+                }
 
-				final long recordingId = RecordingPos.getRecordingId(counters, counterId);
-				System.out.println("Recording started: recordingId = " + recordingId);
+                final long recordingId = RecordingPos.getRecordingId(counters, counterId);
+                System.out.println("Recording started: recordingId = " + recordingId);
 
-				for (int i = 0; i < NUMBER_OF_MESSAGES && running.get(); i++) {
-					final String message = "Hello World! " + i;
-					final byte[] messageBytes = message.getBytes();
-					BUFFER.putBytes(0, messageBytes);
+                for (int i = 0; i < NUMBER_OF_MESSAGES && running.get(); i++) {
+                    final String message = "Hello World! " + i;
+                    final byte[] messageBytes = message.getBytes();
+                    BUFFER.putBytes(0, messageBytes);
 
-					System.out.print("Offering " + i + "/" + NUMBER_OF_MESSAGES + " - ");
+                    System.out.print("Offering " + i + "/" + NUMBER_OF_MESSAGES + " - ");
 
-					final long result = publication.offer(BUFFER, 0, messageBytes.length);
-					checkResult(result);
+                    final long result = publication.offer(BUFFER, 0, messageBytes.length);
+                    checkResult(result);
 
-					final String errorMessage = archive.pollForErrorResponse();
-					if (null != errorMessage) {
-						throw new IllegalStateException(errorMessage);
-					}
+                    final String errorMessage = archive.pollForErrorResponse();
+                    if (null != errorMessage) {
+                        throw new IllegalStateException(errorMessage);
+                    }
 
-					Thread.sleep(TimeUnit.SECONDS.toMillis(1));
-				}
+                    Thread.sleep(TimeUnit.SECONDS.toMillis(1));
+                }
 
-				idleStrategy.reset();
-				while (counters.getCounterValue(counterId) < publication.position()) {
-					if (!RecordingPos.isActive(counters, counterId, recordingId)) {
-						throw new IllegalStateException("recording has stopped unexpectedly: " + recordingId);
-					}
+                idleStrategy.reset();
+                while (counters.getCounterValue(counterId) < publication.position()) {
+                    if (!RecordingPos.isActive(counters, counterId, recordingId)) {
+                        throw new IllegalStateException("recording has stopped unexpectedly: " + recordingId);
+                    }
 
-					idleStrategy.idle();
-				}
-			} finally {
-				System.out.println("Done sending.");
-				archive.stopRecording(CHANNEL, STREAM_ID);
-			}
-		}
-	}
+                    idleStrategy.idle();
+                }
+            } finally {
+                System.out.println("Done sending.");
+                archive.stopRecording(CHANNEL, STREAM_ID);
+            }
+        }
+    }
 
-	private static void checkResult(final long result) {
-		if (result > 0) {
-			System.out.println("yay!");
-		} else if (result == Publication.BACK_PRESSURED) {
-			System.out.println("Offer failed due to back pressure");
-		} else if (result == Publication.ADMIN_ACTION) {
-			System.out.println("Offer failed because of an administration action in the system");
-		} else if (result == Publication.NOT_CONNECTED) {
-			System.out.println("Offer failed because publisher is not connected to subscriber");
-		} else if (result == Publication.CLOSED) {
-			System.out.println("Offer failed publication is closed");
-		} else if (result == Publication.MAX_POSITION_EXCEEDED) {
-			throw new IllegalStateException("Offer failed due to publication reaching max position");
-		} else {
-			System.out.println("Offer failed due to unknown result code: " + result);
-		}
-	}
+    private static void checkResult(final long result) {
+        if (result > 0) {
+            System.out.println("yay!");
+        } else if (result == Publication.BACK_PRESSURED) {
+            System.out.println("Offer failed due to back pressure");
+        } else if (result == Publication.ADMIN_ACTION) {
+            System.out.println("Offer failed because of an administration action in the system");
+        } else if (result == Publication.NOT_CONNECTED) {
+            System.out.println("Offer failed because publisher is not connected to subscriber");
+        } else if (result == Publication.CLOSED) {
+            System.out.println("Offer failed publication is closed");
+        } else if (result == Publication.MAX_POSITION_EXCEEDED) {
+            throw new IllegalStateException("Offer failed due to publication reaching max position");
+        } else {
+            System.out.println("Offer failed due to unknown result code: " + result);
+        }
+    }
 }

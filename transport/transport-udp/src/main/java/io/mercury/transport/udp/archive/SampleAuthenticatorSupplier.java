@@ -23,10 +23,10 @@ import io.aeron.security.AuthenticatorSupplier;
  * {@link SampleAuthenticator}.
  */
 public class SampleAuthenticatorSupplier implements AuthenticatorSupplier {
-	/**
-	 * {@inheritDoc}
-	 */
-	public Authenticator get() {
-		return new SampleAuthenticator();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public Authenticator get() {
+        return new SampleAuthenticator();
+    }
 }

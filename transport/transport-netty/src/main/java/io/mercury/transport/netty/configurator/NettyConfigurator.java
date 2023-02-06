@@ -1,151 +1,148 @@
 package io.mercury.transport.netty.configurator;
 
-import java.util.concurrent.TimeUnit;
-
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.TransportConfigurator;
 
+import java.util.concurrent.TimeUnit;
+
 public final class NettyConfigurator implements TransportConfigurator {
 
-	private final String host;
-	private final int port;
-	private final int backlog;
-	private final boolean keepAlive;
-	private final boolean tcpNoDelay;
-	private final long sendInterval;
-	private final TimeUnit sendIntervalTimeUnit;
-	private final int writeByteBufSize;
-	private final char separator;
+    private final String host;
+    private final int port;
+    private final int backlog;
+    private final boolean keepAlive;
+    private final boolean tcpNoDelay;
+    private final long sendInterval;
+    private final TimeUnit sendIntervalTimeUnit;
+    private final int writeByteBufSize;
+    private final char separator;
 
-	/**
-	 * 
-	 */
-	private final String connectionInfo;
+    private final String connectionInfo;
 
-	private NettyConfigurator(Builder builder) {
-		this.host = builder.host;
-		this.port = builder.port;
-		this.backlog = builder.backlog;
-		this.keepAlive = builder.keepAlive;
-		this.tcpNoDelay = builder.tcpNoDelay;
-		this.sendInterval = builder.sendInterval;
-		this.sendIntervalTimeUnit = builder.sendIntervalTimeUnit;
-		this.writeByteBufSize = builder.writeByteBufSize;
-		this.separator = builder.separator;
-		this.connectionInfo = host + ":" + port;
-	}
+    private NettyConfigurator(Builder builder) {
+        this.host = builder.host;
+        this.port = builder.port;
+        this.backlog = builder.backlog;
+        this.keepAlive = builder.keepAlive;
+        this.tcpNoDelay = builder.tcpNoDelay;
+        this.sendInterval = builder.sendInterval;
+        this.sendIntervalTimeUnit = builder.sendIntervalTimeUnit;
+        this.writeByteBufSize = builder.writeByteBufSize;
+        this.separator = builder.separator;
+        this.connectionInfo = host + ":" + port;
+    }
 
-	public static Builder builder(String host, int port) {
-		return new Builder(host, port);
-	}
+    public static Builder builder(String host, int port) {
+        return new Builder(host, port);
+    }
 
-	public String getHost() {
-		return host;
-	}
+    public String getHost() {
+        return host;
+    }
 
-	public int getPort() {
-		return port;
-	}
+    public int getPort() {
+        return port;
+    }
 
-	public int backlog() {
-		return backlog;
-	}
+    public int backlog() {
+        return backlog;
+    }
 
-	public boolean keepAlive() {
-		return keepAlive;
-	}
+    public boolean keepAlive() {
+        return keepAlive;
+    }
 
-	public boolean tcpNoDelay() {
-		return tcpNoDelay;
-	}
+    public boolean tcpNoDelay() {
+        return tcpNoDelay;
+    }
 
-	public long sendInterval() {
-		return sendInterval;
-	}
+    public long sendInterval() {
+        return sendInterval;
+    }
 
-	public TimeUnit sendIntervalTimeUnit() {
-		return sendIntervalTimeUnit;
-	}
+    public TimeUnit sendIntervalTimeUnit() {
+        return sendIntervalTimeUnit;
+    }
 
-	public int writeByteBufSize() {
-		return writeByteBufSize;
-	}
+    public int writeByteBufSize() {
+        return writeByteBufSize;
+    }
 
-	public char separator() {
-		return separator;
-	}
+    public char separator() {
+        return separator;
+    }
 
-	@Override
-	public String getConfigInfo() {
-		return toString();
-	}
+    @Override
+    public String getConfigInfo() {
+        return toString();
+    }
 
-	@Override
-	public String getConnectionInfo() {
-		return connectionInfo;
-	}
+    @Override
+    public String getConnectionInfo() {
+        return connectionInfo;
+    }
 
-	private transient String strCache;
+    private transient String strCache;
 
-	@Override
-	public String toString() {
-		if (strCache == null)
-			this.strCache = JsonWrapper.toJson(this);
-		return strCache;
-	}
+    @Override
+    public String toString() {
+        if (strCache == null)
+            this.strCache = JsonWrapper.toJson(this);
+        return strCache;
+    }
 
-	public static class Builder {
+    public static class Builder {
 
-		private final String host;
-		private final int port;
-		private int backlog = 128;
-		private boolean keepAlive = true;
-		private boolean tcpNoDelay = true;
-		private long sendInterval;
-		private TimeUnit sendIntervalTimeUnit;
-		private int writeByteBufSize = 1024 * 8;
-		private char separator = ';';
+        private final String host;
+        private final int port;
+        private int backlog = 128;
+        private boolean keepAlive = true;
+        private boolean tcpNoDelay = true;
+        private long sendInterval;
+        private TimeUnit sendIntervalTimeUnit;
+        private int writeByteBufSize = 1024 * 8;
+        private char separator = ';';
 
-		private Builder(String host, int port) {
-			this.host = host;
-			this.port = port;
-		}
+        private Builder(String host, int port) {
+            this.host = host;
+            this.port = port;
+        }
 
-		public Builder backlog(int backlog) {
-			this.backlog = backlog;
-			return this;
-		}
+        public Builder backlog(int backlog) {
+            this.backlog = backlog;
+            return this;
+        }
 
-		public Builder keepAlive(boolean keepAlive) {
-			this.keepAlive = keepAlive;
-			return this;
-		}
+        public Builder keepAlive(boolean keepAlive) {
+            this.keepAlive = keepAlive;
+            return this;
+        }
 
-		public Builder tcpNoDelay(boolean tcpNoDelay) {
-			this.tcpNoDelay = tcpNoDelay;
-			return this;
-		}
+        public Builder tcpNoDelay(boolean tcpNoDelay) {
+            this.tcpNoDelay = tcpNoDelay;
+            return this;
+        }
 
-		public Builder sendInterval(long sendInterval, TimeUnit sendIntervalTimeUnit) {
-			this.sendInterval = sendInterval;
-			this.sendIntervalTimeUnit = sendIntervalTimeUnit;
-			return this;
-		}
+        public Builder sendInterval(long sendInterval, TimeUnit sendIntervalTimeUnit) {
+            this.sendInterval = sendInterval;
+            this.sendIntervalTimeUnit = sendIntervalTimeUnit;
+            return this;
+        }
 
-		public Builder writeByteBufSize(int writeByteBufSize) {
-			this.writeByteBufSize = writeByteBufSize;
-			return this;
-		}
+        public Builder writeByteBufSize(int writeByteBufSize) {
+            this.writeByteBufSize = writeByteBufSize;
+            return this;
+        }
 
-		public Builder separator(char separator) {
-			this.separator = separator;
-			return this;
-		}
+        public Builder separator(char separator) {
+            this.separator = separator;
+            return this;
+        }
 
-		public NettyConfigurator build() {
-			return new NettyConfigurator(this);
-		}
+        public NettyConfigurator build() {
+            return new NettyConfigurator(this);
+        }
 
-	}
+    }
 
 }

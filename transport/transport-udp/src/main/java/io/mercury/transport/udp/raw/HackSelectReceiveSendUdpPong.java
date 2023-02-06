@@ -15,8 +15,10 @@
  */
 package io.mercury.transport.udp.raw;
 
-import static java.nio.channels.SelectionKey.OP_READ;
-import static org.agrona.BitUtil.SIZE_OF_LONG;
+import io.aeron.driver.Configuration;
+import org.agrona.concurrent.SigInt;
+import org.agrona.hints.ThreadHints;
+import org.agrona.nio.NioSelectedKeySet;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -27,11 +29,8 @@ import java.nio.channels.Selector;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.ToIntFunction;
 
-import org.agrona.concurrent.SigInt;
-import org.agrona.hints.ThreadHints;
-import org.agrona.nio.NioSelectedKeySet;
-
-import io.aeron.driver.Configuration;
+import static java.nio.channels.SelectionKey.OP_READ;
+import static org.agrona.BitUtil.SIZE_OF_LONG;
 
 /**
  * Benchmark used to calculate latency of underlying system.
@@ -39,65 +38,65 @@ import io.aeron.driver.Configuration;
  * @see SendHackSelectReceiveUdpPing
  */
 public class HackSelectReceiveSendUdpPong {
-	/**
-	 * Main method for launching the process.
-	 *
-	 * @param args passed to the process.
-	 * @throws IOException if an error occurs with the channel.
-	 */
-	public static void main(final String[] args) throws IOException {
-		new HackSelectReceiveSendUdpPong().run();
-	}
+    /**
+     * Main method for launching the process.
+     *
+     * @param args passed to the process.
+     * @throws IOException if an error occurs with the channel.
+     */
+    public static void main(final String[] args) throws IOException {
+        new HackSelectReceiveSendUdpPong().run();
+    }
 
-	private void run() throws IOException {
-		final InetSocketAddress sendAddress = new InetSocketAddress("localhost", Common.PONG_PORT);
-		final ByteBuffer buffer = ByteBuffer.allocateDirect(Configuration.MTU_LENGTH_DEFAULT);
+    private void run() throws IOException {
+        final InetSocketAddress sendAddress = new InetSocketAddress("localhost", Common.PONG_PORT);
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(Configuration.MTU_LENGTH_DEFAULT);
 
-		final DatagramChannel receiveChannel = DatagramChannel.open();
-		Common.init(receiveChannel);
-		receiveChannel.bind(new InetSocketAddress("localhost", Common.PING_PORT));
+        final DatagramChannel receiveChannel = DatagramChannel.open();
+        Common.init(receiveChannel);
+        receiveChannel.bind(new InetSocketAddress("localhost", Common.PING_PORT));
 
-		final DatagramChannel sendChannel = DatagramChannel.open();
-		Common.init(sendChannel);
+        final DatagramChannel sendChannel = DatagramChannel.open();
+        Common.init(sendChannel);
 
-		final Selector selector = Selector.open();
-		final NioSelectedKeySet keySet = Common.keySet(selector);
+        final Selector selector = Selector.open();
+        final NioSelectedKeySet keySet = Common.keySet(selector);
 
-		final ToIntFunction<SelectionKey> handler = (key) -> {
-			try {
-				buffer.clear();
-				receiveChannel.receive(buffer);
+        final ToIntFunction<SelectionKey> handler = (key) -> {
+            try {
+                buffer.clear();
+                receiveChannel.receive(buffer);
 
-				final long receivedSequenceNumber = buffer.getLong(0);
-				final long receivedTimestamp = buffer.getLong(SIZE_OF_LONG);
+                final long receivedSequenceNumber = buffer.getLong(0);
+                final long receivedTimestamp = buffer.getLong(SIZE_OF_LONG);
 
-				buffer.clear();
-				buffer.putLong(receivedSequenceNumber);
-				buffer.putLong(receivedTimestamp);
-				buffer.flip();
+                buffer.clear();
+                buffer.putLong(receivedSequenceNumber);
+                buffer.putLong(receivedTimestamp);
+                buffer.flip();
 
-				sendChannel.send(buffer, sendAddress);
-			} catch (final IOException ex) {
-				ex.printStackTrace();
-			}
+                sendChannel.send(buffer, sendAddress);
+            } catch (final IOException ex) {
+                ex.printStackTrace();
+            }
 
-			return 1;
-		};
+            return 1;
+        };
 
-		receiveChannel.register(selector, OP_READ, null);
+        receiveChannel.register(selector, OP_READ, null);
 
-		final AtomicBoolean running = new AtomicBoolean(true);
-		SigInt.register(() -> running.set(false));
+        final AtomicBoolean running = new AtomicBoolean(true);
+        SigInt.register(() -> running.set(false));
 
-		while (true) {
-			while (selector.selectNow() == 0) {
-				if (!running.get()) {
-					return;
-				}
-				ThreadHints.onSpinWait();
-			}
+        while (true) {
+            while (selector.selectNow() == 0) {
+                if (!running.get()) {
+                    return;
+                }
+                ThreadHints.onSpinWait();
+            }
 
-			keySet.forEach(handler);
-		}
-	}
+            keySet.forEach(handler);
+        }
+    }
 }

@@ -1,5 +1,12 @@
 package io.mercury.transport.socket;
 
+import io.mercury.common.concurrent.disruptor.RingQueue;
+import io.mercury.common.concurrent.queue.SingleConsumerQueue;
+import io.mercury.common.thread.SleepSupport;
+import io.mercury.common.thread.ThreadSupport;
+import io.mercury.transport.socket.configurator.SocketConfigurator;
+import org.apache.commons.io.IOUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
@@ -7,14 +14,6 @@ import java.io.Writer;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
-
-import org.apache.commons.io.IOUtils;
-
-import io.mercury.common.concurrent.disruptor.RingQueue;
-import io.mercury.common.concurrent.queue.SingleConsumerQueue;
-import io.mercury.common.thread.SleepSupport;
-import io.mercury.common.thread.ThreadSupport;
-import io.mercury.transport.socket.configurator.SocketConfigurator;
 
 public final class SocketTransceiver extends BaseTransceiver<String> {
 
@@ -28,8 +27,8 @@ public final class SocketTransceiver extends BaseTransceiver<String> {
     private final AtomicBoolean isRun = new AtomicBoolean(false);
 
     /**
-     * @param configurator
-     * @param callback
+     * @param configurator SocketConfigurator
+     * @param callback     Consumer<byte[]>
      */
     public SocketTransceiver(SocketConfigurator configurator, Consumer<byte[]> callback) {
         super();

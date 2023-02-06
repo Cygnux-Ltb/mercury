@@ -15,21 +15,20 @@
  */
 package io.mercury.transport.udp.archive;
 
-import static io.aeron.protocol.DataHeaderFlyweight.HEADER_LENGTH;
-import static java.lang.Math.min;
+import io.aeron.logbuffer.FrameDescriptor;
+import io.aeron.protocol.DataHeaderFlyweight;
+import io.mercury.transport.udp.LogInspector;
+import io.mercury.transport.udp.SamplesUtil;
+import org.agrona.BitUtil;
+import org.agrona.concurrent.UnsafeBuffer;
 
 import java.io.File;
 import java.io.PrintStream;
 import java.nio.ByteBuffer;
 import java.util.Date;
 
-import org.agrona.BitUtil;
-import org.agrona.concurrent.UnsafeBuffer;
-
-import io.aeron.logbuffer.FrameDescriptor;
-import io.aeron.protocol.DataHeaderFlyweight;
-import io.mercury.transport.udp.LogInspector;
-import io.mercury.transport.udp.SamplesUtil;
+import static io.aeron.protocol.DataHeaderFlyweight.HEADER_LENGTH;
+import static java.lang.Math.min;
 
 /**
  * Command line utility for inspecting the data contents of a archive segment
@@ -38,56 +37,56 @@ import io.mercury.transport.udp.SamplesUtil;
  * Supports {@link LogInspector#AERON_LOG_DATA_FORMAT_PROP_NAME}
  */
 public class SegmentInspector {
-	/**
-	 * Main method for launching the process.
-	 *
-	 * @param args passed to the process.
-	 */
-	public static void main(final String[] args) {
-		final PrintStream out = System.out;
-		if (args.length < 1) {
-			out.println("Usage: SegmentInspector <segmentFileName> [dump limit in bytes per message]");
-			return;
-		}
+    /**
+     * Main method for launching the process.
+     *
+     * @param args passed to the process.
+     */
+    public static void main(final String[] args) {
+        final PrintStream out = System.out;
+        if (args.length < 1) {
+            out.println("Usage: SegmentInspector <segmentFileName> [dump limit in bytes per message]");
+            return;
+        }
 
-		final String fileName = args[0];
-		final int messageDumpLimit = args.length >= 2 ? Integer.parseInt(args[1]) : Integer.MAX_VALUE;
-		final File file = new File(fileName);
-		final ByteBuffer byteBuffer = SamplesUtil.mapExistingFileReadOnly(file);
-		final UnsafeBuffer segmentBuffer = new UnsafeBuffer(byteBuffer);
+        final String fileName = args[0];
+        final int messageDumpLimit = args.length >= 2 ? Integer.parseInt(args[1]) : Integer.MAX_VALUE;
+        final File file = new File(fileName);
+        final ByteBuffer byteBuffer = SamplesUtil.mapExistingFileReadOnly(file);
+        final UnsafeBuffer segmentBuffer = new UnsafeBuffer(byteBuffer);
 
-		out.println("======================================================================");
-		out.format("%s Inspection dump for %s%n", new Date(), fileName);
-		out.println("======================================================================");
-		out.println();
+        out.println("======================================================================");
+        out.format("%s Inspection dump for %s%n", new Date(), fileName);
+        out.println("======================================================================");
+        out.println();
 
-		dumpSegment(out, messageDumpLimit, segmentBuffer);
-	}
+        dumpSegment(out, messageDumpLimit, segmentBuffer);
+    }
 
-	/**
-	 * Dump the contents of a segment file to a {@link PrintStream}.
-	 *
-	 * @param out              for the dumped contents.
-	 * @param messageDumpLimit for the number of bytes per message fragment to dump.
-	 * @param buffer           the wraps the segment file.
-	 */
-	public static void dumpSegment(final PrintStream out, final int messageDumpLimit, final UnsafeBuffer buffer) {
-		final DataHeaderFlyweight dataHeaderFlyweight = new DataHeaderFlyweight();
-		final int length = buffer.capacity();
-		int offset = 0;
+    /**
+     * Dump the contents of a segment file to a {@link PrintStream}.
+     *
+     * @param out              for the dumped contents.
+     * @param messageDumpLimit for the number of bytes per message fragment to dump.
+     * @param buffer           the wraps the segment file.
+     */
+    public static void dumpSegment(final PrintStream out, final int messageDumpLimit, final UnsafeBuffer buffer) {
+        final DataHeaderFlyweight dataHeaderFlyweight = new DataHeaderFlyweight();
+        final int length = buffer.capacity();
+        int offset = 0;
 
-		while (offset < length) {
-			dataHeaderFlyweight.wrap(buffer, offset, length - offset);
-			out.println(offset + ": " + dataHeaderFlyweight.toString());
+        while (offset < length) {
+            dataHeaderFlyweight.wrap(buffer, offset, length - offset);
+            out.println(offset + ": " + dataHeaderFlyweight.toString());
 
-			final int frameLength = dataHeaderFlyweight.frameLength();
-			if (frameLength < DataHeaderFlyweight.HEADER_LENGTH) {
-				break;
-			}
+            final int frameLength = dataHeaderFlyweight.frameLength();
+            if (frameLength < DataHeaderFlyweight.HEADER_LENGTH) {
+                break;
+            }
 
-			final int limit = min(frameLength - HEADER_LENGTH, messageDumpLimit);
-			out.println(LogInspector.formatBytes(buffer, offset + HEADER_LENGTH, limit));
-			offset += BitUtil.align(frameLength, FrameDescriptor.FRAME_ALIGNMENT);
-		}
-	}
+            final int limit = min(frameLength - HEADER_LENGTH, messageDumpLimit);
+            out.println(LogInspector.formatBytes(buffer, offset + HEADER_LENGTH, limit));
+            offset += BitUtil.align(frameLength, FrameDescriptor.FRAME_ALIGNMENT);
+        }
+    }
 }

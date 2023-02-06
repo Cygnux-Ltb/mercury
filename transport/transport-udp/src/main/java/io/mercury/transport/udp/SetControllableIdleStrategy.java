@@ -15,11 +15,10 @@
  */
 package io.mercury.transport.udp;
 
-import org.agrona.concurrent.status.CountersReader;
-import org.agrona.concurrent.status.StatusIndicator;
-
 import io.aeron.Aeron;
 import io.aeron.driver.status.StatusUtil;
+import org.agrona.concurrent.status.CountersReader;
+import org.agrona.concurrent.status.StatusIndicator;
 
 /**
  * Allows a {@link org.agrona.concurrent.ControllableIdleStrategy} to be set via
@@ -29,28 +28,28 @@ import io.aeron.driver.status.StatusUtil;
  * constants in {@link org.agrona.concurrent.ControllableIdleStrategy}.
  */
 public class SetControllableIdleStrategy {
-	/**
-	 * Main method for launching the process.
-	 *
-	 * @param args passed to the process.
-	 */
-	public static void main(final String[] args) {
-		if (args.length != 1) {
-			System.out.format("Usage: SetControllableIdleStrategy <n>");
-			System.exit(0);
-		}
+    /**
+     * Main method for launching the process.
+     *
+     * @param args passed to the process.
+     */
+    public static void main(final String[] args) {
+        if (args.length != 1) {
+            System.out.format("Usage: SetControllableIdleStrategy <n>");
+            System.exit(0);
+        }
 
-		try (Aeron aeron = Aeron.connect()) {
-			final CountersReader countersReader = aeron.countersReader();
-			final StatusIndicator statusIndicator = StatusUtil.controllableIdleStrategy(countersReader);
+        try (Aeron aeron = Aeron.connect()) {
+            final CountersReader countersReader = aeron.countersReader();
+            final StatusIndicator statusIndicator = StatusUtil.controllableIdleStrategy(countersReader);
 
-			if (null != statusIndicator) {
-				final int status = Integer.parseInt(args[0]);
-				statusIndicator.setOrdered(status);
-				System.out.println("Set ControllableIdleStrategy status to " + status);
-			} else {
-				System.out.println("Could not find ControllableIdleStrategy status.");
-			}
-		}
-	}
+            if (null != statusIndicator) {
+                final int status = Integer.parseInt(args[0]);
+                statusIndicator.setOrdered(status);
+                System.out.println("Set ControllableIdleStrategy status to " + status);
+            } else {
+                System.out.println("Could not find ControllableIdleStrategy status.");
+            }
+        }
+    }
 }

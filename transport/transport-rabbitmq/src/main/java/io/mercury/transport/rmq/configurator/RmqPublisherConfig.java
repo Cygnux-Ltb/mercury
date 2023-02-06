@@ -1,17 +1,16 @@
 package io.mercury.transport.rmq.configurator;
 
-import static com.rabbitmq.client.MessageProperties.PERSISTENT_BASIC;
-import static io.mercury.common.lang.Asserter.nonNull;
-
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-
 import com.rabbitmq.client.AMQP.BasicProperties;
-
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rmq.declare.AmqpQueue;
 import io.mercury.transport.rmq.declare.ExchangeRelationship;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
+
+import static com.rabbitmq.client.MessageProperties.PERSISTENT_BASIC;
+import static io.mercury.common.lang.Asserter.nonNull;
 
 /**
  * @author yellow013
@@ -74,33 +73,32 @@ public final class RmqPublisherConfig extends RmqConfig {
      * @param password String
      * @return Builder
      */
-    public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
-                                        @Nonnull String password) {
+    public static Builder configuration(@Nonnull String host, int port,
+                                        @Nonnull String username, @Nonnull String password) {
         return configuration(RmqConnection.with(host, port, username, password).build());
     }
 
     /**
      * Use Anonymous Exchange
      *
-     * @param host
-     * @param port
-     * @param username
-     * @param password
-     * @param virtualHost
-     * @return
+     * @param host        String
+     * @param port        int
+     * @param username    String
+     * @param password    String
+     * @param virtualHost String
+     * @return Builder
      */
     public static Builder configuration(@Nonnull String host, int port,
-                                        @Nonnull String username,
-                                        @Nonnull String password,
-                                        String virtualHost) {
+                                        @Nonnull String username, @Nonnull String password,
+                                        @Nullable String virtualHost) {
         return configuration(RmqConnection.with(host, port, username, password, virtualHost).build());
     }
 
     /**
      * Use Anonymous Exchange
      *
-     * @param connection
-     * @return
+     * @param connection RmqConnection
+     * @return Builder
      */
     public static Builder configuration(@Nonnull RmqConnection connection) {
         return configuration(connection, ExchangeRelationship.Anonymous);
@@ -109,31 +107,33 @@ public final class RmqPublisherConfig extends RmqConfig {
     /**
      * Use Specified Exchange
      *
-     * @param host
-     * @param port
-     * @param username
-     * @param password
-     * @param publishExchange
-     * @return
+     * @param host            String
+     * @param port            int
+     * @param username        String
+     * @param password        String
+     * @param publishExchange ExchangeRelationship
+     * @return Builder
      */
-    public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
-                                        @Nonnull String password, @Nonnull ExchangeRelationship publishExchange) {
+    public static Builder configuration(@Nonnull String host, int port,
+                                        @Nonnull String username, @Nonnull String password,
+                                        @Nonnull ExchangeRelationship publishExchange) {
         return configuration(RmqConnection.with(host, port, username, password).build(), publishExchange);
     }
 
     /**
      * Use Specified Exchange
      *
-     * @param host
-     * @param port
-     * @param username
-     * @param password
-     * @param virtualHost
-     * @param publishExchange
-     * @return
+     * @param host            String
+     * @param port            int
+     * @param username        String
+     * @param password        String
+     * @param virtualHost     String
+     * @param publishExchange ExchangeRelationship
+     * @return Builder
      */
-    public static Builder configuration(@Nonnull String host, int port, @Nonnull String username,
-                                        @Nonnull String password, String virtualHost, @Nonnull ExchangeRelationship publishExchange) {
+    public static Builder configuration(@Nonnull String host, int port,
+                                        @Nonnull String username, @Nonnull String password,
+                                        @Nullable String virtualHost, @Nonnull ExchangeRelationship publishExchange) {
         return configuration(RmqConnection.with(host, port, username, password, virtualHost).build(),
                 publishExchange);
     }
@@ -141,9 +141,9 @@ public final class RmqPublisherConfig extends RmqConfig {
     /**
      * Use Specified Exchange
      *
-     * @param connection
-     * @param publishExchange
-     * @return
+     * @param connection      RmqConnection
+     * @param publishExchange ExchangeRelationship
+     * @return Builder
      */
     public static Builder configuration(@Nonnull RmqConnection connection,
                                         @Nonnull ExchangeRelationship publishExchange) {
@@ -179,8 +179,8 @@ public final class RmqPublisherConfig extends RmqConfig {
         private PublishConfirmOptions confirmOptions = PublishConfirmOptions.withDefault();
 
         /**
-         * @param connection
-         * @param publishExchange
+         * @param connection      RmqConnection
+         * @param publishExchange ExchangeRelationship
          */
         private Builder(RmqConnection connection, ExchangeRelationship publishExchange) {
             this.connection = connection;
@@ -208,8 +208,8 @@ public final class RmqPublisherConfig extends RmqConfig {
         }
 
         /**
-         * @param confirm
-         * @return
+         * @param confirm boolean
+         * @return Builder
          */
         public Builder setConfirm(boolean confirm) {
             this.confirmOptions.setConfirm(confirm);
@@ -217,8 +217,8 @@ public final class RmqPublisherConfig extends RmqConfig {
         }
 
         /**
-         * @param confirmRetry
-         * @return
+         * @param confirmRetry int
+         * @return Builder
          */
         public Builder setConfirmRetry(int confirmRetry) {
             this.confirmOptions.setConfirmRetry(confirmRetry);
@@ -226,8 +226,8 @@ public final class RmqPublisherConfig extends RmqConfig {
         }
 
         /**
-         * @param confirmTimeout
-         * @return
+         * @param confirmTimeout long
+         * @return Builder
          */
         public Builder setConfirmTimeout(long confirmTimeout) {
             this.confirmOptions.setConfirmTimeout(confirmTimeout);
@@ -235,7 +235,7 @@ public final class RmqPublisherConfig extends RmqConfig {
         }
 
         /**
-         * @return
+         * @return RmqPublisherConfig
          */
         public RmqPublisherConfig build() {
             return new RmqPublisherConfig(this);
@@ -296,7 +296,7 @@ public final class RmqPublisherConfig extends RmqConfig {
         /**
          * 使用默认参数
          *
-         * @return
+         * @return PublishConfirmOptions
          */
         public static PublishConfirmOptions withDefault() {
             return new PublishConfirmOptions();
@@ -305,7 +305,7 @@ public final class RmqPublisherConfig extends RmqConfig {
         /**
          * 指定具体参数
          *
-         * @return
+         * @return PublishConfirmOptions
          */
         public static PublishConfirmOptions with(boolean confirm, long confirmTimeout, int confirmRetry) {
             return new PublishConfirmOptions(confirm, confirmTimeout, confirmRetry);
@@ -313,12 +313,15 @@ public final class RmqPublisherConfig extends RmqConfig {
 
     }
 
-    /**
-     * @param args
-     */
     public static void main(String[] args) {
-        System.out.println(configuration(RmqConnection.with("localhost", 5672, "user0", "userpass").build(),
-                ExchangeRelationship.direct("TEST").bindingQueue(AmqpQueue.named("TEST_0"))).build());
+        System.out.println(configuration(
+                RmqConnection
+                        .with("localhost", 5672, "user0", "password0")
+                        .build(),
+                ExchangeRelationship
+                        .direct("TEST")
+                        .bindingQueue(AmqpQueue.named("TEST_0")))
+                .build());
     }
 
 }

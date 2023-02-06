@@ -260,8 +260,7 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
                                                    byte[] body) throws IOException {
                             try {
                                 log.debug("Message handle start");
-                                log.debug(
-                                        "Callback handleDelivery, consumerTag==[{}], deliveryTag==[{}] body.length==[{}]",
+                                log.debug("Callback handleDelivery, consumerTag==[{}], deliveryTag==[{}] body.length==[{}]",
                                         consumerTag, envelope.getDeliveryTag(), body.length);
                                 T apply;
                                 try {
@@ -323,8 +322,7 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
             log.error("RabbitMqReceiver: [{}] already closed", receiverName);
             throw new MsgHandleException(
                     "The message could not handle, and could not delivered to the error dump address."
-                            + "\n The connection was closed.",
-                    cause);
+                            + "\n The connection was closed.", cause);
         }
     }
 

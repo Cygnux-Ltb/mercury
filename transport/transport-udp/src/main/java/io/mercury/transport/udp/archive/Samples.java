@@ -15,48 +15,48 @@
  */
 package io.mercury.transport.udp.archive;
 
+import io.aeron.logbuffer.FragmentHandler;
+
 import java.io.File;
 import java.io.IOException;
-
-import io.aeron.logbuffer.FragmentHandler;
 
 /**
  * Common constants and functions used in the Archive samples.
  */
 class Samples {
-	/**
-	 * One MB constant for using in calculations.
-	 */
-	public static final double MEGABYTE = 1024.0d * 1024.0d;
+    /**
+     * One MB constant for using in calculations.
+     */
+    public static final double MEGABYTE = 1024.0d * 1024.0d;
 
-	/**
-	 * A {@link FragmentHandler} that consumes fragments with no side effects.
-	 */
-	public static final FragmentHandler NOOP_FRAGMENT_HANDLER = (buffer, offset, length, header) -> {
-	};
+    /**
+     * A {@link FragmentHandler} that consumes fragments with no side effects.
+     */
+    public static final FragmentHandler NOOP_FRAGMENT_HANDLER = (buffer, offset, length, header) -> {
+    };
 
-	/**
-	 * Create a temporary directory for storing a sample archive.
-	 *
-	 * @return a temporary directory for storing a sample archive.
-	 */
-	public static File createTempDir() {
-		final File tempDirForTest;
-		try {
-			tempDirForTest = File.createTempFile("archive", "tmp");
-		} catch (final IOException ex) {
-			throw new RuntimeException(ex);
-		}
+    /**
+     * Create a temporary directory for storing a sample archive.
+     *
+     * @return a temporary directory for storing a sample archive.
+     */
+    public static File createTempDir() {
+        final File tempDirForTest;
+        try {
+            tempDirForTest = File.createTempFile("archive", "tmp");
+        } catch (final IOException ex) {
+            throw new RuntimeException(ex);
+        }
 
-		if (!tempDirForTest.delete()) {
-			throw new IllegalStateException("failed to delete: " + tempDirForTest);
-		}
+        if (!tempDirForTest.delete()) {
+            throw new IllegalStateException("failed to delete: " + tempDirForTest);
+        }
 
-		if (!tempDirForTest.mkdir()) {
-			throw new IllegalStateException("failed to create: " + tempDirForTest);
-		}
+        if (!tempDirForTest.mkdir()) {
+            throw new IllegalStateException("failed to create: " + tempDirForTest);
+        }
 
-		return tempDirForTest;
-	}
+        return tempDirForTest;
+    }
 
 }

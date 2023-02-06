@@ -8,10 +8,10 @@ public class NoAckException extends Exception {
     private static final long serialVersionUID = -197190157920481972L;
 
     /**
-     * @param exchange
-     * @param routingKey
-     * @param confirmRetry
-     * @param confirmTimeout
+     * @param exchange       String
+     * @param routingKey     String
+     * @param confirmRetry   int
+     * @param confirmTimeout long
      */
     public NoAckException(String exchange, String routingKey, int confirmRetry, long confirmTimeout) {
         super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
@@ -19,11 +19,11 @@ public class NoAckException extends Exception {
     }
 
     /**
-     * @param exchange
-     * @param routingKey
-     * @param confirmRetry
-     * @param confirmTimeout
-     * @param cause
+     * @param exchange       String
+     * @param routingKey     String
+     * @param confirmRetry   int
+     * @param confirmTimeout long
+     * @param cause          Throwable
      */
     public NoAckException(String exchange, String routingKey, int confirmRetry, long confirmTimeout, Throwable cause) {
         super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
@@ -31,11 +31,11 @@ public class NoAckException extends Exception {
     }
 
     /**
-     * @param exchange
-     * @param routingKey
-     * @param confirmRetry
-     * @param confirmTimeout
-     * @param msg
+     * @param exchange       String
+     * @param routingKey     String
+     * @param confirmRetry   int
+     * @param confirmTimeout long
+     * @param msg            byte[]
      */
     public NoAckException(String exchange, String routingKey, int confirmRetry, long confirmTimeout, byte[] msg) {
         super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
@@ -44,15 +44,15 @@ public class NoAckException extends Exception {
     }
 
     /**
-     * @param exchange
-     * @param routingKey
-     * @param confirmRetry
-     * @param confirmTimeout
-     * @param msg
-     * @param cause
+     * @param exchange       String
+     * @param routingKey     String
+     * @param confirmRetry   int
+     * @param confirmTimeout long
+     * @param msg            byte[]
+     * @param cause          Throwable
      */
-    public NoAckException(String exchange, String routingKey, int confirmRetry, long confirmTimeout, byte[] msg,
-                          Throwable cause) {
+    public NoAckException(String exchange, String routingKey, int confirmRetry,
+                          long confirmTimeout, byte[] msg, Throwable cause) {
         super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
                 + "], confirmRetry==[" + confirmRetry + "], confirmTimeout==[" + confirmTimeout + "], msg==["
                 + new String(msg) + "]", cause);

@@ -15,8 +15,9 @@
  */
 package io.mercury.transport.udp.raw;
 
-import static io.mercury.transport.udp.raw.Common.init;
-import static org.agrona.BitUtil.SIZE_OF_LONG;
+import io.aeron.driver.Configuration;
+import org.agrona.concurrent.SigInt;
+import org.agrona.hints.ThreadHints;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -24,10 +25,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.agrona.concurrent.SigInt;
-import org.agrona.hints.ThreadHints;
-
-import io.aeron.driver.Configuration;
+import static io.mercury.transport.udp.raw.Common.init;
+import static org.agrona.BitUtil.SIZE_OF_LONG;
 
 /**
  * Benchmark used to calculate latency of underlying system.
@@ -35,71 +34,71 @@ import io.aeron.driver.Configuration;
  * @see SendReceiveUdpPing
  */
 public class ReceiveSendUdpPong {
-	/**
-	 * Main method for launching the process.
-	 *
-	 * @param args passed to the process.
-	 * @throws IOException if an error occurs with the channel.
-	 */
-	public static void main(final String[] args) throws IOException {
-		int numChannels = 1;
-		if (1 <= args.length) {
-			numChannels = Integer.parseInt(args[0]);
-		}
+    /**
+     * Main method for launching the process.
+     *
+     * @param args passed to the process.
+     * @throws IOException if an error occurs with the channel.
+     */
+    public static void main(final String[] args) throws IOException {
+        int numChannels = 1;
+        if (1 <= args.length) {
+            numChannels = Integer.parseInt(args[0]);
+        }
 
-		String remoteHost = "localhost";
-		if (2 <= args.length) {
-			remoteHost = args[1];
-		}
+        String remoteHost = "localhost";
+        if (2 <= args.length) {
+            remoteHost = args[1];
+        }
 
-		System.out.printf("Number of channels: %d, Remote host: %s%n", numChannels, remoteHost);
+        System.out.printf("Number of channels: %d, Remote host: %s%n", numChannels, remoteHost);
 
-		final ByteBuffer buffer = ByteBuffer.allocateDirect(Configuration.MTU_LENGTH_DEFAULT);
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(Configuration.MTU_LENGTH_DEFAULT);
 
-		final DatagramChannel[] receiveChannels = new DatagramChannel[numChannels];
-		for (int i = 0; i < receiveChannels.length; i++) {
-			receiveChannels[i] = DatagramChannel.open();
-			init(receiveChannels[i]);
-			receiveChannels[i].bind(new InetSocketAddress("0.0.0.0", Common.PING_PORT + i));
-		}
+        final DatagramChannel[] receiveChannels = new DatagramChannel[numChannels];
+        for (int i = 0; i < receiveChannels.length; i++) {
+            receiveChannels[i] = DatagramChannel.open();
+            init(receiveChannels[i]);
+            receiveChannels[i].bind(new InetSocketAddress("0.0.0.0", Common.PING_PORT + i));
+        }
 
-		final InetSocketAddress sendAddress = new InetSocketAddress(remoteHost, Common.PONG_PORT);
-		final DatagramChannel sendChannel = DatagramChannel.open();
-		Common.init(sendChannel);
+        final InetSocketAddress sendAddress = new InetSocketAddress(remoteHost, Common.PONG_PORT);
+        final DatagramChannel sendChannel = DatagramChannel.open();
+        Common.init(sendChannel);
 
-		final AtomicBoolean running = new AtomicBoolean(true);
-		SigInt.register(() -> running.set(false));
+        final AtomicBoolean running = new AtomicBoolean(true);
+        SigInt.register(() -> running.set(false));
 
-		while (true) {
-			buffer.clear();
+        while (true) {
+            buffer.clear();
 
-			boolean available = false;
-			while (!available) {
-				ThreadHints.onSpinWait();
-				if (!running.get()) {
-					return;
-				}
+            boolean available = false;
+            while (!available) {
+                ThreadHints.onSpinWait();
+                if (!running.get()) {
+                    return;
+                }
 
-				for (int i = receiveChannels.length - 1; i >= 0; i--) {
-					if (null != receiveChannels[i].receive(buffer)) {
-						available = true;
-						break;
-					}
-				}
-			}
+                for (int i = receiveChannels.length - 1; i >= 0; i--) {
+                    if (null != receiveChannels[i].receive(buffer)) {
+                        available = true;
+                        break;
+                    }
+                }
+            }
 
-			buffer.flip();
-			final int length = buffer.remaining();
-			final long receivedSequenceNumber = buffer.getLong(0);
-			final long receivedTimestamp = buffer.getLong(SIZE_OF_LONG);
+            buffer.flip();
+            final int length = buffer.remaining();
+            final long receivedSequenceNumber = buffer.getLong(0);
+            final long receivedTimestamp = buffer.getLong(SIZE_OF_LONG);
 
-			buffer.clear();
-			buffer.putLong(receivedSequenceNumber);
-			buffer.putLong(receivedTimestamp);
-			buffer.position(length);
-			buffer.flip();
+            buffer.clear();
+            buffer.putLong(receivedSequenceNumber);
+            buffer.putLong(receivedTimestamp);
+            buffer.position(length);
+            buffer.flip();
 
-			sendChannel.send(buffer, sendAddress);
-		}
-	}
+            sendChannel.send(buffer, sendAddress);
+        }
+    }
 }

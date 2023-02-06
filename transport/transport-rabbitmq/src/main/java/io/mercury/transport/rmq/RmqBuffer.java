@@ -1,15 +1,7 @@
 package io.mercury.transport.rmq;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-
 import com.rabbitmq.client.Envelope;
 import com.rabbitmq.client.GetResponse;
-
 import io.mercury.common.character.Charsets;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.concurrent.queue.MultiConsumerQueue;
@@ -21,8 +13,13 @@ import io.mercury.transport.rmq.configurator.RmqConnection;
 import io.mercury.transport.rmq.declare.AmqpExchange;
 import io.mercury.transport.rmq.declare.QueueRelationship;
 import io.mercury.transport.rmq.exception.DeclareException;
+import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
+import java.io.Closeable;
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 
@@ -40,48 +37,52 @@ public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
     private final String name;
 
     /**
-     * @param <E>
-     * @param connection
-     * @param queueName
-     * @param serializer
-     * @param deserializer
-     * @return
-     * @throws DeclareException
+     * @param <E>          E
+     * @param connection   RmqConnection
+     * @param queueName    String
+     * @param serializer   BytesSerializer<E>
+     * @param deserializer BytesDeserializer<E>
+     * @return RmqBuffer<E>
+     * @throws DeclareException de
      */
     public static <E> RmqBuffer<E> newQueue(RmqConnection connection, String queueName,
-                                            BytesSerializer<E> serializer, BytesDeserializer<E> deserializer) throws DeclareException {
+                                            BytesSerializer<E> serializer, BytesDeserializer<E> deserializer)
+            throws DeclareException {
         return new RmqBuffer<>(connection, queueName, MutableLists.newFastList(), MutableLists.newFastList(),
                 serializer, deserializer);
     }
 
     /**
-     * @param <E>
-     * @param connection
-     * @param queueName
-     * @param exchangeNames
-     * @param routingKeys
-     * @param serializer
-     * @param deserializer
-     * @return
-     * @throws DeclareException
+     * @param <E>           E
+     * @param connection    RmqConnection
+     * @param queueName     String
+     * @param exchangeNames List<String>
+     * @param routingKeys   List<String>
+     * @param serializer    BytesSerializer<E>
+     * @param deserializer  BytesDeserializer<E>
+     * @return RmqBuffer<E>
+     * @throws DeclareException de
      */
     public static <E> RmqBuffer<E> newQueue(RmqConnection connection, String queueName,
-                                            List<String> exchangeNames, List<String> routingKeys, BytesSerializer<E> serializer,
-                                            BytesDeserializer<E> deserializer) throws DeclareException {
+                                            List<String> exchangeNames, List<String> routingKeys,
+                                            BytesSerializer<E> serializer, BytesDeserializer<E> deserializer)
+            throws DeclareException {
         return new RmqBuffer<>(connection, queueName, exchangeNames, routingKeys, serializer, deserializer);
     }
 
     /**
-     * @param connection
-     * @param queueName
-     * @param exchangeNames
-     * @param routingKeys
-     * @param serializer
-     * @param deserializer
-     * @throws DeclareException
+     * @param connection    RmqConnection
+     * @param queueName     String
+     * @param exchangeNames List<String>
+     * @param routingKeys   List<String>
+     * @param serializer    BytesSerializer<E>
+     * @param deserializer  BytesDeserializer<E>
+     * @throws DeclareException de
      */
-    private RmqBuffer(RmqConnection connection, String queueName, List<String> exchangeNames, List<String> routingKeys,
-                      BytesSerializer<E> serializer, BytesDeserializer<E> deserializer) throws DeclareException {
+    private RmqBuffer(RmqConnection connection, String queueName,
+                      List<String> exchangeNames, List<String> routingKeys,
+                      BytesSerializer<E> serializer, BytesDeserializer<E> deserializer)
+            throws DeclareException {
         this.connection = connection;
         this.queueName = queueName;
         this.exchangeNames = exchangeNames;
@@ -94,7 +95,7 @@ public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
     }
 
     /**
-     * @throws DeclareException
+     * @throws DeclareException de
      */
     private void declareQueue() throws DeclareException {
         QueueRelationship relationship = QueueRelationship.named(queueName).binding(
@@ -106,7 +107,7 @@ public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
     }
 
     /**
-     * @return
+     * @return RmqConnection
      */
     public RmqConnection getConnection() {
         return connection;
@@ -152,7 +153,7 @@ public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
     }
 
     /**
-     * @return
+     * @return GetResponse
      */
     private GetResponse basicGet() {
         try {
@@ -164,8 +165,8 @@ public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
     }
 
     /**
-     * @param envelope
-     * @return
+     * @param envelope Envelope
+     * @return boolean
      */
     private boolean basicAck(Envelope envelope) {
         try {

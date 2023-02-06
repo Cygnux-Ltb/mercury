@@ -23,36 +23,36 @@ import java.util.concurrent.locks.LockSupport;
  * {@link System#out}.
  */
 public final class ImageRateReporter implements Runnable {
-	private final int messageLength;
-	private final AtomicBoolean running;
-	private final ImageRateSubscriber subscriber;
+    private final int messageLength;
+    private final AtomicBoolean running;
+    private final ImageRateSubscriber subscriber;
 
-	public ImageRateReporter(final int messageLength, final AtomicBoolean running,
-			final ImageRateSubscriber subscriber) {
-		this.messageLength = messageLength;
-		this.running = running;
-		this.subscriber = subscriber;
-	}
+    public ImageRateReporter(final int messageLength, final AtomicBoolean running,
+                             final ImageRateSubscriber subscriber) {
+        this.messageLength = messageLength;
+        this.running = running;
+        this.subscriber = subscriber;
+    }
 
-	public void run() {
-		long lastTimestampMs = System.currentTimeMillis();
-		long lastTotalBytes = subscriber.totalBytes();
-		final int messageLength = this.messageLength;
+    public void run() {
+        long lastTimestampMs = System.currentTimeMillis();
+        long lastTotalBytes = subscriber.totalBytes();
+        final int messageLength = this.messageLength;
 
-		while (running.get()) {
-			LockSupport.parkNanos(1_000_000_000);
+        while (running.get()) {
+            LockSupport.parkNanos(1_000_000_000);
 
-			final long newTimestampMs = System.currentTimeMillis();
-			final long newTotalBytes = subscriber.totalBytes();
+            final long newTimestampMs = System.currentTimeMillis();
+            final long newTotalBytes = subscriber.totalBytes();
 
-			final long durationMs = newTimestampMs - lastTimestampMs;
-			final long bytesTransferred = newTotalBytes - lastTotalBytes;
+            final long durationMs = newTimestampMs - lastTimestampMs;
+            final long bytesTransferred = newTotalBytes - lastTotalBytes;
 
-			System.out.format("Duration %dms - %,d messages - %,d payload bytes%n", durationMs,
-					bytesTransferred / messageLength, bytesTransferred);
+            System.out.format("Duration %dms - %,d messages - %,d payload bytes%n", durationMs,
+                    bytesTransferred / messageLength, bytesTransferred);
 
-			lastTimestampMs = newTimestampMs;
-			lastTotalBytes = newTotalBytes;
-		}
-	}
+            lastTimestampMs = newTimestampMs;
+            lastTotalBytes = newTotalBytes;
+        }
+    }
 }

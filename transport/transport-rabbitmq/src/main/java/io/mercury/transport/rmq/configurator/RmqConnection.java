@@ -215,14 +215,19 @@ public final class RmqConnection implements TransportConfigurator {
     }
 
     public static class Builder {
+
         // 连接地址
         private final String host;
+
         // 端口号
         private final int port;
+
         // 用户名
         private final String username;
+
         // 密码
         private final String password;
+
         // 虚拟主机
         private String virtualHost = "/";
 
@@ -267,7 +272,7 @@ public final class RmqConnection implements TransportConfigurator {
                 this.virtualHost = virtualHost;
         }
 
-        public Builder setSslContext(SSLContext sslContext) {
+        public Builder setSSLContext(SSLContext sslContext) {
             this.sslContext = sslContext;
             return this;
         }

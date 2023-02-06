@@ -8,8 +8,8 @@ public class MsgHandleException extends RuntimeException {
     private static final long serialVersionUID = -8006184062312891950L;
 
     /**
-     * @param message
-     * @param cause
+     * @param message String
+     * @param cause   Throwable
      */
     public MsgHandleException(String message, Throwable cause) {
         super(message, cause);

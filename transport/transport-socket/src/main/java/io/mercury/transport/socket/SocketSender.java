@@ -17,80 +17,81 @@ import io.mercury.transport.socket.configurator.SocketConfigurator;
 
 public final class SocketSender extends TransportComponent implements Sender<byte[]> {
 
-	private SocketConfigurator configurator;
+    private final SocketConfigurator configurator;
 
-	private Socket socket;
+    private Socket socket;
 
-	private AtomicBoolean isRun = new AtomicBoolean(true);
+    private final AtomicBoolean isRun = new AtomicBoolean(true);
 
-	protected static final Logger log = Log4j2LoggerFactory.getLogger(SocketSender.class);
+    private static final Logger log = Log4j2LoggerFactory.getLogger(SocketSender.class);
 
-	public SocketSender(SocketConfigurator configurator) {
-		Asserter.nonNull(configurator, "configurator");
-		this.configurator = configurator;
-		init();
-	}
+    public SocketSender(SocketConfigurator configurator) {
+        Asserter.nonNull(configurator, "configurator");
+        this.configurator = configurator;
+        init();
+    }
 
-	private void init() {
-		try {
-			this.socket = new Socket(configurator.getHost(), configurator.getPort());
-		} catch (IOException e) {
-			log.error("Throw IOException -> {}", e.getMessage(), e);
-			throw new RuntimeException(e);
-		}
-	}
+    private void init() {
+        try {
+            this.socket = new Socket(configurator.getHost(), configurator.getPort());
+        } catch (IOException e) {
+            log.error("Throw IOException -> {}", e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
+    }
 
-	@Override
-	public boolean isConnected() {
-		return socket == null ? false : socket.isConnected();
-	}
+    @Override
+    public boolean isConnected() {
+        return socket == null ? false : socket.isConnected();
+    }
 
-	@Override
-	public boolean closeIgnoreException() {
-		this.isRun.set(false);
-		try {
-			outputStream.close();
-			if (socket != null)
-				socket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return true;
-	}
+    @Override
+    public boolean closeIgnoreException() {
+        this.isRun.set(false);
+        try {
+            outputStream.close();
+            if (socket != null)
+                socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
 
-	@Override
-	public String getName() {
-		return "SocketSender -> " + socket.hashCode();
-	}
+    @Override
+    public String getName() {
+        return "SocketSender -> " + socket.hashCode();
+    }
 
-	@Override
-	public void sent(byte[] msg) {
-		innerQueue.enqueue(msg);
-	}
+    @Override
+    public void sent(byte[] msg) {
+        innerQueue.enqueue(msg);
+    }
 
-	private DataOutputStream outputStream;
+    private DataOutputStream outputStream;
 
-	private void processSendQueue(byte[] msg) {
-		try {
-			if (isRun.get()) {
-				if (outputStream == null)
-					outputStream = new DataOutputStream(socket.getOutputStream());
-				outputStream.write(msg);
-			}
-		} catch (IOException e) {
-			log.error(e.getMessage(), e);
-			closeIgnoreException();
-		}
-	}
+    private void processSendQueue(byte[] msg) {
+        try {
+            if (isRun.get()) {
+                if (outputStream == null)
+                    outputStream = new DataOutputStream(socket.getOutputStream());
+                outputStream.write(msg);
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+            closeIgnoreException();
+        }
+    }
 
-	private SingleConsumerQueue<byte[]> innerQueue = JctSingleConsumerQueue.mpscQueue(getName() + "-InnerQueue")
-			.setCapacity(512).process(bytes -> processSendQueue(bytes));
+    private final SingleConsumerQueue<byte[]> innerQueue = JctSingleConsumerQueue
+            .mpscQueue(getName() + "-InnerQueue")
+            .setCapacity(512).process(this::processSendQueue);
 
-	public static void main(String[] args) throws IOException {
-		SocketConfigurator configurator = SocketConfigurator.builder().host("192.168.1.138").port(7901).build();
-		try (SocketSender sender = new SocketSender(configurator)) {
-			sender.sent("hello".getBytes());
-		}
-	}
+    public static void main(String[] args) throws IOException {
+        SocketConfigurator configurator = SocketConfigurator.builder().host("192.168.1.138").port(7901).build();
+        try (SocketSender sender = new SocketSender(configurator)) {
+            sender.sent("hello".getBytes());
+        }
+    }
 
 }

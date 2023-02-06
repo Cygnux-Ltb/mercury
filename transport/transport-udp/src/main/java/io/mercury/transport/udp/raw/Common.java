@@ -15,6 +15,8 @@
  */
 package io.mercury.transport.udp.raw;
 
+import org.agrona.nio.NioSelectedKeySet;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
@@ -22,66 +24,64 @@ import java.net.StandardSocketOptions;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.Selector;
 
-import org.agrona.nio.NioSelectedKeySet;
-
 /**
  * Common configuration and functions used across raw samples.
  */
 public class Common {
-	public static final int NUM_MESSAGES = 10_000;
+    public static final int NUM_MESSAGES = 10_000;
 
-	public static final int PONG_PORT = 20123;
-	public static final int PING_PORT = 20124;
+    public static final int PONG_PORT = 20123;
+    public static final int PING_PORT = 20124;
 
-	static final Field SELECTED_KEYS_FIELD;
-	static final Field PUBLIC_SELECTED_KEYS_FIELD;
+    static final Field SELECTED_KEYS_FIELD;
+    static final Field PUBLIC_SELECTED_KEYS_FIELD;
 
-	static {
-		Field selectKeysField = null;
-		Field publicSelectKeysField = null;
+    static {
+        Field selectKeysField = null;
+        Field publicSelectKeysField = null;
 
-		try {
-			final Class<?> clazz = Class.forName("sun.nio.ch.SelectorImpl", false, ClassLoader.getSystemClassLoader());
+        try {
+            final Class<?> clazz = Class.forName("sun.nio.ch.SelectorImpl", false, ClassLoader.getSystemClassLoader());
 
-			if (clazz.isAssignableFrom(Selector.open().getClass())) {
-				selectKeysField = clazz.getDeclaredField("selectedKeys");
-				selectKeysField.setAccessible(true);
+            if (clazz.isAssignableFrom(Selector.open().getClass())) {
+                selectKeysField = clazz.getDeclaredField("selectedKeys");
+                selectKeysField.setAccessible(true);
 
-				publicSelectKeysField = clazz.getDeclaredField("publicSelectedKeys");
-				publicSelectKeysField.setAccessible(true);
-			}
-		} catch (final Exception ignore) {
-		}
+                publicSelectKeysField = clazz.getDeclaredField("publicSelectedKeys");
+                publicSelectKeysField.setAccessible(true);
+            }
+        } catch (final Exception ignore) {
+        }
 
-		SELECTED_KEYS_FIELD = selectKeysField;
-		PUBLIC_SELECTED_KEYS_FIELD = publicSelectKeysField;
-	}
+        SELECTED_KEYS_FIELD = selectKeysField;
+        PUBLIC_SELECTED_KEYS_FIELD = publicSelectKeysField;
+    }
 
-	public static void init(final DatagramChannel channel) throws IOException {
-		channel.configureBlocking(false);
-		channel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
-	}
+    public static void init(final DatagramChannel channel) throws IOException {
+        channel.configureBlocking(false);
+        channel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
+    }
 
-	public static void init(final DatagramChannel channel, final InetSocketAddress sendAddress) throws IOException {
-		channel.configureBlocking(false);
-		channel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
-		channel.connect(sendAddress);
-	}
+    public static void init(final DatagramChannel channel, final InetSocketAddress sendAddress) throws IOException {
+        channel.configureBlocking(false);
+        channel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
+        channel.connect(sendAddress);
+    }
 
-	public static NioSelectedKeySet keySet(final Selector selector) {
-		NioSelectedKeySet tmpSet = null;
+    public static NioSelectedKeySet keySet(final Selector selector) {
+        NioSelectedKeySet tmpSet = null;
 
-		if (null != PUBLIC_SELECTED_KEYS_FIELD) {
-			try {
-				tmpSet = new NioSelectedKeySet();
+        if (null != PUBLIC_SELECTED_KEYS_FIELD) {
+            try {
+                tmpSet = new NioSelectedKeySet();
 
-				SELECTED_KEYS_FIELD.set(selector, tmpSet);
-				PUBLIC_SELECTED_KEYS_FIELD.set(selector, tmpSet);
-			} catch (final Exception ignore) {
-				tmpSet = null;
-			}
-		}
+                SELECTED_KEYS_FIELD.set(selector, tmpSet);
+                PUBLIC_SELECTED_KEYS_FIELD.set(selector, tmpSet);
+            } catch (final Exception ignore) {
+                tmpSet = null;
+            }
+        }
 
-		return tmpSet;
-	}
+        return tmpSet;
+    }
 }

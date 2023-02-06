@@ -188,7 +188,7 @@ public final class ExchangeRelationship extends Relationship {
         System.out.println(exchange1);
 
         System.out.println(exchange0 == exchange1);
-        System.out.println(exchange0.isIdempotent(exchange1));
+        System.out.println(exchange0.idempotent(exchange1));
 
         System.out.println(AmqpExchange.direct("ABC"));
         System.out.println(AmqpQueue.named("ABC"));

@@ -19,133 +19,133 @@ import io.mercury.transport.socket.configurator.SocketConfigurator;
 
 public class SocketReceiver extends TransportComponent implements Receiver {
 
-	private SocketConfigurator configurator;
-	private Consumer<byte[]> callback;
+    private final SocketConfigurator configurator;
+    private final Consumer<byte[]> callback;
 
-	private Socket socket;
+    private Socket socket;
 
-	private AtomicBoolean isReceiving = new AtomicBoolean(false);
-	private AtomicBoolean isRun = new AtomicBoolean(false);
+    private final AtomicBoolean isReceiving = new AtomicBoolean(false);
+    private final AtomicBoolean isRun = new AtomicBoolean(false);
 
-	protected static final Logger log = Log4j2LoggerFactory.getLogger(SocketReceiver.class);
+    protected static final Logger log = Log4j2LoggerFactory.getLogger(SocketReceiver.class);
 
-	/**
-	 * @param configurator
-	 * @param callback
-	 */
-	public SocketReceiver(SocketConfigurator configurator, Consumer<byte[]> callback) {
-		Asserter.nonNull(configurator, "configurator");
-		Asserter.nonNull(callback, "callback");
-		this.configurator = configurator;
-		this.callback = callback;
-		init();
-	}
+    /**
+     * @param configurator SocketConfigurator
+     * @param callback     Consumer<byte[]>
+     */
+    public SocketReceiver(SocketConfigurator configurator, Consumer<byte[]> callback) {
+        Asserter.nonNull(configurator, "configurator");
+        Asserter.nonNull(callback, "callback");
+        this.configurator = configurator;
+        this.callback = callback;
+        init();
+    }
 
-	private void init() {
-		try {
-			this.socket = new Socket(configurator.getHost(), configurator.getPort());
-		} catch (Exception e) {
-			log.error("new Socket({}, {}) throw Exception -> {}", configurator.getHost(), configurator.getPort(),
-					e.getMessage(), e);
-			throw new RuntimeException(e);
-		}
-	}
+    private void init() {
+        try {
+            this.socket = new Socket(configurator.getHost(), configurator.getPort());
+        } catch (Exception e) {
+            log.error("new Socket({}, {}) throw Exception -> {}", configurator.getHost(), configurator.getPort(),
+                    e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
+    }
 
-	@Override
-	public boolean isConnected() {
-		return socket == null ? false : socket.isConnected();
-	}
+    @Override
+    public boolean isConnected() {
+        return socket == null ? false : socket.isConnected();
+    }
 
-	@Override
-	public boolean closeIgnoreException() {
-		this.isRun.set(false);
-		try {
-			if (socket != null)
-				socket.close();
-		} catch (IOException e) {
-			log.error("socket.close() throw IOException -> {}", e.getMessage(), e);
-		}
-		return true;
-	}
+    @Override
+    public boolean closeIgnoreException() {
+        this.isRun.set(false);
+        try {
+            if (socket != null)
+                socket.close();
+        } catch (IOException e) {
+            log.error("socket.close() throw IOException -> {}", e.getMessage(), e);
+        }
+        return true;
+    }
 
-	@Override
-	public String getName() {
-		return "SocketReceiver -> " + socket.hashCode();
-	}
+    @Override
+    public String getName() {
+        return "SocketReceiver -> " + socket.hashCode();
+    }
 
-	@Override
-	public void receive() {
-		if (!isRun.get())
-			isRun.set(true);
-		if (!isReceiving.get())
-			startReceiveThread();
-	}
+    @Override
+    public void receive() {
+        if (!isRun.get())
+            isRun.set(true);
+        if (!isReceiving.get())
+            startReceiveThread();
+    }
 
-	private synchronized void startReceiveThread() {
-		if (isReceiving.get())
-			return;
-		isReceiving.set(true);
-		ThreadSupport.startNewThread(() -> {
-			InputStream inputStream = null;
-			try {
-				inputStream = socket.getInputStream();
-			} catch (IOException e) {
-				throw new RuntimeException(e.getMessage());
-			}
-			while (isRun.get()) {
-				try {
-					int available = inputStream.available();
-					if (available == 0) {
-						SleepSupport.sleep(configurator.receiveInterval());
-						continue;
-					}
-					byte[] bytes = new byte[available];
-					IOUtils.read(inputStream, bytes);
-					callback.accept(bytes);
-				} catch (IOException e) {
-					log.error(e.getMessage(), e);
-					try {
-						inputStream.close();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-					closeIgnoreException();
-				}
-			}
-			if (inputStream != null) {
-				try {
-					inputStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    private synchronized void startReceiveThread() {
+        if (isReceiving.get())
+            return;
+        isReceiving.set(true);
+        ThreadSupport.startNewThread(() -> {
+            InputStream inputStream;
+            try {
+                inputStream = socket.getInputStream();
+            } catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+            while (isRun.get()) {
+                try {
+                    int available = inputStream.available();
+                    if (available == 0) {
+                        SleepSupport.sleep(configurator.receiveInterval());
+                        continue;
+                    }
+                    byte[] bytes = new byte[available];
+                    IOUtils.read(inputStream, bytes);
+                    callback.accept(bytes);
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                    try {
+                        inputStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    closeIgnoreException();
+                }
+            }
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		SocketConfigurator configurator = SocketConfigurator.builder().host("192.168.1.138").port(7901).build();
+        SocketConfigurator configurator = SocketConfigurator.builder().host("192.168.1.138").port(7901).build();
 
-		SocketReceiver receiver = new SocketReceiver(configurator, bytes -> System.out.println(new String(bytes)));
+        SocketReceiver receiver = new SocketReceiver(configurator, bytes -> System.out.println(new String(bytes)));
 
-		receiver.receive();
+        receiver.receive();
 
-		try {
-			receiver.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        try {
+            receiver.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-	}
+    }
 
-	@Override
-	public void reconnect() {
+    @Override
+    public void reconnect() {
 
-	}
+    }
 
-	@Override
-	public void close() throws IOException {
-		closeIgnoreException();
-	}
+    @Override
+    public void close() throws IOException {
+        closeIgnoreException();
+    }
 
 }
