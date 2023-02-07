@@ -8,8 +8,7 @@ import org.agrona.DirectBuffer;
  * Repeating group dimensions.
  */
 @SuppressWarnings("all")
-public final class GroupSizeEncodingDecoder
-{
+public final class GroupSizeEncodingDecoder {
     public static final int SCHEMA_ID = 1;
     public static final int SCHEMA_VERSION = 1;
     public static final int ENCODED_LENGTH = 4;
@@ -18,10 +17,8 @@ public final class GroupSizeEncodingDecoder
     private int offset;
     private DirectBuffer buffer;
 
-    public GroupSizeEncodingDecoder wrap(final DirectBuffer buffer, final int offset)
-    {
-        if (buffer != this.buffer)
-        {
+    public GroupSizeEncodingDecoder wrap(final DirectBuffer buffer, final int offset) {
+        if (buffer != this.buffer) {
             this.buffer = buffer;
         }
         this.offset = offset;
@@ -29,117 +26,94 @@ public final class GroupSizeEncodingDecoder
         return this;
     }
 
-    public DirectBuffer buffer()
-    {
+    public DirectBuffer buffer() {
         return buffer;
     }
 
-    public int offset()
-    {
+    public int offset() {
         return offset;
     }
 
-    public int encodedLength()
-    {
+    public int encodedLength() {
         return ENCODED_LENGTH;
     }
 
-    public int sbeSchemaId()
-    {
+    public int sbeSchemaId() {
         return SCHEMA_ID;
     }
 
-    public int sbeSchemaVersion()
-    {
+    public int sbeSchemaVersion() {
         return SCHEMA_VERSION;
     }
 
-    public static int blockLengthEncodingOffset()
-    {
+    public static int blockLengthEncodingOffset() {
         return 0;
     }
 
-    public static int blockLengthEncodingLength()
-    {
+    public static int blockLengthEncodingLength() {
         return 2;
     }
 
-    public static int blockLengthSinceVersion()
-    {
+    public static int blockLengthSinceVersion() {
         return 0;
     }
 
-    public static int blockLengthNullValue()
-    {
+    public static int blockLengthNullValue() {
         return 65535;
     }
 
-    public static int blockLengthMinValue()
-    {
+    public static int blockLengthMinValue() {
         return 0;
     }
 
-    public static int blockLengthMaxValue()
-    {
+    public static int blockLengthMaxValue() {
         return 65534;
     }
 
-    public int blockLength()
-    {
+    public int blockLength() {
         return (buffer.getShort(offset + 0, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
     }
 
 
-    public static int numInGroupEncodingOffset()
-    {
+    public static int numInGroupEncodingOffset() {
         return 2;
     }
 
-    public static int numInGroupEncodingLength()
-    {
+    public static int numInGroupEncodingLength() {
         return 2;
     }
 
-    public static int numInGroupSinceVersion()
-    {
+    public static int numInGroupSinceVersion() {
         return 0;
     }
 
-    public static int numInGroupNullValue()
-    {
+    public static int numInGroupNullValue() {
         return 65535;
     }
 
-    public static int numInGroupMinValue()
-    {
+    public static int numInGroupMinValue() {
         return 0;
     }
 
-    public static int numInGroupMaxValue()
-    {
+    public static int numInGroupMaxValue() {
         return 65534;
     }
 
-    public int numInGroup()
-    {
+    public int numInGroup() {
         return (buffer.getShort(offset + 2, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
     }
 
 
-    public String toString()
-    {
-        if (null == buffer)
-        {
+    public String toString() {
+        if (null == buffer) {
             return "";
         }
 
         return appendTo(new StringBuilder()).toString();
     }
 
-    public StringBuilder appendTo(final StringBuilder builder)
-    {
-        if (null == buffer)
-        {
+    public StringBuilder appendTo(final StringBuilder builder) {
+        if (null == buffer) {
             return builder;
         }
 

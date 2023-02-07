@@ -57,6 +57,11 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>io.mercury</groupId>
+            <artifactId>commons-concurrent</artifactId>
+        </dependency>
+
         <!-- avro-fastserde enables faster Avro de/serialization by doing runtime code-generation
             to provide a faster decoder/encoder implementation. -->
         <dependency>
@@ -73,11 +78,6 @@
                     <artifactId>slf4j-api</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>io.mercury</groupId>
-            <artifactId>commons-concurrent</artifactId>
         </dependency>
 
         <!-- Avro core components -->

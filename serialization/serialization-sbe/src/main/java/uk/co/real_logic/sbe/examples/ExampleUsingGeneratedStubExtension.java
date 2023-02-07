@@ -15,10 +15,11 @@
  */
 package uk.co.real_logic.sbe.examples;
 
-import static extension.CarEncoder.cupHolderCountNullValue;
-import static java.nio.file.StandardOpenOption.CREATE;
-import static java.nio.file.StandardOpenOption.READ;
-import static java.nio.file.StandardOpenOption.WRITE;
+import baseline.BooleanType;
+import baseline.BoostType;
+import extension.CarDecoder.PerformanceFiguresDecoder.AccelerationDecoder;
+import extension.MessageHeaderEncoder;
+import org.agrona.concurrent.UnsafeBuffer;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -26,12 +27,10 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
-import org.agrona.concurrent.UnsafeBuffer;
-
-import baseline.BooleanType;
-import baseline.BoostType;
-import extension.CarDecoder.PerformanceFiguresDecoder.AccelerationDecoder;
-import extension.MessageHeaderEncoder;
+import static extension.CarEncoder.cupHolderCountNullValue;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.READ;
+import static java.nio.file.StandardOpenOption.WRITE;
 
 /**
  * Example encode and decode of a complex message using generated stub codecs
@@ -52,8 +51,8 @@ public class ExampleUsingGeneratedStubExtension {
             MANUFACTURER_CODE = "123".getBytes(baseline.EngineEncoder.manufacturerCodeCharacterEncoding());
             MANUFACTURER = "Honda".getBytes(baseline.CarEncoder.manufacturerCharacterEncoding());
             MODEL = "Civic VTi".getBytes(baseline.CarEncoder.modelCharacterEncoding());
-            ACTIVATION_CODE = new UnsafeBuffer(
-                    "abcdef".getBytes(baseline.CarEncoder.activationCodeCharacterEncoding()));
+            ACTIVATION_CODE = new UnsafeBuffer("abcdef".getBytes(baseline
+                    .CarEncoder.activationCodeCharacterEncoding()));
         } catch (final UnsupportedEncodingException ex) {
             throw new RuntimeException(ex);
         }

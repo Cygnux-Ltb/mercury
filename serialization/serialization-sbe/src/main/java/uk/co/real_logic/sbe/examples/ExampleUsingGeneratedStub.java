@@ -15,18 +15,6 @@
  */
 package uk.co.real_logic.sbe.examples;
 
-import static java.nio.file.StandardOpenOption.CREATE;
-import static java.nio.file.StandardOpenOption.READ;
-import static java.nio.file.StandardOpenOption.WRITE;
-
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
-
-import org.agrona.concurrent.UnsafeBuffer;
-
 import baseline.BooleanType;
 import baseline.BoostType;
 import baseline.CarDecoder;
@@ -38,6 +26,17 @@ import baseline.MessageHeaderDecoder;
 import baseline.MessageHeaderEncoder;
 import baseline.Model;
 import baseline.OptionalExtrasDecoder;
+import org.agrona.concurrent.UnsafeBuffer;
+
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
+
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.READ;
+import static java.nio.file.StandardOpenOption.WRITE;
 
 /**
  * Example encode and decode of a complex message using generated stub codecs.
@@ -114,25 +113,43 @@ public class ExampleUsingGeneratedStub {
 
     static int encode(final CarEncoder car, final UnsafeBuffer directBuffer,
                       final MessageHeaderEncoder messageHeaderEncoder) {
-        car.wrapAndApplyHeader(directBuffer, 0, messageHeaderEncoder).serialNumber(1234).modelYear(2013)
-                .available(BooleanType.T).code(Model.A).putVehicleCode(VEHICLE_CODE, 0);
+        car.wrapAndApplyHeader(directBuffer, 0, messageHeaderEncoder)
+                .serialNumber(1234)
+                .modelYear(2013)
+                .available(BooleanType.T)
+                .code(Model.A)
+                .putVehicleCode(VEHICLE_CODE, 0);
 
         car.putSomeNumbers(1, 2, 3, 4);
 
-        car.extras().clear().cruiseControl(true).sportsPack(true).sunRoof(false);
+        car.extras().clear()
+                .cruiseControl(true)
+                .sportsPack(true)
+                .sunRoof(false);
 
-        car.engine().capacity(2000).numCylinders((short) 4).putManufacturerCode(MANUFACTURER_CODE, 0)
-                .efficiency((byte) 35).boosterEnabled(BooleanType.T).booster().boostType(BoostType.NITROUS)
+        car.engine().capacity(2000)
+                .numCylinders((short) 4)
+                .putManufacturerCode(MANUFACTURER_CODE, 0)
+                .efficiency((byte) 35)
+                .boosterEnabled(BooleanType.T)
+                .booster()
+                .boostType(BoostType.NITROUS)
                 .horsePower((short) 200);
 
-        car.fuelFiguresCount(3).next().speed(30).mpg(35.9f).usageDescription("Urban Cycle").next().speed(55).mpg(49.0f)
-                .usageDescription("Combined Cycle").next().speed(75).mpg(40.0f).usageDescription("Highway Cycle");
+        car.fuelFiguresCount(3)
+                .next().speed(30).mpg(35.9f).usageDescription("Urban Cycle")
+                .next().speed(55).mpg(49.0f).usageDescription("Combined Cycle")
+                .next().speed(75).mpg(40.0f).usageDescription("Highway Cycle");
 
         final CarEncoder.PerformanceFiguresEncoder figures = car.performanceFiguresCount(2);
-        figures.next().octaneRating((short) 95).accelerationCount(3).next().mph(30).seconds(4.0f).next().mph(60)
-                .seconds(7.5f).next().mph(100).seconds(12.2f);
-        figures.next().octaneRating((short) 99).accelerationCount(3).next().mph(30).seconds(3.8f).next().mph(60)
-                .seconds(7.1f).next().mph(100).seconds(11.8f);
+        figures.next().octaneRating((short) 95).accelerationCount(3)
+                .next().mph(30).seconds(4.0f)
+                .next().mph(60).seconds(7.5f)
+                .next().mph(100).seconds(12.2f);
+        figures.next().octaneRating((short) 99).accelerationCount(3)
+                .next().mph(30).seconds(3.8f)
+                .next().mph(60).seconds(7.1f)
+                .next().mph(100).seconds(11.8f);
 
         // An exception will be raised if the string length is larger than can be
         // encoded in the varDataEncoding field

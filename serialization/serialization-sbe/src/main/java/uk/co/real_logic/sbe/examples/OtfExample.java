@@ -15,19 +15,9 @@
  */
 package uk.co.real_logic.sbe.examples;
 
-import java.io.BufferedInputStream;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.nio.ByteBuffer;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-
-import org.agrona.concurrent.UnsafeBuffer;
-
 import baseline.CarEncoder;
 import baseline.MessageHeaderEncoder;
+import org.agrona.concurrent.UnsafeBuffer;
 import uk.co.real_logic.sbe.ir.Ir;
 import uk.co.real_logic.sbe.ir.IrDecoder;
 import uk.co.real_logic.sbe.ir.IrEncoder;
@@ -38,6 +28,15 @@ import uk.co.real_logic.sbe.xml.IrGenerator;
 import uk.co.real_logic.sbe.xml.MessageSchema;
 import uk.co.real_logic.sbe.xml.ParserOptions;
 import uk.co.real_logic.sbe.xml.XmlSchemaParser;
+
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * Example of On-The-Fly decoding of a message based on encoded IR.

@@ -1,16 +1,15 @@
 /* Generated SBE (Simple Binary Encoding) message codec. */
 package extension;
 
-import org.agrona.MutableDirectBuffer;
 import org.agrona.DirectBuffer;
+import org.agrona.MutableDirectBuffer;
 
 
 /**
  * Description of a basic Car
  */
 @SuppressWarnings("all")
-public final class CarDecoder
-{
+public final class CarDecoder {
     public static final int BLOCK_LENGTH = 62;
     public static final int TEMPLATE_ID = 1;
     public static final int SCHEMA_ID = 1;
@@ -25,54 +24,44 @@ public final class CarDecoder
     int actingBlockLength;
     int actingVersion;
 
-    public int sbeBlockLength()
-    {
+    public int sbeBlockLength() {
         return BLOCK_LENGTH;
     }
 
-    public int sbeTemplateId()
-    {
+    public int sbeTemplateId() {
         return TEMPLATE_ID;
     }
 
-    public int sbeSchemaId()
-    {
+    public int sbeSchemaId() {
         return SCHEMA_ID;
     }
 
-    public int sbeSchemaVersion()
-    {
+    public int sbeSchemaVersion() {
         return SCHEMA_VERSION;
     }
 
-    public String sbeSemanticType()
-    {
+    public String sbeSemanticType() {
         return "";
     }
 
-    public DirectBuffer buffer()
-    {
+    public DirectBuffer buffer() {
         return buffer;
     }
 
-    public int initialOffset()
-    {
+    public int initialOffset() {
         return initialOffset;
     }
 
-    public int offset()
-    {
+    public int offset() {
         return offset;
     }
 
     public CarDecoder wrap(
-        final DirectBuffer buffer,
-        final int offset,
-        final int actingBlockLength,
-        final int actingVersion)
-    {
-        if (buffer != this.buffer)
-        {
+            final DirectBuffer buffer,
+            final int offset,
+            final int actingBlockLength,
+            final int actingVersion) {
+        if (buffer != this.buffer) {
             this.buffer = buffer;
         }
         this.initialOffset = offset;
@@ -85,32 +74,28 @@ public final class CarDecoder
     }
 
     public CarDecoder wrapAndApplyHeader(
-        final DirectBuffer buffer,
-        final int offset,
-        final MessageHeaderDecoder headerDecoder)
-    {
+            final DirectBuffer buffer,
+            final int offset,
+            final MessageHeaderDecoder headerDecoder) {
         headerDecoder.wrap(buffer, offset);
 
         final int templateId = headerDecoder.templateId();
-        if (TEMPLATE_ID != templateId)
-        {
+        if (TEMPLATE_ID != templateId) {
             throw new IllegalStateException("Invalid TEMPLATE_ID: " + templateId);
         }
 
         return wrap(
-            buffer,
-            offset + MessageHeaderDecoder.ENCODED_LENGTH,
-            headerDecoder.blockLength(),
-            headerDecoder.version());
+                buffer,
+                offset + MessageHeaderDecoder.ENCODED_LENGTH,
+                headerDecoder.blockLength(),
+                headerDecoder.version());
     }
 
-    public CarDecoder sbeRewind()
-    {
+    public CarDecoder sbeRewind() {
         return wrap(buffer, initialOffset, actingBlockLength, actingVersion);
     }
 
-    public int sbeDecodedLength()
-    {
+    public int sbeDecodedLength() {
         final int currentLimit = limit();
         sbeSkip();
         final int decodedLength = encodedLength();
@@ -119,260 +104,209 @@ public final class CarDecoder
         return decodedLength;
     }
 
-    public int encodedLength()
-    {
+    public int encodedLength() {
         return limit - offset;
     }
 
-    public int limit()
-    {
+    public int limit() {
         return limit;
     }
 
-    public void limit(final int limit)
-    {
+    public void limit(final int limit) {
         this.limit = limit;
     }
 
-    public static int serialNumberId()
-    {
+    public static int serialNumberId() {
         return 1;
     }
 
-    public static int serialNumberSinceVersion()
-    {
+    public static int serialNumberSinceVersion() {
         return 0;
     }
 
-    public static int serialNumberEncodingOffset()
-    {
+    public static int serialNumberEncodingOffset() {
         return 0;
     }
 
-    public static int serialNumberEncodingLength()
-    {
+    public static int serialNumberEncodingLength() {
         return 8;
     }
 
-    public static String serialNumberMetaAttribute(final MetaAttribute metaAttribute)
-    {
-        if (MetaAttribute.PRESENCE == metaAttribute)
-        {
+    public static String serialNumberMetaAttribute(final MetaAttribute metaAttribute) {
+        if (MetaAttribute.PRESENCE == metaAttribute) {
             return "required";
         }
 
         return "";
     }
 
-    public static long serialNumberNullValue()
-    {
+    public static long serialNumberNullValue() {
         return 0xffffffffffffffffL;
     }
 
-    public static long serialNumberMinValue()
-    {
+    public static long serialNumberMinValue() {
         return 0x0L;
     }
 
-    public static long serialNumberMaxValue()
-    {
+    public static long serialNumberMaxValue() {
         return 0xfffffffffffffffeL;
     }
 
-    public long serialNumber()
-    {
+    public long serialNumber() {
         return buffer.getLong(offset + 0, java.nio.ByteOrder.LITTLE_ENDIAN);
     }
 
 
-    public static int modelYearId()
-    {
+    public static int modelYearId() {
         return 2;
     }
 
-    public static int modelYearSinceVersion()
-    {
+    public static int modelYearSinceVersion() {
         return 0;
     }
 
-    public static int modelYearEncodingOffset()
-    {
+    public static int modelYearEncodingOffset() {
         return 8;
     }
 
-    public static int modelYearEncodingLength()
-    {
+    public static int modelYearEncodingLength() {
         return 2;
     }
 
-    public static String modelYearMetaAttribute(final MetaAttribute metaAttribute)
-    {
-        if (MetaAttribute.PRESENCE == metaAttribute)
-        {
+    public static String modelYearMetaAttribute(final MetaAttribute metaAttribute) {
+        if (MetaAttribute.PRESENCE == metaAttribute) {
             return "required";
         }
 
         return "";
     }
 
-    public static int modelYearNullValue()
-    {
+    public static int modelYearNullValue() {
         return 65535;
     }
 
-    public static int modelYearMinValue()
-    {
+    public static int modelYearMinValue() {
         return 0;
     }
 
-    public static int modelYearMaxValue()
-    {
+    public static int modelYearMaxValue() {
         return 65534;
     }
 
-    public int modelYear()
-    {
+    public int modelYear() {
         return (buffer.getShort(offset + 8, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
     }
 
 
-    public static int availableId()
-    {
+    public static int availableId() {
         return 3;
     }
 
-    public static int availableSinceVersion()
-    {
+    public static int availableSinceVersion() {
         return 0;
     }
 
-    public static int availableEncodingOffset()
-    {
+    public static int availableEncodingOffset() {
         return 10;
     }
 
-    public static int availableEncodingLength()
-    {
+    public static int availableEncodingLength() {
         return 1;
     }
 
-    public static String availableMetaAttribute(final MetaAttribute metaAttribute)
-    {
-        if (MetaAttribute.PRESENCE == metaAttribute)
-        {
+    public static String availableMetaAttribute(final MetaAttribute metaAttribute) {
+        if (MetaAttribute.PRESENCE == metaAttribute) {
             return "required";
         }
 
         return "";
     }
 
-    public short availableRaw()
-    {
-        return ((short)(buffer.getByte(offset + 10) & 0xFF));
+    public short availableRaw() {
+        return ((short) (buffer.getByte(offset + 10) & 0xFF));
     }
 
-    public BooleanType available()
-    {
-        return BooleanType.get(((short)(buffer.getByte(offset + 10) & 0xFF)));
+    public BooleanType available() {
+        return BooleanType.get(((short) (buffer.getByte(offset + 10) & 0xFF)));
     }
 
 
-    public static int codeId()
-    {
+    public static int codeId() {
         return 4;
     }
 
-    public static int codeSinceVersion()
-    {
+    public static int codeSinceVersion() {
         return 0;
     }
 
-    public static int codeEncodingOffset()
-    {
+    public static int codeEncodingOffset() {
         return 11;
     }
 
-    public static int codeEncodingLength()
-    {
+    public static int codeEncodingLength() {
         return 1;
     }
 
-    public static String codeMetaAttribute(final MetaAttribute metaAttribute)
-    {
-        if (MetaAttribute.PRESENCE == metaAttribute)
-        {
+    public static String codeMetaAttribute(final MetaAttribute metaAttribute) {
+        if (MetaAttribute.PRESENCE == metaAttribute) {
             return "required";
         }
 
         return "";
     }
 
-    public byte codeRaw()
-    {
+    public byte codeRaw() {
         return buffer.getByte(offset + 11);
     }
 
-    public Model code()
-    {
+    public Model code() {
         return Model.get(buffer.getByte(offset + 11));
     }
 
 
-    public static int someNumbersId()
-    {
+    public static int someNumbersId() {
         return 5;
     }
 
-    public static int someNumbersSinceVersion()
-    {
+    public static int someNumbersSinceVersion() {
         return 0;
     }
 
-    public static int someNumbersEncodingOffset()
-    {
+    public static int someNumbersEncodingOffset() {
         return 12;
     }
 
-    public static int someNumbersEncodingLength()
-    {
+    public static int someNumbersEncodingLength() {
         return 16;
     }
 
-    public static String someNumbersMetaAttribute(final MetaAttribute metaAttribute)
-    {
-        if (MetaAttribute.PRESENCE == metaAttribute)
-        {
+    public static String someNumbersMetaAttribute(final MetaAttribute metaAttribute) {
+        if (MetaAttribute.PRESENCE == metaAttribute) {
             return "required";
         }
 
         return "";
     }
 
-    public static long someNumbersNullValue()
-    {
+    public static long someNumbersNullValue() {
         return 4294967295L;
     }
 
-    public static long someNumbersMinValue()
-    {
+    public static long someNumbersMinValue() {
         return 0L;
     }
 
-    public static long someNumbersMaxValue()
-    {
+    public static long someNumbersMaxValue() {
         return 4294967294L;
     }
 
-    public static int someNumbersLength()
-    {
+    public static int someNumbersLength() {
         return 4;
     }
 
 
-    public long someNumbers(final int index)
-    {
-        if (index < 0 || index >= 4)
-        {
+    public long someNumbers(final int index) {
+        if (index < 0 || index >= 4) {
             throw new IndexOutOfBoundsException("index out of range: index=" + index);
         }
 
@@ -382,61 +316,49 @@ public final class CarDecoder
     }
 
 
-    public static int vehicleCodeId()
-    {
+    public static int vehicleCodeId() {
         return 6;
     }
 
-    public static int vehicleCodeSinceVersion()
-    {
+    public static int vehicleCodeSinceVersion() {
         return 0;
     }
 
-    public static int vehicleCodeEncodingOffset()
-    {
+    public static int vehicleCodeEncodingOffset() {
         return 28;
     }
 
-    public static int vehicleCodeEncodingLength()
-    {
+    public static int vehicleCodeEncodingLength() {
         return 6;
     }
 
-    public static String vehicleCodeMetaAttribute(final MetaAttribute metaAttribute)
-    {
-        if (MetaAttribute.PRESENCE == metaAttribute)
-        {
+    public static String vehicleCodeMetaAttribute(final MetaAttribute metaAttribute) {
+        if (MetaAttribute.PRESENCE == metaAttribute) {
             return "required";
         }
 
         return "";
     }
 
-    public static byte vehicleCodeNullValue()
-    {
-        return (byte)0;
+    public static byte vehicleCodeNullValue() {
+        return (byte) 0;
     }
 
-    public static byte vehicleCodeMinValue()
-    {
-        return (byte)32;
+    public static byte vehicleCodeMinValue() {
+        return (byte) 32;
     }
 
-    public static byte vehicleCodeMaxValue()
-    {
-        return (byte)126;
+    public static byte vehicleCodeMaxValue() {
+        return (byte) 126;
     }
 
-    public static int vehicleCodeLength()
-    {
+    public static int vehicleCodeLength() {
         return 6;
     }
 
 
-    public byte vehicleCode(final int index)
-    {
-        if (index < 0 || index >= 6)
-        {
+    public byte vehicleCode(final int index) {
+        if (index < 0 || index >= 6) {
             throw new IndexOutOfBoundsException("index out of range: index=" + index);
         }
 
@@ -446,16 +368,13 @@ public final class CarDecoder
     }
 
 
-    public static String vehicleCodeCharacterEncoding()
-    {
+    public static String vehicleCodeCharacterEncoding() {
         return "ASCII";
     }
 
-    public int getVehicleCode(final byte[] dst, final int dstOffset)
-    {
+    public int getVehicleCode(final byte[] dst, final int dstOffset) {
         final int length = 6;
-        if (dstOffset < 0 || dstOffset > (dst.length - length))
-        {
+        if (dstOffset < 0 || dstOffset > (dst.length - length)) {
             throw new IndexOutOfBoundsException("Copy will go out of range: offset=" + dstOffset);
         }
 
@@ -464,34 +383,27 @@ public final class CarDecoder
         return length;
     }
 
-    public String vehicleCode()
-    {
+    public String vehicleCode() {
         final byte[] dst = new byte[6];
         buffer.getBytes(offset + 28, dst, 0, 6);
 
         int end = 0;
-        for (; end < 6 && dst[end] != 0; ++end);
+        for (; end < 6 && dst[end] != 0; ++end) ;
 
         return new String(dst, 0, end, java.nio.charset.StandardCharsets.US_ASCII);
     }
 
 
-    public int getVehicleCode(final Appendable value)
-    {
-        for (int i = 0; i < 6; ++i)
-        {
+    public int getVehicleCode(final Appendable value) {
+        for (int i = 0; i < 6; ++i) {
             final int c = buffer.getByte(offset + 28 + i) & 0xFF;
-            if (c == 0)
-            {
+            if (c == 0) {
                 return i;
             }
 
-            try
-            {
-                value.append(c > 127 ? '?' : (char)c);
-            }
-            catch (final java.io.IOException ex)
-            {
+            try {
+                value.append(c > 127 ? '?' : (char) c);
+            } catch (final java.io.IOException ex) {
                 throw new java.io.UncheckedIOException(ex);
             }
         }
@@ -500,30 +412,24 @@ public final class CarDecoder
     }
 
 
-    public static int extrasId()
-    {
+    public static int extrasId() {
         return 7;
     }
 
-    public static int extrasSinceVersion()
-    {
+    public static int extrasSinceVersion() {
         return 0;
     }
 
-    public static int extrasEncodingOffset()
-    {
+    public static int extrasEncodingOffset() {
         return 34;
     }
 
-    public static int extrasEncodingLength()
-    {
+    public static int extrasEncodingLength() {
         return 1;
     }
 
-    public static String extrasMetaAttribute(final MetaAttribute metaAttribute)
-    {
-        if (MetaAttribute.PRESENCE == metaAttribute)
-        {
+    public static String extrasMetaAttribute(final MetaAttribute metaAttribute) {
+        if (MetaAttribute.PRESENCE == metaAttribute) {
             return "required";
         }
 
@@ -532,78 +438,63 @@ public final class CarDecoder
 
     private final OptionalExtrasDecoder extras = new OptionalExtrasDecoder();
 
-    public OptionalExtrasDecoder extras()
-    {
+    public OptionalExtrasDecoder extras() {
         extras.wrap(buffer, offset + 34);
         return extras;
     }
 
-    public static int discountedModelId()
-    {
+    public static int discountedModelId() {
         return 8;
     }
 
-    public static int discountedModelSinceVersion()
-    {
+    public static int discountedModelSinceVersion() {
         return 0;
     }
 
-    public static int discountedModelEncodingOffset()
-    {
+    public static int discountedModelEncodingOffset() {
         return 35;
     }
 
-    public static int discountedModelEncodingLength()
-    {
+    public static int discountedModelEncodingLength() {
         return 1;
     }
 
-    public static String discountedModelMetaAttribute(final MetaAttribute metaAttribute)
-    {
-        if (MetaAttribute.PRESENCE == metaAttribute)
-        {
+    public static String discountedModelMetaAttribute(final MetaAttribute metaAttribute) {
+        if (MetaAttribute.PRESENCE == metaAttribute) {
             return "constant";
         }
 
         return "";
     }
 
-    public byte discountedModelRaw()
-    {
+    public byte discountedModelRaw() {
         return Model.C.value();
     }
 
 
-    public Model discountedModel()
-    {
+    public Model discountedModel() {
         return Model.C;
     }
 
 
-    public static int engineId()
-    {
+    public static int engineId() {
         return 9;
     }
 
-    public static int engineSinceVersion()
-    {
+    public static int engineSinceVersion() {
         return 0;
     }
 
-    public static int engineEncodingOffset()
-    {
+    public static int engineEncodingOffset() {
         return 35;
     }
 
-    public static int engineEncodingLength()
-    {
+    public static int engineEncodingLength() {
         return 10;
     }
 
-    public static String engineMetaAttribute(final MetaAttribute metaAttribute)
-    {
-        if (MetaAttribute.PRESENCE == metaAttribute)
-        {
+    public static String engineMetaAttribute(final MetaAttribute metaAttribute) {
+        if (MetaAttribute.PRESENCE == metaAttribute) {
             return "required";
         }
 
@@ -612,72 +503,58 @@ public final class CarDecoder
 
     private final EngineDecoder engine = new EngineDecoder();
 
-    public EngineDecoder engine()
-    {
+    public EngineDecoder engine() {
         engine.wrap(buffer, offset + 35);
         return engine;
     }
 
-    public static int uuidId()
-    {
+    public static int uuidId() {
         return 100;
     }
 
-    public static int uuidSinceVersion()
-    {
+    public static int uuidSinceVersion() {
         return 1;
     }
 
-    public static int uuidEncodingOffset()
-    {
+    public static int uuidEncodingOffset() {
         return 45;
     }
 
-    public static int uuidEncodingLength()
-    {
+    public static int uuidEncodingLength() {
         return 16;
     }
 
-    public static String uuidMetaAttribute(final MetaAttribute metaAttribute)
-    {
-        if (MetaAttribute.PRESENCE == metaAttribute)
-        {
+    public static String uuidMetaAttribute(final MetaAttribute metaAttribute) {
+        if (MetaAttribute.PRESENCE == metaAttribute) {
             return "optional";
         }
 
         return "";
     }
 
-    public static long uuidNullValue()
-    {
+    public static long uuidNullValue() {
         return -9223372036854775808L;
     }
 
-    public static long uuidMinValue()
-    {
+    public static long uuidMinValue() {
         return -9223372036854775807L;
     }
 
-    public static long uuidMaxValue()
-    {
+    public static long uuidMaxValue() {
         return 9223372036854775807L;
     }
 
-    public static int uuidLength()
-    {
+    public static int uuidLength() {
         return 2;
     }
 
 
-    public long uuid(final int index)
-    {
-        if (index < 0 || index >= 2)
-        {
+    public long uuid(final int index) {
+        if (index < 0 || index >= 2) {
             throw new IndexOutOfBoundsException("index out of range: index=" + index);
         }
 
-        if (parentMessage.actingVersion < 1)
-        {
+        if (parentMessage.actingVersion < 1) {
             return -9223372036854775808L;
         }
 
@@ -687,83 +564,68 @@ public final class CarDecoder
     }
 
 
-    public static int cupHolderCountId()
-    {
+    public static int cupHolderCountId() {
         return 101;
     }
 
-    public static int cupHolderCountSinceVersion()
-    {
+    public static int cupHolderCountSinceVersion() {
         return 1;
     }
 
-    public static int cupHolderCountEncodingOffset()
-    {
+    public static int cupHolderCountEncodingOffset() {
         return 61;
     }
 
-    public static int cupHolderCountEncodingLength()
-    {
+    public static int cupHolderCountEncodingLength() {
         return 1;
     }
 
-    public static String cupHolderCountMetaAttribute(final MetaAttribute metaAttribute)
-    {
-        if (MetaAttribute.PRESENCE == metaAttribute)
-        {
+    public static String cupHolderCountMetaAttribute(final MetaAttribute metaAttribute) {
+        if (MetaAttribute.PRESENCE == metaAttribute) {
             return "optional";
         }
 
         return "";
     }
 
-    public static short cupHolderCountNullValue()
-    {
-        return (short)255;
+    public static short cupHolderCountNullValue() {
+        return (short) 255;
     }
 
-    public static short cupHolderCountMinValue()
-    {
-        return (short)0;
+    public static short cupHolderCountMinValue() {
+        return (short) 0;
     }
 
-    public static short cupHolderCountMaxValue()
-    {
-        return (short)254;
+    public static short cupHolderCountMaxValue() {
+        return (short) 254;
     }
 
-    public short cupHolderCount()
-    {
-        if (parentMessage.actingVersion < 1)
-        {
-            return (short)255;
+    public short cupHolderCount() {
+        if (parentMessage.actingVersion < 1) {
+            return (short) 255;
         }
 
-        return ((short)(buffer.getByte(offset + 61) & 0xFF));
+        return ((short) (buffer.getByte(offset + 61) & 0xFF));
     }
 
 
     private final FuelFiguresDecoder fuelFigures = new FuelFiguresDecoder(this);
 
-    public static long fuelFiguresDecoderId()
-    {
+    public static long fuelFiguresDecoderId() {
         return 10;
     }
 
-    public static int fuelFiguresDecoderSinceVersion()
-    {
+    public static int fuelFiguresDecoderSinceVersion() {
         return 0;
     }
 
-    public FuelFiguresDecoder fuelFigures()
-    {
+    public FuelFiguresDecoder fuelFigures() {
         fuelFigures.wrap(buffer);
         return fuelFigures;
     }
 
     public static final class FuelFiguresDecoder
-        implements Iterable<FuelFiguresDecoder>, java.util.Iterator<FuelFiguresDecoder>
-    {
+            implements Iterable<FuelFiguresDecoder>, java.util.Iterator<FuelFiguresDecoder> {
         public static final int HEADER_SIZE = 4;
         private final CarDecoder parentMessage;
         private DirectBuffer buffer;
@@ -772,15 +634,12 @@ public final class CarDecoder
         private int offset;
         private int blockLength;
 
-        FuelFiguresDecoder(final CarDecoder parentMessage)
-        {
+        FuelFiguresDecoder(final CarDecoder parentMessage) {
             this.parentMessage = parentMessage;
         }
 
-        public void wrap(final DirectBuffer buffer)
-        {
-            if (buffer != this.buffer)
-            {
+        public void wrap(final DirectBuffer buffer) {
+            if (buffer != this.buffer) {
                 this.buffer = buffer;
             }
 
@@ -791,10 +650,8 @@ public final class CarDecoder
             count = (buffer.getShort(limit + 2, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
         }
 
-        public FuelFiguresDecoder next()
-        {
-            if (index >= count)
-            {
+        public FuelFiguresDecoder next() {
+            if (index >= count) {
                 throw new java.util.NoSuchElementException();
             }
 
@@ -805,205 +662,167 @@ public final class CarDecoder
             return this;
         }
 
-        public static int countMinValue()
-        {
+        public static int countMinValue() {
             return 0;
         }
 
-        public static int countMaxValue()
-        {
+        public static int countMaxValue() {
             return 65534;
         }
 
-        public static int sbeHeaderSize()
-        {
+        public static int sbeHeaderSize() {
             return HEADER_SIZE;
         }
 
-        public static int sbeBlockLength()
-        {
+        public static int sbeBlockLength() {
             return 6;
         }
 
-        public int actingBlockLength()
-        {
+        public int actingBlockLength() {
             return blockLength;
         }
 
-        public int count()
-        {
+        public int count() {
             return count;
         }
 
-        public java.util.Iterator<FuelFiguresDecoder> iterator()
-        {
+        public java.util.Iterator<FuelFiguresDecoder> iterator() {
             return this;
         }
 
-        public void remove()
-        {
+        public void remove() {
             throw new UnsupportedOperationException();
         }
 
-        public boolean hasNext()
-        {
+        public boolean hasNext() {
             return index < count;
         }
 
-        public static int speedId()
-        {
+        public static int speedId() {
             return 11;
         }
 
-        public static int speedSinceVersion()
-        {
+        public static int speedSinceVersion() {
             return 0;
         }
 
-        public static int speedEncodingOffset()
-        {
+        public static int speedEncodingOffset() {
             return 0;
         }
 
-        public static int speedEncodingLength()
-        {
+        public static int speedEncodingLength() {
             return 2;
         }
 
-        public static String speedMetaAttribute(final MetaAttribute metaAttribute)
-        {
-            if (MetaAttribute.PRESENCE == metaAttribute)
-            {
+        public static String speedMetaAttribute(final MetaAttribute metaAttribute) {
+            if (MetaAttribute.PRESENCE == metaAttribute) {
                 return "required";
             }
 
             return "";
         }
 
-        public static int speedNullValue()
-        {
+        public static int speedNullValue() {
             return 65535;
         }
 
-        public static int speedMinValue()
-        {
+        public static int speedMinValue() {
             return 0;
         }
 
-        public static int speedMaxValue()
-        {
+        public static int speedMaxValue() {
             return 65534;
         }
 
-        public int speed()
-        {
+        public int speed() {
             return (buffer.getShort(offset + 0, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
         }
 
 
-        public static int mpgId()
-        {
+        public static int mpgId() {
             return 12;
         }
 
-        public static int mpgSinceVersion()
-        {
+        public static int mpgSinceVersion() {
             return 0;
         }
 
-        public static int mpgEncodingOffset()
-        {
+        public static int mpgEncodingOffset() {
             return 2;
         }
 
-        public static int mpgEncodingLength()
-        {
+        public static int mpgEncodingLength() {
             return 4;
         }
 
-        public static String mpgMetaAttribute(final MetaAttribute metaAttribute)
-        {
-            if (MetaAttribute.PRESENCE == metaAttribute)
-            {
+        public static String mpgMetaAttribute(final MetaAttribute metaAttribute) {
+            if (MetaAttribute.PRESENCE == metaAttribute) {
                 return "required";
             }
 
             return "";
         }
 
-        public static float mpgNullValue()
-        {
+        public static float mpgNullValue() {
             return Float.NaN;
         }
 
-        public static float mpgMinValue()
-        {
+        public static float mpgMinValue() {
             return 1.401298464324817E-45f;
         }
 
-        public static float mpgMaxValue()
-        {
+        public static float mpgMaxValue() {
             return 3.4028234663852886E38f;
         }
 
-        public float mpg()
-        {
+        public float mpg() {
             return buffer.getFloat(offset + 2, java.nio.ByteOrder.LITTLE_ENDIAN);
         }
 
 
-        public static int usageDescriptionId()
-        {
+        public static int usageDescriptionId() {
             return 200;
         }
 
-        public static int usageDescriptionSinceVersion()
-        {
+        public static int usageDescriptionSinceVersion() {
             return 0;
         }
 
-        public static String usageDescriptionCharacterEncoding()
-        {
+        public static String usageDescriptionCharacterEncoding() {
             return "ASCII";
         }
 
-        public static String usageDescriptionMetaAttribute(final MetaAttribute metaAttribute)
-        {
-            if (MetaAttribute.PRESENCE == metaAttribute)
-            {
+        public static String usageDescriptionMetaAttribute(final MetaAttribute metaAttribute) {
+            if (MetaAttribute.PRESENCE == metaAttribute) {
                 return "required";
             }
 
             return "";
         }
 
-        public static int usageDescriptionHeaderLength()
-        {
+        public static int usageDescriptionHeaderLength() {
             return 4;
         }
 
-        public int usageDescriptionLength()
-        {
+        public int usageDescriptionLength() {
             final int limit = parentMessage.limit();
-            return (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+            return (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
         }
 
-        public int skipUsageDescription()
-        {
+        public int skipUsageDescription() {
             final int headerLength = 4;
             final int limit = parentMessage.limit();
-            final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+            final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
             final int dataOffset = limit + headerLength;
             parentMessage.limit(dataOffset + dataLength);
 
             return dataLength;
         }
 
-        public int getUsageDescription(final MutableDirectBuffer dst, final int dstOffset, final int length)
-        {
+        public int getUsageDescription(final MutableDirectBuffer dst, final int dstOffset, final int length) {
             final int headerLength = 4;
             final int limit = parentMessage.limit();
-            final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+            final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
             final int bytesCopied = Math.min(length, dataLength);
             parentMessage.limit(limit + headerLength + dataLength);
             buffer.getBytes(limit + headerLength, dst, dstOffset, bytesCopied);
@@ -1011,11 +830,10 @@ public final class CarDecoder
             return bytesCopied;
         }
 
-        public int getUsageDescription(final byte[] dst, final int dstOffset, final int length)
-        {
+        public int getUsageDescription(final byte[] dst, final int dstOffset, final int length) {
             final int headerLength = 4;
             final int limit = parentMessage.limit();
-            final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+            final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
             final int bytesCopied = Math.min(length, dataLength);
             parentMessage.limit(limit + headerLength + dataLength);
             buffer.getBytes(limit + headerLength, dst, dstOffset, bytesCopied);
@@ -1023,24 +841,21 @@ public final class CarDecoder
             return bytesCopied;
         }
 
-        public void wrapUsageDescription(final DirectBuffer wrapBuffer)
-        {
+        public void wrapUsageDescription(final DirectBuffer wrapBuffer) {
             final int headerLength = 4;
             final int limit = parentMessage.limit();
-            final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+            final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
             parentMessage.limit(limit + headerLength + dataLength);
             wrapBuffer.wrap(buffer, limit + headerLength, dataLength);
         }
 
-        public String usageDescription()
-        {
+        public String usageDescription() {
             final int headerLength = 4;
             final int limit = parentMessage.limit();
-            final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+            final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
             parentMessage.limit(limit + headerLength + dataLength);
 
-            if (0 == dataLength)
-            {
+            if (0 == dataLength) {
                 return "";
             }
 
@@ -1048,23 +863,19 @@ public final class CarDecoder
             buffer.getBytes(limit + headerLength, tmp, 0, dataLength);
 
             final String value;
-            try
-            {
+            try {
                 value = new String(tmp, "ASCII");
-            }
-            catch (final java.io.UnsupportedEncodingException ex)
-            {
+            } catch (final java.io.UnsupportedEncodingException ex) {
                 throw new RuntimeException(ex);
             }
 
             return value;
         }
 
-        public int getUsageDescription(final Appendable appendable)
-        {
+        public int getUsageDescription(final Appendable appendable) {
             final int headerLength = 4;
             final int limit = parentMessage.limit();
-            final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+            final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
             final int dataOffset = limit + headerLength;
 
             parentMessage.limit(dataOffset + dataLength);
@@ -1073,10 +884,8 @@ public final class CarDecoder
             return dataLength;
         }
 
-        public StringBuilder appendTo(final StringBuilder builder)
-        {
-            if (null == buffer)
-            {
+        public StringBuilder appendTo(final StringBuilder builder) {
+            if (null == buffer) {
                 return builder;
             }
 
@@ -1095,9 +904,8 @@ public final class CarDecoder
 
             return builder;
         }
-        
-        public FuelFiguresDecoder sbeSkip()
-        {
+
+        public FuelFiguresDecoder sbeSkip() {
             skipUsageDescription();
 
             return this;
@@ -1106,25 +914,21 @@ public final class CarDecoder
 
     private final PerformanceFiguresDecoder performanceFigures = new PerformanceFiguresDecoder(this);
 
-    public static long performanceFiguresDecoderId()
-    {
+    public static long performanceFiguresDecoderId() {
         return 13;
     }
 
-    public static int performanceFiguresDecoderSinceVersion()
-    {
+    public static int performanceFiguresDecoderSinceVersion() {
         return 0;
     }
 
-    public PerformanceFiguresDecoder performanceFigures()
-    {
+    public PerformanceFiguresDecoder performanceFigures() {
         performanceFigures.wrap(buffer);
         return performanceFigures;
     }
 
     public static final class PerformanceFiguresDecoder
-        implements Iterable<PerformanceFiguresDecoder>, java.util.Iterator<PerformanceFiguresDecoder>
-    {
+            implements Iterable<PerformanceFiguresDecoder>, java.util.Iterator<PerformanceFiguresDecoder> {
         public static final int HEADER_SIZE = 4;
         private final CarDecoder parentMessage;
         private DirectBuffer buffer;
@@ -1134,16 +938,13 @@ public final class CarDecoder
         private int blockLength;
         private final AccelerationDecoder acceleration;
 
-        PerformanceFiguresDecoder(final CarDecoder parentMessage)
-        {
+        PerformanceFiguresDecoder(final CarDecoder parentMessage) {
             this.parentMessage = parentMessage;
             acceleration = new AccelerationDecoder(parentMessage);
         }
 
-        public void wrap(final DirectBuffer buffer)
-        {
-            if (buffer != this.buffer)
-            {
+        public void wrap(final DirectBuffer buffer) {
+            if (buffer != this.buffer) {
                 this.buffer = buffer;
             }
 
@@ -1154,10 +955,8 @@ public final class CarDecoder
             count = (buffer.getShort(limit + 2, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
         }
 
-        public PerformanceFiguresDecoder next()
-        {
-            if (index >= count)
-            {
+        public PerformanceFiguresDecoder next() {
+            if (index >= count) {
                 throw new java.util.NoSuchElementException();
             }
 
@@ -1168,121 +967,98 @@ public final class CarDecoder
             return this;
         }
 
-        public static int countMinValue()
-        {
+        public static int countMinValue() {
             return 0;
         }
 
-        public static int countMaxValue()
-        {
+        public static int countMaxValue() {
             return 65534;
         }
 
-        public static int sbeHeaderSize()
-        {
+        public static int sbeHeaderSize() {
             return HEADER_SIZE;
         }
 
-        public static int sbeBlockLength()
-        {
+        public static int sbeBlockLength() {
             return 1;
         }
 
-        public int actingBlockLength()
-        {
+        public int actingBlockLength() {
             return blockLength;
         }
 
-        public int count()
-        {
+        public int count() {
             return count;
         }
 
-        public java.util.Iterator<PerformanceFiguresDecoder> iterator()
-        {
+        public java.util.Iterator<PerformanceFiguresDecoder> iterator() {
             return this;
         }
 
-        public void remove()
-        {
+        public void remove() {
             throw new UnsupportedOperationException();
         }
 
-        public boolean hasNext()
-        {
+        public boolean hasNext() {
             return index < count;
         }
 
-        public static int octaneRatingId()
-        {
+        public static int octaneRatingId() {
             return 14;
         }
 
-        public static int octaneRatingSinceVersion()
-        {
+        public static int octaneRatingSinceVersion() {
             return 0;
         }
 
-        public static int octaneRatingEncodingOffset()
-        {
+        public static int octaneRatingEncodingOffset() {
             return 0;
         }
 
-        public static int octaneRatingEncodingLength()
-        {
+        public static int octaneRatingEncodingLength() {
             return 1;
         }
 
-        public static String octaneRatingMetaAttribute(final MetaAttribute metaAttribute)
-        {
-            if (MetaAttribute.PRESENCE == metaAttribute)
-            {
+        public static String octaneRatingMetaAttribute(final MetaAttribute metaAttribute) {
+            if (MetaAttribute.PRESENCE == metaAttribute) {
                 return "required";
             }
 
             return "";
         }
 
-        public static short octaneRatingNullValue()
-        {
-            return (short)255;
+        public static short octaneRatingNullValue() {
+            return (short) 255;
         }
 
-        public static short octaneRatingMinValue()
-        {
-            return (short)90;
+        public static short octaneRatingMinValue() {
+            return (short) 90;
         }
 
-        public static short octaneRatingMaxValue()
-        {
-            return (short)110;
+        public static short octaneRatingMaxValue() {
+            return (short) 110;
         }
 
-        public short octaneRating()
-        {
-            return ((short)(buffer.getByte(offset + 0) & 0xFF));
+        public short octaneRating() {
+            return ((short) (buffer.getByte(offset + 0) & 0xFF));
         }
 
 
-        public static long accelerationDecoderId()
-        {
+        public static long accelerationDecoderId() {
             return 15;
         }
 
-        public static int accelerationDecoderSinceVersion()
-        {
+        public static int accelerationDecoderSinceVersion() {
             return 0;
         }
 
-        public AccelerationDecoder acceleration()
-        {
+        public AccelerationDecoder acceleration() {
             acceleration.wrap(buffer);
             return acceleration;
         }
 
         public static final class AccelerationDecoder
-            implements Iterable<AccelerationDecoder>, java.util.Iterator<AccelerationDecoder>
-        {
+                implements Iterable<AccelerationDecoder>, java.util.Iterator<AccelerationDecoder> {
             public static final int HEADER_SIZE = 4;
             private final CarDecoder parentMessage;
             private DirectBuffer buffer;
@@ -1291,15 +1067,12 @@ public final class CarDecoder
             private int offset;
             private int blockLength;
 
-            AccelerationDecoder(final CarDecoder parentMessage)
-            {
+            AccelerationDecoder(final CarDecoder parentMessage) {
                 this.parentMessage = parentMessage;
             }
 
-            public void wrap(final DirectBuffer buffer)
-            {
-                if (buffer != this.buffer)
-                {
+            public void wrap(final DirectBuffer buffer) {
+                if (buffer != this.buffer) {
                     this.buffer = buffer;
                 }
 
@@ -1310,10 +1083,8 @@ public final class CarDecoder
                 count = (buffer.getShort(limit + 2, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
             }
 
-            public AccelerationDecoder next()
-            {
-                if (index >= count)
-                {
+            public AccelerationDecoder next() {
+                if (index >= count) {
                     throw new java.util.NoSuchElementException();
                 }
 
@@ -1324,157 +1095,126 @@ public final class CarDecoder
                 return this;
             }
 
-            public static int countMinValue()
-            {
+            public static int countMinValue() {
                 return 0;
             }
 
-            public static int countMaxValue()
-            {
+            public static int countMaxValue() {
                 return 65534;
             }
 
-            public static int sbeHeaderSize()
-            {
+            public static int sbeHeaderSize() {
                 return HEADER_SIZE;
             }
 
-            public static int sbeBlockLength()
-            {
+            public static int sbeBlockLength() {
                 return 6;
             }
 
-            public int actingBlockLength()
-            {
+            public int actingBlockLength() {
                 return blockLength;
             }
 
-            public int count()
-            {
+            public int count() {
                 return count;
             }
 
-            public java.util.Iterator<AccelerationDecoder> iterator()
-            {
+            public java.util.Iterator<AccelerationDecoder> iterator() {
                 return this;
             }
 
-            public void remove()
-            {
+            public void remove() {
                 throw new UnsupportedOperationException();
             }
 
-            public boolean hasNext()
-            {
+            public boolean hasNext() {
                 return index < count;
             }
 
-            public static int mphId()
-            {
+            public static int mphId() {
                 return 16;
             }
 
-            public static int mphSinceVersion()
-            {
+            public static int mphSinceVersion() {
                 return 0;
             }
 
-            public static int mphEncodingOffset()
-            {
+            public static int mphEncodingOffset() {
                 return 0;
             }
 
-            public static int mphEncodingLength()
-            {
+            public static int mphEncodingLength() {
                 return 2;
             }
 
-            public static String mphMetaAttribute(final MetaAttribute metaAttribute)
-            {
-                if (MetaAttribute.PRESENCE == metaAttribute)
-                {
+            public static String mphMetaAttribute(final MetaAttribute metaAttribute) {
+                if (MetaAttribute.PRESENCE == metaAttribute) {
                     return "required";
                 }
 
                 return "";
             }
 
-            public static int mphNullValue()
-            {
+            public static int mphNullValue() {
                 return 65535;
             }
 
-            public static int mphMinValue()
-            {
+            public static int mphMinValue() {
                 return 0;
             }
 
-            public static int mphMaxValue()
-            {
+            public static int mphMaxValue() {
                 return 65534;
             }
 
-            public int mph()
-            {
+            public int mph() {
                 return (buffer.getShort(offset + 0, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
             }
 
 
-            public static int secondsId()
-            {
+            public static int secondsId() {
                 return 17;
             }
 
-            public static int secondsSinceVersion()
-            {
+            public static int secondsSinceVersion() {
                 return 0;
             }
 
-            public static int secondsEncodingOffset()
-            {
+            public static int secondsEncodingOffset() {
                 return 2;
             }
 
-            public static int secondsEncodingLength()
-            {
+            public static int secondsEncodingLength() {
                 return 4;
             }
 
-            public static String secondsMetaAttribute(final MetaAttribute metaAttribute)
-            {
-                if (MetaAttribute.PRESENCE == metaAttribute)
-                {
+            public static String secondsMetaAttribute(final MetaAttribute metaAttribute) {
+                if (MetaAttribute.PRESENCE == metaAttribute) {
                     return "required";
                 }
 
                 return "";
             }
 
-            public static float secondsNullValue()
-            {
+            public static float secondsNullValue() {
                 return Float.NaN;
             }
 
-            public static float secondsMinValue()
-            {
+            public static float secondsMinValue() {
                 return 1.401298464324817E-45f;
             }
 
-            public static float secondsMaxValue()
-            {
+            public static float secondsMaxValue() {
                 return 3.4028234663852886E38f;
             }
 
-            public float seconds()
-            {
+            public float seconds() {
                 return buffer.getFloat(offset + 2, java.nio.ByteOrder.LITTLE_ENDIAN);
             }
 
 
-            public StringBuilder appendTo(final StringBuilder builder)
-            {
-                if (null == buffer)
-                {
+            public StringBuilder appendTo(final StringBuilder builder) {
+                if (null == buffer) {
                     return builder;
                 }
 
@@ -1488,18 +1228,15 @@ public final class CarDecoder
 
                 return builder;
             }
-            
-            public AccelerationDecoder sbeSkip()
-            {
+
+            public AccelerationDecoder sbeSkip() {
 
                 return this;
             }
         }
 
-        public StringBuilder appendTo(final StringBuilder builder)
-        {
-            if (null == buffer)
-            {
+        public StringBuilder appendTo(final StringBuilder builder) {
+            if (null == buffer) {
                 return builder;
             }
 
@@ -1509,10 +1246,8 @@ public final class CarDecoder
             builder.append('|');
             builder.append("acceleration=[");
             AccelerationDecoder acceleration = acceleration();
-            if (acceleration.count() > 0)
-            {
-                while (acceleration.hasNext())
-                {
+            if (acceleration.count() > 0) {
+                while (acceleration.hasNext()) {
                     acceleration.next().appendTo(builder);
                     builder.append(',');
                 }
@@ -1523,14 +1258,11 @@ public final class CarDecoder
 
             return builder;
         }
-        
-        public PerformanceFiguresDecoder sbeSkip()
-        {
+
+        public PerformanceFiguresDecoder sbeSkip() {
             AccelerationDecoder acceleration = acceleration();
-            if (acceleration.count() > 0)
-            {
-                while (acceleration.hasNext())
-                {
+            if (acceleration.count() > 0) {
+                while (acceleration.hasNext()) {
                     acceleration.next();
                     acceleration.sbeSkip();
                 }
@@ -1540,58 +1272,49 @@ public final class CarDecoder
         }
     }
 
-    public static int manufacturerId()
-    {
+    public static int manufacturerId() {
         return 18;
     }
 
-    public static int manufacturerSinceVersion()
-    {
+    public static int manufacturerSinceVersion() {
         return 0;
     }
 
-    public static String manufacturerCharacterEncoding()
-    {
+    public static String manufacturerCharacterEncoding() {
         return "UTF-8";
     }
 
-    public static String manufacturerMetaAttribute(final MetaAttribute metaAttribute)
-    {
-        if (MetaAttribute.PRESENCE == metaAttribute)
-        {
+    public static String manufacturerMetaAttribute(final MetaAttribute metaAttribute) {
+        if (MetaAttribute.PRESENCE == metaAttribute) {
             return "required";
         }
 
         return "";
     }
 
-    public static int manufacturerHeaderLength()
-    {
+    public static int manufacturerHeaderLength() {
         return 4;
     }
 
-    public int manufacturerLength()
-    {
+    public int manufacturerLength() {
         final int limit = parentMessage.limit();
-        return (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        return (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
     }
 
-    public int skipManufacturer()
-    {
+    public int skipManufacturer() {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
         final int dataOffset = limit + headerLength;
         parentMessage.limit(dataOffset + dataLength);
 
         return dataLength;
     }
 
-    public int getManufacturer(final MutableDirectBuffer dst, final int dstOffset, final int length)
-    {
+    public int getManufacturer(final MutableDirectBuffer dst, final int dstOffset, final int length) {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
         final int bytesCopied = Math.min(length, dataLength);
         parentMessage.limit(limit + headerLength + dataLength);
         buffer.getBytes(limit + headerLength, dst, dstOffset, bytesCopied);
@@ -1599,11 +1322,10 @@ public final class CarDecoder
         return bytesCopied;
     }
 
-    public int getManufacturer(final byte[] dst, final int dstOffset, final int length)
-    {
+    public int getManufacturer(final byte[] dst, final int dstOffset, final int length) {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
         final int bytesCopied = Math.min(length, dataLength);
         parentMessage.limit(limit + headerLength + dataLength);
         buffer.getBytes(limit + headerLength, dst, dstOffset, bytesCopied);
@@ -1611,24 +1333,21 @@ public final class CarDecoder
         return bytesCopied;
     }
 
-    public void wrapManufacturer(final DirectBuffer wrapBuffer)
-    {
+    public void wrapManufacturer(final DirectBuffer wrapBuffer) {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
         parentMessage.limit(limit + headerLength + dataLength);
         wrapBuffer.wrap(buffer, limit + headerLength, dataLength);
     }
 
-    public String manufacturer()
-    {
+    public String manufacturer() {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
         parentMessage.limit(limit + headerLength + dataLength);
 
-        if (0 == dataLength)
-        {
+        if (0 == dataLength) {
             return "";
         }
 
@@ -1636,70 +1355,58 @@ public final class CarDecoder
         buffer.getBytes(limit + headerLength, tmp, 0, dataLength);
 
         final String value;
-        try
-        {
+        try {
             value = new String(tmp, "UTF-8");
-        }
-        catch (final java.io.UnsupportedEncodingException ex)
-        {
+        } catch (final java.io.UnsupportedEncodingException ex) {
             throw new RuntimeException(ex);
         }
 
         return value;
     }
 
-    public static int modelId()
-    {
+    public static int modelId() {
         return 19;
     }
 
-    public static int modelSinceVersion()
-    {
+    public static int modelSinceVersion() {
         return 0;
     }
 
-    public static String modelCharacterEncoding()
-    {
+    public static String modelCharacterEncoding() {
         return "UTF-8";
     }
 
-    public static String modelMetaAttribute(final MetaAttribute metaAttribute)
-    {
-        if (MetaAttribute.PRESENCE == metaAttribute)
-        {
+    public static String modelMetaAttribute(final MetaAttribute metaAttribute) {
+        if (MetaAttribute.PRESENCE == metaAttribute) {
             return "required";
         }
 
         return "";
     }
 
-    public static int modelHeaderLength()
-    {
+    public static int modelHeaderLength() {
         return 4;
     }
 
-    public int modelLength()
-    {
+    public int modelLength() {
         final int limit = parentMessage.limit();
-        return (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        return (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
     }
 
-    public int skipModel()
-    {
+    public int skipModel() {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
         final int dataOffset = limit + headerLength;
         parentMessage.limit(dataOffset + dataLength);
 
         return dataLength;
     }
 
-    public int getModel(final MutableDirectBuffer dst, final int dstOffset, final int length)
-    {
+    public int getModel(final MutableDirectBuffer dst, final int dstOffset, final int length) {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
         final int bytesCopied = Math.min(length, dataLength);
         parentMessage.limit(limit + headerLength + dataLength);
         buffer.getBytes(limit + headerLength, dst, dstOffset, bytesCopied);
@@ -1707,11 +1414,10 @@ public final class CarDecoder
         return bytesCopied;
     }
 
-    public int getModel(final byte[] dst, final int dstOffset, final int length)
-    {
+    public int getModel(final byte[] dst, final int dstOffset, final int length) {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
         final int bytesCopied = Math.min(length, dataLength);
         parentMessage.limit(limit + headerLength + dataLength);
         buffer.getBytes(limit + headerLength, dst, dstOffset, bytesCopied);
@@ -1719,24 +1425,21 @@ public final class CarDecoder
         return bytesCopied;
     }
 
-    public void wrapModel(final DirectBuffer wrapBuffer)
-    {
+    public void wrapModel(final DirectBuffer wrapBuffer) {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
         parentMessage.limit(limit + headerLength + dataLength);
         wrapBuffer.wrap(buffer, limit + headerLength, dataLength);
     }
 
-    public String model()
-    {
+    public String model() {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
         parentMessage.limit(limit + headerLength + dataLength);
 
-        if (0 == dataLength)
-        {
+        if (0 == dataLength) {
             return "";
         }
 
@@ -1744,70 +1447,58 @@ public final class CarDecoder
         buffer.getBytes(limit + headerLength, tmp, 0, dataLength);
 
         final String value;
-        try
-        {
+        try {
             value = new String(tmp, "UTF-8");
-        }
-        catch (final java.io.UnsupportedEncodingException ex)
-        {
+        } catch (final java.io.UnsupportedEncodingException ex) {
             throw new RuntimeException(ex);
         }
 
         return value;
     }
 
-    public static int activationCodeId()
-    {
+    public static int activationCodeId() {
         return 20;
     }
 
-    public static int activationCodeSinceVersion()
-    {
+    public static int activationCodeSinceVersion() {
         return 0;
     }
 
-    public static String activationCodeCharacterEncoding()
-    {
+    public static String activationCodeCharacterEncoding() {
         return "ASCII";
     }
 
-    public static String activationCodeMetaAttribute(final MetaAttribute metaAttribute)
-    {
-        if (MetaAttribute.PRESENCE == metaAttribute)
-        {
+    public static String activationCodeMetaAttribute(final MetaAttribute metaAttribute) {
+        if (MetaAttribute.PRESENCE == metaAttribute) {
             return "required";
         }
 
         return "";
     }
 
-    public static int activationCodeHeaderLength()
-    {
+    public static int activationCodeHeaderLength() {
         return 4;
     }
 
-    public int activationCodeLength()
-    {
+    public int activationCodeLength() {
         final int limit = parentMessage.limit();
-        return (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        return (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
     }
 
-    public int skipActivationCode()
-    {
+    public int skipActivationCode() {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
         final int dataOffset = limit + headerLength;
         parentMessage.limit(dataOffset + dataLength);
 
         return dataLength;
     }
 
-    public int getActivationCode(final MutableDirectBuffer dst, final int dstOffset, final int length)
-    {
+    public int getActivationCode(final MutableDirectBuffer dst, final int dstOffset, final int length) {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
         final int bytesCopied = Math.min(length, dataLength);
         parentMessage.limit(limit + headerLength + dataLength);
         buffer.getBytes(limit + headerLength, dst, dstOffset, bytesCopied);
@@ -1815,11 +1506,10 @@ public final class CarDecoder
         return bytesCopied;
     }
 
-    public int getActivationCode(final byte[] dst, final int dstOffset, final int length)
-    {
+    public int getActivationCode(final byte[] dst, final int dstOffset, final int length) {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
         final int bytesCopied = Math.min(length, dataLength);
         parentMessage.limit(limit + headerLength + dataLength);
         buffer.getBytes(limit + headerLength, dst, dstOffset, bytesCopied);
@@ -1827,24 +1517,21 @@ public final class CarDecoder
         return bytesCopied;
     }
 
-    public void wrapActivationCode(final DirectBuffer wrapBuffer)
-    {
+    public void wrapActivationCode(final DirectBuffer wrapBuffer) {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
         parentMessage.limit(limit + headerLength + dataLength);
         wrapBuffer.wrap(buffer, limit + headerLength, dataLength);
     }
 
-    public String activationCode()
-    {
+    public String activationCode() {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
         parentMessage.limit(limit + headerLength + dataLength);
 
-        if (0 == dataLength)
-        {
+        if (0 == dataLength) {
             return "";
         }
 
@@ -1852,23 +1539,19 @@ public final class CarDecoder
         buffer.getBytes(limit + headerLength, tmp, 0, dataLength);
 
         final String value;
-        try
-        {
+        try {
             value = new String(tmp, "ASCII");
-        }
-        catch (final java.io.UnsupportedEncodingException ex)
-        {
+        } catch (final java.io.UnsupportedEncodingException ex) {
             throw new RuntimeException(ex);
         }
 
         return value;
     }
 
-    public int getActivationCode(final Appendable appendable)
-    {
+    public int getActivationCode(final Appendable appendable) {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int) (buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
         final int dataOffset = limit + headerLength;
 
         parentMessage.limit(dataOffset + dataLength);
@@ -1877,10 +1560,8 @@ public final class CarDecoder
         return dataLength;
     }
 
-    public String toString()
-    {
-        if (null == buffer)
-        {
+    public String toString() {
+        if (null == buffer) {
             return "";
         }
 
@@ -1890,10 +1571,8 @@ public final class CarDecoder
         return decoder.appendTo(new StringBuilder()).toString();
     }
 
-    public StringBuilder appendTo(final StringBuilder builder)
-    {
-        if (null == buffer)
-        {
+    public StringBuilder appendTo(final StringBuilder builder) {
+        if (null == buffer) {
             return builder;
         }
 
@@ -1904,15 +1583,13 @@ public final class CarDecoder
         builder.append("|sbeSchemaId=");
         builder.append(SCHEMA_ID);
         builder.append("|sbeSchemaVersion=");
-        if (parentMessage.actingVersion != SCHEMA_VERSION)
-        {
+        if (parentMessage.actingVersion != SCHEMA_VERSION) {
             builder.append(parentMessage.actingVersion);
             builder.append('/');
         }
         builder.append(SCHEMA_VERSION);
         builder.append("|sbeBlockLength=");
-        if (actingBlockLength != BLOCK_LENGTH)
-        {
+        if (actingBlockLength != BLOCK_LENGTH) {
             builder.append(actingBlockLength);
             builder.append('/');
         }
@@ -1932,10 +1609,8 @@ public final class CarDecoder
         builder.append('|');
         builder.append("someNumbers=");
         builder.append('[');
-        if (someNumbersLength() > 0)
-        {
-            for (int i = 0; i < someNumbersLength(); i++)
-            {
+        if (someNumbersLength() > 0) {
+            for (int i = 0; i < someNumbersLength(); i++) {
                 builder.append(someNumbers(i));
                 builder.append(',');
             }
@@ -1944,9 +1619,8 @@ public final class CarDecoder
         builder.append(']');
         builder.append('|');
         builder.append("vehicleCode=");
-        for (int i = 0; i < vehicleCodeLength() && vehicleCode(i) > 0; i++)
-        {
-            builder.append((char)vehicleCode(i));
+        for (int i = 0; i < vehicleCodeLength() && vehicleCode(i) > 0; i++) {
+            builder.append((char) vehicleCode(i));
         }
         builder.append('|');
         builder.append("extras=");
@@ -1957,21 +1631,16 @@ public final class CarDecoder
         builder.append('|');
         builder.append("engine=");
         final EngineDecoder engine = engine();
-        if (engine != null)
-        {
+        if (engine != null) {
             engine.appendTo(builder);
-        }
-        else
-        {
+        } else {
             builder.append("null");
         }
         builder.append('|');
         builder.append("uuid=");
         builder.append('[');
-        if (uuidLength() > 0)
-        {
-            for (int i = 0; i < uuidLength(); i++)
-            {
+        if (uuidLength() > 0) {
+            for (int i = 0; i < uuidLength(); i++) {
                 builder.append(uuid(i));
                 builder.append(',');
             }
@@ -1984,10 +1653,8 @@ public final class CarDecoder
         builder.append('|');
         builder.append("fuelFigures=[");
         FuelFiguresDecoder fuelFigures = fuelFigures();
-        if (fuelFigures.count() > 0)
-        {
-            while (fuelFigures.hasNext())
-            {
+        if (fuelFigures.count() > 0) {
+            while (fuelFigures.hasNext()) {
                 fuelFigures.next().appendTo(builder);
                 builder.append(',');
             }
@@ -1997,10 +1664,8 @@ public final class CarDecoder
         builder.append('|');
         builder.append("performanceFigures=[");
         PerformanceFiguresDecoder performanceFigures = performanceFigures();
-        if (performanceFigures.count() > 0)
-        {
-            while (performanceFigures.hasNext())
-            {
+        if (performanceFigures.count() > 0) {
+            while (performanceFigures.hasNext()) {
                 performanceFigures.next().appendTo(builder);
                 builder.append(',');
             }
@@ -2023,24 +1688,19 @@ public final class CarDecoder
 
         return builder;
     }
-    
-    public CarDecoder sbeSkip()
-    {
+
+    public CarDecoder sbeSkip() {
         sbeRewind();
         FuelFiguresDecoder fuelFigures = fuelFigures();
-        if (fuelFigures.count() > 0)
-        {
-            while (fuelFigures.hasNext())
-            {
+        if (fuelFigures.count() > 0) {
+            while (fuelFigures.hasNext()) {
                 fuelFigures.next();
                 fuelFigures.sbeSkip();
             }
         }
         PerformanceFiguresDecoder performanceFigures = performanceFigures();
-        if (performanceFigures.count() > 0)
-        {
-            while (performanceFigures.hasNext())
-            {
+        if (performanceFigures.count() > 0) {
+            while (performanceFigures.hasNext()) {
                 performanceFigures.next();
                 performanceFigures.sbeSkip();
             }

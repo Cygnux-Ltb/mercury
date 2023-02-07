@@ -4,8 +4,8 @@ package baseline;
 /**
  * Meta attribute enum for selecting a particular meta attribute value.
  */
-public enum MetaAttribute
-{
+public enum MetaAttribute {
+
     /**
      * The epoch or start of time. Default is 'UNIX' which is midnight 1st January 1970 UTC.
      */
@@ -25,4 +25,5 @@ public enum MetaAttribute
      * Field presence indication. Can be optional, required, or constant.
      */
     PRESENCE
+    
 }

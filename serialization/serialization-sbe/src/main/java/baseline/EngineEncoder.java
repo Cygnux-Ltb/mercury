@@ -4,8 +4,7 @@ package baseline;
 import org.agrona.MutableDirectBuffer;
 
 @SuppressWarnings("all")
-public final class EngineEncoder
-{
+public final class EngineEncoder {
     public static final int SCHEMA_ID = 1;
     public static final int SCHEMA_VERSION = 0;
     public static final int ENCODED_LENGTH = 10;
@@ -14,10 +13,8 @@ public final class EngineEncoder
     private int offset;
     private MutableDirectBuffer buffer;
 
-    public EngineEncoder wrap(final MutableDirectBuffer buffer, final int offset)
-    {
-        if (buffer != this.buffer)
-        {
+    public EngineEncoder wrap(final MutableDirectBuffer buffer, final int offset) {
+        if (buffer != this.buffer) {
             this.buffer = buffer;
         }
         this.offset = offset;
@@ -25,160 +22,129 @@ public final class EngineEncoder
         return this;
     }
 
-    public MutableDirectBuffer buffer()
-    {
+    public MutableDirectBuffer buffer() {
         return buffer;
     }
 
-    public int offset()
-    {
+    public int offset() {
         return offset;
     }
 
-    public int encodedLength()
-    {
+    public int encodedLength() {
         return ENCODED_LENGTH;
     }
 
-    public int sbeSchemaId()
-    {
+    public int sbeSchemaId() {
         return SCHEMA_ID;
     }
 
-    public int sbeSchemaVersion()
-    {
+    public int sbeSchemaVersion() {
         return SCHEMA_VERSION;
     }
 
-    public static int capacityEncodingOffset()
-    {
+    public static int capacityEncodingOffset() {
         return 0;
     }
 
-    public static int capacityEncodingLength()
-    {
+    public static int capacityEncodingLength() {
         return 2;
     }
 
-    public static int capacityNullValue()
-    {
+    public static int capacityNullValue() {
         return 65535;
     }
 
-    public static int capacityMinValue()
-    {
+    public static int capacityMinValue() {
         return 0;
     }
 
-    public static int capacityMaxValue()
-    {
+    public static int capacityMaxValue() {
         return 65534;
     }
 
-    public EngineEncoder capacity(final int value)
-    {
-        buffer.putShort(offset + 0, (short)value, java.nio.ByteOrder.LITTLE_ENDIAN);
+    public EngineEncoder capacity(final int value) {
+        buffer.putShort(offset + 0, (short) value, java.nio.ByteOrder.LITTLE_ENDIAN);
         return this;
     }
 
 
-    public static int numCylindersEncodingOffset()
-    {
+    public static int numCylindersEncodingOffset() {
         return 2;
     }
 
-    public static int numCylindersEncodingLength()
-    {
+    public static int numCylindersEncodingLength() {
         return 1;
     }
 
-    public static short numCylindersNullValue()
-    {
-        return (short)255;
+    public static short numCylindersNullValue() {
+        return (short) 255;
     }
 
-    public static short numCylindersMinValue()
-    {
-        return (short)0;
+    public static short numCylindersMinValue() {
+        return (short) 0;
     }
 
-    public static short numCylindersMaxValue()
-    {
-        return (short)254;
+    public static short numCylindersMaxValue() {
+        return (short) 254;
     }
 
-    public EngineEncoder numCylinders(final short value)
-    {
-        buffer.putByte(offset + 2, (byte)value);
+    public EngineEncoder numCylinders(final short value) {
+        buffer.putByte(offset + 2, (byte) value);
         return this;
     }
 
 
-    public static int maxRpmEncodingOffset()
-    {
+    public static int maxRpmEncodingOffset() {
         return 3;
     }
 
-    public static int maxRpmEncodingLength()
-    {
+    public static int maxRpmEncodingLength() {
         return 0;
     }
 
-    public static int maxRpmNullValue()
-    {
+    public static int maxRpmNullValue() {
         return 65535;
     }
 
-    public static int maxRpmMinValue()
-    {
+    public static int maxRpmMinValue() {
         return 0;
     }
 
-    public static int maxRpmMaxValue()
-    {
+    public static int maxRpmMaxValue() {
         return 65534;
     }
 
-    public int maxRpm()
-    {
+    public int maxRpm() {
         return 9000;
     }
 
-    public static int manufacturerCodeEncodingOffset()
-    {
+    public static int manufacturerCodeEncodingOffset() {
         return 3;
     }
 
-    public static int manufacturerCodeEncodingLength()
-    {
+    public static int manufacturerCodeEncodingLength() {
         return 3;
     }
 
-    public static byte manufacturerCodeNullValue()
-    {
-        return (byte)0;
+    public static byte manufacturerCodeNullValue() {
+        return (byte) 0;
     }
 
-    public static byte manufacturerCodeMinValue()
-    {
-        return (byte)32;
+    public static byte manufacturerCodeMinValue() {
+        return (byte) 32;
     }
 
-    public static byte manufacturerCodeMaxValue()
-    {
-        return (byte)126;
+    public static byte manufacturerCodeMaxValue() {
+        return (byte) 126;
     }
 
-    public static int manufacturerCodeLength()
-    {
+    public static int manufacturerCodeLength() {
         return 3;
     }
 
 
-    public EngineEncoder manufacturerCode(final int index, final byte value)
-    {
-        if (index < 0 || index >= 3)
-        {
+    public EngineEncoder manufacturerCode(final int index, final byte value) {
+        if (index < 0 || index >= 3) {
             throw new IndexOutOfBoundsException("index out of range: index=" + index);
         }
 
@@ -187,8 +153,8 @@ public final class EngineEncoder
 
         return this;
     }
-    public EngineEncoder putManufacturerCode(final byte value0, final byte value1, final byte value2)
-    {
+
+    public EngineEncoder putManufacturerCode(final byte value0, final byte value1, final byte value2) {
         buffer.putByte(offset + 3, value0);
         buffer.putByte(offset + 4, value1);
         buffer.putByte(offset + 5, value2);
@@ -196,16 +162,13 @@ public final class EngineEncoder
         return this;
     }
 
-    public static String manufacturerCodeCharacterEncoding()
-    {
+    public static String manufacturerCodeCharacterEncoding() {
         return "US-ASCII";
     }
 
-    public EngineEncoder putManufacturerCode(final byte[] src, final int srcOffset)
-    {
+    public EngineEncoder putManufacturerCode(final byte[] src, final int srcOffset) {
         final int length = 3;
-        if (srcOffset < 0 || srcOffset > (src.length - length))
-        {
+        if (srcOffset < 0 || srcOffset > (src.length - length)) {
             throw new IndexOutOfBoundsException("Copy will go out of range: offset=" + srcOffset);
         }
 
@@ -214,182 +177,150 @@ public final class EngineEncoder
         return this;
     }
 
-    public EngineEncoder manufacturerCode(final String src)
-    {
+    public EngineEncoder manufacturerCode(final String src) {
         final int length = 3;
         final int srcLength = null == src ? 0 : src.length();
-        if (srcLength > length)
-        {
+        if (srcLength > length) {
             throw new IndexOutOfBoundsException("String too large for copy: byte length=" + srcLength);
         }
 
         buffer.putStringWithoutLengthAscii(offset + 3, src);
 
-        for (int start = srcLength; start < length; ++start)
-        {
-            buffer.putByte(offset + 3 + start, (byte)0);
+        for (int start = srcLength; start < length; ++start) {
+            buffer.putByte(offset + 3 + start, (byte) 0);
         }
 
         return this;
     }
 
-    public EngineEncoder manufacturerCode(final CharSequence src)
-    {
+    public EngineEncoder manufacturerCode(final CharSequence src) {
         final int length = 3;
         final int srcLength = null == src ? 0 : src.length();
-        if (srcLength > length)
-        {
+        if (srcLength > length) {
             throw new IndexOutOfBoundsException("CharSequence too large for copy: byte length=" + srcLength);
         }
 
-        for (int i = 0; i < srcLength; ++i)
-        {
+        for (int i = 0; i < srcLength; ++i) {
             final char charValue = src.charAt(i);
-            final byte byteValue = charValue > 127 ? (byte)'?' : (byte)charValue;
+            final byte byteValue = charValue > 127 ? (byte) '?' : (byte) charValue;
             buffer.putByte(offset + 3 + i, byteValue);
         }
 
-        for (int i = srcLength; i < length; ++i)
-        {
-            buffer.putByte(offset + 3 + i, (byte)0);
+        for (int i = srcLength; i < length; ++i) {
+            buffer.putByte(offset + 3 + i, (byte) 0);
         }
 
         return this;
     }
 
-    public static int fuelEncodingOffset()
-    {
+    public static int fuelEncodingOffset() {
         return 6;
     }
 
-    public static int fuelEncodingLength()
-    {
+    public static int fuelEncodingLength() {
         return 0;
     }
 
-    public static byte fuelNullValue()
-    {
-        return (byte)0;
+    public static byte fuelNullValue() {
+        return (byte) 0;
     }
 
-    public static byte fuelMinValue()
-    {
-        return (byte)32;
+    public static byte fuelMinValue() {
+        return (byte) 32;
     }
 
-    public static byte fuelMaxValue()
-    {
-        return (byte)126;
+    public static byte fuelMaxValue() {
+        return (byte) 126;
     }
 
 
-    private static final byte[] FUEL_VALUE = { 80, 101, 116, 114, 111, 108 };
+    private static final byte[] FUEL_VALUE = {80, 101, 116, 114, 111, 108};
 
-    public static int fuelLength()
-    {
+    public static int fuelLength() {
         return 6;
     }
 
 
-    public byte fuel(final int index)
-    {
+    public byte fuel(final int index) {
         return FUEL_VALUE[index];
     }
 
-    public int getFuel(final byte[] dst, final int offset, final int length)
-    {
+    public int getFuel(final byte[] dst, final int offset, final int length) {
         final int bytesCopied = Math.min(length, 6);
         System.arraycopy(FUEL_VALUE, 0, dst, offset, bytesCopied);
 
         return bytesCopied;
     }
 
-    public String fuel()
-    {
+    public String fuel() {
         return "Petrol";
     }
 
 
-    public static int efficiencyEncodingOffset()
-    {
+    public static int efficiencyEncodingOffset() {
         return 6;
     }
 
-    public static int efficiencyEncodingLength()
-    {
+    public static int efficiencyEncodingLength() {
         return 1;
     }
 
-    public static byte efficiencyNullValue()
-    {
-        return (byte)-128;
+    public static byte efficiencyNullValue() {
+        return (byte) -128;
     }
 
-    public static byte efficiencyMinValue()
-    {
-        return (byte)0;
+    public static byte efficiencyMinValue() {
+        return (byte) 0;
     }
 
-    public static byte efficiencyMaxValue()
-    {
-        return (byte)100;
+    public static byte efficiencyMaxValue() {
+        return (byte) 100;
     }
 
-    public EngineEncoder efficiency(final byte value)
-    {
+    public EngineEncoder efficiency(final byte value) {
         buffer.putByte(offset + 6, value);
         return this;
     }
 
 
-    public static int boosterEnabledEncodingOffset()
-    {
+    public static int boosterEnabledEncodingOffset() {
         return 7;
     }
 
-    public static int boosterEnabledEncodingLength()
-    {
+    public static int boosterEnabledEncodingLength() {
         return 1;
     }
 
-    public EngineEncoder boosterEnabled(final BooleanType value)
-    {
-        buffer.putByte(offset + 7, (byte)value.value());
+    public EngineEncoder boosterEnabled(final BooleanType value) {
+        buffer.putByte(offset + 7, (byte) value.value());
         return this;
     }
 
-    public static int boosterEncodingOffset()
-    {
+    public static int boosterEncodingOffset() {
         return 8;
     }
 
-    public static int boosterEncodingLength()
-    {
+    public static int boosterEncodingLength() {
         return 2;
     }
 
     private final BoosterEncoder booster = new BoosterEncoder();
 
-    public BoosterEncoder booster()
-    {
+    public BoosterEncoder booster() {
         booster.wrap(buffer, offset + 8);
         return booster;
     }
 
-    public String toString()
-    {
-        if (null == buffer)
-        {
+    public String toString() {
+        if (null == buffer) {
             return "";
         }
 
         return appendTo(new StringBuilder()).toString();
     }
 
-    public StringBuilder appendTo(final StringBuilder builder)
-    {
-        if (null == buffer)
-        {
+    public StringBuilder appendTo(final StringBuilder builder) {
+        if (null == buffer) {
             return builder;
         }
 

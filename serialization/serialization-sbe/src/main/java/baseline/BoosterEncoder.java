@@ -4,8 +4,7 @@ package baseline;
 import org.agrona.MutableDirectBuffer;
 
 @SuppressWarnings("all")
-public final class BoosterEncoder
-{
+public final class BoosterEncoder {
     public static final int SCHEMA_ID = 1;
     public static final int SCHEMA_VERSION = 0;
     public static final int ENCODED_LENGTH = 2;
@@ -14,10 +13,8 @@ public final class BoosterEncoder
     private int offset;
     private MutableDirectBuffer buffer;
 
-    public BoosterEncoder wrap(final MutableDirectBuffer buffer, final int offset)
-    {
-        if (buffer != this.buffer)
-        {
+    public BoosterEncoder wrap(final MutableDirectBuffer buffer, final int offset) {
+        if (buffer != this.buffer) {
             this.buffer = buffer;
         }
         this.offset = offset;
@@ -25,93 +22,75 @@ public final class BoosterEncoder
         return this;
     }
 
-    public MutableDirectBuffer buffer()
-    {
+    public MutableDirectBuffer buffer() {
         return buffer;
     }
 
-    public int offset()
-    {
+    public int offset() {
         return offset;
     }
 
-    public int encodedLength()
-    {
+    public int encodedLength() {
         return ENCODED_LENGTH;
     }
 
-    public int sbeSchemaId()
-    {
+    public int sbeSchemaId() {
         return SCHEMA_ID;
     }
 
-    public int sbeSchemaVersion()
-    {
+    public int sbeSchemaVersion() {
         return SCHEMA_VERSION;
     }
 
-    public static int boostTypeEncodingOffset()
-    {
+    public static int boostTypeEncodingOffset() {
         return 0;
     }
 
-    public static int boostTypeEncodingLength()
-    {
+    public static int boostTypeEncodingLength() {
         return 1;
     }
 
-    public BoosterEncoder boostType(final BoostType value)
-    {
+    public BoosterEncoder boostType(final BoostType value) {
         buffer.putByte(offset + 0, value.value());
         return this;
     }
 
-    public static int horsePowerEncodingOffset()
-    {
+    public static int horsePowerEncodingOffset() {
         return 1;
     }
 
-    public static int horsePowerEncodingLength()
-    {
+    public static int horsePowerEncodingLength() {
         return 1;
     }
 
-    public static short horsePowerNullValue()
-    {
-        return (short)255;
+    public static short horsePowerNullValue() {
+        return (short) 255;
     }
 
-    public static short horsePowerMinValue()
-    {
-        return (short)0;
+    public static short horsePowerMinValue() {
+        return (short) 0;
     }
 
-    public static short horsePowerMaxValue()
-    {
-        return (short)254;
+    public static short horsePowerMaxValue() {
+        return (short) 254;
     }
 
-    public BoosterEncoder horsePower(final short value)
-    {
-        buffer.putByte(offset + 1, (byte)value);
+    public BoosterEncoder horsePower(final short value) {
+        buffer.putByte(offset + 1, (byte) value);
         return this;
     }
 
 
-    public String toString()
-    {
-        if (null == buffer)
-        {
+    public String toString() {
+        if (null == buffer) {
             return "";
         }
 
         return appendTo(new StringBuilder()).toString();
     }
 
-    public StringBuilder appendTo(final StringBuilder builder)
-    {
-        if (null == buffer)
-        {
+    public StringBuilder appendTo(final StringBuilder builder) {
+        if (null == buffer) {
             return builder;
         }
 
