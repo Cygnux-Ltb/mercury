@@ -75,7 +75,7 @@ public class OrderCancelReject extends AbstractEvent<OrderCancelReject> {
 	}
 
 	@Override
-	public void writeMarshallable(@SuppressWarnings("rawtypes") BytesOut out) {
+	public void writeMarshallable(BytesOut out) {
 		super.writeMarshallable(out);
 		if (PREGENERATED_MARSHALLABLE) {
 			out.writeStopBit(MASHALLABLE_VERSION);
@@ -87,7 +87,7 @@ public class OrderCancelReject extends AbstractEvent<OrderCancelReject> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void readMarshallable(@SuppressWarnings("rawtypes") BytesIn in) {
+	public void readMarshallable(BytesIn in) {
 		super.readMarshallable(in);
 		if (PREGENERATED_MARSHALLABLE) {
 			int version = (int) in.readStopBit();

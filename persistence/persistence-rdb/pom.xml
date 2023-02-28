@@ -9,9 +9,8 @@
     </parent>
 
     <artifactId>persistence-rdb</artifactId>
-    <packaging>jar</packaging>
-
     <name>persistence-jdbc</name>
+    <packaging>jar</packaging>
 
     <properties>
     </properties>
