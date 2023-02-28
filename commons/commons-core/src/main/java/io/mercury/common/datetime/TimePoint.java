@@ -5,6 +5,9 @@ import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+import static io.mercury.common.datetime.DateTimeUtil.date;
+import static io.mercury.common.datetime.DateTimeUtil.timeOfSecond;
+
 public final class TimePoint implements Comparable<TimePoint> {
 
     private final int date;
@@ -50,8 +53,8 @@ public final class TimePoint implements Comparable<TimePoint> {
      */
     public static TimePoint now(@Nonnull LocalDateTime datetime,
                                 @Nonnull ZoneOffset offset) {
-        return new TimePoint(DateTimeUtil.date(datetime.toLocalDate()),
-                DateTimeUtil.timeOfSecond(datetime.toLocalTime()), datetime.getNano(), offset);
+        return new TimePoint(date(datetime.toLocalDate()),
+                timeOfSecond(datetime.toLocalTime()), datetime.getNano(), offset);
     }
 
     /**

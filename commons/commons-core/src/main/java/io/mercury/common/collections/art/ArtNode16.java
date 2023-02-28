@@ -74,7 +74,7 @@ public final class ArtNode16<V> implements ArtNode<V> {
     }
 
     void initFromNode48(ArtNode48<V> node48) {
-//        log.debug("48->16 nodeLevel={} (nodekey={})", node48.nodeLevel, node48.nodeKey);
+//        log.debug("48->16 nodeLevel={} (nodeKey={})", node48.nodeLevel, node48.nodeKey);
         this.numChildren = node48.numChildren;
         this.nodeLevel = node48.nodeLevel;
         this.nodeKey = node48.nodeKey;
@@ -242,7 +242,7 @@ public final class ArtNode16<V> implements ArtNode<V> {
     @SuppressWarnings("unchecked")
     public V getCeilingValue(long key, int level) {
 //        log.debug("key = {}", String.format("%Xh", key));
-//        log.debug("level={} nodeLevel={} nodekey={} looking for key={} mask={}",
+//        log.debug("level={} nodeLevel={} nodeKey={} looking for key={} mask={}",
 //                level, nodeLevel, String.format("%Xh", nodeKey), String.format("%Xh", key), String.format("%Xh", mask));
 //
 //        log.debug("key & mask = {} > nodeKey & mask = {}",
@@ -258,7 +258,7 @@ public final class ArtNode16<V> implements ArtNode<V> {
                 // compacted part is lower - no need to search for ceiling entry here
                 return null;
             } else if (keyWithMask != nodeKeyWithMask) {
-                // can reset key, because compacted nodekey is higher
+                // can reset key, because compacted nodeKey is higher
                 key = 0;
             }
         }
@@ -292,7 +292,7 @@ public final class ArtNode16<V> implements ArtNode<V> {
     @SuppressWarnings("unchecked")
     public V getFloorValue(long key, int level) {
         // log.debug("key = {}", String.format("%Xh", key));
-//        log.debug("level={} nodeLevel={} nodekey={} looking for key={} mask={}",
+//        log.debug("level={} nodeLevel={} nodeKey={} looking for key={} mask={}",
 //                level, nodeLevel, String.format("%Xh", nodeKey), String.format("%Xh", key), String.format("%Xh", mask));
 
         // special processing for compacted nodes
@@ -307,7 +307,7 @@ public final class ArtNode16<V> implements ArtNode<V> {
                 // compacted part is higher - no need to search for floor entry here
                 return null;
             } else if (keyWithMask != nodeKeyWithMask) {
-                // find highest value, because compacted nodekey is lower
+                // find the highest value, because compacted nodeKey is lower
                 key = Long.MAX_VALUE;
             }
         }

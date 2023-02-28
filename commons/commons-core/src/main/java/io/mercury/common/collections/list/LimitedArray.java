@@ -1,7 +1,7 @@
 package io.mercury.common.collections.list;
 
 import javax.annotation.concurrent.NotThreadSafe;
-import java.util.function.IntFunction;
+import java.util.function.Supplier;
 
 @NotThreadSafe
 public final class LimitedArray<E> extends LimitedContainer<E> {
@@ -10,13 +10,12 @@ public final class LimitedArray<E> extends LimitedContainer<E> {
 
     @SuppressWarnings("unchecked")
     public LimitedArray(int capacity) {
-        super(capacity);
-        this.array = (E[]) new Object[capacity];
+        this(capacity, () -> (E[]) new Object[capacity]);
     }
 
-    public LimitedArray(int capacity, IntFunction<E[]> supplier) {
+    public LimitedArray(int capacity, Supplier<E[]> supplier) {
         super(capacity);
-        final E[] array = supplier.apply(capacity);
+        final E[] array = supplier.get();
         if (array.length != capacity)
             throw new IllegalStateException("setting capacity and array length not equal");
         this.array = array;

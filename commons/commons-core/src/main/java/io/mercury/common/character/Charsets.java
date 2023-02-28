@@ -8,13 +8,13 @@ import java.nio.charset.StandardCharsets;
 public interface Charsets {
 
     /**
-     * @param charsetName String
+     * @param name String
      * @return Charset
      */
-    static Charset forName(String charsetName) {
-        if (StringSupport.isNullOrEmpty(charsetName))
+    static Charset forName(String name) {
+        if (StringSupport.isNullOrEmpty(name))
             return SYS_DEFAULT;
-        return Charset.forName(charsetName);
+        return Charset.forName(name);
     }
 
     Charset SYS_DEFAULT = Charset.defaultCharset();

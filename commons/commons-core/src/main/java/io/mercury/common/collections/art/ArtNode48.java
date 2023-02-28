@@ -237,7 +237,7 @@ public final class ArtNode48<V> implements ArtNode<V> {
                 // compacted part is lower - no need to search for ceiling entry here
                 return null;
             } else if (keyWithMask != nodeKeyWithMask) {
-                // can reset key, because compacted nodekey is higher
+                // can reset key, because compacted nodeKey is higher
                 key = 0;
             }
         }
@@ -289,7 +289,7 @@ public final class ArtNode48<V> implements ArtNode<V> {
                 // compacted part is higher - no need to search for floor entry here
                 return null;
             } else if (keyWithMask != nodeKeyWithMask) {
-                // find highest value, because compacted nodekey is lower
+                // find the highest value, because compacted nodeKey is lower
                 key = Long.MAX_VALUE;
             }
         }

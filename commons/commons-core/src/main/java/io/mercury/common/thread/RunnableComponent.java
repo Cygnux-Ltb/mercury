@@ -2,6 +2,7 @@ package io.mercury.common.thread;
 
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.number.ThreadSafeRandoms;
 import org.slf4j.Logger;
 
 import javax.annotation.concurrent.ThreadSafe;
@@ -101,6 +102,7 @@ public abstract class RunnableComponent {
         if (mode.immediately) {
             start();
         } else if (mode.delayMillis > 0) {
+
             //TODO 添加延迟启动
         } else {
             log.info("{}, Start mode is [Manual], waiting call start...", name);

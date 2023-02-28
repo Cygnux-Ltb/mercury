@@ -272,7 +272,7 @@ public final class ArtNode4<V> implements ArtNode<V> {
     @SuppressWarnings("unchecked")
     public V getCeilingValue(long key, int level) {
 //        log.debug("key = {}", String.format("%Xh", key));
-//        log.debug("level={} nodeLevel={} nodekey={} looking for key={} mask={}",
+//        log.debug("level={} nodeLevel={} nodeKey={} looking for key={} mask={}",
 //                level, nodeLevel, String.format("%Xh", nodeKey), String.format("%Xh", key), String.format("%Xh", mask));
 
         // special processing for compacted nodes
@@ -287,7 +287,7 @@ public final class ArtNode4<V> implements ArtNode<V> {
                 // compacted part is lower - no need to search for ceiling entry here
                 return null;
             } else if (keyWithMask != nodeKeyWithMask) {
-                // accept first existing entry, because compacted nodekey is higher
+                // accept first existing entry, because compacted nodeKey is higher
                 key = 0;
             }
         }
@@ -311,7 +311,7 @@ public final class ArtNode4<V> implements ArtNode<V> {
                 // exploring first higher key
                 return nodeLevel == 0
                         ? (V) nodes[i]
-                        : ((ArtNode<V>) nodes[i]).getCeilingValue(0, nodeLevel - 8); // take lowest existing key
+                        : ((ArtNode<V>) nodes[i]).getCeilingValue(0, nodeLevel - 8); // take the lowest existing key
             }
         }
         return null;
@@ -321,7 +321,7 @@ public final class ArtNode4<V> implements ArtNode<V> {
     @SuppressWarnings("unchecked")
     public V getFloorValue(long key, int level) {
         //        log.debug("key = {}", String.format("%Xh", key));
-//        log.debug("level={} nodeLevel={} nodekey={} looking for key={} mask={}",
+//        log.debug("level={} nodeLevel={} nodeKey={} looking for key={} mask={}",
 //                level, nodeLevel, String.format("%Xh", nodeKey), String.format("%Xh", key), String.format("%Xh", mask));
 
         // special processing for compacted nodes
@@ -336,7 +336,7 @@ public final class ArtNode4<V> implements ArtNode<V> {
                 // compacted part is higher - no need to search for floor entry here
                 return null;
             } else if (keyWithMask != nodeKeyWithMask) {
-                // find highest value, because compacted nodekey is lower
+                // find the highest value, because compacted nodeKey is lower
                 key = Long.MAX_VALUE;
             }
         }
@@ -358,7 +358,7 @@ public final class ArtNode4<V> implements ArtNode<V> {
                 // exploring first lower key
                 return nodeLevel == 0
                         ? (V) nodes[i]
-                        : ((ArtNode<V>) nodes[i]).getFloorValue(Long.MAX_VALUE, nodeLevel - 8); // take highest existing key
+                        : ((ArtNode<V>) nodes[i]).getFloorValue(Long.MAX_VALUE, nodeLevel - 8); // take the highest existing key
             }
         }
         return null;
@@ -457,7 +457,7 @@ public final class ArtNode4<V> implements ArtNode<V> {
 
     @Override
     public String outputDiagram(String prefix, int level) {
-        // log.debug(">>>> {} level={} nodelevel={} nodekey={}", prefix, level, nodeLevel, nodeKey);
+        // log.debug(">>>> {} level={} nodeLevel={} nodeKey={}", prefix, level, nodeLevel, nodeKey);
         return LongAdaptiveRadixTreeMap
                 .outputDiagram(prefix, level, nodeLevel, nodeKey, numChildren,
                         idx -> keys[idx], idx -> nodes[idx]);

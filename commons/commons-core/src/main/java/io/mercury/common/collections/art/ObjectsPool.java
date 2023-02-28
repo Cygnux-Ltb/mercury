@@ -15,12 +15,17 @@
  */
 package io.mercury.common.collections.art;
 
+import io.mercury.common.log.Log4j2LoggerFactory;
+import org.slf4j.Logger;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class ObjectsPool {
+
+    private static final Logger log = Log4j2LoggerFactory.getLogger(ObjectsPool.class);
 
     public static final int ORDER = 0;
 
@@ -59,10 +64,10 @@ public final class ObjectsPool {
     public <T> T get(final int type, final Supplier<T> supplier) {
         final T obj = (T) pools[type].pop(); // pollFirst is cheaper for empty pool
         if (obj == null) {
-//            log.debug("MISS {}", type);
+            log.debug("MISS {}", type);
             return supplier.get();
         } else {
-//            log.debug("HIT {} (count={})", type, pools[type].count);
+            log.debug("HIT {} (count={})", type, pools[type].count);
             return obj;
         }
     }
@@ -71,16 +76,16 @@ public final class ObjectsPool {
     public <T> T get(final int type, final Function<ObjectsPool, T> constructor) {
         final T obj = (T) pools[type].pop(); // pollFirst is cheaper for empty pool
         if (obj == null) {
-//            log.debug("MISS {}", type);
+            log.debug("MISS {}", type);
             return constructor.apply(this);
         } else {
-//            log.debug("HIT {} (count={})", type, pools[type].count);
+            log.debug("HIT {} (count={})", type, pools[type].count);
             return obj;
         }
     }
 
     public void put(final int type, Object object) {
-//        log.debug("RETURN {} (count={})", type, pools[type].count);
+        log.debug("RETURN {} (count={})", type, pools[type].count);
         pools[type].add(object);
     }
 

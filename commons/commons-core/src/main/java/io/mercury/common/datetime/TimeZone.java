@@ -62,15 +62,11 @@ public interface TimeZone {
     }
 
     static void showAvailableZoneIds(Logger log) {
-        if (log == null)
-            getAvailableZoneIds().stream()
-                    .sorted(naturalOrder())
-                    .forEachOrdered(System.out::println);
-        else
-            getAvailableZoneIds().stream()
-                    .sorted(naturalOrder())
-                    .forEachOrdered(log::info);
-
+        getAvailableZoneIds().stream()
+                .sorted(naturalOrder())
+                .forEachOrdered(log == null
+                        ? System.out::println
+                        : log::info);
     }
 
 }

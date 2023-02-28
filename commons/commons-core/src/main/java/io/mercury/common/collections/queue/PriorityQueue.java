@@ -59,9 +59,9 @@ public class PriorityQueue<E> {
      * @return Optional<E>
      */
     public Optional<E> next() {
-        return prioritySet.notEmpty()
-                ? Optional.of(prioritySet.first()) : secondarySet.notEmpty()
-                ? Optional.of(secondarySet.first()) : Optional.empty();
+        return prioritySet.notEmpty() ? Optional.of(prioritySet.first())
+                : secondarySet.notEmpty() ? Optional.of(secondarySet.first())
+                : Optional.empty();
     }
 
 }

@@ -138,9 +138,9 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
                 case SECOND -> this.instant = ofEpochSecond(epoch);
                 case MILLIS -> this.instant = ofEpochMilli(epoch);
                 case MICROS -> this.instant = ofEpochSecond(floorDiv(epoch, MICROS_PER_SECONDS),
-                        floorMod(epoch, TimeConst.MICROS_PER_SECONDS));
-                case NANOS ->
-                        this.instant = ofEpochSecond(floorDiv(epoch, NANOS_PER_SECOND), floorMod(epoch, NANOS_PER_SECOND));
+                        floorMod(epoch, MICROS_PER_SECONDS));
+                case NANOS -> this.instant = ofEpochSecond(floorDiv(epoch, NANOS_PER_SECOND),
+                        floorMod(epoch, NANOS_PER_SECOND));
                 default -> {
                 }
             }

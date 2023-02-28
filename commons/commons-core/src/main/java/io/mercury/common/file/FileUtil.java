@@ -157,11 +157,8 @@ public final class FileUtil {
                 return false;
 
         } while (read0 >= 0 && read1 >= 0);
-
-        if (read0 < 0 && read1 < 0)
-            return true; // both at EOF
-
-        return false;
+        // both at EOF
+        return read0 < 0 && read1 < 0;
     }
 
     /**
@@ -215,7 +212,7 @@ public final class FileUtil {
      * @param dir    File
      * @param filter FileFilter
      * @return File[]
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException e
      */
     public static File[] findFiles(File dir, FileFilter filter) throws FileNotFoundException {
         if (!dir.exists())
@@ -224,14 +221,14 @@ public final class FileUtil {
             throw new FileNotFoundException("File " + dir + " is not a directory.");
 
         // being matching process, create array for returning results
-        List<File> files = new FastList<File>();
+        List<File> files = new FastList<>();
 
         // get all files in this directory
         File[] dirFiles = dir.listFiles();
 
         // were any files returned?
-        if (dirFiles != null && dirFiles.length > 0) {
-            // loop thru every file in the dir
+        if (dirFiles != null) {
+            // loop through every file in the dir
             for (File file : dirFiles) {
                 // only match files, not a directory
                 if (file.isFile()) {
@@ -377,11 +374,11 @@ public final class FileUtil {
     }
 
     /**
-     * @param sources
-     * @param dir
-     * @throws IOException
+     * @param sources Set<File>
+     * @param dir     File
+     * @throws IOException ioe
      */
-    public static void copy(@Nonnull Set<File> sources, File dir) throws FileAlreadyExistsException, IOException {
+    public static void copy(@Nonnull Set<File> sources, File dir) throws IOException {
         Asserter.nonNull(sources, "sources");
         for (File source : sources) {
             File target = new File(dir, source.getName());
@@ -392,11 +389,11 @@ public final class FileUtil {
     /**
      * Copy the contents of is to os.
      *
-     * @param is
-     * @param os
+     * @param is    InputStream
+     * @param os    OutputStream
      * @param buf   Can be null
-     * @param close If true, is is closed after the copy.
-     * @throws IOException
+     * @param close If true, is closed after the copy.
+     * @throws IOException ioe
      */
 
     public static void copy(InputStream is, OutputStream os, byte[] buf, boolean close) throws IOException {
@@ -415,7 +412,7 @@ public final class FileUtil {
     /**
      * @param data byte[]
      * @param file File
-     * @throws IOException
+     * @throws IOException ioe
      */
     public static void flush(byte[] data, File file) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(file)) {
@@ -429,7 +426,7 @@ public final class FileUtil {
      *
      * @param file File
      * @return bytes from <CODE>f</CODE>
-     * @throws IOException
+     * @throws IOException ioe
      */
 
     public static byte[] load(File file) throws IOException {
@@ -442,7 +439,7 @@ public final class FileUtil {
      *
      * @param is    InputStream
      * @param close If true, InputStream is closed after the copy.
-     * @throws IOException
+     * @throws IOException ioe
      */
 
     public static byte[] load(InputStream is, boolean close) throws IOException {

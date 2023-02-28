@@ -27,8 +27,8 @@ public class Base64Codec {
     /**
      * The set of characters that may be used in base64-encoded values.
      */
-    private static final char[] BASE64_ALPHABET = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "abcdefghijklmnopqrstuvwxyz"
-            + "0123456789+/").toCharArray();
+    private static final char[] BASE64_ALPHABET = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            + "abcdefghijklmnopqrstuvwxyz" + "0123456789+/").toCharArray();
 
     /**
      * Prevent instance creation.

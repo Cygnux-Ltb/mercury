@@ -117,8 +117,7 @@ public final class LongRangeMap<V> {
                 MutableSets.newLongHashSet(Capacity.L06_SIZE));
     }
 
-    private void operatingSelect(MutableLongSet selectKey,
-                                 LongProcedure func) {
+    private void operatingSelect(MutableLongSet selectKey, LongProcedure func) {
         if (!selectKey.isEmpty())
             selectKey.each(func::accept);
     }

@@ -29,17 +29,15 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
 
     private static final Logger log = LoggerFactory.getLogger(CommonThreadPool.class);
 
-    private CommonThreadPool(String threadPoolName,
-                             ThreadPoolBuilder builder,
+    private CommonThreadPool(String threadPoolName, ThreadPoolBuilder builder,
                              BiConsumer<Thread, Runnable> beforeHandler,
                              BiConsumer<Runnable, Throwable> afterHandler) {
-        super(builder.corePoolSize, builder.maximumPoolSize, builder.keepAliveTime,
-                builder.timeUnit, builder.workQueue);
+        super(builder.corePoolSize, builder.maximumPoolSize,
+                builder.keepAliveTime, builder.timeUnit, builder.workQueue);
         init(threadPoolName, beforeHandler, afterHandler);
     }
 
-    private CommonThreadPool(String threadPoolName,
-                             ThreadPoolBuilder builder,
+    private CommonThreadPool(String threadPoolName, ThreadPoolBuilder builder,
                              ThreadFactory threadFactory,
                              BiConsumer<Thread, Runnable> beforeHandler,
                              BiConsumer<Runnable, Throwable> afterHandler) {
@@ -48,8 +46,7 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
         init(threadPoolName, beforeHandler, afterHandler);
     }
 
-    private CommonThreadPool(String threadPoolName,
-                             ThreadPoolBuilder builder,
+    private CommonThreadPool(String threadPoolName, ThreadPoolBuilder builder,
                              RejectedExecutionHandler rejectedHandler,
                              BiConsumer<Thread, Runnable> beforeHandler,
                              BiConsumer<Runnable, Throwable> afterHandler) {
@@ -58,10 +55,8 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
         init(threadPoolName, beforeHandler, afterHandler);
     }
 
-    private CommonThreadPool(String threadPoolName,
-                             ThreadPoolBuilder builder,
-                             ThreadFactory threadFactory,
-                             RejectedExecutionHandler rejectedHandler,
+    private CommonThreadPool(String threadPoolName, ThreadPoolBuilder builder,
+                             ThreadFactory threadFactory, RejectedExecutionHandler rejectedHandler,
                              BiConsumer<Thread, Runnable> beforeHandler,
                              BiConsumer<Runnable, Throwable> afterHandler) {
         super(builder.corePoolSize, builder.maximumPoolSize, builder.keepAliveTime,

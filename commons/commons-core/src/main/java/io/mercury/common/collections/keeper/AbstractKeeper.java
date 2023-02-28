@@ -2,13 +2,12 @@ package io.mercury.common.collections.keeper;
 
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.collections.Capacity;
+import io.mercury.common.collections.MutableMaps;
 import org.eclipse.collections.api.map.ConcurrentMutableMap;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
-
-import static io.mercury.common.collections.MutableMaps.newConcurrentHashMap;
 
 /**
  * @param <K>
@@ -25,7 +24,7 @@ public abstract class AbstractKeeper<K, V> implements Keeper<K, V> {
     }
 
     protected AbstractKeeper(Capacity capacity) {
-        this.savedMap = newConcurrentHashMap(capacity.value());
+        this.savedMap = MutableMaps.newConcurrentHashMap(capacity.value());
     }
 
     @Nonnull

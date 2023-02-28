@@ -20,7 +20,7 @@ public final class LibraryPathManager {
 	 * 添加java.library.path
 	 * 
 	 * @param libraryFile File
-	 * @throws Exception
+	 * @throws Exception e
 	 */
 	public static void addLibraryDir(File libraryFile) throws Exception {
 		addLibraryDir(libraryFile.getAbsolutePath());
@@ -29,7 +29,7 @@ public final class LibraryPathManager {
 	/**
 	 * 
 	 * @param libraryPath String
-	 * @throws Exception
+	 * @throws Exception e
 	 */
 	public static void addLibraryDir(String libraryPath) throws Exception {
 		Field usrPathsField = ClassLoader.class.getDeclaredField("usr_paths");

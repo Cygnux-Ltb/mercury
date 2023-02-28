@@ -1,6 +1,7 @@
 package io.mercury.common.collections.group;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 import java.io.Serial;
 import java.util.Set;
 
@@ -9,6 +10,7 @@ import java.util.Set;
  * @param <V>
  * @author yellow013
  */
+@Immutable
 public interface Group<K, V> {
 
     @Nonnull

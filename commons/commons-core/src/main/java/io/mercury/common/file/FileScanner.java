@@ -49,12 +49,14 @@ public final class FileScanner {
         File[] listFiles = path.listFiles();
         if (listFiles != null) {
             for (File file : listFiles) {
-                if (file.isDirectory())
-                    // 如果文件是一个目录, 递归执行
+                // 如果文件是一个目录, 递归执行
+                if (file.isDirectory()) {
                     depthFirst0(files, file, filter);
-                else if (filter.accept(file))
-                    // 如果文件符合过滤器断言, 则加入Set
+                }
+                // 如果文件符合过滤器断言, 则加入Set
+                else if (filter.accept(file)) {
                     files.add(file);
+                }
                 // 否则忽略此文件
             }
         }

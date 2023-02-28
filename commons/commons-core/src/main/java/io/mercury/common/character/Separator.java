@@ -18,12 +18,12 @@ public interface Separator {
     String PATH_SEPARATOR = System.getProperty("path.separator");
 
     /**
-     * char = '-';
+     * String = '-';
      */
     String LINE = "-";
 
     /**
-     * char = ' ';
+     * String = ' ';
      */
     String BLANK = " ";
 

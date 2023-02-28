@@ -15,6 +15,9 @@
  */
 package io.mercury.common.collections.art;
 
+import io.mercury.common.log.Log4j2LoggerFactory;
+import org.slf4j.Logger;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -26,12 +29,12 @@ import java.util.function.Supplier;
  * <p>
  * based on original paper:
  * <p>
- * The Adaptive Radix Tree: ARTful Indexing for Main-Memory Databases
+ * The Adaptive Radix Tree: Artful Indexing for Main-Memory Databases
  * <p>
  * Viktor Leis, Alfons Kemper, Thomas Neumann Fakultat fur Informatik Technische
  * Universitat Munchen Boltzmannstrae 3, D-85748 Garching
  * <p>
- * <a href="https://db.in.tum.de/~leis/papers/ART.pdf">The Adaptive Radix Tree: ARTful Indexing for Main-Memory Databases</a>
+ * <a href="https://db.in.tum.de/~leis/papers/ART.pdf">The Adaptive Radix Tree: Artful Indexing for Main-Memory Databases</a>
  * <p>
  * Target operations: - GET or (PUT + GET_LOWER/HIGHER) -
  * placing/moving/bulkload order - often GET, more rare PUT ??cache - REMOVE -
@@ -41,6 +44,8 @@ import java.util.function.Supplier;
  * PUT if not exists - inserting back own orders, very rare
  */
 public final class LongAdaptiveRadixTreeMap<V> {
+
+    private static final Logger log = Log4j2LoggerFactory.getLogger(LongAdaptiveRadixTreeMap.class);
 
     private static final int INITIAL_LEVEL = 56;
 
@@ -216,15 +221,15 @@ public final class LongAdaptiveRadixTreeMap<V> {
         final String baseKeyPrefix;
         final String baseKeyPrefix1;
         final int lvlDiff = level - nodeLevel;
-//        log.debug("nodeKey={} level={} nodeLevel={} lvlDiff={}", String.format("%X", nodeKey), level, nodeLevel, lvlDiff);
+        log.debug("nodeKey={} level={} nodeLevel={} lvlDiff={}", String.format("%X", nodeKey), level, nodeLevel, lvlDiff);
 
         if (lvlDiff != 0) {
             int chars = lvlDiff >> 2;
 //            baseKeyPrefix = String.format("[%0" + chars + "X]", nodeKey & ((1L << lvlDiff) - 1L) << nodeLevel);
             long mask = ((1L << lvlDiff) - 1L);
-//            log.debug("mask={}", String.format("%X", mask));
-//            log.debug("nodeKey >> level = {}", String.format("%X", nodeKey >> (nodeLevel + 8)));
-//            log.debug("nodeKey >> level  & mask= {}", String.format("%X", (nodeKey >> (nodeLevel + 8)) & mask));
+            log.debug("mask={}", String.format("%X", mask));
+            log.debug("nodeKey >> level = {}", String.format("%X", nodeKey >> (nodeLevel + 8)));
+            log.debug("nodeKey >> level  & mask= {}", String.format("%X", (nodeKey >> (nodeLevel + 8)) & mask));
             baseKeyPrefix = charRepeat('─', chars - 2)
                     + String.format("[%0" + chars + "X]", (nodeKey >> (nodeLevel + 8)) & mask);
             baseKeyPrefix1 = charRepeat(' ', chars * 2);
@@ -232,7 +237,7 @@ public final class LongAdaptiveRadixTreeMap<V> {
             baseKeyPrefix = "";
             baseKeyPrefix1 = "";
         }
-        // log.debug("baseKeyPrefix={}", baseKeyPrefix);
+        log.debug("baseKeyPrefix={}", baseKeyPrefix);
 
         StringBuilder sb = new StringBuilder();
         for (short i = 0; i < numChildren; i++) {
@@ -244,8 +249,9 @@ public final class LongAdaptiveRadixTreeMap<V> {
             if (nodeLevel == 0) {
                 sb.append(x).append(key).append(" = ").append(node);
             } else {
-                sb.append(x).append(key).append(((ArtNode<?>) node).outputDiagram(
-                        prefix + (i + 1 == numChildren ? "    " : "│   ") + baseKeyPrefix1, nodeLevel - 8));
+                sb.append(x).append(key).append(((ArtNode<?>) node)
+                        .outputDiagram(prefix + (i + 1 == numChildren ? "    " : "│   ")
+                                + baseKeyPrefix1, nodeLevel - 8));
             }
             if (i < numChildren - 1) {
                 sb.append("\n");

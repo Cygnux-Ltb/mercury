@@ -55,7 +55,9 @@ public final class DateTimeUtil {
      * @return int
      */
     public static int date(@Nonnull LocalDate date) {
-        return date.getYear() * 10000 + date.getMonth().getValue() * 100 + date.getDayOfMonth();
+        return date.getYear() * 10000
+                + date.getMonth().getValue() * 100
+                + date.getDayOfMonth();
     }
 
     /**
@@ -104,7 +106,8 @@ public final class DateTimeUtil {
      * @return int
      */
     public static int dateOfMonth(@Nonnull LocalDate date) {
-        return date.getYear() * 100 + date.getMonth().getValue();
+        return date.getYear() * 100
+                + date.getMonth().getValue();
     }
 
     /**
@@ -123,7 +126,8 @@ public final class DateTimeUtil {
      * @return int
      */
     public static int yearDay(@Nonnull LocalDate date) {
-        return date.getYear() * 1000 + date.getDayOfYear();
+        return date.getYear() * 1000
+                + date.getDayOfYear();
     }
 
     /**
@@ -161,7 +165,8 @@ public final class DateTimeUtil {
      * @return int
      */
     public static int timeOfMinute(@Nonnull LocalTime time) {
-        return time.getHour() * 100 + time.getMinute();
+        return time.getHour() * 100
+                + time.getMinute();
     }
 
     /**
@@ -180,7 +185,9 @@ public final class DateTimeUtil {
      * @return int
      */
     public static int timeOfSecond(@Nonnull LocalTime time) {
-        return time.getHour() * 10000 + time.getMinute() * 100 + time.getSecond();
+        return time.getHour() * 10000
+                + time.getMinute() * 100
+                + time.getSecond();
     }
 
     /**
@@ -199,7 +206,8 @@ public final class DateTimeUtil {
      * @return int
      */
     public static int timeOfMillisecond(@Nonnull LocalTime time) {
-        return timeOfSecond(time) * 1000 + time.getNano() / 1000000;
+        return timeOfSecond(time) * 1000
+                + time.getNano() / 1000000;
     }
 
     /**
@@ -218,7 +226,8 @@ public final class DateTimeUtil {
      * @return long
      */
     public static long timeOfMicrosecond(@Nonnull LocalTime time) {
-        return timeOfSecond(time) * 1000000L + time.getNano() / 1000;
+        return timeOfSecond(time) * 1000000L
+                + time.getNano() / 1000;
     }
 
     /**
@@ -237,7 +246,8 @@ public final class DateTimeUtil {
      * @return long
      */
     public static long timeOfNanosecond(@Nonnull LocalTime time) {
-        return timeOfSecond(time) * 1000000000L + time.getNano();
+        return timeOfSecond(time) * 1000000000L
+                + time.getNano();
     }
 
     /**
@@ -256,7 +266,8 @@ public final class DateTimeUtil {
      * @return long
      */
     public static long datetimeOfHour(@Nonnull LocalDateTime datetime) {
-        return date(datetime.toLocalDate()) * 100L + timeOfHour(datetime.toLocalTime());
+        return date(datetime.toLocalDate()) * 100L
+                + timeOfHour(datetime.toLocalTime());
     }
 
     /**
@@ -275,7 +286,8 @@ public final class DateTimeUtil {
      * @return long
      */
     public static long datetimeOfMinute(@Nonnull LocalDateTime datetime) {
-        return date(datetime.toLocalDate()) * 10000L + timeOfMinute(datetime.toLocalTime());
+        return date(datetime.toLocalDate()) * 10000L
+                + timeOfMinute(datetime.toLocalTime());
     }
 
     /**
@@ -294,7 +306,8 @@ public final class DateTimeUtil {
      * @return long
      */
     public static long datetimeOfSecond(@Nonnull LocalDateTime datetime) {
-        return date(datetime.toLocalDate()) * 1000000L + timeOfSecond(datetime.toLocalTime());
+        return date(datetime.toLocalDate()) * 1000000L
+                + timeOfSecond(datetime.toLocalTime());
     }
 
     /**
@@ -314,7 +327,8 @@ public final class DateTimeUtil {
      * @return long
      */
     public static long datetimeOfMillisecond(@Nonnull LocalDateTime datetime) {
-        return datetimeOfSecond(datetime) * 1000L + datetime.toLocalTime().getNano() / 1000000;
+        return datetimeOfSecond(datetime) * 1000L
+                + datetime.toLocalTime().getNano() / 1000000;
     }
 
     /**
@@ -324,7 +338,8 @@ public final class DateTimeUtil {
      * @return LocalDate
      */
     public static LocalDate toLocalDate(int date) {
-        return LocalDate.of(date / 10000, (date % 10000) / 100, date % 100);
+        return LocalDate.of(date / 10000, (date % 10000) / 100,
+                date % 100);
     }
 
     /**
@@ -344,8 +359,8 @@ public final class DateTimeUtil {
      * @return LocalTime
      */
     public static LocalTime toLocalTime(int time) {
-        return LocalTime.of(time / 10000000, (time % 10000000) / 100000, (time % 100000) / 1000,
-                (time % 1000) * 1000000);
+        return LocalTime.of(time / 10000000, (time % 10000000) / 100000,
+                (time % 100000) / 1000, (time % 1000) * 1000000);
     }
 
     /**
@@ -355,7 +370,8 @@ public final class DateTimeUtil {
      * @return LocalDateTime
      */
     public static LocalDateTime toLocalDateTime(long datetime) {
-        return LocalDateTime.of(toLocalDate((int) (datetime / 1000000000)), toLocalTime((int) (datetime % 1000000000)));
+        return LocalDateTime.of(toLocalDate((int) (datetime / 1000000000)),
+                toLocalTime((int) (datetime % 1000000000)));
     }
 
     /**
@@ -365,7 +381,8 @@ public final class DateTimeUtil {
      * @throws IllegalArgumentException iae
      * @throws DateTimeParseException   dte
      */
-    public static LocalDate toLocalDate(@Nonnull DatePattern pattern, @Nonnull String str)
+    public static LocalDate toLocalDate(@Nonnull DatePattern pattern,
+                                        @Nonnull String str)
             throws IllegalArgumentException, DateTimeParseException {
         checkFormatParam(pattern, str);
         return LocalDate.parse(str, pattern.getFormatter());
@@ -378,7 +395,8 @@ public final class DateTimeUtil {
      * @throws IllegalArgumentException iae
      * @throws DateTimeParseException   e
      */
-    public static LocalTime toLocalTime(@Nonnull TimePattern pattern, @Nonnull String str)
+    public static LocalTime toLocalTime(@Nonnull TimePattern pattern,
+                                        @Nonnull String str)
             throws IllegalArgumentException, DateTimeParseException {
         checkFormatParam(pattern, str);
         return LocalTime.parse(str, pattern.getFormatter());
@@ -391,7 +409,8 @@ public final class DateTimeUtil {
      * @throws IllegalArgumentException iae
      * @throws DateTimeParseException   dte
      */
-    public static LocalDateTime toLocalDateTime(@Nonnull DateTimePattern pattern, @Nonnull String datetime)
+    public static LocalDateTime toLocalDateTime(@Nonnull DateTimePattern pattern,
+                                                @Nonnull String datetime)
             throws IllegalArgumentException, DateTimeParseException {
         checkFormatParam(pattern, datetime);
         return LocalDateTime.parse(datetime, pattern.getFormatter());
@@ -419,7 +438,8 @@ public final class DateTimeUtil {
      * @param zoneId ZoneId
      * @return LocalDateTime
      */
-    public static LocalDateTime toLocalDateTime(@Nonnull Date date, @Nonnull ZoneId zoneId) {
+    public static LocalDateTime toLocalDateTime(@Nonnull Date date,
+                                                @Nonnull ZoneId zoneId) {
         return LocalDateTime.ofInstant(date.toInstant(), zoneId);
     }
 
@@ -436,7 +456,8 @@ public final class DateTimeUtil {
      * @param pattern LocalDate
      * @return String
      */
-    public static String formatDate(@Nonnull DatePattern pattern, @Nonnull LocalDate date) {
+    public static String formatDate(@Nonnull DatePattern pattern,
+                                    @Nonnull LocalDate date) {
         return pattern.getFormatter().format(date);
     }
 
@@ -453,7 +474,8 @@ public final class DateTimeUtil {
      * @param pattern LocalTime
      * @return String
      */
-    public static String formatTime(@Nonnull TimePattern pattern, @Nonnull LocalTime time) {
+    public static String formatTime(@Nonnull TimePattern pattern,
+                                    @Nonnull LocalTime time) {
         return pattern.getFormatter().format(time);
     }
 
@@ -462,7 +484,8 @@ public final class DateTimeUtil {
      * @param pattern  LocalDateTime
      * @return String
      */
-    public static String formatDateTime(@Nonnull DateTimePattern pattern, @Nonnull LocalDateTime datetime) {
+    public static String formatDateTime(@Nonnull DateTimePattern pattern,
+                                        @Nonnull LocalDateTime datetime) {
         return pattern.getFormatter().format(datetime);
     }
 

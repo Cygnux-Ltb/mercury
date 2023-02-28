@@ -24,14 +24,16 @@ public final class LocalDateTimeMap<V> extends TemporalMap<LocalDateTime, V, Loc
      * @return V
      */
     public static <V> LocalDateTimeMap<V> newMapWithHour() {
-        return new LocalDateTimeMap<>(DateTimeUtil::datetimeOfHour, key -> key.plusHours(1), HasNextKey);
+        return new LocalDateTimeMap<>(DateTimeUtil::datetimeOfHour,
+                key -> key.plusHours(1), HasNextKey);
     }
 
     /**
      * @return V
      */
     public static <V> LocalDateTimeMap<V> newMapWithMinute() {
-        return new LocalDateTimeMap<>(DateTimeUtil::datetimeOfMinute, key -> key.plusMinutes(1), HasNextKey);
+        return new LocalDateTimeMap<>(DateTimeUtil::datetimeOfMinute,
+                key -> key.plusMinutes(1), HasNextKey);
     }
 
     /**

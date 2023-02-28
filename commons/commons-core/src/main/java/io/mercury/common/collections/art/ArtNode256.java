@@ -15,6 +15,9 @@
  */
 package io.mercury.common.collections.art;
 
+import io.mercury.common.log.Log4j2LoggerFactory;
+import org.slf4j.Logger;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +32,8 @@ import java.util.Map;
  * to be stored.
  */
 public final class ArtNode256<V> implements ArtNode<V> {
+
+    private static final Logger log = Log4j2LoggerFactory.getLogger(ArtNode256.class);
 
     private static final int NODE48_SWITCH_THRESHOLD = 37;
 
@@ -154,19 +159,19 @@ public final class ArtNode256<V> implements ArtNode<V> {
     @Override
     @SuppressWarnings("unchecked")
     public V getCeilingValue(long key, int level) {
-//        log.debug("key = {}", String.format("%Xh", key));
+        log.debug("key = {}", String.format("%Xh", key));
         // special processing for compacted nodes
         if ((level != nodeLevel)) {
             // try first
             final long mask = -1L << (nodeLevel + 8);
-//            log.debug("key & mask = {} > nodeKey & mask = {}", String.format("%Xh", key & mask), String.format("%Xh", nodeKey & mask));
+            log.debug("key & mask = {} > nodeKey & mask = {}", String.format("%Xh", key & mask), String.format("%Xh", nodeKey & mask));
             final long keyWithMask = key & mask;
             final long nodeKeyWithMask = nodeKey & mask;
             if (nodeKeyWithMask < keyWithMask) {
                 // compacted part is lower - no need to search for ceiling entry here
                 return null;
             } else if (keyWithMask != nodeKeyWithMask) {
-                // find first lowest key, because compacted nodekey is higher
+                // find first lowest key, because compacted nodeKey is higher
                 key = 0;
             }
         }
@@ -184,7 +189,7 @@ public final class ArtNode256<V> implements ArtNode<V> {
 
         // if exact key not found - searching for first higher key
         while (++idx < 256) {
-//            log.debug("idx+ = {}", String.format("%Xh", idx));
+            log.debug("idx+ = {}", String.format("%Xh", idx));
             node = nodes[idx];
             if (node != null) {
                 return (nodeLevel == 0) ? (V) node : ((ArtNode<V>) node).getCeilingValue(0, nodeLevel - 8);// find
@@ -200,20 +205,20 @@ public final class ArtNode256<V> implements ArtNode<V> {
     @Override
     @SuppressWarnings("unchecked")
     public V getFloorValue(long key, int level) {
-        // log.debug("key = {}", String.format("%Xh", key));
+        log.debug("key = {}", String.format("%Xh", key));
         // special processing for compacted nodes
         if ((level != nodeLevel)) {
             // try first
             final long mask = -1L << (nodeLevel + 8);
-//            log.debug("key & mask = {} > nodeKey & mask = {}",
-//                    String.format("%Xh", key & mask), String.format("%Xh", nodeKey & mask));
+            log.debug("key & mask = {} > nodeKey & mask = {}",
+                    String.format("%Xh", key & mask), String.format("%Xh", nodeKey & mask));
             final long keyWithMask = key & mask;
             final long nodeKeyWithMask = nodeKey & mask;
             if (nodeKeyWithMask > keyWithMask) {
                 // compacted part is higher - no need to search for floor entry here
                 return null;
             } else if (keyWithMask != nodeKeyWithMask) {
-                // find highest value, because compacted nodekey is lower
+                // find the highest value, because compacted nodeKey is lower
                 key = Long.MAX_VALUE;
             }
         }
@@ -231,7 +236,7 @@ public final class ArtNode256<V> implements ArtNode<V> {
 
         // if exact key not found - searching for first lower key
         while (--idx >= 0) {
-//            log.debug("idx+ = {}", String.format("%Xh", idx));
+            log.debug("idx+ = {}", String.format("%Xh", idx));
             node = nodes[idx];
             if (node != null) {
                 return (nodeLevel == 0) ? (V) node : ((ArtNode<V>) node).getFloorValue(Long.MAX_VALUE, nodeLevel - 8);// find

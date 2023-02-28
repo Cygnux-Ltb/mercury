@@ -3,9 +3,18 @@ package io.mercury.common.file;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import org.slf4j.Logger;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.FileAlreadyExistsException;
-import java.util.zip.*;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Utility methods for compressing and uncompressing a file.
@@ -39,7 +48,7 @@ public class FileCompressionUtil {
         private final String fileExt;
         private final Compressor compressor;
 
-        private Algorithm(final String name, final String fileExt, final Compressor compressor) {
+        Algorithm(final String name, final String fileExt, final Compressor compressor) {
             this.name = name;
             this.fileExt = fileExt;
             this.compressor = compressor;
@@ -69,7 +78,7 @@ public class FileCompressionUtil {
         }
 
         /**
-         * Finds the matching compression algorithm by performing a case insensitive
+         * Finds the matching compression algorithm by performing a case-insensitive
          * search based on its name such as "gzip".
          *
          * @param name The algorithm name such as "gzip" or "zip"
@@ -77,15 +86,14 @@ public class FileCompressionUtil {
          */
         public static Algorithm findByName(final String name) {
             for (Algorithm algorithm : Algorithm.values()) {
-                if (algorithm.name.equalsIgnoreCase(name)) {
+                if (algorithm.name.equalsIgnoreCase(name))
                     return algorithm;
-                }
             }
             return null;
         }
 
         /**
-         * Finds the matching compression algorithm by performing a case insensitive
+         * Finds the matching compression algorithm by performing a case-insensitive
          * search based on its file extension such as "gz" for gzip.
          *
          * @param fileExt ext The algorithm file extension such as "gz" or "zip"
@@ -93,9 +101,8 @@ public class FileCompressionUtil {
          */
         public static Algorithm findByFileExtension(final String fileExt) {
             for (Algorithm algorithm : Algorithm.values()) {
-                if (algorithm.fileExt.equalsIgnoreCase(fileExt)) {
+                if (algorithm.fileExt.equalsIgnoreCase(fileExt))
                     return algorithm;
-                }
             }
             return null;
         }
@@ -136,17 +143,12 @@ public class FileCompressionUtil {
      * @param deleteSourceFileAfterCompressed Delete the original source file only
      *                                        if the compression was successful.
      * @return The compressed file
-     * @throws FileAlreadyExistsException Thrown if the target file already exists
-     *                                    and an overwrite is not permitted. This
-     *                                    exception is a subclass of IOException, so
-     *                                    its safe to only catch an IOException if
-     *                                    no specific action is required for this
-     *                                    case.
-     * @throws IOException                Thrown if an error occurs while attempting
-     *                                    to compress the source file.
+     * @throws IOException Thrown if an error occurs while attempting
+     *                     to compress the source file.
      */
-    public static File compress(File sourceFile, String algorithm, boolean deleteSourceFileAfterCompressed)
-            throws FileAlreadyExistsException, IOException {
+    public static File compress(File sourceFile, String algorithm,
+                                boolean deleteSourceFileAfterCompressed)
+            throws IOException {
         return compress(sourceFile, sourceFile.getParentFile(), algorithm, deleteSourceFileAfterCompressed);
     }
 
@@ -164,21 +166,16 @@ public class FileCompressionUtil {
      * @param deleteSourceFileAfterCompressed Delete the original source file only
      *                                        if the compression was successful.
      * @return The compressed file
-     * @throws FileAlreadyExistsException Thrown if the target file already exists
-     *                                    and an overwrite is not permitted. This
-     *                                    exception is a subclass of IOException, so
-     *                                    its safe to only catch an IOException if
-     *                                    no specific action is required for this
-     *                                    case.
-     * @throws IOException                Thrown if an error occurs while attempting
-     *                                    to compress the source file.
+     * @throws IOException Thrown if an error occurs while attempting
+     *                     to compress the source file.
      */
     public static File compress(File sourceFile, File targetDir, String algorithm,
-                                boolean deleteSourceFileAfterCompressed) throws FileAlreadyExistsException, IOException {
+                                boolean deleteSourceFileAfterCompressed)
+            throws IOException {
         // make sure the destination directory is a directory
         if (!targetDir.isDirectory()) {
-            throw new IOException(
-                    "Cannot compress file since target directory " + targetDir + " neither exists or is a directory");
+            throw new IOException("Cannot compress file since target directory "
+                    + targetDir + " neither exists or is a directory");
         }
 
         // try to find compression algorithm
@@ -198,7 +195,7 @@ public class FileCompressionUtil {
     }
 
     /**
-     * Uncompresses the source file using a variety of supported compression
+     * Uncompressed the source file using a variety of supported compression
      * algorithms. This method will create a file in the same directory as the
      * source file by stripping the compression algorithm's file extension from the
      * source filename. For example, using "gzip" will mean a source file of
@@ -206,24 +203,18 @@ public class FileCompressionUtil {
      *
      * @param sourceFile                        The compressed file
      * @param deleteSourceFileAfterUncompressed Delete the original source file only
-     *                                          if the uncompression was successful.
+     *                                          if the uncompressed was successful.
      * @return The uncompressed file
-     * @throws FileAlreadyExistsException Thrown if the target file already exists
-     *                                    and an overwrite is not permitted. This
-     *                                    exception is a subclass of IOException, so
-     *                                    its safe to only catch an IOException if
-     *                                    no specific action is required for this
-     *                                    case.
-     * @throws IOException                Thrown if an error occurs while attempting
-     *                                    to uncompress the source file.
+     * @throws IOException Thrown if an error occurs while attempting
+     *                     to uncompress the source file.
      */
     public static File uncompress(File sourceFile, boolean deleteSourceFileAfterUncompressed)
-            throws FileAlreadyExistsException, IOException {
+            throws IOException {
         return uncompress(sourceFile, sourceFile.getParentFile(), deleteSourceFileAfterUncompressed);
     }
 
     /**
-     * Uncompresses the source file using a variety of supported compression
+     * Uncompressed the source file using a variety of supported compression
      * algorithms. This method will create a file in the target directory by
      * stripping the compression algorithm's file extension from the source
      * filename. For example, using "gzip" will mean a source file of "app.log.gz"
@@ -234,42 +225,34 @@ public class FileCompressionUtil {
      *                                          uncompress in same directory as
      *                                          source file
      * @param deleteSourceFileAfterUncompressed Delete the original source file only
-     *                                          if the uncompression was successful.
+     *                                          if the uncompressed was successful.
      * @return The uncompressed file
-     * @throws FileAlreadyExistsException Thrown if the target file already exists
-     *                                    and an overwrite is not permitted. This
-     *                                    exception is a subclass of IOException, so
-     *                                    its safe to only catch an IOException if
-     *                                    no specific action is required for this
-     *                                    case.
-     * @throws IOException                Thrown if an error occurs while attempting
-     *                                    to uncompress the source file.
+     * @throws IOException Thrown if an error occurs while attempting
+     *                     to uncompress the source file.
      */
-    public static File uncompress(File sourceFile, File targetDir, boolean deleteSourceFileAfterUncompressed)
-            throws FileAlreadyExistsException, IOException {
+    public static File uncompress(File sourceFile, File targetDir,
+                                  boolean deleteSourceFileAfterUncompressed)
+            throws IOException {
         // figure out compression algorithm used by its extension
         String fileExt = FileUtil.parseFileExtension(sourceFile.getName());
 
         // was a file extension parsed
-        if (fileExt == null) {
+        if (fileExt == null)
             throw new IOException("File '" + sourceFile
                     + "' must contain a file extension in order to lookup the compression algorithm");
-        }
 
         // try to find compression algorithm
         Algorithm algo = Algorithm.findByFileExtension(fileExt);
 
         // was it not found?
-        if (algo == null) {
-            throw new IOException(
-                    "Unrecognized or unsupported compression algorithm for file extension '" + fileExt + "'");
-        }
+        if (algo == null)
+            throw new IOException("Unrecognized or unsupported compression algorithm for file extension '"
+                    + fileExt + "'");
 
         // make sure the destination directory is a directory
-        if (!targetDir.isDirectory()) {
-            throw new IOException(
-                    "Cannot uncompress file since target directory " + targetDir + " neither exists or is a directory");
-        }
+        if (!targetDir.isDirectory())
+            throw new IOException("Cannot uncompress file since target directory "
+                    + targetDir + " neither exists or is a directory");
 
         // create a target file by stripping the file extension from the original file
         String filename = sourceFile.getName();
@@ -283,23 +266,23 @@ public class FileCompressionUtil {
     }
 
     private static void compress(Algorithm algo, File sourceFile, File targetFile,
-                                 boolean deleteSourceFileAfterCompressed) throws FileAlreadyExistsException, IOException {
+                                 boolean deleteSourceFileAfterCompressed)
+            throws IOException {
         // check if the src file exists
-        if (!sourceFile.canRead()) {
+        if (!sourceFile.canRead())
             throw new IOException("Source file " + sourceFile + " neither exists or can be read");
-        }
 
         // make sure the target file does not exist!
-        if (targetFile.exists()) {
-            throw new FileAlreadyExistsException("Target file " + targetFile + " already exists - cannot overwrite!");
-        }
+        if (targetFile.exists())
+            throw new FileAlreadyExistsException("Target file "
+                    + targetFile + " already exists - cannot overwrite!");
 
         // try to compress the file
         algo.getCompressor().compress(sourceFile, targetFile);
 
         // delete file after compressing
         if (deleteSourceFileAfterCompressed) {
-            sourceFile.delete();
+            boolean delete = sourceFile.delete();
         }
     }
 
@@ -307,25 +290,25 @@ public class FileCompressionUtil {
                                    boolean deleteSourceFileAfterUncompressed)
             throws IOException {
         // check if the src file exists
-        if (!sourceFile.canRead()) {
+        if (!sourceFile.canRead())
             throw new IOException("Source file " + sourceFile + " neither exists or can be read");
-        }
 
         // make sure the target file does not exist!
-        if (targetFile.exists()) {
+        if (targetFile.exists())
             throw new FileAlreadyExistsException("Target file " + targetFile + " already exists - cannot overwrite!");
-        }
 
         // try to uncompress the file
         a.getCompressor().uncompress(sourceFile, targetFile);
 
         // delete file after uncompressing
         if (deleteSourceFileAfterUncompressed) {
-            sourceFile.delete();
+            boolean delete = sourceFile.delete();
         }
+
     }
 
-    public static void uncompress(Algorithm a, InputStream srcIn, OutputStream destOut) throws IOException {
+    public static void uncompress(Algorithm a, InputStream srcIn, OutputStream destOut)
+            throws IOException {
         // try to uncompress the file
         a.getCompressor().uncompress(srcIn, destOut);
     }
@@ -398,7 +381,7 @@ public class FileCompressionUtil {
         }
 
         @Override
-        public void compress(InputStream srcIn, OutputStream destOut) throws IOException {
+        public void compress(InputStream srcIn, OutputStream destOut) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -494,7 +477,7 @@ public class FileCompressionUtil {
                     } catch (Exception ignored) {
                     }
                 }
-                // if the out var is not null, then something went wrong above
+                // if the out var is not null, then something went wrong above,
                 // and we did not compress the destination file correctly
                 if (out != null) {
                     log.warn(
@@ -508,7 +491,7 @@ public class FileCompressionUtil {
         }
 
         @Override
-        public void compress(InputStream srcIn, OutputStream destOut) throws IOException {
+        public void compress(InputStream srcIn, OutputStream destOut) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -542,10 +525,10 @@ public class FileCompressionUtil {
                 // see if there are more entries in this zip file
                 if (in.getNextEntry() != null) {
                     throw new IOException(
-                            "Zip file/inputstream contained more than one entry (this method cannot support)");
+                            "Zip file/inputStream contained more than one entry (this method cannot support)");
                 }
 
-                // close the zip inputstream
+                // close the zip inputStream
                 in.closeEntry();
                 in.close();
                 in = null;

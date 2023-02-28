@@ -1,5 +1,6 @@
 package io.mercury.common.sys;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.security.CodeSource;
@@ -13,9 +14,9 @@ public class NativeTime {
         boolean loaded;
         try {
             String destDir = System.getProperty("java.io.tmpdir");
-            String osname = System.getProperty("os.name");
+            String osName = System.getProperty("os.name");
             String arch = System.getProperty("os.arch");
-            String pattern = osname + java.io.File.separator + arch;
+            String pattern = osName + java.io.File.separator + arch;
 
             try {
                 // TODO
@@ -41,7 +42,7 @@ public class NativeTime {
                             }
                         }
 
-                        if (file.isDirectory()) { // if its a directory, create it
+                        if (file.isDirectory()) { // if it's a directory, create it
                             continue;
                         }
 
@@ -79,9 +80,7 @@ public class NativeTime {
                     }
                     jar.close();
                 }
-            } catch (java.io.FileNotFoundException unused) {
-                unused.printStackTrace();
-            } catch (java.io.IOException unused) {
+            } catch (IOException unused) {
                 unused.printStackTrace();
             }
 
@@ -95,9 +94,7 @@ public class NativeTime {
             calibrate(10);
 
             // background thread for finer-grained calibration
-            Thread t = new Thread(() -> {
-                calibrate(1000);
-            });
+            Thread t = new Thread(() -> calibrate(1000));
             t.setDaemon(true);
             t.start();
 

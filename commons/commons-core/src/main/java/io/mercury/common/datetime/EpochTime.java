@@ -271,7 +271,8 @@ public final class EpochTime {
      * @param zoneId ZoneId
      * @return long
      */
-    public static ZonedDateTime ofEpochMillis(long millis, @Nonnull ZoneId zoneId) {
+    public static ZonedDateTime ofEpochMillis(long millis,
+                                              @Nonnull ZoneId zoneId) {
         return ZonedDateTime.ofInstant(Instant.ofEpochMilli(millis), zoneId);
     }
 
@@ -288,7 +289,8 @@ public final class EpochTime {
      * @param zoneId  ZoneId
      * @return long
      */
-    public static ZonedDateTime ofEpochSeconds(long seconds, @Nonnull ZoneId zoneId) {
+    public static ZonedDateTime ofEpochSeconds(long seconds,
+                                               @Nonnull ZoneId zoneId) {
         return ZonedDateTime.ofInstant(Instant.ofEpochSecond(seconds), zoneId);
     }
 

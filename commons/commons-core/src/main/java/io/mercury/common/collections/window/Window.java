@@ -189,7 +189,7 @@ public class Window<K, R, P> {
     }
 
     /**
-     * Gets the a future by its key.
+     * Gets the future by its key.
      *
      * @param key The key for the request
      * @return The future or null if it doesn't exist.
@@ -204,7 +204,7 @@ public class Window<K, R, P> {
      * @param listener The listener to add
      */
     public void addListener(WindowListener<K, R, P> listener) {
-        this.listeners.addIfAbsent(new UnwrappedWeakReference<WindowListener<K, R, P>>(listener));
+        this.listeners.addIfAbsent(new UnwrappedWeakReference<>(listener));
     }
 
     /**
@@ -213,7 +213,7 @@ public class Window<K, R, P> {
      * @param listener The listener to remove
      */
     public void removeListener(WindowListener<K, R, P> listener) {
-        this.listeners.remove(new UnwrappedWeakReference<WindowListener<K, R, P>>(listener));
+        this.listeners.remove(new UnwrappedWeakReference<>(listener));
     }
 
     /**
@@ -258,7 +258,7 @@ public class Window<K, R, P> {
     }
 
     /**
-     * Stops the monitor if its running. Safe to call multiple times.
+     * Stops the monitor if it's running. Safe to call multiple times.
      */
     public synchronized void stopMonitor() {
         if (this.monitorHandle != null) {
@@ -281,7 +281,7 @@ public class Window<K, R, P> {
 
     /**
      * Offers a request for acceptance, waiting for the specified amount of time in
-     * case it could not immediately accepted. The "caller state hint" of the
+     * case it could not immediately accept. The "caller state hint" of the
      * returned future will be set to "NOT_WAITING". The expireTimestamp of the
      * returned future will be set to -1 (infinity/never expires).
      *
@@ -311,7 +311,7 @@ public class Window<K, R, P> {
 
     /**
      * Offers a request for acceptance, waiting for the specified amount of time in
-     * case it could not immediately accepted. The "caller state hint" of the
+     * case it could not immediately accept. The "caller state hint" of the
      * returned future will be set to "NOT_WAITING".
      *
      * @param key                 The key for the request. A protocol's sequence
@@ -346,7 +346,7 @@ public class Window<K, R, P> {
 
     /**
      * Offers a request for acceptance, waiting for the specified amount of time in
-     * case it could not immediately accepted.
+     * case it could not immediately accept.
      *
      * @param key                 The key for the request. A protocol's sequence
      *                            number is a good choice.
@@ -429,7 +429,7 @@ public class Window<K, R, P> {
             long acceptTimestamp = System.currentTimeMillis();
             long expireTimestamp = (expireTimeoutMillis > 0 ? (acceptTimestamp + expireTimeoutMillis) : -1);
             int callerStateHint = (callerWaitingHint ? WindowFuture.CALLER_WAITING : WindowFuture.CALLER_NOT_WAITING);
-            DefaultWindowFuture<K, R, P> future = new DefaultWindowFuture<K, R, P>(this, lock, completedCondition, key,
+            DefaultWindowFuture<K, R, P> future = new DefaultWindowFuture<>(this, lock, completedCondition, key,
                     request, callerStateHint, offerTimeoutMillis, (futures.size() + 1), offerTimestamp, acceptTimestamp,
                     expireTimestamp);
             this.futures.put(key, future);
@@ -510,7 +510,7 @@ public class Window<K, R, P> {
      *                 are not accepted (use cancel()) instead.
      * @return A future representing the entire operation. Since a response is set,
      * the future.isSuccess() method will be true.
-     * @throws InterruptedException Thrown if the calling thread is interrupted and
+     * @throws InterruptedException Thrown if the calling thread is interrupted, and
      *                              we're currently waiting to acquire the internal
      *                              "windowLock".
      */
@@ -554,13 +554,13 @@ public class Window<K, R, P> {
      *            future. Null values are not accepted (use cancel()) instead.
      * @return A future representing the entire operation. Since a cause is set, the
      * future.isSuccess() method will be false.
-     * @throws InterruptedException Thrown if the calling thread is interrupted and
+     * @throws InterruptedException Thrown if the calling thread is interrupted, and
      *                              we're currently waiting to acquire the internal
      *                              "windowLock".
      */
     public WindowFuture<K, R, P> fail(K key, Throwable t) throws InterruptedException {
         if (t == null) {
-            throw new IllegalArgumentException("Null throwables are illegal. Use cancel() instead.");
+            throw new IllegalArgumentException("Null throwable are illegal. Use cancel() instead.");
         }
 
         if (!this.futures.containsKey(key)) {
@@ -596,16 +596,16 @@ public class Window<K, R, P> {
      * @param t The throwable to set as the failure cause on all associated futures.
      *          Null values are not accepted (use cancelAll()) instead.
      * @return A list of all futures that were failed.
-     * @throws InterruptedException Thrown if the calling thread is interrupted and
+     * @throws InterruptedException Thrown if the calling thread is interrupted, and
      *                              we're currently waiting to acquire the internal
      *                              "windowLock".
      */
     public List<WindowFuture<K, R, P>> failAll(Throwable t) throws InterruptedException {
-        if (this.futures.size() <= 0) {
+        if (this.futures.size() == 0) {
             return null;
         }
 
-        List<WindowFuture<K, R, P>> failed = new ArrayList<WindowFuture<K, R, P>>();
+        List<WindowFuture<K, R, P>> failed = new ArrayList<>();
         long now = System.currentTimeMillis();
         this.lock.lock();
         try {
@@ -633,7 +633,7 @@ public class Window<K, R, P> {
      *
      * @param key The key for the original request
      * @return A future representing the entire operation.
-     * @throws InterruptedException Thrown if the calling thread is interrupted and
+     * @throws InterruptedException Thrown if the calling thread is interrupted, and
      *                              we're currently waiting to acquire the internal
      *                              "windowLock".
      */
@@ -667,12 +667,12 @@ public class Window<K, R, P> {
      * callers/threads blocked with pending offers will be signaled to continue.
      *
      * @return A list of all futures that were cancelled.
-     * @throws InterruptedException Thrown if the calling thread is interrupted and
+     * @throws InterruptedException Thrown if the calling thread is interrupted, and
      *                              we're currently waiting to acquire the internal
      *                              "windowLock".
      */
     public List<WindowFuture<K, R, P>> cancelAll() {
-        if (this.futures.size() <= 0)
+        if (this.futures.size() == 0)
             return null;
 
         List<WindowFuture<K, R, P>> cancelled = new ArrayList<>();
@@ -704,15 +704,15 @@ public class Window<K, R, P> {
      * callers/threads blocked with pending offers will be signaled to continue.
      *
      * @return A list of all expired futures that were cancelled.
-     * @throws InterruptedException Thrown if the calling thread is interrupted and
+     * @throws InterruptedException Thrown if the calling thread is interrupted, and
      *                              we're currently waiting to acquire the internal
      *                              "windowLock".
      */
     public List<WindowFuture<K, R, P>> cancelAllExpired() {
-        if (this.futures.size() <= 0)
+        if (this.futures.size() == 0)
             return null;
 
-        List<WindowFuture<K, R, P>> expired = new ArrayList<WindowFuture<K, R, P>>();
+        List<WindowFuture<K, R, P>> expired = new ArrayList<>();
         long now = System.currentTimeMillis();
         this.lock.lock();
         try {

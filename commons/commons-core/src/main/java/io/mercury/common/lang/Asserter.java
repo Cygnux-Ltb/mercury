@@ -208,20 +208,20 @@ public final class Asserter {
             throws NullPointerException, IllegalArgumentException {
         if (str == null)
             throw new NullPointerException("Param: [" + objName + "] can not be null");
-        if (str.length() <= 0)
+        if (str.length() == 0)
             throw new IllegalArgumentException("Param: [" + objName + "] can not be empty");
         return str;
     }
 
     /**
-     * @param <T>
-     * @param collection
-     * @param objName
-     * @return
+     * @param <C>        C
+     * @param collection C
+     * @param objName    String
+     * @return C
      * @throws NullPointerException     exception
      * @throws IllegalArgumentException exception
      */
-    public static <T extends Collection<E>, E> T nonEmptyCollection(T collection,
+    public static <C extends Collection<E>, E> C nonEmptyCollection(C collection,
                                                                     String objName)
             throws NullPointerException, IllegalArgumentException {
         if (collection == null)

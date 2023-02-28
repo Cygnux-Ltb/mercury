@@ -5,7 +5,7 @@ import java.lang.ref.WeakReference;
 /**
  * Smarter WeakReference that "unwraps" the referenced object in a few methods
  * such as "equals()" which let a WeakReference be used in many other types of
- * collections and lists and have them still work correctly. For exmaple,
+ * collections and lists and have them still work correctly. For example,
  * CopyOnWriteArrayList can be directly used with a UnwrappedWeakReference and
  * have methods like "addIfAbsent" actually work correctly.
  *
@@ -23,7 +23,7 @@ public class UnwrappedWeakReference<T> extends WeakReference<T> {
     public boolean equals(Object obj) {
         // unwrap both objects!
         T thisObject = this.get();
-        // if the other object is also a WeakRefe
+        // if the other object is also a WeakRef
         if (obj instanceof WeakReference) {
             obj = ((WeakReference<?>) obj).get();
         }

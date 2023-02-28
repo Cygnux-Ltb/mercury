@@ -6,9 +6,9 @@ import org.eclipse.collections.impl.list.mutable.FastList;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class LimitedList<L extends List<E>, E> extends LimitedContainer<E> {
+public abstract class LimitedList<E> extends LimitedContainer<E> {
 
-    private final L list;
+    private final List<E> list;
 
     protected LimitedList(int capacity) {
         super(capacity);
@@ -32,7 +32,7 @@ public abstract class LimitedList<L extends List<E>, E> extends LimitedContainer
     }
 
     @AbstractFunction
-    protected abstract L newList(int capacity);
+    protected abstract List<E> newList(int capacity);
 
     @Override
     protected void setTail(int tail, E e) {
@@ -53,14 +53,14 @@ public abstract class LimitedList<L extends List<E>, E> extends LimitedContainer
      * @param <E>
      * @author yellow013
      */
-    public static class LimitedFastList<E> extends LimitedList<FastList<E>, E> {
+    public static class LimitedFastList<E> extends LimitedList<E> {
 
         private LimitedFastList(int capacity) {
             super(capacity);
         }
 
         @Override
-        protected FastList<E> newList(int capacity) {
+        protected List<E> newList(int capacity) {
             return new FastList<>(capacity);
         }
 
@@ -70,14 +70,14 @@ public abstract class LimitedList<L extends List<E>, E> extends LimitedContainer
      * @param <E>
      * @author yellow013
      */
-    public static class LimitedArrayList<E> extends LimitedList<ArrayList<E>, E> {
+    public static class LimitedArrayList<E> extends LimitedList<E> {
 
         private LimitedArrayList(int capacity) {
             super(capacity);
         }
 
         @Override
-        protected ArrayList<E> newList(int capacity) {
+        protected List<E> newList(int capacity) {
             return new ArrayList<>(capacity);
         }
 
