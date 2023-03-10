@@ -35,14 +35,12 @@ public class Titanic {
 
 	// Returns freshly allocated request filename for given UUID
 	private static String requestFilename(String uuid) {
-		String filename = String.format("%s/%s.req", TITANIC_DIR, uuid);
-		return filename;
+		return String.format("%s/%s.req", TITANIC_DIR, uuid);
 	}
 
 	// Returns freshly allocated reply filename for given UUID
 	private static String replyFilename(String uuid) {
-		String filename = String.format("%s/%s.rep", TITANIC_DIR, uuid);
-		return filename;
+		return String.format("%s/%s.rep", TITANIC_DIR, uuid);
 	}
 
 	// .split Titanic request service
@@ -78,7 +76,7 @@ public class Titanic {
 					try {
 						if (file != null)
 							file.close();
-					} catch (IOException e) {
+					} catch (IOException ignored) {
 					}
 				}
 				request.destroy();
@@ -129,7 +127,7 @@ public class Titanic {
 						try {
 							if (file != null)
 								file.close();
-						} catch (IOException e) {
+						} catch (IOException ignored) {
 						}
 					}
 				} else {
@@ -218,7 +216,7 @@ public class Titanic {
 						try {
 							if (wfile != null)
 								wfile.close();
-						} catch (IOException e) {
+						} catch (IOException ignored) {
 						}
 					}
 					msg.destroy();
@@ -253,14 +251,14 @@ public class Titanic {
 						if (Thread.currentThread().isInterrupted())
 							break;
 					}
-				} catch (FileNotFoundException e) {
+				} catch (FileNotFoundException ignored) {
 				} catch (IOException e) {
 					e.printStackTrace();
 				} finally {
 					if (file != null) {
 						try {
 							file.close();
-						} catch (IOException e) {
+						} catch (IOException ignored) {
 						}
 					}
 				}
@@ -293,7 +291,7 @@ public class Titanic {
 			try {
 				if (file != null)
 					file.close();
-			} catch (IOException e) {
+			} catch (IOException ignored) {
 			}
 		}
 		ZFrame service = request.pop();
@@ -316,7 +314,7 @@ public class Titanic {
 			ZMsg reply = client.send(serviceName, request);
 			if (reply != null) {
 				filename = replyFilename(uuid);
-				DataOutputStream ofile = null;
+				DataOutputStream ofile;
 				try {
 					ofile = new DataOutputStream(new FileOutputStream(filename));
 					ZMsg.save(reply, ofile);
@@ -327,7 +325,7 @@ public class Titanic {
 					try {
 						if (file != null)
 							file.close();
-					} catch (IOException e) {
+					} catch (IOException ignored) {
 					}
 				}
 				result = true;

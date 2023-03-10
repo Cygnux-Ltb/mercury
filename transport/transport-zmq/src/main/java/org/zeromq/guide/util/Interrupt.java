@@ -1,10 +1,10 @@
 package org.zeromq.guide.util;
 
 /*
-*
-*  Interrupt in Java
-*  Shows how to handle Ctrl-C
-*/
+ *
+ *  Interrupt in Java
+ *  Shows how to handle Ctrl-C
+ */
 
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
@@ -13,41 +13,42 @@ import org.zeromq.ZMQException;
 
 public class Interrupt {
 
-	public static void main(String[] args) {
-		// Prepare our context and socket
-		final ZContext context = new ZContext();
+    public static void main(String[] args) {
+        // Prepare our context and socket
+        final ZContext context = new ZContext();
 
-		final Thread zmqThread = new Thread() {
-			@Override
-			public void run() {
-				ZMQ.Socket socket = context.createSocket(SocketType.REP);
-				socket.bind("tcp://*:5555");
+        final Thread zmqThread = new Thread() {
+            @Override
+            public void run() {
+                ZMQ.Socket socket = context.createSocket(SocketType.REP);
+                socket.bind("tcp://*:5555");
 
-				while (!Thread.currentThread().isInterrupted()) {
-					try {
-						socket.recv(0);
-					} catch (ZMQException e) {
-						if (e.getErrorCode() == ZMQ.Error.ETERM.getCode()) {
-							break;
-						}
-					}
-				}
+                while (!Thread.currentThread().isInterrupted()) {
+                    try {
+                        socket.recv(0);
+                    } catch (ZMQException e) {
+                        if (e.getErrorCode() == ZMQ.Error.ETERM.getCode()) {
+                            break;
+                        }
+                    }
+                }
 
-				socket.setLinger(0);
-				socket.close();
-			}
-		};
+                socket.setLinger(0);
+                socket.close();
+            }
+        };
 
-		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-			System.out.println("W: interrupt received, killing server...");
-			context.close();
-			try {
-				zmqThread.interrupt();
-				zmqThread.join();
-			} catch (InterruptedException e) {
-			}
-		}));
+        Runtime.getRuntime().addShutdownHook(new Thread(
+                () -> {
+                    System.out.println("W: interrupt received, killing server...");
+                    context.close();
+                    try {
+                        zmqThread.interrupt();
+                        zmqThread.join();
+                    } catch (InterruptedException ignored) {
+                    }
+                }));
 
-		zmqThread.start();
-	}
+        zmqThread.start();
+    }
 }

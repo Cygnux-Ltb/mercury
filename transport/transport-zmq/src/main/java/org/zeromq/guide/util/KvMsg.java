@@ -14,7 +14,7 @@ import org.zeromq.ZMQ.Socket;
 
 public class KvMsg {
 	// Keys are short strings
-	private static final int KVMSG_KEY_MAX = 255;
+	private static final int KV_MSG_KEY_MAX = 255;
 
 	// Message is formatted on wire as 4 frames:
 	// frame 0: getKey (0MQ string)
@@ -27,16 +27,16 @@ public class KvMsg {
 	private static final int FRAME_UUID = 2;
 	private static final int FRAME_PROPS = 3;
 	private static final int FRAME_BODY = 4;
-	private static final int KVMSG_FRAMES = 5;
+	private static final int KV_MSG_FRAMES = 5;
 
 	// Presence indicators for each frame
-	private boolean[] present = new boolean[KVMSG_FRAMES];
+	private final boolean[] present = new boolean[KV_MSG_FRAMES];
 	// Corresponding 0MQ message frames, if any
-	private byte[][] frame = new byte[KVMSG_FRAMES][];
+	private final byte[][] frame = new byte[KV_MSG_FRAMES][];
 	// Key, copied into safe string
 	private String key;
 	// List of properties, as name=value strings
-	private Properties props;
+	private final Properties props;
 	private int props_size;
 
 	// .split property encoding
@@ -91,7 +91,7 @@ public class KvMsg {
 
 		// Read all frames off the wire, reject if bogus
 		int frameNbr;
-		for (frameNbr = 0; frameNbr < KVMSG_FRAMES; frameNbr++) {
+		for (frameNbr = 0; frameNbr < KV_MSG_FRAMES; frameNbr++) {
 			// zmq_msg_init (&self->frame [frameNbr]);
 			self.present[frameNbr] = true;
 			if ((self.frame[frameNbr] = socket.recv(0)) == null) {
@@ -99,7 +99,7 @@ public class KvMsg {
 				break;
 			}
 			// Verify multipart framing
-			boolean rcvmore = (frameNbr < KVMSG_FRAMES - 1) ? true : false;
+			boolean rcvmore = frameNbr < KV_MSG_FRAMES - 1;
 			if (socket.hasReceiveMore() != rcvmore) {
 				self.destroy();
 				break;
@@ -118,11 +118,11 @@ public class KvMsg {
 		// The rest of the method is unchanged from kvsimple
 		// .skip
 		int frameNbr;
-		for (frameNbr = 0; frameNbr < KVMSG_FRAMES; frameNbr++) {
+		for (frameNbr = 0; frameNbr < KV_MSG_FRAMES; frameNbr++) {
 			byte[] copy = ZMQ.MESSAGE_SEPARATOR;
 			if (present[frameNbr])
 				copy = frame[frameNbr];
-			socket.send(copy, (frameNbr < KVMSG_FRAMES - 1) ? ZMQ.SNDMORE : 0);
+			socket.send(copy, (frameNbr < KV_MSG_FRAMES - 1) ? ZMQ.SNDMORE : 0);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class KvMsg {
 	public KvMsg dup() {
 		KvMsg kvmsg = new KvMsg(0);
 		int frameNbr;
-		for (frameNbr = 0; frameNbr < KVMSG_FRAMES; frameNbr++) {
+		for (frameNbr = 0; frameNbr < KV_MSG_FRAMES; frameNbr++) {
 			if (present[frameNbr]) {
 				kvmsg.frame[frameNbr] = new byte[frame[frameNbr].length];
 				System.arraycopy(frame[frameNbr], 0, kvmsg.frame[frameNbr], 0, frame[frameNbr].length);
@@ -152,8 +152,8 @@ public class KvMsg {
 		if (present[FRAME_KEY]) {
 			if (key == null) {
 				int size = frame[FRAME_KEY].length;
-				if (size > KVMSG_KEY_MAX)
-					size = KVMSG_KEY_MAX;
+				if (size > KV_MSG_KEY_MAX)
+					size = KV_MSG_KEY_MAX;
 				byte[] buf = new byte[size];
 				System.arraycopy(frame[FRAME_KEY], 0, buf, 0, size);
 				key = new String(buf, ZMQ.CHARSET);
@@ -287,16 +287,16 @@ public class KvMsg {
 		System.err.printf("[getKey:%s]", getKey());
 		// .until
 		System.err.printf("[size:%d] ", size);
-		System.err.printf("[");
+		System.err.print("[");
 		for (String key : props.stringPropertyNames()) {
 			System.err.printf("%s=%s;", key, props.getProperty(key));
 		}
-		System.err.printf("]");
+		System.err.print("]");
 
 		// .skip
 		for (int charNbr = 0; charNbr < size; charNbr++)
 			System.err.printf("%02X", body[charNbr]);
-		System.err.printf("\n");
+		System.err.print("\n");
 	}
 
 	// .until
@@ -305,7 +305,7 @@ public class KvMsg {
 	// This method is the same as in {{kvsimple}} with added support
 	// for the uuid and property features of {{kvmsg}}:
 	public void test(boolean verbose) {
-		System.out.printf(" * kvmsg: ");
+		System.out.print(" * kvmsg: ");
 
 		// Prepare our context and sockets
 		try (ZContext ctx = new ZContext()) {
@@ -355,7 +355,7 @@ public class KvMsg {
 			kvmsg.destroy();
 		}
 
-		System.out.printf("OK\n");
+		System.out.print("OK\n");
 	}
 	// .until
 }

@@ -10,33 +10,33 @@ import org.zeromq.ZMQ.Socket;
  */
 public class SyncSub {
 
-	public static void main(String[] args) {
-		try (ZContext context = new ZContext()) {
-			// First, connect our subscriber socket
-			Socket subscriber = context.createSocket(SocketType.SUB);
-			subscriber.connect("tcp://localhost:5561");
-			subscriber.subscribe(ZMQ.SUBSCRIPTION_ALL);
+    public static void main(String[] args) {
+        try (ZContext context = new ZContext()) {
+            // First, connect our subscriber socket
+            Socket subscriber = context.createSocket(SocketType.SUB);
+            subscriber.connect("tcp://localhost:5561");
+            subscriber.subscribe(ZMQ.SUBSCRIPTION_ALL);
 
-			// Second, synchronize with publisher
-			Socket syncclient = context.createSocket(SocketType.REQ);
-			syncclient.connect("tcp://localhost:5562");
+            // Second, synchronize with publisher
+            Socket syncClient = context.createSocket(SocketType.REQ);
+            syncClient.connect("tcp://localhost:5562");
 
-			// - send a synchronization request
-			syncclient.send(ZMQ.MESSAGE_SEPARATOR, 0);
+            // - send a synchronization request
+            syncClient.send(ZMQ.MESSAGE_SEPARATOR, 0);
 
-			// - wait for synchronization reply
-			syncclient.recv(0);
+            // - wait for synchronization reply
+            syncClient.recv(0);
 
-			// Third, get our updates and report how many we got
-			int update_nbr = 0;
-			while (true) {
-				String string = subscriber.recvStr(0);
-				if (string.equals("END")) {
-					break;
-				}
-				update_nbr++;
-			}
-			System.out.println("Received " + update_nbr + " updates.");
-		}
-	}
+            // Third, get our updates and report how many we got
+            int update_nbr = 0;
+            while (true) {
+                String string = subscriber.recvStr(0);
+                if (string.equals("END")) {
+                    break;
+                }
+                update_nbr++;
+            }
+            System.out.println("Received " + update_nbr + " updates.");
+        }
+    }
 }

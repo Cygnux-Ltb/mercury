@@ -25,7 +25,7 @@ public class LastValueCache {
 			frontend.subscribe(ZMQ.SUBSCRIPTION_ALL);
 
 			// Store last instance of each topic in a cache
-			Map<String, String> cache = new HashMap<String, String>();
+			Map<String, String> cache = new HashMap<>();
 
 			Poller poller = context.createPoller(2);
 			poller.register(frontend, Poller.POLLIN);

@@ -52,7 +52,7 @@ public class Espresso {
 					break; // Interrupted
 				try {
 					Thread.sleep(100); // Wait for 1/10th second
-				} catch (InterruptedException e) {
+				} catch (InterruptedException ignored) {
 				}
 			}
 			publisher.close();

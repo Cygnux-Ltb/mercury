@@ -11,7 +11,7 @@ import org.zeromq.ZMQ.Socket;
 public class MultiThreadServer {
 
 	private static class Worker extends Thread {
-		private ZContext context;
+		private final ZContext context;
 
 		private Worker(ZContext context) {
 			this.context = context;
@@ -31,7 +31,7 @@ public class MultiThreadServer {
 				// Do some 'work'
 				try {
 					Thread.sleep(1000);
-				} catch (InterruptedException e) {
+				} catch (InterruptedException ignored) {
 				}
 
 				// Send reply back to client (C string)

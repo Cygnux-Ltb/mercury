@@ -10,7 +10,7 @@ import org.zeromq.ZMQ.Socket;
 public class MultiThreadRelay {
 
 	private static class Step1 extends Thread {
-		private ZContext context;
+		private final ZContext context;
 
 		private Step1(ZContext context) {
 			this.context = context;
@@ -29,7 +29,7 @@ public class MultiThreadRelay {
 	}
 
 	private static class Step2 extends Thread {
-		private ZContext context;
+		private final ZContext context;
 
 		private Step2(ZContext context) {
 			this.context = context;
@@ -56,7 +56,7 @@ public class MultiThreadRelay {
 	}
 
 	private static class Step3 extends Thread {
-		private ZContext context;
+		private final ZContext context;
 
 		private Step3(ZContext context) {
 			this.context = context;

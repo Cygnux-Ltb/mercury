@@ -11,12 +11,12 @@ import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
 
 public class ZHelper {
-	private static Random rand = new Random(System.currentTimeMillis());
+	private static final Random rand = new Random(System.currentTimeMillis());
 
 	/**
 	 * Receives all message parts from socket, prints neatly
 	 * 
-	 * @param sock
+	 * @param sock Socket
 	 */
 	public static void dump(Socket sock) {
 		System.out.println("----------------------------------------");
@@ -32,7 +32,7 @@ public class ZHelper {
 			if (isText)
 				data = new String(msg, ZMQ.CHARSET);
 
-			System.out.println(String.format("[%03d] %s", msg.length, data));
+			System.out.printf("[%03d] %s%n", msg.length, data);
 			if (!sock.hasReceiveMore())
 				break;
 		}

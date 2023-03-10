@@ -1,6 +1,6 @@
 package io.mercury.transport.zmq;
 
-public enum ZmqTransportType {
+public enum ZmqType {
 
 	ZmqProxy,
 

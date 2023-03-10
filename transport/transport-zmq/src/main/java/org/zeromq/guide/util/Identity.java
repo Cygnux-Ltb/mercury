@@ -9,25 +9,25 @@ import org.zeromq.ZMQ.Socket;
  * Demonstrate identities as used by the request-reply pattern.
  */
 public class Identity {
-	
-	public static void main(String[] args) throws InterruptedException {
-		try (ZContext context = new ZContext()) {
-			Socket sink = context.createSocket(SocketType.ROUTER);
-			sink.bind("inproc://example");
 
-			// First allow 0MQ to set the identity, [00] + random 4byte
-			Socket anonymous = context.createSocket(SocketType.REQ);
+    public static void main(String[] args) throws InterruptedException {
+        try (ZContext context = new ZContext()) {
+            Socket sink = context.createSocket(SocketType.ROUTER);
+            sink.bind("inproc://example");
 
-			anonymous.connect("inproc://example");
-			anonymous.send("ROUTER uses a generated UUID", 0);
-			ZHelper.dump(sink);
+            // First allow 0MQ to set the identity, [00] + random 4byte
+            Socket anonymous = context.createSocket(SocketType.REQ);
 
-			// Then set the identity ourself
-			Socket identified = context.createSocket(SocketType.REQ);
-			identified.setIdentity("Hello".getBytes(ZMQ.CHARSET));
-			identified.connect("inproc://example");
-			identified.send("ROUTER socket uses REQ's socket identity", 0);
-			ZHelper.dump(sink);
-		}
-	}
+            anonymous.connect("inproc://example");
+            anonymous.send("ROUTER uses a generated UUID", 0);
+            ZHelper.dump(sink);
+
+            // Then set the identity our self
+            Socket identified = context.createSocket(SocketType.REQ);
+            identified.setIdentity("Hello".getBytes(ZMQ.CHARSET));
+            identified.connect("inproc://example");
+            identified.send("ROUTER socket uses REQ's socket identity", 0);
+            ZHelper.dump(sink);
+        }
+    }
 }

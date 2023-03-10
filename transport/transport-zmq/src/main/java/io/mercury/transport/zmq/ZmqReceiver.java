@@ -34,7 +34,7 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 			throw new ZmqBindException(addr);
 		}
 		setTcpKeepAlive(cfg.getTcpKeepAlive());
-		this.name = "zrep$" + addr;
+		this.name = "zrec$" + addr;
 		newStartTime();
 	}
 
@@ -48,8 +48,8 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 	}
 
 	@Override
-	public ZmqTransportType getTransportType() {
-		return ZmqTransportType.ZmqReceiver;
+	public ZmqType getZmqType() {
+		return ZmqType.ZmqReceiver;
 	}
 
 	private final byte[] emptyMsg = new byte[] {};
@@ -68,7 +68,7 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 
 	@Override
 	public void reconnect() {
-		throw new UnsupportedOperationException("ZmqReceiver unsupport reconnect function");
+		throw new UnsupportedOperationException("ZmqReceiver unsupported reconnect function");
 	}
 
 	public static void main(String[] args) {

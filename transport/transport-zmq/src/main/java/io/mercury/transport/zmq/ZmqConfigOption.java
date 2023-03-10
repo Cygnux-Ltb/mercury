@@ -14,11 +14,11 @@ public enum ZmqConfigOption implements ConfigOption {
 
 	private final String configName;
 
-	private final String otherConfigName;
+	private final String otherName;
 
-	ZmqConfigOption(String configName, String otherConfigName) {
+	ZmqConfigOption(String configName, String otherName) {
 		this.configName = configName;
-		this.otherConfigName = otherConfigName;
+		this.otherName = otherName;
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public enum ZmqConfigOption implements ConfigOption {
 		return configName;
 	}
 
-	public String getOtherConfigName() {
-		return otherConfigName;
+	public String getOtherName() {
+		return otherName;
 	}
 }
