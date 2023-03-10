@@ -6,25 +6,25 @@ import io.mercury.transport.exception.ReceiverStartException;
 
 public interface Receiver extends Transport, Runnable {
 
-	/**
-	 * Start receive
-	 * 
-	 * @throws ReceiverStartException
-	 */
-	@AsyncFunction
-	void receive() throws ReceiverStartException;
+    /**
+     * Start receive
+     *
+     * @throws ReceiverStartException e
+     */
+    @AsyncFunction
+    void receive() throws ReceiverStartException;
 
-	/**
-	 * Reconnect
-	 * 
-	 * @throws ConnectionBreakException
-	 * @throws ReceiverStartException
-	 */
-	void reconnect() throws ConnectionBreakException, ReceiverStartException;
+    /**
+     * Reconnect
+     *
+     * @throws ConnectionBreakException e0
+     * @throws ReceiverStartException   e1
+     */
+    void reconnect() throws ConnectionBreakException, ReceiverStartException;
 
-	@Override
-	default void run() {
-		receive();
-	}
+    @Override
+    default void run() {
+        receive();
+    }
 
 }

@@ -29,7 +29,7 @@ public enum RmqConfigOption implements ConfigOption {
     }
 
     @Override
-    public String getOtherConfigName() {
+    public String getOtherName() {
         return otherConfigName;
     }
 

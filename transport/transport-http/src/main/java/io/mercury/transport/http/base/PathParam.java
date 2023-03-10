@@ -6,8 +6,8 @@ public final class PathParam {
     private final String value;
 
     /**
-     * @param name
-     * @param value
+     * @param name  String
+     * @param value String
      */
     public PathParam(String name, String value) {
         this.name = name;

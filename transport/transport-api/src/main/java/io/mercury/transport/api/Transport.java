@@ -43,7 +43,7 @@ public interface Transport extends Closeable {
 
 	@Override
 	default void close() throws IOException {
-		boolean isClosed = false;
+		boolean isClosed;
 		try {
 			isClosed = closeIgnoreException();
 		} catch (Exception e) {

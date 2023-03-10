@@ -9,115 +9,114 @@ import javax.annotation.Nonnull;
 @OnlyOverrideEquals
 public final class TcpKeepAlive implements JsonSerializable {
 
-	private final KeepAliveType keepAlive;
-	private int keepAliveCount;
-	private int keepAliveIdle;
-	private int keepAliveInterval;
+    private final KeepAliveOption keepAliveOption;
 
-	private TcpKeepAlive(KeepAliveType keepAlive) {
-		this.keepAlive = keepAlive;
-	}
+    private int keepAliveCount;
 
-	public KeepAliveType getKeepAlive() {
-		return keepAlive;
-	}
+    private int keepAliveIdle;
+    
+    private int keepAliveInterval;
 
-	public int getKeepAliveCount() {
-		return keepAliveCount;
-	}
+    private TcpKeepAlive(KeepAliveOption keepAliveOption) {
+        this.keepAliveOption = keepAliveOption;
+    }
 
-	public int getKeepAliveIdle() {
-		return keepAliveIdle;
-	}
+    public KeepAliveOption getKeepAliveOption() {
+        return keepAliveOption;
+    }
 
-	public int getKeepAliveInterval() {
-		return keepAliveInterval;
-	}
+    public int getKeepAliveCount() {
+        return keepAliveCount;
+    }
 
-	public TcpKeepAlive setKeepAliveCount(int keepAliveCount) {
-		this.keepAliveCount = keepAliveCount;
-		return this;
-	}
+    public int getKeepAliveIdle() {
+        return keepAliveIdle;
+    }
 
-	public TcpKeepAlive setKeepAliveIdle(int keepAliveIdle) {
-		this.keepAliveIdle = keepAliveIdle;
-		return this;
-	}
+    public int getKeepAliveInterval() {
+        return keepAliveInterval;
+    }
 
-	public TcpKeepAlive setKeepAliveInterval(int keepAliveInterval) {
-		this.keepAliveInterval = keepAliveInterval;
-		return this;
-	}
+    public TcpKeepAlive setKeepAliveCount(int keepAliveCount) {
+        this.keepAliveCount = keepAliveCount;
+        return this;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof TcpKeepAlive)) {
-			return false;
-		} else {
-			TcpKeepAlive o = (TcpKeepAlive) obj;
-			if (!this.keepAlive.equals(o.getKeepAlive()))
-				return false;
-			if (this.keepAliveCount != o.getKeepAliveCount())
-				return false;
-			if (this.keepAliveIdle != o.getKeepAliveIdle())
-				return false;
-			if (this.keepAliveInterval != o.getKeepAliveInterval())
-				return false;
-			return true;
-		}
-	}
+    public TcpKeepAlive setKeepAliveIdle(int keepAliveIdle) {
+        this.keepAliveIdle = keepAliveIdle;
+        return this;
+    }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public static final TcpKeepAlive enable() {
-		return new TcpKeepAlive(KeepAliveType.Enable);
-	}
+    public TcpKeepAlive setKeepAliveInterval(int keepAliveInterval) {
+        this.keepAliveInterval = keepAliveInterval;
+        return this;
+    }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public static final TcpKeepAlive disable() {
-		return new TcpKeepAlive(KeepAliveType.Disable);
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public static final TcpKeepAlive withDefault() {
-		return new TcpKeepAlive(KeepAliveType.Default);
-	}
-
-	/**
-	 * 
-	 * @author yellow013
-	 *
-	 */
-	public static enum KeepAliveType {
-
-		Enable(1), Disable(0), Default(-1),
-
-		;
-
-		private final int code;
-
-		private KeepAliveType(int code) {
-			this.code = code;
-		}
-
-		public int getCode() {
-			return code;
-		}
-
-	}
-
-	@Nonnull
     @Override
-	public String toJson() {
-		return JsonWrapper.toJson(this);
-	}
+    public boolean equals(Object obj) {
+        if (!(obj instanceof TcpKeepAlive o)) {
+            return false;
+        } else {
+            if (!this.keepAliveOption.equals(o.getKeepAliveOption()))
+                return false;
+            if (this.keepAliveCount != o.getKeepAliveCount())
+                return false;
+            if (this.keepAliveIdle != o.getKeepAliveIdle())
+                return false;
+            return this.keepAliveInterval == o.getKeepAliveInterval();
+        }
+    }
+
+    /**
+     * @return TcpKeepAlive
+     */
+    public static TcpKeepAlive enable() {
+        return new TcpKeepAlive(KeepAliveOption.Enable);
+    }
+
+    /**
+     * @return TcpKeepAlive
+     */
+    public static TcpKeepAlive disable() {
+        return new TcpKeepAlive(KeepAliveOption.Disable);
+    }
+
+    /**
+     * @return TcpKeepAlive
+     */
+    public static TcpKeepAlive withDefault() {
+        return new TcpKeepAlive(KeepAliveOption.Default);
+    }
+
+    /**
+     * @author yellow013
+     */
+    public enum KeepAliveOption {
+
+        Enable(1),
+
+        Disable(0),
+
+        Default(-1),
+
+        ;
+
+        private final int code;
+
+        KeepAliveOption(int code) {
+            this.code = code;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+    }
+
+    @Nonnull
+    @Override
+    public String toJson() {
+        return JsonWrapper.toJson(this);
+    }
 
 }

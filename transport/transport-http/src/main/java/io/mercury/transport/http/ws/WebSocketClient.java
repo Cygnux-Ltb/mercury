@@ -2,13 +2,13 @@ package io.mercury.transport.http.ws;
 
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.transport.http.AsyncHttp;
-import io.mercury.transport.http.ws.WebSocketEvent.WsBinaryFrameHandler;
-import io.mercury.transport.http.ws.WebSocketEvent.WsCloseHandler;
-import io.mercury.transport.http.ws.WebSocketEvent.WsOpenHandler;
-import io.mercury.transport.http.ws.WebSocketEvent.WsPingFrameHandler;
-import io.mercury.transport.http.ws.WebSocketEvent.WsPongFrameHandler;
-import io.mercury.transport.http.ws.WebSocketEvent.WsTextFrameHandler;
-import io.mercury.transport.http.ws.WebSocketEvent.WsThrowableHandler;
+import io.mercury.transport.http.ws.WebSocketHandler.WsBinaryFrameHandler;
+import io.mercury.transport.http.ws.WebSocketHandler.WsCloseHandler;
+import io.mercury.transport.http.ws.WebSocketHandler.WsOpenHandler;
+import io.mercury.transport.http.ws.WebSocketHandler.WsPingFrameHandler;
+import io.mercury.transport.http.ws.WebSocketHandler.WsPongFrameHandler;
+import io.mercury.transport.http.ws.WebSocketHandler.WsTextFrameHandler;
+import io.mercury.transport.http.ws.WebSocketHandler.WsThrowableHandler;
 import org.asynchttpclient.ws.WebSocket;
 import org.asynchttpclient.ws.WebSocketListener;
 import org.asynchttpclient.ws.WebSocketUpgradeHandler;
@@ -48,8 +48,9 @@ public final class WebSocketClient {
             // 异常处理函数
             WsThrowableHandler throwableHandler) {
         try {
-            WebSocket webSocket = AsyncHttp.AHC.prepareGet(url)
-                    .execute(new WebSocketUpgradeHandler.Builder().addWebSocketListener(new WebSocketListener() {
+            WebSocket webSocket = AsyncHttp.AHC.prepareGet(url).execute(new WebSocketUpgradeHandler
+                    .Builder()
+                    .addWebSocketListener(new WebSocketListener() {
 
                         @Override
                         public void onOpen(WebSocket webSocket) {

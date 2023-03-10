@@ -3,7 +3,7 @@ package io.mercury.transport.http.ws;
 import io.mercury.common.functional.ThrowableHandler;
 import org.asynchttpclient.ws.WebSocket;
 
-public interface WebSocketEvent {
+public interface WebSocketHandler {
 
     @FunctionalInterface
     interface WsOpenHandler {

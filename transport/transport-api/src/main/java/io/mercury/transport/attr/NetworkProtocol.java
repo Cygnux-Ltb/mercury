@@ -19,7 +19,7 @@ public enum NetworkProtocol {
 	private final String name;
 	private final String prefix;
 
-	private NetworkProtocol(String name) {
+	NetworkProtocol(String name) {
 		this.name = name;
 		this.prefix = name + "://";
 	}
