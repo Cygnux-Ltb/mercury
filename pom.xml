@@ -27,6 +27,7 @@
         <module>serialization</module>
         <module>toolkit</module>
         <module>transport</module>
+        <module>storage</module>
     </modules>
 
     <properties>
@@ -47,7 +48,7 @@
         <slf4j.version>2.0.6</slf4j.version>
         <junit.version>4.13.2</junit.version>
         <jupiter.version>5.9.2</jupiter.version>
-        <netty.version>4.1.87.Final</netty.version>
+        <netty.version>4.1.89.Final</netty.version>
         <jackson.version>2.14.2</jackson.version>
     </properties>
 
