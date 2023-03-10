@@ -8,12 +8,12 @@ public interface ConfigOption {
 		return module + getConfigName();
 	}
 
-	default String getOtherConfigName() {
+	default String getOtherName() {
 		return getConfigName();
 	}
 
-	default String getOtherConfigName(String module) {
-		return module + getOtherConfigName();
+	default String getOtherName(String module) {
+		return module + getOtherName();
 	}
 
 }

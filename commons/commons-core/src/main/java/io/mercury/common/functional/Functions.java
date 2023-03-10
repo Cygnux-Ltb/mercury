@@ -6,7 +6,6 @@ import org.eclipse.collections.impl.list.mutable.FastList;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -14,10 +13,9 @@ import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
 
-public final class Functions {
+public enum Functions {
 
-    private Functions() {
-    }
+    ;//empty
 
     /**
      * @param <T>         T
@@ -59,6 +57,10 @@ public final class Functions {
     }
 
 
+    /**
+     * @param task Runnable
+     * @return boolean
+     */
     public static boolean ifSuccessful(@Nonnull final Runnable task) {
         try {
             task.run();
@@ -69,10 +71,10 @@ public final class Functions {
     }
 
     /**
-     * @param <T>         Supplier<T> return type
-     * @param supplier    Parameterless function to be executed
-     * @param successFunc After the boolean function succeeds...
-     * @param failureFunc After the boolean function fails...
+     * @param <T>         : Supplier<T> return type
+     * @param supplier    : Parameterless function to be executed
+     * @param successFunc : After the boolean function succeeds...
+     * @param failureFunc : After the boolean function fails...
      * @return R
      */
     public static <T> boolean execBool(@Nonnull final Supplier<T> supplier,
@@ -88,10 +90,10 @@ public final class Functions {
     }
 
     /**
-     * @param <T>          Supplier<T> return type
-     * @param supplier     Parameterless function to be executed
-     * @param successFunc  After the int function succeeds...
-     * @param afterFailure After the int function fails...
+     * @param <T>          : Supplier<T> return type
+     * @param supplier     : Parameterless function to be executed
+     * @param successFunc  : After the int function succeeds...
+     * @param afterFailure : After the int function fails...
      * @return int
      */
     public static <T> int execInt(@Nonnull final Supplier<T> supplier,
@@ -107,10 +109,10 @@ public final class Functions {
     }
 
     /**
-     * @param <T>          Supplier<T> return type
-     * @param supplier     Parameterless function to be executed
-     * @param successFunc  After the int function succeeds...
-     * @param afterFailure After the int function fails...
+     * @param <T>          : Supplier<T> return type
+     * @param supplier     : Parameterless function to be executed
+     * @param successFunc  : After the int function succeeds...
+     * @param afterFailure : After the int function fails...
      * @return long
      */
     public static <T> long execLong(@Nonnull final Supplier<T> supplier,
@@ -126,31 +128,32 @@ public final class Functions {
     }
 
     /**
-     * @param <R>      Return type
-     * @param isHas    BooleanSupplier
-     * @param supplier Supplier<R>
-     * @param val      R
+     * @param <R>      : Return type
+     * @param exist    : BooleanSupplier
+     * @param supplier : Supplier<R>
+     * @param val      : R
      * @return R
      */
-    public static <R> R getOrDefault(@Nonnull BooleanSupplier isHas, @Nonnull Supplier<R> supplier,
+    public static <R> R getOrDefault(@Nonnull BooleanSupplier exist,
+                                     @Nonnull Supplier<R> supplier,
                                      @Nonnull R val) {
-        if (isHas.getAsBoolean())
+        if (exist.getAsBoolean())
             return supplier.get();
         return val;
     }
 
     /**
      * @param <R>       : Return type
-     * @param isHas     :
-     * @param supplier  :
-     * @param exception :
+     * @param exist     : BooleanSupplier
+     * @param supplier  : Supplier<R>
+     * @param exception : E
      * @return R
      * @throws E extends Exception
      */
-    public static <R, E extends Exception> R getOrThrows(@Nonnull final BooleanSupplier isHas,
+    public static <R, E extends Throwable> R getOrThrows(@Nonnull final BooleanSupplier exist,
                                                          @Nonnull final Supplier<R> supplier,
                                                          @Nonnull final E exception) throws E {
-        if (isHas.getAsBoolean())
+        if (exist.getAsBoolean())
             return supplier.get();
         else
             throw exception;
@@ -170,20 +173,5 @@ public final class Functions {
     public static <T> Predicate<T> alwaysFalse() {
         return t -> false;
     }
-
-    /**
-     * Predicate returning {@code true} if the specified object is {@code null}.
-     */
-    public static <T> Predicate<T> isNull() {
-        return Objects::isNull;
-    }
-
-    /**
-     * Predicate returning {@code true} if the specified object is not {@code null}.
-     */
-    public static <T> Predicate<T> nonNull() {
-        return Objects::nonNull;
-    }
-
 
 }
