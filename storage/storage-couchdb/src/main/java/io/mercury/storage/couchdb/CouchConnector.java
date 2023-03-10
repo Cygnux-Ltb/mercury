@@ -1,4 +1,4 @@
-package io.mercury.transport.http.couch;
+package io.mercury.storage.couchdb;
 
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.sys.SysProperties;
