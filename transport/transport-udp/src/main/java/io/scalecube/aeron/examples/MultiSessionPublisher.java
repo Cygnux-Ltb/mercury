@@ -1,22 +1,21 @@
 package io.scalecube.aeron.examples;
 
-import static io.aeron.CommonContext.UDP_MEDIA;
-import static io.scalecube.aeron.examples.AeronHelper.NUMBER_OF_MESSAGES;
-import static io.scalecube.aeron.examples.AeronHelper.STREAM_ID;
-import static io.scalecube.aeron.examples.AeronHelper.printPublication;
-
 import io.aeron.Aeron;
 import io.aeron.Aeron.Context;
 import io.aeron.ChannelUri;
 import io.aeron.ChannelUriStringBuilder;
 import io.aeron.Publication;
 import io.aeron.driver.MediaDriver;
+import org.agrona.CloseHelper;
+import org.agrona.concurrent.SigInt;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.agrona.CloseHelper;
-import org.agrona.concurrent.SigInt;
+import static io.aeron.CommonContext.UDP_MEDIA;
+import static io.scalecube.aeron.examples.AeronHelper.NUMBER_OF_MESSAGES;
+import static io.scalecube.aeron.examples.AeronHelper.STREAM_ID;
+import static io.scalecube.aeron.examples.AeronHelper.printPublication;
 
 public class MultiSessionPublisher {
 

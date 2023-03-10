@@ -1,20 +1,5 @@
 package io.scalecube.aeron.examples.perftest;
 
-import static io.aeron.CommonContext.IPC_MEDIA;
-import static io.aeron.CommonContext.MDC_CONTROL_MODE_DYNAMIC;
-import static io.aeron.CommonContext.MDC_CONTROL_MODE_MANUAL;
-import static io.aeron.CommonContext.UDP_MEDIA;
-import static io.scalecube.aeron.examples.AeronHelper.FRAGMENT_LIMIT;
-import static io.scalecube.aeron.examples.AeronHelper.MEGABYTE;
-import static io.scalecube.aeron.examples.AeronHelper.MESSAGE_LENGTH;
-import static io.scalecube.aeron.examples.AeronHelper.MTU65K;
-import static io.scalecube.aeron.examples.AeronHelper.NUMBER_OF_MESSAGES;
-import static io.scalecube.aeron.examples.AeronHelper.RUNS;
-import static io.scalecube.aeron.examples.AeronHelper.STREAM_ID;
-import static io.scalecube.aeron.examples.AeronHelper.printArchiveContext;
-import static org.agrona.BitUtil.CACHE_LINE_LENGTH;
-import static org.agrona.BufferUtil.allocateDirectAligned;
-
 import io.aeron.Aeron;
 import io.aeron.ChannelUri;
 import io.aeron.ChannelUriStringBuilder;
@@ -34,12 +19,6 @@ import io.aeron.driver.ThreadingMode;
 import io.aeron.driver.status.SystemCounterDescriptor;
 import io.aeron.logbuffer.Header;
 import io.scalecube.aeron.examples.AeronHelper;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
 import org.agrona.CloseHelper;
 import org.agrona.DirectBuffer;
 import org.agrona.concurrent.Agent;
@@ -52,6 +31,26 @@ import org.agrona.concurrent.SleepingMillisIdleStrategy;
 import org.agrona.concurrent.UnsafeBuffer;
 import org.agrona.concurrent.status.AtomicCounter;
 import org.agrona.concurrent.status.CountersReader;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+import static io.aeron.CommonContext.IPC_MEDIA;
+import static io.aeron.CommonContext.MDC_CONTROL_MODE_DYNAMIC;
+import static io.aeron.CommonContext.MDC_CONTROL_MODE_MANUAL;
+import static io.aeron.CommonContext.UDP_MEDIA;
+import static io.scalecube.aeron.examples.AeronHelper.FRAGMENT_LIMIT;
+import static io.scalecube.aeron.examples.AeronHelper.MEGABYTE;
+import static io.scalecube.aeron.examples.AeronHelper.MESSAGE_LENGTH;
+import static io.scalecube.aeron.examples.AeronHelper.MTU65K;
+import static io.scalecube.aeron.examples.AeronHelper.NUMBER_OF_MESSAGES;
+import static io.scalecube.aeron.examples.AeronHelper.RUNS;
+import static io.scalecube.aeron.examples.AeronHelper.STREAM_ID;
+import static io.scalecube.aeron.examples.AeronHelper.printArchiveContext;
+import static org.agrona.BitUtil.CACHE_LINE_LENGTH;
+import static org.agrona.BufferUtil.allocateDirectAligned;
 
 public class MdsRecordingWithLiveDestThroughput implements AutoCloseable {
 
