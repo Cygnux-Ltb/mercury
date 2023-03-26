@@ -1,12 +1,11 @@
 package net.openhft.chronicle.network.ssl;
 
-import net.openhft.chronicle.core.threads.EventHandler;
-import net.openhft.chronicle.core.threads.InvalidEventHandlerException;
-import net.openhft.chronicle.network.NetworkContext;
-import net.openhft.chronicle.network.connection.CoreFields;
-
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
+
+import net.openhft.chronicle.core.threads.EventHandler;
+import net.openhft.chronicle.network.NetworkContext;
+import net.openhft.chronicle.network.connection.CoreFields;
 
 final class PingSender implements EventHandler {
 
