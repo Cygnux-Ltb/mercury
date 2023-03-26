@@ -36,7 +36,7 @@ public class GrizzlyEchoServer {
     static final int PORT = Integer.parseInt(System.getProperty("port", "9124"));
     private static final Logger LOG = Logger.getLogger(GrizzlyEchoServer.class.getName());
     @NotNull
-    private static CountDownLatch countDownLatch = new CountDownLatch(1);
+    private static final CountDownLatch countDownLatch = new CountDownLatch(1);
 
     public static void main(String[] args) throws IOException, InterruptedException {
         // Create a FilterChain using FilterChainBuilder

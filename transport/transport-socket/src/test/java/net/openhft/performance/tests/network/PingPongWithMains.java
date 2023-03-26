@@ -17,7 +17,7 @@
  */
 package net.openhft.performance.tests.network;
 
-import static net.openhft.performance.tests.network.LegacyHanderFactory.simpleTcpEventHandlerFactory;
+import static net.openhft.performance.tests.network.LegacyHandlerFactory.simpleTcpEventHandlerFactory;
 
 import java.io.IOException;
 import java.net.StandardSocketOptions;
@@ -144,8 +144,9 @@ public class PingPongWithMains {
 	public void testServer() throws IOException {
 
 		try (@NotNull
-		EventLoop eg = EventGroup.builder().withDaemon(true).withPauser(Pauser.busy()).bindingAnyByDefault().build();
-		// new EventGroup(true, Pauser.busy(), true)
+		EventLoop eg = EventGroup.builder().withDaemon(true)
+				.withPauser(Pauser.busy()).bindingAnyByDefault().build()
+			 // new EventGroup(true, Pauser.busy(), true)
 		) {
 			eg.start();
 			TCPRegistry.createServerSocketChannelFor(serverHostPort);

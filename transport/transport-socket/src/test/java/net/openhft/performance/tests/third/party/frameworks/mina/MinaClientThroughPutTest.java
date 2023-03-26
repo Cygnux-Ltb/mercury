@@ -26,6 +26,7 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.net.InetSocketAddress;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -34,88 +35,87 @@ import static net.openhft.chronicle.core.Jvm.pause;
 
 public class MinaClientThroughPutTest extends NetworkTestCommon {
 
-	private static final String DEFAULT_PORT = Integer.toString(MinaEchoServer.PORT);
-	private static final int PORT = Integer.parseInt(System.getProperty("port", DEFAULT_PORT));
-	private static final String HOST = System.getProperty("host", "127.0.0.1");
-	private static final long CONNECT_TIMEOUT = 30 * 1000L; // 30 seconds
+    private static final String DEFAULT_PORT = Integer.toString(MinaEchoServer.PORT);
+    private static final int PORT = Integer.parseInt(System.getProperty("port", DEFAULT_PORT));
+    private static final String HOST = System.getProperty("host", "127.0.0.1");
+    private static final long CONNECT_TIMEOUT = 30 * 1000L; // 30 seconds
 
-	public static void main(String[] args) throws Throwable {
+    public static void main(String[] args) throws Throwable {
 
-		@NotNull
-		final NioSocketConnector connector = new NioSocketConnector();
-		final IoBuffer ioBuffer = IoBuffer.allocate(1024);
-		connector.setConnectTimeoutMillis(CONNECT_TIMEOUT);
+        @NotNull final NioSocketConnector connector = new NioSocketConnector();
+        final IoBuffer ioBuffer = IoBuffer.allocate(1024);
+        connector.setConnectTimeoutMillis(CONNECT_TIMEOUT);
 
-		connector.setHandler(new IoHandlerAdapter() {
-			final int bufferSize = 64;
-			int bytesReceived = 0;
-			long startTime;
-			@NotNull
-			byte[] payload = new byte[bufferSize];
-			int i;
+        connector.setHandler(new IoHandlerAdapter() {
+            final int bufferSize = 64;
+            int bytesReceived = 0;
+            long startTime;
+            @Nonnull
+            final byte[] payload = new byte[bufferSize];
+            int i;
 
-			{
-				Arrays.fill(payload, (byte) 'X');
-			}
+            {
+                Arrays.fill(payload, (byte) 'X');
+            }
 
-			@Override
-			public void sessionOpened(@NotNull IoSession session) {
-				startTime = System.nanoTime();
-				ioBuffer.clear();
-				ioBuffer.put(payload);
+            @Override
+            public void sessionOpened(@NotNull IoSession session) {
+                startTime = System.nanoTime();
+                ioBuffer.clear();
+                ioBuffer.put(payload);
 
-				session.write(ioBuffer);
-			}
+                session.write(ioBuffer);
+            }
 
-			@Override
-			public void sessionClosed(IoSession session) {
-			}
+            @Override
+            public void sessionClosed(IoSession session) {
+            }
 
-			@Override
-			public void messageReceived(@NotNull IoSession session, @NotNull Object message) {
-				bytesReceived += ((IoBuffer) message).remaining();
-				((IoBuffer) message).clear();
+            @Override
+            public void messageReceived(@NotNull IoSession session, @NotNull Object message) {
+                bytesReceived += ((IoBuffer) message).remaining();
+                ((IoBuffer) message).clear();
 
-				if (i++ % 10000 == 0)
-					System.out.print(".");
+                if (i++ % 10000 == 0)
+                    System.out.print(".");
 
-				((IoBuffer) message).put(payload);
-				session.write(message);
+                ((IoBuffer) message).put(payload);
+                session.write(message);
 
-				if (TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - startTime) >= 10) {
-					long time = System.nanoTime() - startTime;
-					System.out.printf("\nThroughput was %.1f MB/s%n", 1e3 * bytesReceived / time);
-					session.closeNow();
-				}
-			}
+                if (TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - startTime) >= 10) {
+                    long time = System.nanoTime() - startTime;
+                    System.out.printf("\nThroughput was %.1f MB/s%n", 1e3 * bytesReceived / time);
+                    session.closeNow();
+                }
+            }
 
-			@Override
-			public void messageSent(IoSession session, Object message) {
-			}
+            @Override
+            public void messageSent(IoSession session, Object message) {
+            }
 
-			@Override
-			public void exceptionCaught(@NotNull IoSession session, @NotNull Throwable cause) {
-				cause.printStackTrace();
-				session.closeNow();
-			}
-		});
+            @Override
+            public void exceptionCaught(@NotNull IoSession session, @NotNull Throwable cause) {
+                cause.printStackTrace();
+                session.closeNow();
+            }
+        });
 
-		IoSession session;
+        IoSession session;
 
-		for (;;) {
-			try {
-				ConnectFuture future = connector.connect(new InetSocketAddress(HOST, PORT));
-				future.awaitUninterruptibly();
-				session = future.getSession();
-				break;
-			} catch (RuntimeIoException e) {
-				e.printStackTrace();
-				pause(500);
-			}
-		}
+        for (; ; ) {
+            try {
+                ConnectFuture future = connector.connect(new InetSocketAddress(HOST, PORT));
+                future.awaitUninterruptibly();
+                session = future.getSession();
+                break;
+            } catch (RuntimeIoException e) {
+                e.printStackTrace();
+                pause(500);
+            }
+        }
 
-		// wait until the summation is done
-		session.getCloseFuture().awaitUninterruptibly();
-		connector.dispose();
-	}
+        // wait until the summation is done
+        session.getCloseFuture().awaitUninterruptibly();
+        connector.dispose();
+    }
 }

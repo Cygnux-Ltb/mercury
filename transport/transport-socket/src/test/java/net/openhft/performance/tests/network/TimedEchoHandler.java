@@ -44,7 +44,7 @@ class TimedEchoHandler<T extends NetworkContext<T>> extends SimpleCloseable impl
 			@SuppressWarnings("unchecked")
 			@NotNull
 			AcceptorEventHandler<T> eah = new AcceptorEventHandler<>("*:" + EchoClientMain.PORT,
-					LegacyHanderFactory.legacyTcpEventHandlerFactory(TimedEchoHandler::new),
+					LegacyHandlerFactory.legacyTcpEventHandlerFactory(TimedEchoHandler::new),
 					() -> (T) new VanillaNetworkContext<>());
 
 			eg.addHandler(eah);

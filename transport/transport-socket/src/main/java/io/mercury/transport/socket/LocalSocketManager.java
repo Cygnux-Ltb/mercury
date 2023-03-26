@@ -1,24 +1,24 @@
 package io.mercury.transport.socket;
 
+import io.mercury.common.lang.Asserter;
+import io.mercury.transport.socket.configurator.SocketConfigurator;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
-
-import io.mercury.common.lang.Asserter;
-import io.mercury.transport.socket.configurator.SocketConfigurator;
 
 public class LocalSocketManager {
 
     private static final Map<String, SocketTransceiver> ServerSocketMap = new ConcurrentHashMap<>(8);
 
     /**
-     * @param host
-     * @param port
-     * @param callback
-     * @return
+     * @param host     String
+     * @param port     int
+     * @param callback Consumer<byte[]>
+     * @return SocketTransceiver
      */
-    public static synchronized SocketTransceiver getSocketTransceiver(String host, int port,
-                                                                      Consumer<byte[]> callback) {
+    public static synchronized SocketTransceiver getSocketTransceiver(
+            String host, int port, Consumer<byte[]> callback) {
         String socketName = socketName(host, port);
         if (ServerSocketMap.containsKey(socketName))
             return ServerSocketMap.get(socketName);
@@ -34,9 +34,9 @@ public class LocalSocketManager {
     /**
      * Return SocketTransceiver obj or null.
      *
-     * @param name
-     * @param port
-     * @return
+     * @param name String
+     * @param port int
+     * @return SocketTransceiver
      */
     public static SocketTransceiver acquireSocketTransceiver(String name, int port) {
         return ServerSocketMap.getOrDefault(name, null);

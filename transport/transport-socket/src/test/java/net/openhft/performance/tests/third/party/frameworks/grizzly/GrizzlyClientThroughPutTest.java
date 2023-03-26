@@ -20,13 +20,18 @@ package net.openhft.performance.tests.third.party.frameworks.grizzly;
 import net.openhft.chronicle.network.NetworkTestCommon;
 import org.glassfish.grizzly.Buffer;
 import org.glassfish.grizzly.Connection;
-import org.glassfish.grizzly.filterchain.*;
+import org.glassfish.grizzly.filterchain.BaseFilter;
+import org.glassfish.grizzly.filterchain.FilterChainBuilder;
+import org.glassfish.grizzly.filterchain.FilterChainContext;
+import org.glassfish.grizzly.filterchain.NextAction;
+import org.glassfish.grizzly.filterchain.TransportFilter;
 import org.glassfish.grizzly.memory.MemoryManager;
 import org.glassfish.grizzly.nio.transport.TCPNIOTransport;
 import org.glassfish.grizzly.nio.transport.TCPNIOTransportBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
@@ -54,7 +59,7 @@ public class GrizzlyClientThroughPutTest extends NetworkTestCommon {
         System.out.println("Starting Grizzly throughput test");
 
         final int bufferSize = 64 * 1024;
-        @NotNull final byte[] payload = new byte[bufferSize];
+        @Nonnull final byte[] payload = new byte[bufferSize];
 
         final Buffer buffer = GRIZZLY_MM.allocate(bufferSize);
         {
@@ -83,7 +88,6 @@ public class GrizzlyClientThroughPutTest extends NetworkTestCommon {
              *
              * @param ctx Context of {@link org.glassfish.grizzly.filterchain.FilterChainContext} processing
              * @return the next action
-             * @throws java.io.IOException
              */
             @Override
             public NextAction handleRead(@NotNull final FilterChainContext ctx) {

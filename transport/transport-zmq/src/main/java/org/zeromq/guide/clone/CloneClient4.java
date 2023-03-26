@@ -21,7 +21,7 @@ public class CloneClient4 {
 	// handles subtrees.
 	private final static String SUBTREE = "/client/";
 
-	private static Map<String, KvSimple> kvMap = new HashMap<>();
+	private static final Map<String, KvSimple> kvMap = new HashMap<>();
 
 	public void run() {
 		try (ZContext ctx = new ZContext()) {

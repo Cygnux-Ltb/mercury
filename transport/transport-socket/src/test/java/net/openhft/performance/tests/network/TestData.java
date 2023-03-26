@@ -27,6 +27,7 @@ import java.util.function.IntConsumer;
 import java.util.function.LongConsumer;
 
 class TestData implements DoubleConsumer, LongConsumer, IntConsumer {
+
     int value1;
     long value2;
     double value3;

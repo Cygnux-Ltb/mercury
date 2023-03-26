@@ -48,53 +48,53 @@ public final class WebSocketClient {
             // 异常处理函数
             WsThrowableHandler throwableHandler) {
         try {
-            WebSocket webSocket = AsyncHttp.AHC.prepareGet(url).execute(new WebSocketUpgradeHandler
-                    .Builder()
-                    .addWebSocketListener(new WebSocketListener() {
+            WebSocket webSocket = AsyncHttp.INSTANCE.prepareGet(url).execute(
+                    new WebSocketUpgradeHandler.Builder()
+                            .addWebSocketListener(new WebSocketListener() {
 
-                        @Override
-                        public void onOpen(WebSocket webSocket) {
-                            if (openHandler != null)
-                                openHandler.handle(webSocket);
-                        }
+                                @Override
+                                public void onOpen(WebSocket webSocket) {
+                                    if (openHandler != null)
+                                        openHandler.handle(webSocket);
+                                }
 
-                        @Override
-                        public void onClose(WebSocket webSocket, int code, String reason) {
-                            if (closeHandler != null)
-                                closeHandler.handle(webSocket, code, reason);
-                        }
+                                @Override
+                                public void onClose(WebSocket webSocket, int code, String reason) {
+                                    if (closeHandler != null)
+                                        closeHandler.handle(webSocket, code, reason);
+                                }
 
-                        @Override
-                        public void onPingFrame(byte[] payload) {
-                            if (pingFrameHandler != null)
-                                pingFrameHandler.handle(payload);
-                        }
+                                @Override
+                                public void onPingFrame(byte[] payload) {
+                                    if (pingFrameHandler != null)
+                                        pingFrameHandler.handle(payload);
+                                }
 
-                        @Override
-                        public void onPongFrame(byte[] payload) {
-                            if (pongFrameHandler != null)
-                                pongFrameHandler.handle(payload);
-                        }
+                                @Override
+                                public void onPongFrame(byte[] payload) {
+                                    if (pongFrameHandler != null)
+                                        pongFrameHandler.handle(payload);
+                                }
 
-                        @Override
-                        public void onBinaryFrame(byte[] payload, boolean finalFragment, int rsv) {
-                            if (binaryFrameHandler != null)
-                                binaryFrameHandler.handle(payload, finalFragment, rsv);
-                        }
+                                @Override
+                                public void onBinaryFrame(byte[] payload, boolean finalFragment, int rsv) {
+                                    if (binaryFrameHandler != null)
+                                        binaryFrameHandler.handle(payload, finalFragment, rsv);
+                                }
 
-                        @Override
-                        public void onTextFrame(String payload, boolean finalFragment, int rsv) {
-                            if (textFrameHandler != null)
-                                textFrameHandler.handle(payload, finalFragment, rsv);
-                        }
+                                @Override
+                                public void onTextFrame(String payload, boolean finalFragment, int rsv) {
+                                    if (textFrameHandler != null)
+                                        textFrameHandler.handle(payload, finalFragment, rsv);
+                                }
 
-                        @Override
-                        public void onError(Throwable t) {
-                            if (throwableHandler != null)
-                                throwableHandler.handle(t);
-                        }
+                                @Override
+                                public void onError(Throwable t) {
+                                    if (throwableHandler != null)
+                                        throwableHandler.handle(t);
+                                }
 
-                    }).build()).get();
+                            }).build()).get();
             log.info("Url -> {}, Open==[{}]", url, webSocket.isOpen());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();

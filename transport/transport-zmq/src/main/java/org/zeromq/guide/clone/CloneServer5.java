@@ -17,14 +17,14 @@ import org.zeromq.guide.util.KvMsg;
 //  Clone server - Model Five
 
 public class CloneServer5 {
-	private ZContext ctx; // Context wrapper
-	private Map<String, KvMsg> kvmap; // Key-value store
-	private ZLoop loop; // zloop reactor
+	private final ZContext ctx; // Context wrapper
+	private final Map<String, KvMsg> kvmap; // Key-value store
+	private final ZLoop loop; // zloop reactor
 	private int port; // Main port we're working on
 	private long sequence; // How many updates we're at
-	private Socket snapshot; // Handle snapshot requests
-	private Socket publisher; // Publish updates to clients
-	private Socket collector; // Collect updates from clients
+	private final Socket snapshot; // Handle snapshot requests
+	private final Socket publisher; // Publish updates to clients
+	private final Socket collector; // Collect updates from clients
 
 	// .split snapshot handler
 	// This is the reactor handler for the snapshot socket; it accepts

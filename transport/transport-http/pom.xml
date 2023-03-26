@@ -13,8 +13,6 @@
     <packaging>jar</packaging>
 
     <properties>
-        <httpclient.version>5.2.1</httpclient.version>
-        <asynchttpclient.version>2.12.3</asynchttpclient.version>
     </properties>
 
     <dependencies>
@@ -22,20 +20,6 @@
             <groupId>io.mercury</groupId>
             <artifactId>transport-api</artifactId>
         </dependency>
-
-        <!-- Apache HttpComponents Client -->
-        <dependency>
-            <groupId>org.apache.httpcomponents.client5</groupId>
-            <artifactId>httpclient5</artifactId>
-            <version>${httpclient.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
         <!-- jsoup is a Java library for working with real-world HTML. It provides
             a very convenient API for extracting and manipulating data, using the best
             of DOM, CSS, and jquery-like methods. jsoup implements the WHATWG HTML5 specification,
@@ -45,21 +29,23 @@
             <artifactId>jsoup</artifactId>
             <version>1.15.4</version>
         </dependency>
+        <!-- Netty Component -->
         <dependency>
             <groupId>io.netty</groupId>
-            <artifactId>netty-codec</artifactId>
+            <artifactId>netty-handler-proxy</artifactId>
             <version>${netty.version}</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
-            <artifactId>netty-codec-http</artifactId>
+            <artifactId>netty-transport-native-epoll</artifactId>
             <version>${netty.version}</version>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
-            <artifactId>netty-common</artifactId>
+            <artifactId>netty-transport-native-kqueue</artifactId>
             <version>${netty.version}</version>
         </dependency>
+        <!-- Activation API -->
         <dependency>
             <groupId>jakarta.activation</groupId>
             <artifactId>jakarta.activation-api</artifactId>
@@ -68,11 +54,11 @@
         <dependency>
             <groupId>org.asynchttpclient</groupId>
             <artifactId>async-http-client</artifactId>
-            <version>${asynchttpclient.version}</version>
+            <version>2.12.3</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>slf4j-api</artifactId>
                     <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>io.netty</groupId>
@@ -80,27 +66,34 @@
                 </exclusion>
                 <exclusion>
                     <groupId>io.netty</groupId>
-                    <artifactId>netty-codec-http</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>io.netty</groupId>
                     <artifactId>netty-handler</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>io.netty</groupId>
-                    <artifactId>netty-codec</artifactId>
+                    <artifactId>netty-handler-proxy</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>io.netty</groupId>
-                    <artifactId>netty-common</artifactId>
+                    <artifactId>netty-codec-http</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>io.netty</groupId>
-                    <artifactId>netty-transport</artifactId>
+                    <artifactId>netty-codec-socks</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty-transport-native-epoll</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty-transport-native-kqueue</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.activation</groupId>
+                    <artifactId>jakarta.activation</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
-
 
         <!-- A WebSocket client and server implementation written 100% in Java -->
         <!-- <dependency>

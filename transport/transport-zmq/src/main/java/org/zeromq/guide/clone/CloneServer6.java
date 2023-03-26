@@ -19,16 +19,16 @@ import org.zeromq.guide.util.KvMsg;
 
 //  Clone server - Model Six
 public class CloneServer6 {
-	private ZContext ctx; // Context wrapper
+	private final ZContext ctx; // Context wrapper
 	private Map<String, KvMsg> kvmap; // Key-value store
-	private BinaryStarReactor bStar; // Bstar reactor core
+	private final BinaryStarReactor bStar; // Bstar reactor core
 	private long sequence; // How many updates we're at
 	private int port; // Main port we're working on
 	private int peer; // Main port of our peer
-	private Socket publisher; // Publish updates and hugz
-	private Socket collector; // Collect updates from clients
-	private Socket subscriber; // Get updates from peer
-	private List<KvMsg> pending; // Pending updates from clients
+	private final Socket publisher; // Publish updates and hugz
+	private final Socket collector; // Collect updates from clients
+	private final Socket subscriber; // Get updates from peer
+	private final List<KvMsg> pending; // Pending updates from clients
 	@SuppressWarnings("unused")
 	private boolean primary; // TRUE if we're primary
 	private boolean active; // TRUE if we're active
@@ -49,7 +49,7 @@ public class CloneServer6 {
 				if (request.equals("ICANHAZ?")) {
 					subtree = socket.recvStr();
 				} else
-					System.out.printf("E: bad request, aborting\n");
+					System.out.print("E: bad request, aborting\n");
 
 				if (subtree != null) {
 					// Send state socket to client
@@ -84,7 +84,7 @@ public class CloneServer6 {
 					msg.send(srv.publisher);
 					int ttl = Integer.parseInt(msg.getProp("ttl"));
 					if (ttl > 0)
-						msg.setProp("ttl", "%d", System.currentTimeMillis() + ttl * 1000);
+						msg.setProp("ttl", "%d", System.currentTimeMillis() + ttl * 1000L);
 					msg.store(srv.kvmap);
 					System.out.printf("I: publishing update=%d\n", srv.sequence);
 				} else {
@@ -373,7 +373,7 @@ public class CloneServer6 {
 		} else if (args.length == 1 && "-b".equals(args[0])) {
 			srv = new CloneServer6(false);
 		} else {
-			System.out.printf("Usage: clonesrv4 { -p | -b }\n");
+			System.out.print("Usage: clonesrv4 { -p | -b }\n");
 			System.exit(0);
 		}
 		srv.run();

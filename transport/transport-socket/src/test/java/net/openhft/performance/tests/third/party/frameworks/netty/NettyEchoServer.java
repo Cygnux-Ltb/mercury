@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class NettyEchoServer {
 
-	private int port;
+	private final int port;
 
 	public NettyEchoServer(int port) {
 		this.port = port;

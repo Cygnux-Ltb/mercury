@@ -31,15 +31,6 @@
 
 package net.openhft.performance.tests.network;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-
-import org.jetbrains.annotations.NotNull;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.core.threads.EventLoop;
 import net.openhft.chronicle.core.threads.ThreadDump;
@@ -51,127 +42,135 @@ import net.openhft.chronicle.network.connection.TcpChannelHub;
 import net.openhft.chronicle.network.tcp.ChronicleSocket;
 import net.openhft.chronicle.network.tcp.ChronicleSocketChannel;
 import net.openhft.chronicle.threads.EventGroup;
+import org.jetbrains.annotations.NotNull;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 public class BinaryTestBufferSize {
-	private static final @NotNull String desc = "host.port";
-	private EventLoop eg;
-	private ThreadDump threadDump;
 
-	@Before
-	public void threadDump() {
-		threadDump = new ThreadDump();
-	}
+    private static final @NotNull String desc = "host.port";
+    private EventLoop eg;
+    private ThreadDump threadDump;
 
-	@After
-	public void checkThreadDump() {
-		threadDump.assertNoNewThreads();
-	}
+    @Before
+    public void threadDump() {
+        threadDump = new ThreadDump();
+    }
 
-	@Before
-	public void setUp() throws IOException {
-		TCPRegistry.createServerSocketChannelFor(desc);
-		eg = EventGroup.builder().withDaemon(true).build();
-		eg.start();
-		createServer(desc, eg);
-	}
+    @After
+    public void checkThreadDump() {
+        threadDump.assertNoNewThreads();
+    }
 
-	@After
-	public void tearDown() {
-		eg.stop();
-		TcpChannelHub.closeAllHubs();
-		TCPRegistry.reset();
-	}
+    @Before
+    public void setUp() throws IOException {
+        TCPRegistry.createServerSocketChannelFor(desc);
+        eg = EventGroup.builder().withDaemon(true).build();
+        eg.start();
+        createServer(desc, eg);
+    }
 
-	@Test
-	public void test() throws IOException {
-		sendAndReceive(64 << 10);
-	}
+    @After
+    public void tearDown() {
+        eg.stop();
+        TcpChannelHub.closeAllHubs();
+        TCPRegistry.reset();
+    }
 
-	private void sendAndReceive(int tcpBufferSize) throws IOException {
-		for (int length = 1; length < 2000; length++)
-			sendAndReceive(length, tcpBufferSize);
-	}
+    @Test
+    public void test() throws IOException {
+        sendAndReceive(64 << 10);
+    }
 
-	private void sendAndReceive(int length, int tcpBufferSize) throws IOException {
-		String expectedMessage = "";
-		for (int i = 0; i < length; i++)
-			expectedMessage += (char) (32 + (i % (126 - 32)));// (char)('0' + i % 10);
+    private void sendAndReceive(int tcpBufferSize) throws IOException {
+        for (int length = 1; length < 2000; length++)
+            sendAndReceive(length, tcpBufferSize);
+    }
 
-		sendAndReceive(expectedMessage, tcpBufferSize);
-	}
+    private void sendAndReceive(int length, int tcpBufferSize) throws IOException {
+        String expectedMessage = "";
+        for (int i = 0; i < length; i++)
+            expectedMessage += (char) (32 + (i % (126 - 32)));// (char)('0' + i % 10);
 
-	private void sendAndReceive(String expectedMessage, int tcpBufferSize) throws IOException {
-		final ChronicleSocketChannel client = createClient(desc, tcpBufferSize);
+        sendAndReceive(expectedMessage, tcpBufferSize);
+    }
 
-		assert System.getProperty("TcpEventHandler.tcpBufferSize") == null;
-		System.setProperty("TcpEventHandler.tcpBufferSize", Integer.toString(tcpBufferSize));
+    private void sendAndReceive(String expectedMessage, int tcpBufferSize) throws IOException {
+        final ChronicleSocketChannel client = createClient(desc, tcpBufferSize);
 
-		Bytes<ByteBuffer> inBytes = null;
-		Bytes<ByteBuffer> outBytes = null;
+        assert System.getProperty("TcpEventHandler.tcpBufferSize") == null;
+        System.setProperty("TcpEventHandler.tcpBufferSize", Integer.toString(tcpBufferSize));
 
-		try {
-			outBytes = Bytes.elasticByteBuffer().writeUtf8(expectedMessage);
-			final long totalBytes = outBytes.writePosition();
-			final ByteBuffer outBuff = (ByteBuffer) outBytes.underlyingObject();
+        Bytes<ByteBuffer> inBytes = null;
+        Bytes<ByteBuffer> outBytes = null;
 
-			outBuff.clear();
-			outBuff.limit((int) outBytes.writePosition());
+        try {
+            outBytes = Bytes.elasticByteBuffer().writeUtf8(expectedMessage);
+            final long totalBytes = outBytes.writePosition();
+            final ByteBuffer outBuff = outBytes.underlyingObject();
 
-			// write the data to the socket
-			while (outBuff.hasRemaining())
-				client.write(outBuff);
+            outBuff.clear();
+            outBuff.limit((int) outBytes.writePosition());
 
-			inBytes = Bytes.elasticByteBuffer((int) totalBytes).clear();
-			final ByteBuffer inBuff = (ByteBuffer) inBytes.underlyingObject();
+            // write the data to the socket
+            while (outBuff.hasRemaining())
+                client.write(outBuff);
 
-			// read back
-			int totalRead = 0;
-			int read;
-			int count = 0;
-			while (totalRead < totalBytes && (read = client.read(inBuff)) > -1) {
-				assert read != 0;
-				totalRead += read;
-				++count;
-			}
-			if (count > 1)
-				System.out.println("count=" + count);
+            inBytes = Bytes.elasticByteBuffer((int) totalBytes).clear();
+            final ByteBuffer inBuff = inBytes.underlyingObject();
 
-			inBytes.readLimit(totalRead);
-			Assert.assertEquals(expectedMessage, inBytes.readUtf8());
+            // read back
+            int totalRead = 0;
+            int read;
+            int count = 0;
+            while (totalRead < totalBytes && (read = client.read(inBuff)) > -1) {
+                assert read != 0;
+                totalRead += read;
+                ++count;
+            }
+            if (count > 1)
+                System.out.println("count=" + count);
 
-		} finally {
-			inBytes.releaseLast();
-			outBytes.releaseLast();
-			System.clearProperty("TcpEventHandler.tcpBufferSize");
-			client.close();
-		}
-	}
+            inBytes.readLimit(totalRead);
+            Assert.assertEquals(expectedMessage, inBytes.readUtf8());
 
-	@NotNull
-	private ChronicleSocketChannel createClient(@NotNull String desc, int tcpBufferSize) throws IOException {
+        } finally {
+            inBytes.releaseLast();
+            outBytes.releaseLast();
+            System.clearProperty("TcpEventHandler.tcpBufferSize");
+            client.close();
+        }
+    }
 
-		ChronicleSocketChannel result = TCPRegistry.createSocketChannel(desc);
-		ChronicleSocket socket = result.socket();
-		socket.setTcpNoDelay(true);
-		socket.setReceiveBufferSize(tcpBufferSize);
-		socket.setSendBufferSize(tcpBufferSize);
-		result.configureBlocking(true);
-		return result;
-	}
+    @NotNull
+    private ChronicleSocketChannel createClient(@NotNull String desc, int tcpBufferSize) throws IOException {
 
-	private <T extends VanillaNetworkContext<T>> void createServer(@NotNull String desc, @NotNull EventLoop eg)
-			throws IOException {
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		@NotNull
-		AcceptorEventHandler<T> eah = new AcceptorEventHandler<>(desc, (networkContext) -> {
-			@NotNull
-			final TcpEventHandler<T> handler = new TcpEventHandler<>(networkContext);
-			handler.tcpHandler(new EchoHandler<>());
-			return handler;
-		}, () -> (T) new VanillaNetworkContext());
+        ChronicleSocketChannel result = TCPRegistry.createSocketChannel(desc);
+        ChronicleSocket socket = result.socket();
+        socket.setTcpNoDelay(true);
+        socket.setReceiveBufferSize(tcpBufferSize);
+        socket.setSendBufferSize(tcpBufferSize);
+        result.configureBlocking(true);
+        return result;
+    }
 
-		eg.addHandler(eah);
-		ChronicleSocketChannel sc = TCPRegistry.createSocketChannel(desc);
-		sc.configureBlocking(false);
-	}
+    private <T extends VanillaNetworkContext<T>> void createServer(@NotNull String desc, @NotNull EventLoop eg)
+            throws IOException {
+        @SuppressWarnings({"rawtypes", "unchecked"})
+        @NotNull
+        AcceptorEventHandler<T> eah = new AcceptorEventHandler<>(desc, (networkContext) -> {
+            @NotNull final TcpEventHandler<T> handler = new TcpEventHandler<>(networkContext);
+            handler.tcpHandler(new EchoHandler<>());
+            return handler;
+        }, () -> (T) new VanillaNetworkContext());
+
+        eg.addHandler(eah);
+        ChronicleSocketChannel sc = TCPRegistry.createSocketChannel(desc);
+        sc.configureBlocking(false);
+    }
 }

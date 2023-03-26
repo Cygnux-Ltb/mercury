@@ -27,7 +27,7 @@ public class CloneClient6 {
 			clone.set(key, value, rand.nextInt(30));
 			try {
 				Thread.sleep(1000);
-			} catch (InterruptedException e) {
+			} catch (InterruptedException ignored) {
 			}
 		}
 		clone.destroy();

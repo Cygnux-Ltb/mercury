@@ -28,7 +28,7 @@ final class PingSender implements EventHandler {
 	}
 
 	@Override
-	public boolean action() throws InvalidEventHandlerException {
+	public boolean action() {
 		if (lastPublish < System.currentTimeMillis() - 5000L) {
 
 			nc.get().wireOutPublisher().put(null, wireOut -> {

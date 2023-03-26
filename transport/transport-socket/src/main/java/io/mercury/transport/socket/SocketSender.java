@@ -42,7 +42,7 @@ public final class SocketSender extends TransportComponent implements Sender<byt
 
     @Override
     public boolean isConnected() {
-        return socket == null ? false : socket.isConnected();
+        return socket != null && socket.isConnected();
     }
 
     @Override

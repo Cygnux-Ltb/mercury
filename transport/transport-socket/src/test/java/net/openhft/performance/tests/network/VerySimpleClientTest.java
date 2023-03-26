@@ -168,7 +168,7 @@ public class VerySimpleClientTest extends NetworkTestCommon {
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		@NotNull
 		AcceptorEventHandler<?> eah = new AcceptorEventHandler(desc,
-				LegacyHanderFactory.simpleTcpEventHandlerFactory(WireEchoRequestHandler::new, WIRE_TYPE),
+				LegacyHandlerFactory.simpleTcpEventHandlerFactory(WireEchoRequestHandler::new, WIRE_TYPE),
 				VanillaNetworkContext::new);
 
 		eg.addHandler(eah);

@@ -23,7 +23,8 @@ import net.openhft.chronicle.network.VanillaNetworkContext;
 import net.openhft.chronicle.network.api.TcpHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class EchoHandler<T extends VanillaNetworkContext<T>> extends AbstractCloseable implements TcpHandler<T> {
+public class EchoHandler<T extends VanillaNetworkContext<T>>
+        extends AbstractCloseable implements TcpHandler<T> {
 
     public EchoHandler() {
     }

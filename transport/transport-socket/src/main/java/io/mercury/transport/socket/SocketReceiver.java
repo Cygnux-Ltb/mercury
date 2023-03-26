@@ -1,14 +1,5 @@
 package io.mercury.transport.socket;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.Socket;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
-
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.common.thread.SleepSupport;
@@ -16,6 +7,14 @@ import io.mercury.common.thread.ThreadSupport;
 import io.mercury.transport.api.Receiver;
 import io.mercury.transport.api.TransportComponent;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.Socket;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 public class SocketReceiver extends TransportComponent implements Receiver {
 
@@ -53,7 +52,7 @@ public class SocketReceiver extends TransportComponent implements Receiver {
 
     @Override
     public boolean isConnected() {
-        return socket == null ? false : socket.isConnected();
+        return socket != null && socket.isConnected();
     }
 
     @Override

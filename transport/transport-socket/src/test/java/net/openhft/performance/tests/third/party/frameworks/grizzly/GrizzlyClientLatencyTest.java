@@ -83,7 +83,6 @@ public class GrizzlyClientLatencyTest extends NetworkTestCommon {
 			 *            {@link org.glassfish.grizzly.filterchain.FilterChainContext}
 			 *            processing
 			 * @return the next action
-			 * @throws java.io.IOException
 			 */
 			@Override
 			public NextAction handleRead(@NotNull final FilterChainContext ctx) {

@@ -39,11 +39,11 @@ public class EchoMultiServerMain {
         ServerSocketChannel ssc = ServerSocketChannel.open();
         ssc.bind(new InetSocketAddress(port));
         System.out.println("listening on " + ssc);
-        ExecutorService service = new ThreadPoolExecutor(0, 1000,
+        ThreadPoolExecutor service = new ThreadPoolExecutor(0, 1000,
                 60L, TimeUnit.SECONDS,
                 new SynchronousQueue<Runnable>(),
                 new NamedThreadFactory("connections", true));
-        ((ThreadPoolExecutor) service).setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        service.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
 
         while (true) {
             final SocketChannel socket = ssc.accept();

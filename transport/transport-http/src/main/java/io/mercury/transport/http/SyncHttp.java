@@ -1,124 +1,93 @@
 package io.mercury.transport.http;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nonnull;
-
-import org.apache.hc.client5.http.classic.methods.HttpGet;
-import org.apache.hc.client5.http.classic.methods.HttpPost;
-import org.apache.hc.client5.http.classic.methods.HttpPut;
-import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
-import org.apache.hc.client5.http.impl.classic.HttpClients;
-import org.apache.hc.core5.http.HttpEntity;
-import org.apache.hc.core5.http.ParseException;
-import org.apache.hc.core5.http.io.entity.EntityUtils;
-import org.apache.hc.core5.http.message.BasicNameValuePair;
-import org.jsoup.HttpStatusException;
+import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.transport.http.param.PathParam;
 import org.slf4j.Logger;
 
-import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.transport.http.base.PathParam;
+import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.net.Authenticator;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpClient.Redirect;
+import java.net.http.HttpClient.Version;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.Map;
+
+import static java.time.Duration.ofSeconds;
 
 public abstract class SyncHttp {
 
     private static final Logger log = Log4j2LoggerFactory.getLogger(SyncHttp.class);
 
-    // CloseableHttpClient
-    public static final CloseableHttpClient HC = HttpClients.createDefault();
+    public static final HttpClient HC = HttpClient.newBuilder()
+            .version(Version.HTTP_1_1)
+            .followRedirects(Redirect.NORMAL)
+            .connectTimeout(ofSeconds(10))
+            .authenticator(Authenticator.getDefault())
+            .build();
 
     private SyncHttp() {
     }
 
     /**
-     * @param url
-     * @param params
-     * @return
-     * @throws IOException
+     * @param url    String
+     * @param params PathParam[]
+     * @return String
+     * @throws IOException          ioe
+     * @throws InterruptedException e
      */
-    public static String sentGet(@Nonnull String url, List<PathParam> params) throws IOException {
+    public static String sentGet(@Nonnull String url, PathParam... params)
+            throws IOException, InterruptedException {
         // TODO add path params
         return sentGet(url);
     }
 
     /**
-     * @param url
-     * @return
-     * @throws IOException
+     * @param url String
+     * @return String
+     * @throws IOException          ioe
+     * @throws InterruptedException e
      */
-    public static String sentGet(@Nonnull String url) throws IOException {
-        final HttpGet httpGet = new HttpGet(url);
-        try (CloseableHttpResponse rsp = HC.execute(httpGet)) {
-            int code = rsp.getCode();
-            if (code > 307) {
-                log.error("url -> {} | status -> {} : {} ", url, code, rsp.getReasonPhrase());
-                throw new HttpStatusException("Sent GET request throw HttpStatusException", code, url);
-            }
-            final HttpEntity entity = rsp.getEntity();
-            try {
-                String content = EntityUtils.toString(entity);
-                return content != null ? content : "";
-            } catch (Exception e) {
-                log.error("url -> {} | entity parsing exception -> {}", e.getMessage(), e);
-                return "";
-            } finally {
-                EntityUtils.consume(entity);
-            }
+    public static String sentGet(@Nonnull String url)
+            throws IOException, InterruptedException {
+        return sentGet(HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .headers("Content-Type", "text/plain;charset=UTF-8")
+                .GET().build());
+    }
 
-        } catch (IOException e) {
-            log.error("", e);
-            throw e;
-        }
+
+    /**
+     * @param request HttpRequest
+     * @return String
+     * @throws IOException          ioe
+     * @throws InterruptedException e
+     */
+    public static String sentGet(@Nonnull HttpRequest request)
+            throws IOException, InterruptedException {
+        return HC.send(request, HttpResponse.BodyHandlers.ofString()).body();
     }
 
     /**
-     * @param url
-     * @param params
-     * @return
-     * @throws IOException
+     * @param url    String
+     * @param params Map<String, String>
+     * @return String
      */
-    public static String sentPut(@Nonnull String url, Map<String, String> params) throws IOException, ParseException {
-        final HttpPut put = new HttpPut(url);
-        put.setEntity(new UrlEncodedFormEntity(Optional.ofNullable(params).orElse(new HashMap<>()).entrySet().stream()
-                .map(entry -> new BasicNameValuePair(entry.getKey(), entry.getValue())).collect(Collectors.toList())));
-        try (CloseableHttpResponse rsp = HC.execute(put)) {
-            log.info("Put URL -> {}, rspCode==[{}], rspReasonPhrase==[{}]", url, rsp.getCode(), rsp.getReasonPhrase());
-            return handleHttpEntity(rsp.getEntity());
-        } catch (IOException | ParseException e) {
-            log.error("Put URL -> {}, Has Exception -> {}", url, e.getMessage(), e);
-            throw e;
-        }
+    public static String sentPut(@Nonnull String url, Map<String, String> params) {
+        return "";
     }
+
 
     /**
-     * @return
-     * @throws IOException
+     * @param url    String
+     * @param params Map<String, String>
+     * @return String
      */
-    public static String sentPost(@Nonnull String url, Map<String, String> params) throws IOException, ParseException {
-        HttpPost post = new HttpPost(url);
-        post.setEntity(new UrlEncodedFormEntity(Optional.ofNullable(params).orElse(new HashMap<>()).entrySet().stream()
-                .map(entry -> new BasicNameValuePair(entry.getKey(), entry.getValue())).collect(Collectors.toList())));
-        try (CloseableHttpResponse rsp = HC.execute(post)) {
-            log.info("Post URL -> {}, rspCode==[{}], rspReasonPhrase==[{}]", url, rsp.getCode(), rsp.getReasonPhrase());
-            return handleHttpEntity(rsp.getEntity());
-        } catch (IOException | ParseException e) {
-            log.error("Put URL -> {}, Has Exception -> {}", url, e.getMessage(), e);
-            throw e;
-        }
+    public static String sentPost(@Nonnull String url, Map<String, String> params) {
+        return "";
     }
 
-    private static String handleHttpEntity(HttpEntity entity) throws IOException, ParseException {
-        if (entity == null)
-            return "";
-        String str = EntityUtils.toString(entity);
-        EntityUtils.consume(entity);
-        return str;
-    }
 
 }

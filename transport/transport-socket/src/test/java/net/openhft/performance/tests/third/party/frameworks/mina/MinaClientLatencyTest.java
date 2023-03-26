@@ -17,11 +17,7 @@
  */
 package net.openhft.performance.tests.third.party.frameworks.mina;
 
-import static net.openhft.chronicle.core.Jvm.pause;
-
-import java.net.InetSocketAddress;
-import java.util.Arrays;
-
+import net.openhft.chronicle.network.NetworkTestCommon;
 import org.apache.mina.core.RuntimeIoException;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.future.ConnectFuture;
@@ -31,108 +27,110 @@ import org.apache.mina.transport.socket.nio.NioSocketConnector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import net.openhft.chronicle.network.NetworkTestCommon;
+import javax.annotation.Nonnull;
+import java.net.InetSocketAddress;
+import java.util.Arrays;
+
+import static net.openhft.chronicle.core.Jvm.pause;
 
 public class MinaClientLatencyTest extends NetworkTestCommon {
 
-	public static final String DEFAULT_PORT = Integer.toString(MinaEchoServer.PORT);
-	static final int PORT = Integer.parseInt(System.getProperty("port", DEFAULT_PORT));
+    public static final String DEFAULT_PORT = Integer.toString(MinaEchoServer.PORT);
+    static final int PORT = Integer.parseInt(System.getProperty("port", DEFAULT_PORT));
 
-	private static final String HOST = System.getProperty("host", "127.0.0.1");
-	private static final long CONNECT_TIMEOUT = 30 * 1000L; // 30 seconds
+    private static final String HOST = System.getProperty("host", "127.0.0.1");
+    private static final long CONNECT_TIMEOUT = 30 * 1000L; // 30 seconds
 
-	public static void main(String[] args) throws Throwable {
+    public static void main(String[] args) throws Throwable {
 
-		@NotNull
-		final NioSocketConnector connector = new NioSocketConnector();
-		@NotNull
-		final long[] times = new long[500_000];
-		final int bufferSize = 32 * 1024;
+        @Nonnull final NioSocketConnector connector = new NioSocketConnector();
+        @Nonnull final long[] times = new long[500_000];
+        final int bufferSize = 32 * 1024;
 
-		final IoBuffer ioBuffer = IoBuffer.allocate(bufferSize);
-		connector.setConnectTimeoutMillis(CONNECT_TIMEOUT);
+        final IoBuffer ioBuffer = IoBuffer.allocate(bufferSize);
+        connector.setConnectTimeoutMillis(CONNECT_TIMEOUT);
 
-		connector.setHandler(new IoHandlerAdapter() {
-			@SuppressWarnings("unused")
-			long startTime;
-			int count = -50_000; // for warn up - we will skip the first 50_000
-			@SuppressWarnings("unused")
-			int i;
+        connector.setHandler(new IoHandlerAdapter() {
+            @SuppressWarnings("unused")
+            long startTime;
+            int count = -50_000; // for warn up - we will skip the first 50_000
+            @SuppressWarnings("unused")
+            int i;
 
-			@Override
-			public void sessionOpened(@NotNull IoSession session) {
-				startTime = System.nanoTime();
-				ioBuffer.clear();
-				ioBuffer.putLong(System.nanoTime());
+            @Override
+            public void sessionOpened(@NotNull IoSession session) {
+                startTime = System.nanoTime();
+                ioBuffer.clear();
+                ioBuffer.putLong(System.nanoTime());
 
-				session.write(ioBuffer);
-			}
+                session.write(ioBuffer);
+            }
 
-			@Override
-			public void sessionClosed(IoSession session) {
-			}
+            @Override
+            public void sessionClosed(IoSession session) {
+            }
 
-			@Override
-			public void messageReceived(@NotNull IoSession session, @NotNull Object msg) {
-				if (((IoBuffer) msg).remaining() >= 8) {
-					if (count % 10000 == 0)
-						System.out.print(".");
+            @Override
+            public void messageReceived(@NotNull IoSession session, @NotNull Object msg) {
+                if (((IoBuffer) msg).remaining() >= 8) {
+                    if (count % 10000 == 0)
+                        System.out.print(".");
 
-					if (count >= 0) {
-						times[count] = System.nanoTime() - ((IoBuffer) msg).getLong();
+                    if (count >= 0) {
+                        times[count] = System.nanoTime() - ((IoBuffer) msg).getLong();
 
-						if (count == times.length - 1) {
-							Arrays.sort(times);
-							System.out.printf(
-									"\nLoop back echo latency was %.1f/%.1f %,d/%,d %,"
-											+ "d/%d us for 50/90 99/99.9 99.99/worst %%tile%n",
-									times[count / 2] / 1e3, times[count * 9 / 10] / 1e3,
-									times[count - count / 100] / 1000, times[count - count / 1000] / 1000,
-									times[count - count / 10000] / 1000, times[count - 1] / 1000);
-							session.closeNow();
-							return;
-						}
-					}
+                        if (count == times.length - 1) {
+                            Arrays.sort(times);
+                            System.out.printf(
+                                    "\nLoop back echo latency was %.1f/%.1f %,d/%,d %,"
+                                            + "d/%d us for 50/90 99/99.9 99.99/worst %%tile%n",
+                                    times[count / 2] / 1e3, times[count * 9 / 10] / 1e3,
+                                    times[count - count / 100] / 1000, times[count - count / 1000] / 1000,
+                                    times[count - count / 10000] / 1000, times[count - 1] / 1000);
+                            session.closeNow();
+                            return;
+                        }
+                    }
+                    count++;
+                }
 
-					count++;
-				}
+                ioBuffer.clear();
+                ioBuffer.putLong(System.nanoTime());
 
-				ioBuffer.clear();
-				ioBuffer.putLong(System.nanoTime());
+                session.write(ioBuffer); // (3)
 
-				session.write(ioBuffer); // (3)
+            }
 
-			}
+            @Override
+            public void messageSent(IoSession session, Object message) {
+            }
 
-			@Override
-			public void messageSent(IoSession session, Object message) {
-			}
+            @Override
+            public void exceptionCaught(@NotNull IoSession session, @NotNull Throwable cause) {
+                cause.printStackTrace();
+                session.closeNow();
+            }
 
-			@Override
-			public void exceptionCaught(@NotNull IoSession session, @NotNull Throwable cause) {
-				cause.printStackTrace();
-				session.closeNow();
-			}
-		});
-		@Nullable
-		IoSession session = null;
-		try {
-			for (;;) {
-				try {
-					ConnectFuture future = connector.connect(new InetSocketAddress(HOST, PORT));
-					future.awaitUninterruptibly();
-					session = future.getSession();
-					break;
-				} catch (RuntimeIoException e) {
-					e.printStackTrace();
-					pause(500);
-				}
-			}
-		} finally {
-			if (session != null)
-				// wait until the summation is done
-				session.getCloseFuture().awaitUninterruptibly();
-			connector.dispose();
-		}
-	}
+        });
+        @Nullable
+        IoSession session = null;
+        try {
+            for (; ; ) {
+                try {
+                    ConnectFuture future = connector.connect(new InetSocketAddress(HOST, PORT));
+                    future.awaitUninterruptibly();
+                    session = future.getSession();
+                    break;
+                } catch (RuntimeIoException e) {
+                    e.printStackTrace();
+                    pause(500);
+                }
+            }
+        } finally {
+            if (session != null)
+                // wait until the summation is done
+                session.getCloseFuture().awaitUninterruptibly();
+            connector.dispose();
+        }
+    }
 }

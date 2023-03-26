@@ -3,20 +3,21 @@ package net.openhft.chronicle.network;
 import net.openhft.chronicle.core.io.BackgroundResourceReleaser;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class VanillaNetworkContextTest extends NetworkTestCommon {
 
 	@Test
 	public void testClose() {
 		final VanillaNetworkContext<?> v = new VanillaNetworkContext<>();
-		assertEquals(false, v.isClosed());
+		assertFalse(v.isClosed());
 		v.close();
-		assertEquals(true, v.isClosed());
+		assertTrue(v.isClosed());
 		BackgroundResourceReleaser.releasePendingResources();
-		assertEquals(true, v.isClosed());
+		assertTrue(v.isClosed());
 		v.close();
-		assertEquals(true, v.isClosed());
+		assertTrue(v.isClosed());
 	}
 
 }

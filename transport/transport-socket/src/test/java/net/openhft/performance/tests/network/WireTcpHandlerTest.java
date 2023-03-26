@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Function;
 
-import static net.openhft.performance.tests.network.LegacyHanderFactory.simpleTcpEventHandlerFactory;
+import static net.openhft.performance.tests.network.LegacyHandlerFactory.simpleTcpEventHandlerFactory;
 
 /*
 Running on an i7-3970X

@@ -17,8 +17,8 @@ import org.zeromq.guide.util.KvSimple;
  *
  */
 public class CloneClient1 {
-	private static Map<String, KvSimple> kvMap = new HashMap<>();
-	private static AtomicLong sequence = new AtomicLong();
+	private static final Map<String, KvSimple> kvMap = new HashMap<>();
+	private static final AtomicLong sequence = new AtomicLong();
 
 	public void run() {
 		try (ZContext ctx = new ZContext()) {

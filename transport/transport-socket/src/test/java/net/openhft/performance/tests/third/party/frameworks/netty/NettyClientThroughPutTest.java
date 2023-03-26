@@ -17,14 +17,6 @@
  */
 package net.openhft.performance.tests.third.party.frameworks.netty;
 
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
-
-import javax.net.ssl.SSLException;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -44,6 +36,12 @@ import io.netty.util.ReferenceCountUtil;
 import net.openhft.chronicle.network.NetworkTestCommon;
 import net.openhft.performance.tests.vanilla.tcp.EchoClientMain;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.net.ssl.SSLException;
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Sends one message when a connection is open and echoes back any received data
  * to the server. Simply put, the echo client initiates the ping-pong traffic
@@ -52,108 +50,107 @@ import net.openhft.performance.tests.vanilla.tcp.EchoClientMain;
  */
 public final class NettyClientThroughPutTest extends NetworkTestCommon {
 
-	static final boolean SSL = System.getProperty("ssl") != null;
-	static final String HOST = System.getProperty("host", "127.0.0.1");
-	static final int PORT = Integer.getInteger("port", EchoClientMain.PORT);
+    static final boolean SSL = System.getProperty("ssl") != null;
+    static final String HOST = System.getProperty("host", "127.0.0.1");
+    static final int PORT = Integer.getInteger("port", EchoClientMain.PORT);
 
-	@SuppressWarnings("deprecation")
-	public static void main(String[] args) throws SSLException, InterruptedException {
-		// Configure SSL.git
-		@Nullable
-		final SslContext sslCtx;
-		if (SSL) {
-			sslCtx = SslContext.newClientContext(InsecureTrustManagerFactory.INSTANCE);
+    @SuppressWarnings("deprecation")
+    public static void main(String[] args) throws SSLException, InterruptedException {
+        // Configure SSL.git
+        @Nullable final SslContext sslCtx;
+        if (SSL) {
+            sslCtx = SslContext.newClientContext(InsecureTrustManagerFactory.INSTANCE);
 
-		} else {
-			sslCtx = null;
-		}
+        } else {
+            sslCtx = null;
+        }
 
-		// Configure the client.
-		@NotNull
-		EventLoopGroup group = new NioEventLoopGroup();
-		try {
-			@NotNull
-			Bootstrap b = new Bootstrap();
-			b.group(group).channel(NioSocketChannel.class).option(ChannelOption.TCP_NODELAY, true)
-					.handler(new ChannelInitializer<SocketChannel>() {
-						@Override
-						public void initChannel(@NotNull SocketChannel ch) {
-							ChannelPipeline p = ch.pipeline();
-							if (sslCtx != null) {
-								p.addLast(sslCtx.newHandler(ch.alloc(), HOST, PORT));
-							}
-							// p.addLast(new LoggingHandler(LogLevel.INFO));
-							p.addLast(new MyChannelInboundHandler());
-						}
-					});
+        // Configure the client.
+        @Nonnull
+        EventLoopGroup group = new NioEventLoopGroup();
+        try {
+            @Nonnull
+            Bootstrap b = new Bootstrap();
+            b.group(group).channel(NioSocketChannel.class).option(ChannelOption.TCP_NODELAY, true)
+                    .handler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        public void initChannel(@Nonnull SocketChannel ch) {
+                            ChannelPipeline p = ch.pipeline();
+                            if (sslCtx != null) {
+                                p.addLast(sslCtx.newHandler(ch.alloc(), HOST, PORT));
+                            }
+                            // p.addLast(new LoggingHandler(LogLevel.INFO));
+                            p.addLast(new MyChannelInboundHandler());
+                        }
+                    });
 
-			// Start the client.
-			ChannelFuture f = b.connect(HOST, PORT).sync();
+            // Start the client.
+            ChannelFuture f = b.connect(HOST, PORT).sync();
 
-			// Wait until the connection is closed.
-			f.channel().closeFuture().sync();
-		} finally {
-			// Shut down the event loop to terminate all threads.
-			group.shutdownGracefully();
-		}
-	}
+            // Wait until the connection is closed.
+            f.channel().closeFuture().sync();
+        } finally {
+            // Shut down the event loop to terminate all threads.
+            group.shutdownGracefully();
+        }
+    }
 
-	static class MyChannelInboundHandler extends ChannelInboundHandlerAdapter {
-		final int bufferSize = 32 * 1024;
-		private final ByteBuf firstMessage;
-		@NotNull
-		byte[] payload = new byte[bufferSize];
-		long bytesReceived = 0;
-		long startTime;
-		int i = 0;
+    static class MyChannelInboundHandler extends ChannelInboundHandlerAdapter {
+        final int bufferSize = 32 * 1024;
+        private final ByteBuf firstMessage;
+        @Nonnull
+        byte[] payload = new byte[bufferSize];
+        long bytesReceived = 0;
+        long startTime;
+        int i = 0;
 
-		{
-			Arrays.fill(payload, (byte) 'X');
-			firstMessage = Unpooled.buffer(bufferSize);
-			firstMessage.writeBytes(payload);
-		}
+        {
+            Arrays.fill(payload, (byte) 'X');
+            firstMessage = Unpooled.buffer(bufferSize);
+            firstMessage.writeBytes(payload);
+        }
 
-		@Override
-		public void channelActive(@NotNull ChannelHandlerContext ctx) {
-			startTime = System.nanoTime();
-			ctx.writeAndFlush(firstMessage);
+        @Override
+        public void channelActive(@Nonnull ChannelHandlerContext ctx) {
+            startTime = System.nanoTime();
+            ctx.writeAndFlush(firstMessage);
 
-			System.out.print("Running throughput test ( for 10 seconds ) ");
-		}
+            System.out.print("Running throughput test ( for 10 seconds ) ");
+        }
 
-		@Override
-		public void channelRead(@NotNull ChannelHandlerContext ctx, @NotNull Object msg) {
-			try {
-				bytesReceived += ((ByteBuf) msg).readableBytes();
+        @Override
+        public void channelRead(@Nonnull ChannelHandlerContext ctx, @Nonnull Object msg) {
+            try {
+                bytesReceived += ((ByteBuf) msg).readableBytes();
 
-				if (i++ % 10000 == 0)
-					System.out.print(".");
-				if (TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - startTime) >= 10) {
-					long time = System.nanoTime() - startTime;
-					System.out.printf("\nThroughput was %.1f MB/s%n", 1e3 * bytesReceived / time);
-					return;
-				}
-			} finally {
-				ReferenceCountUtil.release(msg); // (2)
-			}
+                if (i++ % 10000 == 0)
+                    System.out.print(".");
+                if (TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - startTime) >= 10) {
+                    long time = System.nanoTime() - startTime;
+                    System.out.printf("\nThroughput was %.1f MB/s%n", 1e3 * bytesReceived / time);
+                    return;
+                }
+            } finally {
+                ReferenceCountUtil.release(msg); // (2)
+            }
 
-			final ByteBuf outMsg = ctx.alloc().buffer(bufferSize); // (2)
-			outMsg.writeBytes(payload);
+            final ByteBuf outMsg = ctx.alloc().buffer(bufferSize); // (2)
+            outMsg.writeBytes(payload);
 
-			ctx.writeAndFlush(outMsg); // (3)
+            ctx.writeAndFlush(outMsg); // (3)
 
-		}
+        }
 
-		@Override
-		public void channelReadComplete(@NotNull ChannelHandlerContext ctx) {
-			ctx.flush();
-		}
+        @Override
+        public void channelReadComplete(@Nonnull ChannelHandlerContext ctx) {
+            ctx.flush();
+        }
 
-		@Override
-		public void exceptionCaught(@NotNull ChannelHandlerContext ctx, @NotNull Throwable cause) {
-			// Close the connection when an exception is raised.
-			cause.printStackTrace();
-			ctx.close();
-		}
-	}
+        @Override
+        public void exceptionCaught(@Nonnull ChannelHandlerContext ctx, @Nonnull Throwable cause) {
+            // Close the connection when an exception is raised.
+            cause.printStackTrace();
+            ctx.close();
+        }
+    }
 }

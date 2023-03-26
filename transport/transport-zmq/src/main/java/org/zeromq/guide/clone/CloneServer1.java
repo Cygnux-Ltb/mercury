@@ -18,7 +18,7 @@ import org.zeromq.guide.util.KvSimple;
  */
 public class CloneServer1 {
 	
-	private static AtomicLong sequence = new AtomicLong();
+	private static final AtomicLong sequence = new AtomicLong();
 
 	public void run() {
 		try (ZContext ctx = new ZContext()) {

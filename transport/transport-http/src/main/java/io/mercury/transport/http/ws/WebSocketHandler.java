@@ -18,19 +18,16 @@ public interface WebSocketHandler {
     @FunctionalInterface
     interface WsPingFrameHandler {
         void handle(byte[] payload);
-
     }
 
     @FunctionalInterface
     interface WsPongFrameHandler {
         void handle(byte[] payload);
-
     }
 
     @FunctionalInterface
     interface WsBinaryFrameHandler {
         void handle(byte[] payload, boolean finalFragment, int rsv);
-
     }
 
     @FunctionalInterface
@@ -40,7 +37,6 @@ public interface WebSocketHandler {
 
     @FunctionalInterface
     interface WsThrowableHandler extends ThrowableHandler<Throwable> {
-
     }
 
 }

@@ -1,12 +1,5 @@
 package org.zeromq.guide.clone;
 
-import java.nio.ByteBuffer;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
@@ -15,6 +8,12 @@ import org.zeromq.ZMQ.Socket;
 import org.zeromq.ZThread;
 import org.zeromq.ZThread.IAttachedRunnable;
 import org.zeromq.guide.util.KvSimple;
+
+import java.nio.ByteBuffer;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
 
 /**
  * Clone server Model Two
@@ -47,7 +46,7 @@ public class CloneServer2 {
 
 				try {
 					Thread.sleep(1000);
-				} catch (InterruptedException e) {
+				} catch (InterruptedException ignored) {
 				}
 			}
 
@@ -56,7 +55,7 @@ public class CloneServer2 {
 	}
 
 	public static class StateManager implements IAttachedRunnable {
-		private static Map<String, KvSimple> kvMap = new LinkedHashMap<>();
+		private static final Map<String, KvSimple> kvMap = new LinkedHashMap<>();
 
 		@Override
 		public void run(Object[] args, ZContext ctx, Socket pipe) {
@@ -95,9 +94,7 @@ public class CloneServer2 {
 						break;
 					}
 
-					Iterator<Entry<String, KvSimple>> iter = kvMap.entrySet().iterator();
-					while (iter.hasNext()) {
-						Entry<String, KvSimple> entry = iter.next();
+					for (Entry<String, KvSimple> entry : kvMap.entrySet()) {
 						KvSimple msg = entry.getValue();
 						System.out.println("Sending message " + entry.getValue().getSequence());
 						this.sendMessage(msg, identity, snapshot);

@@ -14,8 +14,8 @@ import org.zeromq.ZThread.IAttachedRunnable;
 import org.zeromq.guide.util.KvMsg;
 
 public class Clone {
-	private ZContext ctx; // Our context wrapper
-	private Socket pipe; // Pipe through to clone agent
+	private final ZContext ctx; // Our context wrapper
+	private final Socket pipe; // Pipe through to clone agent
 
 	// .split constructor and destructor
 	// Here are the constructor and destructor for the clone class. Note that
@@ -88,10 +88,10 @@ public class Clone {
 	// The backend agent manages a set of servers, which we implement using
 	// our simple class model:
 	private static class Server {
-		private String address; // Server address
-		private int port; // Server port
-		private Socket snapshot; // Snapshot socket
-		private Socket subscriber; // Incoming updates
+		private final String address; // Server address
+		private final int port; // Server port
+		private final Socket snapshot; // Snapshot socket
+		private final Socket subscriber; // Incoming updates
 		private long expiry; // When server expires
 		private int requests; // How many snapshot requests made?
 
@@ -126,21 +126,21 @@ public class Clone {
 	private final static int STATE_ACTIVE = 2; // Getting new updates from server
 
 	private static class Agent {
-		private ZContext ctx; // Context wrapper
-		private Socket pipe; // Pipe back to application
-		private Map<String, String> kvmap; // Actual key/value table
+		private final ZContext ctx; // Context wrapper
+		private final Socket pipe; // Pipe back to application
+		private final Map<String, String> kvmap; // Actual key/value table
 		private String subtree; // Subtree specification, if any
-		private Server[] server;
+		private final Server[] server;
 		private int nbrServers; // 0 to SERVER_MAX
 		private int state; // Current state
 		private int curServer; // If active, server 0 or 1
 		private long sequence; // Last kvmsg processed
-		private Socket publisher; // Outgoing updates
+		private final Socket publisher; // Outgoing updates
 
 		protected Agent(ZContext ctx, Socket pipe) {
 			this.ctx = ctx;
 			this.pipe = pipe;
-			kvmap = new HashMap<String, String>();
+			kvmap = new HashMap<>();
 			subtree = "";
 			state = STATE_INITIAL;
 			publisher = ctx.createSocket(SocketType.PUB);
@@ -162,42 +162,44 @@ public class Clone {
 			if (command == null)
 				return false; // Interrupted
 
-			if (command.equals("SUBTREE")) {
-				subtree = msg.popString();
-			} else if (command.equals("CONNECT")) {
-				String address = msg.popString();
-				String service = msg.popString();
-				if (nbrServers < SERVER_MAX) {
-					server[nbrServers++] = new Server(ctx, address, Integer.parseInt(service), subtree);
-					// We broadcast updates to all known servers
-					publisher.connect(String.format("%s:%d", address, Integer.parseInt(service) + 2));
-				} else
-					System.out.printf("E: too many servers (max. %d)\n", SERVER_MAX);
-			} else
-			// .split set and get commands
-			// When we set a property, we push the new key-value pair onto
-			// all our connected servers:
-			if (command.equals("SET")) {
-				String key = msg.popString();
-				String value = msg.popString();
-				String ttl = msg.popString();
-				kvmap.put(key, value);
+			switch (command) {
+				case "SUBTREE" -> subtree = msg.popString();
+				case "CONNECT" -> {
+					String address = msg.popString();
+					String service = msg.popString();
+					if (nbrServers < SERVER_MAX) {
+						server[nbrServers++] = new Server(ctx, address, Integer.parseInt(service), subtree);
+						// We broadcast updates to all known servers
+						publisher.connect(String.format("%s:%d", address, Integer.parseInt(service) + 2));
+					} else
+						System.out.printf("E: too many servers (max. %d)\n", SERVER_MAX);
+				}
+				// .split set and get commands
+				// When we set a property, we push the new key-value pair onto
+				// all our connected servers:
+				case "SET" -> {
+					String key = msg.popString();
+					String value = msg.popString();
+					String ttl = msg.popString();
+					kvmap.put(key, value);
 
-				// Send key-value pair on to server
-				KvMsg kvmsg = new KvMsg(0);
-				kvmsg.setKey(key);
-				kvmsg.setUUID();
-				kvmsg.fmtBody("%s", value);
-				kvmsg.setProp("ttl", ttl);
-				kvmsg.send(publisher);
-				kvmsg.destroy();
-			} else if (command.equals("GET")) {
-				String key = msg.popString();
-				String value = kvmap.get(key);
-				if (value != null)
-					pipe.send(value);
-				else
-					pipe.send("");
+					// Send key-value pair on to server
+					KvMsg kvmsg = new KvMsg(0);
+					kvmsg.setKey(key);
+					kvmsg.setUUID();
+					kvmsg.fmtBody("%s", value);
+					kvmsg.setProp("ttl", ttl);
+					kvmsg.send(publisher);
+					kvmsg.destroy();
+				}
+				case "GET" -> {
+					String key = msg.popString();
+					String value = kvmap.get(key);
+					if (value != null)
+						pipe.send(value);
+					else
+						pipe.send("");
+				}
 			}
 			msg.destroy();
 
@@ -219,44 +221,42 @@ public class Clone {
 				int pollSize = 2;
 				Server server = self.server[self.curServer];
 				switch (self.state) {
-				case STATE_INITIAL:
-					// In this state we ask the server for a snapshot,
-					// if we have a server to talk to...
-					if (self.nbrServers > 0) {
-						System.out.printf("I: waiting for server at %s:%d...\n", server.address, server.port);
-						if (server.requests < 2) {
-							server.snapshot.sendMore("ICANHAZ?");
-							server.snapshot.send(self.subtree);
-							server.requests++;
-						}
-						server.expiry = System.currentTimeMillis() + SERVER_TTL;
-						self.state = STATE_SYNCING;
+					case STATE_INITIAL -> {
+						// In this state we ask the server for a snapshot,
+						// if we have a server to talk to...
+						if (self.nbrServers > 0) {
+							System.out.printf("I: waiting for server at %s:%d...\n", server.address, server.port);
+							if (server.requests < 2) {
+								server.snapshot.sendMore("ICANHAZ?");
+								server.snapshot.send(self.subtree);
+								server.requests++;
+							}
+							server.expiry = System.currentTimeMillis() + SERVER_TTL;
+							self.state = STATE_SYNCING;
 
+							poller.close();
+							poller = ctx.createPoller(2);
+							poller.register(pipe, Poller.POLLIN);
+							poller.register(server.snapshot, Poller.POLLIN);
+						} else
+							pollSize = 1;
+					}
+					case STATE_SYNCING -> {
+						// In this state we read from snapshot and we expect
+						// the server to respond, else we fail over.
 						poller.close();
 						poller = ctx.createPoller(2);
 						poller.register(pipe, Poller.POLLIN);
 						poller.register(server.snapshot, Poller.POLLIN);
-					} else
-						pollSize = 1;
-					break;
-
-				case STATE_SYNCING:
-					// In this state we read from snapshot and we expect
-					// the server to respond, else we fail over.
-					poller.close();
-					poller = ctx.createPoller(2);
-					poller.register(pipe, Poller.POLLIN);
-					poller.register(server.snapshot, Poller.POLLIN);
-					break;
-
-				case STATE_ACTIVE:
-					// In this state we read from subscriber and we expect
-					// the server to give hugz, else we fail over.
-					poller.close();
-					poller = ctx.createPoller(2);
-					poller.register(pipe, Poller.POLLIN);
-					poller.register(server.subscriber, Poller.POLLIN);
-					break;
+					}
+					case STATE_ACTIVE -> {
+						// In this state we read from subscriber and we expect
+						// the server to give hugz, else we fail over.
+						poller.close();
+						poller = ctx.createPoller(2);
+						poller.register(pipe, Poller.POLLIN);
+						poller.register(server.subscriber, Poller.POLLIN);
+					}
 				}
 				if (server != null) {
 					pollTimer = server.expiry - System.currentTimeMillis();
