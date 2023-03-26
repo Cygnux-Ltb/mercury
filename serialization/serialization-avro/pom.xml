@@ -153,8 +153,8 @@
             <version>1.10.0</version>
         </dependency>
 
-        <!-- General data-binding functionality for Jackson: works on core streaming
-            API -->
+        <!-- General data-binding functionality for Jackson:
+             works on core streaming API -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>

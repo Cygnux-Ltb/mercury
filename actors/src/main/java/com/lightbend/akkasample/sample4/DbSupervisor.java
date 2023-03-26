@@ -20,7 +20,8 @@ import static akka.actor.SupervisorStrategy.resume;
 
 public class DbSupervisor extends AbstractLoggingActor {
 
-    private final SupervisorStrategy strategy = new OneForOneStrategy(10, Duration.create("1 minute"), DeciderBuilder
+    private final SupervisorStrategy strategy = new OneForOneStrategy(
+            10, Duration.create("1 minute"), DeciderBuilder
             // this requires a new connection
             .match(SynchronousDatabaseConnection.ConnectionLost.class,
                     e -> restart())
@@ -58,6 +59,7 @@ public class DbSupervisor extends AbstractLoggingActor {
         }
         return receiveBuilder()
                 // just forward the db-actor query to one of the children through the router
-                .match(DbActor.GetProduct.class, request -> router.route(request, sender())).build();
+                .match(DbActor.GetProduct.class, request -> router.route(request, sender()))
+                .build();
     }
 }

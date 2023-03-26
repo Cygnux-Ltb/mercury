@@ -21,7 +21,7 @@ import java.util.function.IntFunction;
  * mapped to <tt>addLast</tt>.
  *
  * <p>
- * Beware that, unlike in most collections, the <tt>size</tt> method is <em>NOT</em> a constant-time operation. Because of the asynchronous nature of these deques, determining the current number of elements requires a traversal of the elements.
+ * Beware that, unlike in most collections, the <tt>size</tt> method is <em>NOT</em> a constant-time operation. Because of the asynchronous nature of these dequeue, determining the current number of elements requires a traversal of the elements.
  *
  * <p>
  * This class is <tt>Serializable</tt>, but relies on default serialization mechanisms. Usually, it is a better idea for any serializable class using a <tt>ConcurrentLinkedDeque</tt> to instead serialize a snapshot of the elements obtained by method
@@ -223,7 +223,7 @@ public class ConcurrentDoublyLinkedList<E> extends AbstractCollection<E>
      * Returns the number of elements in this deque. If this deque contains more than <tt>Integer.MAX_VALUE</tt> elements, it returns <tt>Integer.MAX_VALUE</tt>.
      *
      * <p>
-     * Beware that, unlike in most collections, this method is <em>NOT</em> a constant-time operation. Because of the asynchronous nature of these deques, determining the current number of elements requires traversing them all to count them.
+     * Beware that, unlike in most collections, this method is <em>NOT</em> a constant-time operation. Because of the asynchronous nature of these dequeue, determining the current number of elements requires traversing them all to count them.
      * Additionally, it is possible for the size to change during execution of this method, in which case the returned result will be inaccurate. Thus, this method is typically not very useful in concurrent applications.
      *
      * @return the number of elements in this deque.

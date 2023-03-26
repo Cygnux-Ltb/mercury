@@ -13,6 +13,7 @@
 
     <modules>
         <module>storage-couchdb</module>
+        <module>storage-redis</module>
     </modules>
 
     <properties>

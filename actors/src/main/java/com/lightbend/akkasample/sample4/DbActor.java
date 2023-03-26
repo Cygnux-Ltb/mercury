@@ -19,16 +19,19 @@ public class DbActor extends AbstractActor {
     }
 
     // protocol
-    public record GetProduct(long id) {
+    public record GetProduct(
+            long id) {
     }
 
-    public record ProductResult(Optional<Product> product) {
+    public record ProductResult(
+            Optional<Product> product) {
     }
 
     @Override
     public Receive createReceive() {
-        return receiveBuilder().match(GetProduct.class,
-                query -> getProduct(query.id)).build();
+        return receiveBuilder()
+                .match(GetProduct.class, query -> getProduct(query.id))
+                .build();
     }
 
 }

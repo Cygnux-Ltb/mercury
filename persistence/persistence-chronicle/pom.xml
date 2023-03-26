@@ -15,15 +15,14 @@
 
     <properties>
         <!-- v chronicle storage basic v -->
-        <chronicle-core.version>2.23.35</chronicle-core.version>
-        <chronicle-bytes.version>2.23.31</chronicle-bytes.version>
+        <chronicle-core.version>2.23.36</chronicle-core.version>
+        <chronicle-bytes.version>2.23.33</chronicle-bytes.version>
         <chronicle-threads.version>2.23.25</chronicle-threads.version>
         <chronicle-wire.version>2.23.39</chronicle-wire.version>
-        <chronicle-analytics.version>2.23.2</chronicle-analytics.version>
         <!-- ^ chronicle storage basic ^ -->
         <chronicle-values.version>2.23.3</chronicle-values.version>
         <chronicle-algorithms.version>2.23.4</chronicle-algorithms.version>
-        <chronicle-queue.version>5.23.35</chronicle-queue.version>
+        <chronicle-queue.version>5.23.37</chronicle-queue.version>
         <chronicle-map.version>3.23.5</chronicle-map.version>
     </properties>
 
@@ -45,6 +44,12 @@
             <groupId>io.mercury</groupId>
             <artifactId>serialization-avro</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jackson-databind</artifactId>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- ####### chronicle-core ####### -->
@@ -118,13 +123,6 @@
                     <groupId>org.slf4j</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-
-        <!-- Chronicle-Analytics -->
-        <dependency>
-            <groupId>net.openhft</groupId>
-            <artifactId>chronicle-analytics</artifactId>
-            <version>${chronicle-analytics.version}</version>
         </dependency>
 
         <!-- ####### chronicle-values ####### -->

@@ -12,7 +12,6 @@ public class PrintQueueMain {
 	public static void main(String[] args) throws FileNotFoundException {
 
 		DumpMain.dump("queue");
-		// DumpQueueMain.dump("queue");
 
 	}
 }

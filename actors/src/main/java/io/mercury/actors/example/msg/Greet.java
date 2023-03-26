@@ -5,5 +5,7 @@ import akka.actor.typed.ActorRef;
 /**
  * @author Akka official
  */
-public record Greet(String whom, ActorRef<Greeted> replyTo) {
+public record Greet(
+        String whom,
+        ActorRef<Greeted> replyTo) {
 }

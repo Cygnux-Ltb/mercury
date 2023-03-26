@@ -9,16 +9,19 @@ import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
  */
 public class OutputMain {
 
-	public static void main(String[] args) throws InterruptedException {
-		String path = "queue-fr";
-		RollingChronicleQueue queue = SingleChronicleQueueBuilder.binary(path).build();
-		MessageConsumer messagePrinter = System.out::println;
-		MethodReader methodReader = queue.createTailer().methodReader(messagePrinter);
+    public static void main(String[] args) throws InterruptedException {
+        String path = "queue-fr";
+        try (RollingChronicleQueue queue = SingleChronicleQueueBuilder
+                .binary(path).build()) {
+            MessageConsumer messagePrinter = System.out::println;
+            MethodReader methodReader = queue.createTailer().methodReader(messagePrinter);
+            while (true) {
+                if (!methodReader.readOne())
+                    Thread.sleep(10);
+            }
+        }
 
-		while (true) {
-			if (!methodReader.readOne())
-				Thread.sleep(10);
-		}
-	}
+
+    }
 
 }

@@ -45,10 +45,10 @@
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.source>17</maven.compiler.source>
         <!-- Common library version -->
-        <slf4j.version>2.0.6</slf4j.version>
+        <slf4j.version>1.7.36</slf4j.version>
         <junit.version>4.13.2</junit.version>
         <jupiter.version>5.9.2</jupiter.version>
-        <netty.version>4.1.89.Final</netty.version>
+        <netty.version>4.1.90.Final</netty.version>
         <jackson.version>2.14.2</jackson.version>
     </properties>
 
