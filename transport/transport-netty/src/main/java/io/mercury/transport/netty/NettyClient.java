@@ -1,7 +1,5 @@
 package io.mercury.transport.netty;
 
-import org.slf4j.Logger;
-
 import io.mercury.common.log.Log4j2LoggerFactory;
 import io.mercury.transport.api.TransportClient;
 import io.mercury.transport.netty.configurator.NettyConfigurator;
@@ -11,6 +9,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import org.slf4j.Logger;
 
 public class NettyClient extends NettyTransport implements TransportClient {
 

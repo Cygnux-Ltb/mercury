@@ -17,7 +17,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
  */
 public class NettyServer {
 
-    //设置服务端端口
+    // 设置服务端端口
     private static final int port = 6789;
 
     // 通过nio方式来接收连接和处理连接
@@ -33,14 +33,14 @@ public class NettyServer {
         try {
             BOOTSTRAP.group(GROUP);
             BOOTSTRAP.channel(NioServerSocketChannel.class);
-            BOOTSTRAP.childHandler(new NettyServerFilter()); //设置过滤器
+            BOOTSTRAP.childHandler(new NettyServerFilter()); // 设置过滤器
             // 服务器绑定端口监听
             ChannelFuture f = BOOTSTRAP.bind(port).sync();
             System.out.println("服务端启动成功,端口是:" + port);
             // 监听服务器关闭监听
             f.channel().closeFuture().sync();
         } finally {
-            GROUP.shutdownGracefully(); //关闭EventLoopGroup，释放掉所有资源包括创建的线程
+            GROUP.shutdownGracefully(); // 关闭EventLoopGroup, 释放掉所有资源包括创建的线程
         }
     }
 }

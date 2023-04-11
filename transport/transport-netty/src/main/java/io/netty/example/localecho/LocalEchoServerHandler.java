@@ -20,20 +20,21 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 
 public class LocalEchoServerHandler extends ChannelInboundHandlerAdapter {
 
-	@Override
-	public void channelRead(ChannelHandlerContext ctx, Object msg) {
-		// Write back as received
-		ctx.write(msg);
-	}
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        // Write back as received
+        ctx.write(msg);
+    }
 
-	@Override
-	public void channelReadComplete(ChannelHandlerContext ctx) {
-		ctx.flush();
-	}
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) {
+        ctx.flush();
+    }
 
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-		cause.printStackTrace();
-		ctx.close();
-	}
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        cause.printStackTrace();
+        ctx.close();
+    }
+
 }

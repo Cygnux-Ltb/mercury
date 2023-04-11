@@ -15,10 +15,6 @@
 
 package io.netty.example.http2.helloworld.server;
 
-import static io.netty.buffer.Unpooled.copiedBuffer;
-import static io.netty.buffer.Unpooled.unreleasableBuffer;
-import static io.netty.handler.codec.http.HttpResponseStatus.OK;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
@@ -36,6 +32,10 @@ import io.netty.handler.codec.http2.Http2FrameListener;
 import io.netty.handler.codec.http2.Http2Headers;
 import io.netty.handler.codec.http2.Http2Settings;
 import io.netty.util.CharsetUtil;
+
+import static io.netty.buffer.Unpooled.copiedBuffer;
+import static io.netty.buffer.Unpooled.unreleasableBuffer;
+import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 
 /**
  * A simple handler that responds with the message "Hello World!".
@@ -67,10 +67,9 @@ public final class HelloWorldHttp2Handler extends Http2ConnectionHandler impleme
      */
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        if (evt instanceof HttpServerUpgradeHandler.UpgradeEvent) {
-            HttpServerUpgradeHandler.UpgradeEvent upgradeEvent =
-                    (HttpServerUpgradeHandler.UpgradeEvent) evt;
-            onHeadersRead(ctx, 1, http1HeadersToHttp2Headers(upgradeEvent.upgradeRequest()), 0 , true);
+        if (evt instanceof HttpServerUpgradeHandler.UpgradeEvent upgradeEvent) {
+            onHeadersRead(ctx, 1, http1HeadersToHttp2Headers(upgradeEvent.upgradeRequest()),
+                    0, true);
         }
         super.userEventTriggered(ctx, evt);
     }

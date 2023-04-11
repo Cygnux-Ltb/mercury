@@ -15,8 +15,6 @@
  */
 package io.netty.example.stomp.websocket;
 
-import java.util.List;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.CompositeByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -29,15 +27,16 @@ import io.netty.handler.codec.stomp.StompHeadersSubframe;
 import io.netty.handler.codec.stomp.StompSubframe;
 import io.netty.handler.codec.stomp.StompSubframeEncoder;
 
+import java.util.List;
+
 public class StompWebSocketFrameEncoder extends StompSubframeEncoder {
 
     @Override
     public void encode(ChannelHandlerContext ctx, StompSubframe msg, List<Object> out) throws Exception {
         super.encode(ctx, msg, out);
 
-        if (out.isEmpty()) {
+        if (out.isEmpty())
             return;
-        }
 
         final WebSocketFrame webSocketFrame;
         if (msg instanceof StompFrame) {

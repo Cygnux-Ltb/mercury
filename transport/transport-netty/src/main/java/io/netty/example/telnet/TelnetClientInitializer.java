@@ -29,31 +29,31 @@ import io.netty.handler.ssl.SslContext;
  */
 public class TelnetClientInitializer extends ChannelInitializer<SocketChannel> {
 
-	private static final StringDecoder DECODER = new StringDecoder();
-	private static final StringEncoder ENCODER = new StringEncoder();
+    private static final StringDecoder DECODER = new StringDecoder();
+    private static final StringEncoder ENCODER = new StringEncoder();
 
-	private static final TelnetClientHandler CLIENT_HANDLER = new TelnetClientHandler();
+    private static final TelnetClientHandler CLIENT_HANDLER = new TelnetClientHandler();
 
-	private final SslContext sslCtx;
+    private final SslContext sslCtx;
 
-	public TelnetClientInitializer(SslContext sslCtx) {
-		this.sslCtx = sslCtx;
-	}
+    public TelnetClientInitializer(SslContext sslCtx) {
+        this.sslCtx = sslCtx;
+    }
 
-	@Override
-	public void initChannel(SocketChannel ch) {
-		ChannelPipeline pipeline = ch.pipeline();
+    @Override
+    public void initChannel(SocketChannel ch) {
+        ChannelPipeline pipeline = ch.pipeline();
 
-		if (sslCtx != null) {
-			pipeline.addLast(sslCtx.newHandler(ch.alloc(), TelnetClient.HOST, TelnetClient.PORT));
-		}
+        if (sslCtx != null) {
+            pipeline.addLast(sslCtx.newHandler(ch.alloc(), TelnetClient.HOST, TelnetClient.PORT));
+        }
 
-		// Add the text line codec combination first,
-		pipeline.addLast(new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
-		pipeline.addLast(DECODER);
-		pipeline.addLast(ENCODER);
+        // Add the text line codec combination first,
+        pipeline.addLast(new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
+        pipeline.addLast(DECODER);
+        pipeline.addLast(ENCODER);
 
-		// and then business logic.
-		pipeline.addLast(CLIENT_HANDLER);
-	}
+        // and then business logic.
+        pipeline.addLast(CLIENT_HANDLER);
+    }
 }

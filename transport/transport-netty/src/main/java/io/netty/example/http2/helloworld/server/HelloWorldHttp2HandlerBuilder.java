@@ -16,16 +16,16 @@
 
 package io.netty.example.http2.helloworld.server;
 
-import static io.netty.handler.logging.LogLevel.INFO;
-
 import io.netty.handler.codec.http2.AbstractHttp2ConnectionHandlerBuilder;
 import io.netty.handler.codec.http2.Http2ConnectionDecoder;
 import io.netty.handler.codec.http2.Http2ConnectionEncoder;
 import io.netty.handler.codec.http2.Http2FrameLogger;
 import io.netty.handler.codec.http2.Http2Settings;
 
-public final class HelloWorldHttp2HandlerBuilder
-        extends AbstractHttp2ConnectionHandlerBuilder<HelloWorldHttp2Handler, HelloWorldHttp2HandlerBuilder> {
+import static io.netty.handler.logging.LogLevel.INFO;
+
+public final class HelloWorldHttp2HandlerBuilder extends
+        AbstractHttp2ConnectionHandlerBuilder<HelloWorldHttp2Handler, HelloWorldHttp2HandlerBuilder> {
 
     private static final Http2FrameLogger logger = new Http2FrameLogger(INFO, HelloWorldHttp2Handler.class);
 

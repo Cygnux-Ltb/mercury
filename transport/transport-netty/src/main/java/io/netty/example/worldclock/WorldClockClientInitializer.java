@@ -26,25 +26,23 @@ import io.netty.handler.ssl.SslContext;
 
 public class WorldClockClientInitializer extends ChannelInitializer<SocketChannel> {
 
-	private final SslContext sslCtx;
+    private final SslContext sslCtx;
 
-	public WorldClockClientInitializer(SslContext sslCtx) {
-		this.sslCtx = sslCtx;
-	}
+    public WorldClockClientInitializer(SslContext sslCtx) {
+        this.sslCtx = sslCtx;
+    }
 
-	@Override
-	public void initChannel(SocketChannel ch) {
-		ChannelPipeline p = ch.pipeline();
-		if (sslCtx != null) {
-			p.addLast(sslCtx.newHandler(ch.alloc(), WorldClockClient.HOST, WorldClockClient.PORT));
-		}
+    @Override
+    public void initChannel(SocketChannel ch) {
+        ChannelPipeline pipeline = ch.pipeline();
+        if (sslCtx != null) {
+            pipeline.addLast(sslCtx.newHandler(ch.alloc(), WorldClockClient.HOST, WorldClockClient.PORT));
+        }
 
-		p.addLast(new ProtobufVarint32FrameDecoder());
-		p.addLast(new ProtobufDecoder(WorldClockProtocol.LocalTimes.getDefaultInstance()));
-
-		p.addLast(new ProtobufVarint32LengthFieldPrepender());
-		p.addLast(new ProtobufEncoder());
-
-		p.addLast(new WorldClockClientHandler());
-	}
+        pipeline.addLast(new ProtobufVarint32FrameDecoder())
+                .addLast(new ProtobufDecoder(WorldClockProtocol.LocalTimes.getDefaultInstance()))
+                .addLast(new ProtobufVarint32LengthFieldPrepender())
+                .addLast(new ProtobufEncoder())
+                .addLast(new WorldClockClientHandler());
+    }
 }

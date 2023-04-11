@@ -34,7 +34,9 @@ public class NettyClient {
     }
 
     /**
-     * Netty创建全部都是实现自AbstractBootstrap。 客户端的是Bootstrap，服务端的则是 ServerBootstrap。
+     * Netty创建全部都是实现自AbstractBootstrap.
+     * 客户端使用: Bootstrap,
+     * 服务端使用: ServerBootstrap.
      **/
     public void run() {
         doConnect(new Bootstrap(), group);

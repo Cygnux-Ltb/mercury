@@ -45,7 +45,6 @@ public class TimeServer {
                     /*
                      * 指定使用 NioServerSocketChannel 类来举例说明一个新的 Channel 如何接收进来的连接.
                      */
-
                     .childHandler(new ChannelInitializer<SocketChannel>() { // (*)
                         /*
                          * 这里的事件处理类经常会被用来处理一个最近的已经接收的 Channel.
@@ -57,7 +56,6 @@ public class TimeServer {
                          *
                          * 当你的程序变的复杂时，可能你会增加更多的处理类到 pipeline 上, 然后提取这些匿名类到最顶层的类上.
                          */
-
                         @Override
                         public void initChannel(SocketChannel ch) {
                             ch.pipeline().addLast(new TimeServerHandler());
@@ -78,14 +76,12 @@ public class TimeServer {
              *
              * childOption() 是提供给由父管道 ServerChannel 接收到的连接, 在这个例子中也是 NioServerSocketChannel.
              */
-
             ChannelFuture future = bootstrap.bind(port).sync(); // 绑定端口, 开始接收进来的连接 (*)
             /*
              * 绑定端口然后启动服务.
              *
              * 可以多次调用 bind() (基于不同绑定地址).
              */
-
             future.channel().closeFuture().sync(); // (*)
             /*
              * 等待服务器 socket 关闭.
@@ -161,6 +157,7 @@ public class TimeServer {
             cause.printStackTrace();
             ctx.close();
         }
+
     }
 
     public static void main(String[] args) throws Exception {

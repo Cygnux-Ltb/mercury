@@ -31,7 +31,7 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("建立连接时：" + new Date());
+        System.out.println("建立连接时: " + new Date());
         ctx.fireChannelActive();
     }
 
@@ -40,18 +40,19 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("关闭连接时：" + new Date());
+        System.out.println("关闭连接时: " + new Date());
         final EventLoop eventLoop = ctx.channel().eventLoop();
         NettyClient.nettyClient.doConnect(new Bootstrap(), eventLoop);
         super.channelInactive(ctx);
     }
 
     /**
-     * 心跳请求处理 每4秒发送一次心跳请求;
+     * 心跳请求处理
+     * 每4秒发送一次心跳请求;
      */
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object obj) throws Exception {
-        System.out.println("循环请求的时间：" + new Date() + "，次数" + fcount);
+        System.out.println("循环请求的时间: " + new Date() + ", 次数" + fcount);
         if (obj instanceof IdleStateEvent event) {
             if (IdleState.WRITER_IDLE.equals(event.state())) { // 如果写通道处于空闲状态,就发送心跳命令
                 UserMsg.Builder userState = UserMsg.newBuilder().setState(2);
@@ -78,7 +79,9 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
             // 进行相应的业务处理。。。
             // 这里就从简了，只是打印而已
             System.out.println(
-                    "客户端接受到的用户信息。编号:" + userMsg.getId() + ",姓名:" + userMsg.getName() + ",年龄:" + userMsg.getAge());
+                    "客户端接受到的用户信息. 编号:" + userMsg.getId()
+                            + ",姓名:" + userMsg.getName()
+                            + ",年龄:" + userMsg.getAge());
 
             // 这里返回一个已经接受到数据的状态
             UserMsg.Builder userState = UserMsg.newBuilder().setState(1);

@@ -16,12 +16,6 @@
 
 package io.netty.example.http2.tiles;
 
-import static io.netty.handler.codec.http2.Http2SecurityUtil.CIPHERS;
-
-import java.security.cert.CertificateException;
-
-import javax.net.ssl.SSLException;
-
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -40,8 +34,13 @@ import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SupportedCipherSuiteFilter;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 
+import javax.net.ssl.SSLException;
+import java.security.cert.CertificateException;
+
+import static io.netty.handler.codec.http2.Http2SecurityUtil.CIPHERS;
+
 /**
- * Demonstrates an Http2 server using Netty to display a bunch of images and
+ * Demonstrates a Http2 server using Netty to display a bunch of images and
  * simulate latency. It is a Netty version of the <a href="https://http2.golang.org/gophertiles?latency=0">
  * Go lang HTTP2 tiles demo</a>.
  */
@@ -61,7 +60,7 @@ public class Http2Server {
         b.option(ChannelOption.SO_BACKLOG, 1024);
         b.group(group).channel(NioServerSocketChannel.class).childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
-            protected void initChannel(SocketChannel ch) throws Exception {
+            protected void initChannel(SocketChannel ch) {
                 ch.pipeline().addLast(sslCtx.newHandler(ch.alloc()), new Http2OrHttpHandler());
             }
         });
@@ -82,7 +81,7 @@ public class Http2Server {
                 ApplicationProtocolNames.HTTP_1_1);
 
         return SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey(), null)
-                                .ciphers(CIPHERS, SupportedCipherSuiteFilter.INSTANCE)
-                                .applicationProtocolConfig(apn).build();
+                .ciphers(CIPHERS, SupportedCipherSuiteFilter.INSTANCE)
+                .applicationProtocolConfig(apn).build();
     }
 }

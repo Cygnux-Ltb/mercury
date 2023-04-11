@@ -16,17 +16,6 @@
 
 package io.netty.example.ocsp;
 
-import java.math.BigInteger;
-import java.security.cert.Certificate;
-
-import javax.net.ssl.SSLSession;
-
-import org.bouncycastle.asn1.ocsp.OCSPResponseStatus;
-import org.bouncycastle.cert.ocsp.BasicOCSPResp;
-import org.bouncycastle.cert.ocsp.CertificateStatus;
-import org.bouncycastle.cert.ocsp.OCSPResp;
-import org.bouncycastle.cert.ocsp.SingleResp;
-
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -56,6 +45,15 @@ import io.netty.handler.ssl.SslProvider;
 import io.netty.handler.ssl.ocsp.OcspClientHandler;
 import io.netty.util.ReferenceCountUtil;
 import io.netty.util.concurrent.Promise;
+import org.bouncycastle.asn1.ocsp.OCSPResponseStatus;
+import org.bouncycastle.cert.ocsp.BasicOCSPResp;
+import org.bouncycastle.cert.ocsp.CertificateStatus;
+import org.bouncycastle.cert.ocsp.OCSPResp;
+import org.bouncycastle.cert.ocsp.SingleResp;
+
+import javax.net.ssl.SSLSession;
+import java.math.BigInteger;
+import java.security.cert.Certificate;
 
 /**
  * This is a very simple example for an HTTPS client that uses OCSP stapling.
@@ -64,175 +62,176 @@ import io.netty.util.concurrent.Promise;
  */
 public class OcspClientExample {
 
-	public static void main(String[] args) throws Exception {
-		if (!OpenSsl.isAvailable()) {
-			throw new IllegalStateException("OpenSSL is not available!");
-		}
+    public static void main(String[] args) throws Exception {
+        if (!OpenSsl.isAvailable()) {
+            throw new IllegalStateException("OpenSSL is not available!");
+        }
 
-		if (!OpenSsl.isOcspSupported()) {
-			throw new IllegalStateException("OCSP is not supported!");
-		}
+        if (!OpenSsl.isOcspSupported()) {
+            throw new IllegalStateException("OCSP is not supported!");
+        }
 
-		// Using Wikipedia as an example. I'd rather use Netty's own website
-		// but the server (Cloudflare) doesn't support OCSP stapling. A few
-		// other examples could be Microsoft or Squarespace. Use OpenSSL's
-		// CLI client to assess if a server supports OCSP stapling. E.g.:
-		//
-		// openssl s_client -tlsextdebug -status -connect www.squarespace.com:443
-		//
-		String host = "www.wikipedia.org";
+        // Using Wikipedia as an example. I'd rather use Netty's own website
+        // but the server (Cloudflare) doesn't support OCSP stapling. A few
+        // other examples could be Microsoft or Squarespace. Use OpenSSL 's
+        // CLI client to assess if a server supports OCSP stapling. E.g.:
+        //
+        // openssl s_client -tlsextdebug -status -connect www.squarespace.com:443
+        //
+        String host = "www.wikipedia.org";
 
-		ReferenceCountedOpenSslContext context = (ReferenceCountedOpenSslContext) SslContextBuilder.forClient()
-				.sslProvider(SslProvider.OPENSSL).enableOcsp(true).build();
+        ReferenceCountedOpenSslContext context = (ReferenceCountedOpenSslContext) SslContextBuilder.forClient()
+                .sslProvider(SslProvider.OPENSSL).enableOcsp(true).build();
 
-		try {
-			EventLoopGroup group = new NioEventLoopGroup();
-			try {
-				Promise<FullHttpResponse> promise = group.next().newPromise();
+        try {
+            EventLoopGroup group = new NioEventLoopGroup();
+            try {
+                Promise<FullHttpResponse> promise = group.next().newPromise();
 
-				Bootstrap bootstrap = new Bootstrap().channel(NioSocketChannel.class).group(group)
-						.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5 * 1000)
-						.handler(newClientHandler(context, host, promise));
+                Bootstrap bootstrap = new Bootstrap().channel(NioSocketChannel.class).group(group)
+                        .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5 * 1000)
+                        .handler(newClientHandler(context, host, promise));
 
-				Channel channel = bootstrap.connect(host, 443).syncUninterruptibly().channel();
+                Channel channel = bootstrap.connect(host, 443).syncUninterruptibly().channel();
 
-				try {
-					FullHttpResponse response = promise.get();
-					ReferenceCountUtil.release(response);
-				} finally {
-					channel.close();
-				}
-			} finally {
-				group.shutdownGracefully();
-			}
-		} finally {
-			context.release();
-		}
-	}
+                try {
+                    FullHttpResponse response = promise.get();
+                    ReferenceCountUtil.release(response);
+                } finally {
+                    channel.close();
+                }
+            } finally {
+                group.shutdownGracefully();
+            }
+        } finally {
+            context.release();
+        }
+    }
 
-	private static ChannelInitializer<Channel> newClientHandler(final ReferenceCountedOpenSslContext context,
-			final String host, final Promise<FullHttpResponse> promise) {
+    private static ChannelInitializer<Channel> newClientHandler(final ReferenceCountedOpenSslContext context,
+                                                                final String host,
+                                                                final Promise<FullHttpResponse> promise) {
 
-		return new ChannelInitializer<Channel>() {
-			@Override
-			protected void initChannel(Channel ch) throws Exception {
-				SslHandler sslHandler = context.newHandler(ch.alloc());
-				ReferenceCountedOpenSslEngine engine = (ReferenceCountedOpenSslEngine) sslHandler.engine();
+        return new ChannelInitializer<>() {
+            @Override
+            protected void initChannel(Channel ch) {
+                SslHandler sslHandler = context.newHandler(ch.alloc());
+                ReferenceCountedOpenSslEngine engine = (ReferenceCountedOpenSslEngine) sslHandler.engine();
 
-				ChannelPipeline pipeline = ch.pipeline();
-				pipeline.addLast(sslHandler);
-				pipeline.addLast(new ExampleOcspClientHandler(engine));
+                ChannelPipeline pipeline = ch.pipeline();
+                pipeline.addLast(sslHandler);
+                pipeline.addLast(new ExampleOcspClientHandler(engine));
 
-				pipeline.addLast(new HttpClientCodec());
-				pipeline.addLast(new HttpObjectAggregator(1024 * 1024));
-				pipeline.addLast(new HttpClientHandler(host, promise));
-			}
+                pipeline.addLast(new HttpClientCodec());
+                pipeline.addLast(new HttpObjectAggregator(1024 * 1024));
+                pipeline.addLast(new HttpClientHandler(host, promise));
+            }
 
-			@Override
-			public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-				if (!promise.isDone()) {
-					promise.tryFailure(new IllegalStateException("Connection closed and Promise was not done."));
-				}
-				ctx.fireChannelInactive();
-			}
+            @Override
+            public void channelInactive(ChannelHandlerContext ctx) {
+                if (!promise.isDone()) {
+                    promise.tryFailure(new IllegalStateException("Connection closed and Promise was not done."));
+                }
+                ctx.fireChannelInactive();
+            }
 
-			@Override
-			public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-				if (!promise.tryFailure(cause)) {
-					ctx.fireExceptionCaught(cause);
-				}
-			}
-		};
-	}
+            @Override
+            public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+                if (!promise.tryFailure(cause)) {
+                    ctx.fireExceptionCaught(cause);
+                }
+            }
+        };
+    }
 
-	private static class HttpClientHandler extends ChannelInboundHandlerAdapter {
+    private static class HttpClientHandler extends ChannelInboundHandlerAdapter {
 
-		private final String host;
+        private final String host;
 
-		private final Promise<FullHttpResponse> promise;
+        private final Promise<FullHttpResponse> promise;
 
-		HttpClientHandler(String host, Promise<FullHttpResponse> promise) {
-			this.host = host;
-			this.promise = promise;
-		}
+        HttpClientHandler(String host, Promise<FullHttpResponse> promise) {
+            this.host = host;
+            this.promise = promise;
+        }
 
-		@Override
-		public void channelActive(ChannelHandlerContext ctx) throws Exception {
-			FullHttpRequest request = new DefaultFullHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.GET, "/",
-					Unpooled.EMPTY_BUFFER);
-			request.headers().set(HttpHeaderNames.HOST, host);
-			request.headers().set(HttpHeaderNames.USER_AGENT, "netty-ocsp-example/1.0");
+        @Override
+        public void channelActive(ChannelHandlerContext ctx) {
+            FullHttpRequest request = new DefaultFullHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.GET, "/",
+                    Unpooled.EMPTY_BUFFER);
+            request.headers().set(HttpHeaderNames.HOST, host);
+            request.headers().set(HttpHeaderNames.USER_AGENT, "netty-ocsp-example/1.0");
 
-			ctx.writeAndFlush(request).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+            ctx.writeAndFlush(request).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
 
-			ctx.fireChannelActive();
-		}
+            ctx.fireChannelActive();
+        }
 
-		@Override
-		public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-			if (!promise.isDone()) {
-				promise.tryFailure(new IllegalStateException("Connection closed and Promise was not done."));
-			}
-			ctx.fireChannelInactive();
-		}
+        @Override
+        public void channelInactive(ChannelHandlerContext ctx) {
+            if (!promise.isDone()) {
+                promise.tryFailure(new IllegalStateException("Connection closed and Promise was not done."));
+            }
+            ctx.fireChannelInactive();
+        }
 
-		@Override
-		public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-			if (msg instanceof FullHttpResponse) {
-				if (!promise.trySuccess((FullHttpResponse) msg)) {
-					ReferenceCountUtil.release(msg);
-				}
-				return;
-			}
+        @Override
+        public void channelRead(ChannelHandlerContext ctx, Object msg) {
+            if (msg instanceof FullHttpResponse) {
+                if (!promise.trySuccess((FullHttpResponse) msg)) {
+                    ReferenceCountUtil.release(msg);
+                }
+                return;
+            }
 
-			ctx.fireChannelRead(msg);
-		}
+            ctx.fireChannelRead(msg);
+        }
 
-		@Override
-		public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-			if (!promise.tryFailure(cause)) {
-				ctx.fireExceptionCaught(cause);
-			}
-		}
-	}
+        @Override
+        public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+            if (!promise.tryFailure(cause)) {
+                ctx.fireExceptionCaught(cause);
+            }
+        }
+    }
 
-	private static class ExampleOcspClientHandler extends OcspClientHandler {
+    private static class ExampleOcspClientHandler extends OcspClientHandler {
 
-		ExampleOcspClientHandler(ReferenceCountedOpenSslEngine engine) {
-			super(engine);
-		}
+        ExampleOcspClientHandler(ReferenceCountedOpenSslEngine engine) {
+            super(engine);
+        }
 
-		@Override
-		protected boolean verify(ChannelHandlerContext ctx, ReferenceCountedOpenSslEngine engine) throws Exception {
-			byte[] staple = engine.getOcspResponse();
-			if (staple == null) {
-				throw new IllegalStateException("Server didn't provide an OCSP staple!");
-			}
+        @Override
+        protected boolean verify(ChannelHandlerContext ctx, ReferenceCountedOpenSslEngine engine) throws Exception {
+            byte[] staple = engine.getOcspResponse();
+            if (staple == null) {
+                throw new IllegalStateException("Server didn't provide an OCSP staple!");
+            }
 
-			OCSPResp response = new OCSPResp(staple);
-			if (response.getStatus() != OCSPResponseStatus.SUCCESSFUL) {
-				return false;
-			}
+            OCSPResp response = new OCSPResp(staple);
+            if (response.getStatus() != OCSPResponseStatus.SUCCESSFUL) {
+                return false;
+            }
 
-			SSLSession session = engine.getSession();
-			Certificate[] chain = session.getPeerCertificates();
-			BigInteger certSerial = ((java.security.cert.X509Certificate) chain[0]).getSerialNumber();
+            SSLSession session = engine.getSession();
+            Certificate[] chain = session.getPeerCertificates();
+            BigInteger certSerial = ((java.security.cert.X509Certificate) chain[0]).getSerialNumber();
 
-			BasicOCSPResp basicResponse = (BasicOCSPResp) response.getResponseObject();
-			SingleResp first = basicResponse.getResponses()[0];
+            BasicOCSPResp basicResponse = (BasicOCSPResp) response.getResponseObject();
+            SingleResp first = basicResponse.getResponses()[0];
 
-			// ATTENTION: CertificateStatus.GOOD is actually a null value! Do not use
-			// equals() or you'll NPE!
-			CertificateStatus status = first.getCertStatus();
-			BigInteger ocspSerial = first.getCertID().getSerialNumber();
-			String message = new StringBuilder().append("OCSP status of ").append(ctx.channel().remoteAddress())
-					.append("\n  Status: ").append(status == CertificateStatus.GOOD ? "Good" : status)
-					.append("\n  This Update: ").append(first.getThisUpdate()).append("\n  Next Update: ")
-					.append(first.getNextUpdate()).append("\n  Cert Serial: ").append(certSerial)
-					.append("\n  OCSP Serial: ").append(ocspSerial).toString();
-			System.out.println(message);
+            // ATTENTION: CertificateStatus.GOOD is actually a null value! Do not use
+            // equals() or you'll NPE!
+            CertificateStatus status = first.getCertStatus();
+            BigInteger ocspSerial = first.getCertID().getSerialNumber();
+            String message = "OCSP status of " + ctx.channel().remoteAddress() +
+                    "\n  Status: " + (status == CertificateStatus.GOOD ? "Good" : status) +
+                    "\n  This Update: " + first.getThisUpdate() + "\n  Next Update: " +
+                    first.getNextUpdate() + "\n  Cert Serial: " + certSerial +
+                    "\n  OCSP Serial: " + ocspSerial;
+            System.out.println(message);
 
-			return status == CertificateStatus.GOOD && certSerial.equals(ocspSerial);
-		}
-	}
+            return status == CertificateStatus.GOOD && certSerial.equals(ocspSerial);
+        }
+    }
 }
