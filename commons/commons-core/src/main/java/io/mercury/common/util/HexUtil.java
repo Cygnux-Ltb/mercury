@@ -17,9 +17,9 @@
 
 package io.mercury.common.util;
 
-import javax.annotation.Nonnull;
-
 import io.mercury.common.lang.Asserter;
+
+import javax.annotation.Nonnull;
 
 /**
  * Utility class for encoding and decoding objects to a hex string.
@@ -207,8 +207,8 @@ public final class HexUtil {
             case 'D', 'd' -> 13;
             case 'E', 'e' -> 14;
             case 'F', 'f' -> 15;
-            default ->
-                    throw new IllegalArgumentException("The character [" + c + "] does not represent a valid hex digit");
+            default -> throw new IllegalArgumentException(
+                    "The character [" + c + "] does not represent a valid hex digit");
         };
     }
 

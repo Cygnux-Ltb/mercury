@@ -14,10 +14,10 @@ public final class Asserter {
     }
 
     /**
-     * @param i
-     * @param min
-     * @param objName
-     * @return
+     * @param i       int
+     * @param min     int
+     * @param objName String
+     * @return int
      * @throws IllegalArgumentException exception
      */
     public static int greaterThan(int i, int min, String objName)
@@ -28,10 +28,10 @@ public final class Asserter {
     }
 
     /**
-     * @param l
-     * @param min
-     * @param objName
-     * @return
+     * @param l       long
+     * @param min     long
+     * @param objName String
+     * @return long
      * @throws IllegalArgumentException exception
      */
     public static long greaterThan(long l, long min, String objName)
@@ -42,10 +42,10 @@ public final class Asserter {
     }
 
     /**
-     * @param i
-     * @param min
-     * @param objName
-     * @return
+     * @param i       int
+     * @param min     int
+     * @param objName String
+     * @return int
      * @throws IllegalArgumentException exception
      */
     public static int greaterOrEqualThan(int i, int min, String objName)
@@ -179,7 +179,7 @@ public final class Asserter {
             if (StringSupport.isNullOrEmpty(objName))
                 throw new NullPointerException("param cannot be null");
             else
-                throw new NullPointerException("Param: [" + objName + "] cannot be null");
+                throw new NullPointerException("[" + objName + "] cannot be null");
         return t;
     }
 

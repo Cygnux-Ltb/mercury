@@ -1,42 +1,34 @@
-package io.mercury.common.http.param;
+package io.mercury.common.http;
 
 import io.mercury.common.collections.MutableSets;
-import io.mercury.common.lang.Throws;
-import io.mercury.common.util.ArrayUtil;
 
 import javax.annotation.Nonnull;
 import java.net.URI;
 import java.util.Collections;
 import java.util.Set;
 
-import static io.mercury.common.util.ArrayUtil.splitArray;
-
 public final class PathParams {
+
+    public record PathParam(
+            Object name,
+            Object value) {
+        @Override
+        public String toString() {
+            return name + "=" + (value == null ? "" : value);
+        }
+    }
 
     private final Set<PathParam> set = MutableSets.newUnifiedSet();
 
     private PathParams() {
     }
 
-    public static PathParams with() {
+    public static PathParams empty() {
         return new PathParams();
     }
 
     public static PathParams with(PathParam... params) {
         return new PathParams().addParams(params);
-    }
-
-    public static PathParams with(Object... params) {
-        return new PathParams().addParams(params);
-    }
-
-    public PathParams addParams(Object... params) {
-        if (ArrayUtil.isNullOrEmpty(params))
-            Throws.illegalArgument("params");
-        splitArray(2, params)
-                .forEach(objs ->
-                        addParams(objs[0], objs.length < 2 ? null : objs[1]));
-        return this;
     }
 
     public PathParams addParams(Object name, Object value) {

@@ -1,6 +1,8 @@
 package io.mercury.common.http;
 
-public enum HeaderEnum {
+import io.mercury.common.http.HttpHeaders.HttpHeader;
+
+public enum HttpHeaderName {
 
     ACCEPT("Accept"),
 
@@ -100,12 +102,16 @@ public enum HeaderEnum {
 
     private final String value;
 
-    HeaderEnum(String value) {
+    HttpHeaderName(String value) {
         this.value = value;
     }
 
     public String value() {
         return value;
+    }
+
+    public HttpHeader set(String value) {
+        return new HttpHeader(this, value);
     }
 
 }

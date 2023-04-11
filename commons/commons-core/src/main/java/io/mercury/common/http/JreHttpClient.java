@@ -1,9 +1,7 @@
-package io.mercury.transport.http;
+package io.mercury.common.http;
 
+import io.mercury.common.http.PathParams.PathParam;
 import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.transport.http.param.HeaderParams;
-import io.mercury.transport.http.param.HttpParam;
-import io.mercury.transport.http.param.PathParams;
 import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
@@ -16,13 +14,12 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
-import java.util.Map;
 
 public abstract class JreHttpClient {
 
     private static final Logger log = Log4j2LoggerFactory.getLogger(JreHttpClient.class);
 
-    public static final HttpClient HC = HttpClient.newBuilder()
+    private static final HttpClient HC = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_2)
             .connectTimeout(Duration.ofSeconds(12))
             .followRedirects(HttpClient.Redirect.NORMAL)
@@ -32,86 +29,55 @@ public abstract class JreHttpClient {
     private JreHttpClient() {
     }
 
-
-    public static String GET(@Nonnull String url, HttpParam... params)
-            throws IOException, InterruptedException {
-        return GET(url + PathParams.newInstance().addParams(params));
+    public static HttpResponse<String> GET(@Nonnull String uri, PathParam... params)
+            throws IOException, InterruptedException, URISyntaxException {
+        return GET(uri, PathParams.with(params));
     }
 
-    public static String GET(@Nonnull String url, PathParams paramSet)
-            throws IOException, InterruptedException {
-        return GET(url + paramSet.toUrlParams());
+    public static HttpResponse<String> GET(@Nonnull String uri, PathParams params)
+            throws IOException, InterruptedException, URISyntaxException {
+        return GET(params.toFullUri(uri));
     }
 
-
-    public static String GET(@Nonnull String url)
+    public static HttpResponse<String> GET(@Nonnull URI uri)
             throws IOException, InterruptedException {
         return GET(HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .headers("Content-Type", "text/plain;charset=UTF-8")
-                .GET().build());
+                .GET().uri(uri)
+                .headers(HttpHeaderName.CONTENT_TYPE.value(), MimeType.APPLICATION_JSON_UTF8)
+                .build());
     }
 
-
-    public static String GET(@Nonnull HttpRequest request)
+    public static HttpResponse<String> GET(@Nonnull HttpRequest request)
             throws IOException, InterruptedException {
-        return HC.send(request, BodyHandlers.ofString()).body();
+        return HC.send(// GET request
+                request, BodyHandlers.ofString());
     }
 
-
-    public static String PUT(@Nonnull URI uri, Map<String, String> params)
+    public static HttpResponse<String> POST(@Nonnull URI uri, String body)
             throws IOException, InterruptedException {
-        // PUT request
-        HttpRequest putRequest = HttpRequest.newBuilder()
-                .uri(uri)
-                .header("Content-Type", "application/x-www-form-urlencoded")
-                .PUT(HttpRequest.BodyPublishers.ofString(buildQueryString(params)))
-                .build();
-        HttpResponse<String> putResponse = HC.send(putRequest, BodyHandlers.ofString());
-        System.out.println("PUT response: " + putResponse.body());
-        return "";
+        return HC.send(// POST request
+                HttpRequest.newBuilder().uri(uri)
+                        .POST(HttpRequest.BodyPublishers.ofString(body))
+                        .header(HttpHeaderName.CONTENT_TYPE.value(), MimeType.APPLICATION_JSON_UTF8).build(),
+                BodyHandlers.ofString());
     }
 
 
-    /**
-     * @param uri    URI
-     * @param params Map<String, String>
-     * @return String
-     */
-    public static String POST(@Nonnull URI uri, HeaderParams params)
+    public static HttpResponse<String> PUT(@Nonnull URI uri, String body)
             throws IOException, InterruptedException {
-        // POST request
-        HttpRequest postRequest = HttpRequest.newBuilder()
-                .uri(uri)
-                .header("Content-Type", "application/x-www-form-urlencoded")
-                .POST(HttpRequest.BodyPublishers.ofString(buildQueryString(null)))
-                .build();
-        HttpResponse<String> postResponse = HC.send(postRequest, BodyHandlers.ofString());
-        System.out.println("POST response: " + postResponse.body());
-
-        return null;
-    }
-
-    public static String DELETE(String url) throws URISyntaxException, IOException, InterruptedException {
-        HttpRequest deleteRequest = HttpRequest.newBuilder()
-                .uri(new URI(url))
-                .DELETE()
-                .build();
-        HttpResponse<String> deleteResponse = HC.send(deleteRequest, BodyHandlers.ofString());
-        System.out.println("DELETE response: " + deleteResponse.body());
-        return url;
+        return HC.send(// PUT request
+                HttpRequest.newBuilder().uri(uri)
+                        .PUT(HttpRequest.BodyPublishers.ofString(body))
+                        .header(HttpHeaderName.CONTENT_TYPE.value(), MimeType.APPLICATION_JSON_UTF8).build(),
+                BodyHandlers.ofString());
     }
 
 
-    private static String buildQueryString(Map<String, String> parameters) {
-        StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, String> entry : parameters.entrySet()) {
-            sb.append(entry.getKey());
-            sb.append("=");
-            sb.append(entry.getValue());
-            sb.append("&");
-        }
-        return sb.toString();
+    public static HttpResponse<String> DELETE(URI uri)
+            throws IOException, InterruptedException {
+        return HC.send(// DELETE request
+                HttpRequest.newBuilder().DELETE().uri(uri).build(),
+                BodyHandlers.ofString());
     }
 
 

@@ -1,15 +1,16 @@
 package io.mercury.common.util;
 
-import static io.mercury.common.util.BitFormatter.longBinaryFormat;
+import io.mercury.common.lang.Asserter;
 
 import javax.annotation.Nonnull;
 
-import io.mercury.common.lang.Asserter;
+import static io.mercury.common.util.BitFormatter.longBinaryFormat;
 
 public final class BitOperator {
 
     private BitOperator() {
     }
+
 
     /**
      * @param bytes byte[]
@@ -20,6 +21,7 @@ public final class BitOperator {
         Asserter.requiredLength(bytes, 2, "bytes array");
         return (char) (((bytes[0] & 0xFF) << 8) | ((bytes[1] & 0xFF)));
     }
+
 
     /**
      * @param bytes  byte[]
@@ -33,6 +35,7 @@ public final class BitOperator {
         return (char) (((bytes[offset] & 0xFF) << 8) | ((bytes[offset + 1] & 0xFF)));
     }
 
+
     /**
      * @param bytes byte[]
      * @return int
@@ -42,6 +45,7 @@ public final class BitOperator {
         Asserter.requiredLength(bytes, 4, "bytes array");
         return ((bytes[0] & 0xFF) << 24) | ((bytes[1] & 0xFF) << 16) | ((bytes[2] & 0xFF) << 8) | ((bytes[3] & 0xFF));
     }
+
 
     /**
      * @param bytes  byte[]
@@ -56,6 +60,7 @@ public final class BitOperator {
                 | ((bytes[offset + 3] & 0xFF));
     }
 
+
     /**
      * 两个[char]合并为[int]
      *
@@ -67,6 +72,7 @@ public final class BitOperator {
         return (((int) highPos) << 16) | ((int) lowPos);
     }
 
+
     /**
      * 两个<b> [char] </b>合并为<b> [int] </b>
      *
@@ -77,6 +83,7 @@ public final class BitOperator {
     public static int merge(short highPos, short lowPos) {
         return (((int) highPos) << 16) | ((int) lowPos);
     }
+
 
     /**
      * 四个<b> [char] </b>合并为<b> [long] </b>
@@ -91,6 +98,7 @@ public final class BitOperator {
         return (((long) highPos) << 48) | ((long) second << 32) | ((long) third << 16) | ((int) lowPos);
     }
 
+
     /**
      * 四个<b> [short] </b>合并为<b> [long] </b>
      *
@@ -104,6 +112,7 @@ public final class BitOperator {
         return (((long) highPos) << 48) | ((long) second << 32) | ((long) third << 16) | ((int) lowPos);
     }
 
+
     /**
      * 两个<b> [int] </b>合并为<b> [long] </b>
      *
@@ -115,9 +124,8 @@ public final class BitOperator {
         return (((long) highPos) << 32) | ((long) lowPos);
     }
 
-    /*
-     * 高位掩码
-     */
+
+    //高位掩码
     public static final long LongHighPosMask = 0xFFFF_FFFF_0000_0000L;
 
     /**
