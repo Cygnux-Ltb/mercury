@@ -2,13 +2,11 @@ package io.mercury.transport.http;
 
 import static org.asynchttpclient.Dsl.asyncHttpClient;
 
-import org.asynchttpclient.AsyncHttpClient;
+public enum AsyncHttpClient {
 
-public enum AsyncHttp {
+    ;
 
-	;
-
-	public static final AsyncHttpClient INSTANCE = asyncHttpClient();
+    public static final org.asynchttpclient.AsyncHttpClient AHC = asyncHttpClient();
 
 
 }

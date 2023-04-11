@@ -1,7 +1,7 @@
 package io.mercury.transport.http.ws;
 
 import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.transport.http.AsyncHttp;
+import io.mercury.transport.http.AsyncHttpClient;
 import io.mercury.transport.http.ws.WebSocketHandler.WsBinaryFrameHandler;
 import io.mercury.transport.http.ws.WebSocketHandler.WsCloseHandler;
 import io.mercury.transport.http.ws.WebSocketHandler.WsOpenHandler;
@@ -48,7 +48,7 @@ public final class WebSocketClient {
             // 异常处理函数
             WsThrowableHandler throwableHandler) {
         try {
-            WebSocket webSocket = AsyncHttp.INSTANCE.prepareGet(url).execute(
+            WebSocket webSocket = AsyncHttpClient.AHC.prepareGet(url).execute(
                     new WebSocketUpgradeHandler.Builder()
                             .addWebSocketListener(new WebSocketListener() {
 
