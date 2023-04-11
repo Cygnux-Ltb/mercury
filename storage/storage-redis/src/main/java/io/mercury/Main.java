@@ -8,8 +8,6 @@ import java.util.List;
 
 public class Main {
 	
-	private
-
     public static void main(String[] args) {
         try (JedisPool pool = new JedisPool(new JedisPoolConfig(), "localhost");
              Jedis jedis = pool.getResource()) {
