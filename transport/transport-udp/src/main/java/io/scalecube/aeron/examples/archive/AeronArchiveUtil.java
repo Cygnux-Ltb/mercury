@@ -43,24 +43,23 @@ public class AeronArchiveUtil {
                  strippedChannel,
                  originalChannel,
                  sourceIdentity) -> {
-                    RecordingDescriptor value =
-                            new RecordingDescriptor(
-                                    controlSessionId,
-                                    correlationId,
-                                    recordingId,
-                                    startTimestamp,
-                                    stopTimestamp,
-                                    startPosition,
-                                    stopPosition,
-                                    initialTermId,
-                                    segmentFileLength,
-                                    termBufferLength,
-                                    mtuLength,
-                                    sessionId,
-                                    streamId1,
-                                    strippedChannel,
-                                    originalChannel,
-                                    sourceIdentity);
+                    RecordingDescriptor value = new RecordingDescriptor(
+                            controlSessionId,
+                            correlationId,
+                            recordingId,
+                            startTimestamp,
+                            stopTimestamp,
+                            startPosition,
+                            stopPosition,
+                            initialTermId,
+                            segmentFileLength,
+                            termBufferLength,
+                            mtuLength,
+                            sessionId,
+                            streamId1,
+                            strippedChannel,
+                            originalChannel,
+                            sourceIdentity);
                     if (predicate.test(value)) {
                         result.set(value);
                     }
@@ -87,46 +86,22 @@ public class AeronArchiveUtil {
         MutableReference<RecordingDescriptor> result = new MutableReference<>();
         int step = 10;
         for (long i = fromRecordingId; i < Integer.MAX_VALUE; i = i + step) {
-            int count = aeronArchive.listRecordings(
-                    i,
-                    step,
-                    (controlSessionId,
-                     correlationId,
-                     recordingId,
-                     startTimestamp,
-                     stopTimestamp,
-                     startPosition,
-                     stopPosition,
-                     initialTermId,
-                     segmentFileLength,
-                     termBufferLength,
-                     mtuLength,
-                     sessionId,
-                     streamId,
-                     strippedChannel,
-                     originalChannel,
+            int count = aeronArchive.listRecordings(i, step,
+                    (controlSessionId, correlationId, recordingId,
+                     startTimestamp, stopTimestamp, startPosition,
+                     stopPosition, initialTermId, segmentFileLength,
+                     termBufferLength, mtuLength, sessionId,
+                     streamId, strippedChannel, originalChannel,
                      sourceIdentity) -> {
-                        RecordingDescriptor value =
-                                new RecordingDescriptor(
-                                        controlSessionId,
-                                        correlationId,
-                                        recordingId,
-                                        startTimestamp,
-                                        stopTimestamp,
-                                        startPosition,
-                                        stopPosition,
-                                        initialTermId,
-                                        segmentFileLength,
-                                        termBufferLength,
-                                        mtuLength,
-                                        sessionId,
-                                        streamId,
-                                        strippedChannel,
-                                        originalChannel,
-                                        sourceIdentity);
-                        if (result.get() == null && predicate.test(value)) {
+                        RecordingDescriptor value = new RecordingDescriptor(
+                                controlSessionId, correlationId, recordingId,
+                                startTimestamp, stopTimestamp, startPosition,
+                                stopPosition, initialTermId, segmentFileLength,
+                                termBufferLength, mtuLength, sessionId,
+                                streamId, strippedChannel, originalChannel,
+                                sourceIdentity);
+                        if (result.get() == null && predicate.test(value))
                             result.set(value);
-                        }
                     });
             if (result.get() != null || count < step) {
                 break;
@@ -146,46 +121,22 @@ public class AeronArchiveUtil {
     public static List<RecordingDescriptor> findAllRecordings(
             AeronArchive aeronArchive, Predicate<RecordingDescriptor> predicate) {
         MutableReference<List<RecordingDescriptor>> result = new MutableReference<>(new ArrayList<>());
-        aeronArchive.listRecordings(
-                0,
-                Integer.MAX_VALUE,
-                (controlSessionId,
-                 correlationId,
-                 recordingId,
-                 startTimestamp,
-                 stopTimestamp,
-                 startPosition,
-                 stopPosition,
-                 initialTermId,
-                 segmentFileLength,
-                 termBufferLength,
-                 mtuLength,
-                 sessionId,
-                 streamId1,
-                 strippedChannel,
-                 originalChannel,
+        aeronArchive.listRecordings(0, Integer.MAX_VALUE,
+                (controlSessionId, correlationId, recordingId,
+                 startTimestamp, stopTimestamp, startPosition,
+                 stopPosition, initialTermId, segmentFileLength,
+                 termBufferLength, mtuLength, sessionId,
+                 streamId1, strippedChannel, originalChannel,
                  sourceIdentity) -> {
-                    RecordingDescriptor value =
-                            new RecordingDescriptor(
-                                    controlSessionId,
-                                    correlationId,
-                                    recordingId,
-                                    startTimestamp,
-                                    stopTimestamp,
-                                    startPosition,
-                                    stopPosition,
-                                    initialTermId,
-                                    segmentFileLength,
-                                    termBufferLength,
-                                    mtuLength,
-                                    sessionId,
-                                    streamId1,
-                                    strippedChannel,
-                                    originalChannel,
-                                    sourceIdentity);
-                    if (predicate.test(value)) {
+                    RecordingDescriptor value = new RecordingDescriptor(
+                            controlSessionId, correlationId, recordingId,
+                            startTimestamp, stopTimestamp, startPosition,
+                            stopPosition, initialTermId, segmentFileLength,
+                            termBufferLength, mtuLength, sessionId,
+                            streamId1, strippedChannel, originalChannel,
+                            sourceIdentity);
+                    if (predicate.test(value))
                         result.get().add(value);
-                    }
                 });
 
         return result.get();

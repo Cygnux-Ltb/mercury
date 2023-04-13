@@ -49,48 +49,43 @@ public class SingleSessionMdsReceiver {
 
         SigInt.register(SingleSessionMdsReceiver::close);
 
-        mediaDriver =
-                MediaDriver.launchEmbedded(
-                        new MediaDriver.Context()
-                                .spiesSimulateConnection(true)
-                                .imageLivenessTimeoutNs(IMAGE_LIVENESS_TIMEOUT));
+        mediaDriver = MediaDriver.launchEmbedded(
+                new MediaDriver.Context()
+                        .spiesSimulateConnection(true)
+                        .imageLivenessTimeoutNs(IMAGE_LIVENESS_TIMEOUT));
 
         String aeronDirectoryName = mediaDriver.aeronDirectoryName();
 
-        Context context =
-                new Context()
-                        .aeronDirectoryName(aeronDirectoryName)
-                        .availableImageHandler(AeronHelper::printAvailableImage)
-                        .unavailableImageHandler(AeronHelper::printUnavailableImage);
+        Context context = new Context()
+                .aeronDirectoryName(aeronDirectoryName)
+                .availableImageHandler(AeronHelper::printAvailableImage)
+                .unavailableImageHandler(AeronHelper::printUnavailableImage);
 
         aeron = Aeron.connect(context);
         System.out.println("hello, " + context.aeronDirectoryName());
 
-        String controlChannel =
-                new ChannelUriStringBuilder()
-                        .media(UDP_MEDIA)
-                        .controlMode(MDC_CONTROL_MODE_MANUAL)
-                        .sessionId(SESSION_ID)
-                        .rejoin(false)
-                        .build();
+        String controlChannel = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA)
+                .controlMode(MDC_CONTROL_MODE_MANUAL)
+                .sessionId(SESSION_ID)
+                .rejoin(false)
+                .build();
 
         Subscription subscription = aeron.addSubscription(controlChannel, STREAM_ID);
 
         printSubscription(subscription);
 
-        String liveChannel =
-                new ChannelUriStringBuilder()
-                        .media(UDP_MEDIA)
-                        .controlEndpoint(CONTROL_ENDPOINT)
-                        .endpoint("localhost:0")
-                        .build();
+        String liveChannel = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA)
+                .controlEndpoint(CONTROL_ENDPOINT)
+                .endpoint("localhost:0")
+                .build();
 
-        String replayChannel =
-                new ChannelUriStringBuilder()
-                        .media(UDP_MEDIA)
-                        .endpoint(REPLAY_ENDPOINT)
-                        .sessionId(SESSION_ID)
-                        .build();
+        String replayChannel = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA)
+                .endpoint(REPLAY_ENDPOINT)
+                .sessionId(SESSION_ID)
+                .build();
 
         // subscription.addDestination(liveChannel);
         // subscription.addDestination(replayChannel);

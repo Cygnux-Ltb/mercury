@@ -98,7 +98,6 @@ public class DynamicCompositeAgent implements Agent {
         for (Agent agent : agents) {
             agent.onStart();
         }
-
         status = Status.ACTIVE;
     }
 

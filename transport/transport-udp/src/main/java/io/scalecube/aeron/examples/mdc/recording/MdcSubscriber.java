@@ -21,8 +21,7 @@ public final class MdcSubscriber {
 
     private static final long DEFAULT_POLLING_PERIOD_NS = 1_000_000_000L;
 
-    private static final ChannelUriStringBuilder
-            liveDestinationBuilder = new ChannelUriStringBuilder()
+    private static final ChannelUriStringBuilder liveDestinationBuilder = new ChannelUriStringBuilder()
             .alias("events-liveDestination")
             .media(UDP_MEDIA)
             .endpoint(LIVE_ENDPOINT)
@@ -40,14 +39,13 @@ public final class MdcSubscriber {
 
         Subscription subscription = aeron.addSubscription(liveDestinationBuilder.build(), STREAM_ID);
 
-        runPoller(subscription,
-                pollingPeriodNs != null ? Long.parseLong(pollingPeriodNs) : DEFAULT_POLLING_PERIOD_NS);
+        runPoller(subscription, pollingPeriodNs != null
+                ? Long.parseLong(pollingPeriodNs) : DEFAULT_POLLING_PERIOD_NS);
 
-        Runtime.getRuntime().addShutdownHook(new Thread(
-                () -> {
-                    System.out.println("Shutdown...");
-                    CloseHelper.quietCloseAll(aeron, mediaDriver);
-                }));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Shutdown...");
+            CloseHelper.quietCloseAll(aeron, mediaDriver);
+        }));
     }
 
     private static void setup(boolean cleanStart) {
@@ -69,12 +67,10 @@ public final class MdcSubscriber {
             while (true) {
                 long now = System.nanoTime();
                 if (now >= deadline) {
-                    subscription.poll(
-                            (buffer, offset, length, header) -> {
-                                String message = buffer.getStringWithoutLengthAscii(offset, length);
-                                System.out.println(message);
-                            },
-                            FRAGMENT_LIMIT);
+                    subscription.poll((buffer, offset, length, header) -> {
+                        String message = buffer.getStringWithoutLengthAscii(offset, length);
+                        System.out.println(message);
+                    }, FRAGMENT_LIMIT);
                     deadline = now + pollingPeriodNs;
                 }
             }

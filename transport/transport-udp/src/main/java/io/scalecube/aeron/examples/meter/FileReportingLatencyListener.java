@@ -23,15 +23,15 @@ public class FileReportingLatencyListener implements LatencyListener {
     @Override
     public void onReport(Context context, Histogram histogram) {
         ensurePrintStream();
-        histogram.outputPercentileDistribution(
-                printStream, context.percentileTicksPerHalfDistance(), context.scalingRatio(), false);
+        histogram.outputPercentileDistribution(printStream,
+                context.percentileTicksPerHalfDistance(), context.scalingRatio(), false);
     }
 
     @Override
     public void onTerminate(Context context, Histogram histogram) {
         ensurePrintStream();
-        histogram.outputPercentileDistribution(
-                printStream, context.percentileTicksPerHalfDistance(), context.scalingRatio(), false);
+        histogram.outputPercentileDistribution(printStream,
+                context.percentileTicksPerHalfDistance(), context.scalingRatio(), false);
     }
 
     @Override
@@ -42,7 +42,8 @@ public class FileReportingLatencyListener implements LatencyListener {
     private void ensurePrintStream() {
         if (printStream == null) {
             try {
-                printStream = new PrintStream(String.join(".", fileName, currentDateTime(), "log"));
+                printStream = new PrintStream(
+                        String.join(".", fileName, currentDateTime(), "log"));
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }

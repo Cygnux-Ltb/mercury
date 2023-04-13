@@ -40,7 +40,8 @@ public class FileReportingThroughputListener implements ThroughputListener {
     private void ensurePrintStream() {
         if (printStream == null) {
             try {
-                printStream = new PrintStream(String.join(".", fileName, currentDateTime(), "log"));
+                printStream = new PrintStream(
+                        String.join(".", fileName, currentDateTime(), "log"));
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }

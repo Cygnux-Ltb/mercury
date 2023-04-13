@@ -184,15 +184,15 @@ public class AeronHelper {
                         .add(String.join(": ", "aeronDirectoryName", aeronDirectoryName))
                         .add(String.join(": ", "archiveDirectoryName", archiveDirectoryName))
                         .add(String.join(": ", "controlChannel", controlChannel))
-                        .add(String.join(": ", "controlStreamId", "" + controlStreamId))
+                        .add(String.join(": ", "controlStreamId", String.valueOf(controlStreamId)))
                         .add(String.join(": ", "localControlChannel", localControlChannel))
-                        .add(String.join(": ", "localControlStreamId", "" + localControlStreamId))
-                        .add(String.join(": ", "recordingEventsEnabled", "" + recordingEventsEnabled))
+                        .add(String.join(": ", "localControlStreamId", String.valueOf(localControlStreamId)))
+                        .add(String.join(": ", "recordingEventsEnabled", String.valueOf(recordingEventsEnabled)))
                         .add(String.join(": ", "recordingEventsChannel", recordingEventsChannel))
-                        .add(String.join(": ", "recordingEventsStreamId", "" + recordingEventsStreamId))
+                        .add(String.join(": ", "recordingEventsStreamId", String.valueOf(recordingEventsStreamId)))
                         .add(String.join(": ", "replicationChannel", replicationChannel))
-                        .add(String.join(": ", "controlMtuLength", "" + controlMtuLength))
-                        .add(String.join(": ", "controlTermBufferLength", "" + controlTermBufferLength)));
+                        .add(String.join(": ", "controlMtuLength", String.valueOf(controlMtuLength)))
+                        .add(String.join(": ", "controlTermBufferLength", String.valueOf(controlTermBufferLength))));
     }
 
     public static String controlRequestChannel(String endpoint) {
@@ -352,12 +352,12 @@ public class AeronHelper {
      */
     public static void sendMessage(Publication publication, long i) {
         System.out.println(new StringJoiner(", ", "yay! ", "")
-                .add(String.join(": ", "sessionId", "" + publication.sessionId()))
-                .add(String.join(": ", "streamId", "" + publication.streamId()))
-                .add(String.join(": ", "position", "" + publication.position()))
-                .add(String.join(": ", "numOfTermBuffers", "" + publication.position() / publication.termBufferLength()))
-                .add(String.join(": ", "initialTermId", "" + publication.initialTermId()))
-                .add(String.join(": ", "i", "" + i)));
+                .add(String.join(": ", "sessionId", String.valueOf(publication.sessionId())))
+                .add(String.join(": ", "streamId", String.valueOf(publication.streamId())))
+                .add(String.join(": ", "position", String.valueOf(publication.position())))
+                .add(String.join(": ", "numOfTermBuffers", String.valueOf(publication.position() / publication.termBufferLength())))
+                .add(String.join(": ", "initialTermId", String.valueOf(publication.initialTermId())))
+                .add(String.join(": ", "i", String.valueOf(i))));
 
         final UnsafeBuffer buffer = new UnsafeBuffer(BufferUtil.allocateDirectAligned(256, 64));
         System.out.print("Offering " + i + "/" + NUMBER_OF_MESSAGES + " - ");
@@ -429,12 +429,12 @@ public class AeronHelper {
             } while (recordingPos < publication.position());
 
             System.out.println(new StringJoiner(", ", "yay! ", "")
-                    .add(String.join(": ", "sessionId", "" + publication.sessionId()))
-                    .add(String.join(": ", "streamId", "" + publication.streamId()))
-                    .add(String.join(": ", "position", "" + publication.position()))
-                    .add(String.join(": ", "recordingPos", "" + recordingPos))
-                    .add(String.join(": ", "i", "" + i))
-                    .add(String.join(": ", "time", "" + (System.nanoTime() - s))));
+                    .add(String.join(": ", "sessionId", String.valueOf(publication.sessionId())))
+                    .add(String.join(": ", "streamId", String.valueOf(publication.streamId())))
+                    .add(String.join(": ", "position", String.valueOf(publication.position())))
+                    .add(String.join(": ", "recordingPos", String.valueOf(recordingPos)))
+                    .add(String.join(": ", "i", String.valueOf(i)))
+                    .add(String.join(": ", "time", String.valueOf(System.nanoTime() - s))));
         } else if (result == Publication.BACK_PRESSURED) {
             System.out.println("Offer failed due to back pressure");
         } else if (result == Publication.NOT_CONNECTED) {
@@ -460,10 +460,10 @@ public class AeronHelper {
         if (result > 0) {
             System.out.println(
                     new StringJoiner(", ", "yay! ", "")
-                            .add(String.join(": ", "session", "" + publication.sessionId()))
-                            .add(String.join(": ", "stream", "" + publication.streamId()))
-                            .add(String.join(": ", "position", "" + publication.position()))
-                            .add(String.join(": ", "positionLimit", "" + publication.positionLimit())));
+                            .add(String.join(": ", "session", String.valueOf(publication.sessionId())))
+                            .add(String.join(": ", "stream", String.valueOf(publication.streamId())))
+                            .add(String.join(": ", "position", String.valueOf(publication.position())))
+                            .add(String.join(": ", "positionLimit", String.valueOf(publication.positionLimit()))));
         } else if (result == Publication.BACK_PRESSURED) {
             System.out.println("Offer failed due to back pressure");
         } else if (result == Publication.NOT_CONNECTED) {

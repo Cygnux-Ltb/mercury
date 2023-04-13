@@ -30,4 +30,5 @@ public class CompositeLatencyListener implements LatencyListener {
             latencyListener.onTerminate(context, accumulatedHistogram);
         }
     }
+
 }

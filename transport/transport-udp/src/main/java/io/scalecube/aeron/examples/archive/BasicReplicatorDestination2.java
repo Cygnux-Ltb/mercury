@@ -189,8 +189,8 @@ public class BasicReplicatorDestination2 {
             dstClient = AeronArchive.connect(dstContext.clone());
             signalAdapter = newRecordingSignalAdapter(dstClient, this, this);
             dstRecordingDescriptor = findRecordingDescriptor(dstClient); // nullable
-            dstRecordingPosition =
-                    dstRecordingDescriptor != null ? dstRecordingDescriptor.stopPosition : NULL_VALUE;
+            dstRecordingPosition = dstRecordingDescriptor != null
+                    ? dstRecordingDescriptor.stopPosition() : NULL_VALUE;
             state = State.INIT;
             System.out.println("start");
         }
@@ -199,20 +199,27 @@ public class BasicReplicatorDestination2 {
         public int doWork() {
             try {
                 switch (state) {
-                    case INIT:
+                    case INIT -> {
                         return connect();
-                    case POLL_CONNECT:
+                    }
+                    case POLL_CONNECT -> {
                         return pollConnect();
-                    case CONNECTED:
+                    }
+                    case CONNECTED -> {
                         return catchup();
-                    case REPLICATE:
+                    }
+                    case REPLICATE -> {
                         return replicate();
-                    case POLL_REPLICATE:
+                    }
+                    case POLL_REPLICATE -> {
                         return pollReplicate();
-                    case RESET:
+                    }
+                    case RESET -> {
                         return reset();
-                    default:
-                        // no-op
+                    }
+                    default -> {
+                    }
+                    // no-op
                 }
             } catch (Exception e) {
                 System.err.println("exception occurred: " + e);
@@ -276,7 +283,7 @@ public class BasicReplicatorDestination2 {
                 srcRecordingDescriptor = findRecordingDescriptorOrThrow(srcClient);
             }
 
-            long srcPosition = srcClient.getRecordingPosition(srcRecordingDescriptor.recordingId);
+            long srcPosition = srcClient.getRecordingPosition(srcRecordingDescriptor.recordingId());
 
             System.out.printf(
                     "[catchup] dstPosition: %d, srcPosition: %d%n", dstRecordingPosition, srcPosition);
@@ -290,9 +297,9 @@ public class BasicReplicatorDestination2 {
         }
 
         private int replicate() {
-            long srcRecordingId = srcRecordingDescriptor.recordingId;
+            long srcRecordingId = srcRecordingDescriptor.recordingId();
             long dstRecordingId =
-                    dstRecordingDescriptor != null ? dstRecordingDescriptor.recordingId : NULL_VALUE;
+                    dstRecordingDescriptor != null ? dstRecordingDescriptor.recordingId() : NULL_VALUE;
 
             replicationId =
                     dstClient.replicate(
@@ -318,15 +325,13 @@ public class BasicReplicatorDestination2 {
         }
 
         @Override
-        public void onResponse(
-                long controlSessionId,
-                long correlationId,
-                long relevantId,
-                ControlResponseCode code,
-                String errorMessage) {
+        public void onResponse(long controlSessionId,
+                               long correlationId,
+                               long relevantId,
+                               ControlResponseCode code,
+                               String errorMessage) {
 
-            System.out.printf(
-                    "[control][onResponse] "
+            System.out.printf("[control][onResponse] "
                             + "controlSessionId: %d, "
                             + "correlationId: %d, "
                             + "relevantId: %d, "
@@ -394,7 +399,7 @@ public class BasicReplicatorDestination2 {
         }
 
         private static RecordingDescriptor findRecordingDescriptor(AeronArchive archiveClient) {
-            return AeronArchiveUtil.findLastRecording(archiveClient, rd -> rd.streamId == STREAM_ID);
+            return AeronArchiveUtil.findLastRecording(archiveClient, rd -> rd.streamId() == STREAM_ID);
         }
 
         private static RecordingSignalAdapter newRecordingSignalAdapter(

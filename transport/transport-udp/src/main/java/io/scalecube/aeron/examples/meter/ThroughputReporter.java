@@ -33,8 +33,8 @@ public class ThroughputReporter implements Agent, AutoCloseable {
     }
 
     public ThroughputMeter meter(String name, ThroughputListener... listeners) {
-        return meters.computeIfAbsent(
-                name, s -> new ThroughputMeter(name, context, new CompositeThroughputListener(listeners)));
+        return meters.computeIfAbsent(name,
+                s -> new ThroughputMeter(name, context, new CompositeThroughputListener(listeners)));
     }
 
     public void remove(ThroughputMeter meter) {

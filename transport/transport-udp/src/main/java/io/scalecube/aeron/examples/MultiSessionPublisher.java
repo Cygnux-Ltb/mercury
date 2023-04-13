@@ -48,10 +48,10 @@ public class MultiSessionPublisher {
         System.out.println("hello, " + context.aeronDirectoryName());
 
         String channel = new ChannelUriStringBuilder().media(UDP_MEDIA).endpoint(ENDPOINT).build();
-        Publication publication =
-                aeron.addExclusivePublication(ChannelUri.addSessionId(channel, SESSION_ID_1), STREAM_ID);
-        Publication publication2 =
-                aeron.addExclusivePublication(ChannelUri.addSessionId(channel, SESSION_ID_2), STREAM_ID);
+        Publication publication = aeron
+                .addExclusivePublication(ChannelUri.addSessionId(channel, SESSION_ID_1), STREAM_ID);
+        Publication publication2 = aeron
+                .addExclusivePublication(ChannelUri.addSessionId(channel, SESSION_ID_2), STREAM_ID);
 
         printPublication(publication);
         printPublication(publication2);

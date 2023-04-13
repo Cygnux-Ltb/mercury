@@ -65,83 +65,71 @@ public class BasicReplicatorSource {
 
         Path aeronPath = Paths.get(CommonContext.generateRandomDirName());
         String instanceName = aeronPath.getFileName().toString();
-        Path archivePath =
-                AeronHelper.archivePath()
-                        .orElseGet(() -> Paths.get(String.join("-", instanceName, "archive")));
+        Path archivePath = AeronHelper.archivePath()
+                .orElseGet(() -> Paths.get(String.join("-", instanceName, "archive")));
 
-        mediaDriver =
-                MediaDriver.launch(
-                        new MediaDriver.Context()
-                                .aeronDirectoryName(aeronPath.toString())
-                                .spiesSimulateConnection(true));
+        mediaDriver = MediaDriver.launch(new MediaDriver.Context()
+                .aeronDirectoryName(aeronPath.toString())
+                .spiesSimulateConnection(true));
 
-        aeron =
-                Aeron.connect(
-                        new Aeron.Context()
-                                .aeronDirectoryName(aeronPath.toString())
-                                .availableImageHandler(AeronHelper::printAvailableImage)
-                                .unavailableImageHandler(AeronHelper::printUnavailableImage));
+        aeron = Aeron.connect(new Aeron.Context()
+                .aeronDirectoryName(aeronPath.toString())
+                .availableImageHandler(AeronHelper::printAvailableImage)
+                .unavailableImageHandler(AeronHelper::printUnavailableImage));
 
-        archive =
-                Archive.launch(
-                        new Archive.Context()
-                                .aeron(aeron)
-                                .mediaDriverAgentInvoker(mediaDriver.sharedAgentInvoker())
-                                .errorCounter(
-                                        new AtomicCounter(
-                                                mediaDriver.context().countersValuesBuffer(),
-                                                SystemCounterDescriptor.ERRORS.id()))
-                                .errorHandler(mediaDriver.context().errorHandler())
-                                .archiveClientContext(
-                                        new AeronArchive.Context().controlResponseChannel(controlResponseChannel()))
-                                .localControlChannel(localControlChannel(instanceName))
-                                .controlChannel(controlChannel())
-                                .recordingEventsChannel(recordingEventsChannel())
-                                .replicationChannel(replicationChannel())
-                                .aeronDirectoryName(aeronPath.toString())
-                                .archiveDirectoryName(archivePath.toString())
-                                .threadingMode(ArchiveThreadingMode.SHARED));
+        archive = Archive.launch(new Archive.Context()
+                .aeron(aeron)
+                .mediaDriverAgentInvoker(mediaDriver.sharedAgentInvoker())
+                .errorCounter(new AtomicCounter(
+                        mediaDriver.context().countersValuesBuffer(),
+                        SystemCounterDescriptor.ERRORS.id()))
+                .errorHandler(mediaDriver.context().errorHandler())
+                .archiveClientContext(new AeronArchive.Context()
+                        .controlResponseChannel(controlResponseChannel()))
+                .localControlChannel(localControlChannel(instanceName))
+                .controlChannel(controlChannel())
+                .recordingEventsChannel(recordingEventsChannel())
+                .replicationChannel(replicationChannel())
+                .aeronDirectoryName(aeronPath.toString())
+                .archiveDirectoryName(archivePath.toString())
+                .threadingMode(ArchiveThreadingMode.SHARED));
 
         printArchiveContext(archive.context());
 
         CountersReader counters = aeron.countersReader();
 
-        aeronArchive =
-                AeronArchive.connect(
-                        new AeronArchive.Context()
-                                .aeron(aeron)
-                                .controlResponseChannel(controlResponseChannel()));
+        aeronArchive = AeronArchive.connect(
+                new AeronArchive.Context()
+                        .aeron(aeron)
+                        .controlResponseChannel(controlResponseChannel()));
 
         long controlSessionId = aeronArchive.controlSessionId();
         System.out.printf("### controlSessionId: %s%n", controlSessionId);
 
-        RecordingDescriptor rd =
-                AeronArchiveUtil.findLastRecording(aeronArchive, rd1 -> rd1.streamId == STREAM_ID);
+        RecordingDescriptor rd = AeronArchiveUtil
+                .findLastRecording(aeronArchive, rd1 -> rd1.streamId() == STREAM_ID);
 
         if (rd == null) {
-            publication =
-                    aeronArchive.addRecordedExclusivePublication(
-                            new ChannelUriStringBuilder()
-                                    .media(UDP_MEDIA)
-                                    .controlMode(MDC_CONTROL_MODE_DYNAMIC)
-                                    .controlEndpoint(ENDPOINT)
-                                    .build(),
-                            STREAM_ID);
-        } else {
-            int newPosition = TRUNCATE_POSITION;
-
-            String channel =
+            publication = aeronArchive.addRecordedExclusivePublication(
                     new ChannelUriStringBuilder()
                             .media(UDP_MEDIA)
                             .controlMode(MDC_CONTROL_MODE_DYNAMIC)
                             .controlEndpoint(ENDPOINT)
-                            .initialPosition(newPosition, rd.initialTermId, rd.termBufferLength)
-                            .build();
+                            .build(),
+                    STREAM_ID);
+        } else {
+            int newPosition = TRUNCATE_POSITION;
+
+            String channel = new ChannelUriStringBuilder()
+                    .media(UDP_MEDIA)
+                    .controlMode(MDC_CONTROL_MODE_DYNAMIC)
+                    .controlEndpoint(ENDPOINT)
+                    .initialPosition(newPosition, rd.initialTermId(), rd.termBufferLength())
+                    .build();
 
             publication = aeron.addExclusivePublication(channel, STREAM_ID);
-            aeronArchive.truncateRecording(rd.recordingId, newPosition);
-            aeronArchive.extendRecording(
-                    rd.recordingId,
+            aeronArchive.truncateRecording(rd.recordingId(), newPosition);
+            aeronArchive.extendRecording(rd.recordingId(),
                     ChannelUri.addSessionId(channel, publication.sessionId()),
                     STREAM_ID,
                     SourceLocation.LOCAL);
@@ -195,4 +183,5 @@ public class BasicReplicatorSource {
         CloseHelper.close(archive);
         CloseHelper.close(mediaDriver);
     }
+
 }

@@ -71,4 +71,5 @@ public class DynamicMdcSender {
         CloseHelper.close(aeron);
         CloseHelper.close(mediaDriver);
     }
+
 }

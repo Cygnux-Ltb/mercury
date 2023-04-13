@@ -36,11 +36,10 @@ public class ManualMdsSender1 {
         mediaDriver = MediaDriver.launchEmbedded();
         String aeronDirectoryName = mediaDriver.aeronDirectoryName();
 
-        Context context =
-                new Context()
-                        .aeronDirectoryName(aeronDirectoryName)
-                        .availableImageHandler(AeronHelper::printAvailableImage)
-                        .unavailableImageHandler(AeronHelper::printUnavailableImage);
+        Context context = new Context()
+                .aeronDirectoryName(aeronDirectoryName)
+                .availableImageHandler(AeronHelper::printAvailableImage)
+                .unavailableImageHandler(AeronHelper::printUnavailableImage);
 
         aeron = Aeron.connect(context);
         System.out.println("hello, " + context.aeronDirectoryName());

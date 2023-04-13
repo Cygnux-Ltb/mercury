@@ -45,44 +45,40 @@ public class FlowControlMdcReceiver {
         SigInt.register(() -> running.set(false));
 
         try {
-            if (receiverCategory == null) {
+            if (receiverCategory == null)
                 throw new IllegalArgumentException("receiverCategory must not be null");
-            }
 
-            System.out.printf(
-                    "### receiverCategory: %s, pollDelayMillis: %s%n",
+            System.out.printf("### receiverCategory: %s, pollDelayMillis: %s%n",
                     receiverCategory.replace("\\s+", ""), pollDelayMillis);
 
             mediaDriver = MediaDriver.launchEmbedded();
             String aeronDirectoryName = mediaDriver.aeronDirectoryName();
 
-            Context context =
-                    new Context()
-                            .aeronDirectoryName(aeronDirectoryName)
-                            .availableImageHandler(AeronHelper::printAvailableImage)
-                            .unavailableImageHandler(AeronHelper::printUnavailableImage);
+            Context context = new Context()
+                    .aeronDirectoryName(aeronDirectoryName)
+                    .availableImageHandler(AeronHelper::printAvailableImage)
+                    .unavailableImageHandler(AeronHelper::printUnavailableImage);
 
             aeron = Aeron.connect(context);
             System.out.println("hello, " + context.aeronDirectoryName());
 
-            String channel =
-                    new ChannelUriStringBuilder()
-                            .media(UDP_MEDIA)
-                            .controlMode(MDC_CONTROL_MODE_DYNAMIC)
-                            .controlEndpoint(CONTROL_ENDPOINT)
-                            .endpoint("localhost:0")
-                            .build();
+            String channel = new ChannelUriStringBuilder()
+                    .media(UDP_MEDIA)
+                    .controlMode(MDC_CONTROL_MODE_DYNAMIC)
+                    .controlEndpoint(CONTROL_ENDPOINT)
+                    .endpoint("localhost:0")
+                    .build();
 
-            Subscription subscription =
-                    aeron.addSubscription(channel, STREAM_ID); // conn: 20121 / logbuffer: 48M
+            Subscription subscription = aeron
+                    .addSubscription(channel, STREAM_ID); // conn: 20121 / logbuffer: 48M
 
             printSubscription(subscription);
 
             final Image image = awaitImage(subscription);
 
             meterRegistry = MeterRegistry.create();
-            final ThroughputMeter tps =
-                    meterRegistry.tps(receiverCategory.replace("\\s+", "") + ".receiver.tps");
+            final ThroughputMeter tps = meterRegistry
+                    .tps(receiverCategory.replace("\\s+", "") + ".receiver.tps");
 
             final FragmentAssembler fragmentAssembler = new FragmentAssembler(printAsciiMessage(tps));
 

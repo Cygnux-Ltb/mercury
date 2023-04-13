@@ -68,49 +68,41 @@ public class BasicReplicatorDestination1 {
 
         Path aeronPath = Paths.get(CommonContext.generateRandomDirName());
         String instanceName = aeronPath.getFileName().toString();
-        Path archivePath =
-                AeronHelper.archivePath()
-                        .orElseGet(() -> Paths.get(String.join("-", instanceName, "archive")));
+        Path archivePath = AeronHelper.archivePath()
+                .orElseGet(() -> Paths.get(String.join("-", instanceName, "archive")));
 
-        mediaDriver =
-                MediaDriver.launch(
-                        new Context().aeronDirectoryName(aeronPath.toString()).spiesSimulateConnection(true));
+        mediaDriver = MediaDriver.launch(new Context()
+                .aeronDirectoryName(aeronPath.toString()).spiesSimulateConnection(true));
 
-        aeron =
-                Aeron.connect(
-                        new Aeron.Context()
-                                .aeronDirectoryName(aeronPath.toString())
-                                .availableImageHandler(AeronHelper::printAvailableImage)
-                                .unavailableImageHandler(AeronHelper::printUnavailableImage));
+        aeron = Aeron.connect(new Aeron.Context()
+                .aeronDirectoryName(aeronPath.toString())
+                .availableImageHandler(AeronHelper::printAvailableImage)
+                .unavailableImageHandler(AeronHelper::printUnavailableImage));
 
-        archive =
-                Archive.launch(
-                        new Archive.Context()
-                                .aeron(aeron)
-                                .mediaDriverAgentInvoker(mediaDriver.sharedAgentInvoker())
-                                .errorCounter(
-                                        new AtomicCounter(
-                                                mediaDriver.context().countersValuesBuffer(),
-                                                SystemCounterDescriptor.ERRORS.id()))
-                                .errorHandler(mediaDriver.context().errorHandler())
-                                .archiveClientContext(
-                                        new AeronArchive.Context().controlResponseChannel(controlResponseChannel()))
-                                .localControlChannel(localControlChannel(instanceName))
-                                .controlChannel(controlChannel())
-                                .recordingEventsChannel(recordingEventsChannel())
-                                .replicationChannel(replicationChannel())
-                                .aeronDirectoryName(aeronPath.toString())
-                                .archiveDirectoryName(archivePath.toString())
-                                .threadingMode(ArchiveThreadingMode.SHARED));
+        archive = Archive.launch(new Archive.Context()
+                .aeron(aeron)
+                .mediaDriverAgentInvoker(mediaDriver.sharedAgentInvoker())
+                .errorCounter(new AtomicCounter(
+                        mediaDriver.context().countersValuesBuffer(),
+                        SystemCounterDescriptor.ERRORS.id()))
+                .errorHandler(mediaDriver.context().errorHandler())
+                .archiveClientContext(new AeronArchive.Context()
+                        .controlResponseChannel(controlResponseChannel()))
+                .localControlChannel(localControlChannel(instanceName))
+                .controlChannel(controlChannel())
+                .recordingEventsChannel(recordingEventsChannel())
+                .replicationChannel(replicationChannel())
+                .aeronDirectoryName(aeronPath.toString())
+                .archiveDirectoryName(archivePath.toString())
+                .threadingMode(ArchiveThreadingMode.SHARED));
 
         printArchiveContext(archive.context());
 
-        agentRunner =
-                new AgentRunner(
-                        new SleepingMillisIdleStrategy(300),
-                        System.err::println,
-                        null,
-                        new RecordingReplicationAgent());
+        agentRunner = new AgentRunner(
+                new SleepingMillisIdleStrategy(300),
+                System.err::println,
+                null,
+                new RecordingReplicationAgent());
 
         AgentRunner.startOnThread(agentRunner).join();
 
@@ -166,17 +158,15 @@ public class BasicReplicatorDestination1 {
         }
 
         RecordingReplicationAgent() {
-            dstContext =
-                    new AeronArchive.Context()
-                            .aeron(aeron)
-                            .controlRequestChannel(controlChannel())
-                            .controlResponseChannel(controlResponseChannel())
-                            .recordingEventsChannel(recordingEventsChannel());
-            srcContext =
-                    new AeronArchive.Context()
-                            .aeron(aeron)
-                            .controlRequestChannel(srcControlChannel())
-                            .controlResponseChannel(controlResponseChannel());
+            dstContext = new AeronArchive.Context()
+                    .aeron(aeron)
+                    .controlRequestChannel(controlChannel())
+                    .controlResponseChannel(controlResponseChannel())
+                    .recordingEventsChannel(recordingEventsChannel());
+            srcContext = new AeronArchive.Context()
+                    .aeron(aeron)
+                    .controlRequestChannel(srcControlChannel())
+                    .controlResponseChannel(controlResponseChannel());
         }
 
         @Override
@@ -189,8 +179,8 @@ public class BasicReplicatorDestination1 {
             dstClient = AeronArchive.connect(dstContext.clone());
             signalAdapter = newRecordingSignalAdapter(dstClient, this, this);
             dstRecordingDescriptor = findRecordingDescriptor(dstClient); // nullable
-            dstRecordingPosition =
-                    dstRecordingDescriptor != null ? dstRecordingDescriptor.stopPosition : NULL_VALUE;
+            dstRecordingPosition = dstRecordingDescriptor != null
+                    ? dstRecordingDescriptor.stopPosition() : NULL_VALUE;
             state = State.INIT;
             System.out.println("start");
         }
@@ -199,20 +189,27 @@ public class BasicReplicatorDestination1 {
         public int doWork() {
             try {
                 switch (state) {
-                    case INIT:
+                    case INIT -> {
                         return connect();
-                    case POLL_CONNECT:
+                    }
+                    case POLL_CONNECT -> {
                         return pollConnect();
-                    case CONNECTED:
+                    }
+                    case CONNECTED -> {
                         return catchup();
-                    case REPLICATE:
+                    }
+                    case REPLICATE -> {
                         return replicate();
-                    case POLL_REPLICATE:
+                    }
+                    case POLL_REPLICATE -> {
                         return pollReplicate();
-                    case RESET:
+                    }
+                    case RESET -> {
                         return reset();
-                    default:
-                        // no-op
+                    }
+                    default -> {
+                    }
+                    // no-op
                 }
             } catch (Exception e) {
                 System.err.println("exception occurred: " + e);
@@ -276,10 +273,10 @@ public class BasicReplicatorDestination1 {
                 srcRecordingDescriptor = findRecordingDescriptorOrThrow(srcClient);
             }
 
-            long srcPosition = srcClient.getRecordingPosition(srcRecordingDescriptor.recordingId);
+            long srcPosition = srcClient.getRecordingPosition(srcRecordingDescriptor.recordingId());
 
-            System.out.printf(
-                    "[catchup] dstPosition: %d, srcPosition: %d%n", dstRecordingPosition, srcPosition);
+            System.out.printf("[catchup] dstPosition: %d, srcPosition: %d%n",
+                    dstRecordingPosition, srcPosition);
 
             if (dstRecordingPosition <= srcPosition) {
                 state = State.REPLICATE;
@@ -290,25 +287,23 @@ public class BasicReplicatorDestination1 {
         }
 
         private int replicate() {
-            long srcRecordingId = srcRecordingDescriptor.recordingId;
-            long dstRecordingId =
-                    dstRecordingDescriptor != null ? dstRecordingDescriptor.recordingId : NULL_VALUE;
+            long srcRecordingId = srcRecordingDescriptor.recordingId();
+            long dstRecordingId = dstRecordingDescriptor != null
+                    ? dstRecordingDescriptor.recordingId() : NULL_VALUE;
 
-            replicationId =
-                    dstClient.replicate(
-                            srcRecordingId,
-                            dstRecordingId,
-                            srcClient.context().controlRequestStreamId(),
-                            srcClient.context().controlRequestChannel(),
-                            new ChannelUriStringBuilder()
-                                    .media(UDP_MEDIA)
-                                    .controlEndpoint(LIVE_CONTROL_ENDPOINT)
-                                    .endpoint("localhost:0")
-                                    .build());
+            replicationId = dstClient.replicate(
+                    srcRecordingId,
+                    dstRecordingId,
+                    srcClient.context().controlRequestStreamId(),
+                    srcClient.context().controlRequestChannel(),
+                    new ChannelUriStringBuilder()
+                            .media(UDP_MEDIA)
+                            .controlEndpoint(LIVE_CONTROL_ENDPOINT)
+                            .endpoint("localhost:0")
+                            .build());
 
             state = State.POLL_REPLICATE;
-            System.out.printf(
-                    "replicate, replicationId: %d, srcRecordingId: %d, dstRecordingId: %d%n",
+            System.out.printf("replicate, replicationId: %d, srcRecordingId: %d, dstRecordingId: %d%n",
                     replicationId, srcRecordingId, dstRecordingId);
             return 1;
         }
@@ -325,8 +320,7 @@ public class BasicReplicatorDestination1 {
                 ControlResponseCode code,
                 String errorMessage) {
 
-            System.out.printf(
-                    "[control][onResponse] "
+            System.out.printf("[control][onResponse] "
                             + "controlSessionId: %d, "
                             + "correlationId: %d, "
                             + "relevantId: %d, "
@@ -349,16 +343,11 @@ public class BasicReplicatorDestination1 {
         }
 
         @Override
-        public void onSignal(
-                long controlSessionId,
-                long correlationId,
-                long recordingId,
-                long subscriptionId,
-                long position,
-                RecordingSignal signal) {
+        public void onSignal(long controlSessionId, long correlationId,
+                             long recordingId, long subscriptionId,
+                             long position, RecordingSignal signal) {
 
-            System.out.printf(
-                    "[control][onSignal] "
+            System.out.printf("[control][onSignal] "
                             + "controlSessionId: %d, "
                             + "correlationId: %d, "
                             + "recordingId: %d, "
@@ -394,7 +383,7 @@ public class BasicReplicatorDestination1 {
         }
 
         private static RecordingDescriptor findRecordingDescriptor(AeronArchive archiveClient) {
-            return AeronArchiveUtil.findLastRecording(archiveClient, rd -> rd.streamId == STREAM_ID);
+            return AeronArchiveUtil.findLastRecording(archiveClient, rd -> rd.streamId() == STREAM_ID);
         }
 
         private static RecordingSignalAdapter newRecordingSignalAdapter(

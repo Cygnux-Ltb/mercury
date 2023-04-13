@@ -39,11 +39,10 @@ public class ManualMdcReceiver2 {
         mediaDriver = MediaDriver.launchEmbedded();
         String aeronDirectoryName = mediaDriver.aeronDirectoryName();
 
-        Context context =
-                new Context()
-                        .aeronDirectoryName(aeronDirectoryName)
-                        .availableImageHandler(AeronHelper::printAvailableImage)
-                        .unavailableImageHandler(AeronHelper::printUnavailableImage);
+        Context context = new Context()
+                .aeronDirectoryName(aeronDirectoryName)
+                .availableImageHandler(AeronHelper::printAvailableImage)
+                .unavailableImageHandler(AeronHelper::printUnavailableImage);
 
         aeron = Aeron.connect(context);
         System.out.println("hello, " + context.aeronDirectoryName());
@@ -52,8 +51,8 @@ public class ManualMdcReceiver2 {
 
         String channel = new ChannelUriStringBuilder().media(UDP_MEDIA).endpoint(ENDPOINT).build();
 
-        Subscription subscription =
-                aeron.addSubscription(channel, STREAM_ID); // conn: 20122 / logbuffer: 48M
+        Subscription subscription = aeron
+                .addSubscription(channel, STREAM_ID); // conn: 20122 / logbuffer: 48M
 
         printSubscription(subscription);
 

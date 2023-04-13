@@ -67,12 +67,12 @@ public class MultiImageReceiver {
         awaitImage(subscription2);
         awaitImage(subscription3);
 
-        FragmentAssembler fragmentAssembler =
-                new FragmentAssembler(AeronHelper.printAsciiMessage(STREAM_ID, "1"));
-        FragmentAssembler fragmentAssembler2 =
-                new FragmentAssembler(AeronHelper.printAsciiMessage(STREAM_ID, "2"));
-        FragmentAssembler fragmentAssembler3 =
-                new FragmentAssembler(AeronHelper.printAsciiMessage(STREAM_ID, "3"));
+        FragmentAssembler fragmentAssembler = new FragmentAssembler(AeronHelper
+                .printAsciiMessage(STREAM_ID, "1"));
+        FragmentAssembler fragmentAssembler2 = new FragmentAssembler(AeronHelper
+                .printAsciiMessage(STREAM_ID, "2"));
+        FragmentAssembler fragmentAssembler3 = new FragmentAssembler(AeronHelper
+                .printAsciiMessage(STREAM_ID, "3"));
 
         final Image image = subscription.imageAtIndex(0);
         final Image image2 = subscription2.imageAtIndex(0);

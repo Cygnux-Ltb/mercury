@@ -22,4 +22,5 @@ public class CompositeThroughputListener implements ThroughputListener {
             listener.onReport(context, messages);
         }
     }
+
 }

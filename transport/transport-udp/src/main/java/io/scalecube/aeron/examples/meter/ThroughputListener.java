@@ -11,4 +11,5 @@ public interface ThroughputListener extends AutoCloseable {
      * @param messages number of messages
      */
     void onReport(Context context, double messages);
+
 }

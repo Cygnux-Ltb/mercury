@@ -20,4 +20,5 @@ public interface LatencyListener extends AutoCloseable {
      * @param accumulatedHistogram the histogram
      */
     void onTerminate(Context context, Histogram accumulatedHistogram);
+
 }

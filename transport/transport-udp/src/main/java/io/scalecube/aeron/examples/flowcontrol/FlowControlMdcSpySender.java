@@ -57,32 +57,29 @@ public class FlowControlMdcSpySender {
         SigInt.register(() -> running.set(false));
 
         try {
-            if (messageRate == null) {
+            if (messageRate == null)
                 throw new IllegalArgumentException("messageRate must not be null");
-            }
 
-            System.out.printf(
-                    "### messageRate: %s, pollSpyDelayMillis: %s%n", messageRate, pollSpyDelayMillis);
+            System.out.printf("### messageRate: %s, pollSpyDelayMillis: %s%n",
+                    messageRate, pollSpyDelayMillis);
 
             mediaDriver = MediaDriver.launchEmbedded();
             String aeronDirectoryName = mediaDriver.aeronDirectoryName();
 
-            Context context =
-                    new Context()
-                            .aeronDirectoryName(aeronDirectoryName)
-                            .availableImageHandler(AeronHelper::printAvailableImage)
-                            .unavailableImageHandler(AeronHelper::printUnavailableImage);
+            Context context = new Context()
+                    .aeronDirectoryName(aeronDirectoryName)
+                    .availableImageHandler(AeronHelper::printAvailableImage)
+                    .unavailableImageHandler(AeronHelper::printUnavailableImage);
 
             aeron = Aeron.connect(context);
             System.out.println("hello, " + context.aeronDirectoryName());
 
-            String channel =
-                    new ChannelUriStringBuilder()
-                            .media(UDP_MEDIA)
-                            .spiesSimulateConnection(true)
-                            .controlMode(MDC_CONTROL_MODE_DYNAMIC)
-                            .controlEndpoint(CONTROL_ENDPOINT)
-                            .build();
+            String channel = new ChannelUriStringBuilder()
+                    .media(UDP_MEDIA)
+                    .spiesSimulateConnection(true)
+                    .controlMode(MDC_CONTROL_MODE_DYNAMIC)
+                    .controlEndpoint(CONTROL_ENDPOINT)
+                    .build();
 
             ExclusivePublication publication = aeron.addExclusivePublication(channel, STREAM_ID);
 
@@ -127,8 +124,8 @@ public class FlowControlMdcSpySender {
         return subscription.imageAtIndex(0);
     }
 
-    private static int pollImageUntilClosed(
-            FragmentAssembler fragmentAssembler, Image image, int fragmentLimit) {
+    private static int pollImageUntilClosed(FragmentAssembler fragmentAssembler,
+                                            Image image, int fragmentLimit) {
         if (image.isClosed()) {
             throw new RuntimeException("Image is closed, image: " + image);
         } else {
@@ -152,12 +149,11 @@ public class FlowControlMdcSpySender {
 
         @Override
         public void onStart() {
-            String channel =
-                    new ChannelUriStringBuilder()
-                            .media(UDP_MEDIA)
-                            .prefix(SPY_QUALIFIER)
-                            .controlEndpoint(CONTROL_ENDPOINT)
-                            .build();
+            String channel = new ChannelUriStringBuilder()
+                    .media(UDP_MEDIA)
+                    .prefix(SPY_QUALIFIER)
+                    .controlEndpoint(CONTROL_ENDPOINT)
+                    .build();
 
             final Subscription subscription = aeron.addSubscription(channel, STREAM_ID);
             printSubscription(subscription);
@@ -192,4 +188,5 @@ public class FlowControlMdcSpySender {
             return "spy-agent";
         }
     }
+
 }

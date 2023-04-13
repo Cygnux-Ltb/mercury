@@ -42,27 +42,21 @@ public class BasicReplayRunner {
 
         Path aeronPath = Paths.get(CommonContext.generateRandomDirName());
 
-        mediaDriver =
-                MediaDriver.launch(
-                        new Context().aeronDirectoryName(aeronPath.toString()).spiesSimulateConnection(true));
+        mediaDriver = MediaDriver.launch(new Context()
+                .aeronDirectoryName(aeronPath.toString()).spiesSimulateConnection(true));
 
-        aeron =
-                Aeron.connect(
-                        new Aeron.Context()
-                                .aeronDirectoryName(aeronPath.toString())
-                                .availableImageHandler(AeronHelper::printAvailableImage)
-                                .unavailableImageHandler(AeronHelper::printUnavailableImage));
+        aeron = Aeron.connect(new Aeron.Context()
+                .aeronDirectoryName(aeronPath.toString())
+                .availableImageHandler(AeronHelper::printAvailableImage)
+                .unavailableImageHandler(AeronHelper::printUnavailableImage));
 
-        aeronArchive =
-                AeronArchive.connect(
-                        new AeronArchive.Context()
-                                .aeron(aeron)
-                                .controlRequestChannel(
-                                        new ChannelUriStringBuilder()
-                                                .media(UDP_MEDIA)
-                                                .endpoint("localhost:8010")
-                                                .build())
-                                .controlResponseChannel(AeronHelper.controlResponseChannel()));
+        aeronArchive = AeronArchive.connect(new AeronArchive.Context()
+                .aeron(aeron)
+                .controlRequestChannel(new ChannelUriStringBuilder()
+                        .media(UDP_MEDIA)
+                        .endpoint("localhost:8010")
+                        .build())
+                .controlResponseChannel(AeronHelper.controlResponseChannel()));
 
         String aeronDirectoryName = mediaDriver.aeronDirectoryName();
         System.out.printf("### aeronDirectoryName: %s%n", aeronDirectoryName);
@@ -70,16 +64,16 @@ public class BasicReplayRunner {
         long controlSessionId = aeronArchive.controlSessionId();
         System.out.printf("### controlSessionId: %s%n", controlSessionId);
 
-        RecordingDescriptor rd =
-                AeronArchiveUtil.findLastRecording(aeronArchive, rd1 -> rd1.streamId == STREAM_ID);
+        RecordingDescriptor rd = AeronArchiveUtil
+                .findLastRecording(aeronArchive, rd1 -> rd1.streamId() == STREAM_ID);
         System.out.printf("### found rd: %s%n", rd);
 
-        Subscription subscription =
-                aeronArchive.replay(rd.recordingId, 0, Long.MAX_VALUE, CHANNEL, STREAM_ID);
-        Subscription subscription2 =
-                aeronArchive.replay(rd.recordingId, 0, Long.MAX_VALUE, CHANNEL, STREAM_ID);
-        Subscription subscription3 =
-                aeronArchive.replay(rd.recordingId, 0, Long.MAX_VALUE, CHANNEL, STREAM_ID);
+        Subscription subscription = aeronArchive
+                .replay(rd.recordingId(), 0, Long.MAX_VALUE, CHANNEL, STREAM_ID);
+        Subscription subscription2 = aeronArchive
+                .replay(rd.recordingId(), 0, Long.MAX_VALUE, CHANNEL, STREAM_ID);
+        Subscription subscription3 = aeronArchive
+                .replay(rd.recordingId(), 0, Long.MAX_VALUE, CHANNEL, STREAM_ID);
 
         final FragmentHandler fragmentHandler = printAsciiMessage(STREAM_ID);
         FragmentAssembler fragmentAssembler = new FragmentAssembler(fragmentHandler);

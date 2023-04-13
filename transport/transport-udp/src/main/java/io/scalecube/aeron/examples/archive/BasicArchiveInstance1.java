@@ -55,10 +55,9 @@ public class BasicArchiveInstance1 {
         archive = Archive.launch(new Archive.Context()
                 .aeron(aeron)
                 .mediaDriverAgentInvoker(mediaDriver.sharedAgentInvoker())
-                .errorCounter(
-                        new AtomicCounter(
-                                mediaDriver.context().countersValuesBuffer(),
-                                SystemCounterDescriptor.ERRORS.id()))
+                .errorCounter(new AtomicCounter(
+                        mediaDriver.context().countersValuesBuffer(),
+                        SystemCounterDescriptor.ERRORS.id()))
                 .errorHandler(mediaDriver.context().errorHandler())
                 .localControlChannel(localControlChannel(instanceName))
                 .controlChannel(controlChannel())

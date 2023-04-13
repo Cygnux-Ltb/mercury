@@ -58,31 +58,25 @@ public class MultiSessionReplayReceiver {
 
         Path aeronPath = Paths.get(CommonContext.generateRandomDirName());
 
-        mediaDriver =
-                MediaDriver.launch(
-                        new Context()
-                                .aeronDirectoryName(aeronPath.toString())
-                                .imageLivenessTimeoutNs(IMAGE_LIVENESS_TIMEOUT)
-                                .multicastFlowControlSupplier(new MinMulticastFlowControlSupplier())
-                                .unicastFlowControlSupplier(new MinMulticastFlowControlSupplier()));
+        mediaDriver = MediaDriver.launch(new Context()
+                .aeronDirectoryName(aeronPath.toString())
+                .imageLivenessTimeoutNs(IMAGE_LIVENESS_TIMEOUT)
+                .multicastFlowControlSupplier(new MinMulticastFlowControlSupplier())
+                .unicastFlowControlSupplier(new MinMulticastFlowControlSupplier()));
 
-        aeron =
-                Aeron.connect(
-                        new Aeron.Context()
-                                .aeronDirectoryName(aeronPath.toString())
-                                .availableImageHandler(AeronHelper::printAvailableImage)
-                                .unavailableImageHandler(AeronHelper::printUnavailableImage));
+        aeron = Aeron.connect(new Aeron.Context()
+                .aeronDirectoryName(aeronPath.toString())
+                .availableImageHandler(AeronHelper::printAvailableImage)
+                .unavailableImageHandler(AeronHelper::printUnavailableImage));
 
-        aeronArchive =
-                AeronArchive.connect(
-                        new AeronArchive.Context()
-                                .aeron(aeron)
-                                .controlRequestChannel(
-                                        new ChannelUriStringBuilder()
-                                                .media(UDP_MEDIA)
-                                                .endpoint("localhost:8010")
-                                                .build())
-                                .controlResponseChannel(controlResponseChannel()));
+        aeronArchive = AeronArchive.connect(new AeronArchive.Context()
+                .aeron(aeron)
+                .controlRequestChannel(
+                        new ChannelUriStringBuilder()
+                                .media(UDP_MEDIA)
+                                .endpoint("localhost:8010")
+                                .build())
+                .controlResponseChannel(controlResponseChannel()));
 
         String aeronDirectoryName = mediaDriver.aeronDirectoryName();
         System.out.printf("### aeronDirectoryName: %s%n", aeronDirectoryName);
@@ -95,10 +89,9 @@ public class MultiSessionReplayReceiver {
         compositeAgent.add(newAgent(STREAM_ID1));
         compositeAgent.add(newAgent(STREAM_ID2));
 
-        Thread thread =
-                AgentRunner.startOnThread(
-                        new AgentRunner(YieldingIdleStrategy.INSTANCE, throwable -> {
-                        }, null, compositeAgent));
+        Thread thread = AgentRunner.startOnThread(
+                new AgentRunner(YieldingIdleStrategy.INSTANCE, throwable -> {
+                }, null, compositeAgent));
 
         thread.join();
 
@@ -141,26 +134,24 @@ public class MultiSessionReplayReceiver {
             @Override
             public void onStart() {
                 // recording descriptor / per STREAM_ID
-                rd = AeronArchiveUtil.findLastRecording(aeronArchive, rd -> rd.streamId == streamId);
+                rd = AeronArchiveUtil.findLastRecording(aeronArchive, rd -> rd.streamId() == streamId);
                 if (rd == null) {
                     throw new IllegalStateException("Cannot find recording descriptor");
                 }
                 System.out.printf("### found rd: %s%n", rd);
 
                 // live channel / per STREAM_ID
-                liveChannel =
-                        new ChannelUriStringBuilder()
-                                .media(UDP_MEDIA)
-                                .controlEndpoint(RECORDING_ENDPOINT)
-                                .sessionId(rd.sessionId)
-                                .build();
+                liveChannel = new ChannelUriStringBuilder()
+                        .media(UDP_MEDIA)
+                        .controlEndpoint(RECORDING_ENDPOINT)
+                        .sessionId(rd.sessionId())
+                        .build();
 
                 // multi-destination control subscription / per STREAM_ID
-                String controlChannel =
-                        new ChannelUriStringBuilder()
-                                .media(UDP_MEDIA)
-                                .controlMode(MDC_CONTROL_MODE_MANUAL)
-                                .build();
+                String controlChannel = new ChannelUriStringBuilder()
+                        .media(UDP_MEDIA)
+                        .controlMode(MDC_CONTROL_MODE_MANUAL)
+                        .build();
                 subscription = aeron.addSubscription(controlChannel, streamId);
                 printSubscription(subscription);
             }
@@ -172,12 +163,12 @@ public class MultiSessionReplayReceiver {
 
             @Override
             public int doWork() {
-                Image liveImage = subscription.imageBySessionId(rd.sessionId);
+                Image liveImage = subscription.imageBySessionId(rd.sessionId());
 
-                final Image bobImage =
-                        bobSessionId != -1 ? subscription.imageBySessionId(bobSessionId) : null;
-                final Image aliceImage =
-                        aliceSessionId != -1 ? subscription.imageBySessionId(aliceSessionId) : null;
+                final Image bobImage = bobSessionId != -1
+                        ? subscription.imageBySessionId(bobSessionId) : null;
+                final Image aliceImage = aliceSessionId != -1
+                        ? subscription.imageBySessionId(aliceSessionId) : null;
 
                 int progress = 0;
 
@@ -220,18 +211,18 @@ public class MultiSessionReplayReceiver {
                 }
 
                 if (!replaysAdded && replaysAddDeadline <= System.currentTimeMillis()) {
-                    bobReplayId =
-                            aeronArchive.startReplay(rd.recordingId, 0, rd.stopPosition, replayChannel, streamId);
-                    bobReplayChannel =
-                            ChannelUri.addSessionId(replayChannel, bobSessionId = (int) bobReplayId);
+                    bobReplayId = aeronArchive
+                            .startReplay(rd.recordingId(), 0, rd.stopPosition(), replayChannel, streamId);
+                    bobReplayChannel = ChannelUri
+                            .addSessionId(replayChannel, bobSessionId = (int) bobReplayId);
                     subscription.asyncAddDestination(bobReplayChannel);
                     System.err.println(
                             "### " + Instant.now() + "| ADDED Bob channel | sessionId: " + bobSessionId);
 
-                    aliceReplayId =
-                            aeronArchive.startReplay(rd.recordingId, 0, rd.stopPosition, replayChannel, streamId);
-                    aliceReplayChannel =
-                            ChannelUri.addSessionId(replayChannel, aliceSessionId = (int) aliceReplayId);
+                    aliceReplayId = aeronArchive
+                            .startReplay(rd.recordingId(), 0, rd.stopPosition(), replayChannel, streamId);
+                    aliceReplayChannel = ChannelUri
+                            .addSessionId(replayChannel, aliceSessionId = (int) aliceReplayId);
                     subscription.asyncAddDestination(aliceReplayChannel);
 
                     System.err.println(

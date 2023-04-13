@@ -53,27 +53,21 @@ public class BasicReplayMergeReceiver {
 
         Path aeronPath = Paths.get(CommonContext.generateRandomDirName());
 
-        mediaDriver =
-                MediaDriver.launch(
-                        new Context().aeronDirectoryName(aeronPath.toString()).spiesSimulateConnection(true));
+        mediaDriver = MediaDriver.launch(new Context()
+                .aeronDirectoryName(aeronPath.toString()).spiesSimulateConnection(true));
 
-        aeron =
-                Aeron.connect(
-                        new Aeron.Context()
-                                .aeronDirectoryName(aeronPath.toString())
-                                .availableImageHandler(AeronHelper::printAvailableImage)
-                                .unavailableImageHandler(AeronHelper::printUnavailableImage));
+        aeron = Aeron.connect(new Aeron.Context()
+                .aeronDirectoryName(aeronPath.toString())
+                .availableImageHandler(AeronHelper::printAvailableImage)
+                .unavailableImageHandler(AeronHelper::printUnavailableImage));
 
-        aeronArchive =
-                AeronArchive.connect(
-                        new AeronArchive.Context()
-                                .aeron(aeron)
-                                .controlRequestChannel(
-                                        new ChannelUriStringBuilder()
-                                                .media(UDP_MEDIA)
-                                                .endpoint("localhost:8010")
-                                                .build())
-                                .controlResponseChannel(AeronHelper.controlResponseChannel()));
+        aeronArchive = AeronArchive.connect(new AeronArchive.Context()
+                .aeron(aeron)
+                .controlRequestChannel(new ChannelUriStringBuilder()
+                        .media(UDP_MEDIA)
+                        .endpoint("localhost:8010")
+                        .build())
+                .controlResponseChannel(AeronHelper.controlResponseChannel()));
 
         String aeronDirectoryName = mediaDriver.aeronDirectoryName();
         System.out.printf("### aeronDirectoryName: %s%n", aeronDirectoryName);
@@ -81,60 +75,51 @@ public class BasicReplayMergeReceiver {
         long controlSessionId = aeronArchive.controlSessionId();
         System.out.printf("### controlSessionId: %s%n", controlSessionId);
 
-        RecordingDescriptor rd =
-                AeronArchiveUtil.findLastRecording(aeronArchive, rd1 -> rd1.streamId == STREAM_ID);
+        RecordingDescriptor rd = AeronArchiveUtil
+                .findLastRecording(aeronArchive, rd1 -> rd1.streamId() == STREAM_ID);
         if (rd == null) {
             throw new NoSuchElementException("recording not found");
         }
 
         // mds subscription
-        Subscription subscription =
-                aeron.addSubscription(
-                        new ChannelUriStringBuilder()
-                                .media(UDP_MEDIA)
-                                .controlMode(MDC_CONTROL_MODE_MANUAL)
-                                // .sessionId(rd.sessionId)
-                                .build(),
-                        STREAM_ID);
+        Subscription subscription = aeron.addSubscription(
+                new ChannelUriStringBuilder()
+                        .media(UDP_MEDIA)
+                        .controlMode(MDC_CONTROL_MODE_MANUAL)
+                        // .sessionId(rd.sessionId)
+                        .build(),
+                STREAM_ID);
 
         printSubscription(subscription);
 
-        String replayChannel =
-                new ChannelUriStringBuilder()
-                        .media(UDP_MEDIA)
-                        // .controlMode(MDC_CONTROL_MODE_DYNAMIC)
-                        // .controlEndpoint(REPLAY_MERGE_CONTROL_ENDPOINT)
-                        // .endpoint("localhost:0")
-                        .sessionId(rd.sessionId)
-                        .build();
+        String replayChannel = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA)
+                // .controlMode(MDC_CONTROL_MODE_DYNAMIC)
+                // .controlEndpoint(REPLAY_MERGE_CONTROL_ENDPOINT)
+                // .endpoint("localhost:0")
+                .sessionId(rd.sessionId())
+                .build();
 
-        String replayDestination =
-                new ChannelUriStringBuilder()
-                        .media(UDP_MEDIA)
-                        // .controlMode(MDC_CONTROL_MODE_DYNAMIC)
-                        // .controlEndpoint(REPLAY_MERGE_CONTROL_ENDPOINT)
-                        .endpoint("localhost:0")
-                        // .sessionId(rd.sessionId)
-                        .build();
+        String replayDestination = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA)
+                // .controlMode(MDC_CONTROL_MODE_DYNAMIC)
+                // .controlEndpoint(REPLAY_MERGE_CONTROL_ENDPOINT)
+                .endpoint("localhost:0")
+                // .sessionId(rd.sessionId)
+                .build();
 
-        String liveDestination =
-                new ChannelUriStringBuilder()
-                        .media(UDP_MEDIA)
-                        // .controlMode(MDC_CONTROL_MODE_DYNAMIC)
-                        .controlEndpoint(REPLAY_MERGE_CONTROL_ENDPOINT)
-                        .endpoint("localhost:0")
-                        // .sessionId(rd.sessionId)
-                        .build();
+        String liveDestination = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA)
+                // .controlMode(MDC_CONTROL_MODE_DYNAMIC)
+                .controlEndpoint(REPLAY_MERGE_CONTROL_ENDPOINT)
+                .endpoint("localhost:0")
+                // .sessionId(rd.sessionId)
+                .build();
 
-        ReplayMerge replayMerge =
-                new ReplayMerge(
-                        subscription,
-                        aeronArchive,
-                        replayChannel,
-                        replayDestination,
-                        liveDestination,
-                        rd.recordingId,
-                        rd.startPosition);
+        ReplayMerge replayMerge = new ReplayMerge(
+                subscription, aeronArchive, replayChannel,
+                replayDestination, liveDestination, rd.recordingId(),
+                rd.startPosition());
 
         final FragmentHandler fragmentHandler = printAsciiMessage(STREAM_ID);
         FragmentAssembler fragmentAssembler = new FragmentAssembler(fragmentHandler);
@@ -161,14 +146,12 @@ public class BasicReplayMergeReceiver {
         if (replayMerge.isMerged()) {
             final Image image = replayMerge.image();
             progress = image.poll(fragmentAssembler, FRAGMENT_LIMIT);
-
             if (image.isClosed()) {
                 System.err.println("### replayMerge.image is closed, exiting");
                 throw new RuntimeException("good bye");
             }
         } else {
             progress = replayMerge.poll(fragmentHandler, FRAGMENT_LIMIT);
-
             if (replayMerge.hasFailed()) {
                 System.err.println("### replayMerge has failed, exiting");
                 throw new RuntimeException("good bye");
@@ -184,4 +167,5 @@ public class BasicReplayMergeReceiver {
         CloseHelper.close(aeron);
         CloseHelper.close(mediaDriver);
     }
+
 }

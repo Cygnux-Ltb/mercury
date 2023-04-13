@@ -17,11 +17,10 @@ public class LatencyMeter implements AutoCloseable {
         this.name = name;
         this.listener = listener;
         this.context = context;
-        this.histogram =
-                new org.HdrHistogram.Recorder(
-                        context.lowestTrackableValue(),
-                        context.highestTrackableValue(),
-                        context.numberOfSignificantValueDigits());
+        this.histogram = new org.HdrHistogram.Recorder(
+                context.lowestTrackableValue(),
+                context.highestTrackableValue(),
+                context.numberOfSignificantValueDigits());
     }
 
     public String name() {

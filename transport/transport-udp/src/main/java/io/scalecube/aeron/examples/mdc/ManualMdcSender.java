@@ -38,25 +38,24 @@ public class ManualMdcSender {
         mediaDriver = MediaDriver.launchEmbedded();
         String aeronDirectoryName = mediaDriver.aeronDirectoryName();
 
-        Context context =
-                new Context()
-                        .aeronDirectoryName(aeronDirectoryName)
-                        .availableImageHandler(AeronHelper::printAvailableImage)
-                        .unavailableImageHandler(AeronHelper::printUnavailableImage);
+        Context context = new Context()
+                .aeronDirectoryName(aeronDirectoryName)
+                .availableImageHandler(AeronHelper::printAvailableImage)
+                .unavailableImageHandler(AeronHelper::printUnavailableImage);
 
         aeron = Aeron.connect(context);
         System.out.println("hello, " + context.aeronDirectoryName());
 
-        String controlEndpointChannel =
-                new ChannelUriStringBuilder().media(UDP_MEDIA).controlMode(MDC_CONTROL_MODE_MANUAL).build();
+        String controlEndpointChannel = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA).controlMode(MDC_CONTROL_MODE_MANUAL).build();
 
         ExclusivePublication publication =
                 aeron.addExclusivePublication(controlEndpointChannel, STREAM_ID);
 
-        String destinationChannel =
-                new ChannelUriStringBuilder().media(UDP_MEDIA).endpoint(ENDPOINT).build();
-        String destinationChannel2 =
-                new ChannelUriStringBuilder().media(UDP_MEDIA).endpoint(ENDPOINT2).build();
+        String destinationChannel = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA).endpoint(ENDPOINT).build();
+        String destinationChannel2 = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA).endpoint(ENDPOINT2).build();
 
         publication.addDestination(destinationChannel);
         publication.addDestination(destinationChannel2);

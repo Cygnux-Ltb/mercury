@@ -41,30 +41,27 @@ public class FlowControlMdcSender {
         try {
             final Integer messageRate = Integer.getInteger("messageRate");
 
-            if (messageRate == null) {
+            if (messageRate == null)
                 throw new IllegalArgumentException("messageRate must not be null");
-            }
 
             System.out.printf("### messageRate: %s%n", messageRate);
 
             mediaDriver = MediaDriver.launchEmbedded();
             String aeronDirectoryName = mediaDriver.aeronDirectoryName();
 
-            Context context =
-                    new Context()
-                            .aeronDirectoryName(aeronDirectoryName)
-                            .availableImageHandler(AeronHelper::printAvailableImage)
-                            .unavailableImageHandler(AeronHelper::printUnavailableImage);
+            Context context = new Context()
+                    .aeronDirectoryName(aeronDirectoryName)
+                    .availableImageHandler(AeronHelper::printAvailableImage)
+                    .unavailableImageHandler(AeronHelper::printUnavailableImage);
 
             aeron = Aeron.connect(context);
             System.out.println("hello, " + context.aeronDirectoryName());
 
-            String channel =
-                    new ChannelUriStringBuilder()
-                            .media(UDP_MEDIA)
-                            .controlMode(MDC_CONTROL_MODE_DYNAMIC)
-                            .controlEndpoint(CONTROL_ENDPOINT)
-                            .build();
+            String channel = new ChannelUriStringBuilder()
+                    .media(UDP_MEDIA)
+                    .controlMode(MDC_CONTROL_MODE_DYNAMIC)
+                    .controlEndpoint(CONTROL_ENDPOINT)
+                    .build();
 
             ExclusivePublication publication = aeron.addExclusivePublication(channel, STREAM_ID);
 

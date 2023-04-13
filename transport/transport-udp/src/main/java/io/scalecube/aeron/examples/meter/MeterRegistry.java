@@ -52,12 +52,11 @@ public class MeterRegistry implements AutoCloseable {
         final DynamicCompositeAgent compositeAgent =
                 new DynamicCompositeAgent("meter-registry", latencyReporter, throughputReporter);
 
-        agentRunner =
-                new AgentRunner(
-                        context.idleStrategy,
-                        throwable -> LOGGER.error("[{}] Error:", compositeAgent.roleName(), throwable),
-                        null,
-                        compositeAgent);
+        agentRunner = new AgentRunner(
+                context.idleStrategy,
+                throwable -> LOGGER.error("[{}] Error:", compositeAgent.roleName(), throwable),
+                null,
+                compositeAgent);
 
         AgentRunner.startOnThread(agentRunner);
     }

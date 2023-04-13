@@ -39,9 +39,9 @@ public class ThroughputMeter implements AutoCloseable {
         long currentTimestamp = context.nanoClock().nanoTime();
 
         long timeSpanNs = currentTimestamp - lastTimestamp;
-        double messagesPerInterval =
-                ((currentTotalMessages - lastTotalMessages) * (double) context.reportInterval().toNanos())
-                        / (double) timeSpanNs;
+        double messagesPerInterval = ((currentTotalMessages - lastTotalMessages)
+                * (double) context.reportInterval().toNanos())
+                / (double) timeSpanNs;
 
         lastTotalMessages = currentTotalMessages;
         lastTimestamp = currentTimestamp;

@@ -46,56 +46,52 @@ public class SingleSessionMdsSender {
 
         SigInt.register(SingleSessionMdsSender::close);
 
-        mediaDriver =
-                MediaDriver.launchEmbedded(
-                        new MediaDriver.Context()
-                                .spiesSimulateConnection(true)
-                                .publicationLingerTimeoutNs(PUBLICATION_LINGER_TIMEOUT)
-                                .imageLivenessTimeoutNs(IMAGE_LIVENESS_TIMEOUT));
+        mediaDriver = MediaDriver.launchEmbedded(
+                new MediaDriver.Context()
+                        .spiesSimulateConnection(true)
+                        .publicationLingerTimeoutNs(PUBLICATION_LINGER_TIMEOUT)
+                        .imageLivenessTimeoutNs(IMAGE_LIVENESS_TIMEOUT));
 
         String aeronDirectoryName = mediaDriver.aeronDirectoryName();
 
-        Context context =
-                new Context()
-                        .aeronDirectoryName(aeronDirectoryName)
-                        .availableImageHandler(AeronHelper::printAvailableImage)
-                        .unavailableImageHandler(AeronHelper::printUnavailableImage);
+        Context context = new Context()
+                .aeronDirectoryName(aeronDirectoryName)
+                .availableImageHandler(AeronHelper::printAvailableImage)
+                .unavailableImageHandler(AeronHelper::printUnavailableImage);
 
         aeron = Aeron.connect(context);
         System.out.println("hello, " + context.aeronDirectoryName());
 
         // recording
-        String recordingChannel =
-                new ChannelUriStringBuilder()
-                        .media(UDP_MEDIA)
-                        .controlMode(MDC_CONTROL_MODE_DYNAMIC)
-                        .controlEndpoint(CONTROL_ENDPOINT)
-                        .sessionId(SESSION_ID)
-                        .build();
+        String recordingChannel = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA)
+                .controlMode(MDC_CONTROL_MODE_DYNAMIC)
+                .controlEndpoint(CONTROL_ENDPOINT)
+                .sessionId(SESSION_ID)
+                .build();
 
-        ExclusivePublication recordingPublication =
-                aeron.addExclusivePublication(recordingChannel, STREAM_ID);
+        ExclusivePublication recordingPublication = aeron
+                .addExclusivePublication(recordingChannel, STREAM_ID);
         printPublication(recordingPublication);
 
         // spy recording (need it very much to keep updating sender position counter in network
         // publication, see io.aeron.driver.NetworkPublication.send)
-        Subscription spyRecordingSubscription =
-                aeron.addSubscription(String.join(":", SPY_QUALIFIER, recordingChannel), STREAM_ID);
+        Subscription spyRecordingSubscription = aeron
+                .addSubscription(String.join(":", SPY_QUALIFIER, recordingChannel), STREAM_ID);
 
         // replay
-        String replayChannel =
-                new ChannelUriStringBuilder()
-                        .media(UDP_MEDIA)
-                        .initialPosition(
-                                0L, recordingPublication.initialTermId(), recordingPublication.termBufferLength())
-                        .endpoint(REPLAY_ENDPOINT)
-                        .sessionId(SESSION_ID)
-                        .linger(0L)
-                        .eos(false)
-                        .build();
+        String replayChannel = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA)
+                .initialPosition(0L, recordingPublication.initialTermId(),
+                        recordingPublication.termBufferLength())
+                .endpoint(REPLAY_ENDPOINT)
+                .sessionId(SESSION_ID)
+                .linger(0L)
+                .eos(false)
+                .build();
 
-        ExclusivePublication replayPublication =
-                aeron.addExclusivePublication(replayChannel, STREAM_ID);
+        ExclusivePublication replayPublication = aeron
+                .addExclusivePublication(replayChannel, STREAM_ID);
         printPublication(replayPublication);
 
         // spy replay (left here for research purpose, somehow presence of this spy prohibits from
@@ -103,8 +99,8 @@ public class SingleSessionMdsSender {
         // conditions can't be met, somehow this "replay spy" creates situation when live channel is at
         // underRun condition (i.e. !isFlowControlUnderRun(packetPosition) -> false), appears is , see
         // io.aeron.driver.PublicationImage.insertPacket)
-        Subscription spyReplaySubscription =
-                aeron.addSubscription(String.join(":", SPY_QUALIFIER, replayChannel), STREAM_ID);
+        Subscription spyReplaySubscription = aeron
+                .addSubscription(String.join(":", SPY_QUALIFIER, replayChannel), STREAM_ID);
 
         // send
         for (long i = 0; i < NUMBER_OF_MESSAGES; i++) {

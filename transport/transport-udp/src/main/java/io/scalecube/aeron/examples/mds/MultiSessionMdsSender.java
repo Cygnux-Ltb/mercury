@@ -52,73 +52,68 @@ public class MultiSessionMdsSender {
 
         SigInt.register(MultiSessionMdsSender::close);
 
-        mediaDriver =
-                MediaDriver.launchEmbedded(
-                        new MediaDriver.Context()
-                                .spiesSimulateConnection(true)
-                                .publicationLingerTimeoutNs(PUBLICATION_LINGER_TIMEOUT)
-                                .imageLivenessTimeoutNs(IMAGE_LIVENESS_TIMEOUT));
+        mediaDriver = MediaDriver.launchEmbedded(
+                new MediaDriver.Context()
+                        .spiesSimulateConnection(true)
+                        .publicationLingerTimeoutNs(PUBLICATION_LINGER_TIMEOUT)
+                        .imageLivenessTimeoutNs(IMAGE_LIVENESS_TIMEOUT));
 
         String aeronDirectoryName = mediaDriver.aeronDirectoryName();
 
-        Context context =
-                new Context()
-                        .aeronDirectoryName(aeronDirectoryName)
-                        .availableImageHandler(AeronHelper::printAvailableImage)
-                        .unavailableImageHandler(AeronHelper::printUnavailableImage);
+        Context context = new Context()
+                .aeronDirectoryName(aeronDirectoryName)
+                .availableImageHandler(AeronHelper::printAvailableImage)
+                .unavailableImageHandler(AeronHelper::printUnavailableImage);
 
         aeron = Aeron.connect(context);
         System.out.println("hello, " + context.aeronDirectoryName());
 
         // recording
-        String recordingChannel =
-                new ChannelUriStringBuilder()
-                        .media(UDP_MEDIA)
-                        .controlMode(MDC_CONTROL_MODE_DYNAMIC)
-                        .controlEndpoint(RECORDING_ENDPOINT)
-                        .sessionId(RECORDING_SESSION_ID)
-                        .build();
+        String recordingChannel = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA)
+                .controlMode(MDC_CONTROL_MODE_DYNAMIC)
+                .controlEndpoint(RECORDING_ENDPOINT)
+                .sessionId(RECORDING_SESSION_ID)
+                .build();
 
-        ExclusivePublication recordingPublication =
-                aeron.addExclusivePublication(recordingChannel, STREAM_ID);
+        ExclusivePublication recordingPublication = aeron
+                .addExclusivePublication(recordingChannel, STREAM_ID);
         printPublication(recordingPublication);
 
         // spy recording
-        Subscription spyRecordingSubscription =
-                aeron.addSubscription(String.join(":", SPY_QUALIFIER, recordingChannel), STREAM_ID);
+        Subscription spyRecordingSubscription = aeron
+                .addSubscription(String.join(":", SPY_QUALIFIER, recordingChannel), STREAM_ID);
 
         // replay 1
-        String replayChannelBob =
-                new ChannelUriStringBuilder()
-                        .media(UDP_MEDIA)
-                        .initialPosition(
-                                0, recordingPublication.initialTermId(), recordingPublication.termBufferLength())
-                        .controlMode(MDC_CONTROL_MODE_DYNAMIC)
-                        .controlEndpoint(REPLAY_BOB_ENDPOINT)
-                        .sessionId(REPLAY_BOB_SESSION_ID)
-                        .linger(0L)
-                        .eos(false)
-                        .build();
+        String replayChannelBob = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA)
+                .initialPosition(0, recordingPublication.initialTermId(),
+                        recordingPublication.termBufferLength())
+                .controlMode(MDC_CONTROL_MODE_DYNAMIC)
+                .controlEndpoint(REPLAY_BOB_ENDPOINT)
+                .sessionId(REPLAY_BOB_SESSION_ID)
+                .linger(0L)
+                .eos(false)
+                .build();
 
-        ExclusivePublication replayPublicationBob =
-                aeron.addExclusivePublication(replayChannelBob, STREAM_ID);
+        ExclusivePublication replayPublicationBob = aeron
+                .addExclusivePublication(replayChannelBob, STREAM_ID);
         printPublication(replayPublicationBob);
 
         // replay 2
-        String replayChannelAlice =
-                new ChannelUriStringBuilder()
-                        .media(UDP_MEDIA)
-                        .initialPosition(
-                                0, recordingPublication.initialTermId(), recordingPublication.termBufferLength())
-                        .controlMode(MDC_CONTROL_MODE_DYNAMIC)
-                        .controlEndpoint(REPLAY_ALICE_ENDPOINT)
-                        .sessionId(REPLAY_ALICE_SESSION_ID)
-                        .linger(0L)
-                        .eos(false)
-                        .build();
+        String replayChannelAlice = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA)
+                .initialPosition(0, recordingPublication.initialTermId(),
+                        recordingPublication.termBufferLength())
+                .controlMode(MDC_CONTROL_MODE_DYNAMIC)
+                .controlEndpoint(REPLAY_ALICE_ENDPOINT)
+                .sessionId(REPLAY_ALICE_SESSION_ID)
+                .linger(0L)
+                .eos(false)
+                .build();
 
-        ExclusivePublication replayPublicationAlice =
-                aeron.addExclusivePublication(replayChannelAlice, STREAM_ID);
+        ExclusivePublication replayPublicationAlice = aeron
+                .addExclusivePublication(replayChannelAlice, STREAM_ID);
         printPublication(replayPublicationAlice);
 
         // send

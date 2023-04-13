@@ -35,11 +35,10 @@ import static io.scalecube.aeron.examples.AeronHelper.printRecordedPublication;
 
 public class BasicLocalExclusiveRecorder {
 
-    public static final String CHANNEL =
-            new ChannelUriStringBuilder()
-                    .media(IPC_MEDIA)
-                    .endpoint(String.join("-", "ipc_endpoint", UUID.randomUUID().toString()))
-                    .build();
+    public static final String CHANNEL = new ChannelUriStringBuilder()
+            .media(IPC_MEDIA)
+            .endpoint(String.join("-", "ipc_endpoint", UUID.randomUUID().toString()))
+            .build();
 
     public static final String RECORDING_EVENTS_CHANNEL_ENDPOINT = "localhost:8030";
     public static final String CONTROL_CHANNEL_ENDPOINT = "localhost:8010";
@@ -64,50 +63,40 @@ public class BasicLocalExclusiveRecorder {
 
         Path aeronPath = Paths.get(CommonContext.generateRandomDirName());
         String instanceName = aeronPath.getFileName().toString();
-        Path archivePath =
-                AeronHelper.archivePath()
-                        .orElseGet(() -> Paths.get(String.join("-", instanceName, "archive")));
+        Path archivePath = AeronHelper.archivePath()
+                .orElseGet(() -> Paths.get(String.join("-", instanceName, "archive")));
 
-        mediaDriver =
-                MediaDriver.launch(
-                        new MediaDriver.Context()
-                                .aeronDirectoryName(aeronPath.toString())
-                                .spiesSimulateConnection(true));
+        mediaDriver = MediaDriver.launch(new MediaDriver.Context()
+                .aeronDirectoryName(aeronPath.toString())
+                .spiesSimulateConnection(true));
 
-        aeron =
-                Aeron.connect(
-                        new Aeron.Context()
-                                .aeronDirectoryName(aeronPath.toString())
-                                .availableImageHandler(AeronHelper::printAvailableImage)
-                                .unavailableImageHandler(AeronHelper::printUnavailableImage));
+        aeron = Aeron.connect(new Aeron.Context()
+                .aeronDirectoryName(aeronPath.toString())
+                .availableImageHandler(AeronHelper::printAvailableImage)
+                .unavailableImageHandler(AeronHelper::printUnavailableImage));
 
-        archive =
-                Archive.launch(
-                        new Archive.Context()
-                                .aeron(aeron)
-                                .mediaDriverAgentInvoker(mediaDriver.sharedAgentInvoker())
-                                .errorCounter(
-                                        new AtomicCounter(
-                                                mediaDriver.context().countersValuesBuffer(),
-                                                SystemCounterDescriptor.ERRORS.id()))
-                                .errorHandler(mediaDriver.context().errorHandler())
-                                .localControlChannel(localControlChannel(instanceName))
-                                .controlChannel(controlChannel())
-                                .recordingEventsChannel(recordingEventsChannel())
-                                .replicationChannel(replicationChannel())
-                                .aeronDirectoryName(aeronPath.toString())
-                                .archiveDirectoryName(archivePath.toString())
-                                .threadingMode(ArchiveThreadingMode.SHARED));
+        archive = Archive.launch(new Archive.Context()
+                .aeron(aeron)
+                .mediaDriverAgentInvoker(mediaDriver.sharedAgentInvoker())
+                .errorCounter(new AtomicCounter(
+                        mediaDriver.context().countersValuesBuffer(),
+                        SystemCounterDescriptor.ERRORS.id()))
+                .errorHandler(mediaDriver.context().errorHandler())
+                .localControlChannel(localControlChannel(instanceName))
+                .controlChannel(controlChannel())
+                .recordingEventsChannel(recordingEventsChannel())
+                .replicationChannel(replicationChannel())
+                .aeronDirectoryName(aeronPath.toString())
+                .archiveDirectoryName(archivePath.toString())
+                .threadingMode(ArchiveThreadingMode.SHARED));
 
         printArchiveContext(archive.context());
 
         CountersReader counters = aeron.countersReader();
 
-        aeronArchive =
-                AeronArchive.connect(
-                        new AeronArchive.Context()
-                                .aeron(aeron)
-                                .controlResponseChannel(controlResponseChannel()));
+        aeronArchive = AeronArchive.connect(new AeronArchive.Context()
+                .aeron(aeron)
+                .controlResponseChannel(controlResponseChannel()));
 
         long controlSessionId = aeronArchive.controlSessionId();
         System.out.printf("### controlSessionId: %s%n", controlSessionId);

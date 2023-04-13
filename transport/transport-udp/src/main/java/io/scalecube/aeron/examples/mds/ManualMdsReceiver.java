@@ -41,24 +41,23 @@ public class ManualMdsReceiver {
         mediaDriver = MediaDriver.launchEmbedded();
         String aeronDirectoryName = mediaDriver.aeronDirectoryName();
 
-        Context context =
-                new Context()
-                        .aeronDirectoryName(aeronDirectoryName)
-                        .availableImageHandler(AeronHelper::printAvailableImage)
-                        .unavailableImageHandler(AeronHelper::printUnavailableImage);
+        Context context = new Context()
+                .aeronDirectoryName(aeronDirectoryName)
+                .availableImageHandler(AeronHelper::printAvailableImage)
+                .unavailableImageHandler(AeronHelper::printUnavailableImage);
 
         aeron = Aeron.connect(context);
         System.out.println("hello, " + context.aeronDirectoryName());
 
-        String controlChannel =
-                new ChannelUriStringBuilder().media(UDP_MEDIA).controlMode(MDC_CONTROL_MODE_MANUAL).build();
+        String controlChannel = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA).controlMode(MDC_CONTROL_MODE_MANUAL).build();
 
         Subscription subscription = aeron.addSubscription(controlChannel, STREAM_ID);
 
-        String destinationChannel =
-                new ChannelUriStringBuilder().media(UDP_MEDIA).endpoint(ENDPOINT).build();
-        String destinationChannel2 =
-                new ChannelUriStringBuilder().media(UDP_MEDIA).endpoint(ENDPOINT2).build();
+        String destinationChannel = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA).endpoint(ENDPOINT).build();
+        String destinationChannel2 = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA).endpoint(ENDPOINT2).build();
 
         subscription.addDestination(destinationChannel);
         subscription.addDestination(destinationChannel2);

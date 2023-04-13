@@ -36,16 +36,14 @@ public final class MdcRecordingPublisher {
 
     public static final int STREAM_ID = 10000;
 
-    private static final ChannelUriStringBuilder
-            publicationChannel = new ChannelUriStringBuilder()
+    private static final ChannelUriStringBuilder publicationChannel = new ChannelUriStringBuilder()
             .alias("mdc-publication")
             .spiesSimulateConnection(true)
             .media(UDP_MEDIA)
             .controlEndpoint(CONTROL_ENDPOINT)
             .controlMode(MDC_CONTROL_MODE_DYNAMIC);
 
-    private static final ChannelUriStringBuilder
-            recordingChannel = new ChannelUriStringBuilder()
+    private static final ChannelUriStringBuilder recordingChannel = new ChannelUriStringBuilder()
             .alias("recording")
             .media(UDP_MEDIA)
             // .endpoint(RECORDING_ENDPOINT)
@@ -70,17 +68,16 @@ public final class MdcRecordingPublisher {
         Publication publication = aeron
                 .addExclusivePublication(publicationChannel.build(), STREAM_ID);
 
-        aeronArchive.startRecording(
-                recordingChannel.sessionId(publication.sessionId()).build(), STREAM_ID, LOCAL, true);
+        aeronArchive.startRecording(recordingChannel
+                .sessionId(publication.sessionId()).build(), STREAM_ID, LOCAL, true);
 
-        publishMessages(publication,
-                publishPeriodNs != null ? Long.parseLong(publishPeriodNs) : DEFAULT_PUBLISH_PERIOD_NS);
+        publishMessages(publication, publishPeriodNs != null
+                ? Long.parseLong(publishPeriodNs) : DEFAULT_PUBLISH_PERIOD_NS);
 
-        Runtime.getRuntime().addShutdownHook(
-                new Thread(() -> {
-                    System.out.println("Shutdown...");
-                    CloseHelper.quietCloseAll(aeron, aeronArchive, archive, mediaDriver);
-                }));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Shutdown...");
+            CloseHelper.quietCloseAll(aeron, aeronArchive, archive, mediaDriver);
+        }));
     }
 
     private static void setup(boolean cleanStart) {
@@ -124,7 +121,6 @@ public final class MdcRecordingPublisher {
 
     private static void publishMessage(Publication publication, String message) {
         int length = buffer.putStringWithoutLengthAscii(0, message);
-
         long result;
         long lastResult = 0;
         while ((result = publication.offer(buffer, 0, length)) <= 0) {

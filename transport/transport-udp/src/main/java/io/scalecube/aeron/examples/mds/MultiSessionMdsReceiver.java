@@ -53,56 +53,50 @@ public class MultiSessionMdsReceiver {
 
         SigInt.register(MultiSessionMdsReceiver::close);
 
-        mediaDriver =
-                MediaDriver.launchEmbedded(
-                        new MediaDriver.Context()
-                                .spiesSimulateConnection(true)
-                                .imageLivenessTimeoutNs(IMAGE_LIVENESS_TIMEOUT));
+        mediaDriver = MediaDriver.launchEmbedded(
+                new MediaDriver.Context()
+                        .spiesSimulateConnection(true)
+                        .imageLivenessTimeoutNs(IMAGE_LIVENESS_TIMEOUT));
 
         String aeronDirectoryName = mediaDriver.aeronDirectoryName();
 
-        Context context =
-                new Context()
-                        .aeronDirectoryName(aeronDirectoryName)
-                        .availableImageHandler(AeronHelper::printAvailableImage)
-                        .unavailableImageHandler(AeronHelper::printUnavailableImage);
+        Context context = new Context()
+                .aeronDirectoryName(aeronDirectoryName)
+                .availableImageHandler(AeronHelper::printAvailableImage)
+                .unavailableImageHandler(AeronHelper::printUnavailableImage);
 
         aeron = Aeron.connect(context);
         System.out.println("hello, " + context.aeronDirectoryName());
 
-        String controlChannel =
-                new ChannelUriStringBuilder()
-                        .media(UDP_MEDIA)
-                        .controlMode(MDC_CONTROL_MODE_MANUAL)
-                        .rejoin(false)
-                        .build();
+        String controlChannel = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA)
+                .controlMode(MDC_CONTROL_MODE_MANUAL)
+                .rejoin(false)
+                .build();
 
         Subscription subscription = aeron.addSubscription(controlChannel, STREAM_ID);
         printSubscription(subscription);
 
-        String liveChannel =
-                new ChannelUriStringBuilder()
-                        .media(UDP_MEDIA)
-                        .controlEndpoint(RECORDING_ENDPOINT)
-                        .endpoint("localhost:0")
-                        .sessionId(RECORDING_SESSION_ID)
-                        .build();
+        String liveChannel = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA)
+                .controlEndpoint(RECORDING_ENDPOINT)
+                .endpoint("localhost:0")
+                .sessionId(RECORDING_SESSION_ID)
+                .build();
 
-        String bobChannel =
-                new ChannelUriStringBuilder()
-                        .media(UDP_MEDIA)
-                        .controlEndpoint(REPLAY_BOB_ENDPOINT)
-                        .endpoint("localhost:0")
-                        .sessionId(REPLAY_BOB_SESSION_ID)
-                        .build();
+        String bobChannel = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA)
+                .controlEndpoint(REPLAY_BOB_ENDPOINT)
+                .endpoint("localhost:0")
+                .sessionId(REPLAY_BOB_SESSION_ID)
+                .build();
 
-        String aliceChannel =
-                new ChannelUriStringBuilder()
-                        .media(UDP_MEDIA)
-                        .controlEndpoint(REPLAY_ALICE_ENDPOINT)
-                        .endpoint("localhost:0")
-                        .sessionId(REPLAY_ALICE_SESSION_ID)
-                        .build();
+        String aliceChannel = new ChannelUriStringBuilder()
+                .media(UDP_MEDIA)
+                .controlEndpoint(REPLAY_ALICE_ENDPOINT)
+                .endpoint("localhost:0")
+                .sessionId(REPLAY_ALICE_SESSION_ID)
+                .build();
 
         SleepingMillisIdleStrategy idleStrategy = new SleepingMillisIdleStrategy(300);
         final FragmentHandler fragmentHandler = printAsciiMessage(STREAM_ID);
@@ -133,9 +127,7 @@ public class MultiSessionMdsReceiver {
                 System.err.println("### " + Instant.now() + "| ADDED Bob channel");
             }
 
-            if (isLiveAdded
-                    && isBobAdded
-                    && !isAliceAdded
+            if (isLiveAdded && isBobAdded && !isAliceAdded
                     && (System.currentTimeMillis() - aliceAddStart) >= 5000) {
                 subscription.addDestination(aliceChannel);
                 isAliceAdded = true;

@@ -38,20 +38,19 @@ public class MultiStreamSubscriber {
         mediaDriver = MediaDriver.launchEmbedded();
         String aeronDirectoryName = mediaDriver.aeronDirectoryName();
 
-        Context context =
-                new Context()
-                        .aeronDirectoryName(aeronDirectoryName)
-                        .availableImageHandler(AeronHelper::printAvailableImage)
-                        .unavailableImageHandler(AeronHelper::printUnavailableImage);
+        Context context = new Context()
+                .aeronDirectoryName(aeronDirectoryName)
+                .availableImageHandler(AeronHelper::printAvailableImage)
+                .unavailableImageHandler(AeronHelper::printUnavailableImage);
 
         aeron = Aeron.connect(context);
         System.out.println("hello, " + context.aeronDirectoryName());
 
         String channel = new ChannelUriStringBuilder().media(UDP_MEDIA).endpoint(ENDPOINT).build();
-        Subscription subscription =
-                aeron.addSubscription(channel, STREAM_ID); // conn: 20121 / logbuffer: 48M
-        Subscription subscription2 =
-                aeron.addSubscription(channel, STREAM_ID + 1); // conn: 20121 / logbuffer: 48M
+        Subscription subscription = aeron
+                .addSubscription(channel, STREAM_ID); // conn: 20121 / logbuffer: 48M
+        Subscription subscription2 = aeron
+                .addSubscription(channel, STREAM_ID + 1); // conn: 20121 / logbuffer: 48M
 
         printSubscription(subscription);
         printSubscription(subscription2);
