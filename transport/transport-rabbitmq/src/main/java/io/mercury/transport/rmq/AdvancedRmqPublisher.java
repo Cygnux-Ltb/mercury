@@ -197,12 +197,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
                                                                 @Nonnull Charset charset,
                                                                 @Nullable AckCallback ackCallback,
                                                                 @Nullable NoAckCallback noAckCallback) {
-        return new AdvancedRmqPublisher<>(tag, config, msg -> {
-            if (msg != null) {
-                return msg.getBytes(charset);
-            }
-            return null;
-        }, ackCallback, noAckCallback);
+        return new AdvancedRmqPublisher<>(tag, config, msg -> msg != null ? msg.getBytes(charset) : null, ackCallback, noAckCallback);
     }
 
     /**

@@ -90,7 +90,7 @@ public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
         this.serializer = serializer;
         this.deserializer = deserializer;
         this.channel = RmqChannel.with(connection);
-        this.name = "rabbitmq-buffer::" + connection.getConnectionInfo() + "/" + queueName + "";
+        this.name = "rabbitmq-buffer::" + connection.getConnectionInfo() + "/" + queueName;
         declareQueue();
     }
 

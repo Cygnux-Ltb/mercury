@@ -162,11 +162,11 @@ public class BasicIpcRecordingThroughput implements AutoCloseable {
                     "Recorded %.02f MB @ %.02f MB/s - %,d msg/sec - %d byte payload + 32 byte header%n",
                     recordingMb, dataRate, msgRate, MESSAGE_LENGTH);
 
-            RecordingDescriptor rd =
-                    AeronArchiveUtil.findLastRecording(aeronArchive, rd1 -> rd1.streamId == STREAM_ID);
+            RecordingDescriptor rd = AeronArchiveUtil
+                    .findLastRecording(aeronArchive, rd1 -> rd1.streamId() == STREAM_ID);
 
             aeronArchive.stopRecording(publication);
-            aeronArchive.truncateRecording(rd.recordingId, 0);
+            aeronArchive.truncateRecording(rd.recordingId(), 0);
         }
     }
 
