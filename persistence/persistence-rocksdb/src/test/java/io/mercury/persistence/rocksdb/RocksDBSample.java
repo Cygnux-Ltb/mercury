@@ -110,7 +110,8 @@ public class RocksDBSample {
 					.setBlockSizeDeviation(5)
 					.setBlockRestartInterval(10)
 					.setCacheIndexAndFilterBlocks(true)
-					.setBlockCacheCompressed(new LRUCache(512));
+					.setBlockCache(new LRUCache(512));
+					//.setBlockCacheCompressed();
 			// .setBlockCacheCompressedSize(64 * SizeUnit.KB)
 			// .setBlockCacheCompressedNumShardBits(10);
 
