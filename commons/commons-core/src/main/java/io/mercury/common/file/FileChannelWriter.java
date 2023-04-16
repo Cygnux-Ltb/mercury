@@ -86,9 +86,8 @@ public final class FileChannelWriter {
      * @throws NullPointerException npe
      * @throws IOException          ioe
      */
-    public static <T> File write(Collection<T> data,
-                                 @Nonnull BytesSerializer<T> serializer,
-                                 @Nonnull File target, int capacity, boolean append)
+    public static <T> File write(Collection<T> data, @Nonnull BytesSerializer<T> serializer,
+                                 File target, int capacity, boolean append)
             throws NullPointerException, IOException {
         if (target == null)
             throw new NullPointerException("target file must not be null.");

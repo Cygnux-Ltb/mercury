@@ -15,7 +15,8 @@ import java.util.function.ToLongFunction;
 
 public enum Functions {
 
-    ;//empty
+    //empty
+    ;
 
     /**
      * @param <T>         T
