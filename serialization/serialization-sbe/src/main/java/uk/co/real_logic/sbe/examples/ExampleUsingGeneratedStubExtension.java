@@ -179,7 +179,7 @@ public class ExampleUsingGeneratedStubExtension {
                 .append(new String(buffer, 0, engine.getFuel(buffer, 0, buffer.length), StandardCharsets.US_ASCII));
 
         final String cupHolderCount = car.cupHolderCount() == cupHolderCountNullValue() ? "null"
-                : car.cupHolderCount() + "";
+                : String.valueOf(car.cupHolderCount());
         sb.append("\ncar.cupHolderCount=").append(cupHolderCount);
 
         for (final extension.CarDecoder.FuelFiguresDecoder fuelFigures : car.fuelFigures()) {

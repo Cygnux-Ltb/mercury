@@ -36,14 +36,18 @@ public enum Model {
      */
     public static Model get(final byte value) {
         switch (value) {
-            case 65:
+            case 65 -> {
                 return A;
-            case 66:
+            }
+            case 66 -> {
                 return B;
-            case 67:
+            }
+            case 67 -> {
                 return C;
-            case 0:
+            }
+            case 0 -> {
                 return NULL_VAL;
+            }
         }
 
         throw new IllegalArgumentException("Unknown value: " + value);

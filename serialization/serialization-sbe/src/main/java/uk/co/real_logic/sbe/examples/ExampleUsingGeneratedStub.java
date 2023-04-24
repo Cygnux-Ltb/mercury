@@ -86,7 +86,8 @@ public class ExampleUsingGeneratedStub {
 
         final String encodingFilename = System.getProperty(ENCODING_FILENAME);
         if (encodingFilename != null) {
-            try (FileChannel channel = FileChannel.open(Paths.get(encodingFilename), READ, WRITE, CREATE)) {
+            try (FileChannel channel = FileChannel
+                    .open(Paths.get(encodingFilename), READ, WRITE, CREATE)) {
                 byteBuffer.limit(encodingLengthPlusHeader);
                 channel.write(byteBuffer);
             }
