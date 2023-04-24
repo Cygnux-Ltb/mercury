@@ -1,7 +1,7 @@
 package io.mercury.serialization.avro;
 
 import io.mercury.common.annotation.thread.ThreadSafeField;
-import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.serialization.specific.BytesDeserializer;
 import org.apache.avro.io.BinaryDecoder;
 import org.apache.avro.io.DatumReader;
