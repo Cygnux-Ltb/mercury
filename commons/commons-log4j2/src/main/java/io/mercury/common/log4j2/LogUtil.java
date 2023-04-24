@@ -1,4 +1,4 @@
-package io.mercury.common.log;
+package io.mercury.common.log4j2;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -23,7 +23,7 @@ public class LogUtil {
     /**
      * 日志打印的目录
      */
-    private static final String LOGDIR = "/tmp/biz-logs";
+    private static final String LOG_DIR = "/tmp/biz-logs";
 
     /**
      * Logger Context对象
@@ -52,11 +52,14 @@ public class LogUtil {
         SizeBasedTriggeringPolicy tp = SizeBasedTriggeringPolicy.createPolicy("255MB");
         CompositeTriggeringPolicy policyComposite = CompositeTriggeringPolicy.createPolicy(tbtp, tp);
 
-        String loggerDir = LOGDIR + File.separator + "quartz-" + loggerName;
+        String loggerDir = LOG_DIR + File.separator + "quartz-" + loggerName;
         DefaultRolloverStrategy strategy = DefaultRolloverStrategy.newBuilder().withMax("30").withConfig(CONF).build();
+
         ThresholdFilter infoFilter = ThresholdFilter.createFilter(Level.INFO, Filter.Result.ACCEPT, Filter.Result.DENY);
+
         ThresholdFilter errorFilter = ThresholdFilter.createFilter(Level.ERROR, Filter.Result.ACCEPT,
                 Filter.Result.NEUTRAL);
+
         RollingFileAppender appender = RollingFileAppender.newBuilder().withFileName(loggerDir + ".log")
                 .withFilePattern(loggerDir + ".%d{yyyy-MM-dd}.%i.log.gz").withAppend(true).withPolicy(policyComposite)
                 .withStrategy(strategy).setName(loggerName).setFilter(infoFilter).setFilter(errorFilter)

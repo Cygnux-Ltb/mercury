@@ -1,4 +1,4 @@
-package io.mercury.common.log;
+package io.mercury.common.log4j2;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Appender;
@@ -18,16 +18,16 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 
 import java.io.File;
 
-import static io.mercury.common.log.Log4j2Configurator.LogLevel;
-import static io.mercury.common.log.Log4j2Configurator.LogLevel.ERROR;
-import static io.mercury.common.log.Log4j2Configurator.getFileSizeOfMb;
-import static io.mercury.common.log.Log4j2Configurator.getFilename;
-import static io.mercury.common.log.Log4j2Configurator.getFolder;
-import static io.mercury.common.log.Log4j2Configurator.getLogLevel;
-import static io.mercury.common.log.Log4j2Configurator.setFileSizeOfMb;
-import static io.mercury.common.log.Log4j2Configurator.setLogFilename;
-import static io.mercury.common.log.Log4j2Configurator.setLogFolder;
-import static io.mercury.common.log.Log4j2Configurator.setLogLevel;
+import static io.mercury.common.log4j2.Log4j2Configurator.LogLevel;
+import static io.mercury.common.log4j2.Log4j2Configurator.LogLevel.ERROR;
+import static io.mercury.common.log4j2.Log4j2Configurator.getFileSizeOfMb;
+import static io.mercury.common.log4j2.Log4j2Configurator.getFilename;
+import static io.mercury.common.log4j2.Log4j2Configurator.getFolder;
+import static io.mercury.common.log4j2.Log4j2Configurator.getLogLevel;
+import static io.mercury.common.log4j2.Log4j2Configurator.setFileSizeOfMb;
+import static io.mercury.common.log4j2.Log4j2Configurator.setLogFilename;
+import static io.mercury.common.log4j2.Log4j2Configurator.setLogFolder;
+import static io.mercury.common.log4j2.Log4j2Configurator.setLogLevel;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.LocalDateTime.now;
 import static java.time.format.DateTimeFormatter.ofPattern;
@@ -78,20 +78,24 @@ public final class Log4j2LoggerFactory {
     private static void checkAndSettings() {
         // 配置日志存储目录, 基于${user.home}
         String folder = getFolder();
-        if (folder == null || folder.isEmpty())
+        if (folder == null || folder.isEmpty()) {
             setLogFolder("default");
+        }
         // 配置日志文件名
         String filename = getFilename();
-        if (filename == null || filename.isEmpty())
+        if (filename == null || filename.isEmpty()) {
             setLogFilename(DefaultFileName);
+        }
         // 配置日志級別
         String level = getLogLevel();
-        if (level == null || level.isEmpty())
+        if (level == null || level.isEmpty()) {
             setLogLevel(ERROR);
+        }
         // 配置日志文件大小
         String sizeOfMb = getFileSizeOfMb();
-        if (sizeOfMb == null || sizeOfMb.isEmpty())
+        if (sizeOfMb == null || sizeOfMb.isEmpty()) {
             setFileSizeOfMb(255);
+        }
     }
 
     private static final Object MUTEX = new Object();
@@ -122,31 +126,51 @@ public final class Log4j2LoggerFactory {
             CTX = (LoggerContext) LogManager.getContext(false);
         if (CONF == null)
             CONF = CTX.getConfiguration();
+
         // 基于时间分割日志文件
-        TriggeringPolicy timeBased = TimeBasedTriggeringPolicy.newBuilder().withInterval(1).withModulate(true).build();
+        TriggeringPolicy timeBased = TimeBasedTriggeringPolicy.newBuilder()
+                .withInterval(1)
+                .withModulate(true)
+                .build();
 
         // 基于文件大小分割日志文件
         TriggeringPolicy sizeBased = SizeBasedTriggeringPolicy.createPolicy("255MB");
 
         String logFile = BizLogsDir + File.separator + loggerName;
 
-        RolloverStrategy strategy = DefaultRolloverStrategy.newBuilder().withMax("120").withConfig(CONF).build();
+        RolloverStrategy strategy = DefaultRolloverStrategy.newBuilder()
+                .withMax("120")
+                .withConfig(CONF)
+                .build();
 
         // 日志样式
-        Layout<String> layout = PatternLayout.newBuilder().withConfiguration(CONF).withCharset(UTF_8)
+        Layout<String> layout = PatternLayout.newBuilder()
+                .withConfiguration(CONF)
+                .withCharset(UTF_8)
                 .withHeader("The business log storage file with [" + loggerName + "]")
-                .withPattern("%d{yy-MM-dd HH:mm:ss.SSS} %-5level [%t] [%C{1}.%M] %msg%n").build();
+                .withPattern("%d{yyyy-MM-dd HH:mm:ss.SSS} | %-5level [%t] [%C{1}.%M] >>> %msg%n")
+                .build();
 
-        Appender appender = RollingFileAppender.newBuilder().setName(loggerName).withFileName(logFile + ".log")
-                .withFilePattern(logFile + ".%d{yyyyMMdd}.log").withAppend(true)
-                .withPolicy(CompositeTriggeringPolicy.createPolicy(timeBased, sizeBased)).withStrategy(strategy)
-                .setFilter(LogLevel.getCompositeFilterWith(level)).setLayout(layout).setConfiguration(CONF).build();
+        Appender appender = RollingFileAppender.newBuilder()
+                .setConfiguration(CONF)
+                .setName(loggerName)
+                .withFileName(logFile + ".log")
+                .withFilePattern(logFile + ".%d{yyyyMMdd}.log")
+                .withAppend(true)
+                .withStrategy(strategy)
+                .withPolicy(CompositeTriggeringPolicy.createPolicy(timeBased, sizeBased))
+                .setFilter(LogLevel.getCompositeFilterWith(level))
+                .setLayout(layout)
+                .build();
 
         appender.start();
 
         @SuppressWarnings("deprecation")
-        LoggerConfig loggerConfig = LoggerConfig.createLogger(false, level.getLevel(), loggerName, "true",
-                new AppenderRef[]{AppenderRef.createAppenderRef(loggerName, null, null)}, null, CONF, null);
+        LoggerConfig loggerConfig = LoggerConfig.createLogger(
+                false, level.getLevel(), loggerName, "true",
+                new AppenderRef[]{AppenderRef.createAppenderRef(loggerName, null, null)},
+                null, CONF, null);
+
         loggerConfig.addAppender(appender, level.getLevel(), null);
 
         CONF.addAppender(appender);
@@ -194,9 +218,7 @@ public final class Log4j2LoggerFactory {
     }
 
     public static void main(String[] args) {
-
         System.out.println(System.getProperty("java.io.tmpdir"));
-
     }
 
 }

@@ -1,12 +1,11 @@
 package io.mercury.common.graph;
 
-import java.util.function.Supplier;
-
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.slf4j.Logger;
 
-import io.mercury.common.log.Log4j2LoggerFactory;
+import java.util.function.Supplier;
 
 public final class GraphBuilder {
 
