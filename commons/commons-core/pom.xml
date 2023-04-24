@@ -81,13 +81,6 @@
             <version>${guava.version}</version>
         </dependency>
 
-        <!-- Non-Blocking Reactive Foundation for the JVM -->
-        <!--        <dependency>-->
-        <!--            <groupId>io.projectreactor</groupId>-->
-        <!--            <artifactId>reactor-core</artifactId>-->
-        <!--            <version>3.5.2</version>-->
-        <!--        </dependency>-->
-
         <!-- commons log4j2 logger -->
         <dependency>
             <groupId>io.mercury</groupId>

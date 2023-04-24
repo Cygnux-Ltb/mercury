@@ -180,7 +180,7 @@ public class TimeWindow implements Serial<TimeWindow> {
     }
 
     @Override
-    public long getSerialId() {
+    public long serialId() {
         return epochSecond;
     }
 

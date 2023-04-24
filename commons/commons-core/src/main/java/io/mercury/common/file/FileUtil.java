@@ -205,7 +205,7 @@ public final class FileUtil {
 
     /**
      * Finds all files (non-recursively) in a directory based on the FileFilter.
-     * This method is slightly different than the JDK File.listFiles() version since
+     * This method is slightly different from the JDK File.listFiles() version since
      * it throws an error if the directory does not exist or is not a directory.
      * Also, this method only finds files and will skip including directories.
      *
@@ -246,12 +246,12 @@ public final class FileUtil {
     }
 
     /**
-     * Get all of the files (not dirs) under <CODE>dir</CODE>
+     * Get all the files (not dirs) under <CODE>dir</CODE>
      *
      * @param dir Directory to search.
      * @return all the files under <CODE>dir</CODE>
      */
-    public static Set<File> getRecursiveFiles(File dir) throws IOException {
+    public static Set<File> getRecursiveFiles(File dir) {
         if
         (!dir.isDirectory()) {
             HashSet<File> one = new HashSet<>();
@@ -315,7 +315,7 @@ public final class FileUtil {
      */
 
     /**
-     * Copy dest.length bytes from the inputstream into the dest bytearray.
+     * Copy dest.length bytes from the inputStream into the dest bytearray.
      *
      * @param is
      * @param dest

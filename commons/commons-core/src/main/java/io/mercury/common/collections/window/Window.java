@@ -1,6 +1,6 @@
 package io.mercury.common.collections.window;
 
-import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -378,7 +378,9 @@ public class Window<K, R, P> {
      *                                      interrupted while waiting to acquire the
      *                                      internal lock.
      */
-    public WindowFuture<K, R, P> offer(K key, R request, long offerTimeoutMillis, long expireTimeoutMillis,
+    public WindowFuture<K, R, P> offer(K key, R request,
+                                       long offerTimeoutMillis,
+                                       long expireTimeoutMillis,
                                        boolean callerWaitingHint)
             throws DuplicateKeyException, OfferTimeoutException, PendingOfferAbortedException, InterruptedException {
         if (offerTimeoutMillis < 0) {

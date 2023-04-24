@@ -1,17 +1,15 @@
 package io.mercury.common.thread;
 
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
+import io.mercury.common.annotation.AbstractFunction;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
+import org.slf4j.Logger;
 
+import javax.annotation.concurrent.ThreadSafe;
 import java.io.Serial;
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.annotation.concurrent.ThreadSafe;
-
-import org.slf4j.Logger;
-
-import io.mercury.common.annotation.AbstractFunction;
-import io.mercury.common.log.Log4j2LoggerFactory;
+import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
 
 @ThreadSafe
 public abstract class RunnableComponent {

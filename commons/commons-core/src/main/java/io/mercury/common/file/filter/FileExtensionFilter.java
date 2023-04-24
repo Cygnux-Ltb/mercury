@@ -1,11 +1,10 @@
 package io.mercury.common.file.filter;
 
-import java.io.File;
-import java.io.FileFilter;
+import io.mercury.common.file.FileUtil;
 
 import javax.annotation.Nonnull;
-
-import io.mercury.common.file.FileUtil;
+import java.io.File;
+import java.io.FileFilter;
 
 /**
  * Accepts a file based on its file extension against a list of one or more
@@ -18,7 +17,7 @@ public class FileExtensionFilter implements FileFilter {
 
     /**
      * Creates a new instance of a <code>FileExtensionMatcher</code> that will
-     * perform a case insensitive match to this file extension.
+     * perform a case-insensitive match to this file extension.
      *
      * @param extensions The file extension to match against a File
      * @throws IllegalArgumentException Thrown if the file extension is not
@@ -34,7 +33,7 @@ public class FileExtensionFilter implements FileFilter {
      * perform a match to this array of file extensions.
      *
      * @param ignoreCase If true the extension must match the case of the
-     *                   provided extension, otherwise a case insensitive match
+     *                   provided extension, otherwise a case-insensitive match
      *                   will occur.
      * @param extensions The array of file extensions to match against a File
      * @throws IllegalArgumentException Thrown if the file extension is not
