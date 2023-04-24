@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xml>
-<configuration packages="net.openhft.chronicle.logger,net.openhft.chronicle.logger.log4j2">
+<xml packages="net.openhft.chronicle.logger,net.openhft.chronicle.logger.log4j2">
 	<!-- ******************************************************************* -->
 	<!-- APPENDERS                                                           -->
 	<!-- ******************************************************************* -->
@@ -42,4 +42,4 @@
 
 	</loggers>
 
-</configuration>
+</xml>

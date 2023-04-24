@@ -122,6 +122,14 @@
                     <artifactId>slf4j-api</artifactId>
                     <groupId>org.slf4j</groupId>
                 </exclusion>
+                <exclusion>
+                    <groupId>net.openhft</groupId>
+                    <artifactId>chronicle-bytes</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.openhft</groupId>
+                    <artifactId>chronicle-core</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -188,6 +196,10 @@
                 <exclusion>
                     <artifactId>slf4j-api</artifactId>
                     <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>chronicle-core</artifactId>
+                    <groupId>net.openhft</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
