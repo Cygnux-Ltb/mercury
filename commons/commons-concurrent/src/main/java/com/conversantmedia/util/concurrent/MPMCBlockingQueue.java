@@ -14,7 +14,8 @@ import java.util.concurrent.TimeUnit;
  * Alternative implementation for benchmarking purposes
  */
 public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
-        implements Serializable, Iterable<E>, Collection<E>, BlockingQueue<E>, Queue<E>, ConcurrentQueue<E> {
+        implements Serializable, Iterable<E>, Collection<E>,
+        BlockingQueue<E>, Queue<E>, ConcurrentQueue<E> {
 
     @Serial
     private static final long serialVersionUID = 6924345034690664781L;
@@ -61,20 +62,19 @@ public final class MPMCBlockingQueue<E> extends MPMCConcurrentQueue<E>
      */
     public MPMCBlockingQueue(final int capacity, final SpinPolicy spinPolicy) {
         super(capacity);
-
         switch (spinPolicy) {
-            case BLOCKING:
+            case BLOCKING -> {
                 queueNotFullCondition = new QueueNotFull();
                 queueNotEmptyCondition = new QueueNotEmpty();
-                break;
-            case SPINNING:
+            }
+            case SPINNING -> {
                 queueNotFullCondition = new SpinningQueueNotFull();
                 queueNotEmptyCondition = new SpinningQueueNotEmpty();
-                break;
-            case WAITING:
-            default:
+            }
+            default -> {
                 queueNotFullCondition = new WaitingQueueNotFull();
                 queueNotEmptyCondition = new WaitingQueueNotEmpty();
+            }
         }
     }
 

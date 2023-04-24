@@ -9,7 +9,7 @@ import io.mercury.common.collections.MutableLists;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.lang.Throws;
-import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.util.StringSupport;
 import org.slf4j.Logger;
 

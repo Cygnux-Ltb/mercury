@@ -6,7 +6,7 @@ import io.mercury.common.concurrent.queue.QueueWorkingException;
 import io.mercury.common.concurrent.queue.SingleConsumerQueue;
 import io.mercury.common.concurrent.queue.WaitingStrategy;
 import io.mercury.common.functional.Processor;
-import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.ThreadSupport;
 import io.mercury.common.util.StringSupport;
