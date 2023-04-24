@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp;
+package io.mercury.transport.aeron;
 
 import io.aeron.Aeron;
 import io.aeron.Publication;
@@ -25,17 +25,17 @@ import org.agrona.concurrent.UnsafeBuffer;
 
 import java.io.File;
 
-import static io.mercury.transport.udp.FileReceiver.CHUNK_LENGTH_OFFSET;
-import static io.mercury.transport.udp.FileReceiver.CHUNK_OFFSET_OFFSET;
-import static io.mercury.transport.udp.FileReceiver.CHUNK_PAYLOAD_OFFSET;
-import static io.mercury.transport.udp.FileReceiver.CORRELATION_ID_OFFSET;
-import static io.mercury.transport.udp.FileReceiver.FILE_CHUNK_TYPE;
-import static io.mercury.transport.udp.FileReceiver.FILE_CREATE_TYPE;
-import static io.mercury.transport.udp.FileReceiver.FILE_LENGTH_OFFSET;
-import static io.mercury.transport.udp.FileReceiver.FILE_NAME_OFFSET;
-import static io.mercury.transport.udp.FileReceiver.TYPE_OFFSET;
-import static io.mercury.transport.udp.FileReceiver.VERSION;
-import static io.mercury.transport.udp.FileReceiver.VERSION_OFFSET;
+import static io.mercury.transport.aeron.FileReceiver.CHUNK_LENGTH_OFFSET;
+import static io.mercury.transport.aeron.FileReceiver.CHUNK_OFFSET_OFFSET;
+import static io.mercury.transport.aeron.FileReceiver.CHUNK_PAYLOAD_OFFSET;
+import static io.mercury.transport.aeron.FileReceiver.CORRELATION_ID_OFFSET;
+import static io.mercury.transport.aeron.FileReceiver.FILE_CHUNK_TYPE;
+import static io.mercury.transport.aeron.FileReceiver.FILE_CREATE_TYPE;
+import static io.mercury.transport.aeron.FileReceiver.FILE_LENGTH_OFFSET;
+import static io.mercury.transport.aeron.FileReceiver.FILE_NAME_OFFSET;
+import static io.mercury.transport.aeron.FileReceiver.TYPE_OFFSET;
+import static io.mercury.transport.aeron.FileReceiver.VERSION;
+import static io.mercury.transport.aeron.FileReceiver.VERSION_OFFSET;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 
 /**

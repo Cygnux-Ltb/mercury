@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp;
+package io.mercury.transport.aeron;
 
 import io.aeron.driver.Configuration;
 import org.agrona.concurrent.IdleStrategy;

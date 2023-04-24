@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp.archive;
+package io.mercury.transport.aeron.archive;
 
 import io.aeron.security.Authenticator;
 import io.aeron.security.SessionProxy;

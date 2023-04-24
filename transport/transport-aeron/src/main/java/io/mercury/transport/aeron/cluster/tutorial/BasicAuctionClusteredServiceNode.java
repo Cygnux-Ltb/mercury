@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp.cluster.tutorial;
+package io.mercury.transport.aeron.cluster.tutorial;
 
 import io.aeron.ChannelUriStringBuilder;
 import io.aeron.CommonContext;

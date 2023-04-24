@@ -1,4 +1,4 @@
-package io.mercury.transport.udp.sample;
+package io.mercury.transport.aeron.sample;
 
 import io.aeron.Aeron;
 import io.aeron.Publication;

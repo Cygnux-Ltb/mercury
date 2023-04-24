@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp;
+package io.mercury.transport.aeron;
 
 import io.aeron.Aeron;
 import io.aeron.Subscription;
@@ -28,7 +28,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static io.mercury.transport.udp.SamplesUtil.rateReporterHandler;
+import static io.mercury.transport.aeron.SamplesUtil.rateReporterHandler;
 
 /**
  * Example that displays current throughput rate while receiving data.

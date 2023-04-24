@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp.archive;
+package io.mercury.transport.aeron.archive;
 
 import io.aeron.Publication;
 import io.aeron.archive.client.AeronArchive;
 import io.aeron.archive.codecs.SourceLocation;
 import io.aeron.archive.status.RecordingPos;
-import io.mercury.transport.udp.SampleConfiguration;
+import io.mercury.transport.aeron.SampleConfiguration;
 import org.agrona.BufferUtil;
 import org.agrona.concurrent.IdleStrategy;
 import org.agrona.concurrent.SigInt;

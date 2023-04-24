@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp.archive;
+package io.mercury.transport.aeron.archive;
 
 import io.aeron.ChannelUri;
 import io.aeron.Subscription;
 import io.aeron.archive.client.AeronArchive;
 import io.aeron.archive.client.RecordingDescriptorConsumer;
 import io.aeron.logbuffer.FragmentHandler;
-import io.mercury.transport.udp.SampleConfiguration;
-import io.mercury.transport.udp.SamplesUtil;
+import io.mercury.transport.aeron.SampleConfiguration;
+import io.mercury.transport.aeron.SamplesUtil;
 import org.agrona.collections.MutableLong;
 import org.agrona.concurrent.SigInt;
 

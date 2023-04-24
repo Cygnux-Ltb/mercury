@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp.cluster.tutorial;
+package io.mercury.transport.aeron.cluster.tutorial;
 
 import io.aeron.cluster.client.AeronCluster;
 import io.aeron.cluster.client.EgressListener;
@@ -30,13 +30,6 @@ import org.agrona.concurrent.IdleStrategy;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static io.mercury.transport.udp.cluster.tutorial.BasicAuctionClusteredService.BID_MESSAGE_LENGTH;
-import static io.mercury.transport.udp.cluster.tutorial.BasicAuctionClusteredService.BID_SUCCEEDED_OFFSET;
-import static io.mercury.transport.udp.cluster.tutorial.BasicAuctionClusteredService.CORRELATION_ID_OFFSET;
-import static io.mercury.transport.udp.cluster.tutorial.BasicAuctionClusteredService.CUSTOMER_ID_OFFSET;
-import static io.mercury.transport.udp.cluster.tutorial.BasicAuctionClusteredService.PRICE_OFFSET;
-import static io.mercury.transport.udp.cluster.tutorial.BasicAuctionClusteredServiceNode.calculatePort;
 
 /**
  * Client for communicating with {@link BasicAuctionClusteredService}.
@@ -63,10 +56,10 @@ public class BasicAuctionClusterClient implements EgressListener
     // tag::response[]
     public void onMessage(final long clusterSessionId, final long timestamp, final DirectBuffer buffer,
                           final int offset, final int length, final Header header) {
-        final long correlationId = buffer.getLong(offset + CORRELATION_ID_OFFSET);
-        final long customerId = buffer.getLong(offset + CUSTOMER_ID_OFFSET);
-        final long currentPrice = buffer.getLong(offset + PRICE_OFFSET);
-        final boolean bidSucceed = 0 != buffer.getByte(offset + BID_SUCCEEDED_OFFSET);
+        final long correlationId = buffer.getLong(offset + BasicAuctionClusteredService.CORRELATION_ID_OFFSET);
+        final long customerId = buffer.getLong(offset + BasicAuctionClusteredService.CUSTOMER_ID_OFFSET);
+        final long currentPrice = buffer.getLong(offset + BasicAuctionClusteredService.PRICE_OFFSET);
+        final boolean bidSucceed = 0 != buffer.getByte(offset + BasicAuctionClusteredService.BID_SUCCEEDED_OFFSET);
 
         lastBidSeen = currentPrice;
 
@@ -121,12 +114,12 @@ public class BasicAuctionClusterClient implements EgressListener
     // tag::publish[]
     private long sendBid(final AeronCluster aeronCluster, final long price) {
         final long correlationId = this.correlationId++;
-        actionBidBuffer.putLong(CORRELATION_ID_OFFSET, correlationId); // <1>
-        actionBidBuffer.putLong(CUSTOMER_ID_OFFSET, customerId);
-        actionBidBuffer.putLong(PRICE_OFFSET, price);
+        actionBidBuffer.putLong(BasicAuctionClusteredService.CORRELATION_ID_OFFSET, correlationId); // <1>
+        actionBidBuffer.putLong(BasicAuctionClusteredService.CUSTOMER_ID_OFFSET, customerId);
+        actionBidBuffer.putLong(BasicAuctionClusteredService.PRICE_OFFSET, price);
 
         idleStrategy.reset();
-        while (aeronCluster.offer(actionBidBuffer, 0, BID_MESSAGE_LENGTH) < 0) // <2>
+        while (aeronCluster.offer(actionBidBuffer, 0, BasicAuctionClusteredService.BID_MESSAGE_LENGTH) < 0) // <2>
         {
             idleStrategy.idle(aeronCluster.pollEgress()); // <3>
         }
@@ -140,7 +133,7 @@ public class BasicAuctionClusterClient implements EgressListener
         for (int i = 0; i < hostnames.size(); i++) {
             sb.append(i).append('=');
             sb.append(hostnames.get(i)).append(':')
-                    .append(calculatePort(i, BasicAuctionClusteredServiceNode.CLIENT_FACING_PORT_OFFSET));
+                    .append(BasicAuctionClusteredServiceNode.calculatePort(i, BasicAuctionClusteredServiceNode.CLIENT_FACING_PORT_OFFSET));
             sb.append(',');
         }
 

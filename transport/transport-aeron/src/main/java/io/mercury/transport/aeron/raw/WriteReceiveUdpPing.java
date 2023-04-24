@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp.raw;
+package io.mercury.transport.aeron.raw;
 
 import org.HdrHistogram.Histogram;
 import org.agrona.concurrent.SigInt;
@@ -27,9 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.LockSupport;
 
 import static io.aeron.driver.Configuration.MTU_LENGTH_DEFAULT;
-import static io.mercury.transport.udp.raw.Common.PING_PORT;
-import static io.mercury.transport.udp.raw.Common.PONG_PORT;
-import static io.mercury.transport.udp.raw.Common.init;
+import static io.mercury.transport.aeron.raw.Common.init;
 import static org.agrona.BitUtil.SIZE_OF_LONG;
 
 /**
@@ -57,13 +55,13 @@ public class WriteReceiveUdpPing {
         final DatagramChannel[] receiveChannels = new DatagramChannel[numChannels];
         for (int i = 0; i < receiveChannels.length; i++) {
             receiveChannels[i] = DatagramChannel.open();
-            init(receiveChannels[i]);
-            receiveChannels[i].bind(new InetSocketAddress("localhost", PONG_PORT + i));
+            Common.init(receiveChannels[i]);
+            receiveChannels[i].bind(new InetSocketAddress("localhost", Common.PONG_PORT + i));
         }
 
-        final InetSocketAddress writeAddress = new InetSocketAddress("localhost", PING_PORT);
+        final InetSocketAddress writeAddress = new InetSocketAddress("localhost", Common.PING_PORT);
         final DatagramChannel writeChannel = DatagramChannel.open();
-        init(writeChannel, writeAddress);
+        Common.init(writeChannel, writeAddress);
 
         final AtomicBoolean running = new AtomicBoolean(true);
         SigInt.register(() -> running.set(false));

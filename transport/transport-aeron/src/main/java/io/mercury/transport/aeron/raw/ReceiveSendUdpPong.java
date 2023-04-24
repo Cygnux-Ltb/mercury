@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp.raw;
+package io.mercury.transport.aeron.raw;
 
 import io.aeron.driver.Configuration;
 import org.agrona.concurrent.SigInt;
@@ -25,7 +25,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static io.mercury.transport.udp.raw.Common.init;
+import static io.mercury.transport.aeron.raw.Common.init;
 import static org.agrona.BitUtil.SIZE_OF_LONG;
 
 /**
@@ -58,7 +58,7 @@ public class ReceiveSendUdpPong {
         final DatagramChannel[] receiveChannels = new DatagramChannel[numChannels];
         for (int i = 0; i < receiveChannels.length; i++) {
             receiveChannels[i] = DatagramChannel.open();
-            init(receiveChannels[i]);
+            Common.init(receiveChannels[i]);
             receiveChannels[i].bind(new InetSocketAddress("0.0.0.0", Common.PING_PORT + i));
         }
 

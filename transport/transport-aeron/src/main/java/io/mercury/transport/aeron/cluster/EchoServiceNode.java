@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp.cluster;
+package io.mercury.transport.aeron.cluster;
 
 import io.aeron.ChannelUriStringBuilder;
 import io.aeron.CommonContext;
@@ -26,7 +26,7 @@ import io.aeron.cluster.service.ClusteredServiceContainer;
 import io.aeron.driver.MediaDriver;
 import io.aeron.driver.MinMulticastFlowControlSupplier;
 import io.aeron.driver.ThreadingMode;
-import io.mercury.transport.udp.cluster.tutorial.BasicAuctionClusteredService;
+import io.mercury.transport.aeron.cluster.tutorial.BasicAuctionClusteredService;
 import org.agrona.ErrorHandler;
 import org.agrona.concurrent.NoOpLock;
 import org.agrona.concurrent.ShutdownSignalBarrier;

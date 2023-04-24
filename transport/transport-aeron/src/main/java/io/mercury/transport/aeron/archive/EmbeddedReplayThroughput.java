@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp.archive;
+package io.mercury.transport.aeron.archive;
 
 import io.aeron.Aeron;
 import io.aeron.ChannelUri;
@@ -29,7 +29,7 @@ import io.aeron.archive.codecs.SourceLocation;
 import io.aeron.archive.status.RecordingPos;
 import io.aeron.driver.MediaDriver;
 import io.aeron.logbuffer.Header;
-import io.mercury.transport.udp.SampleConfiguration;
+import io.mercury.transport.aeron.SampleConfiguration;
 import org.agrona.CloseHelper;
 import org.agrona.DirectBuffer;
 import org.agrona.collections.MutableLong;
@@ -43,8 +43,6 @@ import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import static io.aeron.archive.Archive.Configuration.ARCHIVE_DIR_DEFAULT;
-import static io.mercury.transport.udp.archive.Samples.MEGABYTE;
-import static io.mercury.transport.udp.archive.Samples.NOOP_FRAGMENT_HANDLER;
 import static org.agrona.BitUtil.CACHE_LINE_LENGTH;
 import static org.agrona.BufferUtil.allocateDirectAligned;
 import static org.agrona.SystemUtil.loadPropertiesFiles;
@@ -106,8 +104,8 @@ public class EmbeddedReplayThroughput extends EmbeddedReplayThroughputValue impl
                 test.replayRecording(recordingLength, recordingId);
 
                 final long durationMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs);
-                final double dataRate = (recordingLength * 1000.0d / durationMs) / MEGABYTE;
-                final double recordingMb = recordingLength / MEGABYTE;
+                final double dataRate = (recordingLength * 1000.0d / durationMs) / Samples.MEGABYTE;
+                final double recordingMb = recordingLength / Samples.MEGABYTE;
                 final long msgRate = (NUMBER_OF_MESSAGES / durationMs) * 1000L;
 
                 System.out.println("Performance inclusive of replay request and connection setup:");
@@ -170,7 +168,7 @@ public class EmbeddedReplayThroughput extends EmbeddedReplayThroughputValue impl
                         workCount += 1;
                     }
 
-                    final int fragments = image.poll(NOOP_FRAGMENT_HANDLER, 10);
+                    final int fragments = image.poll(Samples.NOOP_FRAGMENT_HANDLER, 10);
                     if (0 == fragments && image.isClosed()) {
                         throw new IllegalStateException("image closed unexpectedly");
                     }
@@ -181,7 +179,7 @@ public class EmbeddedReplayThroughput extends EmbeddedReplayThroughputValue impl
 
                 final long position = publication.position();
                 while (image.position() < position) {
-                    final int fragments = image.poll(NOOP_FRAGMENT_HANDLER, 10);
+                    final int fragments = image.poll(Samples.NOOP_FRAGMENT_HANDLER, 10);
                     if (0 == fragments && image.isClosed()) {
                         throw new IllegalStateException("image closed unexpectedly");
                     }

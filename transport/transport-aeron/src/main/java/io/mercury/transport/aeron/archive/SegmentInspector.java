@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp.archive;
+package io.mercury.transport.aeron.archive;
 
 import io.aeron.logbuffer.FrameDescriptor;
 import io.aeron.protocol.DataHeaderFlyweight;
-import io.mercury.transport.udp.LogInspector;
-import io.mercury.transport.udp.SamplesUtil;
+import io.mercury.transport.aeron.LogInspector;
+import io.mercury.transport.aeron.SamplesUtil;
 import org.agrona.BitUtil;
 import org.agrona.concurrent.UnsafeBuffer;
 

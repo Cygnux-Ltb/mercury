@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp.cluster;
+package io.mercury.transport.aeron.cluster;
 
 import io.aeron.ExclusivePublication;
 import io.aeron.Image;

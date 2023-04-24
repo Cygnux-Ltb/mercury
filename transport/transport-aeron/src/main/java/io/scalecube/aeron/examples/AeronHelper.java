@@ -122,17 +122,18 @@ public class AeronHelper {
      * @param image image
      */
     public static void printAvailableImage(final Image image) {
-        final Subscription subscription = image.subscription();
-        System.out.printf(
-                "### %s | [subscription:%d] Available image on %s "
-                        + "streamId=%d, sessionId=%d, subscription.imageCount=%d from %s%n",
-                System.nanoTime(),
-                subscription.registrationId(),
-                subscription.channel(),
-                subscription.streamId(),
-                image.sessionId(),
-                subscription.imageCount(),
-                image.sourceIdentity());
+        try (final Subscription subscription = image.subscription()) {
+            System.out.printf(
+                    "### %s | [subscription:%d] Available image on %s "
+                            + "streamId=%d, sessionId=%d, subscription.imageCount=%d from %s%n",
+                    System.nanoTime(),
+                    subscription.registrationId(),
+                    subscription.channel(),
+                    subscription.streamId(),
+                    image.sessionId(),
+                    subscription.imageCount(),
+                    image.sourceIdentity());
+        }
     }
 
     /**
@@ -488,6 +489,7 @@ public class AeronHelper {
     //@SuppressWarnings("StatementWithEmptyBody")
     static void verifyResultQuietly(Publication publication, long result) {
         if (result > 0) {
+            // no-op
         } else if (result == Publication.BACK_PRESSURED) {
             System.out.printf(
                     "Offer failed due to back pressure (position: %d)%n", publication.position());

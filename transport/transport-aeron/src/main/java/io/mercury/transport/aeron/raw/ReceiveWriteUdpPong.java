@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp.raw;
+package io.mercury.transport.aeron.raw;
 
 import org.agrona.concurrent.SigInt;
 import org.agrona.hints.ThreadHints;

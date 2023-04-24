@@ -23,12 +23,10 @@ public class DynamicCompositeAgent implements Agent {
          * Agent is being initialised and has not yet been started.
          */
         INIT,
-
         /**
          * Agent is not active after a successful <code>{@link #onStart()}</code>.
          */
         ACTIVE,
-
         /**
          * Agent has been closed.
          */

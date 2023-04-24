@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp.raw;
+package io.mercury.transport.aeron.raw;
 
 import io.aeron.driver.Configuration;
 import org.HdrHistogram.Histogram;
@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.LockSupport;
 
-import static io.mercury.transport.udp.raw.Common.init;
+import static io.mercury.transport.aeron.raw.Common.init;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -75,7 +75,7 @@ public class BurstSendReceiveUdpPing {
 
         final InetSocketAddress sendAddress = new InetSocketAddress(remoteHost, Common.PING_PORT);
         final DatagramChannel sendChannel = DatagramChannel.open();
-        init(sendChannel);
+        Common.init(sendChannel);
 
         final AtomicBoolean running = new AtomicBoolean(true);
         SigInt.register(() -> running.set(false));

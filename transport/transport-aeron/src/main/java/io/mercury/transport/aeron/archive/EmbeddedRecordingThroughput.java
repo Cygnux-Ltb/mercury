@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp.archive;
+package io.mercury.transport.aeron.archive;
 
 import io.aeron.Aeron;
 import io.aeron.ExclusivePublication;
@@ -23,7 +23,7 @@ import io.aeron.archive.client.AeronArchive;
 import io.aeron.archive.codecs.SourceLocation;
 import io.aeron.archive.status.RecordingPos;
 import io.aeron.driver.MediaDriver;
-import io.mercury.transport.udp.SampleConfiguration;
+import io.mercury.transport.aeron.SampleConfiguration;
 import org.agrona.CloseHelper;
 import org.agrona.concurrent.IdleStrategy;
 import org.agrona.concurrent.UnsafeBuffer;
@@ -35,7 +35,7 @@ import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import static io.aeron.archive.Archive.Configuration.ARCHIVE_DIR_DEFAULT;
-import static io.mercury.transport.udp.archive.Samples.MEGABYTE;
+import static io.mercury.transport.aeron.archive.Samples.MEGABYTE;
 import static org.agrona.BitUtil.CACHE_LINE_LENGTH;
 import static org.agrona.BufferUtil.allocateDirectAligned;
 import static org.agrona.SystemUtil.loadPropertiesFiles;

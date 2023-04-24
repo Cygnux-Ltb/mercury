@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp.raw;
+package io.mercury.transport.aeron.raw;
 
 import io.aeron.driver.Configuration;
 import org.HdrHistogram.Histogram;
@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.LockSupport;
 
-import static io.mercury.transport.udp.raw.Common.init;
+import static io.mercury.transport.aeron.raw.Common.init;
 
 /**
  * Benchmark used to calculate latency of underlying system.
@@ -62,13 +62,13 @@ public class SendReceiveUdpPing {
         final DatagramChannel[] receiveChannels = new DatagramChannel[numChannels];
         for (int i = 0; i < receiveChannels.length; i++) {
             receiveChannels[i] = DatagramChannel.open();
-            init(receiveChannels[i]);
+            Common.init(receiveChannels[i]);
             receiveChannels[i].bind(new InetSocketAddress("0.0.0.0", Common.PONG_PORT + i));
         }
 
         final InetSocketAddress sendAddress = new InetSocketAddress(remoteHost, Common.PING_PORT);
         final DatagramChannel sendChannel = DatagramChannel.open();
-        init(sendChannel);
+        Common.init(sendChannel);
 
         final AtomicBoolean running = new AtomicBoolean(true);
         SigInt.register(() -> running.set(false));

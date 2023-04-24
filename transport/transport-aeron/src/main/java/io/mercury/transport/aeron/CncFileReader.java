@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mercury.transport.udp;
+package io.mercury.transport.aeron;
 
 import io.aeron.CncFileDescriptor;
 import io.aeron.CommonContext;
@@ -33,7 +33,7 @@ import static io.aeron.CncFileDescriptor.cncVersionOffset;
 import static io.aeron.CncFileDescriptor.createCountersMetaDataBuffer;
 import static io.aeron.CncFileDescriptor.createCountersValuesBuffer;
 import static io.aeron.CncFileDescriptor.createMetaDataBuffer;
-import static io.mercury.transport.udp.SamplesUtil.mapExistingFileReadOnly;
+import static io.mercury.transport.aeron.SamplesUtil.mapExistingFileReadOnly;
 
 /**
  * Reader for Aeron CnC file represented by {@link CncFileDescriptor} which can
