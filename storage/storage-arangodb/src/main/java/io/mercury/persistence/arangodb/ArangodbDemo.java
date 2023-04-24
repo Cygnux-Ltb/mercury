@@ -1,6 +1,10 @@
 package io.mercury.persistence.arangodb;
 
-import com.arangodb.*;
+import com.arangodb.ArangoCollection;
+import com.arangodb.ArangoDB;
+import com.arangodb.ArangoDBException;
+import com.arangodb.ArangoDatabase;
+import com.arangodb.Protocol;
 import com.arangodb.entity.BaseDocument;
 import com.arangodb.model.DBCreateOptions;
 import com.arangodb.velocypack.VPackSlice;
@@ -22,19 +26,17 @@ public class ArangodbDemo {
 	public static void main(final String[] args) {
 
 		final ArangoDB arangoDB = new ArangoDB.Builder().host("127.0.0.1", 8529).user("root").password("root")
-				.useProtocol(Protocol.VST).build();
+				.protocol(Protocol.VST).build();
 
 		log.info("ArangoDB Info: Version -> {}, Engine -> {}", toStringShortPrefixStyle(arangoDB.getVersion()),
 				toStringShortPrefixStyle(arangoDB.getEngine()));
 
-		DbName dbName = DbName.of("test_db");
-
-		final DBCreateOptions options = new DBCreateOptions().name(dbName);
+		final DBCreateOptions options = new DBCreateOptions().name("test_db");
 		final String collection = "userdata";
 
 		try {
 
-			ArangoDatabase database = arangoDB.db(dbName);
+			ArangoDatabase database = arangoDB.db("test_db");
 
 			if (!database.exists()) {
 				arangoDB.createDatabase(options);

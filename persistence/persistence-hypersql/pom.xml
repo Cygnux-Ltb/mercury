@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.mercury</groupId>
-        <artifactId>libraries</artifactId>
+        <artifactId>persistence</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>library-hypersql</artifactId>
-    <name>library-hypersql</name>
+    <artifactId>persistence-hypersql</artifactId>
+    <name>persistence-hypersql</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

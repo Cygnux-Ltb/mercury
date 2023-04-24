@@ -1,6 +1,6 @@
-package io.mercury.common.log;
+package io.mercury.common.log4j2;
 
-import io.mercury.common.log.Log4j2Configurator.LogLevel;
+import io.mercury.common.log4j2.Log4j2Configurator.LogLevel;
 import org.junit.Test;
 import org.slf4j.Logger;
 

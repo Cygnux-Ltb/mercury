@@ -1,4 +1,4 @@
-package io.mercury.common.log;
+package io.mercury.common.log4j2;
 
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Filter.Result;
