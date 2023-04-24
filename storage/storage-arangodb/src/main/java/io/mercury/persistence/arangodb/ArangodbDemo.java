@@ -8,9 +8,9 @@ import com.arangodb.Protocol;
 import com.arangodb.entity.BaseDocument;
 import com.arangodb.model.DBCreateOptions;
 import com.arangodb.velocypack.VPackSlice;
-import io.mercury.common.log.Log4j2Configurator;
-import io.mercury.common.log.Log4j2Configurator.LogLevel;
-import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.log4j2.Log4j2Configurator;
+import io.mercury.common.log4j2.Log4j2Configurator.LogLevel;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import org.slf4j.Logger;
 
 import static io.mercury.common.util.StringSupport.toStringShortPrefixStyle;

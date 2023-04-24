@@ -3,7 +3,7 @@ package io.mercury.library.ignite.user.service.impl;
 import io.mercury.library.ignite.user.dao.PersonRepository;
 import io.mercury.library.ignite.user.model.Person;
 import io.mercury.library.ignite.user.service.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PersonServiceImpl implements PersonService {
 
-    @Autowired
+    @Resource
     private PersonRepository personRepository;
 
     /**

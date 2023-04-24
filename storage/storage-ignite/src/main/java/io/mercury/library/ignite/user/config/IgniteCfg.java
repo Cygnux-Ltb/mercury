@@ -3,6 +3,7 @@ package io.mercury.library.ignite.user.config;
 import io.mercury.library.ignite.user.model.Person;
 import io.mercury.library.ignite.user.model.Role;
 import io.mercury.library.ignite.user.service.PersonService;
+import jakarta.annotation.Resource;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.Ignition;
 import org.apache.ignite.configuration.CacheConfiguration;
@@ -10,7 +11,6 @@ import org.apache.ignite.configuration.IgniteConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 

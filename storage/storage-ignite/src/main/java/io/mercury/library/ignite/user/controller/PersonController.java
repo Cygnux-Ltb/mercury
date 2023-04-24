@@ -1,17 +1,21 @@
 package io.mercury.library.ignite.user.controller;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.mercury.library.ignite.user.model.Person;
 import io.mercury.library.ignite.user.model.ReqPerson;
 import io.mercury.library.ignite.user.model.RespResult;
 import io.mercury.library.ignite.user.model.Role;
 import io.mercury.library.ignite.user.service.PersonService;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.web.bind.annotation.*;
+import jakarta.annotation.Resource;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -74,7 +78,7 @@ public class PersonController {
     /**
      * User register with whose username and password
      *
-     * @param reqPerson
+     * @param reqPerson ReqPerson
      * @return Success message
      */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -119,8 +123,12 @@ public class PersonController {
         }
 
         // Create Twt token
-        String jwtToken = Jwts.builder().setSubject(reqPerson.username()).claim("roles", "member").setIssuedAt(new Date())
-                .signWith(SignatureAlgorithm.HS256, "secretkey").compact();
+        String jwtToken = Jwts.builder()
+                .setSubject(reqPerson.username())
+                .claim("roles", "member")
+                .setIssuedAt(new Date())
+                .signWith(SignatureAlgorithm.HS256, "secretkey")
+                .compact();
 
         return new RespResult<>("200 OK", "login success", jwtToken);
     }

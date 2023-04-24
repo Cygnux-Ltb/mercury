@@ -1,11 +1,11 @@
 package io.mercury.library.ignite.demo.controller;
 
+import jakarta.annotation.Resource;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 
 /**
  * @author ：lichuankang

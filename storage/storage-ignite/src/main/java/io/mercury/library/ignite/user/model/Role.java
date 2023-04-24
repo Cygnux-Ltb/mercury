@@ -6,7 +6,9 @@ package io.mercury.library.ignite.user.model;
  **/
 public enum Role {
 
-    ADMIN, MEMBER;
+    ADMIN,
+
+    MEMBER;
 
     public String authority() {
         return "ROLE_" + this.name();

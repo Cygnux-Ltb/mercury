@@ -7,6 +7,7 @@ package io.mercury.library.ignite.user.model;
  * @param username Request username
  * @param password Request password
  */
-public record ReqPerson
-        (String username, String password) {
+public record ReqPerson(
+        String username,
+        String password) {
 }
