@@ -1,7 +1,7 @@
 package io.mercury.transport.zmq;
 
 import io.mercury.common.lang.Asserter;
-import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.attr.TcpKeepAlive;
 import io.mercury.transport.attr.Topics;
