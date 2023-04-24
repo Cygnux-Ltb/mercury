@@ -6,7 +6,7 @@ import com.rabbitmq.client.ConsumerShutdownSignalCallback;
 import com.rabbitmq.client.Envelope;
 import io.mercury.common.codec.DecodeException;
 import io.mercury.common.lang.Asserter;
-import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.serialization.specific.BytesDeserializer;
 import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Receiver;

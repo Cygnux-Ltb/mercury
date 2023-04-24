@@ -5,7 +5,7 @@ import com.rabbitmq.client.GetResponse;
 import io.mercury.common.character.Charsets;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.concurrent.queue.MultiConsumerQueue;
-import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.serialization.specific.BytesDeserializer;
 import io.mercury.common.serialization.specific.BytesSerializer;
 import io.mercury.serialization.json.JsonWrapper;
