@@ -3,8 +3,8 @@ package io.mercury.serialization.wire;
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
 
-import io.mercury.common.log.Log4j2Configurator;
-import io.mercury.common.log.Log4j2Configurator.LogLevel;
+import io.mercury.common.log4j2.Log4j2Configurator;
+import io.mercury.common.log4j2.Log4j2Configurator.LogLevel;
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.wire.BinaryWire;
 import net.openhft.chronicle.wire.TextWire;
@@ -23,7 +23,7 @@ public class SimpleExampleWithDataType {
 
     public static void main(String[] args) {
 
-        /**
+        /*
          * See below for the code for Data. <br>
          * It is much the same and the previous section, with the code required wrapped
          * in a method.
@@ -53,7 +53,7 @@ public class SimpleExampleWithDataType {
 //		{"message":"Hello World","number":1234567890,"timeUnit":"NANOSECONDS","price":10.5}
 
         System.out.println("============================================================================");
-        /**
+        /*
          * To write in binary instead
          */
 

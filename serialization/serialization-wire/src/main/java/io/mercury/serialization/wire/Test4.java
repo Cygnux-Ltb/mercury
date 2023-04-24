@@ -3,8 +3,8 @@ package io.mercury.serialization.wire;
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
 
-import io.mercury.common.log.Log4j2Configurator;
-import io.mercury.common.log.Log4j2Configurator.LogLevel;
+import io.mercury.common.log4j2.Log4j2Configurator;
+import io.mercury.common.log4j2.Log4j2Configurator.LogLevel;
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.core.pool.ClassAliasPool;
 import net.openhft.chronicle.wire.BinaryWire;
@@ -25,7 +25,7 @@ public class Test4 {
 
 	public static void main(String[] args) {
 
-		/**
+		/*
 		 * In this example, the type is encoded with the data. Instead of showing the
 		 * entire package name which will almost certainly not work on any other
 		 * platform, an alias for the type is used. It also means the message is shorter
@@ -57,10 +57,9 @@ public class Test4 {
 //
 //		Data{message='Hello World', number=1234567890, timeUnit=NANOSECONDS, price=10.5}
 
-		/**
+		/*
 		 * To write in binary instead
 		 */
-
 		Bytes<ByteBuffer> bytes2 = Bytes.elasticByteBuffer();
 		Wire wire2 = new BinaryWire(bytes2);
 

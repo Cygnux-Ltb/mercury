@@ -16,7 +16,9 @@ import net.openhft.chronicle.wire.WireOut;
 public class WireModel implements Marshallable {
 
     enum Values implements WireKey {
-        ID, REVISION, KEY
+        ID,
+        REVISION,
+        KEY
     }
 
     private long id;
