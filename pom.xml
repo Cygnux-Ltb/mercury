@@ -25,9 +25,9 @@
         <module>libraries</module>
         <module>persistence</module>
         <module>serialization</module>
+        <module>storage</module>
         <module>toolkit</module>
         <module>transport</module>
-        <module>storage</module>
     </modules>
 
     <properties>
@@ -48,12 +48,9 @@
         <slf4j.version>1.7.36</slf4j.version>
         <junit.version>4.13.2</junit.version>
         <jupiter.version>5.9.2</jupiter.version>
-        <netty.version>4.1.90.Final</netty.version>
+        <netty.version>4.1.91.Final</netty.version>
         <jackson.version>2.14.2</jackson.version>
     </properties>
-
-
-
 
     <build>
         <pluginManagement>

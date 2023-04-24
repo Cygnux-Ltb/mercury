@@ -17,6 +17,7 @@ public final class Log4j2Configurator {
      * @param folder String
      */
     public static synchronized void setLogFolder(String folder) {
+
         System.setProperty("log4j2.folder", folder);
     }
 
