@@ -46,8 +46,8 @@
             <version>${project.version}</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>jackson-databind</artifactId>
                     <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -60,12 +60,12 @@
             <version>${chronicle-core.version}</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>chronicle-analytics</artifactId>
                     <groupId>net.openhft</groupId>
+                    <artifactId>chronicle-analytics</artifactId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>slf4j-api</artifactId>
                     <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -80,12 +80,12 @@
             <version>${chronicle-bytes.version}</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>chronicle-core</artifactId>
                     <groupId>net.openhft</groupId>
+                    <artifactId>chronicle-core</artifactId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>slf4j-api</artifactId>
                     <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -101,12 +101,12 @@
             <version>${chronicle-threads.version}</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>chronicle-core</artifactId>
                     <groupId>net.openhft</groupId>
+                    <artifactId>chronicle-core</artifactId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>slf4j-api</artifactId>
                     <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -119,8 +119,8 @@
             <version>${chronicle-wire.version}</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>slf4j-api</artifactId>
                     <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>net.openhft</groupId>
@@ -144,12 +144,12 @@
             <version>${chronicle-values.version}</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>chronicle-bytes</artifactId>
                     <groupId>net.openhft</groupId>
+                    <artifactId>chronicle-bytes</artifactId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>chronicle-core</artifactId>
                     <groupId>net.openhft</groupId>
+                    <artifactId>chronicle-core</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -163,16 +163,16 @@
             <version>${chronicle-algorithms.version}</version>
             <exclusions>
                 <exclusion>
+                    <groupId>net.openhft</groupId>
                     <artifactId>chronicle-bytes</artifactId>
-                    <groupId>net.openhft</groupId>
                 </exclusion>
                 <exclusion>
+                    <groupId>net.openhft</groupId>
                     <artifactId>chronicle-core</artifactId>
-                    <groupId>net.openhft</groupId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>slf4j-api</artifactId>
                     <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -186,20 +186,20 @@
             <version>${chronicle-queue.version}</version>
             <exclusions>
                 <exclusion>
+                    <groupId>net.openhft</groupId>
                     <artifactId>chronicle-wire</artifactId>
-                    <groupId>net.openhft</groupId>
                 </exclusion>
                 <exclusion>
+                    <groupId>net.openhft</groupId>
                     <artifactId>chronicle-bytes</artifactId>
-                    <groupId>net.openhft</groupId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>slf4j-api</artifactId>
                     <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>chronicle-core</artifactId>
                     <groupId>net.openhft</groupId>
+                    <artifactId>chronicle-core</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -222,20 +222,20 @@
                     <artifactId>jcl-over-slf4j</artifactId>
                 </exclusion>
                 <exclusion>
+                    <groupId>net.openhft</groupId>
                     <artifactId>chronicle-core</artifactId>
-                    <groupId>net.openhft</groupId>
                 </exclusion>
                 <exclusion>
+                    <groupId>net.openhft</groupId>
                     <artifactId>chronicle-threads</artifactId>
-                    <groupId>net.openhft</groupId>
                 </exclusion>
                 <exclusion>
+                    <groupId>net.openhft</groupId>
                     <artifactId>chronicle-wire</artifactId>
-                    <groupId>net.openhft</groupId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>slf4j-api</artifactId>
                     <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
                 </exclusion>
                 <!-- java 11 use this exclusion -->
                 <!-- <exclusion> <groupId>com.sun.java</groupId> <artifactId>tools</artifactId>
@@ -256,12 +256,12 @@
             <scope>test</scope>
             <exclusions>
                 <exclusion>
-                    <artifactId>chronicle-core</artifactId>
                     <groupId>net.openhft</groupId>
+                    <artifactId>chronicle-core</artifactId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>affinity</artifactId>
                     <groupId>net.openhft</groupId>
+                    <artifactId>affinity</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
