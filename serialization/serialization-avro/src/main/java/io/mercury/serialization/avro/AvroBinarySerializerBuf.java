@@ -50,7 +50,7 @@ public final class AvroBinarySerializerBuf<T extends SpecificRecord> implements 
     }
 
     private AvroBinarySerializer<T> getSerializer() {
-        long threadId = Thread.currentThread().getId();
+        long threadId = Thread.currentThread().threadId();
         return serializers.putIfAbsent(threadId, new AvroBinarySerializer<>(type, bufSize));
     }
 
