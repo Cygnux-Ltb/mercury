@@ -16,7 +16,7 @@ import static io.mercury.common.functional.Functions.getOrThrows;
 import static io.mercury.common.lang.Asserter.nonNull;
 import static io.mercury.common.util.StringSupport.nonEmpty;
 
-public final class ConfigWrapper<OP extends ConfigOption> {
+public final class ConfigWrapper<O extends ConfigOption> {
 
     private final String module;
 
@@ -42,7 +42,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @param option OP
      * @return boolean
      */
-    public boolean hasOption(@Nonnull OP option) {
+    public boolean hasOption(@Nonnull O option) {
         return config.hasPath(option.getConfigName(module));
     }
 
@@ -52,7 +52,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @param option OP
      * @return boolean
      */
-    public boolean hasOptionOrNull(@Nonnull OP option) {
+    public boolean hasOptionOrNull(@Nonnull O option) {
         return config.hasPathOrNull(option.getConfigName(module));
     }
 
@@ -62,7 +62,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @param option OP
      * @return boolean
      */
-    public boolean getBoolean(@Nonnull OP option) {
+    public boolean getBoolean(@Nonnull O option) {
         return getBoolean(option, false);
     }
 
@@ -73,9 +73,11 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @param defaultVal boolean
      * @return boolean
      */
-    public boolean getBoolean(@Nonnull OP option, boolean defaultVal) {
-        return getOrDefault(() -> config.hasPath(option.getConfigName(module)),
-                () -> config.getBoolean(option.getConfigName(module)), defaultVal);
+    public boolean getBoolean(@Nonnull O option, boolean defaultVal) {
+        return getOrDefault(
+                () -> config.hasPath(option.getConfigName(module)),
+                () -> config.getBoolean(option.getConfigName(module)),
+                defaultVal);
     }
 
     /**
@@ -84,7 +86,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @param option OP
      * @return int
      */
-    public int getInt(@Nonnull OP option) {
+    public int getInt(@Nonnull O option) {
         return getInt(option, 0);
     }
 
@@ -95,7 +97,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @param defaultVal int
      * @return int
      */
-    public int getInt(@Nonnull OP option, int defaultVal) {
+    public int getInt(@Nonnull O option, int defaultVal) {
         return getOrDefault(() -> config.hasPath(option.getConfigName(module)),
                 () -> config.getInt(option.getConfigName(module)), defaultVal);
     }
@@ -106,7 +108,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @param option OP
      * @return long
      */
-    public long getLong(@Nonnull OP option) {
+    public long getLong(@Nonnull O option) {
         return getLong(option, 0L);
     }
 
@@ -117,7 +119,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @param defaultVal long
      * @return long
      */
-    public long getLong(@Nonnull OP option, long defaultVal) {
+    public long getLong(@Nonnull O option, long defaultVal) {
         return getOrDefault(() -> config.hasPath(option.getConfigName(module)),
                 () -> config.getLong(option.getConfigName(module)), defaultVal);
     }
@@ -128,7 +130,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @param option OP
      * @return double
      */
-    public double getDouble(@Nonnull OP option) {
+    public double getDouble(@Nonnull O option) {
         return getDouble(option, 0.0D);
     }
 
@@ -139,7 +141,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @param defaultVal double
      * @return double
      */
-    public double getDouble(@Nonnull OP option, double defaultVal) {
+    public double getDouble(@Nonnull O option, double defaultVal) {
         return getOrDefault(() -> config.hasPath(option.getConfigName(module)),
                 () -> config.getDouble(option.getConfigName(module)), defaultVal);
     }
@@ -150,7 +152,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @param option OP
      * @return String
      */
-    public String getString(@Nonnull OP option) {
+    public String getString(@Nonnull O option) {
         return getString(option, "");
     }
 
@@ -161,7 +163,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @param defaultVal String
      * @return String
      */
-    public String getString(@Nonnull OP option, @Nonnull String defaultVal) {
+    public String getString(@Nonnull O option, @Nonnull String defaultVal) {
         return getOrDefault(() -> config.hasPath(option.getConfigName(module)),
                 () -> config.getString(option.getConfigName(module)), defaultVal);
     }
@@ -171,7 +173,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @return boolean
      * @throws Missing exception
      */
-    public boolean getBooleanOrThrows(@Nonnull OP option) throws Missing {
+    public boolean getBooleanOrThrows(@Nonnull O option) throws Missing {
         return getOrThrows(
                 () -> config.hasPath(option.getConfigName(module)),
                 () -> config.getBoolean(option.getConfigName(module)),
@@ -183,7 +185,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @return int
      * @throws Missing exception
      */
-    public int getIntOrThrows(@Nonnull OP option) throws Missing {
+    public int getIntOrThrows(@Nonnull O option) throws Missing {
         return getOrThrows(
                 () -> config.hasPath(option.getConfigName(module)),
                 () -> config.getInt(option.getConfigName(module)),
@@ -197,7 +199,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @throws Missing  exception
      * @throws BadValue exception
      */
-    public int getIntOrThrows(@Nonnull OP option, IntPredicate verify)
+    public int getIntOrThrows(@Nonnull O option, IntPredicate verify)
             throws Missing, BadValue {
         return getIntOrThrows(option, verify,
                 new IllegalArgumentException("Illegal argument -> " + option.getConfigName(module)));
@@ -211,7 +213,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @throws Missing  exception
      * @throws BadValue exception
      */
-    public int getIntOrThrows(@Nonnull OP option, IntPredicate verify, Exception ex)
+    public int getIntOrThrows(@Nonnull O option, IntPredicate verify, Exception ex)
             throws Missing, BadValue {
         int value = getIntOrThrows(option);
         if (verify.test(value))
@@ -225,7 +227,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @return long
      * @throws Missing exception
      */
-    public long getLongOrThrows(@Nonnull OP option) throws Missing {
+    public long getLongOrThrows(@Nonnull O option) throws Missing {
         return getOrThrows(() -> config.hasPath(option.getConfigName(module)),
                 () -> config.getLong(option.getConfigName(module)),
                 new Missing(option.getConfigName(module)));
@@ -238,7 +240,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @throws Missing  exception
      * @throws BadValue exception
      */
-    public long getLongOrThrows(@Nonnull OP option, LongPredicate verify)
+    public long getLongOrThrows(@Nonnull O option, LongPredicate verify)
             throws Missing, BadValue {
         return getLongOrThrows(option, verify,
                 new IllegalArgumentException("Illegal argument -> " + option.getConfigName(module)));
@@ -252,7 +254,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @throws Missing  exception
      * @throws BadValue exception
      */
-    public long getLongOrThrows(@Nonnull OP option, LongPredicate verify, Exception ex)
+    public long getLongOrThrows(@Nonnull O option, LongPredicate verify, Exception ex)
             throws Missing, BadValue {
         long value = getLongOrThrows(option);
         if (verify.test(value))
@@ -266,7 +268,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @return double
      * @throws Missing exception
      */
-    public double getDoubleOrThrows(@Nonnull OP option) throws Missing {
+    public double getDoubleOrThrows(@Nonnull O option) throws Missing {
         return getOrThrows(
                 () -> config.hasPath(option.getConfigName(module)),
                 () -> config.getDouble(option.getConfigName(module)),
@@ -280,7 +282,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @throws Missing  exception
      * @throws BadValue exception
      */
-    public double getDoubleOrThrows(@Nonnull OP option, DoublePredicate verify)
+    public double getDoubleOrThrows(@Nonnull O option, DoublePredicate verify)
             throws Missing, BadValue {
         return getDoubleOrThrows(option, verify,
                 new IllegalArgumentException("Illegal argument -> " + option.getConfigName(module)));
@@ -294,7 +296,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @throws Missing  exception
      * @throws BadValue exception
      */
-    public double getDoubleOrThrows(@Nonnull OP option, DoublePredicate verify, Exception ex)
+    public double getDoubleOrThrows(@Nonnull O option, DoublePredicate verify, Exception ex)
             throws Missing, BadValue {
         double value = getDoubleOrThrows(option);
         if (verify.test(value))
@@ -308,7 +310,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @return String
      * @throws Missing exception
      */
-    public String getStringOrThrows(@Nonnull OP option) throws Missing {
+    public String getStringOrThrows(@Nonnull O option) throws Missing {
         return getOrThrows(
                 () -> config.hasPath(option.getConfigName(module)),
                 () -> config.getString(option.getConfigName(module)),
@@ -322,7 +324,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @throws Missing  exception
      * @throws BadValue exception
      */
-    public String getStringOrThrows(@Nonnull OP option, Predicate<String> verify)
+    public String getStringOrThrows(@Nonnull O option, Predicate<String> verify)
             throws Missing, BadValue {
         return getStringOrThrows(option, verify,
                 new IllegalArgumentException("Illegal argument -> " + option.getConfigName(module)));
@@ -336,7 +338,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @throws Missing  exception
      * @throws BadValue exception
      */
-    public String getStringOrThrows(@Nonnull OP option, Predicate<String> verify, Exception ex)
+    public String getStringOrThrows(@Nonnull O option, Predicate<String> verify, Exception ex)
             throws Missing, BadValue {
         String value = getStringOrThrows(option);
         if (verify.test(value))

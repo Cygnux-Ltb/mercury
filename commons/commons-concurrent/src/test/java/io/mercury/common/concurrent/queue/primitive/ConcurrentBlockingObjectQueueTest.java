@@ -1,6 +1,9 @@
 package io.mercury.common.concurrent.queue.primitive;
 
-import static org.junit.Assert.assertEquals;
+import io.mercury.common.concurrent.queue.lowlatency.ConcurrentQueue;
+import org.junit.Assert;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CountDownLatch;
@@ -8,11 +11,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import io.mercury.common.concurrent.queue.lowlatency.ConcurrentQueue;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by robaustin on 31/01/2014.
@@ -246,7 +245,7 @@ public class ConcurrentBlockingObjectQueueTest {
     }
 
     @SuppressWarnings("deprecation")
-	private void testConcurrentBlockingObjectQueue(final int nTimes) throws InterruptedException {
+    private void testConcurrentBlockingObjectQueue(final int nTimes) throws InterruptedException {
         final ConcurrentQueue<Integer> queue = new ConcurrentQueue<Integer>(1024);
         final CountDownLatch countDown = new CountDownLatch(1);
 
@@ -314,66 +313,48 @@ public class ConcurrentBlockingObjectQueueTest {
         readerThread.stop();
     }
 
+    private void testArrayBlockingQueue(final int nTimes) throws InterruptedException {
 
-    @SuppressWarnings("deprecation")
-	private void testArrayBlockingQueue(final int nTimes) throws InterruptedException {
-
-        final ArrayBlockingQueue<Integer> queue = new ArrayBlockingQueue<Integer>(1024);
+        final ArrayBlockingQueue<Integer> queue = new ArrayBlockingQueue<>(1024);
         final CountDownLatch countDown = new CountDownLatch(1);
 
         final AtomicBoolean success = new AtomicBoolean(true);
 
-        Thread writerThread = new Thread(
-                new Runnable() {
+        Thread writerThread = new Thread(() -> {
+            try {
+                for (int i = 1; i < nTimes; i++) {
+                    queue.put(i);
 
-                    @Override
-                    public void run() {
-                        try {
-                            for (int i = 1; i < nTimes; i++) {
-                                queue.put(i);
+                }
 
-                            }
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
 
-                        } catch (Throwable e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                });
+        });
 
 
         writerThread.setName("ArrayBlockingQueue-writer");
 
-        Thread readerThread = new Thread(
-                new Runnable() {
+        Thread readerThread = new Thread(() -> {
+            int value = 0;
+            for (int i = 1; i < nTimes; i++) {
+                final int newValue;
+                try {
+                    newValue = queue.take();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                if (newValue != value + 1) {
+                    success.set(false);
+                    return;
+                }
+                value = newValue;
+            }
+            countDown.countDown();
 
-                    @Override
-                    public void run() {
-
-                        int value = 0;
-                        for (int i = 1; i < nTimes; i++) {
-
-                            final int newValue;
-                            try {
-                                newValue = queue.take();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                                return;
-                            }
-
-
-                            if (newValue != value + 1) {
-                                success.set(false);
-                                return;
-                            }
-
-                            value = newValue;
-
-                        }
-                        countDown.countDown();
-
-                    }
-                });
+        });
 
         readerThread.setName("ArrayBlockingQueue-reader");
 
@@ -388,17 +369,14 @@ public class ConcurrentBlockingObjectQueueTest {
 
 
     @Test
-    public void testLatency() throws NoSuchFieldException, InterruptedException {
-
+    public void testLatency() throws InterruptedException {
 
         for (int pwr = 2; pwr < 20; pwr++) {
             int i = (int) Math.pow(2, pwr);
 
-
             final long arrayBlockingQueueStart = System.nanoTime();
             testArrayBlockingQueue(i);
             final double arrayBlockingDuration = System.nanoTime() - arrayBlockingQueueStart;
-
 
             final long queueStart = System.nanoTime();
             testConcurrentBlockingObjectQueue(i);

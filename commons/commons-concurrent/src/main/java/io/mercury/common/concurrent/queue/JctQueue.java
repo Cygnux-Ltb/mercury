@@ -1,31 +1,31 @@
-package io.mercury.common.concurrent.queue.jct;
+package io.mercury.common.concurrent.queue;
 
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.annotation.thread.SpinLock;
-import io.mercury.common.concurrent.queue.QueueWorkingException;
-import io.mercury.common.concurrent.queue.SingleConsumerQueue;
-import io.mercury.common.concurrent.queue.WaitingStrategy;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.ThreadSupport;
-import io.mercury.common.util.StringSupport;
 import org.jctools.queues.MpscArrayQueue;
 import org.jctools.queues.SpscArrayQueue;
 import org.slf4j.Logger;
 
 import java.util.Queue;
 
+import static io.mercury.common.thread.ThreadSupport.getCurrentThreadName;
+import static io.mercury.common.util.StringSupport.isNullOrEmpty;
+import static java.lang.Math.max;
+
 /**
  * @param <E> Single consumer queue use jctools implements
  * @author yellow013
  */
-public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> implements Runnable {
+public abstract class JctQueue<E> extends ScQueue<E> implements Runnable {
 
     /**
      * Logger
      */
-    private static final Logger log = Log4j2LoggerFactory.getLogger(JctSingleConsumerQueue.class);
+    private static final Logger log = Log4j2LoggerFactory.getLogger(JctQueue.class);
 
     /**
      * internal queue
@@ -52,8 +52,8 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> i
      *
      * @return Builder
      */
-    public static Builder spscQueue() {
-        return new Builder(QueueType.OneToOne);
+    public static QueueBuilder spscQueue() {
+        return spscQueue(null);
     }
 
     /**
@@ -62,8 +62,8 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> i
      * @param name String
      * @return Builder
      */
-    public static Builder spscQueue(String name) {
-        return new Builder(QueueType.OneToOne).setQueueName(name);
+    public static QueueBuilder spscQueue(String name) {
+        return new QueueBuilder(QueueType.SPSC, name);
     }
 
     /**
@@ -71,8 +71,8 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> i
      *
      * @return Builder
      */
-    public static Builder mpscQueue() {
-        return new Builder(QueueType.ManyToOne);
+    public static QueueBuilder mpscQueue() {
+        return mpscQueue(null);
     }
 
     /**
@@ -81,8 +81,8 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> i
      * @param name String
      * @return Builder
      */
-    public static Builder mpscQueue(String name) {
-        return new Builder(QueueType.ManyToOne).setQueueName(name);
+    public static QueueBuilder mpscQueue(String name) {
+        return new QueueBuilder(QueueType.MPSC, name);
     }
 
     /**
@@ -91,8 +91,8 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> i
      * @param strategy    WaitingStrategy
      * @param sleepMillis long
      */
-    protected JctSingleConsumerQueue(Processor<E> processor, int capacity,
-                                     WaitingStrategy strategy, long sleepMillis) {
+    protected JctQueue(Processor<E> processor, int capacity,
+                       WaitingStrategy strategy, long sleepMillis) {
         super(processor);
         this.queue = createQueue(capacity);
         this.strategy = strategy;
@@ -165,14 +165,14 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> i
      * @param <E> Single Producer Single Consumer Queue
      * @author yellow013
      */
-    private static final class JctSpscQueue<E> extends JctSingleConsumerQueue<E> {
+    private static final class SpscQueueJct<E> extends JctQueue<E> {
 
-        private JctSpscQueue(String queueName, int capacity, StartMode mode,
+        private SpscQueueJct(String queueName, int capacity, StartMode mode,
                              WaitingStrategy strategy, long sleepMillis,
                              Processor<E> processor) {
-            super(processor, Math.max(capacity, 16), strategy, sleepMillis);
-            super.name = StringSupport.isNullOrEmpty(queueName)
-                    ? "JctSpscQueue-" + ThreadSupport.getCurrentThreadName()
+            super(processor, max(capacity, 16), strategy, sleepMillis);
+            super.name = isNullOrEmpty(queueName)
+                    ? "JctSpscQueue-T[" + getCurrentThreadName() + "]"
                     : queueName;
             startWith(mode);
         }
@@ -184,7 +184,7 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> i
 
         @Override
         public QueueType getQueueType() {
-            return QueueType.OneToOne;
+            return QueueType.SPSC;
         }
 
     }
@@ -193,14 +193,14 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> i
      * @param <E> Multiple Producer Single Consumer Queue
      * @author yellow013
      */
-    private static final class JctMpscQueue<E> extends JctSingleConsumerQueue<E> {
+    private static final class MpscQueueJct<E> extends JctQueue<E> {
 
-        private JctMpscQueue(String queueName, int capacity, StartMode mode,
+        private MpscQueueJct(String queueName, int capacity, StartMode mode,
                              WaitingStrategy strategy, long sleepMillis,
                              Processor<E> processor) {
-            super(processor, Math.max(capacity, 16), strategy, sleepMillis);
-            super.name = StringSupport.isNullOrEmpty(queueName)
-                    ? "JctMpscQueue-" + ThreadSupport.getCurrentThreadName()
+            super(processor, max(capacity, 16), strategy, sleepMillis);
+            super.name = isNullOrEmpty(queueName)
+                    ? "JctMpscQueue-T[" + getCurrentThreadName() + "]"
                     : queueName;
             startWith(mode);
         }
@@ -212,61 +212,59 @@ public abstract class JctSingleConsumerQueue<E> extends SingleConsumerQueue<E> i
 
         @Override
         public QueueType getQueueType() {
-            return QueueType.ManyToOne;
+            return QueueType.MPSC;
         }
 
     }
 
     /**
-     * JctQueue Builder
+     * Jct QueueBuilder
      *
      * @author yellow013
      */
-    public static class Builder {
+    public static class QueueBuilder {
 
         private final QueueType type;
-        private String queueName = null;
+        private final String queueName;
         private StartMode mode = StartMode.auto();
         private WaitingStrategy strategy = WaitingStrategy.Spin;
         private long sleepMillis = 5;
         private int capacity = 32;
 
-        private Builder(QueueType type) {
+        private QueueBuilder(QueueType type, String queueName) {
             this.type = type;
-        }
-
-        public Builder setQueueName(String queueName) {
             this.queueName = queueName;
-            return this;
         }
 
-        public Builder setStartMode(StartMode mode) {
+        public QueueBuilder startMode(StartMode mode) {
             this.mode = mode;
             return this;
         }
 
-        public Builder useSpinStrategy() {
+        public QueueBuilder spinStrategy() {
             this.strategy = WaitingStrategy.Spin;
             return this;
         }
 
-        public Builder useSleepStrategy(long sleepMillis) {
+        public QueueBuilder sleepStrategy(long sleepMillis) {
             this.strategy = WaitingStrategy.Sleep;
             if (sleepMillis > 0)
                 this.sleepMillis = sleepMillis;
+            else
+                this.sleepMillis = 1;
             return this;
         }
 
-        public Builder setCapacity(int capacity) {
+        public QueueBuilder capacity(int capacity) {
             this.capacity = capacity;
             return this;
         }
 
-        public final <E> JctSingleConsumerQueue<E> process(Processor<E> processor) {
+        public final <E> JctQueue<E> process(Processor<E> processor) {
             return switch (type) {
-                case OneToOne -> new JctSpscQueue<>(queueName, capacity, mode, strategy, sleepMillis, processor);
-                case ManyToOne -> new JctMpscQueue<>(queueName, capacity, mode, strategy, sleepMillis, processor);
-                default -> throw new IllegalArgumentException("Error enum value");
+                case SPSC -> new SpscQueueJct<>(queueName, capacity, mode, strategy, sleepMillis, processor);
+                case MPSC -> new MpscQueueJct<>(queueName, capacity, mode, strategy, sleepMillis, processor);
+                default -> throw new IllegalArgumentException("Error QueueType value[" + type + "]");
             };
         }
     }

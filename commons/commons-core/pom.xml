@@ -10,7 +10,6 @@
 
     <artifactId>commons-core</artifactId>
     <name>commons-core</name>
-
     <packaging>jar</packaging>
 
     <properties>

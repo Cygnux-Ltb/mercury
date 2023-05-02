@@ -12,7 +12,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 @ThreadSafe
-public class PreloadingQueue<E> implements MultiConsumerQueue<E> {
+public class PreloadingQueue<E> implements McQueue<E> {
 
     private static final Logger log = Log4j2LoggerFactory.getLogger(PreloadingQueue.class);
 
@@ -98,7 +98,7 @@ public class PreloadingQueue<E> implements MultiConsumerQueue<E> {
 
     @Override
     public QueueType getQueueType() {
-        return QueueType.ManyToMany;
+        return QueueType.MPMC;
     }
 
 }

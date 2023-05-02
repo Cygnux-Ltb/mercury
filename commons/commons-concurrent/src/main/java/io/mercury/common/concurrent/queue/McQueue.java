@@ -13,7 +13,7 @@ import io.mercury.common.collections.queue.Queue;
  *
  * @param <E>
  */
-public interface MultiConsumerQueue<E> extends Queue<E> {
+public interface McQueue<E> extends Queue<E> {
 
 	@CheckForNull
 	E dequeue();

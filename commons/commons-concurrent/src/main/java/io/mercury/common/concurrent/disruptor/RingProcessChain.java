@@ -82,6 +82,13 @@ public class RingProcessChain<E, I> extends AbstractRingBuffer<E, I> {
                 newFactory(eventType, log), publisher);
     }
 
+    /**
+     * @param eventType
+     * @param eventTranslator
+     * @param <E>
+     * @param <I>
+     * @return Builder<E, I>
+     */
     public static <E, I> Builder<E, I> withSingleProducer(@Nonnull Class<E> eventType,
                                                           @Nonnull EventTranslatorOneArg<E, I> eventTranslator) {
         return withSingleProducer(

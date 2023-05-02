@@ -6,7 +6,7 @@ import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import io.mercury.common.collections.queue.LoadContainer;
-import io.mercury.common.concurrent.queue.SingleConsumerQueue;
+import io.mercury.common.concurrent.queue.ScQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.thread.MaxPriorityThreadFactory;
@@ -20,7 +20,7 @@ import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Sleeping
  * @param <E>
  * @author yellow013
  */
-public class RingQueue<E> extends SingleConsumerQueue<E> {
+public class RingQueue<E> extends ScQueue<E> {
 
     private static final Logger log = Log4j2LoggerFactory.getLogger(RingQueue.class);
 
@@ -181,7 +181,7 @@ public class RingQueue<E> extends SingleConsumerQueue<E> {
 
     @Override
     public QueueType getQueueType() {
-        return QueueType.OneToOne;
+        return QueueType.SPSC;
     }
 
 }

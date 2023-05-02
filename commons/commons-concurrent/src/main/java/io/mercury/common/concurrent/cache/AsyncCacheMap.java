@@ -2,14 +2,15 @@ package io.mercury.common.concurrent.cache;
 
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.concurrent.queue.SingleConsumerQueue;
-import io.mercury.common.concurrent.queue.jct.JctSingleConsumerQueue;
-import io.mercury.common.util.StringSupport;
+import io.mercury.common.concurrent.queue.ScQueue;
 import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
 
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.function.Consumer;
+
+import static io.mercury.common.concurrent.queue.JctQueue.mpscQueue;
+import static io.mercury.common.util.StringSupport.isNullOrEmpty;
 
 /**
  * @param <K>
@@ -26,14 +27,13 @@ public final class AsyncCacheMap<K, V> {
 
     private final String cacheName;
 
-    private final SingleConsumerQueue<ExecEvent> execQueue;
+    private final ScQueue<ExecEvent> execQueue;
 
-    private final SingleConsumerQueue<QueryResult> queryQueue;
+    private final ScQueue<QueryResult> queryQueue;
 
     // private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private final class ExecEvent {
-
         private final K key;
         private V value;
         private long nanoTime;
@@ -47,11 +47,9 @@ public final class AsyncCacheMap<K, V> {
             this.key = key;
             this.nanoTime = nanoTime;
         }
-
     }
 
     private final class QueryResult {
-
         private final V value;
         private final long nanoTime;
 
@@ -59,15 +57,14 @@ public final class AsyncCacheMap<K, V> {
             this.value = value;
             this.nanoTime = nanoTime;
         }
-
     }
 
     public AsyncCacheMap(String cacheName) {
-        this.cacheName = StringSupport.isNullOrEmpty(cacheName) ? "AsyncCacheMap-" + hashCode() : cacheName;
-        this.execQueue = JctSingleConsumerQueue.mpscQueue(this.cacheName + "-ExecQueue").setCapacity(64)
-                .process(event -> asyncExec(event));
-        this.queryQueue = JctSingleConsumerQueue.mpscQueue(this.cacheName + "-QueryQueue").setCapacity(64)
-                .process(result -> consumerMap.remove(result.nanoTime).accept(result.value));
+        this.cacheName = isNullOrEmpty(cacheName) ? "AsyncCacheMap-" + hashCode() : cacheName;
+        this.execQueue = mpscQueue(this.cacheName + "-ExecQueue")
+                .capacity(64).process(event -> asyncExec(event));
+        this.queryQueue = mpscQueue(this.cacheName + "-QueryQueue")
+                .capacity(64).process(result -> consumerMap.remove(result.nanoTime).accept(result.value));
     }
 
     public String getCacheName() {

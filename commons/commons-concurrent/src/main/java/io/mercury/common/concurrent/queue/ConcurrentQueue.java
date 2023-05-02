@@ -1,8 +1,8 @@
-package io.mercury.common.concurrent.queue.jct;
+package io.mercury.common.concurrent.queue;
 
 import io.mercury.common.annotation.thread.SpinLock;
 import io.mercury.common.collections.Capacity;
-import io.mercury.common.concurrent.queue.MultiConsumerQueue;
+import io.mercury.common.concurrent.queue.McQueue;
 import io.mercury.common.concurrent.queue.WaitingStrategy;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.ThreadSupport;
@@ -12,7 +12,7 @@ import org.jctools.queues.MpmcArrayQueue;
 import javax.annotation.concurrent.ThreadSafe;
 
 @ThreadSafe
-public final class ConcurrentQueue<E> implements MultiConsumerQueue<E> {
+public final class ConcurrentQueue<E> implements McQueue<E> {
 
     private final MpmcArrayQueue<E> queue;
 
@@ -67,7 +67,7 @@ public final class ConcurrentQueue<E> implements MultiConsumerQueue<E> {
 
     @Override
     public QueueType getQueueType() {
-        return QueueType.ManyToMany;
+        return QueueType.MPMC;
     }
 
 }
