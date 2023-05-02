@@ -1,7 +1,7 @@
 package io.mercury.transport.socket;
 
 import io.mercury.common.concurrent.disruptor.RingQueue;
-import io.mercury.common.concurrent.queue.SingleConsumerQueue;
+import io.mercury.common.concurrent.queue.ScQueue;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.ThreadSupport;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
@@ -132,7 +132,7 @@ public final class SocketTransceiver extends BaseTransceiver<String> {
     }
 
     @Override
-    protected SingleConsumerQueue<String> initSendQueue() {
+    protected ScQueue<String> initSendQueue() {
         return RingQueue.withSingleProducer().setName("socket-queue").size(128).process(this::processSendQueue);
     }
 

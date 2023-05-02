@@ -51,22 +51,22 @@ public final class ObjectEchoClient {
 
         EventLoopGroup group = new NioEventLoopGroup();
         try {
-            Bootstrap b = new Bootstrap();
-            b.group(group).channel(NioSocketChannel.class).handler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                public void initChannel(SocketChannel ch) {
-                    ChannelPipeline p = ch.pipeline();
-                    if (sslCtx != null) {
-                        p.addLast(sslCtx.newHandler(ch.alloc(), HOST, PORT));
-                    }
-                    p.addLast(new ObjectEncoder(),
-                            new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                            new ObjectEchoClientHandler());
-                }
-            });
-
+            Bootstrap bootstrap = new Bootstrap();
+            bootstrap.group(group).channel(NioSocketChannel.class)
+                    .handler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        public void initChannel(SocketChannel ch) {
+                            ChannelPipeline p = ch.pipeline();
+                            if (sslCtx != null) {
+                                p.addLast(sslCtx.newHandler(ch.alloc(), HOST, PORT));
+                            }
+                            p.addLast(new ObjectEncoder(),
+                                    new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
+                                    new ObjectEchoClientHandler());
+                        }
+                    });
             // Start the connection attempt.
-            b.connect(HOST, PORT).sync().channel().closeFuture().sync();
+            bootstrap.connect(HOST, PORT).sync().channel().closeFuture().sync();
         } finally {
             group.shutdownGracefully();
         }

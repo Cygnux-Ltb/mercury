@@ -59,6 +59,7 @@ import static org.agrona.BitUtil.SIZE_OF_LONG;
  * published.
  */
 public class IndexedReplicatedRecording implements AutoCloseable {
+
     static final int MESSAGE_INDEX_OFFSET = 0;
     static final int TIMESTAMP_OFFSET = SIZE_OF_LONG;
     static final int HEADER_LENGTH = TIMESTAMP_OFFSET + SIZE_OF_LONG;

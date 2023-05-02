@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import io.mercury.common.concurrent.queue.ScQueue;
 import org.slf4j.Logger;
 
-import io.mercury.common.concurrent.queue.SingleConsumerQueue;
-import io.mercury.common.concurrent.queue.jct.JctSingleConsumerQueue;
+import io.mercury.common.concurrent.queue.JctQueue;
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.transport.api.Sender;
@@ -83,9 +83,9 @@ public final class SocketSender extends TransportComponent implements Sender<byt
         }
     }
 
-    private final SingleConsumerQueue<byte[]> innerQueue = JctSingleConsumerQueue
+    private final ScQueue<byte[]> innerQueue = JctQueue
             .mpscQueue(getName() + "-InnerQueue")
-            .setCapacity(512).process(this::processSendQueue);
+            .capacity(512).process(this::processSendQueue);
 
     public static void main(String[] args) throws IOException {
         SocketConfigurator configurator = SocketConfigurator.builder().host("192.168.1.138").port(7901).build();

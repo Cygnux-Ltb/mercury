@@ -47,7 +47,7 @@ import static java.nio.ByteOrder.LITTLE_ENDIAN;
  * <p>
  * The chunk size if best determined by
  * {@link io.aeron.Publication#maxPayloadLength()} minus header for the chunk.
- *
+ * <p>
  * <b>file-create</b>
  *
  * <pre>

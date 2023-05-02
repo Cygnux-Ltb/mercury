@@ -87,7 +87,7 @@ public abstract class ZmqTransport extends TransportComponent implements Transpo
                     socket.setTCPKeepAlive(keepAlive.getCode());
                     log.info("ZMQ.Socket used [Disable] tcpKeepAlive");
                 }
-                case Default, default -> log.info("ZMQ.Socket used [Default] tcpKeepAlive");
+                case Default -> log.info("ZMQ.Socket used [Default] tcpKeepAlive");
             }
         }
         return socket;

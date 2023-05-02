@@ -44,6 +44,7 @@ import static org.agrona.SystemUtil.loadPropertiesFiles;
  * Tests the throughput when recording a stream of messages.
  */
 public class EmbeddedRecordingThroughput implements AutoCloseable {
+    
     private static final long NUMBER_OF_MESSAGES = SampleConfiguration.NUMBER_OF_MESSAGES;
     private static final int MESSAGE_LENGTH = SampleConfiguration.MESSAGE_LENGTH;
     private static final int STREAM_ID = SampleConfiguration.STREAM_ID;
