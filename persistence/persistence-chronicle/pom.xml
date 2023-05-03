@@ -18,10 +18,10 @@
         <chronicle-core.version>2.23.36</chronicle-core.version>
         <chronicle-bytes.version>2.23.33</chronicle-bytes.version>
         <chronicle-threads.version>2.23.25</chronicle-threads.version>
-        <chronicle-wire.version>2.23.39</chronicle-wire.version>
-        <!-- ^ chronicle storage basic ^ -->
         <chronicle-values.version>2.23.3</chronicle-values.version>
         <chronicle-algorithms.version>2.23.4</chronicle-algorithms.version>
+        <!-- ^ chronicle storage basic ^ -->
+        <chronicle-wire.version>2.23.39</chronicle-wire.version>
         <chronicle-queue.version>5.23.37</chronicle-queue.version>
         <chronicle-map.version>3.23.5</chronicle-map.version>
     </properties>

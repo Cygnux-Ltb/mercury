@@ -18,6 +18,7 @@
     <repositories>
         <repository>
             <id>avro-util</id>
+            <name>avro-util</name>
             <url>https://linkedin.jfrog.io/artifactory/avro-util/</url>
         </repository>
     </repositories>

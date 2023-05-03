@@ -5,5 +5,4 @@ package io.mercury.common.functional;
  */
 @FunctionalInterface
 public interface ThrowableHandler<E extends Throwable> extends Handler<E> {
-
 }
