@@ -181,7 +181,7 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
             throw new DeclareRuntimeException(e);
         }
         if (errMsgExchange != null && errMsgQueue != null) {
-            errMsgExchange.bindingQueue(errMsgQueue.getQueue());
+            errMsgExchange.bindingQueues(errMsgQueue.getQueue());
             declareErrMsgExchange(operator);
         } else if (errMsgExchange != null) {
             declareErrMsgExchange(operator);

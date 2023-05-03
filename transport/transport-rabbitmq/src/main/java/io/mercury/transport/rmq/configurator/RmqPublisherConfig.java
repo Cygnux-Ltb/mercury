@@ -320,7 +320,7 @@ public final class RmqPublisherConfig extends RmqConfig {
                         .build(),
                 ExchangeRelationship
                         .direct("TEST")
-                        .bindingQueue(AmqpQueue.named("TEST_0")))
+                        .bindingQueues(AmqpQueue.named("TEST_0")))
                 .build());
     }
 

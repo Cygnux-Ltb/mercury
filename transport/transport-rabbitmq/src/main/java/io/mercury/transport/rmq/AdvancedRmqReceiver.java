@@ -123,9 +123,9 @@ public class AdvancedRmqReceiver<T> extends RmqTransport
      * @param consumer Consumer<byte[]>
      * @return AdvancedRmqReceiver<byte [ ]>
      */
-    public static AdvancedRmqReceiver<byte[]> create(
-            String tag, @Nonnull RmqReceiverConfig config,
-            @Nonnull Consumer<byte[]> consumer) {
+    public static AdvancedRmqReceiver<byte[]> create(String tag,
+                                                     @Nonnull RmqReceiverConfig config,
+                                                     @Nonnull Consumer<byte[]> consumer) {
         Asserter.nonNull(config, "config");
         Asserter.nonNull(consumer, "consumer");
         return new AdvancedRmqReceiver<>(tag, config, (msg, reuse) -> msg,
@@ -140,10 +140,10 @@ public class AdvancedRmqReceiver<T> extends RmqTransport
      * @param consumer     Consumer<T>
      * @return AdvancedRmqReceiver<T>
      */
-    public static <T> AdvancedRmqReceiver<T> create(
-            String tag, @Nonnull RmqReceiverConfig config,
-            @Nonnull BytesDeserializer<T> deserializer,
-            @Nonnull Consumer<T> consumer) {
+    public static <T> AdvancedRmqReceiver<T> create(String tag,
+                                                    @Nonnull RmqReceiverConfig config,
+                                                    @Nonnull BytesDeserializer<T> deserializer,
+                                                    @Nonnull Consumer<T> consumer) {
         Asserter.nonNull(config, "config");
         Asserter.nonNull(deserializer, "deserializer");
         Asserter.nonNull(consumer, "consumer");
@@ -152,67 +152,67 @@ public class AdvancedRmqReceiver<T> extends RmqTransport
     }
 
     /**
-     * @param config          RmqReceiverConfig
-     * @param selfAckConsumer SelfAckConsumer<byte[]>
+     * @param config      RmqReceiverConfig
+     * @param ackConsumer SelfAckConsumer<byte[]>
      * @return AdvancedRmqReceiver<byte [ ]>
      */
-    public static AdvancedRmqReceiver<byte[]> createWithSelfAck(
-            @Nonnull RmqReceiverConfig config,
-            @Nonnull SelfAckConsumer<byte[]> selfAckConsumer) {
+    public static AdvancedRmqReceiver<byte[]> createWithSelfAck(@Nonnull RmqReceiverConfig config,
+                                                                @Nonnull SelfAckConsumer<byte[]> ackConsumer) {
         Asserter.nonNull(config, "config");
-        Asserter.nonNull(selfAckConsumer, "selfAckConsumer");
+        Asserter.nonNull(ackConsumer, "ackConsumer");
         return new AdvancedRmqReceiver<>(null, config, (msg, reuse) -> msg,
-                null, selfAckConsumer);
+                null, ackConsumer);
     }
 
     /**
-     * @param tag             String
-     * @param config          RmqReceiverConfig
-     * @param selfAckConsumer SelfAckConsumer<byte[]>
+     * @param tag         String
+     * @param config      RmqReceiverConfig
+     * @param ackConsumer SelfAckConsumer<byte[]>
      * @return AdvancedRmqReceiver<byte [ ]>
      */
-    public static AdvancedRmqReceiver<byte[]> createWithSelfAck(
-            String tag, @Nonnull RmqReceiverConfig config,
-            @Nonnull SelfAckConsumer<byte[]> selfAckConsumer) {
+    public static AdvancedRmqReceiver<byte[]> createWithSelfAck(String tag,
+                                                                @Nonnull RmqReceiverConfig config,
+                                                                @Nonnull SelfAckConsumer<byte[]> ackConsumer) {
         Asserter.nonNull(config, "config");
-        Asserter.nonNull(selfAckConsumer, "selfAckConsumer");
+        Asserter.nonNull(ackConsumer, "ackConsumer");
         return new AdvancedRmqReceiver<>(tag, config, (msg, reuse) -> msg,
-                null, selfAckConsumer);
+                null, ackConsumer);
     }
 
     /**
-     * @param <T>             T
-     * @param tag             String
-     * @param config          RmqReceiverConfig
-     * @param deserializer    BytesDeserializer<T>
-     * @param selfAckConsumer SelfAckConsumer<T>
+     * @param <T>          T
+     * @param tag          String
+     * @param config       RmqReceiverConfig
+     * @param deserializer BytesDeserializer<T>
+     * @param ackConsumer  SelfAckConsumer<T>
      * @return AdvancedRmqReceiver<T>
      */
-    public static <T> AdvancedRmqReceiver<T> createWithSelfAck(
-            String tag, @Nonnull RmqReceiverConfig config,
-            @Nonnull BytesDeserializer<T> deserializer,
-            @Nonnull SelfAckConsumer<T> selfAckConsumer) {
+    public static <T> AdvancedRmqReceiver<T> createWithSelfAck(String tag,
+                                                               @Nonnull RmqReceiverConfig config,
+                                                               @Nonnull BytesDeserializer<T> deserializer,
+                                                               @Nonnull SelfAckConsumer<T> ackConsumer) {
         Asserter.nonNull(config, "config");
         Asserter.nonNull(deserializer, "deserializer");
-        Asserter.nonNull(selfAckConsumer, "selfAckConsumer");
+        Asserter.nonNull(ackConsumer, "ackConsumer");
         return new AdvancedRmqReceiver<>(tag, config, deserializer,
-                null, selfAckConsumer);
+                null, ackConsumer);
     }
 
     /**
-     * @param tag             String
-     * @param config          RmqReceiverConfig
-     * @param deserializer    BytesDeserializer<T>
-     * @param consumer        Consumer<T>
-     * @param selfAckConsumer SelfAckConsumer<T>
+     * @param tag          String
+     * @param config       RmqReceiverConfig
+     * @param deserializer BytesDeserializer<T>
+     * @param consumer     Consumer<T>
+     * @param ackConsumer  SelfAckConsumer<T>
      */
-    private AdvancedRmqReceiver(String tag, @Nonnull RmqReceiverConfig config,
+    private AdvancedRmqReceiver(String tag,
+                                @Nonnull RmqReceiverConfig config,
                                 @Nonnull BytesDeserializer<T> deserializer,
                                 @Nullable Consumer<T> consumer,
-                                @Nullable SelfAckConsumer<T> selfAckConsumer)
+                                @Nullable SelfAckConsumer<T> ackConsumer)
             throws ConnectionFailedException {
         super(nonEmpty(tag) ? tag : "adv-recv-" + datetimeOfMillisecond(), config.getConnection());
-        if (consumer == null && selfAckConsumer == null) {
+        if (consumer == null && ackConsumer == null) {
             throw new NullPointerException("[Consumer] and [SelfAckConsumer] cannot all be null");
         }
         this.receiveQueue = config.getReceiveQueue();
@@ -229,11 +229,11 @@ public class AdvancedRmqReceiver<T> extends RmqTransport
         this.exclusive = config.isExclusive();
         this.args = config.getArgs();
         this.consumer = consumer;
-        this.selfAckConsumer = selfAckConsumer;
+        this.selfAckConsumer = ackConsumer;
         this.receiverName = "receiver::[" + rmqConnection.getConnectionInfo() + "$" + queueName + "]";
         createConnection();
         declareQueue();
-        if (selfAckConsumer != null) {
+        if (ackConsumer != null) {
             createAckDelegate();
         }
     }
@@ -262,7 +262,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport
             throw new DeclareRuntimeException(e);
         }
         if (errMsgExchange != null && errMsgQueue != null) {
-            errMsgExchange.bindingQueue(errMsgQueue.getQueue());
+            errMsgExchange.bindingQueues(errMsgQueue.getQueue());
             declareErrMsgExchange(operator);
         } else if (errMsgExchange != null) {
             declareErrMsgExchange(operator);

@@ -16,7 +16,7 @@ public class RmqPublisherTest {
 
 		RmqPublisherConfig configurator = RmqPublisherConfig
 				.configuration(connection, ExchangeRelationship.fanout("TEST_DIR")
-						.bindingQueue(Arrays.asList(AmqpQueue.named("TEST_D1")), Arrays.asList("K1", "K2")))
+						.bindingQueues(Arrays.asList(AmqpQueue.named("TEST_D1")), Arrays.asList("K1", "K2")))
 				.setDefaultRoutingKey("K1").build();
 
 		try (RmqPublisher publisher = new RmqPublisher("TEST_PUB", configurator)) {

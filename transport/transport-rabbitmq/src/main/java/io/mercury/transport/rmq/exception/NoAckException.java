@@ -13,9 +13,17 @@ public class NoAckException extends Exception {
      * @param confirmRetry   int
      * @param confirmTimeout long
      */
-    public NoAckException(String exchange, String routingKey, int confirmRetry, long confirmTimeout) {
-        super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
-                + "], confirmRetry==[" + confirmRetry + "], confirmTimeout==[" + confirmTimeout + "]");
+    public NoAckException(String exchange, String routingKey,
+                          int confirmRetry, long confirmTimeout) {
+        super("Call confirmPublish failure -> "
+                + "exchange : "
+                + "[" + exchange + "], "
+                + "routingKey : "
+                + "[" + routingKey + "], "
+                + "confirmRetry : "
+                + "[" + confirmRetry + "], "
+                + "confirmTimeout : "
+                + "[" + confirmTimeout + "]");
     }
 
     /**
@@ -25,9 +33,18 @@ public class NoAckException extends Exception {
      * @param confirmTimeout long
      * @param cause          Throwable
      */
-    public NoAckException(String exchange, String routingKey, int confirmRetry, long confirmTimeout, Throwable cause) {
-        super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
-                + "], confirmRetry==[" + confirmRetry + "], confirmTimeout==[" + confirmTimeout + "]", cause);
+    public NoAckException(String exchange, String routingKey,
+                          int confirmRetry, long confirmTimeout,
+                          Throwable cause) {
+        super("Call confirmPublish failure -> "
+                + "exchange : "
+                + "[" + exchange + "], "
+                + "routingKey : "
+                + "[" + routingKey + "], "
+                + "confirmRetry : "
+                + "[" + confirmRetry + "], "
+                + "confirmTimeout : "
+                + "[" + confirmTimeout + "]", cause);
     }
 
     /**
@@ -37,10 +54,20 @@ public class NoAckException extends Exception {
      * @param confirmTimeout long
      * @param msg            byte[]
      */
-    public NoAckException(String exchange, String routingKey, int confirmRetry, long confirmTimeout, byte[] msg) {
-        super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
-                + "], confirmRetry==[" + confirmRetry + "], confirmTimeout==[" + confirmTimeout + "], msg==["
-                + new String(msg) + "]");
+    public NoAckException(String exchange, String routingKey,
+                          int confirmRetry, long confirmTimeout,
+                          byte[] msg) {
+        super("Call confirmPublish failure -> "
+                + "exchange : "
+                + "[" + exchange + "], "
+                + "routingKey : "
+                + "[" + routingKey + "], "
+                + "confirmRetry : "
+                + "[" + confirmRetry + "], "
+                + "confirmTimeout : "
+                + "[" + confirmTimeout + "], "
+                + "msg : "
+                + "[" + new String(msg) + "]");
     }
 
     /**
@@ -51,11 +78,20 @@ public class NoAckException extends Exception {
      * @param msg            byte[]
      * @param cause          Throwable
      */
-    public NoAckException(String exchange, String routingKey, int confirmRetry,
-                          long confirmTimeout, byte[] msg, Throwable cause) {
-        super("Call confirmPublish failure -> exchange==[" + exchange + "], routingKey==[" + routingKey
-                + "], confirmRetry==[" + confirmRetry + "], confirmTimeout==[" + confirmTimeout + "], msg==["
-                + new String(msg) + "]", cause);
+    public NoAckException(String exchange, String routingKey,
+                          int confirmRetry, long confirmTimeout,
+                          byte[] msg, Throwable cause) {
+        super("Call confirmPublish failure -> "
+                + "exchange : "
+                + "[" + exchange + "], "
+                + "routingKey : "
+                + "[" + routingKey + "], "
+                + "confirmRetry : "
+                + "[" + confirmRetry + "], "
+                + "confirmTimeout : "
+                + "[" + confirmTimeout + "], "
+                + "msg : "
+                + "[" + new String(msg) + "]", cause);
     }
 
 }

@@ -16,6 +16,14 @@
         <byte-buddy.version>1.14.4</byte-buddy.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>aeronic</id>
+            <name>aeronic</name>
+            <url>https://dl.cloudsmith.io/public/lob-software/aeronic/maven/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>io.mercury</groupId>
@@ -27,6 +35,14 @@
             <groupId>org.agrona</groupId>
             <artifactId>agrona</artifactId>
             <version>1.18.1</version>
+        </dependency>
+
+        <!-- Aeronic allows for flexible usage of Aeron by way of
+             proxy generation for subscriptions and publications. -->
+        <dependency>
+            <groupId>io.aeronic</groupId>
+            <artifactId>aeronic</artifactId>
+            <version>0.0.18</version>
         </dependency>
 
         <!-- Aeron : Efficient reliable UDP unicast, UDP multicast,
@@ -55,12 +71,6 @@
             <groupId>io.aeron</groupId>
             <artifactId>aeron-client</artifactId>
             <version>${aeron.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>agrona</artifactId>
-                    <groupId>org.agrona</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- Byte Buddy -->

@@ -20,6 +20,7 @@
             <groupId>io.mercury</groupId>
             <artifactId>transport-api</artifactId>
         </dependency>
+
         <!-- jsoup is a Java library for working with real-world HTML. It provides
             a very convenient API for extracting and manipulating data, using the best
             of DOM, CSS, and jquery-like methods. jsoup implements the WHATWG HTML5 specification,
@@ -29,6 +30,7 @@
             <artifactId>jsoup</artifactId>
             <version>1.15.4</version>
         </dependency>
+
         <!-- Netty Component -->
         <dependency>
             <groupId>io.netty</groupId>
@@ -45,12 +47,15 @@
             <artifactId>netty-transport-native-kqueue</artifactId>
             <version>${netty.version}</version>
         </dependency>
+
         <!-- Activation API -->
         <dependency>
             <groupId>jakarta.activation</groupId>
             <artifactId>jakarta.activation-api</artifactId>
             <version>2.1.1</version>
         </dependency>
+
+        <!-- The Async Http Client (AHC) classes -->
         <dependency>
             <groupId>org.asynchttpclient</groupId>
             <artifactId>async-http-client</artifactId>

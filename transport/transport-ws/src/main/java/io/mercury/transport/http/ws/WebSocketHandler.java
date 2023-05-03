@@ -1,13 +1,13 @@
 package io.mercury.transport.http.ws;
 
+import io.mercury.common.functional.Handler;
 import io.mercury.common.functional.ThrowableHandler;
 import org.asynchttpclient.ws.WebSocket;
 
 public interface WebSocketHandler {
 
     @FunctionalInterface
-    interface WsOpenHandler {
-        void handle(WebSocket webSocket);
+    interface WsOpenHandler extends Handler<WebSocket> {
     }
 
     @FunctionalInterface
@@ -16,14 +16,10 @@ public interface WebSocketHandler {
     }
 
     @FunctionalInterface
-    interface WsPingFrameHandler {
-        void handle(byte[] payload);
-    }
+    interface WsPingFrameHandler extends Handler<byte[]> {    }
 
     @FunctionalInterface
-    interface WsPongFrameHandler {
-        void handle(byte[] payload);
-    }
+    interface WsPongFrameHandler extends Handler<byte[]> {    }
 
     @FunctionalInterface
     interface WsBinaryFrameHandler {
