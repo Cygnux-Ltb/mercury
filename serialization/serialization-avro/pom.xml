@@ -18,6 +18,7 @@
     <repositories>
         <repository>
             <id>avro-util</id>
+            <name>avro-util</name>
             <url>https://linkedin.jfrog.io/artifactory/avro-util/</url>
         </repository>
     </repositories>
@@ -67,7 +68,7 @@
         <dependency>
             <groupId>com.linkedin.avroutil1</groupId>
             <artifactId>avro-fastserde</artifactId>
-            <version>0.2.133</version>
+            <version>0.2.139</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.commons</groupId>
@@ -153,8 +154,8 @@
             <version>1.10.0</version>
         </dependency>
 
-        <!-- General data-binding functionality for Jackson: works on core streaming
-            API -->
+        <!-- General data-binding functionality for Jackson:
+             works on core streaming API -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>

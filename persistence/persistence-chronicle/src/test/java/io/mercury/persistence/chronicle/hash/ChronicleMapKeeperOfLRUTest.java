@@ -1,8 +1,8 @@
 package io.mercury.persistence.chronicle.hash;
 
 import io.mercury.common.datetime.EpochTime;
-import io.mercury.common.log.Log4j2Configurator;
-import io.mercury.common.log.Log4j2Configurator.LogLevel;
+import io.mercury.common.log4j2.Log4j2Configurator;
+import io.mercury.common.log4j2.Log4j2Configurator.LogLevel;
 import io.mercury.common.sys.SysProperties;
 import io.mercury.common.thread.SleepSupport;
 import net.openhft.chronicle.map.ChronicleMap;

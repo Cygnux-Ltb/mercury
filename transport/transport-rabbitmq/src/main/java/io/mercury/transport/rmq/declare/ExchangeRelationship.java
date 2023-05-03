@@ -123,8 +123,8 @@ public final class ExchangeRelationship extends Relationship {
      * @param destExchanges AmqpExchange...
      * @return ExchangeRelationship
      */
-    public ExchangeRelationship bindingExchange(AmqpExchange... destExchanges) {
-        return bindingExchange(newFastList(destExchanges), null);
+    public ExchangeRelationship bindingExchanges(AmqpExchange... destExchanges) {
+        return bindingExchanges(newFastList(destExchanges), null);
     }
 
     /**
@@ -132,8 +132,8 @@ public final class ExchangeRelationship extends Relationship {
      * @param routingKeys   Collection<String>
      * @return ExchangeRelationship
      */
-    public ExchangeRelationship bindingExchange(Collection<AmqpExchange> destExchanges,
-                                                Collection<String> routingKeys) {
+    public ExchangeRelationship bindingExchanges(Collection<AmqpExchange> destExchanges,
+                                                 Collection<String> routingKeys) {
         if (CollectionUtils.isNotEmpty(destExchanges)) {
             destExchanges.forEach(dest -> {
                 if (CollectionUtils.isNotEmpty(routingKeys))
@@ -150,8 +150,8 @@ public final class ExchangeRelationship extends Relationship {
      * @param destQueues AmqpQueue...
      * @return ExchangeRelationship
      */
-    public ExchangeRelationship bindingQueue(AmqpQueue... destQueues) {
-        return bindingQueue(newFastList(destQueues), null);
+    public ExchangeRelationship bindingQueues(AmqpQueue... destQueues) {
+        return bindingQueues(newFastList(destQueues), null);
     }
 
     /**
@@ -159,8 +159,8 @@ public final class ExchangeRelationship extends Relationship {
      * @param routingKeys Collection<String>
      * @return ExchangeRelationship
      */
-    public ExchangeRelationship bindingQueue(Collection<AmqpQueue> destQueues,
-                                             Collection<String> routingKeys) {
+    public ExchangeRelationship bindingQueues(Collection<AmqpQueue> destQueues,
+                                              Collection<String> routingKeys) {
         if (CollectionUtils.isNotEmpty(destQueues)) {
             destQueues.forEach(dest -> {
                 if (CollectionUtils.isNotEmpty(routingKeys))

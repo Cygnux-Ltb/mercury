@@ -13,7 +13,10 @@ import javax.annotation.Nonnull;
 public class WireProperty extends WireModel implements Marshallable {
 
     enum Values implements WireKey {
-        REFERENCE, PATH, NAME, VALUE
+        REFERENCE,
+        PATH,
+        NAME,
+        VALUE
     }
 
     private String reference;

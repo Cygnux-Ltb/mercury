@@ -12,7 +12,13 @@ public interface Queue<E> {
 
     enum QueueType {
 
-        OneToOne, ManyToOne, OneToMany, ManyToMany
+        SPSC,
+
+        MPSC,
+
+        SPMC,
+
+        MPMC
 
     }
 

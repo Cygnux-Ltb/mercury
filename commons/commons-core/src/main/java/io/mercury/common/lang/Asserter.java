@@ -14,10 +14,10 @@ public final class Asserter {
     }
 
     /**
-     * @param i
-     * @param min
-     * @param objName
-     * @return
+     * @param i       int
+     * @param min     int
+     * @param objName String
+     * @return int
      * @throws IllegalArgumentException exception
      */
     public static int greaterThan(int i, int min, String objName)
@@ -28,10 +28,10 @@ public final class Asserter {
     }
 
     /**
-     * @param l
-     * @param min
-     * @param objName
-     * @return
+     * @param l       long
+     * @param min     long
+     * @param objName String
+     * @return long
      * @throws IllegalArgumentException exception
      */
     public static long greaterThan(long l, long min, String objName)
@@ -42,10 +42,10 @@ public final class Asserter {
     }
 
     /**
-     * @param i
-     * @param min
-     * @param objName
-     * @return
+     * @param i       int
+     * @param min     int
+     * @param objName String
+     * @return int
      * @throws IllegalArgumentException exception
      */
     public static int greaterOrEqualThan(int i, int min, String objName)
@@ -56,10 +56,10 @@ public final class Asserter {
     }
 
     /**
-     * @param l
-     * @param min
-     * @param objName
-     * @return
+     * @param l       long
+     * @param min     long
+     * @param objName String
+     * @return long
      * @throws IllegalArgumentException exception
      */
     public static long greaterOrEqualThan(long l, long min, String objName)
@@ -70,10 +70,10 @@ public final class Asserter {
     }
 
     /**
-     * @param i
-     * @param max
-     * @param objName
-     * @return
+     * @param i       int
+     * @param max     int
+     * @param objName String
+     * @return int
      * @throws IllegalArgumentException exception
      */
     public static int lessThan(int i, int max, String objName)
@@ -84,10 +84,10 @@ public final class Asserter {
     }
 
     /**
-     * @param l
-     * @param max
-     * @param objName
-     * @return
+     * @param l       long
+     * @param max     long
+     * @param objName String
+     * @return long
      * @throws IllegalArgumentException exception
      */
     public static long lessThan(long l, long max, String objName)
@@ -98,10 +98,10 @@ public final class Asserter {
     }
 
     /**
-     * @param i
-     * @param max
-     * @param objName
-     * @return
+     * @param i       int
+     * @param max     int
+     * @param objName String
+     * @return int
      * @throws IllegalArgumentException exception
      */
     public static int lessOrEqualThan(int i, int max, String objName)
@@ -179,7 +179,7 @@ public final class Asserter {
             if (StringSupport.isNullOrEmpty(objName))
                 throw new NullPointerException("param cannot be null");
             else
-                throw new NullPointerException("Param: [" + objName + "] cannot be null");
+                throw new NullPointerException("[" + objName + "] cannot be null");
         return t;
     }
 
@@ -188,7 +188,7 @@ public final class Asserter {
      * @param <E>
      * @param t
      * @param e
-     * @return
+     * @return T
      * @throws E exception
      */
     public static <T, E extends Throwable> T nonNull(T t, E e) throws E {
@@ -198,9 +198,9 @@ public final class Asserter {
     }
 
     /**
-     * @param str
-     * @param objName
-     * @return
+     * @param str     String
+     * @param objName String
+     * @return String
      * @throws NullPointerException     exception
      * @throws IllegalArgumentException exception
      */
@@ -232,14 +232,14 @@ public final class Asserter {
     }
 
     /**
-     * @param <T>
-     * @param map
-     * @param objName
-     * @return
+     * @param <M>     Map type
+     * @param map     M
+     * @param objName String
+     * @return M
      * @throws NullPointerException     exception
      * @throws IllegalArgumentException exception
      */
-    public static <T extends Map<?, ?>> T nonEmptyMap(T map, String objName)
+    public static <M extends Map<?, ?>> M nonEmptyMap(M map, String objName)
             throws NullPointerException, IllegalArgumentException {
         if (map == null)
             throw new NullPointerException("Param: [" + objName + "] can not be null");
@@ -249,11 +249,11 @@ public final class Asserter {
     }
 
     /**
-     * @param <T>
-     * @param array
-     * @param requiredLength
-     * @param arrayName
-     * @return
+     * @param <T>            Type
+     * @param array          T[]
+     * @param requiredLength int
+     * @param arrayName      String
+     * @return T[]
      * @throws NullPointerException     exception
      * @throws IllegalArgumentException exception
      */

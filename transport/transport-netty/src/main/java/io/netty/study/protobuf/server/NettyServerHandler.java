@@ -27,7 +27,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
     /**
-     * 建立连接时，发送一条消息
+     * 建立连接时, 发送一条消息
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -39,12 +39,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     /**
-     * 超时处理 如果5秒没有接受客户端的心跳，就触发; 如果超过两次，则直接关闭;
+     * 超时处理
+     * 如果5秒没有接受客户端的心跳, 就触发; 如果超过两次, 则直接关闭;
      */
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object obj) throws Exception {
         if (obj instanceof IdleStateEvent event) {
-            if (IdleState.READER_IDLE.equals(event.state())) { // 如果读通道处于空闲状态，说明没有接收到心跳命令
+            if (IdleState.READER_IDLE.equals(event.state())) { // 如果读通道处于空闲状态, 说明没有接收到心跳命令
                 System.out.println("已经5秒没有接收到客户端的信息了");
                 if (idle_count > 1) {
                     System.out.println("关闭这个不活跃的channel");

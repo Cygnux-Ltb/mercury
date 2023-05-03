@@ -1,19 +1,17 @@
 package io.mercury.common.file.filter;
 
+import io.mercury.common.datetime.TimeZone;
+import io.mercury.common.datetime.pattern.DatePattern;
+import io.mercury.common.datetime.pattern.TemporalPattern;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
+import org.slf4j.Logger;
+
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.FileFilter;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-
-import org.slf4j.Logger;
-
-import io.mercury.common.datetime.TimeZone;
-import io.mercury.common.datetime.pattern.DatePattern;
-import io.mercury.common.datetime.pattern.TemporalPattern;
-import io.mercury.common.log.Log4j2LoggerFactory;
-
-import javax.annotation.Nonnull;
 
 public class FileNameDateTimeFilter implements FileFilter {
 
@@ -50,7 +48,7 @@ public class FileNameDateTimeFilter implements FileFilter {
     @Override
     public boolean accept(File file) {
         // parse out the date contained within the filename
-        ZonedDateTime datetime = null;
+        ZonedDateTime datetime;
         try {
             datetime = ZonedDateTime.of(LocalDateTime.parse(file.getName(), pattern.getFormatter()), zoneId);
         } catch (Exception e) {
@@ -59,7 +57,7 @@ public class FileNameDateTimeFilter implements FileFilter {
         }
         log.debug("Filename '" + file.getName() + "' contained an embedded date of " + datetime);
 
-        // does the cutoff date occurr before or equal
+        // does the cutoff date occur before or equal
         if (datetime.isBefore(cutoffDate) || datetime.isEqual(cutoffDate)) {
             log.debug("Filename '" + file.getName() + "' embedded date of " + datetime + " occurred beforeOrEquals "
                     + datetime.isBefore(cutoffDate));

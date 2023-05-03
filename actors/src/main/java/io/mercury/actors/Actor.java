@@ -44,7 +44,7 @@ public class Actor {
      * <p>
      * When called from a properly called actor action, return this actor's ActorRef.
      * <p>
-     * Returns null if called not from from actor context
+     * Returns null if called not from actor context
      *
      * @param <T> actor POJO class
      * @return {@link IActorRef} for the actor being called

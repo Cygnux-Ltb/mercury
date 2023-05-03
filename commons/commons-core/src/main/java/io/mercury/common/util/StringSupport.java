@@ -106,23 +106,6 @@ public final class StringSupport {
     }
 
     /**
-     * @param strings String[]
-     * @return String
-     */
-    @Nonnull
-    public static String toString(@Nullable String... strings) {
-        if (strings == null)
-            return CONST_EMPTY;
-        StringBuilder builder = new StringBuilder(strings.length * 16).append('[');
-        for (int i = 0, j = strings.length - 1; i < strings.length; i++) {
-            builder.append(toString(strings[i]));
-            if (i < j)
-                builder.append(',');
-        }
-        return builder.append(']').toString();
-    }
-
-    /**
      * @param bs byte[]
      * @return String
      */

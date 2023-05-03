@@ -4,9 +4,9 @@ import org.junit.Test;
 
 public class ConcurrentBlockingByteQueueTest {
 
-	@Test
-	public void test() {
-	
-	}
+    @Test
+    public void test() {
+
+    }
 
 }

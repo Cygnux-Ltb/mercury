@@ -4,7 +4,7 @@ import com.typesafe.config.Config;
 import io.mercury.common.annotation.OnlyOverrideEquals;
 import io.mercury.common.config.ConfigWrapper;
 import io.mercury.common.lang.Asserter;
-import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.net.IpAddressIllegalException;
 import io.mercury.common.net.IpAddressValidator;
 import io.mercury.common.serialization.specific.BytesSerializer;
@@ -234,7 +234,8 @@ public final class ZmqConfigurator implements
      * @param consumer BiConsumer<byte[], byte[]>
      * @return ZmqSubscriber
      */
-    public ZmqSubscriber newSubscriber(@Nonnull Topics topics, @Nonnull BiConsumer<byte[], byte[]> consumer) {
+    public ZmqSubscriber newSubscriber(@Nonnull Topics topics,
+                                       @Nonnull BiConsumer<byte[], byte[]> consumer) {
         Asserter.nonNull(topics, "topics");
         Asserter.nonNull(consumer, "consumer");
         return new ZmqSubscriber(this, topics, consumer);
@@ -283,7 +284,8 @@ public final class ZmqConfigurator implements
      * @param encode Charset
      * @return ZmqPublisher
      */
-    public ZmqPublisher<String> newPublisherWithString(@Nonnull String topic, @Nonnull Charset encode) {
+    public ZmqPublisher<String> newPublisherWithString(@Nonnull String topic,
+                                                       @Nonnull Charset encode) {
         Asserter.nonNull(encode, "encode");
         return newPublisher(topic, str -> str.getBytes(encode));
     }
@@ -303,7 +305,8 @@ public final class ZmqConfigurator implements
      * @param ser   BytesSerializer<T>
      * @return ZmqPublisher
      */
-    public <T> ZmqPublisher<T> newPublisher(@Nonnull String topic, @Nonnull BytesSerializer<T> ser) {
+    public <T> ZmqPublisher<T> newPublisher(@Nonnull String topic,
+                                            @Nonnull BytesSerializer<T> ser) {
         Asserter.nonNull(topic, "topic");
         Asserter.nonNull(ser, "ser");
         return new ZmqPublisher<>(this, topic, ser);

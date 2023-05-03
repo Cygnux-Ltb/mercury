@@ -10,6 +10,7 @@
 
     <artifactId>commons-config</artifactId>
     <name>commons-config</name>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

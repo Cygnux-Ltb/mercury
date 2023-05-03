@@ -44,7 +44,7 @@ public class NettyClient {
      * 重连
      */
     public void doConnect(Bootstrap bootstrap, EventLoopGroup eventLoopGroup) {
-        ChannelFuture f = null;
+        ChannelFuture future;
         try {
             if (bootstrap != null) {
                 bootstrap.group(eventLoopGroup);
@@ -52,7 +52,7 @@ public class NettyClient {
                 bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
                 bootstrap.handler(new NettyClientFilter());
                 bootstrap.remoteAddress(host, port);
-                f = bootstrap.connect().addListener((ChannelFuture futureListener) -> {
+                future = bootstrap.connect().addListener((ChannelFuture futureListener) -> {
                     final EventLoop eventLoop = futureListener.channel().eventLoop();
                     if (!futureListener.isSuccess()) {
                         System.out.println("与服务端断开连接!在10s之后准备尝试重连!");
@@ -64,7 +64,7 @@ public class NettyClient {
                     initFalg = false;
                 }
                 // 阻塞
-                f.channel().closeFuture().sync();
+                future.channel().closeFuture().sync();
             }
         } catch (Exception e) {
             System.out.println("客户端连接失败!" + e.getMessage());

@@ -27,9 +27,7 @@ import static akka.http.javadsl.server.Directives.onComplete;
 import static akka.http.javadsl.server.Directives.path;
 import static akka.http.javadsl.server.PathMatchers.longSegment;
 import static akka.http.javadsl.server.PathMatchers.segment;
-import static akka.pattern.PatternsCS.ask;
-import static akka.pattern.PatternsCS.pipe;
-import static com.lightbend.akkasample.sample4.CompletionStageUtils.withRetries;
+import static akka.pattern.Patterns.pipe;
 
 @SuppressWarnings("deprecation")
 public class WebServer extends AbstractLoggingActor {
@@ -93,13 +91,14 @@ public class WebServer extends AbstractLoggingActor {
     }
 
     private CompletionStage<DbActor.ProductResult> lookupProduct(long productId) {
-        return withRetries(() -> ask(database, // actor to ask
-                        new DbActor.GetProduct(productId), // message
-                        500) // max time in ms to wait before failing
-                        .thenApply(object -> ((DbActor.ProductResult) object)),
-                2 // nr of retries - this means max time a user will have to wait is 2s after
-                // which it will always fail
-        );
+//        return withRetries(() -> ask(database, // actor to ask
+//                        new DbActor.GetProduct(productId), // message
+//                        500) // max time in ms to wait before failing
+//                        .thenApply(object -> ((DbActor.ProductResult) object)),
+//                2 // nr of retries - this means max time a user will have to wait is 2s after
+//                // which it will always fail
+//        );
+        return null;
     }
 
     @Override

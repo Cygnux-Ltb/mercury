@@ -46,7 +46,7 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("建立连接时：" + new Date());
+        System.out.println("建立连接时: " + new Date());
         ctx.fireChannelActive();
     }
 
@@ -55,20 +55,21 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("关闭连接时：" + new Date());
+        System.out.println("关闭连接时: " + new Date());
         final EventLoop eventLoop = ctx.channel().eventLoop();
         NettyClient.nettyClient.doConnect(new Bootstrap(), eventLoop);
         super.channelInactive(ctx);
     }
 
     /**
-     * 心跳请求处理 每4秒发送一次心跳请求;
+     * 心跳请求处理
+     * 每4秒发送一次心跳请求;
      */
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object obj) throws Exception {
-        System.out.println("循环请求的时间：" + new Date() + "，次数" + fcount);
+        System.out.println("循环请求的时间: " + new Date() + ",次数" + fcount);
         if (obj instanceof IdleStateEvent event) {
-            if (IdleState.WRITER_IDLE.equals(event.state())) { // 如果写通道处于空闲状态,就发送心跳命令
+            if (IdleState.WRITER_IDLE.equals(event.state())) { // 如果写通道处于空闲状态, 就发送心跳命令
                 if (idle_count <= 2) { // 设置发送次数
                     idle_count++;
                     ctx.channel().writeAndFlush(HEARTBEAT_SEQUENCE.duplicate());

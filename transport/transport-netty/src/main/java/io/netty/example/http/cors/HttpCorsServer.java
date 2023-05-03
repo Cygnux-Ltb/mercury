@@ -32,12 +32,12 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
  * instead has a html page that is loaded to try out CORS support in a web
  * browser.
  * <p>
- *
+ * <p>
  * CORS is configured in {@link HttpCorsServerInitializer} and by updating the
  * config you can try out various combinations, like using a specific origin
  * instead of a wildcard origin ('*').
  * <p>
- *
+ * <p>
  * The file {@code src/main/resources/cors/cors.html} contains a very basic
  * example client which can be used to try out different configurations. For
  * example, you can add custom headers to force a CORS preflight request to make
@@ -53,11 +53,11 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
  * add a new host name to your systems hosts file, for example if you are on
  * Linux you may update /etc/hosts to add an additional name for you local
  * system:
- * 
+ *
  * <pre>
  * 127.0.0.1   localhost domain1.com
  * </pre>
- * 
+ * <p>
  * Now, you should be able to access {@code http://domain1.com/cors.html}
  * depending on how you have configured you local web server the exact url may
  * differ.
@@ -65,44 +65,43 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
  * <h3>Using a web browser</h3> Open the file
  * {@code src/main/resources/cors/cors.html} in a web browser. You should see
  * loaded page and in the text area the following message:
- * 
+ *
  * <pre>
  * 'CORS is not working'
  * </pre>
- *
+ * <p>
  * If you inspect the headers being sent using your browser you'll see that the
  * 'Origin' request header is {@code 'null'}. This is expected and happens when
  * you load a file from the local file system. Netty can handle this by
  * configuring the CorsHandler which is done in the
  * {@link HttpCorsServerInitializer}.
- *
  */
 public final class HttpCorsServer {
 
-	static final boolean SSL = System.getProperty("ssl") != null;
-	static final int PORT = Integer.parseInt(System.getProperty("port", SSL ? "8443" : "8080"));
+    static final boolean SSL = System.getProperty("ssl") != null;
+    static final int PORT = Integer.parseInt(System.getProperty("port", SSL ? "8443" : "8080"));
 
-	public static void main(String[] args) throws Exception {
-		// Configure SSL.
-		final SslContext sslCtx;
-		if (SSL) {
-			SelfSignedCertificate ssc = new SelfSignedCertificate();
-			sslCtx = SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey()).build();
-		} else {
-			sslCtx = null;
-		}
+    public static void main(String[] args) throws Exception {
+        // Configure SSL.
+        final SslContext sslCtx;
+        if (SSL) {
+            SelfSignedCertificate ssc = new SelfSignedCertificate();
+            sslCtx = SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey()).build();
+        } else {
+            sslCtx = null;
+        }
 
-		EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-		EventLoopGroup workerGroup = new NioEventLoopGroup();
-		try {
-			ServerBootstrap b = new ServerBootstrap();
-			b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
-					.handler(new LoggingHandler(LogLevel.INFO)).childHandler(new HttpCorsServerInitializer(sslCtx));
+        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        try {
+            ServerBootstrap b = new ServerBootstrap();
+            b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
+                    .handler(new LoggingHandler(LogLevel.INFO)).childHandler(new HttpCorsServerInitializer(sslCtx));
 
-			b.bind(PORT).sync().channel().closeFuture().sync();
-		} finally {
-			bossGroup.shutdownGracefully();
-			workerGroup.shutdownGracefully();
-		}
-	}
+            b.bind(PORT).sync().channel().closeFuture().sync();
+        } finally {
+            bossGroup.shutdownGracefully();
+            workerGroup.shutdownGracefully();
+        }
+    }
 }

@@ -30,36 +30,39 @@ import io.netty.handler.logging.LoggingHandler;
  * message received.
  */
 public final class UptimeServer {
-	private static final int PORT = Integer.parseInt(System.getProperty("port", "8080"));
-	private static final UptimeServerHandler handler = new UptimeServerHandler();
 
-	private UptimeServer() {
-	}
+    private static final int PORT = Integer.parseInt(System.getProperty("port", "8080"));
+    private static final UptimeServerHandler handler = new UptimeServerHandler();
 
-	public static void main(String[] args) throws Exception {
+    private UptimeServer() {
+    }
 
-		EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-		EventLoopGroup workerGroup = new NioEventLoopGroup();
-		try {
-			ServerBootstrap b = new ServerBootstrap();
-			b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
-					.handler(new LoggingHandler(LogLevel.INFO)).childHandler(new ChannelInitializer<SocketChannel>() {
-						@Override
-						public void initChannel(SocketChannel ch) {
-							ch.pipeline().addLast(handler);
-						}
-					});
+    public static void main(String[] args) throws Exception {
 
-			// Bind and start to accept incoming connections.
-			ChannelFuture f = b.bind(PORT).sync();
+        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        try {
+            ServerBootstrap bootstrap = new ServerBootstrap();
+            bootstrap.group(bossGroup, workerGroup)
+                    .channel(NioServerSocketChannel.class)
+                    .handler(new LoggingHandler(LogLevel.INFO))
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        public void initChannel(SocketChannel ch) {
+                            ch.pipeline().addLast(handler);
+                        }
+                    });
 
-			// Wait until the server socket is closed.
-			// In this example, this does not happen, but you can do that to gracefully
-			// shut down your server.
-			f.channel().closeFuture().sync();
-		} finally {
-			workerGroup.shutdownGracefully();
-			bossGroup.shutdownGracefully();
-		}
-	}
+            // Bind and start to accept incoming connections.
+            ChannelFuture future = bootstrap.bind(PORT).sync();
+
+            // Wait until the server socket is closed.
+            // In this example, this does not happen, but you can do that to gracefully
+            // shut down your server.
+            future.channel().closeFuture().sync();
+        } finally {
+            workerGroup.shutdownGracefully();
+            bossGroup.shutdownGracefully();
+        }
+    }
 }

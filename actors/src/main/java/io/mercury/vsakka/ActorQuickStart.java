@@ -14,7 +14,7 @@ public class ActorQuickStart {
              final IActorRef<Printer> printerActor = system.actorOf(Printer::new, "printerActor");
              final IActorRef<Greeter> howdyGreeter = system.actorOf(() -> new Greeter("Howdy", printerActor), "howdyGreeter");
              final IActorRef<Greeter> helloGreeter = system.actorOf(() -> new Greeter("Hello", printerActor), "helloGreeter");
-             final IActorRef<Greeter> goodDayGreeter = system.actorOf(() -> new Greeter("Good day", printerActor), "goodDayGreeter");
+             final IActorRef<Greeter> goodDayGreeter = system.actorOf(() -> new Greeter("Good day", printerActor), "goodDayGreeter")
              // #create-actors
         ) {
             // #main-send-messages

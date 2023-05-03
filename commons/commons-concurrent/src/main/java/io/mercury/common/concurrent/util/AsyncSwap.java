@@ -1,6 +1,6 @@
 package io.mercury.common.concurrent.util;
 
-import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.thread.RunnableComponent;
 import net.openhft.chronicle.ticker.NanoTicker;
 import org.slf4j.Logger;

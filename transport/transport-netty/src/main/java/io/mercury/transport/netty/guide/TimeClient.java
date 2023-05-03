@@ -40,18 +40,15 @@ public class TimeClient {
              *
              * 是对非服务端的 channel 而言, 比如客户端或者无连接传输模式的 channel
              */
-
             bootstrap.group(workerGroup); // (#)
             /*
              * #) 如果只指定了一个 EventLoopGroup, 就会即作为一个 boss group, 也会作为一个 worker group,
              * 尽管客户端不需要使用到 boss worker.
              */
-
             bootstrap.channel(NioSocketChannel.class); // (#)
             /*
              * #) 代替 NioServerSocketChannel 的是 NioSocketChannel, 这个类在客户端channel 被创建时使用.
              */
-
             bootstrap.option(ChannelOption.SO_KEEPALIVE, true); // (#)
             /*
              * #) 不像在使用 ServerBootstrap 时需要用 childOption() 方法, 因为客户端的 SocketChannel 没有父亲.
@@ -62,13 +59,11 @@ public class TimeClient {
                     ch.pipeline().addLast(new TimeClientHandler());
                 }
             });
-
             // 启动客户端
             ChannelFuture future = bootstrap.connect(host, port).sync(); // (#)
             /*
              * #) 使用 connect() 方法代替 bind() 方法.
              */
-
             // 等待连接关闭
             future.channel().closeFuture().sync();
         } finally {
@@ -89,7 +84,9 @@ public class TimeClient {
              */
             try {
                 long epochMillis = buf.readLong();
-                System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(epochMillis), ZoneId.systemDefault()));
+                System.out.println(LocalDateTime.ofInstant(
+                        Instant.ofEpochMilli(epochMillis),
+                        ZoneId.systemDefault()));
                 ctx.close();
             } finally {
                 buf.release();

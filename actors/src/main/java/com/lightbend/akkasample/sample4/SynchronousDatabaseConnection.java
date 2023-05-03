@@ -41,7 +41,7 @@ public class SynchronousDatabaseConnection {
     }
 
     public Optional<Product> findProduct(long id) {
-        // simulate a slow blocking database where the queries takes
+        // simulate a slow blocking database where the queries take
         // between 200 and 700 ms
         try {
             Thread.sleep(failureRandom.nextInt(500) + 200);

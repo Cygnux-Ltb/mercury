@@ -5,8 +5,8 @@ package net.openhft.chronicle.queue.simple.translator;
  */
 public interface MessageConsumer {
 
-	void onMessage(String text);
+    void onMessage(String text);
 
-	// void translate(String from, String to);
+    // void translate(String from, String to);
 
 }

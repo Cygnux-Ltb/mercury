@@ -1,6 +1,6 @@
 package io.mercury.common.file;
 
-import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.serialization.specific.BytesSerializer;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
@@ -86,9 +86,8 @@ public final class FileChannelWriter {
      * @throws NullPointerException npe
      * @throws IOException          ioe
      */
-    public static <T> File write(Collection<T> data,
-                                 @Nonnull BytesSerializer<T> serializer,
-                                 @Nonnull File target, int capacity, boolean append)
+    public static <T> File write(Collection<T> data, @Nonnull BytesSerializer<T> serializer,
+                                 File target, int capacity, boolean append)
             throws NullPointerException, IOException {
         if (target == null)
             throw new NullPointerException("target file must not be null.");

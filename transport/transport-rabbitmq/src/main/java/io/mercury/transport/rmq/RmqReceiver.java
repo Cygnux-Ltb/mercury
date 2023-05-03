@@ -5,7 +5,7 @@ import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import io.mercury.common.codec.DecodeException;
 import io.mercury.common.lang.Asserter;
-import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Receiver;
 import io.mercury.transport.api.Subscriber;
@@ -181,7 +181,7 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
             throw new DeclareRuntimeException(e);
         }
         if (errMsgExchange != null && errMsgQueue != null) {
-            errMsgExchange.bindingQueue(errMsgQueue.getQueue());
+            errMsgExchange.bindingQueues(errMsgQueue.getQueue());
             declareErrMsgExchange(operator);
         } else if (errMsgExchange != null) {
             declareErrMsgExchange(operator);

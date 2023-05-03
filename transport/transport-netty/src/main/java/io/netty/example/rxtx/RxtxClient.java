@@ -40,7 +40,7 @@ public final class RxtxClient {
 			Bootstrap b = new Bootstrap();
 			b.group(group).channel(RxtxChannel.class).handler(new ChannelInitializer<RxtxChannel>() {
 				@Override
-				public void initChannel(RxtxChannel ch) throws Exception {
+				public void initChannel(RxtxChannel ch) {
 					ch.pipeline().addLast(new LineBasedFrameDecoder(32768), new StringEncoder(), new StringDecoder(),
 							new RxtxClientHandler());
 				}

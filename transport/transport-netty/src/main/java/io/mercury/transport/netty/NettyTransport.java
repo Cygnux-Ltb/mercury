@@ -1,7 +1,5 @@
 package io.mercury.transport.netty;
 
-import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
-
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.lang.Asserter;
 import io.mercury.transport.api.Transport;
@@ -10,6 +8,8 @@ import io.mercury.transport.netty.configurator.NettyConfigurator;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+
+import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
 
 public abstract class NettyTransport extends TransportComponent implements Transport {
 

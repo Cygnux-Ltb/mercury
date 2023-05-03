@@ -3,7 +3,6 @@ package io.mercury.common.sequence;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.lang.Asserter;
 import org.eclipse.collections.api.list.ImmutableList;
-import org.eclipse.collections.api.list.MutableList;
 
 import javax.annotation.Nonnull;
 import java.time.Duration;
@@ -143,17 +142,17 @@ public class TimeWindow implements Serial<TimeWindow> {
                                                                @Nonnull Duration duration) {
         if (end.isBefore(start))
             throw new IllegalArgumentException("the end time can not before start time");
-        Duration between = Duration.between(start, end);
+        var between = Duration.between(start, end);
         long seconds = duration.getSeconds();
         long count = between.getSeconds() / seconds;
-        MutableList<TimeWindow> windows = MutableLists.newFastList();
+        var windows = MutableLists.<TimeWindow>newFastList();
         if (count == 0)
             // 时间窗口的持续时间超过起止时间
             windows.add(new TimeWindow(start, end, offset));
         else {
             // 分配第一个时间窗口
-            LocalDateTime t0 = start;
-            LocalDateTime t1 = start.plusSeconds(seconds);
+            var t0 = start;
+            var t1 = start.plusSeconds(seconds);
             for (int i = 0; i < count; i++) {
                 windows.add(new TimeWindow(t0, t1, offset));
                 // 增加新时间窗口
@@ -180,7 +179,7 @@ public class TimeWindow implements Serial<TimeWindow> {
     }
 
     @Override
-    public long getSerialId() {
+    public long serialId() {
         return epochSecond;
     }
 

@@ -68,7 +68,7 @@ public class TimePoint implements Serial<TimePoint> {
     }
 
     @Override
-    public long getSerialId() {
+    public long serialId() {
         return serialId;
     }
 
@@ -92,13 +92,13 @@ public class TimePoint implements Serial<TimePoint> {
         System.out.println(timeStarted0);
         System.out.println(timeStarted0.getDatetime());
         System.out.println(timeStarted0.getEpochSecond());
-        System.out.println(timeStarted0.getSerialId());
+        System.out.println(timeStarted0.serialId());
 
         TimePoint timeStarted1 = TimePoint.with(timeStarted0);
         System.out.println(timeStarted1);
         System.out.println(timeStarted1.getDatetime());
         System.out.println(timeStarted1.getEpochSecond());
-        System.out.println(timeStarted1.getSerialId());
+        System.out.println(timeStarted1.serialId());
 
         System.out.println(EpochTime.getEpochMillis());
         System.out.println(EpochTime.getEpochSeconds());

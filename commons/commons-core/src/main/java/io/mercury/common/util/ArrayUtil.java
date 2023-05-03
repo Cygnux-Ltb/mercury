@@ -4,6 +4,10 @@ import io.mercury.common.lang.Asserter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.lang.System.arraycopy;
 
@@ -297,6 +301,68 @@ public final class ArrayUtil {
             target = new Object[origin.length];
         arraycopy(origin, 0, target, 0, Math.min(target.length, origin.length));
         return target;
+    }
+
+
+    @SafeVarargs
+    public static <T> List<T[]> splitArray(int chunkSize, T... original) {
+        int numOfChunks = (int) Math.ceil((double) original.length / chunkSize);
+        return IntStream.range(0, numOfChunks)
+                .mapToObj(i -> Arrays.copyOfRange(original,
+                        //from
+                        i * chunkSize,
+                        //to
+                        Math.min((i + 1) * chunkSize, original.length)
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public static List<byte[]> splitArray(int chunkSize, byte... original) {
+        int numOfChunks = (int) Math.ceil((double) original.length / chunkSize);
+        return IntStream.range(0, numOfChunks)
+                .mapToObj(i -> Arrays.copyOfRange(original,
+                        //from
+                        i * chunkSize,
+                        //to
+                        Math.min((i + 1) * chunkSize, original.length)
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public static List<int[]> splitArray(int chunkSize, int... original) {
+        int numOfChunks = (int) Math.ceil((double) original.length / chunkSize);
+        return IntStream.range(0, numOfChunks)
+                .mapToObj(i -> Arrays.copyOfRange(original,
+                        //from
+                        i * chunkSize,
+                        //to
+                        Math.min((i + 1) * chunkSize, original.length)
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public static List<long[]> splitArray(int chunkSize, long... original) {
+        int numOfChunks = (int) Math.ceil((double) original.length / chunkSize);
+        return IntStream.range(0, numOfChunks)
+                .mapToObj(i -> Arrays.copyOfRange(original,
+                        //from
+                        i * chunkSize,
+                        //to
+                        Math.min((i + 1) * chunkSize, original.length)
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public static List<double[]> splitArray(int chunkSize, double... original) {
+        int numOfChunks = (int) Math.ceil((double) original.length / chunkSize);
+        return IntStream.range(0, numOfChunks)
+                .mapToObj(i -> Arrays.copyOfRange(original,
+                        //from
+                        i * chunkSize,
+                        //to
+                        Math.min((i + 1) * chunkSize, original.length)
+                ))
+                .collect(Collectors.toList());
     }
 
 }

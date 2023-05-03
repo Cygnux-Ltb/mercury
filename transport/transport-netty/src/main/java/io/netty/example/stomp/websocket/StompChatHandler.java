@@ -15,6 +15,24 @@
  */
 package io.netty.example.stomp.websocket;
 
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandler.Sharable;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.DecoderResult;
+import io.netty.handler.codec.stomp.DefaultStompFrame;
+import io.netty.handler.codec.stomp.StompCommand;
+import io.netty.handler.codec.stomp.StompFrame;
+import io.netty.util.CharsetUtil;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 import static io.netty.handler.codec.stomp.StompHeaders.ACCEPT_VERSION;
 import static io.netty.handler.codec.stomp.StompHeaders.CONTENT_LENGTH;
 import static io.netty.handler.codec.stomp.StompHeaders.CONTENT_TYPE;
@@ -29,30 +47,11 @@ import static io.netty.handler.codec.stomp.StompHeaders.SERVER;
 import static io.netty.handler.codec.stomp.StompHeaders.SUBSCRIPTION;
 import static io.netty.handler.codec.stomp.StompHeaders.VERSION;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandler.Sharable;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.DecoderResult;
-import io.netty.handler.codec.stomp.DefaultStompFrame;
-import io.netty.handler.codec.stomp.StompCommand;
-import io.netty.handler.codec.stomp.StompFrame;
-import io.netty.util.CharsetUtil;
-
 @Sharable
 public class StompChatHandler extends SimpleChannelInboundHandler<StompFrame> {
 
     private final ConcurrentMap<String, Set<StompSubscription>> chatDestinations =
-            new ConcurrentHashMap<String, Set<StompSubscription>>();
+            new ConcurrentHashMap<>();
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, StompFrame inboundFrame) throws Exception {
@@ -63,25 +62,13 @@ public class StompChatHandler extends SimpleChannelInboundHandler<StompFrame> {
         }
 
         switch (inboundFrame.command()) {
-        case STOMP:
-        case CONNECT:
-            onConnect(ctx, inboundFrame);
-            break;
-        case SUBSCRIBE:
-            onSubscribe(ctx, inboundFrame);
-            break;
-        case SEND:
-            onSend(ctx, inboundFrame);
-            break;
-        case UNSUBSCRIBE:
-            onUnsubscribe(ctx, inboundFrame);
-            break;
-        case DISCONNECT:
-            onDisconnect(ctx, inboundFrame);
-            break;
-        default:
-            sendErrorFrame("unsupported command",
-                           "Received unsupported command " + inboundFrame.command(), ctx);
+            case STOMP, CONNECT -> onConnect(ctx, inboundFrame);
+            case SUBSCRIBE -> onSubscribe(ctx, inboundFrame);
+            case SEND -> onSend(ctx, inboundFrame);
+            case UNSUBSCRIBE -> onUnsubscribe(ctx, inboundFrame);
+            case DISCONNECT -> onDisconnect(ctx, inboundFrame);
+            default -> sendErrorFrame("unsupported command",
+                    "Received unsupported command " + inboundFrame.command(), ctx);
         }
     }
 
@@ -96,7 +83,7 @@ public class StompChatHandler extends SimpleChannelInboundHandler<StompFrame> {
 
         Set<StompSubscription> subscriptions = chatDestinations.get(destination);
         if (subscriptions == null) {
-            subscriptions = new HashSet<StompSubscription>();
+            subscriptions = new HashSet<>();
             Set<StompSubscription> previousSubscriptions = chatDestinations.putIfAbsent(destination, subscriptions);
             if (previousSubscriptions != null) {
                 subscriptions = previousSubscriptions;
@@ -106,17 +93,14 @@ public class StompChatHandler extends SimpleChannelInboundHandler<StompFrame> {
         final StompSubscription subscription = new StompSubscription(subscriptionId, destination, ctx.channel());
         if (subscriptions.contains(subscription)) {
             sendErrorFrame("duplicate subscription",
-                           "Received duplicate subscription id=" + subscriptionId, ctx);
+                    "Received duplicate subscription id=" + subscriptionId, ctx);
             return;
         }
 
         subscriptions.add(subscription);
-        ctx.channel().closeFuture().addListener(new ChannelFutureListener() {
-            @Override
-            public void operationComplete(ChannelFuture future) {
-                chatDestinations.get(subscription.destination()).remove(subscription);
-            }
-        });
+        ctx.channel().closeFuture()
+                .addListener((ChannelFutureListener) future -> chatDestinations
+                        .get(subscription.destination()).remove(subscription));
 
         String receiptId = inboundFrame.headers().getAsString(RECEIPT);
         if (receiptId != null) {
@@ -158,15 +142,15 @@ public class StompChatHandler extends SimpleChannelInboundHandler<StompFrame> {
         StompVersion handshakeAcceptVersion = ctx.channel().attr(StompVersion.CHANNEL_ATTRIBUTE_KEY).get();
         if (acceptVersions == null || !acceptVersions.contains(handshakeAcceptVersion.version())) {
             sendErrorFrame("invalid version",
-                           "Received invalid version, expected " + handshakeAcceptVersion.version(), ctx);
+                    "Received invalid version, expected " + handshakeAcceptVersion.version(), ctx);
             return;
         }
 
         StompFrame connectedFrame = new DefaultStompFrame(StompCommand.CONNECTED);
         connectedFrame.headers()
-                      .set(VERSION, handshakeAcceptVersion.version())
-                      .set(SERVER, "Netty-Server")
-                      .set(HEART_BEAT, "0,0");
+                .set(VERSION, handshakeAcceptVersion.version())
+                .set(SERVER, "Netty-Server")
+                .set(HEART_BEAT, "0,0");
         ctx.writeAndFlush(connectedFrame);
     }
 
@@ -197,9 +181,9 @@ public class StompChatHandler extends SimpleChannelInboundHandler<StompFrame> {
         StompFrame messageFrame = new DefaultStompFrame(StompCommand.MESSAGE, sendFrame.content().retainedDuplicate());
         String id = UUID.randomUUID().toString();
         messageFrame.headers()
-                    .set(MESSAGE_ID, id)
-                    .set(SUBSCRIPTION, subscription.id())
-                    .set(CONTENT_LENGTH, Integer.toString(messageFrame.content().readableBytes()));
+                .set(MESSAGE_ID, id)
+                .set(SUBSCRIPTION, subscription.id())
+                .set(CONTENT_LENGTH, Integer.toString(messageFrame.content().readableBytes()));
 
         CharSequence contentType = sendFrame.headers().get(CONTENT_TYPE);
         if (contentType != null) {

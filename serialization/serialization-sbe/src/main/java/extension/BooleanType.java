@@ -46,12 +46,15 @@ public enum BooleanType {
      */
     public static BooleanType get(final short value) {
         switch (value) {
-            case 0:
+            case 0 -> {
                 return F;
-            case 1:
+            }
+            case 1 -> {
                 return T;
-            case 255:
+            }
+            case 255 -> {
                 return NULL_VAL;
+            }
         }
 
         throw new IllegalArgumentException("Unknown value: " + value);

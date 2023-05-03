@@ -14,6 +14,8 @@ package com.conversantmedia.util.concurrent;
  */
 public enum SpinPolicy {
 
-    WAITING, BLOCKING, SPINNING
+    WAITING,
+    BLOCKING,
+    SPINNING
 
 }

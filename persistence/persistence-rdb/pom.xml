@@ -22,22 +22,26 @@
             <artifactId>commons-reflect</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <!-- Persistence API -->
         <dependency>
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
         </dependency>
+
         <!-- Transaction API -->
         <dependency>
             <groupId>jakarta.transaction</groupId>
             <artifactId>jakarta.transaction-api</artifactId>
         </dependency>
+
         <!-- The Apache Commons DbUtils package is a set of Java utility classes
             for easing JDBC development. -->
         <dependency>
             <groupId>commons-dbutils</groupId>
             <artifactId>commons-dbutils</artifactId>
         </dependency>
+
         <!-- Ultimate JDBC Connection Pool -->
         <dependency>
             <groupId>com.zaxxer</groupId>
@@ -50,7 +54,5 @@
             </exclusions>
         </dependency>
 
-
     </dependencies>
-
 </project>

@@ -38,18 +38,18 @@ public final class ConcurrentStack<N> implements BlockingStack<N> {
         stack = new AtomicReferenceArray<>(stackSize);
 
         switch (spinPolicy) {
-            case BLOCKING:
+            case BLOCKING -> {
                 stackNotFullCondition = new StackNotFull();
                 stackNotEmptyCondition = new StackNotEmpty();
-                break;
-            case SPINNING:
+            }
+            case SPINNING -> {
                 stackNotFullCondition = new SpinningStackNotFull();
                 stackNotEmptyCondition = new SpinningStackNotEmpty();
-                break;
-            case WAITING:
-            default:
+            }
+            default -> {
                 stackNotFullCondition = new WaitingStackNotFull();
                 stackNotEmptyCondition = new WaitingStackNotEmpty();
+            }
         }
     }
 

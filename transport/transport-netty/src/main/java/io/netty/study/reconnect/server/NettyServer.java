@@ -20,7 +20,9 @@ public class NettyServer {
     private static final ServerBootstrap bootstrap = new ServerBootstrap();
 
     /**
-     * Netty创建全部都是实现自AbstractBootstrap。 客户端的是Bootstrap，服务端的则是 ServerBootstrap。
+     * Netty创建全部都是实现自AbstractBootstrap.
+     * 客户端: Bootstrap,
+     * 服务端: ServerBootstrap.
      **/
     public static void main(String[] args) {
         try {
@@ -35,7 +37,7 @@ public class NettyServer {
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-            // 关闭EventLoopGroup，释放掉所有资源包括创建的线程
+            // 关闭EventLoopGroup, 释放掉所有资源包括创建的线程
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
         }

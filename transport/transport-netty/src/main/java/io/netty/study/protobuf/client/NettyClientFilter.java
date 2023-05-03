@@ -25,8 +25,8 @@ public class NettyClientFilter extends ChannelInitializer<SocketChannel> {
         ChannelPipeline ph = ch.pipeline();
         /*
          * 解码和编码，应和服务端一致
-         * */
-        //入参说明: 读超时时间、写超时时间、所有类型的超时时间、时间格式
+         */
+        //入参说明: 读超时时间, 写超时时间, 所有类型的超时时间, 时间格式
         ph.addLast(new IdleStateHandler(0, 4, 0, TimeUnit.SECONDS));
 
         //传输的协议 Protobuf

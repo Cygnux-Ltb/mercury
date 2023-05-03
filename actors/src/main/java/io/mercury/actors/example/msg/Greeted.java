@@ -7,7 +7,9 @@ import akka.actor.typed.ActorRef;
 /**
  * @author Akka official
  */
-public record Greeted(String whom, ActorRef<Greet> from) {
+public record Greeted(
+        String whom,
+        ActorRef<Greet> from) {
 
     @Override
     public boolean equals(Object o) {

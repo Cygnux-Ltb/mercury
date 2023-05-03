@@ -29,11 +29,13 @@ import io.netty.handler.codec.http.HttpVersion;
  * request.
  */
 public class OkResponseHandler extends SimpleChannelInboundHandler<Object> {
-	@Override
-	public void channelRead0(ChannelHandlerContext ctx, Object msg) {
-		final FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
-				Unpooled.EMPTY_BUFFER);
-		response.headers().set("custom-response-header", "Some value");
-		ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
-	}
+
+    @Override
+    public void channelRead0(ChannelHandlerContext ctx, Object msg) {
+        final FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
+                Unpooled.EMPTY_BUFFER);
+        response.headers().set("custom-response-header", "Some value");
+        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+    }
+
 }

@@ -1,9 +1,9 @@
 package io.mercury.transport.rmq.exception;
 
+import com.rabbitmq.client.BuiltinExchangeType;
+
 import java.io.Serial;
 import java.util.Map;
-
-import com.rabbitmq.client.BuiltinExchangeType;
 
 public final class DeclareException extends Exception {
 
@@ -11,44 +11,45 @@ public final class DeclareException extends Exception {
     private static final long serialVersionUID = -7352101640279556300L;
 
     /**
-     * @param cause
+     * @param cause Throwable
      */
     private DeclareException(Throwable cause) {
         super(cause);
     }
 
     /**
-     * @param message
-     * @param cause
+     * @param message String
+     * @param cause   Throwable
      */
     private DeclareException(String message, Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * @param queue
-     * @param durable
-     * @param exclusive
-     * @param autoDelete
-     * @param args
-     * @param cause
-     * @return
+     * @param queue      String
+     * @param durable    boolean
+     * @param exclusive  boolean
+     * @param autoDelete boolean
+     * @param args       Map<String, Object>
+     * @param cause      Throwable
+     * @return DeclareException
      */
-    public static DeclareException declareQueueError(String queue, boolean durable, boolean exclusive,
-                                                     boolean autoDelete, Map<String, Object> args, Throwable cause) {
+    public static DeclareException declareQueueError(String queue, boolean durable,
+                                                     boolean exclusive, boolean autoDelete,
+                                                     Map<String, Object> args, Throwable cause) {
         return new DeclareException("Declare queue error -> queue==[" + queue + "], durable==[" + durable
                 + "], exclusive==[" + exclusive + "], autoDelete==[" + autoDelete + "], args==[" + args + "]", cause);
     }
 
     /**
-     * @param exchange
-     * @param type
-     * @param durable
-     * @param autoDelete
-     * @param internal
-     * @param args
-     * @param cause
-     * @return
+     * @param exchange   String
+     * @param type       BuiltinExchangeType
+     * @param durable    boolean
+     * @param autoDelete boolean
+     * @param internal   boolean
+     * @param args       Map<String, Object>
+     * @param cause      Throwable
+     * @return DeclareException
      */
     public static DeclareException declareExchangeError(String exchange, BuiltinExchangeType type,
                                                         boolean durable, boolean autoDelete, boolean internal,
@@ -60,14 +61,14 @@ public final class DeclareException extends Exception {
     }
 
     /**
-     * @param queue
-     * @param exchange
-     * @param routingKey
-     * @param cause
-     * @return
+     * @param queue      String
+     * @param exchange   String
+     * @param routingKey String
+     * @param cause      Throwable
+     * @return DeclareException
      */
-    public static DeclareException bindQueueError(String queue, String exchange, String routingKey,
-                                                  Throwable cause) {
+    public static DeclareException bindQueueError(String queue, String exchange,
+                                                  String routingKey, Throwable cause) {
         return new DeclareException("Bind queue error -> queue==[" + queue + "], exchange==[" + exchange
                 + "], routingKey==[" + routingKey + "]", cause);
     }
@@ -86,10 +87,10 @@ public final class DeclareException extends Exception {
     }
 
     /**
-     * @param cause
-     * @return
+     * @param cause Throwable
+     * @return DeclareException
      */
-    public static DeclareException with(Throwable cause) {
+    public static DeclareException becauseOf(Throwable cause) {
         return new DeclareException(cause);
     }
 

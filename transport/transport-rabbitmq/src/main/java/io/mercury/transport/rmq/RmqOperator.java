@@ -90,7 +90,7 @@ public final class RmqOperator extends RmqTransport {
         try {
             Asserter.nonNull(queue, "queue");
         } catch (Exception e) {
-            throw DeclareException.with(e);
+            throw DeclareException.becauseOf(e);
         }
         return declareQueue(queue.getName(), queue.isDurable(), queue.isExclusive(), queue.isAutoDelete(),
                 queue.getArgs());
@@ -109,7 +109,7 @@ public final class RmqOperator extends RmqTransport {
         try {
             Asserter.nonEmpty(queue, "queue");
         } catch (Exception e) {
-            throw DeclareException.with(e);
+            throw DeclareException.becauseOf(e);
         }
         try {
             channel.queueDeclare(queue, durable, exclusive, autoDelete, args);
@@ -128,7 +128,7 @@ public final class RmqOperator extends RmqTransport {
         try {
             Asserter.nonNull(exchange, "exchange");
         } catch (Exception e) {
-            throw DeclareException.with(e);
+            throw DeclareException.becauseOf(e);
         }
         return switch (exchange.getType()) {
             case Direct -> declareDirectExchange(exchange.getName(), exchange.isDurable(), exchange.isAutoDelete(),
@@ -215,7 +215,7 @@ public final class RmqOperator extends RmqTransport {
         try {
             Asserter.nonEmpty(exchange, "exchange");
         } catch (Exception e) {
-            throw DeclareException.with(e);
+            throw DeclareException.becauseOf(e);
         }
         try {
             /*
@@ -258,7 +258,7 @@ public final class RmqOperator extends RmqTransport {
             Asserter.nonEmpty(queue, "queue");
             Asserter.nonEmpty(exchange, "exchange");
         } catch (Exception e) {
-            throw DeclareException.with(e);
+            throw DeclareException.becauseOf(e);
         }
         try {
             /*
@@ -296,7 +296,7 @@ public final class RmqOperator extends RmqTransport {
             Asserter.nonEmpty(destExchange, "destExchange");
             Asserter.nonEmpty(sourceExchange, "sourceExchange");
         } catch (Exception e) {
-            throw DeclareException.with(e);
+            throw DeclareException.becauseOf(e);
         }
         try {
             /*
@@ -343,11 +343,6 @@ public final class RmqOperator extends RmqTransport {
          */
         channel.exchangeDelete(exchange, !force);
         return true;
-    }
-
-    @Override
-    public String getName() {
-        return tag;
     }
 
     public static void main(String[] args) {

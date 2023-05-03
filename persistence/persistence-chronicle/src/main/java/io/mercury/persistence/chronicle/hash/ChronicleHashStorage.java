@@ -19,17 +19,21 @@ import static io.mercury.common.util.StringSupport.fixPath;
 public class ChronicleHashStorage {
 
 
-    public static <K, V> MapBuilder<K, V> newMap(@Nonnull Class<K> keyType, @Nonnull Class<V> valueType) {
+    public static <K, V> MapBuilder<K, V> newMap(@Nonnull Class<K> keyType,
+                                                 @Nonnull Class<V> valueType) {
         return newMap(keyType, valueType, "auto-create-map-" + DateTimeUtil.datetimeOfSecond());
     }
 
-    public static <K, V> MapBuilder<K, V> newMap(@Nonnull Class<K> keyType, @Nonnull Class<V> valueType,
+    public static <K, V> MapBuilder<K, V> newMap(@Nonnull Class<K> keyType,
+                                                 @Nonnull Class<V> valueType,
                                                  @Nonnull String filename) {
         return newMap(keyType, valueType, JAVA_IO_TMPDIR + "/chronicle-map/", filename);
     }
 
-    public static <K, V> MapBuilder<K, V> newMap(@Nonnull Class<K> keyType, @Nonnull Class<V> valueType,
-                                                 @Nonnull String savePath, @Nonnull String filename) {
+    public static <K, V> MapBuilder<K, V> newMap(@Nonnull Class<K> keyType,
+                                                 @Nonnull Class<V> valueType,
+                                                 @Nonnull String savePath,
+                                                 @Nonnull String filename) {
         return new MapBuilder<>(keyType, valueType, savePath, filename);
     }
 
@@ -44,7 +48,8 @@ public class ChronicleHashStorage {
     }
 
     public static <E> SetBuilder<E> newSet(@Nonnull Class<E> elementType,
-                                           @Nonnull String savePath, @Nonnull String filename) {
+                                           @Nonnull String savePath,
+                                           @Nonnull String filename) {
         return new SetBuilder<>(elementType, savePath, filename);
     }
 
@@ -170,7 +175,7 @@ public class ChronicleHashStorage {
          */
         public ChronicleMap<K, V> build() {
             // ChronicleMap构建器
-            ChronicleMapBuilder<K, V> builder = ChronicleMapBuilder
+            ChronicleMapBuilder<K, V> mapBuilder = ChronicleMapBuilder
                     // 设置KeyType, ValueType
                     .of(keyType, valueType)
                     // 设置put函数是否返回null
@@ -184,31 +189,31 @@ public class ChronicleHashStorage {
 
             // 设置块大小
             if (actualChunkSize > 0)
-                builder.actualChunkSize(actualChunkSize);
+                mapBuilder.actualChunkSize(actualChunkSize);
             // 设置关闭操作
             if (preShutdownAction != null)
-                builder.setPreShutdownAction(preShutdownAction);
+                mapBuilder.setPreShutdownAction(preShutdownAction);
             // 基于Key值设置平均长度
             if (averageKey != null)
-                builder.averageKey(averageKey);
+                mapBuilder.averageKey(averageKey);
             // 基于Value值设置平均长度
             if (averageValue != null)
-                builder.averageValue(averageValue);
+                mapBuilder.averageValue(averageValue);
 
             // 持久化选项
             if (isPersistent) {
                 checkSaveFile();
                 try {
                     // Is recover data
-                    return isRecover ? builder.createOrRecoverPersistedTo(saveFile)
-                            : builder.createPersistedTo(saveFile);
+                    return isRecover ? mapBuilder.createOrRecoverPersistedTo(saveFile)
+                            : mapBuilder.createPersistedTo(saveFile);
                 } catch (IOException e) {
                     throw new ChronicleIOException(e);
                 }
             } else {
                 // 设置条目数校验
-                builder.checksumEntries(isChecksumEntries);
-                return builder.create();
+                mapBuilder.checksumEntries(isChecksumEntries);
+                return mapBuilder.create();
             }
         }
     }
@@ -245,7 +250,7 @@ public class ChronicleHashStorage {
 
         public ChronicleSet<E> build() {
             // ChronicleSet构建器
-            ChronicleSetBuilder<E> builder = ChronicleSetBuilder
+            ChronicleSetBuilder<E> setBuilder = ChronicleSetBuilder
                     // 设置ElementType
                     .of(elementType)
                     // 设置名称
@@ -255,27 +260,27 @@ public class ChronicleHashStorage {
 
             // 设置块大小
             if (actualChunkSize > 0)
-                builder.actualChunkSize(actualChunkSize);
+                setBuilder.actualChunkSize(actualChunkSize);
             // 设置关闭操作
             if (preShutdownAction != null)
-                builder.setPreShutdownAction(preShutdownAction);
+                setBuilder.setPreShutdownAction(preShutdownAction);
             // 基于元素值设置平均长度
             if (averageElement != null)
-                builder.averageKey(averageElement);
+                setBuilder.averageKey(averageElement);
 
             if (isPersistent) {
                 checkSaveFile();
                 try {
                     // Is recover data
-                    return isRecover ? builder.createOrRecoverPersistedTo(saveFile)
-                            : builder.createPersistedTo(saveFile);
+                    return isRecover ? setBuilder.createOrRecoverPersistedTo(saveFile)
+                            : setBuilder.createPersistedTo(saveFile);
                 } catch (IOException e) {
                     throw new ChronicleIOException(e);
                 }
             } else {
                 // 设置条目数校验
-                builder.checksumEntries(isChecksumEntries);
-                return builder.create();
+                setBuilder.checksumEntries(isChecksumEntries);
+                return setBuilder.create();
             }
         }
 

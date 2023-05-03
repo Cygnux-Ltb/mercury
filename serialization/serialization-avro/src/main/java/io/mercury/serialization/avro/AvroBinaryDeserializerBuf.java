@@ -1,6 +1,6 @@
 package io.mercury.serialization.avro;
 
-import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.serialization.specific.BytesDeserializer;
 import org.apache.avro.specific.SpecificRecord;
 import org.slf4j.Logger;
@@ -49,7 +49,7 @@ public final class AvroBinaryDeserializerBuf<T extends SpecificRecord> implement
      * @return AvroBinaryDeserializer<T>
      */
     private AvroBinaryDeserializer<T> getDeserializer() {
-        long threadId = Thread.currentThread().getId();
+        long threadId = Thread.currentThread().threadId();
         return deserializers.putIfAbsent(threadId, new AvroBinaryDeserializer<>(type));
     }
 

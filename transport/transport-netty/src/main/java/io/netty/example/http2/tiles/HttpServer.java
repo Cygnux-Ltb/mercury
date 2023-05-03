@@ -31,7 +31,7 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
 /**
- * Demonstrates an http server using Netty to display a bunch of images, simulate
+ * Demonstrates a http server using Netty to display a bunch of images, simulate
  * latency and compare it against the http2 implementation.
  */
 public final class HttpServer {
@@ -50,15 +50,15 @@ public final class HttpServer {
         b.option(ChannelOption.SO_BACKLOG, 1024);
 
         b.group(group).channel(NioServerSocketChannel.class).handler(new LoggingHandler(LogLevel.INFO))
-        .childHandler(new ChannelInitializer<SocketChannel>() {
-            @Override
-            protected void initChannel(SocketChannel ch) throws Exception {
-                ch.pipeline().addLast(new HttpRequestDecoder(),
-                                      new HttpResponseEncoder(),
-                                      new HttpObjectAggregator(MAX_CONTENT_LENGTH),
-                                      new Http1RequestHandler());
-            }
-        });
+                .childHandler(new ChannelInitializer<SocketChannel>() {
+                    @Override
+                    protected void initChannel(SocketChannel ch) {
+                        ch.pipeline().addLast(new HttpRequestDecoder(),
+                                new HttpResponseEncoder(),
+                                new HttpObjectAggregator(MAX_CONTENT_LENGTH),
+                                new Http1RequestHandler());
+                    }
+                });
 
         Channel ch = b.bind(PORT).sync().channel();
         return ch.closeFuture();

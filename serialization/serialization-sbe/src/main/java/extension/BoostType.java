@@ -38,16 +38,21 @@ public enum BoostType {
      */
     public static BoostType get(final byte value) {
         switch (value) {
-            case 84:
+            case 84 -> {
                 return TURBO;
-            case 83:
+            }
+            case 83 -> {
                 return SUPERCHARGER;
-            case 78:
+            }
+            case 78 -> {
                 return NITROUS;
-            case 75:
+            }
+            case 75 -> {
                 return KERS;
-            case 0:
+            }
+            case 0 -> {
                 return NULL_VAL;
+            }
         }
 
         throw new IllegalArgumentException("Unknown value: " + value);

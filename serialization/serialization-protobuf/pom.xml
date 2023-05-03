@@ -12,7 +12,7 @@
     <name>serialization-proto</name>
 
     <properties>
-        <protobuf.version>3.21.10</protobuf.version>
+        <protobuf.version>3.22.3</protobuf.version>
         <protostuff.version>1.8.0</protostuff.version>
     </properties>
 

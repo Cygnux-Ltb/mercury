@@ -43,7 +43,7 @@ public final class Launcher {
         HttpServer http = new HttpServer(group);
         try {
             http2.start();
-            System.err.println("Open your web browser and navigate to " + "http://" + Html.IP + ":" + HttpServer.PORT);
+            System.err.println("Open your web browser and navigate to " + "https://" + Html.IP + ":" + HttpServer.PORT);
             http.start().sync();
         } catch (Exception e) {
             e.printStackTrace();

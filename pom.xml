@@ -25,9 +25,9 @@
         <module>libraries</module>
         <module>persistence</module>
         <module>serialization</module>
+        <module>storage</module>
         <module>toolkit</module>
         <module>transport</module>
-        <module>storage</module>
     </modules>
 
     <properties>
@@ -41,14 +41,14 @@
         <!-- <maven.compiler.target>11</maven.compiler.target> -->
         <!-- <maven.compiler.source>11</maven.compiler.source> -->
         <!-- Java 17 -->
-        <java.version>17</java.version>
-        <maven.compiler.target>17</maven.compiler.target>
-        <maven.compiler.source>17</maven.compiler.source>
+        <java.version>20</java.version>
+        <maven.compiler.target>20</maven.compiler.target>
+        <maven.compiler.source>20</maven.compiler.source>
         <!-- Common library version -->
-        <slf4j.version>2.0.6</slf4j.version>
+        <slf4j.version>1.7.36</slf4j.version>
         <junit.version>4.13.2</junit.version>
         <jupiter.version>5.9.2</jupiter.version>
-        <netty.version>4.1.89.Final</netty.version>
+        <netty.version>4.1.92.Final</netty.version>
         <jackson.version>2.14.2</jackson.version>
     </properties>
 
@@ -58,7 +58,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.10.1</version>
+                    <version>3.11.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -68,12 +68,15 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <compilerArgument>-parameters</compilerArgument>
+                    <compilerArgs>--enable-preview</compilerArgs>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <release>${java.version}</release>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
 
     <dependencies>
         <dependency>

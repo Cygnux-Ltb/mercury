@@ -10,6 +10,7 @@
 
     <artifactId>persistence-sqlite</artifactId>
     <name>persistence-sqlite</name>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
@@ -46,7 +47,7 @@
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
-            <version>3.41.0.0</version>
+            <version>3.41.2.1</version>
         </dependency>
 
     </dependencies>

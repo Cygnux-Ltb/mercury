@@ -3,10 +3,12 @@ package io.mercury.common.concurrent.queue.primitive;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
+import javax.annotation.Nonnull;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.security.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -156,16 +158,15 @@ public class JSR166TestCase extends TestCase {
 	public void tearDown() throws Exception {
 		Throwable t = threadFailure.getAndSet(null);
 		if (t != null) {
-			if (t instanceof Error)
-				throw (Error) t;
-			else if (t instanceof RuntimeException)
-				throw (RuntimeException) t;
-			else if (t instanceof Exception)
-				throw (Exception) t;
-			else {
-				AssertionFailedError afe = new AssertionFailedError(t.toString());
-				afe.initCause(t);
-				throw afe;
+			switch (t) {
+				case Error error -> throw error;
+				case RuntimeException runtimeException -> throw runtimeException;
+				case Exception exception -> throw exception;
+				default -> {
+					AssertionFailedError afe = new AssertionFailedError(t.toString());
+					afe.initCause(t);
+					throw afe;
+				}
 			}
 		}
 
@@ -178,7 +179,6 @@ public class JSR166TestCase extends TestCase {
 	/**
 	 * Find missing try { ... } finally { joinPool(e); }
 	 */
-	@SuppressWarnings("deprecation")
 	void checkForkJoinPoolThreadLeaks() throws InterruptedException {
 		Thread[] survivors = new Thread[5];
 		int count = Thread.enumerate(survivors);
@@ -423,7 +423,7 @@ public class JSR166TestCase extends TestCase {
 		try {
 			future.get(timeoutMillis, MILLISECONDS);
 			shouldThrow();
-		} catch (TimeoutException success) {
+		} catch (TimeoutException ignored) {
 		} catch (Exception e) {
 			threadUnexpectedException(e);
 		} finally {
@@ -453,40 +453,23 @@ public class JSR166TestCase extends TestCase {
 
 	// Some convenient Integer constants
 
-	@SuppressWarnings("removal")
-	public static final Integer zero = new Integer(0);
-	@SuppressWarnings("removal")
-	public static final Integer one = new Integer(1);
-	@SuppressWarnings("removal")
-	public static final Integer two = new Integer(2);
-	@SuppressWarnings("removal")
-	public static final Integer three = new Integer(3);
-	@SuppressWarnings("removal")
-	public static final Integer four = new Integer(4);
-	@SuppressWarnings("removal")
-	public static final Integer five = new Integer(5);
-	@SuppressWarnings("removal")
-	public static final Integer six = new Integer(6);
-	@SuppressWarnings("removal")
-	public static final Integer seven = new Integer(7);
-	@SuppressWarnings("removal")
-	public static final Integer eight = new Integer(8);
-	@SuppressWarnings("removal")
-	public static final Integer nine = new Integer(9);
-	@SuppressWarnings("removal")
-	public static final Integer m1 = new Integer(-1);
-	@SuppressWarnings("removal")
-	public static final Integer m2 = new Integer(-2);
-	@SuppressWarnings("removal")
-	public static final Integer m3 = new Integer(-3);
-	@SuppressWarnings("removal")
-	public static final Integer m4 = new Integer(-4);
-	@SuppressWarnings("removal")
-	public static final Integer m5 = new Integer(-5);
-	@SuppressWarnings("removal")
-	public static final Integer m6 = new Integer(-6);
-	@SuppressWarnings("removal")
-	public static final Integer m10 = new Integer(-10);
+	public static final Integer zero = 0;
+	public static final Integer one = 1;
+	public static final Integer two = 2;
+	public static final Integer three = 3;
+	public static final Integer four = 4;
+	public static final Integer five = 5;
+	public static final Integer six = 6;
+	public static final Integer seven = 7;
+	public static final Integer eight = 8;
+	public static final Integer nine = 9;
+	public static final Integer m1 = -1;
+	public static final Integer m2 = -2;
+	public static final Integer m3 = -3;
+	public static final Integer m4 = -4;
+	public static final Integer m5 = -5;
+	public static final Integer m6 = -6;
+	public static final Integer m10 = -10;
 
 	/**
 	 * android-changed Android does not use a SecurityManager. This will simply
@@ -548,7 +531,7 @@ public class JSR166TestCase extends TestCase {
 		}
 
 		public String toString() {
-			List<Permission> ps = new ArrayList<Permission>();
+			List<Permission> ps = new ArrayList<>();
 			for (Enumeration<Permission> e = perms.elements(); e.hasMoreElements();)
 				ps.add(e.nextElement());
 			return "AdjustablePolicy with permissions " + ps;
@@ -562,13 +545,16 @@ public class JSR166TestCase extends TestCase {
 	public static Policy permissivePolicy() {
 		return new AdjustablePolicy
 		// Permissions j.u.c. needs directly
-		(new RuntimePermission("modifyThread"), new RuntimePermission("getClassLoader"),
+		(new RuntimePermission("modifyThread"),
+				new RuntimePermission("getClassLoader"),
 				new RuntimePermission("setContextClassLoader"),
 				// Permissions needed to change permissions!
-				new SecurityPermission("getPolicy"), new SecurityPermission("setPolicy"),
+				new SecurityPermission("getPolicy"),
+				new SecurityPermission("setPolicy"),
 				new RuntimePermission("setSecurityManager"),
 				// Permissions needed by the junit test harness
-				new RuntimePermission("accessDeclaredMembers"), new PropertyPermission("*", "read"),
+				new RuntimePermission("accessDeclaredMembers"),
+				new PropertyPermission("*", "read"),
 				new java.io.FilePermission("<<ALL FILES>>", "read"));
 	}
 
@@ -778,11 +764,11 @@ public class JSR166TestCase extends TestCase {
 	}
 
 	public Callable<String> latchAwaitingStringTask(final CountDownLatch latch) {
-		return new CheckedCallable<String>() {
+		return new CheckedCallable<>() {
 			protected String realCall() {
 				try {
 					latch.await();
-				} catch (InterruptedException quittingTime) {
+				} catch (InterruptedException ignored) {
 				}
 				return TEST_STRING;
 			}
@@ -791,7 +777,7 @@ public class JSR166TestCase extends TestCase {
 
 	public Runnable awaiter(final CountDownLatch latch) {
 		return new CheckedRunnable() {
-			public void realRun() throws InterruptedException {
+			public void realRun() {
 				await(latch);
 			}
 		};
@@ -923,7 +909,7 @@ public class JSR166TestCase extends TestCase {
 	 * For use as ThreadFactory in constructors
 	 */
 	public static class SimpleThreadFactory implements ThreadFactory {
-		public Thread newThread(Runnable r) {
+		public Thread newThread(@Nonnull Runnable r) {
 			return new Thread(r);
 		}
 	}
@@ -1023,9 +1009,8 @@ public class JSR166TestCase extends TestCase {
 	 * Analog of CheckedRunnable for RecursiveAction
 	 */
 	public abstract class CheckedRecursiveAction extends RecursiveAction {
-		/**
-		 * 
-		 */
+
+		@Serial
 		private static final long serialVersionUID = -2929181802905044200L;
 
 		protected abstract void realCompute() throws Throwable;
@@ -1044,9 +1029,8 @@ public class JSR166TestCase extends TestCase {
 	 * Analog of CheckedCallable for RecursiveTask
 	 */
 	public abstract class CheckedRecursiveTask<T> extends RecursiveTask<T> {
-		/**
-		 * 
-		 */
+
+		@Serial
 		private static final long serialVersionUID = -8396273497773571640L;
 
 		protected abstract T realCompute() throws Throwable;
@@ -1074,7 +1058,7 @@ public class JSR166TestCase extends TestCase {
 	 * A CyclicBarrier that uses timed await and fails with AssertionFailedErrors
 	 * instead of throwing checked exceptions.
 	 */
-	public class CheckedBarrier extends CyclicBarrier {
+	public static class CheckedBarrier extends CyclicBarrier {
 		public CheckedBarrier(int parties) {
 			super(parties);
 		}
@@ -1105,17 +1089,17 @@ public class JSR166TestCase extends TestCase {
 			try {
 				q.element();
 				shouldThrow();
-			} catch (NoSuchElementException success) {
+			} catch (NoSuchElementException ignored) {
 			}
 			try {
 				q.iterator().next();
 				shouldThrow();
-			} catch (NoSuchElementException success) {
+			} catch (NoSuchElementException ignored) {
 			}
 			try {
 				q.remove();
 				shouldThrow();
-			} catch (NoSuchElementException success) {
+			} catch (NoSuchElementException ignored) {
 			}
 		} catch (InterruptedException ie) {
 			threadUnexpectedException(ie);

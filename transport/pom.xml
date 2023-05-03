@@ -15,13 +15,13 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>transport-aeron</module>
         <module>transport-api</module>
-        <module>transport-http</module>
         <module>transport-jetty</module>
         <module>transport-netty</module>
         <module>transport-rabbitmq</module>
         <module>transport-socket</module>
-        <module>transport-udp</module>
+        <module>transport-ws</module>
         <module>transport-zmq</module>
     </modules>
 
@@ -66,6 +66,16 @@
             <dependency>
                 <groupId>io.mercury</groupId>
                 <artifactId>commons-config</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mercury</groupId>
+                <artifactId>serialization-wire</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mercury</groupId>
+                <artifactId>serialization-sbe</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -1,11 +1,10 @@
 package io.mercury.transport.netty.handler;
 
-import org.slf4j.Logger;
-
-import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import org.slf4j.Logger;
 
 public abstract class GeneralNettyHandler extends ChannelInboundHandlerAdapter {
 

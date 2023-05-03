@@ -10,7 +10,8 @@ public class CompletionStageUtils {
      * Retry an operation returning a completion stage up to maxRetries times in
      * case the completion stage is failed.
      */
-    public static <T> CompletionStage<T> withRetries(Supplier<CompletionStage<T>> tFactory, int maxRetries) {
+    public static <T> CompletionStage<T> withRetries(
+            Supplier<CompletionStage<T>> tFactory, int maxRetries) {
         return tFactory.get().handle((t, failure) -> {
             if (failure == null) {
                 return CompletableFuture.completedFuture(t);

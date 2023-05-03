@@ -1,6 +1,5 @@
 package io.mercury.common.serialization.basic;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Function;
 
@@ -8,7 +7,7 @@ import java.util.function.Function;
 public interface Serializer<T, R> extends Function<T, R> {
 
     @Nullable
-    R serialization(@Nonnull T source);
+    R serialization(T source);
 
     @Override
     default R apply(T t) {

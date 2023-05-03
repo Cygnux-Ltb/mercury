@@ -1,7 +1,7 @@
 package io.mercury.common.thread;
 
 import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.util.StringSupport;
 import org.eclipse.collections.api.map.MutableMap;
 import org.slf4j.Logger;
@@ -281,7 +281,7 @@ public final class ThreadSupport {
         try {
             thread.join();
         } catch (InterruptedException e) {
-            log.error("Thread join throw InterruptedException from thread -> id==[{}], name==[{}]", thread.getId(),
+            log.error("Thread join throw InterruptedException from thread -> id==[{}], name==[{}]", thread.threadId(),
                     thread.getName(), e);
             throw new RuntimeInterruptedException(e.getMessage(), e);
         }
@@ -349,7 +349,7 @@ public final class ThreadSupport {
     public static Thread getThread(final long id) {
         final Thread[] threads = getAllThreads();
         for (Thread thread : threads)
-            if (thread.getId() == id)
+            if (thread.threadId() == id)
                 return thread;
         return null;
     }
@@ -393,7 +393,7 @@ public final class ThreadSupport {
     public static String dumpThreadInfo(@Nonnull final Thread thread) {
         final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
         final MutableMap<String, String> map = MutableMaps.newUnifiedMap();
-        final ThreadInfo threadInfo = threadMXBean.getThreadInfo(thread.getId());
+        final ThreadInfo threadInfo = threadMXBean.getThreadInfo(thread.threadId());
         map.put("threadId", StringSupport.toString(threadInfo.getThreadId()));
         map.put("threadName", threadInfo.getThreadName());
         map.put("threadState", StringSupport.toString(threadInfo.getThreadState()));

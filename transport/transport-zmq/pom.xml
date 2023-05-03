@@ -10,37 +10,26 @@
 
     <artifactId>transport-zmq</artifactId>
     <name>transport-zmq</name>
+    <packaging>jar</packaging>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>17</source>
-                    <target>17</target>
+                    <source>20</source>
+                    <target>20</target>
                     <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
         </plugins>
     </build>
 
-    <packaging>jar</packaging>
-
     <dependencies>
         <dependency>
             <groupId>io.mercury</groupId>
             <artifactId>transport-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.mercury</groupId>
-            <artifactId>serialization-avro</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jackson-databind</artifactId>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- JeroMq : Pure Java implementation of libzmq -->

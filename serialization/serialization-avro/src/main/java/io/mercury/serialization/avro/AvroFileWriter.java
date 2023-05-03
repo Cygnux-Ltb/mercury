@@ -1,6 +1,7 @@
 package io.mercury.serialization.avro;
 
 import io.mercury.common.lang.Asserter;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import org.apache.avro.Schema;
 import org.apache.avro.file.CodecFactory;
 import org.apache.avro.file.DataFileWriter;
@@ -8,6 +9,7 @@ import org.apache.avro.io.DatumWriter;
 import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecord;
 import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
@@ -18,6 +20,8 @@ import java.util.Collection;
 
 @NotThreadSafe
 public final class AvroFileWriter<T extends SpecificRecord> implements Closeable {
+
+    private static final Logger log = Log4j2LoggerFactory.getLogger(AvroFileWriter.class);
 
     // SpecificRecord schema
     private final Schema schema;
@@ -50,11 +54,13 @@ public final class AvroFileWriter<T extends SpecificRecord> implements Closeable
      * @param records  Collection<T>
      * @throws IOException ioe
      */
-    public void append(@Nullable CodecFactory codec, final File saveFile, final Collection<T> records) throws IOException {
+    public void append(@Nullable CodecFactory codec, final File saveFile, final Collection<T> records)
+            throws IOException {
         Asserter.nonNull(saveFile, "saveFile");
         File dir = saveFile.getParentFile();
         if (!dir.exists()) {
             boolean mkdirs = dir.mkdirs();
+            log.debug("{} mkdirs -> {}", dir, mkdirs);
         }
         // 如果文件存在则追加, 否则创建新文件
         if (saveFile.exists()) {

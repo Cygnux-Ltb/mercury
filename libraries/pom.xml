@@ -14,13 +14,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>library-arangodb</module>
         <module>library-encryption</module>
-        <module>library-hypersql</module>
-        <module>library-ignite</module>
         <module>library-jmx</module>
         <module>library-nacos</module>
-        <module>library-redis</module>
     </modules>
 
     <dependencies>

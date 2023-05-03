@@ -15,11 +15,11 @@
  */
 package io.netty.example.stomp.websocket;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.netty.util.AttributeKey;
 import io.netty.util.internal.StringUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public enum StompVersion {
 
@@ -31,7 +31,7 @@ public enum StompVersion {
     public static final String SUB_PROTOCOLS;
 
     static {
-        List<String> subProtocols = new ArrayList<String>(values().length);
+        List<String> subProtocols = new ArrayList<>(values().length);
         for (StompVersion stompVersion : values()) {
             subProtocols.add(stompVersion.subProtocol);
         }

@@ -10,7 +10,6 @@
 
     <artifactId>commons-graph</artifactId>
     <name>commons-graph</name>
-
     <packaging>jar</packaging>
 
     <dependencies>
@@ -45,8 +44,8 @@
             <!-- <version>1.4.0</version> -->
         </dependency>
 
-        <!-- A free, production-ready, efficient Java library containing a collection
-            of heap data-structures. -->
+        <!-- A free, production-ready, efficient Java library containing
+             a collection of heap data-structures. -->
         <dependency>
             <groupId>org.jheaps</groupId>
             <artifactId>jheaps</artifactId>

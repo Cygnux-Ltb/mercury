@@ -12,10 +12,8 @@
     <name>serialization-wire</name>
 
     <properties>
-        <chronicle-core.version>2.23.35</chronicle-core.version>
-        <chronicle-bytes.version>2.23.32</chronicle-bytes.version>
+        <chronicle-bytes.version>2.23.33</chronicle-bytes.version>
         <chronicle-threads.version>2.23.25</chronicle-threads.version>
-        <chronicle-analytics.version>2.23.2</chronicle-analytics.version>
         <chronicle-wire.version>2.23.39</chronicle-wire.version>
     </properties>
 
@@ -36,26 +34,21 @@
             allowing data, such as usage-statistics, to be collected for Java applications.
             The data can subsequently be analysed using a variety of tools available from
             Google and other providers. -->
-        <dependency>
-            <groupId>net.openhft</groupId>
-            <artifactId>chronicle-analytics</artifactId>
-            <version>${chronicle-analytics.version}</version>
-        </dependency>
 
         <!-- ####### chronicle-core ####### -->
         <!-- Low level access to native memory, JVM and OS. -->
+
+        <!-- ####### posix ####### -->
+        <!-- This supports calls to do with memory mapping which other
+            Posix libraries don’t seem to cover. -->
         <dependency>
             <groupId>net.openhft</groupId>
-            <artifactId>chronicle-core</artifactId>
-            <version>${chronicle-core.version}</version>
+            <artifactId>posix</artifactId>
+            <version>2.23.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>chronicle-analytics</artifactId>
-                    <groupId>net.openhft</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -75,8 +68,8 @@
                     <artifactId>slf4j-api</artifactId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>chronicle-core</artifactId>
                     <groupId>net.openhft</groupId>
+                    <artifactId>posix</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -86,22 +79,6 @@
             is design to share blocking, monitoring and busy waiting threads. Busy waiting
             tasks can be prioritised for HIGH, MEDIUM, DAEMON (low priority) as well
             as TIMER (fixed rate events) tasks in a single thread without creating garbage. -->
-        <dependency>
-            <groupId>net.openhft</groupId>
-            <artifactId>chronicle-threads</artifactId>
-            <version>${chronicle-threads.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>chronicle-core</artifactId>
-                    <groupId>net.openhft</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
 
         <!-- ####### chronicle-wire ####### -->
         <!-- A Java serialization Library that supports multiple formats. -->
@@ -113,6 +90,14 @@
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.openhft</groupId>
+                    <artifactId>chronicle-bytes</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.openhft</groupId>
+                    <artifactId>posix</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

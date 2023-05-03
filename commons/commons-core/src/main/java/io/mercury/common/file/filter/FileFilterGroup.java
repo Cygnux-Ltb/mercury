@@ -23,7 +23,7 @@ public final class FileFilterGroup implements FileFilter {
 
 	@Override
 	public boolean accept(@Nonnull File file) {
-		// loop thru every filter
+		// loop through every filter
 		for (FileFilter filter : filters) {
 			if (!filter.accept(file))
 				return false;

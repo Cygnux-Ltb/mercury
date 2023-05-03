@@ -1,8 +1,7 @@
 package io.mercury.common.thread;
 
 import io.mercury.common.annotation.AbstractFunction;
-import io.mercury.common.log.Log4j2LoggerFactory;
-import io.mercury.common.number.ThreadSafeRandoms;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import org.slf4j.Logger;
 
 import javax.annotation.concurrent.ThreadSafe;
@@ -65,7 +64,7 @@ public abstract class RunnableComponent {
             } catch (Exception e) {
                 isRunning.set(false);
                 log.error("Component -> [{}] start0 throw exception -> {}", name, e.getMessage(), e);
-                throw new ComponentStartException(name, e.getMessage(), e);
+                throw new ComponentRunningException(name, e.getMessage(), e);
             }
         } else
             log.warn("Error call, Component -> [{}] already started", name);
@@ -98,12 +97,14 @@ public abstract class RunnableComponent {
     }
 
 
-    protected void startWith(StartMode mode) {
+    protected void startWith(final StartMode mode) {
         if (mode.immediately) {
             start();
         } else if (mode.delayMillis > 0) {
-
-            //TODO 添加延迟启动
+            ThreadSupport.startNewMaxPriorityThread("", () -> {
+                SleepSupport.sleep(mode.delayMillis);
+                this.start();
+            });
         } else {
             log.info("{}, Start mode is [Manual], waiting call start...", name);
         }
@@ -140,7 +141,7 @@ public abstract class RunnableComponent {
             if (immediately)
                 return "Auto";
             else if (delayMillis > 0)
-                return "Delay(" + delayMillis + ")";
+                return "Delay(" + delayMillis + "ms)";
             else
                 return "Manual";
         }
@@ -150,12 +151,12 @@ public abstract class RunnableComponent {
     /**
      * @author yellow013
      */
-    public static class ComponentStartException extends RuntimeException {
+    public static class ComponentRunningException extends RuntimeException {
 
         @Serial
         private static final long serialVersionUID = -5059741051462133930L;
 
-        public ComponentStartException(String componentName, String msg, Throwable cause) {
+        public ComponentRunningException(String componentName, String msg, Throwable cause) {
             super("Component -> [" + componentName + "] start failed, Msg: " + msg, cause);
         }
 

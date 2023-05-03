@@ -64,4 +64,5 @@ public class StompWebSocketProtocolCodec extends MessageToMessageCodec<WebSocket
             ctx.close();
         }
     }
+
 }

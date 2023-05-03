@@ -1,10 +1,10 @@
 package io.mercury.storage.couchdb;
 
-import io.mercury.common.log.Log4j2LoggerFactory;
+import io.mercury.common.http.JreHttpClient;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.sys.SysProperties;
 import io.mercury.common.util.PropertiesUtil;
 import io.mercury.serialization.json.JsonParser;
-import io.mercury.transport.http.SyncHttp;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -45,14 +45,14 @@ public final class CouchConnector {
     }
 
     /**
-     * @param database
-     * @param documentId
-     * @return
+     * @param database   String
+     * @param documentId String
+     * @return String
      */
     private String sendGetRequest(String database, String documentId) {
         log.info("sendGetRequest() -> database==[{}], documentId==[{}]", database, documentId);
         try {
-            return SyncHttp.sentGet(couchdbUrl + "/" + database + "/" + documentId);
+            return JreHttpClient.GET(couchdbUrl + "/" + database + "/" + documentId).body();
         } catch (Exception e) {
             log.error("sendGetRequest() -> database==[{}], documentId==[{}]", database, documentId, e);
             return "";

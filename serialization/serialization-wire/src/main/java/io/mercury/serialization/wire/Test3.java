@@ -3,8 +3,8 @@ package io.mercury.serialization.wire;
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
 
-import io.mercury.common.log.Log4j2Configurator;
-import io.mercury.common.log.Log4j2Configurator.LogLevel;
+import io.mercury.common.log4j2.Log4j2Configurator;
+import io.mercury.common.log4j2.Log4j2Configurator.LogLevel;
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.wire.BinaryWire;
 import net.openhft.chronicle.wire.TextWire;
@@ -24,7 +24,7 @@ public class Test3 {
 
 	public static void main(String[] args) {
 
-		/**
+		/*
 		 * In this example we the data is marshaled as a nested data structure.
 		 */
 
@@ -52,10 +52,9 @@ public class Test3 {
 //
 //		Data{message='Hello World', number=1234567890, timeUnit=NANOSECONDS, price=10.5}
 
-		/**
+		/*
 		 * To write in binary instead
 		 */
-
 		Bytes<ByteBuffer> bytes2 = Bytes.elasticByteBuffer();
 		Wire wire2 = new BinaryWire(bytes2);
 

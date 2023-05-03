@@ -12,7 +12,10 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>storage-arangodb</module>
         <module>storage-couchdb</module>
+        <module>storage-ignite</module>
+        <module>storage-redis</module>
     </modules>
 
     <properties>
@@ -34,5 +37,27 @@
             </plugin>
         </plugins>
     </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.mercury</groupId>
+                <artifactId>commons-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mercury</groupId>
+                <artifactId>commons-config</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- A set of annotations used for code inspection support
+                    and code documentation -->
+            <dependency>
+                <groupId>org.jetbrains</groupId>
+                <artifactId>annotations</artifactId>
+                <version>23.0.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>

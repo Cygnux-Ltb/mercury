@@ -107,18 +107,18 @@ public final class DisruptorBlockingQueue<E> extends MultithreadConcurrentQueue<
         super(capacity);
 
         switch (spinPolicy) {
-            case BLOCKING:
+            case BLOCKING -> {
                 queueNotFullCondition = new QueueNotFull();
                 queueNotEmptyCondition = new QueueNotEmpty();
-                break;
-            case SPINNING:
+            }
+            case SPINNING -> {
                 queueNotFullCondition = new SpinningQueueNotFull();
                 queueNotEmptyCondition = new SpinningQueueNotEmpty();
-                break;
-            case WAITING:
-            default:
+            }
+            default -> {
                 queueNotFullCondition = new WaitingQueueNotFull();
                 queueNotEmptyCondition = new WaitingQueueNotEmpty();
+            }
         }
     }
 

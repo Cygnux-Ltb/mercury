@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 public final class AnnotationScanner {
 
     public static <A extends Annotation> ImmutableSet<Method> scanPackage(@Nonnull Class<A> annotation,
-                                                                          @Nonnull String packages) {
+                                                                          @Nonnull Package... packages) {
 
 
         return null;
