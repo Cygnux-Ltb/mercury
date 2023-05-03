@@ -9,6 +9,7 @@ import org.apache.ignite.resources.IgniteInstanceResource;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder;
 
+import java.io.Serial;
 import java.util.Collections;
 
 /**
@@ -64,6 +65,7 @@ public class IgniteExampleMain {
 	@SuppressWarnings("unused")
 	private static class RemoteTask implements IgniteRunnable {
 
+		@Serial
 		private static final long serialVersionUID = 4404881047854464814L;
 
 		@IgniteInstanceResource

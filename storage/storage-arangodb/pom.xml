@@ -10,7 +10,6 @@
 
     <artifactId>storage-arangodb</artifactId>
     <name>storage-arangodb</name>
-
     <packaging>jar</packaging>
 
     <build>

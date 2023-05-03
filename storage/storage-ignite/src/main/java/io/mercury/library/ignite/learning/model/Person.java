@@ -3,13 +3,10 @@ package io.mercury.library.ignite.learning.model;
 import org.apache.ignite.cache.query.annotations.QuerySqlField;
 
 /**
- * @param : id   人的id
- * @param : name 人的名称
- * @param : city_id  人所在城市的id
- * @program: ignite_learning
- * @create: 2018-06-05 11:15
+ * @program : ignite_learning
+ * @create : 2018-06-05 11:15
  * <p>
- * 这个类用于表示人，包含三个字段，用于ignite测试
+ * 这个类用于表示人, 包含三个字段, 用于ignite测试
  **/
 public class Person {
 
@@ -29,6 +26,12 @@ public class Person {
 
     }
 
+    /**
+     * @param id      人的id
+     * @param name    人的名称
+     * @param city_id 人所在城市的id
+     * @param address 人的地址
+     */
     public Person(int id, String name, int city_id, Address address) {
         this.id = id;
         this.name = name;

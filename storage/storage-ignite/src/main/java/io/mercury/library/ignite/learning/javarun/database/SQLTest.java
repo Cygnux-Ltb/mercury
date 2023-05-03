@@ -7,8 +7,8 @@ import org.apache.ignite.cache.query.SqlFieldsQuery;
 import org.apache.ignite.configuration.IgniteConfiguration;
 
 /**
- * @program: ignite_learning
- * @create: 2018-06-08 16:40
+ * @program : ignite_learning
+ * @create : 2018-06-08 16:40
  **/
 public class SQLTest {
 

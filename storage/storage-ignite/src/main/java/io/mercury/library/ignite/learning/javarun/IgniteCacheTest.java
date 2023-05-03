@@ -7,8 +7,8 @@ import org.apache.ignite.Ignition;
 import org.apache.ignite.configuration.IgniteConfiguration;
 
 /**
- * @program: ignite_learning
- * @create: 2018-06-08 10:29
+ * @program : ignite_learning
+ * @create : 2018-06-08 10:29
  * <p>
  * 这个类用于测试Ignite的访问操作，对FirstDataGridApplication.java中创建的Ignite节点进行访问
  **/

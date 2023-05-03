@@ -1,8 +1,8 @@
 package io.mercury.library.ignite.learning.model;
 
 /**
- * @program: ignite_learning
- * @create: 2018-06-08 14:35
+ * @program : ignite_learning
+ * @create : 2018-06-08 14:35
  **/
 public class Address {
 

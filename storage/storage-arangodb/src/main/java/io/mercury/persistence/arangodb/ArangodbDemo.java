@@ -25,28 +25,27 @@ public class ArangodbDemo {
 
 	public static void main(final String[] args) {
 
-		final ArangoDB arangoDB = new ArangoDB.Builder().host("127.0.0.1", 8529).user("root").password("root")
-				.protocol(Protocol.VST).build();
+		final ArangoDB arangoDB = new ArangoDB.Builder()
+				.host("127.0.0.1", 8529)
+				.user("root").password("root")
+				.protocol(Protocol.VST)
+				.build();
 
-		log.info("ArangoDB Info: Version -> {}, Engine -> {}", toStringShortPrefixStyle(arangoDB.getVersion()),
+		log.info("ArangoDB Info: Version -> {}, Engine -> {}",
+				toStringShortPrefixStyle(arangoDB.getVersion()),
 				toStringShortPrefixStyle(arangoDB.getEngine()));
 
 		final DBCreateOptions options = new DBCreateOptions().name("test_db");
 		final String collection = "userdata";
 
 		try {
-
 			ArangoDatabase database = arangoDB.db("test_db");
-
 			if (!database.exists()) {
 				arangoDB.createDatabase(options);
 				log.info("Create Database: {}", options.getName());
 			}
-
 			arangoDB.getDatabases().forEach(dbName0 -> log.info("DB Name -> {}", dbName0));
-
 			handleArangoDatabase(database, collection);
-
 		} catch (ArangoDBException e) {
 			log.error("Failed to create database: " + options.getName() + "; " + e.getMessage());
 		} finally {

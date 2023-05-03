@@ -9,8 +9,8 @@ import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
 
 /**
- * @program: ignite_learning
- * @create: 2018-06-06 20:41
+ * @program : ignite_learning
+ * @create : 2018-06-06 20:41
  * <p>
  * 使用配置启动Ignite节点，并且向Ignite节点中创建myCache这个Cache，并向其中放入十个Person对象
  * 用于测试并启动一个特定的Ignite节点，并尝试ignite简单的的put以及get操作，以及将对象直接作为值放入Cache的操作

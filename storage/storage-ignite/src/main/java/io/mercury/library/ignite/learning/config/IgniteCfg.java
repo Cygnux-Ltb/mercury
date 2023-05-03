@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @program: ignite_learning
- * @create: 2018-06-05 11:06
+ * @program : ignite_learning
+ * @create : 2018-06-05 11:06
  * -
  * 配置类，这个类中生成了一个Ignite的配置
  * Ignite节点名称：springDataNode
@@ -22,7 +22,7 @@ public class IgniteCfg {
      * Ignite的初始化Bean，这么配置的情况下，Ignite与Spring Boot公用一个JVM，Spring Boot停止时Ignite也随之退出
      * 该Bean创建了一个节点名称为springDataNode的节点，并启动了Peer类加载器
      * 创建了一个名为PersonCache的Cache设置其键值对为<Long, City>
-     * 将Cahce放入节点并启动
+     * 将Cache放入节点并启动
      * @return Ignite
      */
 //    @Bean
@@ -54,6 +54,7 @@ public class IgniteCfg {
 
     /**
      * 通过配置来启动Ignite节点，传入配置的xml即可启动ignite
+     *
      * @return Ignite
      */
     @Bean
