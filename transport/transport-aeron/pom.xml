@@ -59,17 +59,17 @@
         </dependency>
         <dependency>
             <groupId>io.aeron</groupId>
+            <artifactId>aeron-client</artifactId>
+            <version>${aeron.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.aeron</groupId>
             <artifactId>aeron-cluster</artifactId>
             <version>${aeron.version}</version>
         </dependency>
         <dependency>
             <groupId>io.aeron</groupId>
             <artifactId>aeron-driver</artifactId>
-            <version>${aeron.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.aeron</groupId>
-            <artifactId>aeron-client</artifactId>
             <version>${aeron.version}</version>
         </dependency>
 
