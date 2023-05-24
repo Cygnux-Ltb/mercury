@@ -25,31 +25,24 @@ public class ConcurrentBlockingObjectQueueTest {
         final ConcurrentQueue<Integer> queue = new ConcurrentQueue<Integer>();
 
         // writer thread
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    queue.put(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        Executors.newSingleThreadExecutor().execute(() -> {
+            try {
+                queue.put(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         });
 
         final ArrayBlockingQueue<Integer> actual = new ArrayBlockingQueue<Integer>(1);
 
         // reader thread
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                final int value;
-                try {
-                    value = queue.take();
-                    actual.add(value);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
+        Executors.newSingleThreadExecutor().execute(() -> {
+            final int value;
+            try {
+                value = queue.take();
+                actual.add(value);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         });
 
@@ -60,13 +53,13 @@ public class ConcurrentBlockingObjectQueueTest {
 
 
     @Test
-    public void testWrite() throws Exception {
+    public void testWrite() {
 
     }
 
     @Test
     public void testRead() throws Exception {
-        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<Integer>();
+        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<>();
         queue.put(10);
         final int value = queue.take();
         assertEquals(10, value);
@@ -74,7 +67,7 @@ public class ConcurrentBlockingObjectQueueTest {
 
     @Test
     public void testRead2() throws Exception {
-        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<Integer>();
+        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<>();
         queue.put(10);
         queue.put(11);
         final int value = queue.take();
@@ -85,7 +78,7 @@ public class ConcurrentBlockingObjectQueueTest {
 
     @Test
     public void testReadLoop() throws Exception {
-        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<Integer>();
+        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<>();
 
         for (int i = 1; i < 50; i++) {
             queue.put(i);
@@ -96,69 +89,45 @@ public class ConcurrentBlockingObjectQueueTest {
 
     /**
      * reader and add, reader and writers on different threads
-     *
-     * @throws Exception
      */
     @Test
     public void testWithFasterReader() throws Exception {
 
-        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<Integer>();
+        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<>();
         final int max = 100;
         final CountDownLatch countDown = new CountDownLatch(1);
 
         final AtomicBoolean success = new AtomicBoolean(true);
 
+        new Thread(() -> {
+            for (int i = 1; i < max; i++) {
+                try {
+                    queue.put(i);
+                    Thread.sleep((int) (Math.random() * 100));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
-        new Thread(
-                new Runnable() {
-
-                    @Override
-                    public void run() {
-                        for (int i = 1; i < max; i++) {
-                            try {
-                                queue.put(i);
-                                Thread.sleep((int) (Math.random() * 100));
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
+        new Thread(() -> {
+            int value = 0;
+            for (int i = 1; i < max; i++) {
+                try {
+                    final int newValue = queue.take();
+                    assertEquals(i, newValue);
+                    if (newValue != value + 1) {
+                        success.set(false);
+                        return;
                     }
-                }).start();
-
-
-        new Thread(
-                new Runnable() {
-
-                    @Override
-                    public void run() {
-
-                        int value = 0;
-                        for (int i = 1; i < max; i++) {
-                            try {
-
-                                final int newValue = queue.take();
-
-                                assertEquals(i, newValue);
-
-
-                                if (newValue != value + 1) {
-                                    success.set(false);
-                                    return;
-                                }
-
-                                value = newValue;
-
-
-                                Thread.sleep((int) (Math.random() * 10));
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        countDown.countDown();
-
-                    }
-                }).start();
+                    value = newValue;
+                    Thread.sleep((int) (Math.random() * 10));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            countDown.countDown();
+        }).start();
 
         countDown.await();
 
@@ -168,68 +137,44 @@ public class ConcurrentBlockingObjectQueueTest {
 
     /**
      * faster writer
-     *
-     * @throws Exception
      */
     @Test
     public void testWithFasterWriter() throws Exception {
 
-        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<Integer>();
+        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<>();
         final int max = 200;
         final CountDownLatch countDown = new CountDownLatch(1);
         final AtomicBoolean success = new AtomicBoolean(true);
 
-        new Thread(
-                new Runnable() {
+        new Thread(() -> {
+            for (int i = 1; i < max; i++) {
+                try {
+                    queue.put(i);
+                    Thread.sleep((int) (Math.random() * 3));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
-                    @Override
-                    public void run() {
-                        for (int i = 1; i < max; i++) {
-                            try {
-                                queue.put(i);
-
-                                Thread.sleep((int) (Math.random() * 3));
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
+        new Thread(() -> {
+            int value = 0;
+            for (int i = 1; i < max; i++) {
+                try {
+                    final int newValue = queue.take();
+                    assertEquals(i, newValue);
+                    if (newValue != value + 1) {
+                        success.set(false);
+                        return;
                     }
-                }).start();
-
-
-        new Thread(
-                new Runnable() {
-
-                    @Override
-                    public void run() {
-
-                        int value = 0;
-                        for (int i = 1; i < max; i++) {
-
-                            try {
-                                final int newValue = queue.take();
-
-                                assertEquals(i, newValue);
-
-
-                                if (newValue != value + 1) {
-                                    success.set(false);
-                                    return;
-                                }
-
-                                value = newValue;
-
-
-                                Thread.sleep((int) (Math.random() * 10));
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        countDown.countDown();
-
-                    }
-                }).start();
+                    value = newValue;
+                    Thread.sleep((int) (Math.random() * 10));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            countDown.countDown();
+        }).start();
 
         countDown.await();
         Assert.assertTrue(success.get());
@@ -239,68 +184,44 @@ public class ConcurrentBlockingObjectQueueTest {
     @Test
     @Ignore
     public void testFlatOut() throws Exception {
-
         testConcurrentBlockingObjectQueue(Integer.MAX_VALUE);
-
     }
 
-    @SuppressWarnings("deprecation")
     private void testConcurrentBlockingObjectQueue(final int nTimes) throws InterruptedException {
-        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<Integer>(1024);
+        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<>(1024);
         final CountDownLatch countDown = new CountDownLatch(1);
 
         final AtomicBoolean success = new AtomicBoolean(true);
 
-        Thread writerThread = new Thread(
-                new Runnable() {
-
-                    @Override
-                    public void run() {
-                        try {
-                            for (int i = 1; i < nTimes; i++) {
-                                queue.put(i);
-
-                            }
-
-                        } catch (Throwable e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                });
-
+        Thread writerThread = new Thread(() -> {
+            try {
+                for (int i = 1; i < nTimes; i++) {
+                    queue.put(i);
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        });
 
         writerThread.setName("ConcurrentBlockingObjectQueue<Integer>-writer");
 
-        Thread readerThread = new Thread(
-                new Runnable() {
-
-                    @Override
-                    public void run() {
-
-                        int value = 0;
-                        for (int i = 1; i < nTimes; i++) {
-
-                            final int newValue;
-                            try {
-                                newValue = queue.take();
-
-
-                                if (newValue != value + 1) {
-                                    success.set(false);
-                                    return;
-                                }
-
-                                value = newValue;
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                        countDown.countDown();
-
+        Thread readerThread = new Thread(() -> {
+            int value = 0;
+            for (int i = 1; i < nTimes; i++) {
+                final int newValue;
+                try {
+                    newValue = queue.take();
+                    if (newValue != value + 1) {
+                        success.set(false);
+                        return;
                     }
-                });
+                    value = newValue;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            countDown.countDown();
+        });
 
         readerThread.setName("ConcurrentBlockingObjectQueue<Integer>-reader");
 
@@ -324,15 +245,11 @@ public class ConcurrentBlockingObjectQueueTest {
             try {
                 for (int i = 1; i < nTimes; i++) {
                     queue.put(i);
-
                 }
-
             } catch (Throwable e) {
                 e.printStackTrace();
             }
-
         });
-
 
         writerThread.setName("ArrayBlockingQueue-writer");
 

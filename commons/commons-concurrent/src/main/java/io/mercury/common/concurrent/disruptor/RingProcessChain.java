@@ -75,22 +75,24 @@ public class RingProcessChain<E, I> extends AbstractRingBuffer<E, I> {
 
     // **************** 单生产者处理链 ****************//
 
-    public static <E, I> Builder<E, I> withSingleProducer(@Nonnull Class<E> eventType,
-                                                          @Nonnull RingEventPublisher<E, I> publisher) {
+    public static <E, I> Builder<E, I> withSingleProducer(
+            @Nonnull Class<E> eventType,
+            @Nonnull RingEventPublisher<E, I> publisher) {
         return withSingleProducer(
                 // 使用反射EventFactory
                 newFactory(eventType, log), publisher);
     }
 
     /**
-     * @param eventType
-     * @param eventTranslator
-     * @param <E>
-     * @param <I>
+     * @param eventType       Class<E>
+     * @param eventTranslator EventTranslatorOneArg<E, I>
+     * @param <E>             handle type
+     * @param <I>             input type
      * @return Builder<E, I>
      */
-    public static <E, I> Builder<E, I> withSingleProducer(@Nonnull Class<E> eventType,
-                                                          @Nonnull EventTranslatorOneArg<E, I> eventTranslator) {
+    public static <E, I> Builder<E, I> withSingleProducer(
+            @Nonnull Class<E> eventType,
+            @Nonnull EventTranslatorOneArg<E, I> eventTranslator) {
         return withSingleProducer(
                 // 使用反射EventFactory
                 newFactory(eventType, log), eventTranslator);

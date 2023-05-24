@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static java.lang.System.out;
+
 /**
  * @author yellow013
  */
@@ -30,7 +32,7 @@ public final class ConfigUtil {
                 log.info("Key -> [{}],  ValueType -> [{}],  Value -> [{}]",
                         entry.getKey(), value.valueType(), value.unwrapped());
             else
-                System.out.println("Key -> [" + entry.getKey() + "],  ValueType -> [" + value.valueType()
+                out.println("Key -> [" + entry.getKey() + "],  ValueType -> [" + value.valueType()
                         + "],  Value -> [" + value.unwrapped() + "]");
         });
     }

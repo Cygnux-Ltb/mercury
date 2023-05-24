@@ -2,15 +2,11 @@ package io.mercury.common.datetime;
 
 import org.slf4j.Logger;
 
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-
-import static java.time.Instant.EPOCH;
-import static java.time.ZoneId.getAvailableZoneIds;
-import static java.time.ZoneId.of;
-import static java.time.ZoneId.systemDefault;
-import static java.time.ZonedDateTime.ofInstant;
-import static java.util.Comparator.naturalOrder;
+import java.time.ZonedDateTime;
+import java.util.Comparator;
 
 public interface TimeZone {
 
@@ -22,27 +18,27 @@ public interface TimeZone {
     /**
      * ZoneOffset from runtime
      */
-    ZoneOffset SYS_DEFAULT = getZoneOffset(systemDefault());
+    ZoneOffset SYS_DEFAULT = getZoneOffset(ZoneId.systemDefault());
 
     /**
      * Chinese Standard Time ZoneOffset
      */
-    ZoneOffset CST = getZoneOffset(of("Asia/Shanghai"));
+    ZoneOffset CST = getZoneOffset(ZoneId.of("Asia/Shanghai"));
 
     /**
      * Taiwan Standard Time ZoneOffset
      */
-    ZoneOffset TST = getZoneOffset(of("Asia/Taipei"));
+    ZoneOffset TST = getZoneOffset(ZoneId.of("Asia/Taipei"));
 
     /**
      * Japan Standard Time ZoneOffset
      */
-    ZoneOffset JST = getZoneOffset(of("Asia/Tokyo"));
+    ZoneOffset JST = getZoneOffset(ZoneId.of("Asia/Tokyo"));
 
     /**
      * North America Chicago Time ZoneOffset
      */
-    ZoneOffset NA_CHICAGO = getZoneOffset(of("America/Chicago"));
+    ZoneOffset NA_CHICAGO = getZoneOffset(ZoneId.of("America/Chicago"));
 
     /**
      * @param zoneId ZoneId
@@ -51,7 +47,7 @@ public interface TimeZone {
     static ZoneOffset getZoneOffset(ZoneId zoneId) {
         if (zoneId instanceof ZoneOffset offset)
             return offset;
-        return ofInstant(EPOCH, zoneId).getOffset();
+        return ZonedDateTime.ofInstant(Instant.EPOCH, zoneId).getOffset();
     }
 
     /**
@@ -62,8 +58,9 @@ public interface TimeZone {
     }
 
     static void showAvailableZoneIds(Logger log) {
-        getAvailableZoneIds().stream()
-                .sorted(naturalOrder())
+        ZoneId.getAvailableZoneIds()
+                .stream()
+                .sorted(Comparator.naturalOrder())
                 .forEachOrdered(log == null
                         ? System.out::println
                         : log::info);
