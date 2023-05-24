@@ -49,7 +49,7 @@ import static org.agrona.BitUtil.SIZE_OF_LONG;
  * <p>
  * The chunk size if best determined by
  * {@link io.aeron.Publication#maxPayloadLength()} minus header for the chunk.
- *
+ * <p>
  * <b>file-create</b>
  *
  * <pre>
@@ -172,20 +172,13 @@ public class FileReceiver {
 
         final int messageType = buffer.getInt(offset + TYPE_OFFSET, LITTLE_ENDIAN);
         switch (messageType) {
-            case FILE_CREATE_TYPE:
-                createFile(buffer.getLong(offset + CORRELATION_ID_OFFSET, LITTLE_ENDIAN),
-                        buffer.getLong(offset + FILE_LENGTH_OFFSET, LITTLE_ENDIAN),
-                        buffer.getStringUtf8(offset + FILE_NAME_OFFSET, LITTLE_ENDIAN));
-                break;
-
-            case FILE_CHUNK_TYPE:
-                fileChunk(buffer.getLong(offset + CORRELATION_ID_OFFSET, LITTLE_ENDIAN),
-                        buffer.getLong(offset + CHUNK_OFFSET_OFFSET, LITTLE_ENDIAN),
-                        buffer.getLong(offset + CHUNK_LENGTH_OFFSET, LITTLE_ENDIAN), buffer, offset);
-                break;
-
-            default:
-                throw new IllegalArgumentException("unknown message type: " + messageType);
+            case FILE_CREATE_TYPE -> createFile(buffer.getLong(offset + CORRELATION_ID_OFFSET, LITTLE_ENDIAN),
+                    buffer.getLong(offset + FILE_LENGTH_OFFSET, LITTLE_ENDIAN),
+                    buffer.getStringUtf8(offset + FILE_NAME_OFFSET, LITTLE_ENDIAN));
+            case FILE_CHUNK_TYPE -> fileChunk(buffer.getLong(offset + CORRELATION_ID_OFFSET, LITTLE_ENDIAN),
+                    buffer.getLong(offset + CHUNK_OFFSET_OFFSET, LITTLE_ENDIAN),
+                    buffer.getLong(offset + CHUNK_LENGTH_OFFSET, LITTLE_ENDIAN), buffer, offset);
+            default -> throw new IllegalArgumentException("unknown message type: " + messageType);
         }
     }
 

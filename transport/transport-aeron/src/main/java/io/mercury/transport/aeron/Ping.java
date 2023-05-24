@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Ping component of Ping-Pong latency test recorded to a histogram to capture
- * full distribution..
+ * full distribution.
  * <p>
  * Initiates messages sent to {@link Pong} and records times.
  *
@@ -147,12 +147,13 @@ public class Ping {
     }
 
     private static void availablePongImageHandler(final Image image) {
-        final Subscription subscription = image.subscription();
-        System.out.format("Available image: channel=%s streamId=%d session=%d%n", subscription.channel(),
-                subscription.streamId(), image.sessionId());
-
-        if (PONG_STREAM_ID == subscription.streamId() && PONG_CHANNEL.equals(subscription.channel())) {
-            LATCH.countDown();
+        try (final Subscription subscription = image.subscription()) {
+            System.out.format("Available image: channel=%s streamId=%d session=%d%n",
+                    subscription.channel(), subscription.streamId(), image.sessionId());
+            if (PONG_STREAM_ID == subscription.streamId()
+                    && PONG_CHANNEL.equals(subscription.channel())) {
+                LATCH.countDown();
+            }
         }
     }
 }

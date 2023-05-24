@@ -193,51 +193,29 @@ public class BacklogStat {
     /**
      * Composite key which identifies an Aeron stream of messages.
      */
-    public static class StreamCompositeKey {
-        private final int sessionId;
-        private final int streamId;
-        private final String channel;
-
-        public StreamCompositeKey(final int sessionId, final int streamId, final String channel) {
+    public record StreamCompositeKey(
+            int sessionId,
+            int streamId,
+            String channel) {
+        public StreamCompositeKey {
             Objects.requireNonNull(channel, "channel cannot be null");
-
-            this.sessionId = sessionId;
-            this.streamId = streamId;
-            this.channel = channel;
-        }
-
-        public int sessionId() {
-            return sessionId;
-        }
-
-        public int streamId() {
-            return streamId;
-        }
-
-        public String channel() {
-            return channel;
         }
 
         public boolean equals(final Object o) {
-            if (this == o) {
+            if (this == o)
                 return true;
-            }
-            if (!(o instanceof final StreamCompositeKey that)) {
+            if (!(o instanceof final StreamCompositeKey that))
                 return false;
-            }
-            return this.sessionId == that.sessionId && this.streamId == that.streamId
+            return this.sessionId == that.sessionId
+                    && this.streamId == that.streamId
                     && this.channel.equals(that.channel);
         }
 
-        public int hashCode() {
-            int result = sessionId;
-            result = 31 * result + streamId;
-            result = 31 * result + channel.hashCode();
-            return result;
-        }
-
         public String toString() {
-            return "StreamCompositeKey{" + "sessionId=" + sessionId + ", streamId=" + streamId + ", channel='" + channel
+            return "StreamCompositeKey{"
+                    + "sessionId=" + sessionId
+                    + ", streamId=" + streamId
+                    + ", channel='" + channel
                     + '\'' + '}';
         }
     }

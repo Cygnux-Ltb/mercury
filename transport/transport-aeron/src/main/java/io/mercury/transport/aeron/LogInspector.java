@@ -128,7 +128,7 @@ public class LogInspector {
                 int offset = 0;
                 do {
                     dataHeaderFlyweight.wrap(termBuffer, offset, termLength - offset);
-                    out.println(offset + ": " + dataHeaderFlyweight.toString());
+                    out.println(offset + ": " + dataHeaderFlyweight);
 
                     final int frameLength = dataHeaderFlyweight.frameLength();
                     if (frameLength < DataHeaderFlyweight.HEADER_LENGTH) {
@@ -158,18 +158,14 @@ public class LogInspector {
     }
 
     public static char[] formatBytes(final DirectBuffer buffer, final int offset, final int length) {
-        switch (AERON_LOG_DATA_FORMAT) {
-            case "us-ascii":
-            case "us_ascii":
-            case "ascii":
-                return bytesToAscii(buffer, offset, length);
-
-            default:
-                return bytesToHex(buffer, offset, length);
-        }
+        return switch (AERON_LOG_DATA_FORMAT) {
+            case "us-ascii", "us_ascii", "ascii" -> bytesToAscii(buffer, offset, length);
+            default -> bytesToHex(buffer, offset, length);
+        };
     }
 
-    private static char[] bytesToAscii(final DirectBuffer buffer, final int offset, final int length) {
+    private static char[] bytesToAscii(final DirectBuffer buffer, final int offset,
+                                       final int length) {
         final char[] chars = new char[length];
 
         for (int i = 0; i < length; i++) {
@@ -185,7 +181,8 @@ public class LogInspector {
         return chars;
     }
 
-    public static char[] bytesToHex(final DirectBuffer buffer, final int offset, final int length) {
+    public static char[] bytesToHex(final DirectBuffer buffer, final int offset,
+                                    final int length) {
         final char[] chars = new char[length * 2];
 
         for (int i = 0; i < length; i++) {

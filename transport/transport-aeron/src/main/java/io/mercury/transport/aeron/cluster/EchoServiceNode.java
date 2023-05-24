@@ -69,7 +69,7 @@ public class EchoServiceNode
     // end::ports[]
 
     // tag::udp_channel[]
-    private static String udpChannel(final int nodeId, final String hostname, final int portOffset) {
+    public static String udpChannel(final int nodeId, final String hostname, final int portOffset) {
         final int port = calculatePort(nodeId, portOffset);
         return new ChannelUriStringBuilder().media("udp").termLength(TERM_LENGTH).endpoint(hostname + ":" + port)
                 .build();

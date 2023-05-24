@@ -25,7 +25,6 @@ import org.agrona.concurrent.IdleStrategy;
 public class SampleConfiguration {
     public static final String CHANNEL_PROP = "aeron.sample.channel";
     public static final String STREAM_ID_PROP = "aeron.sample.streamId";
-
     public static final String PING_CHANNEL_PROP = "aeron.sample.ping.channel";
     public static final String PONG_CHANNEL_PROP = "aeron.sample.pong.channel";
     public static final String PING_STREAM_ID_PROP = "aeron.sample.ping.streamId";
@@ -86,4 +85,5 @@ public class SampleConfiguration {
     public static IdleStrategy newIdleStrategy() {
         return Configuration.agentIdleStrategy(IDLE_STRATEGY_NAME, null);
     }
+
 }

@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
  * message on a fixed channel and stream.
  */
 public class SimplePublisher {
+
     /**
      * Main method for launching the process.
      *
@@ -60,7 +61,8 @@ public class SimplePublisher {
         // implement
         // AutoCloseable, and will automatically clean up resources when this try block
         // is finished.
-        try (Aeron aeron = Aeron.connect(ctx); Publication publication = aeron.addPublication(channel, streamId)) {
+        try (Aeron aeron = Aeron.connect(ctx);
+             Publication publication = aeron.addPublication(channel, streamId)) {
             final String message = "Hello World! ";
             final byte[] messageBytes = message.getBytes();
             buffer.putBytes(0, messageBytes);

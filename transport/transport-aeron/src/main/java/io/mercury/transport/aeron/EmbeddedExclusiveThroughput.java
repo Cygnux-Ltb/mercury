@@ -63,10 +63,11 @@ public class EmbeddedExclusiveThroughput {
 
         final RateReporter reporter = new RateReporter(TimeUnit.SECONDS.toNanos(1),
                 EmbeddedExclusiveThroughput::printRate);
-        final ExecutorService executor = Executors.newFixedThreadPool(2);
+
         final AtomicBoolean running = new AtomicBoolean(true);
 
-        try (MediaDriver ignore = MediaDriver.launch();
+        try (final ExecutorService executor = Executors.newFixedThreadPool(2);
+             MediaDriver ignore = MediaDriver.launch();
              Aeron aeron = Aeron.connect();
              Subscription subscription = aeron.addSubscription(CHANNEL, STREAM_ID);
              ExclusivePublication publication = aeron.addExclusivePublication(CHANNEL, STREAM_ID)) {

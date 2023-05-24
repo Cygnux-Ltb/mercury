@@ -253,13 +253,14 @@ public class IndexedReplicatedRecording implements AutoCloseable {
         }
     }
 
-    static void assertEquals(final String type, final long srcValue, final long dstValue) {
+    public static void assertEquals(final String type, final long srcValue, final long dstValue) {
         if (srcValue != dstValue) {
             throw new IllegalStateException(type + " not equal: srcValue=" + srcValue + " dstValue=" + dstValue);
         }
     }
 
-    static void assertEquals(final String type, final LongArrayList srcList, final LongArrayList dstList) {
+    static void assertEquals(final String type, final LongArrayList srcList,
+                             final LongArrayList dstList) {
         final int srcSize = srcList.size();
         final int dstSize = dstList.size();
         if (srcSize != dstSize) {

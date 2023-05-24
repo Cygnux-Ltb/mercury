@@ -103,9 +103,10 @@ public class SendHackSelectReceiveUdpPing implements ToIntFunction<SelectionKey>
         return 1;
     }
 
-    private void measureRoundTrip(final Histogram histogram, final InetSocketAddress sendAddress,
-                                  final ByteBuffer buffer, final DatagramChannel sendChannel, final Selector selector,
-                                  final NioSelectedKeySet keySet, final AtomicBoolean running) throws IOException {
+    public void measureRoundTrip(final Histogram histogram, final InetSocketAddress sendAddress,
+                                 final ByteBuffer buffer, final DatagramChannel sendChannel,
+                                 final Selector selector, final NioSelectedKeySet keySet,
+                                 final AtomicBoolean running) throws IOException {
         for (sequenceNumber = 0; sequenceNumber < Common.NUM_MESSAGES; sequenceNumber++) {
             final long timestampNs = System.nanoTime();
 

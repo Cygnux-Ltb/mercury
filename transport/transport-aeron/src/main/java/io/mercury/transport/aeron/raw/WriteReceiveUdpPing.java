@@ -27,7 +27,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.LockSupport;
 
 import static io.aeron.driver.Configuration.MTU_LENGTH_DEFAULT;
-import static io.mercury.transport.aeron.raw.Common.init;
 import static org.agrona.BitUtil.SIZE_OF_LONG;
 
 /**

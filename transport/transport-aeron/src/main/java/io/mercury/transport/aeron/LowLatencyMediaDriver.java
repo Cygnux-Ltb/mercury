@@ -29,6 +29,7 @@ import static org.agrona.SystemUtil.loadPropertiesFiles;
  * delivery low latency performance, i.e. 3 active polling threads.
  */
 public class LowLatencyMediaDriver {
+
     /**
      * Main method for launching the process.
      *
@@ -39,13 +40,14 @@ public class LowLatencyMediaDriver {
         loadPropertiesFiles(args);
 
         final MediaDriver.Context ctx = new MediaDriver.Context().termBufferSparseFile(false)
-                .useWindowsHighResTimer(true).threadingMode(ThreadingMode.DEDICATED)
-                .conductorIdleStrategy(BusySpinIdleStrategy.INSTANCE).receiverIdleStrategy(NoOpIdleStrategy.INSTANCE)
+                .useWindowsHighResTimer(true)
+                .threadingMode(ThreadingMode.DEDICATED)
+                .conductorIdleStrategy(BusySpinIdleStrategy.INSTANCE)
+                .receiverIdleStrategy(NoOpIdleStrategy.INSTANCE)
                 .senderIdleStrategy(NoOpIdleStrategy.INSTANCE);
 
         try (MediaDriver ignored = MediaDriver.launch(ctx)) {
             new ShutdownSignalBarrier().await();
-
             System.out.println("Shutdown Driver...");
         }
     }

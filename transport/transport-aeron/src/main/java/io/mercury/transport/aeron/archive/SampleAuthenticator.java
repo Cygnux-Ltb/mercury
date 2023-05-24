@@ -66,7 +66,8 @@ public class SampleAuthenticator implements Authenticator {
      *                           may be 0 length.
      * @param nowMs              current epoch time in milliseconds.
      */
-    public void onChallengeResponse(final long sessionId, final byte[] encodedCredentials, final long nowMs) {
+    public void onChallengeResponse(final long sessionId, final byte[] encodedCredentials,
+                                    final long nowMs) {
         final String credentialsString = new String(encodedCredentials, StandardCharsets.US_ASCII);
         final SessionState sessionState = sessionIdToStateMap.get(sessionId);
 
@@ -88,17 +89,9 @@ public class SampleAuthenticator implements Authenticator {
 
         if (null != sessionState) {
             switch (sessionState) {
-                case CHALLENGE:
-                    sessionProxy.challenge((CHALLENGE_STRING.getBytes()));
-                    break;
-
-                case AUTHENTICATED:
-                    sessionProxy.authenticate(ArrayUtil.EMPTY_BYTE_ARRAY);
-                    break;
-
-                case REJECT:
-                    sessionProxy.reject();
-                    break;
+                case CHALLENGE -> sessionProxy.challenge((CHALLENGE_STRING.getBytes()));
+                case AUTHENTICATED -> sessionProxy.authenticate(ArrayUtil.EMPTY_BYTE_ARRAY);
+                case REJECT -> sessionProxy.reject();
             }
         }
     }
@@ -114,15 +107,9 @@ public class SampleAuthenticator implements Authenticator {
 
         if (null != sessionState) {
             switch (sessionState) {
-                case AUTHENTICATED:
-                    sessionProxy.authenticate(ArrayUtil.EMPTY_BYTE_ARRAY);
-                    break;
-                case REJECT:
-                    sessionProxy.reject();
-                    break;
-                default:
-                    System.err.println("error");
-                    break;
+                case AUTHENTICATED -> sessionProxy.authenticate(ArrayUtil.EMPTY_BYTE_ARRAY);
+                case REJECT -> sessionProxy.reject();
+                default -> System.err.println("error");
             }
         }
     }

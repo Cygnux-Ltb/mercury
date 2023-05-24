@@ -29,7 +29,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.LockSupport;
 
-import static io.mercury.transport.aeron.raw.Common.init;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 

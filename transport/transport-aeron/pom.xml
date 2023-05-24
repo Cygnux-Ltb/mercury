@@ -12,7 +12,7 @@
     <name>transport-aeron</name>
 
     <properties>
-        <aeron.version>1.41.2</aeron.version>
+        <aeron.version>1.41.3</aeron.version>
         <byte-buddy.version>1.14.4</byte-buddy.version>
     </properties>
 

@@ -67,7 +67,7 @@ public class EmbeddedDualExclusiveThroughput {
 
         final RateReporter reporter = new RateReporter(TimeUnit.SECONDS.toNanos(1),
                 EmbeddedDualExclusiveThroughput::printRate);
-        final ExecutorService executor = Executors.newFixedThreadPool(2);
+
         final AtomicBoolean running = new AtomicBoolean(true);
         final AvailableImageHandler handler = (image) -> System.out
                 .println("source connection=" + image.sourceIdentity());
@@ -78,7 +78,8 @@ public class EmbeddedDualExclusiveThroughput {
         final String sourceUriOne = builder.controlEndpoint("localhost:20550").tags("1").build();
         final String sourceUriTwo = builder.controlEndpoint("localhost:20551").tags("2").build();
 
-        try (MediaDriver ignore = MediaDriver.launch();
+        try (final ExecutorService executor = Executors.newFixedThreadPool(2);
+             MediaDriver ignore = MediaDriver.launch();
              Aeron aeron = Aeron.connect();
              Subscription subscription = aeron.addSubscription(CHANNEL, STREAM_ID, handler, null);
              ExclusivePublication publicationOne = aeron.addExclusivePublication(sourceUriOne, STREAM_ID);

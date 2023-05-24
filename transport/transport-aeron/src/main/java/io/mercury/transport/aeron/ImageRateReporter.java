@@ -23,6 +23,7 @@ import java.util.concurrent.locks.LockSupport;
  * {@link System#out}.
  */
 public final class ImageRateReporter implements Runnable {
+
     private final int messageLength;
     private final AtomicBoolean running;
     private final ImageRateSubscriber subscriber;

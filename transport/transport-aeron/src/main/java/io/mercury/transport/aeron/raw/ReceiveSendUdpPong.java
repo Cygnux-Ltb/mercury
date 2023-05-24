@@ -25,7 +25,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static io.mercury.transport.aeron.raw.Common.init;
 import static org.agrona.BitUtil.SIZE_OF_LONG;
 
 /**
@@ -34,6 +33,7 @@ import static org.agrona.BitUtil.SIZE_OF_LONG;
  * @see SendReceiveUdpPing
  */
 public class ReceiveSendUdpPong {
+
     /**
      * Main method for launching the process.
      *

@@ -28,8 +28,8 @@ import java.nio.channels.Selector;
  * Common configuration and functions used across raw samples.
  */
 public class Common {
-    public static final int NUM_MESSAGES = 10_000;
 
+    public static final int NUM_MESSAGES = 10_000;
     public static final int PONG_PORT = 20123;
     public static final int PING_PORT = 20124;
 
@@ -41,7 +41,9 @@ public class Common {
         Field publicSelectKeysField = null;
 
         try {
-            final Class<?> clazz = Class.forName("sun.nio.ch.SelectorImpl", false, ClassLoader.getSystemClassLoader());
+            final Class<?> clazz = Class
+                    .forName("sun.nio.ch.SelectorImpl", false,
+                            ClassLoader.getSystemClassLoader());
 
             if (clazz.isAssignableFrom(Selector.open().getClass())) {
                 selectKeysField = clazz.getDeclaredField("selectedKeys");
