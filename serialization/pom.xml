@@ -163,7 +163,7 @@
             <dependency>
                 <groupId>net.openhft</groupId>
                 <artifactId>zero-allocation-hashing</artifactId>
-                <version>0.15</version>
+                <version>0.16</version>
             </dependency>
 
             <!-- JNI bindings for Zstd native library that provides fast and high
@@ -171,7 +171,7 @@
             <dependency>
                 <groupId>com.github.luben</groupId>
                 <artifactId>zstd-jni</artifactId>
-                <version>1.5.2-3</version>
+                <version>1.5.5-2</version>
             </dependency>
 
             <!-- Date and time library to replace JDK date handling -->

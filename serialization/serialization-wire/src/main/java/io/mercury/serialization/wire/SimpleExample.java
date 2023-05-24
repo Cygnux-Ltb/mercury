@@ -100,8 +100,8 @@ public class SimpleExample {
 //		00000030 69 63 65 90 00 00 28 41                          ice···(A 
 
         /*
-         * Using the RawWire strips away all the meta data to reduce the size of the
-         * message, and improve speed. The down side is that we cannot easily see what
+         * Using the RawWire strips away all the metadata to reduce the size of the
+         * message, and improve speed. The downside is that we cannot easily see what
          * the message contains.
          */
 
