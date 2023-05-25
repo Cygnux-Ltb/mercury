@@ -20,7 +20,7 @@
         <repository>
             <id>aeronic</id>
             <name>aeronic</name>
-            <url>https://dl.cloudsmith.io/public/lob-software/aeronic/maven/</url>
+            <url>https://cloudsmith.io/~lob-software/repos/aeronic/packages/</url>
         </repository>
     </repositories>
 

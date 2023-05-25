@@ -12,7 +12,7 @@
     <name>storage-ignite</name>
 
     <properties>
-        <ignite.version>2.14.0</ignite.version>
+        <ignite.version>2.15.0</ignite.version>
     </properties>
 
     <dependencies>

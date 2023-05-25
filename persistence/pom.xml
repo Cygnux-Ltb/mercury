@@ -17,7 +17,7 @@
     <modules>
         <module>persistence-chronicle</module>
         <module>persistence-h2</module>
-        <module>persistence-hypersql</module>
+        <module>persistence-hsqldb</module>
         <module>persistence-log4j2-hp</module>
         <!-- <module>persistence-kyotocabinet</module> -->
         <module>persistence-rdb</module>
@@ -129,7 +129,7 @@
             <dependency>
                 <groupId>org.xerial.snappy</groupId>
                 <artifactId>snappy-java</artifactId>
-                <version>1.1.9.1</version>
+                <version>1.1.10.0</version>
             </dependency>
 
             <!-- Zero-allocation implementations of fast non-cryptographic hash functions
@@ -152,7 +152,7 @@
             <dependency>
                 <groupId>com.github.luben</groupId>
                 <artifactId>zstd-jni</artifactId>
-                <version>1.5.5-1</version>
+                <version>1.5.5-3</version>
             </dependency>
 
             <!-- Date and time library to replace JDK date handling -->
