@@ -10,9 +10,6 @@
 
     <artifactId>storage-redis</artifactId>
 
-    <properties>
-    </properties>
-
     <dependencies>
         <!-- Jedis is a blazingly small and sane Redis java client. -->
         <dependency>
