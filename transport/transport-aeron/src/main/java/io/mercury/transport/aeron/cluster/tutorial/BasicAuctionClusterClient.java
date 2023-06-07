@@ -47,15 +47,17 @@ public class BasicAuctionClusterClient implements EgressListener
     private long correlationId = ThreadLocalRandom.current().nextLong();
     private long lastBidSeen = 100;
 
-    public BasicAuctionClusterClient(final long customerId, final int numOfBids, final int bidIntervalMs) {
+    public BasicAuctionClusterClient(final long customerId, final int numOfBids,
+                                     final int bidIntervalMs) {
         this.customerId = customerId;
         this.numOfBids = numOfBids;
         this.bidIntervalMs = bidIntervalMs;
     }
 
     // tag::response[]
-    public void onMessage(final long clusterSessionId, final long timestamp, final DirectBuffer buffer,
-                          final int offset, final int length, final Header header) {
+    public void onMessage(final long clusterSessionId, final long timestamp,
+                          final DirectBuffer buffer, final int offset,
+                          final int length, final Header header) {
         final long correlationId = buffer.getLong(offset + BasicAuctionClusteredService.CORRELATION_ID_OFFSET);
         final long customerId = buffer.getLong(offset + BasicAuctionClusteredService.CUSTOMER_ID_OFFSET);
         final long currentPrice = buffer.getLong(offset + BasicAuctionClusteredService.PRICE_OFFSET);
@@ -67,14 +69,15 @@ public class BasicAuctionClusterClient implements EgressListener
                 + ", " + bidSucceed + ")");
     }
 
-    public void onSessionEvent(final long correlationId, final long clusterSessionId, final long leadershipTermId,
-                               final int leaderMemberId, final EventCode code, final String detail) {
+    public void onSessionEvent(final long correlationId, final long clusterSessionId,
+                               final long leadershipTermId, final int leaderMemberId,
+                               final EventCode code, final String detail) {
         printOutput("SessionEvent(" + correlationId + ", " + leadershipTermId + ", " + leaderMemberId + ", " + code
                 + ", " + detail + ")");
     }
 
-    public void onNewLeader(final long clusterSessionId, final long leadershipTermId, final int leaderMemberId,
-                            final String ingressEndpoints) {
+    public void onNewLeader(final long clusterSessionId, final long leadershipTermId,
+                            final int leaderMemberId, final String ingressEndpoints) {
         printOutput("NewLeader(" + clusterSessionId + ", " + leadershipTermId + ", " + leaderMemberId + ")");
     }
     // end::response[]

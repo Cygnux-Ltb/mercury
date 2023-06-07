@@ -20,7 +20,6 @@ import static io.mercury.common.collections.ImmutableSets.newImmutableSet;
  *
  * @author yellow013
  */
-
 public final class AmqpProxyReflection {
 
     private static final AmqpProxyReflection INSTANCE = new AmqpProxyReflection();

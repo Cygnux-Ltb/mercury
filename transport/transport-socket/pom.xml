@@ -11,8 +11,6 @@
     <artifactId>transport-socket</artifactId>
     <name>transport-socket</name>
 
-    <packaging>jar</packaging>
-
     <dependencies>
         <dependency>
             <groupId>io.mercury</groupId>

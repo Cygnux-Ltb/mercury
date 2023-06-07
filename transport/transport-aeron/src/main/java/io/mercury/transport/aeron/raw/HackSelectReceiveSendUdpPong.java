@@ -15,7 +15,6 @@
  */
 package io.mercury.transport.aeron.raw;
 
-import io.aeron.driver.Configuration;
 import org.agrona.concurrent.SigInt;
 import org.agrona.hints.ThreadHints;
 import org.agrona.nio.NioSelectedKeySet;
@@ -29,6 +28,7 @@ import java.nio.channels.Selector;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.ToIntFunction;
 
+import static io.aeron.driver.Configuration.MTU_LENGTH_DEFAULT;
 import static java.nio.channels.SelectionKey.OP_READ;
 import static org.agrona.BitUtil.SIZE_OF_LONG;
 
@@ -38,6 +38,7 @@ import static org.agrona.BitUtil.SIZE_OF_LONG;
  * @see SendHackSelectReceiveUdpPing
  */
 public class HackSelectReceiveSendUdpPong {
+
     /**
      * Main method for launching the process.
      *
@@ -49,8 +50,9 @@ public class HackSelectReceiveSendUdpPong {
     }
 
     private void run() throws IOException {
-        final InetSocketAddress sendAddress = new InetSocketAddress("localhost", Common.PONG_PORT);
-        final ByteBuffer buffer = ByteBuffer.allocateDirect(Configuration.MTU_LENGTH_DEFAULT);
+        final InetSocketAddress sendAddress = new InetSocketAddress(
+                "localhost", Common.PONG_PORT);
+        final ByteBuffer buffer = ByteBuffer.allocateDirect(MTU_LENGTH_DEFAULT);
 
         final DatagramChannel receiveChannel = DatagramChannel.open();
         Common.init(receiveChannel);

@@ -28,6 +28,7 @@ import org.agrona.concurrent.status.StatusIndicator;
  * constants in {@link org.agrona.concurrent.ControllableIdleStrategy}.
  */
 public class SetControllableIdleStrategy {
+
     /**
      * Main method for launching the process.
      *
@@ -41,7 +42,8 @@ public class SetControllableIdleStrategy {
 
         try (Aeron aeron = Aeron.connect()) {
             final CountersReader countersReader = aeron.countersReader();
-            final StatusIndicator statusIndicator = StatusUtil.controllableIdleStrategy(countersReader);
+            final StatusIndicator statusIndicator = StatusUtil
+                    .controllableIdleStrategy(countersReader);
 
             if (null != statusIndicator) {
                 final int status = Integer.parseInt(args[0]);

@@ -63,10 +63,11 @@ public class EmbeddedThroughput {
         loadPropertiesFiles(args);
 
         final RateReporter reporter = new RateReporter(TimeUnit.SECONDS.toNanos(1), EmbeddedThroughput::printRate);
-        final ExecutorService executor = Executors.newFixedThreadPool(2);
+
         final AtomicBoolean running = new AtomicBoolean(true);
 
-        try (MediaDriver ignore = MediaDriver.launch();
+        try (final ExecutorService executor = Executors.newFixedThreadPool(2);
+             MediaDriver ignore = MediaDriver.launch();
              Aeron aeron = Aeron.connect();
              Subscription subscription = aeron.addSubscription(CHANNEL, STREAM_ID);
              Publication publication = aeron.addPublication(CHANNEL, STREAM_ID)) {

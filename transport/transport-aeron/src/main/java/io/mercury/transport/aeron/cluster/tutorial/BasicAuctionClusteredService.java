@@ -198,7 +198,8 @@ public class BasicAuctionClusteredService implements ClusteredService
 
             final Auction auction = (Auction) o;
 
-            return bestPrice == auction.bestPrice && currentWinningCustomerId == auction.currentWinningCustomerId;
+            return bestPrice == auction.bestPrice
+                    && currentWinningCustomerId == auction.currentWinningCustomerId;
         }
 
         public int hashCode() {

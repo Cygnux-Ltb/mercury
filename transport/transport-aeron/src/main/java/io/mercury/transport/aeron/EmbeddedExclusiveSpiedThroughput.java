@@ -64,12 +64,13 @@ public class EmbeddedExclusiveSpiedThroughput {
 
         final RateReporter reporter = new RateReporter(TimeUnit.SECONDS.toNanos(1),
                 EmbeddedExclusiveSpiedThroughput::printRate);
-        final ExecutorService executor = Executors.newFixedThreadPool(2);
+
         final AtomicBoolean running = new AtomicBoolean(true);
 
         final MediaDriver.Context ctx = new MediaDriver.Context().spiesSimulateConnection(true);
 
-        try (MediaDriver ignore = MediaDriver.launch(ctx);
+        try (final ExecutorService executor = Executors.newFixedThreadPool(2);
+             MediaDriver ignore = MediaDriver.launch(ctx);
              Aeron aeron = Aeron.connect();
              Subscription subscription = aeron.addSubscription(CommonContext.SPY_PREFIX + CHANNEL, STREAM_ID);
              ExclusivePublication publication = aeron.addExclusivePublication(CHANNEL, STREAM_ID)) {

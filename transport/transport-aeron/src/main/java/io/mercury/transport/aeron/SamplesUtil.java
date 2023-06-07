@@ -56,8 +56,8 @@ public class SamplesUtil {
      * @param running         indication for loop.
      * @return loop function.
      */
-    public static Consumer<Subscription> subscriberLoop(final FragmentHandler fragmentHandler, final int limit,
-                                                        final AtomicBoolean running) {
+    public static Consumer<Subscription> subscriberLoop(final FragmentHandler fragmentHandler,
+                                                        final int limit, final AtomicBoolean running) {
         return subscriberLoop(fragmentHandler, limit, running, SampleConfiguration.newIdleStrategy());
     }
 
@@ -72,8 +72,9 @@ public class SamplesUtil {
      * @param idleStrategy    to use for loop.
      * @return loop function.
      */
-    public static Consumer<Subscription> subscriberLoop(final FragmentHandler fragmentHandler, final int limit,
-                                                        final AtomicBoolean running, final IdleStrategy idleStrategy) {
+    public static Consumer<Subscription> subscriberLoop(final FragmentHandler fragmentHandler,
+                                                        final int limit, final AtomicBoolean running,
+                                                        final IdleStrategy idleStrategy) {
         return (subscription) -> {
             final FragmentAssembler assembler = new FragmentAssembler(fragmentHandler);
             while (running.get()) {
@@ -93,8 +94,8 @@ public class SamplesUtil {
     public static FragmentHandler printAsciiMessage(final int streamId) {
         return (buffer, offset, length, header) -> {
             final String msg = buffer.getStringWithoutLengthAscii(offset, length);
-            System.out.printf("Message to stream %d from session %d (%d@%d) <<%s>>%n", streamId, header.sessionId(),
-                    length, offset, msg);
+            System.out.printf("Message to stream %d from session %d (%d@%d) <<%s>>%n",
+                    streamId, header.sessionId(), length, offset, msg);
         };
     }
 
@@ -114,11 +115,12 @@ public class SamplesUtil {
      *
      * @param channel   for the error.
      * @param streamId  for the error.
-     * @param sessionId for the error, if source.
+     * @param sessionId for the error, if sourced.
      * @param message   indicating what the error was.
      * @param cause     of the error.
      */
-    public static void printError(final String channel, final int streamId, final int sessionId, final String message,
+    public static void printError(final String channel, final int streamId,
+                                  final int sessionId, final String message,
                                   final HeaderFlyweight cause) {
         System.out.println(message);
     }
@@ -131,10 +133,10 @@ public class SamplesUtil {
      * @param totalMessages  being reported.
      * @param totalBytes     being reported.
      */
-    public static void printRate(final double messagesPerSec, final double bytesPerSec, final long totalMessages,
-                                 final long totalBytes) {
-        System.out.printf("%.04g msgs/sec, %.04g payload bytes/sec, totals %d messages %d MB%n", messagesPerSec,
-                bytesPerSec, totalMessages, totalBytes / (1024 * 1024));
+    public static void printRate(final double messagesPerSec, final double bytesPerSec,
+                                 final long totalMessages, final long totalBytes) {
+        System.out.printf("%.04g msgs/sec, %.04g payload bytes/sec, totals %d messages %d MB%n",
+                messagesPerSec, bytesPerSec, totalMessages, totalBytes / (1024 * 1024));
     }
 
     /**
@@ -143,9 +145,11 @@ public class SamplesUtil {
      * @param image that has been created.
      */
     public static void printAvailableImage(final Image image) {
-        final Subscription subscription = image.subscription();
-        System.out.printf("Available image on %s streamId=%d sessionId=%d from %s%n", subscription.channel(),
-                subscription.streamId(), image.sessionId(), image.sourceIdentity());
+        try (final Subscription subscription = image.subscription()) {
+            System.out.printf("Available image on %s streamId=%d sessionId=%d from %s%n",
+                    subscription.channel(), subscription.streamId(),
+                    image.sessionId(), image.sourceIdentity());
+        }
     }
 
     /**
@@ -154,9 +158,10 @@ public class SamplesUtil {
      * @param image that has gone inactive.
      */
     public static void printUnavailableImage(final Image image) {
-        final Subscription subscription = image.subscription();
-        System.out.printf("Unavailable image on %s streamId=%d sessionId=%d%n", subscription.channel(),
-                subscription.streamId(), image.sessionId());
+        try (final Subscription subscription = image.subscription()) {
+            System.out.printf("Unavailable image on %s streamId=%d sessionId=%d%n",
+                    subscription.channel(), subscription.streamId(), image.sessionId());
+        }
     }
 
     /**
@@ -172,7 +177,8 @@ public class SamplesUtil {
         }
 
         MappedByteBuffer mappedByteBuffer = null;
-        try (RandomAccessFile file = new RandomAccessFile(location, "r"); FileChannel channel = file.getChannel()) {
+        try (RandomAccessFile file = new RandomAccessFile(location, "r");
+             FileChannel channel = file.getChannel()) {
             mappedByteBuffer = channel.map(READ_ONLY, 0, channel.size());
         } catch (final IOException ex) {
             LangUtil.rethrowUnchecked(ex);

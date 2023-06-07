@@ -29,8 +29,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.LockSupport;
 
-import static io.mercury.transport.aeron.raw.Common.init;
-
 /**
  * Benchmark used to calculate latency of underlying system.
  *

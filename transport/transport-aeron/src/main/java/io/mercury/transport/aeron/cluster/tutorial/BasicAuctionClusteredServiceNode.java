@@ -67,16 +67,19 @@ public class BasicAuctionClusteredServiceNode
     // end::ports[]
 
     // tag::udp_channel[]
-    private static String udpChannel(final int nodeId, final String hostname, final int portOffset) {
+    public static String udpChannel(final int nodeId, final String hostname, final int portOffset) {
         final int port = calculatePort(nodeId, portOffset);
         return new ChannelUriStringBuilder().media("udp").termLength(TERM_LENGTH).endpoint(hostname + ":" + port)
                 .build();
     }
     // end::udp_channel[]
 
-    private static String logControlChannel(final int nodeId, final String hostname, final int portOffset) {
+    public static String logControlChannel(final int nodeId, final String hostname,
+                                           final int portOffset) {
         final int port = calculatePort(nodeId, portOffset);
-        return new ChannelUriStringBuilder().media("udp").termLength(TERM_LENGTH).controlMode("manual")
+        return new ChannelUriStringBuilder().media("udp")
+                .termLength(TERM_LENGTH)
+                .controlMode("manual")
                 .controlEndpoint(hostname + ":" + port).build();
     }
 

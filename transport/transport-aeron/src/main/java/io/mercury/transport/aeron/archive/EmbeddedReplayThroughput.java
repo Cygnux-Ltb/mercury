@@ -78,7 +78,8 @@ public class EmbeddedReplayThroughput extends EmbeddedReplayThroughputValue impl
     private final ArchivingMediaDriver archivingMediaDriver;
     private final Aeron aeron;
     private final AeronArchive aeronArchive;
-    private final UnsafeBuffer buffer = new UnsafeBuffer(allocateDirectAligned(MESSAGE_LENGTH, CACHE_LINE_LENGTH));
+    private final UnsafeBuffer buffer = new UnsafeBuffer(
+            allocateDirectAligned(MESSAGE_LENGTH, CACHE_LINE_LENGTH));
     private int publicationSessionId;
 
     /**

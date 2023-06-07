@@ -40,16 +40,16 @@
         <!-- <java.version>11</java.version> -->
         <!-- <maven.compiler.target>11</maven.compiler.target> -->
         <!-- <maven.compiler.source>11</maven.compiler.source> -->
-        <!-- Java 17 -->
+        <!-- Java 20 -->
         <java.version>20</java.version>
         <maven.compiler.target>20</maven.compiler.target>
         <maven.compiler.source>20</maven.compiler.source>
         <!-- Common library version -->
         <slf4j.version>1.7.36</slf4j.version>
         <junit.version>4.13.2</junit.version>
-        <jupiter.version>5.9.2</jupiter.version>
-        <netty.version>4.1.92.Final</netty.version>
-        <jackson.version>2.14.2</jackson.version>
+        <jupiter.version>5.9.3</jupiter.version>
+        <netty.version>4.1.93.Final</netty.version>
+        <jackson.version>2.15.2</jackson.version>
     </properties>
 
     <build>
@@ -77,7 +77,6 @@
         </plugins>
     </build>
 
-
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -93,19 +92,17 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- JUnit 4 -->
+            <!-- JUnit 4 - classic -->
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
-                <scope>test</scope>
             </dependency>
-            <!-- junit-jupiter of JUnit 5 -->
+            <!-- JUnit 5 - jupiter -->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
                 <version>${jupiter.version}</version>
-                <scope>test</scope>
             </dependency>
             <!-- JSR305 Annotations for Find bugs -->
             <dependency>

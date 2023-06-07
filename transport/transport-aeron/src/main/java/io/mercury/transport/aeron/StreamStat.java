@@ -47,6 +47,7 @@ import static io.aeron.driver.status.StreamCounter.labelName;
  * {@code <label-name>:<registration-id>:<position value>}
  */
 public class StreamStat {
+
     private final CountersReader counters;
 
     /**
@@ -80,8 +81,10 @@ public class StreamStat {
         final Map<StreamCompositeKey, List<StreamPosition>> streams = new HashMap<>();
 
         counters.forEach((counterId, typeId, keyBuffer, label) -> {
-            if ((typeId >= PUBLISHER_LIMIT_TYPE_ID && typeId <= RECEIVER_POS_TYPE_ID) || typeId == SENDER_LIMIT_TYPE_ID
-                    || typeId == PER_IMAGE_TYPE_ID || typeId == PUBLISHER_POS_TYPE_ID) {
+            if ((typeId >= PUBLISHER_LIMIT_TYPE_ID && typeId <= RECEIVER_POS_TYPE_ID)
+                    || typeId == SENDER_LIMIT_TYPE_ID
+                    || typeId == PER_IMAGE_TYPE_ID
+                    || typeId == PUBLISHER_POS_TYPE_ID) {
                 final StreamCompositeKey key = new StreamCompositeKey(keyBuffer.getInt(SESSION_ID_OFFSET),
                         keyBuffer.getInt(STREAM_ID_OFFSET), keyBuffer.getStringAscii(CHANNEL_OFFSET));
 
@@ -91,7 +94,6 @@ public class StreamStat {
                 streams.computeIfAbsent(key, (ignore) -> new ArrayList<>()).add(position);
             }
         });
-
         return streams;
     }
 
@@ -115,7 +117,8 @@ public class StreamStat {
                     .append(" channel=").append(key.channel()).append(" :");
 
             for (final StreamPosition streamPosition : entry.getValue()) {
-                builder.append(' ').append(labelName(streamPosition.typeId())).append(':').append(streamPosition.id())
+                builder.append(' ').append(labelName(streamPosition.typeId()))
+                        .append(':').append(streamPosition.id())
                         .append(':').append(streamPosition.value());
             }
 
@@ -128,56 +131,30 @@ public class StreamStat {
     /**
      * Composite key which identifies an Aeron stream of messages.
      */
-    public static class StreamCompositeKey {
-        private final int sessionId;
-        private final int streamId;
-        private final String channel;
+    public record StreamCompositeKey(
+            int sessionId,
+            int streamId,
+            String channel) {
 
-        public StreamCompositeKey(final int sessionId, final int streamId, final String channel) {
+        public StreamCompositeKey {
             Objects.requireNonNull(channel, "Channel cannot be null");
-
-            this.sessionId = sessionId;
-            this.streamId = streamId;
-            this.channel = channel;
-        }
-
-        public int sessionId() {
-            return sessionId;
-        }
-
-        public int streamId() {
-            return streamId;
-        }
-
-        public String channel() {
-            return channel;
         }
 
         public boolean equals(final Object o) {
-            if (this == o) {
+            if (this == o)
                 return true;
-            }
-
-            if (!(o instanceof StreamCompositeKey)) {
+            if (!(o instanceof StreamCompositeKey that))
                 return false;
-            }
-
-            final StreamCompositeKey that = (StreamCompositeKey) o;
-
-            return this.sessionId == that.sessionId && this.streamId == that.streamId
+            return this.sessionId == that.sessionId
+                    && this.streamId == that.streamId
                     && this.channel.equals(that.channel);
         }
 
-        public int hashCode() {
-            int result = sessionId;
-            result = 31 * result + streamId;
-            result = 31 * result + channel.hashCode();
-
-            return result;
-        }
-
         public String toString() {
-            return "StreamCompositeKey{" + "sessionId=" + sessionId + ", streamId=" + streamId + ", channel='" + channel
+            return "StreamCompositeKey{"
+                    + "sessionId=" + sessionId
+                    + ", streamId=" + streamId
+                    + ", channel='" + channel
                     + '\'' + '}';
         }
     }
@@ -185,16 +162,10 @@ public class StreamStat {
     /**
      * Represents a position within a particular stream of messages.
      */
-    public static class StreamPosition {
-        private final long id;
-        private final long value;
-        private final int typeId;
-
-        public StreamPosition(final long id, final long value, final int typeId) {
-            this.id = id;
-            this.value = value;
-            this.typeId = typeId;
-        }
+    public record StreamPosition(
+            long id,
+            long value,
+            int typeId) {
 
         /**
          * The identifier for the registered entity, such as publication or
@@ -203,6 +174,7 @@ public class StreamStat {
          * @return the identifier for the registered entity to which the counter
          * relates.
          */
+        @Override
         public long id() {
             return id;
         }
@@ -212,6 +184,7 @@ public class StreamStat {
          *
          * @return the value of the counter.
          */
+        @Override
         public long value() {
             return value;
         }
@@ -221,34 +194,34 @@ public class StreamStat {
          *
          * @return the type category of the counter for the stream position.
          */
+        @Override
         public int typeId() {
             return typeId;
         }
 
         public boolean equals(final Object o) {
-            if (this == o) {
+            if (this == o)
                 return true;
-            }
-
-            if (!(o instanceof StreamPosition)) {
+            if (!(o instanceof StreamPosition that))
                 return false;
-            }
-
-            final StreamPosition that = (StreamPosition) o;
-
-            return this.id == that.id && this.value == that.value && this.typeId == that.typeId;
+            return this.id == that.id
+                    && this.value == that.value
+                    && this.typeId == that.typeId;
         }
 
         public int hashCode() {
             int result = (int) (id ^ (id >>> 32));
             result = 31 * result + (int) (value ^ (value >>> 32));
             result = 31 * result + typeId;
-
             return result;
         }
 
         public String toString() {
-            return "StreamPosition{" + "id=" + id + ", value=" + value + ", typeId=" + typeId + '}';
+            return "StreamPosition{"
+                    + "id=" + id
+                    + ", value=" + value
+                    + ", typeId=" + typeId
+                    + '}';
         }
     }
 }

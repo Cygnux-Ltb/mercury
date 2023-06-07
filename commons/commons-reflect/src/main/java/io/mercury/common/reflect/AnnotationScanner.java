@@ -8,10 +8,8 @@ import java.lang.reflect.Method;
 
 public final class AnnotationScanner {
 
-    public static <A extends Annotation> ImmutableSet<Method> scanPackage(@Nonnull Class<A> annotation,
-                                                                          @Nonnull Package... packages) {
-
-
+    public static <A extends Annotation> ImmutableSet<Method> scanPackage(
+            @Nonnull Class<A> annotation, @Nonnull Package... packages) {
         return null;
     }
 

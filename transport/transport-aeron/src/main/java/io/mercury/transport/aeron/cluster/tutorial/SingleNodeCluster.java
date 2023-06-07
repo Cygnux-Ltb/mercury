@@ -146,7 +146,6 @@ public class SingleNodeCluster implements AutoCloseable {
 
         public void onTakeSnapshot(final ExclusivePublication snapshotPublication) {
             System.out.println("onTakeSnapshot messageCount=" + messageCount);
-
             buffer.putInt(0, messageCount);
             idleStrategy.reset();
             while (snapshotPublication.offer(buffer, 0, 4) < 0) {
@@ -161,8 +160,9 @@ public class SingleNodeCluster implements AutoCloseable {
         public void onTerminate(final Cluster cluster) {
         }
 
-        public void onNewLeadershipTermEvent(final long leadershipTermId, final long logPosition, final long timestamp,
-                                             final long termBaseLogPosition, final int leaderMemberId, final int logSessionId,
+        public void onNewLeadershipTermEvent(final long leadershipTermId, final long logPosition,
+                                             final long timestamp, final long termBaseLogPosition,
+                                             final int leaderMemberId, final int logSessionId,
                                              final TimeUnit timeUnit, final int appVersion) {
             System.out.println("onNewLeadershipTermEvent");
         }
@@ -170,6 +170,7 @@ public class SingleNodeCluster implements AutoCloseable {
         protected long serviceCorrelationId(final int correlationId) {
             return ((long) cluster.context().serviceId()) << 56 | correlationId;
         }
+
     }
 
     public SingleNodeCluster(final ClusteredService externalService, final boolean cleanStart) {

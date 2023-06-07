@@ -1,4 +1,4 @@
-package io.mercury.transport.aeron.sample;
+package com.aeroncookbook;
 
 import io.aeron.Aeron;
 import io.aeron.Publication;
@@ -11,32 +11,36 @@ import org.agrona.concurrent.UnsafeBuffer;
 
 import java.nio.ByteBuffer;
 
-public class IpcSample {
+public class Simple {
 
     public static void main(String[] args) {
-        var channel = "aeron:ipc";
+        final String channel = "aeron:ipc";
         final String message = "my message";
-        final IdleStrategy idle = new SleepingIdleStrategy();
-        final UnsafeBuffer unsafeBuffer = new UnsafeBuffer(ByteBuffer.allocate(128));
+        final IdleStrategy idleStrategy = new SleepingIdleStrategy();
+        final UnsafeBuffer unsafeBuffer = new UnsafeBuffer(ByteBuffer.allocate(256));
         try (MediaDriver driver = MediaDriver.launch();
              Aeron aeron = Aeron.connect();
-             Subscription sub = aeron.addSubscription(channel, 10);
-             Publication pub = aeron.addPublication(channel, 10)) {
+             Publication pub = aeron.addPublication(channel, 10);
+             Subscription sub = aeron.addSubscription(channel, 10)) {
+
             while (!pub.isConnected()) {
-                idle.idle();
+                idleStrategy.idle();
             }
+
             unsafeBuffer.putStringAscii(0, message);
             System.out.println("sending:" + message);
+
             while (pub.offer(unsafeBuffer) < 0) {
-                idle.idle();
+                idleStrategy.idle();
             }
+
             FragmentHandler handler = (buffer, offset, length, header) ->
                     System.out.println("received:" + buffer.getStringAscii(offset));
+
             while (sub.poll(handler, 1) <= 0) {
-                idle.idle();
+                idleStrategy.idle();
             }
         }
-
     }
 
 }

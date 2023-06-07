@@ -91,9 +91,11 @@ public class MultipleSubscribersWithFragmentAssembly {
      * @param image that has been created.
      */
     public static void eventAvailableImage(final Image image) {
-        final Subscription subscription = image.subscription();
-        System.out.format("new image on %s streamId %x sessionId %x from %s%n", subscription.channel(),
-                subscription.streamId(), image.sessionId(), image.sourceIdentity());
+        try (final Subscription subscription = image.subscription()) {
+            System.out.format("new image on %s streamId %x sessionId %x from %s%n",
+                    subscription.channel(), subscription.streamId(),
+                    image.sessionId(), image.sourceIdentity());
+        }
     }
 
     /**
@@ -102,9 +104,10 @@ public class MultipleSubscribersWithFragmentAssembly {
      * @param image that has gone inactive.
      */
     public static void eventUnavailableImage(final Image image) {
-        final Subscription subscription = image.subscription();
-        System.out.format("inactive image on %s streamId %d sessionId %x%n", subscription.channel(),
-                subscription.streamId(), image.sessionId());
+        try (final Subscription subscription = image.subscription()) {
+            System.out.format("inactive image on %s streamId %d sessionId %x%n",
+                    subscription.channel(), subscription.streamId(), image.sessionId());
+        }
     }
 
     /**

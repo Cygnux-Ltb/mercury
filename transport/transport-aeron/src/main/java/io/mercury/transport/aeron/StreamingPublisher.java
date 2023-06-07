@@ -38,6 +38,7 @@ import static org.agrona.BitUtil.SIZE_OF_LONG;
  * possible.
  */
 public class StreamingPublisher {
+
     private static final long NUMBER_OF_MESSAGES = SampleConfiguration.NUMBER_OF_MESSAGES;
     private static final long LINGER_TIMEOUT_MS = SampleConfiguration.LINGER_TIMEOUT_MS;
     private static final int STREAM_ID = SampleConfiguration.STREAM_ID;
@@ -45,8 +46,8 @@ public class StreamingPublisher {
     private static final boolean EMBEDDED_MEDIA_DRIVER = SampleConfiguration.EMBEDDED_MEDIA_DRIVER;
     private static final boolean RANDOM_MESSAGE_LENGTH = SampleConfiguration.RANDOM_MESSAGE_LENGTH;
     private static final String CHANNEL = SampleConfiguration.CHANNEL;
-    private static final UnsafeBuffer OFFER_BUFFER = new UnsafeBuffer(
-            BufferUtil.allocateDirectAligned(MESSAGE_LENGTH, BitUtil.CACHE_LINE_LENGTH));
+    private static final UnsafeBuffer OFFER_BUFFER = new UnsafeBuffer(BufferUtil
+            .allocateDirectAligned(MESSAGE_LENGTH, BitUtil.CACHE_LINE_LENGTH));
     private static final IntSupplier LENGTH_GENERATOR = composeLengthGenerator(RANDOM_MESSAGE_LENGTH, MESSAGE_LENGTH);
 
     private static volatile boolean printingActive = true;
@@ -107,8 +108,8 @@ public class StreamingPublisher {
                     reporter.onMessage(length);
                 }
 
-                System.out.println(
-                        "Done streaming. Back pressure ratio " + ((double) backPressureCount / NUMBER_OF_MESSAGES));
+                System.out.println("Done streaming. Back pressure ratio "
+                        + ((double) backPressureCount / NUMBER_OF_MESSAGES));
 
                 if (LINGER_TIMEOUT_MS > 0) {
                     System.out.println("Lingering for " + LINGER_TIMEOUT_MS + " milliseconds...");
@@ -127,16 +128,15 @@ public class StreamingPublisher {
     private static void printRate(final double messagesPerSec, final double bytesPerSec, final long totalFragments,
                                   final long totalBytes) {
         if (printingActive) {
-            System.out.format("%.02g msgs/sec, %.02g bytes/sec, totals %d messages %d MB%n", messagesPerSec,
-                    bytesPerSec, totalFragments, totalBytes / (1024 * 1024));
+            System.out.format("%.02g msgs/sec, %.02g bytes/sec, totals %d messages %d MB%n",
+                    messagesPerSec, bytesPerSec, totalFragments, totalBytes / (1024 * 1024));
         }
     }
 
-    private static IntSupplier composeLengthGenerator(final boolean random, final int max) {
-        if (random) {
+    public static IntSupplier composeLengthGenerator(final boolean random, final int max) {
+        if (random)
             return () -> ThreadLocalRandom.current().nextInt(SIZE_OF_LONG, max);
-        } else {
+        else
             return () -> max;
-        }
     }
 }

@@ -8,6 +8,8 @@ public interface ColumnDefinition {
 
     String DECIMAL_19_4 = "DECIMAL(19,4)";
 
+    String DECIMAL_19_6 = "DECIMAL(19,6)";
+
     String DECIMAL_19_8 = "DECIMAL(19,8)";
 
     String DATETIME = "DATETIME";

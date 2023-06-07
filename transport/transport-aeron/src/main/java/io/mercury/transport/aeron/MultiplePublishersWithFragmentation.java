@@ -18,8 +18,9 @@ package io.mercury.transport.aeron;
 import io.aeron.Aeron;
 import io.aeron.Publication;
 import org.agrona.BitUtil;
-import org.agrona.BufferUtil;
 import org.agrona.concurrent.UnsafeBuffer;
+
+import static org.agrona.BufferUtil.allocateDirectAligned;
 
 /**
  * A publisher application with multiple publications which send fragmented
@@ -31,13 +32,14 @@ import org.agrona.concurrent.UnsafeBuffer;
  * {@code -Daeron.sample.channel=aeron:udp?endpoint=localhost:5555 -Daeron.sample.streamId=20}
  */
 public class MultiplePublishersWithFragmentation {
+
     private static final int STREAM_ID_1 = SampleConfiguration.STREAM_ID;
     private static final int STREAM_ID_2 = SampleConfiguration.STREAM_ID + 1;
     private static final String CHANNEL = SampleConfiguration.CHANNEL;
     private static final UnsafeBuffer BUFFER_1 = new UnsafeBuffer(
-            BufferUtil.allocateDirectAligned(10000, BitUtil.CACHE_LINE_LENGTH));
+            allocateDirectAligned(10000, BitUtil.CACHE_LINE_LENGTH));
     private static final UnsafeBuffer BUFFER_2 = new UnsafeBuffer(
-            BufferUtil.allocateDirectAligned(9000, BitUtil.CACHE_LINE_LENGTH));
+            allocateDirectAligned(9000, BitUtil.CACHE_LINE_LENGTH));
 
     /**
      * Main method for launching the process.
@@ -45,8 +47,9 @@ public class MultiplePublishersWithFragmentation {
      * @param args passed to the process.
      */
     public static void main(final String[] args) {
-        System.out
-                .println("Publishing to " + CHANNEL + " on stream id " + STREAM_ID_1 + " and stream id " + STREAM_ID_2);
+        System.out.println("Publishing to " + CHANNEL
+                + " on stream id " + STREAM_ID_1
+                + " and stream id " + STREAM_ID_2);
 
         try (Aeron aeron = Aeron.connect();
              Publication publication1 = aeron.addPublication(CHANNEL, STREAM_ID_1);
@@ -71,17 +74,18 @@ public class MultiplePublishersWithFragmentation {
                             j++;
                             offerStatus1 = true;
                             System.out.println("Successfully sent data on stream id " + STREAM_ID_1
-                                    + " and data length " + BUFFER_1.capacity() + " at offset " + result1);
+                                    + " and data length " + BUFFER_1.capacity()
+                                    + " at offset " + result1);
                         } else {
                             if (result1 == Publication.BACK_PRESSURED) {
-                                System.out.println(" Offer failed due to back pressure for stream id " + STREAM_ID_1);
+                                System.out.println(" Offer failed due to back pressure for stream id "
+                                        + STREAM_ID_1);
                             } else if (result1 == Publication.NOT_CONNECTED) {
                                 System.out.println(" Offer failed because publisher is not yet "
                                         + "connected to subscriber for stream id " + STREAM_ID_1);
                             } else {
                                 System.out.println(" Offer failed due to unexpected reason: " + result1);
                             }
-
                             offerStatus1 = false;
                         }
                     }
@@ -108,8 +112,8 @@ public class MultiplePublishersWithFragmentation {
                     }
                 }
             }
-
-            System.out.println("Done sending total messages for stream id " + STREAM_ID_1 + " = " + (j - 1)
+            System.out.println("Done sending total messages for stream id "
+                    + STREAM_ID_1 + " = " + (j - 1)
                     + " and stream id " + STREAM_ID_2 + " = " + (k - 1));
         }
     }

@@ -11,8 +11,6 @@
     <artifactId>transport-netty</artifactId>
     <name>transport-netty</name>
 
-    <packaging>jar</packaging>
-
     <dependencies>
         <dependency>
             <groupId>io.mercury</groupId>
@@ -80,9 +78,9 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.activation</groupId>
-            <artifactId>activation</artifactId>
-            <version>1.1.1</version>
+            <groupId>jakarta.activation</groupId>
+            <artifactId>jakarta.activation-api</artifactId>
+            <version>2.1.2</version>
         </dependency>
     </dependencies>
 

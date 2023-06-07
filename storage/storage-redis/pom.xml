@@ -10,15 +10,12 @@
 
     <artifactId>storage-redis</artifactId>
 
-    <properties>
-    </properties>
-
     <dependencies>
         <!-- Jedis is a blazingly small and sane Redis java client. -->
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
-            <version>4.3.2</version>
+            <version>4.4.1</version>
         </dependency>
 
     </dependencies>
