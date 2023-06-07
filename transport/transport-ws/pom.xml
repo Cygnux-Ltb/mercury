@@ -10,10 +10,6 @@
 
     <artifactId>transport-ws</artifactId>
     <name>transport-ws</name>
-    <packaging>jar</packaging>
-
-    <properties>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -28,7 +24,7 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.15.4</version>
+            <version>1.16.1</version>
         </dependency>
 
         <!-- Netty Component -->

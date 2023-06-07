@@ -11,8 +11,6 @@
     <artifactId>transport-api</artifactId>
     <name>transport-api</name>
 
-    <packaging>jar</packaging>
-
     <dependencies>
         <dependency>
             <groupId>io.mercury</groupId>

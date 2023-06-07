@@ -32,6 +32,7 @@ import java.util.Date;
  * described in {@link CncFileDescriptor}.
  */
 public class ErrorStat {
+    
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
 
     /**
@@ -51,8 +52,10 @@ public class ErrorStat {
         System.out.format("%n%d distinct errors observed.%n", distinctErrorCount);
     }
 
-    private static void accept(final int observationCount, final long firstObservationTimestamp,
-                               final long lastObservationTimestamp, final String encodedException) {
+    private static void accept(final int observationCount,
+                               final long firstObservationTimestamp,
+                               final long lastObservationTimestamp,
+                               final String encodedException) {
         System.out.format("***%n%d observations from %s to %s for:%n %s%n", observationCount,
                 DATE_FORMAT.format(new Date(firstObservationTimestamp)),
                 DATE_FORMAT.format(new Date(lastObservationTimestamp)), encodedException);

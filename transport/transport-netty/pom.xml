@@ -10,7 +10,6 @@
 
     <artifactId>transport-netty</artifactId>
     <name>transport-netty</name>
-    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

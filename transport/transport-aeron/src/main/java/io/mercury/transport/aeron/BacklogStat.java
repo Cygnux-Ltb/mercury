@@ -84,8 +84,10 @@ public class BacklogStat {
         final Map<StreamCompositeKey, StreamBacklog> streams = new HashMap<>();
 
         counters.forEach((counterId, typeId, keyBuffer, label) -> {
-            if ((typeId >= PUBLISHER_LIMIT_TYPE_ID && typeId <= RECEIVER_POS_TYPE_ID) || typeId == SENDER_LIMIT_TYPE_ID
-                    || typeId == PER_IMAGE_TYPE_ID || typeId == PUBLISHER_POS_TYPE_ID) {
+            if ((typeId >= PUBLISHER_LIMIT_TYPE_ID && typeId <= RECEIVER_POS_TYPE_ID)
+                    || typeId == SENDER_LIMIT_TYPE_ID
+                    || typeId == PER_IMAGE_TYPE_ID
+                    || typeId == PUBLISHER_POS_TYPE_ID) {
                 final StreamCompositeKey key = new StreamCompositeKey(keyBuffer.getInt(SESSION_ID_OFFSET),
                         keyBuffer.getInt(STREAM_ID_OFFSET), keyBuffer.getStringAscii(CHANNEL_OFFSET));
 

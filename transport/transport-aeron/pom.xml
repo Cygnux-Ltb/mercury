@@ -13,7 +13,7 @@
 
     <properties>
         <aeron.version>1.41.3</aeron.version>
-        <byte-buddy.version>1.14.4</byte-buddy.version>
+        <byte-buddy.version>1.14.5</byte-buddy.version>
     </properties>
 
     <repositories>
@@ -30,7 +30,7 @@
             <artifactId>transport-api</artifactId>
         </dependency>
 
-        <!-- High performance primitives and utility library.  -->
+        <!-- High performance primitives and utility library. -->
         <dependency>
             <groupId>org.agrona</groupId>
             <artifactId>agrona</artifactId>

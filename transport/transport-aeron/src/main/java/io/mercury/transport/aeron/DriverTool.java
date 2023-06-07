@@ -52,7 +52,6 @@ public class DriverTool {
 
         if (0 != args.length) {
             checkForHelp(args);
-
             if (args[0].equals("pid")) {
                 printPidOnly = true;
             } else if (args[0].equals("terminate")) {

@@ -35,10 +35,10 @@ public abstract class GeneralNettyHandler extends ChannelInboundHandlerAdapter {
         ctx.close();
     }
 
-    protected byte[] getRecvBytes(ByteBuf byteBuf) {
-        byte[] bytes = new byte[byteBuf.readableBytes()];
-        byteBuf.retain().readBytes(bytes);
-        byteBuf.release();
+    protected byte[] getRecvBytes(ByteBuf buf) {
+        byte[] bytes = new byte[buf.readableBytes()];
+        buf.retain().readBytes(bytes);
+        buf.release();
         return bytes;
     }
 
