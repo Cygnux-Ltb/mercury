@@ -125,13 +125,6 @@
                 <version>1.8.0</version>
             </dependency>
 
-            <!-- snappy-java: A fast compression/decompression library -->
-            <dependency>
-                <groupId>org.xerial.snappy</groupId>
-                <artifactId>snappy-java</artifactId>
-                <version>1.1.10.0</version>
-            </dependency>
-
             <!-- Zero-allocation implementations of fast non-cryptographic hash functions
                 for byte sequences or blocks of memory -->
             <dependency>
@@ -145,14 +138,6 @@
                 <groupId>io.netty</groupId>
                 <artifactId>netty-buffer</artifactId>
                 <version>${netty.version}</version>
-            </dependency>
-
-            <!-- JNI bindings for Zstd native library that provides fast and high
-                compression lossless algorithm for Java and all JVM languages -->
-            <dependency>
-                <groupId>com.github.luben</groupId>
-                <artifactId>zstd-jni</artifactId>
-                <version>1.5.5-3</version>
             </dependency>
 
             <!-- Date and time library to replace JDK date handling -->

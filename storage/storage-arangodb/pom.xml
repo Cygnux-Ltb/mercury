@@ -10,7 +10,6 @@
 
     <artifactId>storage-arangodb</artifactId>
     <name>storage-arangodb</name>
-    <packaging>jar</packaging>
 
     <build>
         <plugins>
@@ -36,7 +35,7 @@
         <dependency>
             <groupId>com.arangodb</groupId>
             <artifactId>arangodb-java-driver</artifactId>
-            <version>7.0.0</version>
+            <version>7.1.0</version>
             <exclusions>
                 <exclusion>
                     <artifactId>slf4j-api</artifactId>

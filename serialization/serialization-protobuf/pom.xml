@@ -43,14 +43,14 @@
             </exclusions>
         </dependency>
 
-        <!-- protobuf serialization for mutable messages -->
+        <!-- protobuf is serialization for mutable messages -->
         <dependency>
             <groupId>io.protostuff</groupId>
             <artifactId>protostuff-core</artifactId>
             <version>${protostuff.version}</version>
         </dependency>
 
-        <!-- protobuf serialization for pre-existing objects -->
+        <!-- protobuf is serialization for pre-existing objects -->
         <dependency>
             <groupId>io.protostuff</groupId>
             <artifactId>protostuff-runtime</artifactId>
