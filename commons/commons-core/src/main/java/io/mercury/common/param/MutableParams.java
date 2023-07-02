@@ -31,7 +31,7 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     private final MutableIntDoubleMap doubleParams = MutableMaps.newIntDoubleHashMap();
 
     private final MutableIntObjectMap<String> stringParams = MutableMaps.newIntObjectHashMap();
-    
+
     private final MutableIntObjectMap<Temporal> temporalParams = MutableMaps.newIntObjectHashMap();
 
     private final MutableSet<K> keys = MutableSets.newUnifiedSet();
