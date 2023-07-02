@@ -15,12 +15,12 @@ public interface ResultSetProcessor extends RowProcessor {
     }
 
     @Override
-    default Map<String, Object> toMap(ResultSet rs) throws SQLException {
+    default Map<String, Object> toMap(ResultSet rs) {
         throw new UnsupportedOperationException("Unsupported toMap(ResultSet) function");
     }
 
     @Override
-    default <T> T toBean(ResultSet rs, Class<? extends T> type) throws SQLException {
+    default <T> T toBean(ResultSet rs, Class<? extends T> type) {
         throw new UnsupportedOperationException("Unsupported toArray(ResultSet, Class) function");
     }
 

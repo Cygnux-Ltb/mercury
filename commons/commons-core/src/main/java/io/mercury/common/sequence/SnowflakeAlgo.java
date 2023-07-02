@@ -95,7 +95,8 @@ public final class SnowflakeAlgo {
      * @param ownerId int
      * @param start   LocalDate
      */
-    public SnowflakeAlgo(int ownerId, @Nonnull LocalDate start) {
+    public SnowflakeAlgo(int ownerId,
+                         @Nonnull final LocalDate start) {
         this(ownerId, start, UTC);
     }
 
@@ -104,8 +105,13 @@ public final class SnowflakeAlgo {
      * @param start   LocalDate
      * @param zoneId  ZoneId
      */
-    public SnowflakeAlgo(int ownerId, @Nullable LocalDate start, @Nullable ZoneId zoneId) {
-        this(ownerId, start == null ? EPOCH_ZERO : ZonedDateTime.of(start, MIN, zoneId == null ? UTC : zoneId));
+    public SnowflakeAlgo(int ownerId,
+                         @Nullable final LocalDate start,
+                         @Nullable final ZoneId zoneId) {
+        this(ownerId,
+                start == null ? EPOCH_ZERO :
+                        ZonedDateTime.of(start, MIN,
+                                zoneId == null ? UTC : zoneId));
     }
 
     /**

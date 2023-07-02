@@ -96,7 +96,7 @@
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-http_2.13</artifactId>
-            <version>10.5.0</version>
+            <version>10.5.2</version>
             <exclusions>
                 <exclusion>
                     <artifactId>scala-library</artifactId>

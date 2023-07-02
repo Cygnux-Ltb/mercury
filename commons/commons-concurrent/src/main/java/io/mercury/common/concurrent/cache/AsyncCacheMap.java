@@ -9,7 +9,7 @@ import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.function.Consumer;
 
-import static io.mercury.common.concurrent.queue.ScQueueByJct.mpscQueue;
+import static io.mercury.common.concurrent.queue.ScQueueWithJCT.mpscQueue;
 import static io.mercury.common.util.StringSupport.isNullOrEmpty;
 
 /**

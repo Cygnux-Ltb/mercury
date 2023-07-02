@@ -20,12 +20,12 @@ import static java.lang.Math.max;
  * @param <E> Single consumer queue use jctools implements
  * @author yellow013
  */
-public abstract class ScQueueByJct<E> extends ScQueue<E> implements Runnable {
+public abstract class ScQueueWithJCT<E> extends ScQueue<E> implements Runnable {
 
     /**
      * Logger
      */
-    private static final Logger log = Log4j2LoggerFactory.getLogger(ScQueueByJct.class);
+    private static final Logger log = Log4j2LoggerFactory.getLogger(ScQueueWithJCT.class);
 
     /**
      * internal queue
@@ -91,8 +91,8 @@ public abstract class ScQueueByJct<E> extends ScQueue<E> implements Runnable {
      * @param strategy    WaitingStrategy
      * @param sleepMillis long
      */
-    protected ScQueueByJct(Processor<E> processor, int capacity,
-                           WaitingStrategy strategy, long sleepMillis) {
+    protected ScQueueWithJCT(Processor<E> processor, int capacity,
+                             WaitingStrategy strategy, long sleepMillis) {
         super(processor);
         this.queue = createQueue(capacity);
         this.strategy = strategy;
@@ -165,11 +165,11 @@ public abstract class ScQueueByJct<E> extends ScQueue<E> implements Runnable {
      * @param <E> Single Producer Single Consumer Queue
      * @author yellow013
      */
-    private static final class SpscQueueByJct<E> extends ScQueueByJct<E> {
+    private static final class SpscQueueWithJCT<E> extends ScQueueWithJCT<E> {
 
-        private SpscQueueByJct(String queueName, int capacity, StartMode mode,
-                               WaitingStrategy strategy, long sleepMillis,
-                               Processor<E> processor) {
+        private SpscQueueWithJCT(String queueName, int capacity, StartMode mode,
+                                 WaitingStrategy strategy, long sleepMillis,
+                                 Processor<E> processor) {
             super(processor, max(capacity, 16), strategy, sleepMillis);
             super.name = isNullOrEmpty(queueName)
                     ? "JctSpscQueue-T[" + getCurrentThreadName() + "]"
@@ -193,11 +193,11 @@ public abstract class ScQueueByJct<E> extends ScQueue<E> implements Runnable {
      * @param <E> Multiple Producer Single Consumer Queue
      * @author yellow013
      */
-    private static final class MpscQueueByJct<E> extends ScQueueByJct<E> {
+    private static final class MpscQueueWithJCT<E> extends ScQueueWithJCT<E> {
 
-        private MpscQueueByJct(String queueName, int capacity, StartMode mode,
-                               WaitingStrategy strategy, long sleepMillis,
-                               Processor<E> processor) {
+        private MpscQueueWithJCT(String queueName, int capacity, StartMode mode,
+                                 WaitingStrategy strategy, long sleepMillis,
+                                 Processor<E> processor) {
             super(processor, max(capacity, 16), strategy, sleepMillis);
             super.name = isNullOrEmpty(queueName)
                     ? "JctMpscQueue-T[" + getCurrentThreadName() + "]"
@@ -260,10 +260,10 @@ public abstract class ScQueueByJct<E> extends ScQueue<E> implements Runnable {
             return this;
         }
 
-        public final <E> ScQueueByJct<E> process(Processor<E> processor) {
+        public final <E> ScQueueWithJCT<E> process(Processor<E> processor) {
             return switch (type) {
-                case SPSC -> new SpscQueueByJct<>(queueName, capacity, mode, strategy, sleepMillis, processor);
-                case MPSC -> new MpscQueueByJct<>(queueName, capacity, mode, strategy, sleepMillis, processor);
+                case SPSC -> new SpscQueueWithJCT<>(queueName, capacity, mode, strategy, sleepMillis, processor);
+                case MPSC -> new MpscQueueWithJCT<>(queueName, capacity, mode, strategy, sleepMillis, processor);
                 default -> throw new IllegalArgumentException("Error QueueType value[" + type + "]");
             };
         }

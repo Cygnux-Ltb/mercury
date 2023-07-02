@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import io.mercury.common.concurrent.queue.ScQueue;
 import org.slf4j.Logger;
 
-import io.mercury.common.concurrent.queue.ScQueueByJct;
+import io.mercury.common.concurrent.queue.ScQueueWithJCT;
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.transport.api.Sender;
@@ -83,7 +83,7 @@ public final class SocketSender extends TransportComponent implements Sender<byt
         }
     }
 
-    private final ScQueue<byte[]> innerQueue = ScQueueByJct
+    private final ScQueue<byte[]> innerQueue = ScQueueWithJCT
             .mpscQueue(getName() + "-InnerQueue")
             .capacity(512).process(this::processSendQueue);
 
