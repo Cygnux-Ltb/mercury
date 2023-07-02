@@ -2,7 +2,7 @@ package io.mercury.persistence.rdb;
 
 public interface ColumnDefinition {
 
-    String UID = "uid";
+    String UID = "UID";
 
     String DECIMAL_19_2 = "DECIMAL(19,2)";
 
