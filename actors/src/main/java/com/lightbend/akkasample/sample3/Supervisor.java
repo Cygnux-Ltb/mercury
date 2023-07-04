@@ -12,8 +12,9 @@ import static akka.actor.SupervisorStrategy.escalate;
 
 public class Supervisor extends AbstractLoggingActor {
 
-    public static final OneForOneStrategy STRATEGY = new OneForOneStrategy(10, Duration.create("10 seconds"),
-            DeciderBuilder.match(RuntimeException.class, ex -> (SupervisorStrategy.Directive) escalate()).build());
+    public static final OneForOneStrategy STRATEGY = new OneForOneStrategy(
+            10, Duration.create("10 seconds"),
+            DeciderBuilder.match(RuntimeException.class, ex -> escalate()).build());
 
     final ActorRef child = getContext().actorOf(NonTrustWorthyChild.props(), "child");
 
@@ -32,6 +33,8 @@ public class Supervisor extends AbstractLoggingActor {
 
     @Override
     public Receive createReceive() {
-        return receiveBuilder().matchAny(any -> child.forward(any, getContext())).build();
+        return receiveBuilder()
+                .matchAny(any -> child.forward(any, getContext()))
+                .build();
     }
 }

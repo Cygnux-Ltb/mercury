@@ -30,7 +30,9 @@ public class NonTrustWorthyChild extends AbstractLoggingActor {
 
     @Override
     public Receive createReceive() {
-        return receiveBuilder().match(Command.class, this::onCommand).build();
+        return receiveBuilder()
+                .match(Command.class, this::onCommand)
+                .build();
     }
 
 }
