@@ -41,8 +41,6 @@ public class App {
 
         public Alarm(String password) {
             this.password = password;
-
-
         }
 
         private void onEnable(Enable enable) {
@@ -73,10 +71,13 @@ public class App {
 
         @Override
         public Receive createReceive() {
-            enabled = receiveBuilder().match(Activity.class, this::onActivity).match(Disable.class, this::onDisable)
+            enabled = receiveBuilder()
+                    .match(Activity.class, this::onActivity)
+                    .match(Disable.class, this::onDisable)
                     .build();
-
-            disabled = receiveBuilder().match(Enable.class, this::onEnable).build();
+            disabled = receiveBuilder()
+                    .match(Enable.class, this::onEnable)
+                    .build();
             return null;
         }
     }

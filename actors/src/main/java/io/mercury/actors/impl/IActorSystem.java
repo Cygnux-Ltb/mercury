@@ -315,7 +315,6 @@ public class IActorSystem implements io.mercury.actors.IActorSystem {
 
         @Override
         public <R> void ask(TernaryConsumer<I, T, Consumer<R>> action, Consumer<Map<I, R>> result) {
-
             Map<I, R> map = new ConcurrentHashMap<>();
             for (I id : ids) {
                 IActorRef<T> actor = IActorSystem.this.<T>actorBuilder()
