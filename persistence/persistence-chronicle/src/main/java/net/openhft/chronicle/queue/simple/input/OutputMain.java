@@ -10,20 +10,19 @@ import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
  */
 public class OutputMain {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		String path = "queue";
-		RollingChronicleQueue queue = SingleChronicleQueueBuilder.binary(path).build();
-		ExcerptTailer tailer = queue.createTailer();
-
-		while (true) {
-			String text = tailer.readText();
-			if (text == null) {
-				Jvm.pause(10);
-			} else {
-				System.out.println(text);
-			}
-
-		}
-	}
+        String path = "queue";
+        try (RollingChronicleQueue queue = SingleChronicleQueueBuilder.binary(path).build()) {
+            ExcerptTailer tailer = queue.createTailer();
+            while (true) {
+                String text = tailer.readText();
+                if (text == null) {
+                    Jvm.pause(10);
+                } else {
+                    System.out.println(text);
+                }
+            }
+        }
+    }
 }

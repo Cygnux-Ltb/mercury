@@ -20,7 +20,7 @@ import java.time.ZonedDateTime;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import static io.mercury.common.datetime.DateTimeUtil.formatDateTime;
+import static io.mercury.common.datetime.DateTimeUtil.fmtDateTime;
 import static io.mercury.common.datetime.pattern.DateTimePattern.YY_MM_DD_HH_MM_SS_SSS;
 import static io.mercury.common.thread.SleepSupport.sleep;
 import static io.mercury.common.thread.ThreadSupport.startNewThread;
@@ -177,7 +177,7 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
 
     @Override
     public void run() {
-        logger.info("ChronicleReader -> [{}] is running at [{}]", getReaderName(), formatDateTime(YY_MM_DD_HH_MM_SS_SSS));
+        logger.info("ChronicleReader -> [{}] is running at [{}]", getReaderName(), fmtDateTime(YY_MM_DD_HH_MM_SS_SSS));
         if (params.getDelayReadTime() > 0)
             sleep(params.getDelayReadUnit(), params.getDelayReadTime());
         boolean waitingData = params.isWaitingData();
@@ -187,7 +187,7 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
         for (; ; ) {
             if (isClose) {
                 logger.info("ChronicleReader -> [{}] is closed, execute exit function at [{}]", getReaderName(),
-                        formatDateTime(YY_MM_DD_HH_MM_SS_SSS));
+                        fmtDateTime(YY_MM_DD_HH_MM_SS_SSS));
                 exit();
                 break;
             }
@@ -197,7 +197,7 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
             } catch (ChronicleReadException e) {
                 if (params.isReadFailLogging())
                     logger.error("ChronicleReader -> [{}] call next throw exception: [{}] at [{}]", getReaderName(),
-                            e.getMessage(), formatDateTime(YY_MM_DD_HH_MM_SS_SSS), e);
+                            e.getMessage(), fmtDateTime(YY_MM_DD_HH_MM_SS_SSS), e);
                 if (params.isReadFailCrash())
                     throw e;
             }
@@ -230,7 +230,7 @@ public abstract class AbstractChronicleReader<OUT> extends CloseableChronicleAcc
                 exitTask.run();
 
         }
-        logger.info("ChronicleReader -> [{}] running exit at {}", getReaderName(), formatDateTime(YY_MM_DD_HH_MM_SS_SSS));
+        logger.info("ChronicleReader -> [{}] running exit at {}", getReaderName(), fmtDateTime(YY_MM_DD_HH_MM_SS_SSS));
     }
 
     @Override
