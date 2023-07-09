@@ -29,9 +29,9 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
         Asserter.nonNull(serializer, "serializer");
         this.serializer = serializer;
         String addr = cfg.getAddr().toString();
-        if (socket.connect(addr))
+        if (socket.connect(addr)) {
             log.info("ZmqSender connected addr -> {}", addr);
-        else {
+        } else {
             log.error("ZmqSender unable to connect addr -> {}", addr);
             throw new ZmqConnectionException(addr);
         }

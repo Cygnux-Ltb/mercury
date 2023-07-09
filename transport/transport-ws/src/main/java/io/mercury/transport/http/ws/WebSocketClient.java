@@ -19,9 +19,6 @@ import static io.mercury.transport.http.AsyncHttpClient.AHC;
 
 public final class WebSocketClient {
 
-
-
-
     private static final Logger log = Log4j2LoggerFactory.getLogger(WebSocketClient.class);
 
     /**
@@ -52,16 +49,11 @@ public final class WebSocketClient {
             WebSocket webSocket = AHC.prepareGet(uri)
                     .execute(new Builder().addWebSocketListener(
                             new WebSocketListenerImpl(
-                                    // WebSocket地址
-                                    uri,
-                                    // [打开/关闭] 连接处理函数
-                                    openHandler, closeHandler,
-                                    // [Ping/Pong] 帧处理函数
-                                    pingFrameHandler, pongFrameHandler,
-                                    // [二进制/文本] 帧处理函数
-                                    binaryFrameHandler, textFrameHandler,
-                                    // 异常处理函数
-                                    throwableHandler
+                                    uri, // WebSocket地址
+                                    openHandler, closeHandler, // [打开/关闭] 连接处理函数
+                                    pingFrameHandler, pongFrameHandler, // [Ping/Pong] 帧处理函数
+                                    binaryFrameHandler, textFrameHandler, // [二进制/文本] 帧处理函数
+                                    throwableHandler // 异常处理函数
                             )).build())
                     .get();
             log.info("Ws uri -> {}, Open==[{}]", uri, webSocket.isOpen());
@@ -72,8 +64,7 @@ public final class WebSocketClient {
 
 
     record WebSocketListenerImpl(
-            // WebSocket地址
-            String uri,
+            String uri, // WebSocket地址
             // [打开/关闭] 连接处理函数
             WsOpenHandler openHandler,
             WsCloseHandler closeHandler,
@@ -84,14 +75,14 @@ public final class WebSocketClient {
             WsBinaryFrameHandler binaryFrameHandler,
             WsTextFrameHandler textFrameHandler,
             // 异常处理函数
-            WsThrowableHandler throwableHandler)
-            implements WebSocketListener {
+            WsThrowableHandler throwableHandler) implements WebSocketListener {
 
         @Override
         public void onOpen(WebSocket webSocket) {
             if (openHandler != null)
                 openHandler.handle(webSocket);
             else
+                // TODO
                 log.warn("Connect uri -> {}, WsOpenHandler is null", uri);
         }
 
@@ -100,6 +91,7 @@ public final class WebSocketClient {
             if (closeHandler != null)
                 closeHandler.handle(webSocket, code, reason);
             else
+                // TODO
                 log.warn("");
         }
 
@@ -108,6 +100,7 @@ public final class WebSocketClient {
             if (pingFrameHandler != null)
                 pingFrameHandler.handle(payload);
             else
+                // TODO
                 log.warn("");
         }
 
@@ -116,6 +109,7 @@ public final class WebSocketClient {
             if (pongFrameHandler != null)
                 pongFrameHandler.handle(payload);
             else
+                // TODO
                 log.warn("");
         }
 
@@ -124,6 +118,7 @@ public final class WebSocketClient {
             if (binaryFrameHandler != null)
                 binaryFrameHandler.handle(payload, finalFragment, rsv);
             else
+                // TODO
                 log.warn("");
         }
 
@@ -132,6 +127,7 @@ public final class WebSocketClient {
             if (textFrameHandler != null)
                 textFrameHandler.handle(payload, finalFragment, rsv);
             else
+                // TODO
                 log.warn("");
         }
 
@@ -140,6 +136,7 @@ public final class WebSocketClient {
             if (throwableHandler != null)
                 throwableHandler.handle(t);
             else
+                // TODO
                 log.error("");
         }
 

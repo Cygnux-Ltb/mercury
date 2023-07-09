@@ -16,10 +16,12 @@ public interface WebSocketHandler {
     }
 
     @FunctionalInterface
-    interface WsPingFrameHandler extends Handler<byte[]> {    }
+    interface WsPingFrameHandler extends Handler<byte[]> {
+    }
 
     @FunctionalInterface
-    interface WsPongFrameHandler extends Handler<byte[]> {    }
+    interface WsPongFrameHandler extends Handler<byte[]> {
+    }
 
     @FunctionalInterface
     interface WsBinaryFrameHandler {
