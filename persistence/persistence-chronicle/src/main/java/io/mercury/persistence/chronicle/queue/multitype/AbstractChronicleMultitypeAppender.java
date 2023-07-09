@@ -1,6 +1,6 @@
 package io.mercury.persistence.chronicle.queue.multitype;
 
-import static io.mercury.common.datetime.DateTimeUtil.formatDateTime;
+import static io.mercury.common.datetime.DateTimeUtil.fmtDateTime;
 import static io.mercury.common.datetime.pattern.DateTimePattern.YY_MM_DD_HH_MM_SS_SSS;
 
 import java.util.function.Supplier;
@@ -105,7 +105,7 @@ public abstract class AbstractChronicleMultitypeAppender<E extends Envelope, IN>
             }
         } else {
             logger.error("MultitypeAppender -> [{}] Default envelope is null, Thread exit at {}",
-                    getAppenderName(), formatDateTime(YY_MM_DD_HH_MM_SS_SSS));
+                    getAppenderName(), fmtDateTime(YY_MM_DD_HH_MM_SS_SSS));
         }
     }
 

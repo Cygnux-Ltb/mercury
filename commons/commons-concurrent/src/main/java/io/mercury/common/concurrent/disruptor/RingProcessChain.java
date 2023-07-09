@@ -225,7 +225,7 @@ public class RingProcessChain<E, I> extends AbstractRingBuffer<E, I> {
                 waitStrategy = handlersMap.stream().mapToInt(List::size).sum() > availableProcessors() ? Sleeping.get()
                         : Yielding.get();
             if (StringSupport.isNullOrEmpty(name))
-                name = "RingProcessChain-" + YYYYMMDD_L_HHMMSSSSS.format(LocalDateTime.now());
+                name = "RingProcessChain-" + YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now());
             return new RingProcessChain<>(name, size, eventFactory, producerType, waitStrategy, mode, eventTranslator,
                     handlersMap);
         }

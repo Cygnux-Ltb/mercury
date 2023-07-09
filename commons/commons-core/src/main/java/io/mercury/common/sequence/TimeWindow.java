@@ -204,8 +204,8 @@ public class TimeWindow implements Serial<TimeWindow> {
     @Override
     public String toString() {
         if (cache == null)
-            cache = epochSecond + " -> [" + offset + "][" + YYYY_MM_DD_HH_MM_SS.format(start) + " - "
-                    + YYYY_MM_DD_HH_MM_SS.format(end) + "][" + duration.getSeconds() + "s]";
+            cache = epochSecond + " -> [" + offset + "][" + YYYY_MM_DD_HH_MM_SS.fmt(start) + " - "
+                    + YYYY_MM_DD_HH_MM_SS.fmt(end) + "][" + duration.getSeconds() + "s]";
         return cache;
     }
 
