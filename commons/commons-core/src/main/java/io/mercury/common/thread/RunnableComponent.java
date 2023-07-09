@@ -29,7 +29,7 @@ public abstract class RunnableComponent {
     /**
      * name
      */
-    protected String name = "Component-[" + YYYYMMDD_L_HHMMSSSSS.format(LocalDateTime.now()) + "]";
+    protected String name = "Component-[" + YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now()) + "]";
 
     protected RunnableComponent() {
     }

@@ -447,7 +447,7 @@ public final class DateTimeUtil {
      * @param pattern DatePattern
      * @return String
      */
-    public static String formatDate(@Nonnull DatePattern pattern) {
+    public static String fmtDate(@Nonnull DatePattern pattern) {
         return pattern.getFormatter().format(LocalDate.now());
     }
 
@@ -456,8 +456,8 @@ public final class DateTimeUtil {
      * @param pattern LocalDate
      * @return String
      */
-    public static String formatDate(@Nonnull DatePattern pattern,
-                                    @Nonnull LocalDate date) {
+    public static String fmtDate(@Nonnull DatePattern pattern,
+                                 @Nonnull LocalDate date) {
         return pattern.getFormatter().format(date);
     }
 
@@ -465,7 +465,7 @@ public final class DateTimeUtil {
      * @param pattern TimePattern
      * @return String
      */
-    public static String formatTime(@Nonnull TimePattern pattern) {
+    public static String fmtTime(@Nonnull TimePattern pattern) {
         return pattern.getFormatter().format(LocalTime.now());
     }
 
@@ -474,8 +474,8 @@ public final class DateTimeUtil {
      * @param pattern LocalTime
      * @return String
      */
-    public static String formatTime(@Nonnull TimePattern pattern,
-                                    @Nonnull LocalTime time) {
+    public static String fmtTime(@Nonnull TimePattern pattern,
+                                 @Nonnull LocalTime time) {
         return pattern.getFormatter().format(time);
     }
 
@@ -484,8 +484,8 @@ public final class DateTimeUtil {
      * @param pattern  LocalDateTime
      * @return String
      */
-    public static String formatDateTime(@Nonnull DateTimePattern pattern,
-                                        @Nonnull LocalDateTime datetime) {
+    public static String fmtDateTime(@Nonnull DateTimePattern pattern,
+                                     @Nonnull LocalDateTime datetime) {
         return pattern.getFormatter().format(datetime);
     }
 
@@ -493,7 +493,7 @@ public final class DateTimeUtil {
      * @param pattern DateTimePattern
      * @return String
      */
-    public static String formatDateTime(@Nonnull DateTimePattern pattern) {
+    public static String fmtDateTime(@Nonnull DateTimePattern pattern) {
         return pattern.getFormatter().format(LocalDateTime.now());
     }
 

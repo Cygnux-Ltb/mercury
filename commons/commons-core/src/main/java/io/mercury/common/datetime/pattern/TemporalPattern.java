@@ -40,29 +40,29 @@ public interface TemporalPattern {
      * @return String
      */
     default String now() {
-        return format(LocalDateTime.now());
+        return fmt(LocalDateTime.now());
     }
 
     /**
      * @return String
      */
     default String utc() {
-        return format(ZonedDateTime.now(UTC));
+        return fmt(ZonedDateTime.now(UTC));
     }
 
     /**
      * @param datetime ZonedDateTime
      * @return String
      */
-    default String format(ZonedDateTime datetime) {
-        return format(datetime.toLocalDateTime());
+    default String fmt(ZonedDateTime datetime) {
+        return fmt(datetime.toLocalDateTime());
     }
 
     /**
      * @param datetime LocalDateTime
      * @return String
      */
-    default String format(LocalDateTime datetime) {
+    default String fmt(LocalDateTime datetime) {
         return getFormatter().format(datetime);
     }
 
@@ -70,7 +70,7 @@ public interface TemporalPattern {
      * @param date LocalDate
      * @return String
      */
-    default String format(LocalDate date) {
+    default String fmt(LocalDate date) {
         return getFormatter().format(date);
     }
 
@@ -78,7 +78,7 @@ public interface TemporalPattern {
      * @param time LocalTime
      * @return String
      */
-    default String format(LocalTime time) {
+    default String fmt(LocalTime time) {
         return getFormatter().format(time);
     }
 

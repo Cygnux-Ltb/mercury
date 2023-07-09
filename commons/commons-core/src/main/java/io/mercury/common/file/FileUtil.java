@@ -69,9 +69,13 @@ public final class FileUtil {
     public static File mkdirInTmp(@Nonnull String path) throws NullPointerException, IllegalArgumentException {
         Asserter.nonEmpty(path, "path");
         File file = new File(JAVA_IO_TMPDIR, path);
-        file.mkdirs();
-        return file;
+        if (file.mkdirs())
+            return file;
+        else
+            //TODO
+            throw new NullPointerException("");
     }
+
 
     /**
      * @param file File
@@ -89,8 +93,10 @@ public final class FileUtil {
     public static File mkdirInHome(@Nonnull String path) {
         Asserter.nonEmpty(path, "path");
         File file = new File(USER_HOME, path);
-        file.mkdirs();
-        return file;
+        if (file.mkdirs())
+            return file;
+        else
+            throw new NullPointerException();
     }
 
     /**
@@ -278,7 +284,7 @@ public final class FileUtil {
     }
 
 
-    /**
+    /*
      * public static boolean rmdir(File dir, boolean recursive) throws IOException {
      * // make sure this is a directory if (!dir.isDirectory()) { throw new
      * IOException("File " + dir + " is not a directory"); }
@@ -314,14 +320,14 @@ public final class FileUtil {
      * // finally remove this directory return dir.delete(); }
      */
 
-    /**
+    /*
      * Copy dest.length bytes from the inputStream into the dest bytearray.
      *
      * @param is
      * @param dest
      * @throws IOException
      */
-    /**
+    /*
      * public static void copy(InputStream is, byte[] dest) throws IOException { int
      * len = dest.length; int ofs = 0; while (len > 0) { int size = is.read(dest,
      * ofs, len); ofs += size; len -= size; } }
@@ -349,7 +355,7 @@ public final class FileUtil {
      *
      * @param source The source file to copy from
      * @param target The target file to copy to
-     * @return True if an overwrite occurred, otherwise false.
+     *               //@return True if an overwrite occurred, otherwise false.
      * @throws FileAlreadyExistsException Thrown if the target file already exists
      *                                    and an overwrite is not permitted. This
      *                                    exception is a subclass of IOException, so

@@ -77,7 +77,7 @@ public class TimePoint implements Serial<TimePoint> {
     @Override
     public String toString() {
         if (cache == null)
-            cache = epochSecond + " -> " + YYYY_MM_DD_HH_MM_SS.format(datetime) + " / " + repeat;
+            cache = epochSecond + " -> " + YYYY_MM_DD_HH_MM_SS.fmt(datetime) + " / " + repeat;
         return cache;
     }
 
