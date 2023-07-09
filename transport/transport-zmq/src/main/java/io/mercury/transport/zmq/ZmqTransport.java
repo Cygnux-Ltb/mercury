@@ -133,8 +133,9 @@ public abstract class ZmqTransport extends TransportComponent implements Transpo
             context.close();
             newEndTime();
             log.info("Zmq component -> {} closed, Running duration millis -> {}", name, getRunningDuration());
-        } else
+        } else {
             log.warn("Zmq component -> {} already closed, Cannot be called again", name);
+        }
         return context.isClosed();
     }
 

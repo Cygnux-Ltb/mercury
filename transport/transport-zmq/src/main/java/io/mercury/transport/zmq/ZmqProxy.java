@@ -18,8 +18,11 @@ public final class ZmqProxy extends TransportComponent {
     private final boolean isConnected;
 
     private final ZmqTransport frontend;
+
     private final ZmqTransport backend;
+
     private ZmqTransport capture;
+
     private ZmqSender<String> control;
 
     ZmqProxy(@Nonnull ZmqTransport frontend, @Nonnull ZmqTransport backend, ZmqTransport capture,
@@ -62,7 +65,6 @@ public final class ZmqProxy extends TransportComponent {
         return control;
     }
 
-
     @Override
     public String getName() {
         return name;
@@ -75,7 +77,6 @@ public final class ZmqProxy extends TransportComponent {
 
     @Override
     public boolean closeIgnoreException() {
-
         return false;
     }
 

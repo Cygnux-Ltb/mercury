@@ -27,7 +27,8 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber {
     // 订阅消息消费者
     private final BiConsumer<byte[], byte[]> consumer;
 
-    ZmqSubscriber(@Nonnull ZmqConfigurator cfg, @Nonnull Topics topics, @Nonnull BiConsumer<byte[], byte[]> consumer)
+    ZmqSubscriber(@Nonnull ZmqConfigurator cfg, @Nonnull Topics topics,
+                  @Nonnull BiConsumer<byte[], byte[]> consumer)
             throws ZmqConnectionException {
         super(cfg);
         Asserter.nonNull(topics, "topics");
