@@ -198,7 +198,7 @@ public final class RingMulticaster<E, I> extends AbstractRingBuffer<E, I> {
             if (waitStrategy == null)
                 waitStrategy = handlers.size() > availableProcessors() ? Sleeping.get() : Yielding.get();
             if (StringSupport.isNullOrEmpty(name))
-                name = "RingMulticaster-" + YYYYMMDD_L_HHMMSSSSS.format(LocalDateTime.now());
+                name = "RingMulticaster-" + YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now());
             return new RingMulticaster<>(name, size, eventFactory, producerType,
                     waitStrategy, mode, eventTranslator, handlers);
         }

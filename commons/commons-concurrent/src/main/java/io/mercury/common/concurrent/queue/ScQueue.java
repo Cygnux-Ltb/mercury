@@ -23,7 +23,7 @@ public abstract class ScQueue<E> extends RunnableComponent implements Queue<E> {
     protected ScQueue(Processor<E> processor) {
         Asserter.nonNull(processor, "processor");
         this.processor = processor;
-        this.name = "queue-" + "[" + YYYYMMDD_L_HHMMSSSSS.format(LocalDateTime.now()) + "]";
+        this.name = "queue-" + "[" + YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now()) + "]";
     }
 
     @Override

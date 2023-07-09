@@ -43,7 +43,7 @@ public abstract class SingleProducerRingBuffer<E, I> extends RunnableComponent {
         if (StringSupport.nonEmpty(name))
             super.name = name;
         else
-            super.name = "sp-ring-" + YYYYMMDD_L_HHMMSSSSS.format(LocalDateTime.now());
+            super.name = "sp-ring-" + YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now());
         this.disruptor = new Disruptor<>(
                 // 事件工厂
                 factory,
