@@ -98,8 +98,10 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @return int
      */
     public int getInt(@Nonnull OP option, int defaultVal) {
-        return getOrDefault(() -> config.hasPath(option.getConfigName(module)),
-                () -> config.getInt(option.getConfigName(module)), defaultVal);
+        return getOrDefault(
+                () -> config.hasPath(option.getConfigName(module)),
+                () -> config.getInt(option.getConfigName(module)),
+                defaultVal);
     }
 
     /**
@@ -120,8 +122,10 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @return long
      */
     public long getLong(@Nonnull OP option, long defaultVal) {
-        return getOrDefault(() -> config.hasPath(option.getConfigName(module)),
-                () -> config.getLong(option.getConfigName(module)), defaultVal);
+        return getOrDefault(
+                () -> config.hasPath(option.getConfigName(module)),
+                () -> config.getLong(option.getConfigName(module)),
+                defaultVal);
     }
 
     /**
@@ -142,8 +146,10 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @return double
      */
     public double getDouble(@Nonnull OP option, double defaultVal) {
-        return getOrDefault(() -> config.hasPath(option.getConfigName(module)),
-                () -> config.getDouble(option.getConfigName(module)), defaultVal);
+        return getOrDefault(
+                () -> config.hasPath(option.getConfigName(module)),
+                () -> config.getDouble(option.getConfigName(module)),
+                defaultVal);
     }
 
     /**
@@ -164,8 +170,10 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @return String
      */
     public String getString(@Nonnull OP option, @Nonnull String defaultVal) {
-        return getOrDefault(() -> config.hasPath(option.getConfigName(module)),
-                () -> config.getString(option.getConfigName(module)), defaultVal);
+        return getOrDefault(
+                () -> config.hasPath(option.getConfigName(module)),
+                () -> config.getString(option.getConfigName(module)),
+                defaultVal);
     }
 
     /**
@@ -228,7 +236,8 @@ public final class ConfigWrapper<OP extends ConfigOption> {
      * @throws Missing exception
      */
     public long getLongOrThrows(@Nonnull OP option) throws Missing {
-        return getOrThrows(() -> config.hasPath(option.getConfigName(module)),
+        return getOrThrows(
+                () -> config.hasPath(option.getConfigName(module)),
                 () -> config.getLong(option.getConfigName(module)),
                 new Missing(option.getConfigName(module)));
     }
