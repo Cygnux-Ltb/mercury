@@ -5,6 +5,6 @@ public interface Sender<M> extends Transport {
     /**
      * @param msg T
      */
-    void sent(M msg);
+    void send(M msg);
 
 }

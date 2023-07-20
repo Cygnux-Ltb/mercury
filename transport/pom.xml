@@ -16,7 +16,6 @@
 
     <modules>
         <module>transport-aeron</module>
-        <module>transport-api</module>
         <module>transport-jetty</module>
         <module>transport-netty</module>
         <module>transport-rabbitmq</module>
@@ -45,12 +44,7 @@
             <dependency>
                 <groupId>org.jetbrains</groupId>
                 <artifactId>annotations</artifactId>
-                <version>23.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>io.mercury</groupId>
-                <artifactId>transport-api</artifactId>
-                <version>${project.version}</version>
+                <version>24.0.1</version>
             </dependency>
             <dependency>
                 <groupId>io.mercury</groupId>

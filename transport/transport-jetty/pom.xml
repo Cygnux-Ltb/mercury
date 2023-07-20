@@ -17,10 +17,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.mercury</groupId>
-            <artifactId>transport-api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>websocket-client</artifactId>
             <version>${jetty.version}</version>

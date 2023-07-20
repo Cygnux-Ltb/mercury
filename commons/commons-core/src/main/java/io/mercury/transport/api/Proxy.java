@@ -16,9 +16,4 @@ public interface Proxy<T, M> extends Transport, Receiver, Publisher<T, M> {
 
 	Publisher<T, M> getUpstream();
 
-	@Override
-	default void run() {
-		receive();
-	}
-
 }
