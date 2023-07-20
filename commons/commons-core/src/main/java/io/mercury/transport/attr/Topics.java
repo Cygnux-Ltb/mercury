@@ -2,7 +2,6 @@ package io.mercury.transport.attr;
 
 import io.mercury.common.collections.CollectionUtil;
 import io.mercury.common.collections.MutableSets;
-import io.mercury.serialization.json.JsonWrapper;
 import org.eclipse.collections.api.block.procedure.Procedure;
 import org.eclipse.collections.api.set.MutableSet;
 
@@ -37,15 +36,6 @@ public final class Topics {
 
     public void each(Procedure<String> procedure) {
         saved.each(procedure);
-    }
-
-    private transient String toString;
-
-    @Override
-    public String toString() {
-        if (toString == null)
-            this.toString = JsonWrapper.toJson(this);
-        return toString;
     }
 
 }

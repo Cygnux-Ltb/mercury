@@ -23,7 +23,7 @@
             <groupId>org.jgrapht</groupId>
             <artifactId>jgrapht-core</artifactId>
             <!-- java 11 -->
-            <version>1.5.1</version>
+            <version>1.5.2</version>
             <!-- java 8 -->
             <!-- <version>1.4.0</version> -->
             <exclusions>
@@ -39,7 +39,7 @@
             <groupId>org.jgrapht</groupId>
             <artifactId>jgrapht-ext</artifactId>
             <!-- java 11 -->
-            <version>1.5.1</version>
+            <version>1.5.2</version>
             <!-- java 8 -->
             <!-- <version>1.4.0</version> -->
         </dependency>

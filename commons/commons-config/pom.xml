@@ -18,6 +18,8 @@
             <artifactId>commons-core</artifactId>
         </dependency>
 
+        <!-- Jimfs is an in-memory implementation of Java 7's
+             java.nio.file abstract file system API. -->
         <dependency>
             <groupId>com.google.jimfs</groupId>
             <artifactId>jimfs</artifactId>

@@ -1,20 +1,16 @@
 package io.mercury.transport.attr;
 
 import io.mercury.common.annotation.OnlyOverrideEquals;
-import io.mercury.common.serialization.specific.JsonSerializable;
-import io.mercury.serialization.json.JsonWrapper;
-
-import javax.annotation.Nonnull;
 
 @OnlyOverrideEquals
-public final class TcpKeepAlive implements JsonSerializable {
+public final class TcpKeepAlive {
 
     private final KeepAliveOption keepAliveOption;
 
     private int keepAliveCount;
 
     private int keepAliveIdle;
-    
+
     private int keepAliveInterval;
 
     private TcpKeepAlive(KeepAliveOption keepAliveOption) {
@@ -111,12 +107,6 @@ public final class TcpKeepAlive implements JsonSerializable {
             return code;
         }
 
-    }
-
-    @Nonnull
-    @Override
-    public String toJson() {
-        return JsonWrapper.toJson(this);
     }
 
 }
