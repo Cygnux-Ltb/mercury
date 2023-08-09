@@ -429,7 +429,7 @@ public final class ZmqConfigurator implements
         }
 
         /**
-         * 创建TCP协议连接
+         * [TCP] 协议连接
          *
          * @param addr String
          * @param port int
@@ -444,7 +444,7 @@ public final class ZmqConfigurator implements
         }
 
         /**
-         * 使用[ipc]协议连接, 用于进程间通信
+         * [IPC] 协议连接, 用于进程间通信
          *
          * @param addr String
          * @return ZmqAddr
@@ -455,7 +455,7 @@ public final class ZmqConfigurator implements
         }
 
         /**
-         * 使用[inproc]协议连接, 用于线程间通信
+         * [INPROC] 协议连接, 用于线程间通信
          *
          * @param addr String
          * @return ZmqAddr

@@ -26,7 +26,9 @@ public enum ZmqConfigOption implements ConfigOption {
 		return configName;
 	}
 
+	@Override
 	public String getOtherName() {
 		return otherName;
 	}
+
 }
