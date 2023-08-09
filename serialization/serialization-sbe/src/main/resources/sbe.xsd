@@ -357,7 +357,7 @@
                     </xs:enumeration>
                     <xs:enumeration value="constant">
                         <xs:annotation>
-                            <xs:documentation>Value does not vary so it need not be
+                            <xs:documentation>Value does not vary, so it need not be
                                 serialized on the wire
                             </xs:documentation>
                         </xs:annotation>

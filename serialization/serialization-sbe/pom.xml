@@ -12,10 +12,10 @@
     <name>serialization-sbe</name>
 
     <properties>
-        <sbe-tool.version>1.28.3</sbe-tool.version>
+        <sbe-tool.version>1.29.0</sbe-tool.version>
     </properties>
 
-    <!--<build>
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -36,15 +36,16 @@
                     <systemProperties>
                         <systemProperty>
                             <key>sbe.output.dir</key>
-                            <value>${project.build.directory}/generated-sources/java</value>
+                            <value>${project.build.sourceDirectory}</value>
                         </systemProperty>
                     </systemProperties>
                     <arguments>
-                        <argument>${project.basedir}/src/main/resources/common.xml</argument>
-                        <argument>${project.basedir}/src/main/resources/schema.xml</argument>
-                        <argument>${project.basedir}/src/main/resources/extension.xml</argument>
+                        <!--suppress UnresolvedMavenProperty-->
+                        <argument>${project.build.sourceDirectory}/../resources/common.xml</argument>
+                        <!--suppress UnresolvedMavenProperty -->
+                        <argument>${project.build.sourceDirectory}/../resources/extension.xml</argument>
                     </arguments>
-                    <workingDirectory>${project.build.directory}/generated-sources/java</workingDirectory>
+                    <workingDirectory>${project.build.sourceDirectory}</workingDirectory>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -57,7 +58,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.4.0</version>
                 <executions>
                     <execution>
                         <id>add-source</id>
@@ -67,14 +68,14 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>${project.build.directory}/generated-sources/java/</source>
+                                <source>${project.build.sourceDirectory}</source>
                             </sources>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
-    </build>-->
+    </build>
 
     <dependencies>
         <dependency>

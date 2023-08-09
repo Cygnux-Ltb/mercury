@@ -13,7 +13,6 @@
 
     <properties>
         <protobuf.version>3.23.4</protobuf.version>
-        <protostuff.version>1.8.0</protostuff.version>
     </properties>
 
     <dependencies>
@@ -42,20 +41,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <!-- protobuf is serialization for mutable messages -->
-        <dependency>
-            <groupId>io.protostuff</groupId>
-            <artifactId>protostuff-core</artifactId>
-            <version>${protostuff.version}</version>
-        </dependency>
-
-        <!-- protobuf is serialization for pre-existing objects -->
-        <dependency>
-            <groupId>io.protostuff</groupId>
-            <artifactId>protostuff-runtime</artifactId>
-            <version>${protostuff.version}</version>
-        </dependency>
-
     </dependencies>
+
 </project>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<message>
+    <string name="symbol" description="Stock symbol"/>
+    <int32 name="quantity" description="Order quantity"/>
+    <int64 name="price" description="Order price"/>
+    <enum name="orderType" description="Order type">
+        <validValue name="BUY" value="0" description="Buy order"/>
+        <validValue name="SELL" value="1" description="Sell order"/>
+    </enum>
+</message>

@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package bak;
+package uk.co.real_logic.sbe.examples;
 
-import baseline.BooleanType;
-import baseline.BoostType;
-import baseline.CarDecoder;
-import baseline.CarDecoder.PerformanceFiguresDecoder.AccelerationDecoder;
-import baseline.CarEncoder;
-import baseline.EngineDecoder;
-import baseline.EngineEncoder;
-import baseline.MessageHeaderDecoder;
-import baseline.MessageHeaderEncoder;
-import baseline.Model;
-import baseline.OptionalExtrasDecoder;
+
 import org.agrona.concurrent.UnsafeBuffer;
+import sbe.extension.BooleanType;
+import sbe.extension.BoostType;
+import sbe.extension.CarDecoder;
+import sbe.extension.CarEncoder;
+import sbe.extension.EngineDecoder;
+import sbe.extension.EngineEncoder;
+import sbe.extension.MessageHeaderDecoder;
+import sbe.extension.MessageHeaderEncoder;
+import sbe.extension.Model;
+import sbe.extension.OptionalExtrasDecoder;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -105,7 +105,7 @@ public class ExampleUsingGeneratedStub {
         // Lookup the applicable flyweight to decode this type of message based on
         // templateId and version.
         final int templateId = messageHeaderDecoder.templateId();
-        if (templateId != baseline.CarEncoder.TEMPLATE_ID) {
+        if (templateId != sbe.extension.CarEncoder.TEMPLATE_ID) {
             throw new IllegalStateException("Template ids do not match");
         }
 
@@ -216,7 +216,7 @@ public class ExampleUsingGeneratedStub {
         for (final CarDecoder.PerformanceFiguresDecoder performanceFigures : car.performanceFigures()) {
             sb.append("\ncar.performanceFigures.octaneRating=").append(performanceFigures.octaneRating());
 
-            for (final AccelerationDecoder acceleration : performanceFigures.acceleration()) {
+            for (final CarDecoder.PerformanceFiguresDecoder.AccelerationDecoder acceleration : performanceFigures.acceleration()) {
                 sb.append("\ncar.performanceFigures.acceleration.mph=").append(acceleration.mph());
                 sb.append("\ncar.performanceFigures.acceleration.seconds=").append(acceleration.seconds());
             }

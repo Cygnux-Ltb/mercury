@@ -68,7 +68,7 @@
         <dependency>
             <groupId>com.linkedin.avroutil1</groupId>
             <artifactId>avro-fastserde</artifactId>
-            <version>0.3.9</version>
+            <version>0.3.11</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.commons</groupId>
@@ -148,19 +148,12 @@
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-text</artifactId>
-            <version>1.10.0</version>
-        </dependency>
-
         <!-- General data-binding functionality for Jackson:
              works on core streaming API -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
-
     </dependencies>
 
 </project>

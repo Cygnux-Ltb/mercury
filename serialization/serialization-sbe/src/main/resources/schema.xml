@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sbe:messageSchema xmlns:sbe="http://fixprotocol.io/2016/sbe" xmlns:xi="http://www.w3.org/2001/XInclude"
-                   package="baseline" id="1" version="0" semanticVersion="5.2"
+                   package="seb.baseline" id="1" version="0" semanticVersion="5.2"
                    description="Example base schema which can be extended.">
     <xi:include href="common.xml"/>
     <types>
@@ -67,11 +67,9 @@
         <enum name="BooleanType" encodingType="uint8"
               description="Boolean Type.">
             <validValue name="F"
-                        description="False value representation.">0
-            </validValue>
+                        description="False value representation.">0</validValue>
             <validValue name="T"
-                        description="True value representation.">1
-            </validValue>
+                        description="True value representation.">1</validValue>
         </enum>
         <enum name="Model" encodingType="char">
             <validValue name="A">A</validValue>
