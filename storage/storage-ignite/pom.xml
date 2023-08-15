@@ -27,6 +27,12 @@
             <groupId>io.mercury</groupId>
             <artifactId>commons-concurrent</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>annotations</artifactId>
+                    <groupId>org.jetbrains</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
