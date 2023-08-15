@@ -1,4 +1,4 @@
-package io.mercury.common.serialization.basic;
+package io.mercury.common.serialization.api;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;

@@ -18,6 +18,7 @@ import org.eclipse.collections.impl.set.immutable.primitive.ImmutableLongSetFact
 import org.eclipse.collections.impl.set.sorted.immutable.ImmutableSortedSetFactoryImpl;
 
 import javax.annotation.Nonnull;
+import java.util.stream.Stream;
 
 public final class ImmutableSets {
 
@@ -29,6 +30,21 @@ public final class ImmutableSets {
      */
     public static ImmutableSetFactory getSetFactory() {
         return ImmutableSetFactoryImpl.INSTANCE;
+    }
+
+    /**
+     * @return E... array
+     */
+    @SafeVarargs
+    public static <E> ImmutableSet<E> fromStream(@Nonnull E... array) {
+        return fromStream(Stream.of(array));
+    }
+
+    /**
+     * @return ImmutableSet<T> set
+     */
+    public static <E> ImmutableSet<E> fromStream(@Nonnull Stream<E> stream) {
+        return ImmutableSetFactoryImpl.INSTANCE.fromStream(stream);
     }
 
     /**
