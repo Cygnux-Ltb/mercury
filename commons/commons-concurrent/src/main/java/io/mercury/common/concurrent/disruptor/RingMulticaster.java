@@ -5,6 +5,7 @@ import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.dsl.ProducerType;
+import io.mercury.common.collections.CollectionUtil;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.lang.Asserter;
@@ -18,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-import static io.mercury.common.collections.CollectionUtil.toArray;
 import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Sleeping;
 import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Yielding;
 import static io.mercury.common.concurrent.disruptor.ReflectionEventFactory.newFactory;
@@ -67,7 +67,7 @@ public final class RingMulticaster<E, I> extends AbstractRingBuffer<E, I> {
         super(name, size, factory, type, strategy, translator);
         Asserter.requiredLength(handlers, 1, "handlers");
         // 将处理器添加进Disruptor中, 各个处理器进行并行处理
-        disruptor.handleEventsWith(toArray(handlers, EventHandler[]::new));
+        disruptor.handleEventsWith(CollectionUtil.<EventHandler<E>>toArray(handlers, EventHandler[]::new));
         log.info(
                 "Initialized RingMulticaster -> {}, size -> {}, WaitStrategy -> {}, StartMode -> {}, EventHandler count -> {}",
                 this.name, size, strategy, mode, handlers.size());

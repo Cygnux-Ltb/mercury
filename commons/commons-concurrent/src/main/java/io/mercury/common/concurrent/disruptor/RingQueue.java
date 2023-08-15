@@ -28,7 +28,8 @@ public class RingQueue<E> extends ScQueue<E> {
 
     private final LoadContainerEventProducer producer;
 
-    private RingQueue(String name, int size, StartMode mode, ProducerType type, WaitStrategy strategy,
+    private RingQueue(String name, int size, StartMode startMode,
+                      ProducerType producerType, WaitStrategy waitStrategy,
                       Processor<E> processor) {
         super(processor);
         if (name != null)
@@ -43,14 +44,14 @@ public class RingQueue<E> extends ScQueue<E> {
                 // (Runnable runnable) -> newMaxPriorityThread(this.name + "-worker", runnable),
                 new MaxPriorityThreadFactory(this.name + "-worker"),
                 // 生产者策略, 使用单生产者
-                type,
+                producerType,
                 // Waiting策略
-                strategy);
+                waitStrategy);
         this.disruptor.handleEventsWith(this::process);
         // TODO 异常处理
         // this.disruptor.setDefaultExceptionHandler(null);
         this.producer = new LoadContainerEventProducer(disruptor.getRingBuffer());
-        startWith(mode);
+        startWith(startMode);
     }
 
     private void process(LoadContainer<E> container, long sequence, boolean endOfBatch) {

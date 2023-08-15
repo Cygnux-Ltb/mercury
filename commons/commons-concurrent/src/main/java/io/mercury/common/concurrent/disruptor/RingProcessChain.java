@@ -47,7 +47,8 @@ public class RingProcessChain<E, I> extends AbstractRingBuffer<E, I> {
      * @param handlersMap MutableIntObjectMap<List<EventHandler<E>>>
      */
     private RingProcessChain(@Nonnull String name, int size, @Nonnull EventFactory<E> factory,
-                             @Nonnull ProducerType type, @Nonnull WaitStrategy strategy, @Nonnull StartMode mode,
+                             @Nonnull ProducerType type, @Nonnull StartMode mode,
+                             @Nonnull WaitStrategy strategy,
                              @Nonnull EventTranslatorOneArg<E, I> translator,
                              @Nonnull MutableIntObjectMap<List<EventHandler<E>>> handlersMap) {
         super(name, size, factory, type, strategy, translator);
@@ -226,8 +227,8 @@ public class RingProcessChain<E, I> extends AbstractRingBuffer<E, I> {
                         : Yielding.get();
             if (StringSupport.isNullOrEmpty(name))
                 name = "RingProcessChain-" + YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now());
-            return new RingProcessChain<>(name, size, eventFactory, producerType, waitStrategy, mode, eventTranslator,
-                    handlersMap);
+            return new RingProcessChain<>(name, size, eventFactory, producerType,
+                    mode, waitStrategy, eventTranslator, handlersMap);
         }
 
     }
