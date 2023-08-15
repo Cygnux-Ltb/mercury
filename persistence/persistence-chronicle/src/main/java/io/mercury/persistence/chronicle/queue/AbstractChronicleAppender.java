@@ -2,7 +2,7 @@ package io.mercury.persistence.chronicle.queue;
 
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.annotation.thread.OnlyAllowSingleThreadAccess;
-import io.mercury.common.serialization.basic.Serializer;
+import io.mercury.common.serialization.api.Serializer;
 import io.mercury.persistence.chronicle.exception.ChronicleAppendException;
 import net.openhft.chronicle.queue.ExcerptAppender;
 import org.slf4j.Logger;
@@ -15,16 +15,15 @@ import java.util.function.Supplier;
 
 @Immutable
 @NotThreadSafe
-public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAccessor implements Runnable {
+public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAccessor
+        implements Runnable {
 
     protected final ExcerptAppender appender;
 
     protected final Supplier<IN> dataProducer;
 
-    protected AbstractChronicleAppender(long allocateSeq,
-                                        String appenderName,
-                                        Logger logger,
-                                        ExcerptAppender appender,
+    protected AbstractChronicleAppender(long allocateSeq, String appenderName,
+                                        Logger logger, ExcerptAppender appender,
                                         Supplier<IN> dataProducer) {
         super(allocateSeq, appenderName, logger);
         this.appender = appender;
@@ -54,8 +53,7 @@ public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAc
      * @throws ChronicleAppendException cae
      */
     @OnlyAllowSingleThreadAccess
-    public <T> void append(@Nullable T t,
-                           @Nonnull Serializer<T, IN> serializer)
+    public <T> void append(@Nullable T t, @Nonnull Serializer<T, IN> serializer)
             throws IllegalStateException, ChronicleAppendException {
         append(serializer.serialization(t));
     }
@@ -80,7 +78,6 @@ public abstract class AbstractChronicleAppender<IN> extends CloseableChronicleAc
             throw new ChronicleAppendException(e.getMessage(), e);
         }
     }
-
 
     @AbstractFunction
     protected abstract void append0(@Nonnull IN in);
