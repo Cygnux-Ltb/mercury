@@ -1,6 +1,6 @@
 package io.mercury.transport.socket;
 
-import io.mercury.common.concurrent.disruptor.RingQueue;
+import io.mercury.common.concurrent.ring.RingQueue;
 import io.mercury.common.concurrent.queue.ScQueue;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.ThreadSupport;

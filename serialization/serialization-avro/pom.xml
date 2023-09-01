@@ -68,7 +68,7 @@
         <dependency>
             <groupId>com.linkedin.avroutil1</groupId>
             <artifactId>avro-fastserde</artifactId>
-            <version>0.3.11</version>
+            <version>0.3.13</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.commons</groupId>
