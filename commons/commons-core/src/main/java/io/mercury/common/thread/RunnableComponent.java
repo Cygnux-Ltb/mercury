@@ -1,20 +1,20 @@
 package io.mercury.common.thread;
 
 import io.mercury.common.annotation.AbstractFunction;
-import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import org.slf4j.Logger;
 
 import javax.annotation.concurrent.ThreadSafe;
 import java.io.Serial;
-import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
+import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
+import static java.time.LocalDateTime.now;
 
 @ThreadSafe
 public abstract class RunnableComponent {
 
-    private static final Logger log = Log4j2LoggerFactory.getLogger(RunnableComponent.class);
+    private static final Logger log = getLogger(RunnableComponent.class);
 
     /**
      * Running flag
@@ -29,30 +29,35 @@ public abstract class RunnableComponent {
     /**
      * name
      */
-    protected String name = "Component-[" + YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now()) + "]";
+    protected String name = "Component-[" + YYYYMMDD_L_HHMMSSSSS.fmt(now()) + "]";
 
     protected RunnableComponent() {
     }
 
+    protected RunnableComponent(String name) {
+        this.name = name;
+    }
+
     /**
-     * @return isRunning
+     * @return name String
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @return isRunning boolean
      */
     public boolean isRunning() {
         return isRunning.get();
     }
 
     /**
-     * @return isClosed
+     * @return isClosed boolean
      */
     public boolean isClosed() {
         return isClosed.get();
     }
-
-    /**
-     * @throws Exception e
-     */
-    @AbstractFunction
-    protected abstract void start0() throws Exception;
 
     /**
      * 启动组件
@@ -61,20 +66,16 @@ public abstract class RunnableComponent {
         if (isRunning.compareAndSet(false, true)) {
             try {
                 start0();
+                log.warn("func -> {}::start() call succeeded", name);
             } catch (Exception e) {
                 isRunning.set(false);
-                log.error("Component -> [{}] start0 throw exception -> {}", name, e.getMessage(), e);
+                log.error("component -> {}::start0 throw exception -> {}", name, e.getMessage(), e);
                 throw new ComponentRunningException(name, e.getMessage(), e);
             }
         } else
-            log.warn("Error call, Component -> [{}] already started", name);
+            log.warn("func -> {}::start() call failed, component already started", name);
     }
 
-    /**
-     * @throws Exception e
-     */
-    @AbstractFunction
-    protected abstract void stop0() throws Exception;
 
     /**
      * 停止运行
@@ -85,25 +86,35 @@ public abstract class RunnableComponent {
             try {
                 stop0();
             } catch (Exception e) {
-                log.error("Component -> {} stop0 throw exception -> {}", name, e.getMessage(), e);
+                log.error("component -> {} stop0 throw exception -> {}", name, e.getMessage(), e);
                 throw new ComponentStopException(name, e.getMessage(), e);
             }
         } else
-            log.warn("Error call, Component -> [{}] already stopped", name);
+            log.warn("func -> {}::stop() call failed, component already stopped", name);
     }
 
-    public String getName() {
-        return name;
-    }
+    /**
+     * @throws Exception e
+     */
+    @AbstractFunction
+    protected abstract void start0() throws Exception;
 
+    /**
+     * @throws Exception e
+     */
+    @AbstractFunction
+    protected abstract void stop0() throws Exception;
 
-    protected void startWith(final StartMode mode) {
+    /**
+     * @param mode StartMode
+     */
+    public void startWith(final StartMode mode) {
         if (mode.immediately) {
             start();
         } else if (mode.delayMillis > 0) {
-            ThreadSupport.startNewMaxPriorityThread("", () -> {
+            ThreadSupport.startNewMaxPriorityThread(name + "-worker", () -> {
                 SleepSupport.sleep(mode.delayMillis);
-                this.start();
+                start();
             });
         } else {
             log.info("{}, Start mode is [Manual], waiting call start...", name);

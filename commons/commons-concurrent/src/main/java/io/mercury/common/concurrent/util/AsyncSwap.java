@@ -14,7 +14,6 @@ public final class AsyncSwap<E> extends RunnableComponent implements Runnable {
 
     private final SynchronousQueue<E> swap = new SynchronousQueue<>();
 
-    private final String name;
     private final Consumer<E> consumer;
 
     private static final Logger log = Log4j2LoggerFactory.getLogger(AsyncSwap.class);

@@ -1,12 +1,13 @@
 package io.mercury.common.thread;
 
 import io.mercury.common.collections.MutableLists;
-import io.mercury.common.number.ThreadSafeRandoms;
 import org.eclipse.collections.api.list.MutableList;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.concurrent.ThreadPoolExecutor;
+
+import static io.mercury.common.number.ThreadSafeRandoms.randomUnsignedInt;
 
 public final class ShutdownHooks {
 
@@ -21,13 +22,14 @@ public final class ShutdownHooks {
 
     private void executeShutdownHook() {
         System.out.println("start execution all shutdown hook");
-        ThreadPoolExecutor executor = CommonThreadPool.newBuilder().build();
-        for (Runnable shutdownTask : shutdownTasks)
-            executor.execute(shutdownTask);
-        executor.shutdown();
-        while (!executor.isTerminated())
-            SleepSupport.sleepIgnoreInterrupts(100);
-        System.out.println("all shutdown hook execution completed");
+        try (ThreadPoolExecutor executor = CommonThreadPool.newBuilder().build()) {
+            for (Runnable shutdownTask : shutdownTasks)
+                executor.execute(shutdownTask);
+            executor.shutdown();
+            while (!executor.isTerminated())
+                SleepSupport.sleepIgnoreInterrupts(100);
+            System.out.println("all shutdown hook execution completed");
+        }
     }
 
     /**
@@ -42,8 +44,8 @@ public final class ShutdownHooks {
      * @return Thread
      */
     public static Thread addShutdownHook(Runnable hook) {
-        return addShutdownHook("ShutdownHooksSubThread-" + ThreadSafeRandoms.randomUnsignedInt(),
-                hook);
+        return addShutdownHook(
+                "ShutdownHooksSubThread-" + randomUnsignedInt(), hook);
     }
 
     /**

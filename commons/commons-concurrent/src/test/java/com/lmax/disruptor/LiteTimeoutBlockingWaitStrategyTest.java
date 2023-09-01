@@ -25,7 +25,7 @@ public class LiteTimeoutBlockingWaitStrategyTest {
 		try {
 			waitStrategy.waitFor(6, cursor, dependent, sequenceBarrier);
 			fail("TimeoutException should have been thrown");
-		} catch (TimeoutException e) {
+		} catch (TimeoutException ignored) {
 		}
 
 		long t1 = System.currentTimeMillis();

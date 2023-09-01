@@ -23,8 +23,8 @@ public class WorkerStressTest {
 
 	@Test
 	public void shouldHandleLotsOfThreads() throws Exception {
-		Disruptor<TestEvent> disruptor = new Disruptor<TestEvent>(TestEvent.FACTORY, 1 << 16,
-				DaemonThreadFactory.INSTANCE, ProducerType.MULTI, new SleepingWaitStrategy());
+		Disruptor<TestEvent> disruptor = new Disruptor<>(TestEvent.FACTORY, 1 << 16,
+                DaemonThreadFactory.INSTANCE, ProducerType.MULTI, new SleepingWaitStrategy());
 		RingBuffer<TestEvent> ringBuffer = disruptor.getRingBuffer();
 		disruptor.setDefaultExceptionHandler(new FatalExceptionHandler());
 
@@ -86,7 +86,7 @@ public class WorkerStressTest {
 		private int seen;
 
 		@Override
-		public void onEvent(TestEvent event) throws Exception {
+		public void onEvent(TestEvent event) {
 			seen++;
 		}
 	}
@@ -141,9 +141,7 @@ public class WorkerStressTest {
 		@SuppressWarnings("unused")
 		public String s;
 
-		public static final EventFactory<TestEvent> FACTORY = () -> {
-			return new TestEvent();
-		};
+		public static final EventFactory<TestEvent> FACTORY = TestEvent::new;
 		
 	}
 }

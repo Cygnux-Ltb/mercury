@@ -4,7 +4,9 @@ import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.LifecycleAware;
 
 public class NamedEventHandler<T> implements EventHandler<T>, LifecycleAware {
+
 	private String oldName;
+
 	private final String name;
 
 	public NamedEventHandler(final String name) {

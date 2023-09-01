@@ -18,7 +18,7 @@ public class RingBufferWithAssertingStubTest {
 	public void setUp() {
 		sequencer = new AssertingSequencer(16);
 
-		ringBuffer = new RingBuffer<StubEvent>(StubEvent.EVENT_FACTORY, sequencer);
+		ringBuffer = new RingBuffer<>(StubEvent.EVENT_FACTORY, sequencer);
 	}
 
 	@Test
@@ -32,7 +32,7 @@ public class RingBufferWithAssertingStubTest {
 	}
 
 	@Test
-	public void shouldDelegateNextNAndPublish() throws Exception {
+	public void shouldDelegateNextNAndPublish() {
 		long hi = ringBuffer.next(10);
 		ringBuffer.publish(hi - 9, hi);
 	}
@@ -83,12 +83,12 @@ public class RingBufferWithAssertingStubTest {
 		}
 
 		@Override
-		public long tryNext() throws InsufficientCapacityException {
+		public long tryNext() {
 			return next();
 		}
 
 		@Override
-		public long tryNext(int n) throws InsufficientCapacityException {
+		public long tryNext(int n) {
 			return next(n);
 		}
 

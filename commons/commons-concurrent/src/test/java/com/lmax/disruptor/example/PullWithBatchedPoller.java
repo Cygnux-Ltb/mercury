@@ -15,7 +15,7 @@ public class PullWithBatchedPoller {
 		RingBuffer<BatchedPoller.DataEvent<Object>> ringBuffer = RingBuffer
 				.createMultiProducer(BatchedPoller.DataEvent.factory(), 1024);
 
-		BatchedPoller<Object> poller = new BatchedPoller<Object>(ringBuffer, batchSize);
+		BatchedPoller<Object> poller = new BatchedPoller<>(ringBuffer, batchSize);
 
 		Object value = poller.poll();
 

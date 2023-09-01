@@ -24,14 +24,12 @@ public final class UtilTest {
 	@Test
 	public void shouldReturnNextPowerOfTwo() {
 		int powerOfTwo = Util.ceilingNextPowerOfTwo(1000);
-
 		Assert.assertEquals(1024, powerOfTwo);
 	}
 
 	@Test
 	public void shouldReturnExactPowerOfTwo() {
 		int powerOfTwo = Util.ceilingNextPowerOfTwo(1024);
-
 		Assert.assertEquals(1024, powerOfTwo);
 	}
 
@@ -44,7 +42,7 @@ public final class UtilTest {
 	@Test
 	public void shouldReturnLongMaxWhenNoEventProcessors() {
 		final Sequence[] sequences = new Sequence[0];
-
 		Assert.assertEquals(Long.MAX_VALUE, Util.getMinimumSequence(sequences));
 	}
+
 }

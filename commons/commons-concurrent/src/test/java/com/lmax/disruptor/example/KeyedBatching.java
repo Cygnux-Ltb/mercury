@@ -7,35 +7,35 @@ import java.util.List;
 
 public class KeyedBatching implements EventHandler<KeyedBatching.KeyedEvent> {
 
-	private static final int MAX_BATCH_SIZE = 100;
-	private long key = 0;
-	private List<Object> batch = new ArrayList<Object>();
+    private static final int MAX_BATCH_SIZE = 100;
+    private long key = 0;
+    private final List<Object> batch = new ArrayList<>();
 
-	@Override
-	public void onEvent(KeyedEvent event, long sequence, boolean endOfBatch) throws Exception {
+    @Override
+    public void onEvent(KeyedEvent event, long sequence, boolean endOfBatch) throws Exception {
 
-		if (!batch.isEmpty() && event.key != key) {
-			processBatch(batch);
-		}
+        if (!batch.isEmpty() && event.key != key) {
+            processBatch(batch);
+        }
 
-		if (event.data != null) {
-			batch.add(event.data);
-			key = event.key;
-		}
+        if (event.data != null) {
+            batch.add(event.data);
+            key = event.key;
+        }
 
-		if (endOfBatch || batch.size() >= MAX_BATCH_SIZE) {
-			processBatch(batch);
-		}
+        if (endOfBatch || batch.size() >= MAX_BATCH_SIZE) {
+            processBatch(batch);
+        }
 
-	}
+    }
 
-	private void processBatch(List<Object> batch) {
-		// do work.
-		batch.clear();
-	}
+    private void processBatch(List<Object> batch) {
+        // do work.
+        batch.clear();
+    }
 
-	public static class KeyedEvent {
-		long key;
-		Object data;
-	}
+    public static class KeyedEvent {
+        long key;
+        Object data;
+    }
 }

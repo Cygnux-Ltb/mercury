@@ -43,7 +43,7 @@ public final class SequenceGroupTest {
 	}
 
 	@Test
-	public void shouldNotFailIfTryingToRemoveNotExistingSequence() throws Exception {
+	public void shouldNotFailIfTryingToRemoveNotExistingSequence() {
 		SequenceGroup group = new SequenceGroup();
 		group.add(new Sequence());
 		group.add(new Sequence());
@@ -122,7 +122,7 @@ public final class SequenceGroupTest {
 	}
 
 	@Test
-	public void shouldAddWhileRunning() throws Exception {
+	public void shouldAddWhileRunning() {
 		RingBuffer<TestEvent> ringBuffer = RingBuffer.createSingleProducer(TestEvent.EVENT_FACTORY, 32);
 		final Sequence sequenceThree = new Sequence(3L);
 		final Sequence sequenceSeven = new Sequence(7L);

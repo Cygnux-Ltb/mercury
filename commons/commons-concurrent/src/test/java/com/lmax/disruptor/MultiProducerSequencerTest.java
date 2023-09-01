@@ -24,7 +24,7 @@ public class MultiProducerSequencerTest {
 	private final Sequencer publisher = new MultiProducerSequencer(1024, new BlockingWaitStrategy());
 
 	@Test
-	public void shouldOnlyAllowMessagesToBeAvailableIfSpecificallyPublished() throws Exception {
+	public void shouldOnlyAllowMessagesToBeAvailableIfSpecificallyPublished() {
 		
 		publisher.publish(3);
 		publisher.publish(5);

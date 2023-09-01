@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
 
@@ -183,20 +185,49 @@ public final class StringSupport {
     }
 
     /**
-     * @param cs CharSequence
+     * @param value String
      * @return boolean
      */
-    public static boolean isNullOrEmpty(CharSequence cs) {
-        return cs == null || cs.length() == 0;
+    public static boolean isNullOrEmpty(String value) {
+        return value == null || value.isEmpty();
     }
 
     /**
-     * @param cs CharSequence
+     * @param value String
      * @return boolean
      */
-    public static boolean nonEmpty(CharSequence cs) {
-        return cs != null && cs.length() != 0;
+    public static boolean nonEmpty(String value) {
+        return value != null && !value.isEmpty();
     }
+
+
+    /**
+     * @param value    String
+     * @param defValue String
+     * @return String
+     */
+    public static String requireNonEmptyElse(String value, String defValue) {
+        return nonEmpty(value) ? value : defValue;
+    }
+
+    /**
+     * @param value    String
+     * @param supplier Supplier<String>
+     * @return String
+     */
+    public static String requireNonEmptyElseGet(String value, Supplier<String> supplier) {
+        return nonEmpty(value) ? value : supplier.get();
+    }
+
+    /**
+     * @param value String
+     * @param func  Function<T, String>
+     * @return String
+     */
+    public static <T> String requireNonEmptyElseGet(String value, Function<T, String> func, T t) {
+        return nonEmpty(value) ? value : func.apply(t);
+    }
+
 
     /**
      * @param str1 String
@@ -217,7 +248,8 @@ public final class StringSupport {
     }
 
     /**
-     *
+     * @param str String
+     * @return boolean
      */
     @Deprecated
     public static boolean isDecimalDeprecated(String str) {
@@ -278,7 +310,8 @@ public final class StringSupport {
             // 判断是否为long double float的写法
             if (lc == 'L' || lc == 'l' || lc == 'D' || lc == 'd' || lc == 'F' || lc == 'f')
                 end = str.length() - 1;
-            // 如果没有数字可以检查且第一位与最后一位都跳过了检查, 则[offset == endPoint], 此时输入参数不是数字
+            // 如果没有数字可以检查且(第一位)与(最后一位)都跳过了检查,
+            // 则[offset == endPoint], 此时输入参数不是数字
             if (offset == end)
                 return false;
             // 是否已出现小数点

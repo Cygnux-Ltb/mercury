@@ -7,6 +7,7 @@ import com.lmax.disruptor.SequenceReportingEventHandler;
 public class EarlyReleaseHandler implements SequenceReportingEventHandler<LongEvent> {
 	
 	private Sequence sequenceCallback;
+
 	private int batchRemaining = 20;
 
 	@Override

@@ -17,53 +17,11 @@ import java.util.List;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import static java.lang.Thread.MAX_PRIORITY;
-import static java.lang.Thread.MIN_PRIORITY;
-import static java.lang.Thread.NORM_PRIORITY;
-
 public final class ThreadSupport {
 
     private static final Logger log = Log4j2LoggerFactory.getLogger(ThreadSupport.class);
 
     private ThreadSupport() {
-    }
-
-    public enum ThreadPriority {
-        /**
-         * The minimum priority that a thread can have.
-         */
-        MIN(MIN_PRIORITY),
-
-        /**
-         * BELOW NORM_PRIORITY
-         */
-        BELOW_NORM(NORM_PRIORITY - 2),
-
-        /**
-         * The default priority that is assigned to a thread.
-         */
-        NORM(NORM_PRIORITY),
-
-        /**
-         * ABOVE NORM_PRIORITY
-         */
-        ABOVE_NORM(NORM_PRIORITY + 2),
-        /**
-         * The maximum priority that a thread can have.
-         */
-        MAX(MAX_PRIORITY),
-
-        ;
-
-        private final int value;
-
-        ThreadPriority(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
     }
 
     /**
@@ -397,7 +355,7 @@ public final class ThreadSupport {
         map.put("threadId", StringSupport.toString(threadInfo.getThreadId()));
         map.put("threadName", threadInfo.getThreadName());
         map.put("threadState", StringSupport.toString(threadInfo.getThreadState()));
-        //map.put("priority", StringSupport.toString(threadInfo.getPriority()));
+        map.put("priority", StringSupport.toString(threadInfo.getPriority()));
         map.put("lockName", threadInfo.getLockName());
         map.put("lockInfo", StringSupport.toString(threadInfo.getLockInfo()));
         map.put("lockOwnerId", StringSupport.toString(threadInfo.getLockOwnerId()));

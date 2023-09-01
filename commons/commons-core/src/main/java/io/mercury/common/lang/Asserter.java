@@ -1,12 +1,13 @@
 package io.mercury.common.lang;
 
-import io.mercury.common.util.StringSupport;
-
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+
+import static io.mercury.common.util.StringSupport.isNullOrEmpty;
+import static java.util.Objects.requireNonNull;
 
 public final class Asserter {
 
@@ -175,19 +176,15 @@ public final class Asserter {
      */
     public static <T> T nonNull(T t, @Nonnull String objName)
             throws NullPointerException {
-        if (t == null)
-            if (StringSupport.isNullOrEmpty(objName))
-                throw new NullPointerException("param cannot be null");
-            else
-                throw new NullPointerException("[" + objName + "] cannot be null");
-        return t;
+        return requireNonNull(t, isNullOrEmpty(objName)
+                ? "param cannot be null"
+                : "[" + objName + "] cannot be null"
+        );
     }
 
     /**
-     * @param <T>
-     * @param <E>
-     * @param t
-     * @param e
+     * @param t T
+     * @param e E
      * @return T
      * @throws E exception
      */
@@ -208,7 +205,7 @@ public final class Asserter {
             throws NullPointerException, IllegalArgumentException {
         if (str == null)
             throw new NullPointerException("Param: [" + objName + "] can not be null");
-        if (str.length() == 0)
+        if (str.isEmpty())
             throw new IllegalArgumentException("Param: [" + objName + "] can not be empty");
         return str;
     }
@@ -268,11 +265,10 @@ public final class Asserter {
     }
 
     /**
-     * @param <E>
-     * @param collection
-     * @param requiredLength
-     * @param arrayName
-     * @return
+     * @param collection     Collection<E>
+     * @param requiredLength int
+     * @param arrayName      String
+     * @return Collection<E>
      * @throws NullPointerException     exception
      * @throws IllegalArgumentException exception
      */
@@ -289,11 +285,10 @@ public final class Asserter {
     }
 
     /**
-     * @param <T>
-     * @param list
-     * @param requiredLength
-     * @param listName
-     * @return
+     * @param list           List<T>
+     * @param requiredLength int
+     * @param listName       String
+     * @return List<T>
      * @throws NullPointerException     exception
      * @throws IllegalArgumentException exception
      */
@@ -310,10 +305,10 @@ public final class Asserter {
     }
 
     /**
-     * @param array
-     * @param requiredLength
-     * @param arrayName
-     * @return
+     * @param array          boolean[]
+     * @param requiredLength int
+     * @param arrayName      String
+     * @return boolean[]
      * @throws NullPointerException     exception
      * @throws IllegalArgumentException exception
      */

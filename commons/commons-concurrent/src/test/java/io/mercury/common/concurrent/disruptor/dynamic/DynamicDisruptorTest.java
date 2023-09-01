@@ -1,9 +1,8 @@
 package io.mercury.common.concurrent.disruptor.dynamic;
 
+import io.mercury.common.concurrent.ring.dynamic.example.ExampleDisruptorServer;
 import org.junit.Before;
 import org.junit.Test;
-
-import io.mercury.common.concurrent.disruptor.dynamic.example.ExampleDisruptorServer;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -14,7 +13,9 @@ public class DynamicDisruptorTest {
     @Before
     public void initServer() {
         exampleDisruptorServer = new ExampleDisruptorServer();
-        exampleDisruptorServer.startServer("server", 1024 * 1024, 16, 512, 1000, 5);
+        exampleDisruptorServer.startServer("server",
+                1024 * 1024, 16, 512,
+                1000, 5);
     }
 
     @Test
@@ -24,7 +25,7 @@ public class DynamicDisruptorTest {
         CountDownLatch countDownLatch = new CountDownLatch(produceSize * 2);
 
         for (int i = 0; i < produceSize; i++) {
-            startPublishEvent( countDownLatch, 1000000, "produce=" + i);
+            startPublishEvent(countDownLatch, 1000000, "produce=" + i);
         }
 
         try {

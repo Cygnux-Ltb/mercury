@@ -21,7 +21,7 @@
         <dependency>
             <groupId>org.agrona</groupId>
             <artifactId>agrona</artifactId>
-            <version>1.19.0</version>
+            <version>1.19.1</version>
         </dependency>
 
         <!-- Java Concurrency Tools Core Library -->
@@ -36,13 +36,6 @@
             <groupId>com.lmax</groupId>
             <artifactId>disruptor</artifactId>
             <version>3.4.4</version>
-        </dependency>
-
-        <!-- Conversant Disruptor - very high throughput Java BlockingQueue -->
-        <dependency>
-            <groupId>com.conversantmedia</groupId>
-            <artifactId>disruptor</artifactId>
-            <version>1.2.21</version>
         </dependency>
 
         <!-- A time ticker as a lightweight clock -->

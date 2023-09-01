@@ -58,8 +58,8 @@ public class ThreeToOneDisruptor {
 		
 		@SuppressWarnings("unused")
 		Executor executor = Executors.newFixedThreadPool(4);
-		Disruptor<DataEvent> disruptor = new Disruptor<DataEvent>(DataEvent.FACTORY, 1024,
-				DaemonThreadFactory.INSTANCE);
+		Disruptor<DataEvent> disruptor = new Disruptor<>(DataEvent.FACTORY, 1024,
+                DaemonThreadFactory.INSTANCE);
 
 		TransformingHandler handler1 = new TransformingHandler(0);
 		TransformingHandler handler2 = new TransformingHandler(1);

@@ -22,8 +22,8 @@ public class DisruptorStressTest {
 
 	@Test
 	public void shouldHandleLotsOfThreads() throws Exception {
-		Disruptor<TestEvent> disruptor = new Disruptor<TestEvent>(TestEvent.FACTORY, 1 << 16,
-				DaemonThreadFactory.INSTANCE, ProducerType.MULTI, new BusySpinWaitStrategy());
+		Disruptor<TestEvent> disruptor = new Disruptor<>(TestEvent.FACTORY, 1 << 16,
+                DaemonThreadFactory.INSTANCE, ProducerType.MULTI, new BusySpinWaitStrategy());
 		RingBuffer<TestEvent> ringBuffer = disruptor.getRingBuffer();
 		disruptor.setDefaultExceptionHandler(new FatalExceptionHandler());
 
@@ -89,7 +89,7 @@ public class DisruptorStressTest {
 		}
 
 		@Override
-		public void onEvent(TestEvent event, long sequence, boolean endOfBatch) throws Exception {
+		public void onEvent(TestEvent event, long sequence, boolean endOfBatch) {
 			if (event.sequence != sequence || event.a != sequence + 13 || event.b != sequence - 7
 					|| !("wibble-" + sequence).equals(event.s)) {
 				failureCount++;
@@ -144,11 +144,6 @@ public class DisruptorStressTest {
 		public long b;
 		public String s;
 
-		public static final EventFactory<TestEvent> FACTORY = new EventFactory<DisruptorStressTest.TestEvent>() {
-			@Override
-			public DisruptorStressTest.TestEvent newInstance() {
-				return new DisruptorStressTest.TestEvent();
-			}
-		};
+		public static final EventFactory<TestEvent> FACTORY = TestEvent::new;
 	}
 }

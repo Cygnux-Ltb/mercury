@@ -18,6 +18,7 @@ package com.lmax.disruptor.dsl.stubs;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import org.junit.Assert;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadFactory;
@@ -27,12 +28,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class StubThreadFactory implements ThreadFactory {
 	
 	private final DaemonThreadFactory threadFactory = DaemonThreadFactory.INSTANCE;
-	private final Collection<Thread> threads = new CopyOnWriteArrayList<Thread>();
+	private final Collection<Thread> threads = new CopyOnWriteArrayList<>();
 	private final AtomicBoolean ignoreExecutions = new AtomicBoolean(false);
 	private final AtomicInteger executionCount = new AtomicInteger(0);
 
 	@Override
-	public Thread newThread(final Runnable command) {
+	public Thread newThread(@Nonnull final Runnable command) {
 		executionCount.getAndIncrement();
 		Runnable toExecute = command;
 		if (ignoreExecutions.get()) {
