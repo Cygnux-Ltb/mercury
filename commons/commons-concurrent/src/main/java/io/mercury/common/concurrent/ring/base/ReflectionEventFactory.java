@@ -1,12 +1,14 @@
 package io.mercury.common.concurrent.ring.base;
 
 import com.lmax.disruptor.EventFactory;
-import io.mercury.common.lang.Asserter;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.util.JreReflection;
 import io.mercury.common.util.JreReflection.RuntimeReflectionException;
 import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
+
+import static io.mercury.common.lang.Asserter.nonNull;
 
 /**
  * @param <T>
@@ -15,6 +17,8 @@ import javax.annotation.Nonnull;
  * @implNote 通过反射实现EventFactory
  */
 public final class ReflectionEventFactory<T> implements EventFactory<T> {
+
+    private static final Logger LOGGER = Log4j2LoggerFactory.getLogger(ReflectionEventFactory.class);
 
     private final Class<T> type;
 
@@ -40,7 +44,7 @@ public final class ReflectionEventFactory<T> implements EventFactory<T> {
      */
     public static <T> ReflectionEventFactory<T> newFactory(@Nonnull Class<T> type, Logger log)
             throws RuntimeReflectionException {
-        Asserter.nonNull(type, "type");
+        nonNull(type, "type");
         ReflectionEventFactory<T> factory = new ReflectionEventFactory<>(type);
         try {
             // Try call newInstance() function
@@ -49,6 +53,8 @@ public final class ReflectionEventFactory<T> implements EventFactory<T> {
         } catch (RuntimeReflectionException e) {
             if (log != null)
                 log.error("Class -> {} :: new instance exception -> {}", type, e.getMessage(), e);
+            else
+                LOGGER.error("Class -> {} :: new instance exception -> {}", type, e.getMessage(), e);
             throw e;
         }
     }

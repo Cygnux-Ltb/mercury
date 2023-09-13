@@ -6,8 +6,8 @@ import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import io.mercury.common.collections.queue.LoadContainer;
-import io.mercury.common.concurrent.ring.base.WaitStrategyOption;
 import io.mercury.common.concurrent.queue.ScQueue;
+import io.mercury.common.concurrent.ring.base.WaitStrategyOption;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.thread.MaxPriorityThreadFactory;
@@ -28,13 +28,13 @@ public class RingQueue<E> extends ScQueue<E> {
     private final LoadContainerEventProducer producer;
 
     private RingQueue(String name, int size, StartMode startMode,
-                      ProducerType producerType, WaitStrategy waitStrategy,
+                      ProducerType type, WaitStrategy waitStrategy,
                       Processor<E> processor) {
         super(processor);
         if (name != null)
             super.name = name;
         this.disruptor = new Disruptor<>(
-                // 实现EventFactory<LoadContainer<>>的Lambda
+                // 实现EventFactory<LoadContainer<E>>的Lambda
                 LoadContainer::new,
                 // 队列容量
                 size,
@@ -42,10 +42,8 @@ public class RingQueue<E> extends ScQueue<E> {
                 // DaemonThreadFactory.INSTANCE,
                 // (Runnable runnable) -> newMaxPriorityThread(this.name + "-worker", runnable),
                 new MaxPriorityThreadFactory(this.name + "-worker"),
-                // 生产者策略, 使用单生产者
-                producerType,
-                // Waiting策略
-                waitStrategy);
+                // 生产者策略, Waiting策略
+                type, waitStrategy);
         this.disruptor.handleEventsWith(this::process);
         // TODO 异常处理
         // this.disruptor.setDefaultExceptionHandler(null);

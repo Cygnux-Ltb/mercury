@@ -72,8 +72,8 @@ public enum WaitStrategyOption implements Supplier<WaitStrategy> {
     @Override
     public WaitStrategy get() {
         return switch (this) {
-            case BusySpin -> new BusySpinWaitStrategy();
             case Blocking -> new BlockingWaitStrategy();
+            case BusySpin -> new BusySpinWaitStrategy();
             case Yielding -> new YieldingWaitStrategy();
             default -> new SleepingWaitStrategy();
         };

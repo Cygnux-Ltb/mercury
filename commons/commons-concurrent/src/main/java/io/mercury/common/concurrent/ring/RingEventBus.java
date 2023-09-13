@@ -3,11 +3,14 @@ package io.mercury.common.concurrent.ring;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.EventTranslatorOneArg;
+import com.lmax.disruptor.EventTranslatorTwoArg;
+import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import io.mercury.common.concurrent.ring.base.EventHandlerWrapper;
 import io.mercury.common.concurrent.ring.base.EventPublisher;
+import io.mercury.common.concurrent.ring.base.HandlerGraph;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.thread.MaxPriorityThreadFactory;
@@ -15,46 +18,59 @@ import io.mercury.common.thread.RunnableComponent;
 import org.slf4j.Logger;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 import static com.lmax.disruptor.dsl.ProducerType.MULTI;
+import static io.mercury.common.concurrent.ring.base.ReflectionEventFactory.newFactory;
 import static io.mercury.common.concurrent.ring.base.WaitStrategyOption.Yielding;
 import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
+import static io.mercury.common.util.BitOperator.minPow2;
 import static java.util.Objects.requireNonNullElse;
 
 /**
  * @param <E>
  * @author yellow013
  */
-public final class RingEventBus<E> extends RunnableComponent {
+public class RingEventBus<E> extends RunnableComponent {
 
     private static final Logger log = Log4j2LoggerFactory.getLogger(RingEventBus.class);
 
-    private final Disruptor<E> disruptor;
+    protected final Disruptor<E> disruptor;
 
-    private final EventHandleGraph<E> handleGraph;
+    protected final HandlerGraph<E> handleGraph;
 
-    private final boolean isMultiProducer;
+    protected final RingBuffer<E> ringBuffer;
 
-    private RingEventBus(String name, int size, StartMode startMode,
-                         ProducerType type, EventFactory<E> eventFactory,
-                         WaitStrategy waitStrategy, EventHandleGraph<E> handleGraph) {
-        this.name = Objects.requireNonNullElse(name,
+    protected final boolean isMultiProducer;
+
+    protected RingEventBus(String name, int size, StartMode startMode,
+                           ProducerType type, EventFactory<E> eventFactory,
+                           WaitStrategy waitStrategy, HandlerGraph<E> handleGraph) {
+        this.name = requireNonNullElse(name,
                 "RingEventBus-[" + YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now()) + "]");
         final ProducerType producerType = requireNonNullElse(type, MULTI);
         this.disruptor = new Disruptor<>(
                 // EventFactory, 队列容量
-                eventFactory, size,
+                eventFactory, adjustSize(size),
                 // ThreadFactory
                 new MaxPriorityThreadFactory(this.name + "-worker"),
                 // 生产者策略, Waiting策略
                 producerType, waitStrategy);
         this.handleGraph = handleGraph;
         this.handleGraph.deploy(this.disruptor);
-        this.isMultiProducer = producerType == MULTI;
+        this.ringBuffer = this.disruptor.getRingBuffer();
+        this.isMultiProducer = (producerType == MULTI);
         startWith(startMode);
     }
 
+    /**
+     * 调整队列容量, 最小16, 最大65536, 其他输入参数自动调整为最接近的2次幂
+     *
+     * @param size buffer size
+     * @return int
+     */
+    private int adjustSize(int size) {
+        return size < 16 ? 16 : size > 65536 ? 65536 : minPow2(size);
+    }
 
     @Override
     protected void start0() {
@@ -68,12 +84,40 @@ public final class RingEventBus<E> extends RunnableComponent {
         log.info("Disruptor::shutdown() func execution succeed, {} is shutdown", name);
     }
 
-    public static <E> Wizard<E> withMultiProducer(EventFactory<E> eventFactory) {
-        return new Wizard<>(ProducerType.MULTI, eventFactory);
+    /**
+     * @param eventType EventFactory<E>
+     * @param <E>       Class type
+     * @return Wizard<E>
+     */
+    public static <E> Wizard<E> multiProducer(Class<E> eventType) {
+        return multiProducer(newFactory(eventType, log));
     }
 
-    public static <E> Wizard<E> withSingleProducer(EventFactory<E> eventFactory) {
-        return new Wizard<>(ProducerType.SINGLE, eventFactory);
+    /**
+     * @param factory EventFactory<E>
+     * @param <E>     Class type
+     * @return Wizard<E>
+     */
+    public static <E> Wizard<E> multiProducer(EventFactory<E> factory) {
+        return new Wizard<>(MULTI, factory);
+    }
+
+    /**
+     * @param eventType EventFactory<E>
+     * @param <E>       Class type
+     * @return Wizard<E>
+     */
+    public static <E> Wizard<E> singleProducer(Class<E> eventType) {
+        return singleProducer(newFactory(eventType, log));
+    }
+
+    /**
+     * @param factory EventFactory<E>
+     * @param <E>     Class type
+     * @return Wizard<E>
+     */
+    public static <E> Wizard<E> singleProducer(EventFactory<E> factory) {
+        return new Wizard<>(ProducerType.SINGLE, factory);
     }
 
     /**
@@ -91,13 +135,36 @@ public final class RingEventBus<E> extends RunnableComponent {
         }
     }
 
+    /**
+     * @param translator EventTranslatorOneArg<E, A>
+     * @param arg        A
+     * @param <A>        Arg type
+     */
+    public <A> void publish(EventTranslatorOneArg<E, A> translator, A arg) {
+        ringBuffer.publishEvent(translator, arg);
+    }
 
+    /**
+     * @param translator EventTranslatorTwoArg<E, A0, A1>
+     * @param arg0       A0
+     * @param arg1       A1
+     * @param <A0>       A0 Type
+     * @param <A1>       A1 Type
+     */
+    public <A0, A1> void publish(EventTranslatorTwoArg<E, A0, A1> translator, A0 arg0, A1 arg1) {
+        ringBuffer.publishEvent(translator, arg0, arg1);
+    }
+
+    /**
+     * @param <E>
+     */
     public static class Wizard<E> {
 
         private final ProducerType producerType;
         private final EventFactory<E> eventFactory;
-        private String name;
-        private int size = 64;
+
+        private String name = null;
+        private int size = 128;
         private StartMode startMode = StartMode.auto();
         private WaitStrategy waitStrategy = Yielding.get();
 
@@ -116,13 +183,13 @@ public final class RingEventBus<E> extends RunnableComponent {
             return this;
         }
 
-        public Wizard<E> startMode(StartMode startMode) {
-            this.startMode = startMode;
+        public Wizard<E> waitStrategy(WaitStrategy strategy) {
+            this.waitStrategy = strategy;
             return this;
         }
 
-        public Wizard<E> waitStrategy(WaitStrategy strategy) {
-            this.waitStrategy = strategy;
+        public Wizard<E> startMode(StartMode startMode) {
+            this.startMode = startMode;
             return this;
         }
 
@@ -131,12 +198,12 @@ public final class RingEventBus<E> extends RunnableComponent {
         }
 
         public RingEventBus<E> process(EventHandler<E> handler) {
-            return process(EventHandleGraph.single(handler));
+            return process(HandlerGraph.single(handler));
         }
 
-        public RingEventBus<E> process(EventHandleGraph<E> handleGraph) {
+        public RingEventBus<E> process(HandlerGraph<E> handlerGraph) {
             return new RingEventBus<>(name, size, startMode, producerType,
-                    eventFactory, waitStrategy, handleGraph);
+                    eventFactory, waitStrategy, handlerGraph);
         }
 
     }
