@@ -30,7 +30,7 @@ public final class CollectionUtil {
      * @return boolean
      */
     public static <E> boolean notEmpty(Collection<E> collection) {
-        return collection != null && collection.size() >= 1;
+        return collection != null && !collection.isEmpty();
     }
 
     /**

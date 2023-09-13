@@ -60,22 +60,33 @@ public abstract class RunnableComponent {
     }
 
     /**
+     * @throws Exception e
+     */
+    @AbstractFunction
+    protected abstract void start0() throws Exception;
+
+    /**
      * 启动组件
      */
     public void start() {
         if (isRunning.compareAndSet(false, true)) {
             try {
                 start0();
-                log.warn("func -> {}::start() call succeeded", name);
+                log.info("{}::start() call succeeded", name);
             } catch (Exception e) {
                 isRunning.set(false);
-                log.error("component -> {}::start0 throw exception -> {}", name, e.getMessage(), e);
-                throw new ComponentRunningException(name, e.getMessage(), e);
+                log.error("{}::start throw exception -> {}", name, e.getMessage(), e);
+                throw new ComponentStartException(name, e.getMessage(), e);
             }
         } else
-            log.warn("func -> {}::start() call failed, component already started", name);
+            log.warn("{}::start() call failed, component already started", name);
     }
 
+    /**
+     * @throws Exception e
+     */
+    @AbstractFunction
+    protected abstract void stop0() throws Exception;
 
     /**
      * 停止运行
@@ -86,39 +97,26 @@ public abstract class RunnableComponent {
             try {
                 stop0();
             } catch (Exception e) {
-                log.error("component -> {} stop0 throw exception -> {}", name, e.getMessage(), e);
+                log.error("{}::stop throw exception -> {}", name, e.getMessage(), e);
                 throw new ComponentStopException(name, e.getMessage(), e);
             }
         } else
-            log.warn("func -> {}::stop() call failed, component already stopped", name);
+            log.warn("{}::stop() call failed, component already stopped", name);
     }
-
-    /**
-     * @throws Exception e
-     */
-    @AbstractFunction
-    protected abstract void start0() throws Exception;
-
-    /**
-     * @throws Exception e
-     */
-    @AbstractFunction
-    protected abstract void stop0() throws Exception;
 
     /**
      * @param mode StartMode
      */
     public void startWith(final StartMode mode) {
-        if (mode.immediately) {
+        if (mode.immediately)
             start();
-        } else if (mode.delayMillis > 0) {
+        else if (mode.delayMillis > 0)
             ThreadSupport.startNewMaxPriorityThread(name + "-worker", () -> {
                 SleepSupport.sleep(mode.delayMillis);
                 start();
             });
-        } else {
-            log.info("{}, Start mode is [Manual], waiting call start...", name);
-        }
+        else
+            log.warn("{}, Start mode is [Manual], waiting call start...", name);
     }
 
     /**
@@ -162,12 +160,12 @@ public abstract class RunnableComponent {
     /**
      * @author yellow013
      */
-    public static class ComponentRunningException extends RuntimeException {
+    public static class ComponentStartException extends RuntimeException {
 
         @Serial
         private static final long serialVersionUID = -5059741051462133930L;
 
-        public ComponentRunningException(String componentName, String msg, Throwable cause) {
+        public ComponentStartException(String componentName, String msg, Throwable cause) {
             super("Component -> [" + componentName + "] start failed, Msg: " + msg, cause);
         }
 
