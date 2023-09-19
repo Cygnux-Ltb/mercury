@@ -14,7 +14,7 @@
     <properties>
         <chronicle-bytes.version>2.23.33</chronicle-bytes.version>
         <chronicle-threads.version>2.23.25</chronicle-threads.version>
-        <chronicle-wire.version>2.23.39</chronicle-wire.version>
+        <chronicle-wire.version>2.24ea25</chronicle-wire.version>
     </properties>
 
     <dependencies>
@@ -41,44 +41,56 @@
         <!-- ####### posix ####### -->
         <!-- This supports calls to do with memory mapping which other
             Posix libraries don’t seem to cover. -->
-        <dependency>
-            <groupId>net.openhft</groupId>
-            <artifactId>posix</artifactId>
-            <version>2.23.2</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>net.openhft</groupId>-->
+<!--            <artifactId>posix</artifactId>-->
+<!--            <version>2.23.2</version>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.slf4j</groupId>-->
+<!--                    <artifactId>slf4j-api</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
 
         <!-- ####### chronicle-bytes ####### -->
         <!-- Chronicle Bytes contains all the low level memory access wrappers.
             It is built on Chronicle Core’s direct memory and OS system call access.
             Chronicle Bytes has a similar purpose to Java NIO’s
             ByteBuffer with some extensions. -->
-        <dependency>
-            <groupId>net.openhft</groupId>
-            <artifactId>chronicle-bytes</artifactId>
-            <version>${chronicle-bytes.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>net.openhft</groupId>
-                    <artifactId>posix</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>net.openhft</groupId>-->
+<!--            <artifactId>chronicle-bytes</artifactId>-->
+<!--            <version>${chronicle-bytes.version}</version>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.slf4j</groupId>-->
+<!--                    <artifactId>slf4j-api</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>net.openhft</groupId>-->
+<!--                    <artifactId>posix</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
 
         <!-- ####### chronicle-threads ####### -->
         <!-- This library provide a high performance thread pool. This thread pool
             is design to share blocking, monitoring and busy waiting threads. Busy waiting
             tasks can be prioritised for HIGH, MEDIUM, DAEMON (low priority) as well
             as TIMER (fixed rate events) tasks in a single thread without creating garbage. -->
+
+        <dependency>
+            <groupId>net.openhft</groupId>
+            <artifactId>chronicle-core</artifactId>
+            <version>2.24ea25</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
         <!-- ####### chronicle-wire ####### -->
         <!-- A Java serialization Library that supports multiple formats. -->
@@ -92,13 +104,17 @@
                     <artifactId>slf4j-api</artifactId>
                 </exclusion>
                 <exclusion>
+                    <artifactId>chronicle-core</artifactId>
                     <groupId>net.openhft</groupId>
-                    <artifactId>chronicle-bytes</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>net.openhft</groupId>
-                    <artifactId>posix</artifactId>
-                </exclusion>
+                <!--                <exclusion>-->
+<!--                    <groupId>net.openhft</groupId>-->
+<!--                    <artifactId>chronicle-bytes</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>net.openhft</groupId>-->
+<!--                    <artifactId>posix</artifactId>-->
+<!--                </exclusion>-->
             </exclusions>
         </dependency>
 

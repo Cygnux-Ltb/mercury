@@ -4,12 +4,12 @@ import com.lmax.disruptor.WorkHandler;
 import io.mercury.common.concurrent.ring.base.HandlerGraph;
 import org.junit.Test;
 
-public class RingEventBusTest {
+public class RingEventbusTest {
 
     @Test
     public void test0() {
 
-        RingEventBus.multiProducer(EventBean.class).process(
+        RingEventbus.multiProducer(EventBean.class).process(
                 HandlerGraph.complexWithFirst((WorkHandler<EventBean>) event -> {
 
                         }

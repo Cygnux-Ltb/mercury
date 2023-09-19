@@ -30,9 +30,9 @@ import static java.util.Objects.requireNonNullElse;
  * @param <E>
  * @author yellow013
  */
-public class RingEventBus<E> extends RunnableComponent {
+public class RingEventbus<E> extends RunnableComponent {
 
-    private static final Logger log = Log4j2LoggerFactory.getLogger(RingEventBus.class);
+    private static final Logger log = Log4j2LoggerFactory.getLogger(RingEventbus.class);
 
     protected final Disruptor<E> disruptor;
 
@@ -42,11 +42,11 @@ public class RingEventBus<E> extends RunnableComponent {
 
     protected final boolean isMultiProducer;
 
-    protected RingEventBus(String name, int size, StartMode startMode,
+    protected RingEventbus(String name, int size, StartMode startMode,
                            ProducerType type, EventFactory<E> eventFactory,
                            WaitStrategy waitStrategy, HandlerGraph<E> handleGraph) {
         this.name = requireNonNullElse(name,
-                "RingEventBus-[" + YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now()) + "]");
+                "REventbus-[" + YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now()) + "]");
         final ProducerType producerType = requireNonNullElse(type, MULTI);
         this.disruptor = new Disruptor<>(
                 // EventFactory, 队列容量
@@ -193,16 +193,16 @@ public class RingEventBus<E> extends RunnableComponent {
             return this;
         }
 
-        public RingEventBus<E> process(Processor<E> processor) {
+        public RingEventbus<E> process(Processor<E> processor) {
             return process(new EventHandlerWrapper<>(processor, log));
         }
 
-        public RingEventBus<E> process(EventHandler<E> handler) {
+        public RingEventbus<E> process(EventHandler<E> handler) {
             return process(HandlerGraph.single(handler));
         }
 
-        public RingEventBus<E> process(HandlerGraph<E> handlerGraph) {
-            return new RingEventBus<>(name, size, startMode, producerType,
+        public RingEventbus<E> process(HandlerGraph<E> handlerGraph) {
+            return new RingEventbus<>(name, size, startMode, producerType,
                     eventFactory, waitStrategy, handlerGraph);
         }
 

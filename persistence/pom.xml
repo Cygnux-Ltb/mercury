@@ -114,7 +114,7 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
-                <version>1.23.0</version>
+                <version>1.24.0</version>
             </dependency>
 
             <!-- Java ports and bindings of the LZ4 compression algorithm and the
