@@ -17,16 +17,16 @@
             <artifactId>serialization-json</artifactId>
         </dependency>
 
-        <!-- Netty/All -->
+        <!-- Reactor Netty -->
         <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>${netty.version}</version>
+            <groupId>io.projectreactor.netty</groupId>
+            <artifactId>reactor-netty</artifactId>
+            <version>1.1.11</version>
         </dependency>
-        <!-- Netty/Transport -->
+        <!-- Netty/Codec -->
         <dependency>
             <groupId>io.netty</groupId>
-            <artifactId>netty-transport</artifactId>
+            <artifactId>netty-codec</artifactId>
             <version>${netty.version}</version>
         </dependency>
         <!-- Netty/Transport/Native/Epoll -->
@@ -39,18 +39,6 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-transport-native-kqueue</artifactId>
-            <version>${netty.version}</version>
-        </dependency>
-        <!-- Netty/Codec -->
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-codec</artifactId>
-            <version>${netty.version}</version>
-        </dependency>
-        <!-- Netty/Codec/HTTP -->
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-codec-http</artifactId>
             <version>${netty.version}</version>
         </dependency>
 
@@ -76,6 +64,14 @@
             <groupId>jakarta.activation</groupId>
             <artifactId>jakarta.activation-api</artifactId>
             <version>2.1.2</version>
+        </dependency>
+
+        <!-- Netty/All -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>${netty.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

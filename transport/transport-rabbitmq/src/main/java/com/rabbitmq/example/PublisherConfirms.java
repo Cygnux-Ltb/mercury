@@ -49,7 +49,7 @@ public class PublisherConfirms {
         }
     }
 
-    static void publishMessagesInBatch() throws Exception {
+    static void publishMessagesInBatch() {
         try (Connection connection = createConnection()) {
             Channel ch = connection.createChannel();
 
@@ -84,7 +84,7 @@ public class PublisherConfirms {
         }
     }
 
-    static void handlePublishConfirmsAsynchronously() throws Exception {
+    static void handlePublishConfirmsAsynchronously() {
         try (Connection connection = createConnection()) {
             Channel ch = connection.createChannel();
 

@@ -1,6 +1,7 @@
 package io.mercury.transport.http.ws;
 
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
+import io.mercury.transport.http.AsyncHttpClientImpl;
 import io.mercury.transport.http.ws.WebSocketHandler.WsBinaryFrameHandler;
 import io.mercury.transport.http.ws.WebSocketHandler.WsCloseHandler;
 import io.mercury.transport.http.ws.WebSocketHandler.WsOpenHandler;
@@ -14,8 +15,6 @@ import org.asynchttpclient.ws.WebSocketUpgradeHandler.Builder;
 import org.slf4j.Logger;
 
 import java.util.concurrent.ExecutionException;
-
-import static io.mercury.transport.http.AsyncHttpClient.AHC;
 
 public final class WebSocketClient {
 
@@ -31,22 +30,18 @@ public final class WebSocketClient {
      * @param textFrameHandler   文本帧处理函数
      * @param throwableHandler   异常处理函数
      */
-    public static void connect(
-            // WebSocket地址
-            String uri,
-            // [打开/关闭] 连接处理函数
-            WsOpenHandler openHandler,
-            WsCloseHandler closeHandler,
-            // [Ping/Pong] 帧处理函数
-            WsPingFrameHandler pingFrameHandler,
-            WsPongFrameHandler pongFrameHandler,
-            // [二进制/文本] 帧处理函数
-            WsBinaryFrameHandler binaryFrameHandler,
-            WsTextFrameHandler textFrameHandler,
-            // 异常处理函数
-            WsThrowableHandler throwableHandler) {
+    public static void connect(// WebSocket地址
+                               String uri,
+                               // [打开/关闭] 连接处理函数
+                               WsOpenHandler openHandler, WsCloseHandler closeHandler,
+                               // [Ping/Pong] 帧处理函数
+                               WsPingFrameHandler pingFrameHandler, WsPongFrameHandler pongFrameHandler,
+                               // [二进制帧/文本帧] 处理函数
+                               WsBinaryFrameHandler binaryFrameHandler, WsTextFrameHandler textFrameHandler,
+                               // 异常处理函数
+                               WsThrowableHandler throwableHandler) {
         try {
-            WebSocket webSocket = AHC.prepareGet(uri)
+            WebSocket webSocket = AsyncHttpClientImpl.INSTANCE.prepareGet(uri)
                     .execute(new Builder().addWebSocketListener(
                             new WebSocketListenerImpl(
                                     uri, // WebSocket地址

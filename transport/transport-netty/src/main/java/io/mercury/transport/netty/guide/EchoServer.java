@@ -64,7 +64,6 @@ public class EchoServer {
                          *
                          * 当你的程序变的复杂时，可能你会增加更多的处理类到 pipeline 上, 然后提取这些匿名类到最顶层的类上.
                          */
-
                         @Override
                         public void initChannel(SocketChannel ch) {
                             ch.pipeline().addLast(new EchoServerHandler());

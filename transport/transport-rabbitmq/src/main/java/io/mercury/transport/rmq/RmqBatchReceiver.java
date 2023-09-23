@@ -48,13 +48,28 @@ public class RmqBatchReceiver<T> extends RmqTransport implements Receiver, Runna
     // 队列持久化
     private boolean durable = true;
 
+    public RmqBatchReceiver<T> setDurable(boolean durable) {
+        this.durable = durable;
+        return this;
+    }
+
     // 连接独占此队列
     private boolean exclusive = false;
+
+    public RmqBatchReceiver<T> setExclusive(boolean exclusive) {
+        this.exclusive = exclusive;
+        return this;
+    }
 
     // channel关闭后自动删除队列
     private boolean autoDelete = false;
 
-    private BatchProcessConsumer<T> consumer;
+    public RmqBatchReceiver<T> setAutoDelete(boolean autoDelete) {
+        this.autoDelete = autoDelete;
+        return this;
+    }
+
+    private final BatchProcessConsumer<T> consumer;
 
     public RmqBatchReceiver(String tag, @Nonnull RmqReceiverConfig cfg, long autoFlushInterval,
                             BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent) {
@@ -62,7 +77,7 @@ public class RmqBatchReceiver<T> extends RmqTransport implements Receiver, Runna
         this.receiveQueue = cfg.getReceiveQueue().getQueueName();
         createConnection();
         queueDeclare();
-        this.consumer = new BatchProcessConsumer<T>(channel, cfg.getAckOptions().getQos(), autoFlushInterval,
+        this.consumer = new BatchProcessConsumer<>(channel, cfg.getAckOptions().getQos(), autoFlushInterval,
                 batchHandler, deserializer, refreshNowEvent, null);
     }
 
@@ -74,7 +89,7 @@ public class RmqBatchReceiver<T> extends RmqTransport implements Receiver, Runna
         this.receiveQueue = configurator.getReceiveQueue().getQueueName();
         createConnection();
         queueDeclare();
-        this.consumer = new BatchProcessConsumer<T>(super.channel, configurator.getAckOptions().getQos(),
+        this.consumer = new BatchProcessConsumer<>(super.channel, configurator.getAckOptions().getQos(),
                 autoFlushInterval, batchHandler, deserializer, refreshNowEvent, filter);
     }
 
@@ -85,12 +100,7 @@ public class RmqBatchReceiver<T> extends RmqTransport implements Receiver, Runna
         } catch (IOException e) {
             log.error(
                     "Function channel.queueDeclare(queue==[{}], durable==[{}], exclusive==[{}], autoDelete==[{}], arguments==null) IOException message -> {}",
-                    receiveQueue,
-                    durable,
-                    exclusive,
-                    autoDelete,
-                    e.getMessage(),
-                    e);
+                    receiveQueue, durable, exclusive, autoDelete, e.getMessage(), e);
             closeIgnoreException();
         }
     }
@@ -333,7 +343,7 @@ public class RmqBatchReceiver<T> extends RmqTransport implements Receiver, Runna
      * @author yellow013
      */
     @FunctionalInterface
-    public static interface BatchHandler<T> extends Predicate<Collection<T>> {
+    public interface BatchHandler<T> extends Predicate<Collection<T>> {
 
         boolean handle(Collection<T> collection);
 
@@ -348,7 +358,7 @@ public class RmqBatchReceiver<T> extends RmqTransport implements Receiver, Runna
      * @author yellow013
      */
     @FunctionalInterface
-    public static interface RefreshNowEvent<T> extends Predicate<T> {
+    public interface RefreshNowEvent<T> extends Predicate<T> {
 
         boolean flushNow(T t);
 

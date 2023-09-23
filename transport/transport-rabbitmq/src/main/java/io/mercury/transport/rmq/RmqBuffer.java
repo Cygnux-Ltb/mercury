@@ -188,6 +188,17 @@ public class RmqBuffer<E> implements McQueue<E>, Closeable {
         channel.close();
     }
 
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Override
+    public QueueType getQueueType() {
+        return QueueType.MPMC;
+    }
+
+    
     public static void main(String[] args) {
 
         RmqConnection connection = RmqConnection.with("127.0.0.1", 5672, "user", "password").build();
@@ -205,16 +216,6 @@ public class RmqBuffer<E> implements McQueue<E>, Closeable {
             e.printStackTrace();
         }
 
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public QueueType getQueueType() {
-        return QueueType.MPMC;
     }
 
 }

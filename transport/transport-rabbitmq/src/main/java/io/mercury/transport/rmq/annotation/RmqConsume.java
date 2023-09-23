@@ -2,7 +2,7 @@ package io.mercury.transport.rmq.annotation;
 
 public @interface RmqConsume {
 
-    String queueName() default "";
+    String queueName();
 
     boolean autoAck() default true;
 
