@@ -11,8 +11,6 @@
     <artifactId>persistence-chronicle</artifactId>
     <name>persistence-chronicle</name>
 
-    <packaging>jar</packaging>
-
     <properties>
         <!-- v chronicle storage basic v -->
         <chronicle-core.version>2.23.36</chronicle-core.version>

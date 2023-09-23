@@ -32,18 +32,14 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Java 1.8 -->
-        <!-- <java.version>1.8</java.version> -->
-        <!-- <maven.compiler.target>1.8</maven.compiler.target> -->
-        <!-- <maven.compiler.source>1.8</maven.compiler.source> -->
         <!-- Java 11 -->
         <!-- <java.version>11</java.version> -->
         <!-- <maven.compiler.target>11</maven.compiler.target> -->
         <!-- <maven.compiler.source>11</maven.compiler.source> -->
-        <!-- Java 20 -->
-        <java.version>20</java.version>
-        <maven.compiler.target>20</maven.compiler.target>
-        <maven.compiler.source>20</maven.compiler.source>
+        <!-- Java 21 -->
+        <java.version>21</java.version>
+        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
         <!-- Common library version -->
         <slf4j.version>1.7.36</slf4j.version>
         <junit.version>4.13.2</junit.version>
