@@ -4,8 +4,7 @@ package sbe.extension;
 import org.agrona.MutableDirectBuffer;
 
 @SuppressWarnings("all")
-public final class OptionalExtrasEncoder
-{
+public final class OptionalExtrasEncoder {
     public static final int SCHEMA_ID = 1;
     public static final int SCHEMA_VERSION = 1;
     public static final String SEMANTIC_VERSION = "5.2";
@@ -15,10 +14,8 @@ public final class OptionalExtrasEncoder
     private int offset;
     private MutableDirectBuffer buffer;
 
-    public OptionalExtrasEncoder wrap(final MutableDirectBuffer buffer, final int offset)
-    {
-        if (buffer != this.buffer)
-        {
+    public OptionalExtrasEncoder wrap(final MutableDirectBuffer buffer, final int offset) {
+        if (buffer != this.buffer) {
             this.buffer = buffer;
         }
         this.offset = offset;
@@ -26,73 +23,61 @@ public final class OptionalExtrasEncoder
         return this;
     }
 
-    public MutableDirectBuffer buffer()
-    {
+    public MutableDirectBuffer buffer() {
         return buffer;
     }
 
-    public int offset()
-    {
+    public int offset() {
         return offset;
     }
 
-    public int encodedLength()
-    {
+    public int encodedLength() {
         return ENCODED_LENGTH;
     }
 
-    public int sbeSchemaId()
-    {
+    public int sbeSchemaId() {
         return SCHEMA_ID;
     }
 
-    public int sbeSchemaVersion()
-    {
+    public int sbeSchemaVersion() {
         return SCHEMA_VERSION;
     }
 
-    public OptionalExtrasEncoder clear()
-    {
-        buffer.putByte(offset, (byte)(short)0);
+    public OptionalExtrasEncoder clear() {
+        buffer.putByte(offset, (byte) (short) 0);
         return this;
     }
 
-    public OptionalExtrasEncoder sunRoof(final boolean value)
-    {
+    public OptionalExtrasEncoder sunRoof(final boolean value) {
         byte bits = buffer.getByte(offset);
-        bits = (byte)(value ? bits | (1 << 0) : bits & ~(1 << 0));
+        bits = (byte) (value ? bits | (1 << 0) : bits & ~(1 << 0));
         buffer.putByte(offset, bits);
         return this;
     }
 
-    public static byte sunRoof(final byte bits, final boolean value)
-    {
-        return (byte)(value ? bits | (1 << 0) : bits & ~(1 << 0));
+    public static byte sunRoof(final byte bits, final boolean value) {
+        return (byte) (value ? bits | (1 << 0) : bits & ~(1 << 0));
     }
 
-    public OptionalExtrasEncoder sportsPack(final boolean value)
-    {
+    public OptionalExtrasEncoder sportsPack(final boolean value) {
         byte bits = buffer.getByte(offset);
-        bits = (byte)(value ? bits | (1 << 1) : bits & ~(1 << 1));
+        bits = (byte) (value ? bits | (1 << 1) : bits & ~(1 << 1));
         buffer.putByte(offset, bits);
         return this;
     }
 
-    public static byte sportsPack(final byte bits, final boolean value)
-    {
-        return (byte)(value ? bits | (1 << 1) : bits & ~(1 << 1));
+    public static byte sportsPack(final byte bits, final boolean value) {
+        return (byte) (value ? bits | (1 << 1) : bits & ~(1 << 1));
     }
 
-    public OptionalExtrasEncoder cruiseControl(final boolean value)
-    {
+    public OptionalExtrasEncoder cruiseControl(final boolean value) {
         byte bits = buffer.getByte(offset);
-        bits = (byte)(value ? bits | (1 << 2) : bits & ~(1 << 2));
+        bits = (byte) (value ? bits | (1 << 2) : bits & ~(1 << 2));
         buffer.putByte(offset, bits);
         return this;
     }
 
-    public static byte cruiseControl(final byte bits, final boolean value)
-    {
-        return (byte)(value ? bits | (1 << 2) : bits & ~(1 << 2));
+    public static byte cruiseControl(final byte bits, final boolean value) {
+        return (byte) (value ? bits | (1 << 2) : bits & ~(1 << 2));
     }
 }

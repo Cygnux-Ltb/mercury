@@ -8,8 +8,7 @@ import org.agrona.MutableDirectBuffer;
  * Variable length UTF-8 String.
  */
 @SuppressWarnings("all")
-public final class VarStringEncodingEncoder
-{
+public final class VarStringEncodingEncoder {
     public static final int SCHEMA_ID = 1;
     public static final int SCHEMA_VERSION = 1;
     public static final String SEMANTIC_VERSION = "5.2";
@@ -19,10 +18,8 @@ public final class VarStringEncodingEncoder
     private int offset;
     private MutableDirectBuffer buffer;
 
-    public VarStringEncodingEncoder wrap(final MutableDirectBuffer buffer, final int offset)
-    {
-        if (buffer != this.buffer)
-        {
+    public VarStringEncodingEncoder wrap(final MutableDirectBuffer buffer, final int offset) {
+        if (buffer != this.buffer) {
             this.buffer = buffer;
         }
         this.offset = offset;
@@ -30,102 +27,82 @@ public final class VarStringEncodingEncoder
         return this;
     }
 
-    public MutableDirectBuffer buffer()
-    {
+    public MutableDirectBuffer buffer() {
         return buffer;
     }
 
-    public int offset()
-    {
+    public int offset() {
         return offset;
     }
 
-    public int encodedLength()
-    {
+    public int encodedLength() {
         return ENCODED_LENGTH;
     }
 
-    public int sbeSchemaId()
-    {
+    public int sbeSchemaId() {
         return SCHEMA_ID;
     }
 
-    public int sbeSchemaVersion()
-    {
+    public int sbeSchemaVersion() {
         return SCHEMA_VERSION;
     }
 
-    public static int lengthEncodingOffset()
-    {
+    public static int lengthEncodingOffset() {
         return 0;
     }
 
-    public static int lengthEncodingLength()
-    {
+    public static int lengthEncodingLength() {
         return 4;
     }
 
-    public static long lengthNullValue()
-    {
+    public static long lengthNullValue() {
         return 4294967295L;
     }
 
-    public static long lengthMinValue()
-    {
+    public static long lengthMinValue() {
         return 0L;
     }
 
-    public static long lengthMaxValue()
-    {
+    public static long lengthMaxValue() {
         return 1073741824L;
     }
 
-    public VarStringEncodingEncoder length(final long value)
-    {
-        buffer.putInt(offset + 0, (int)value, java.nio.ByteOrder.LITTLE_ENDIAN);
+    public VarStringEncodingEncoder length(final long value) {
+        buffer.putInt(offset + 0, (int) value, java.nio.ByteOrder.LITTLE_ENDIAN);
         return this;
     }
 
 
-    public static int varDataEncodingOffset()
-    {
+    public static int varDataEncodingOffset() {
         return 4;
     }
 
-    public static int varDataEncodingLength()
-    {
+    public static int varDataEncodingLength() {
         return -1;
     }
 
-    public static short varDataNullValue()
-    {
-        return (short)255;
+    public static short varDataNullValue() {
+        return (short) 255;
     }
 
-    public static short varDataMinValue()
-    {
-        return (short)0;
+    public static short varDataMinValue() {
+        return (short) 0;
     }
 
-    public static short varDataMaxValue()
-    {
-        return (short)254;
+    public static short varDataMaxValue() {
+        return (short) 254;
     }
 
-    public String toString()
-    {
-        if (null == buffer)
-        {
+    public String toString() {
+        if (null == buffer) {
             return "";
         }
 
         return appendTo(new StringBuilder()).toString();
     }
 
-    public StringBuilder appendTo(final StringBuilder builder)
-    {
-        if (null == buffer)
-        {
+    public StringBuilder appendTo(final StringBuilder builder) {
+        if (null == buffer) {
             return builder;
         }
 
