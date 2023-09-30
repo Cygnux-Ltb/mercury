@@ -14,7 +14,7 @@
     <properties>
         <chronicle-bytes.version>2.23.33</chronicle-bytes.version>
         <chronicle-threads.version>2.23.25</chronicle-threads.version>
-        <chronicle-wire.version>2.24ea25</chronicle-wire.version>
+        <chronicle-wire.version>2.22.22</chronicle-wire.version>
     </properties>
 
     <dependencies>

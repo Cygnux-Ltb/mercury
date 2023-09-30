@@ -19,7 +19,7 @@
         <module>transport-jetty</module>
         <module>transport-netty</module>
         <module>transport-rabbitmq</module>
-        <module>transport-socket</module>
+        <!-- <module>transport-socket</module> -->
         <module>transport-ws</module>
         <module>transport-zmq</module>
     </modules>

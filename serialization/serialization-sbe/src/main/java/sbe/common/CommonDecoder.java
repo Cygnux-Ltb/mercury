@@ -8,7 +8,8 @@ import org.agrona.DirectBuffer;
  * Common Message
  */
 @SuppressWarnings("all")
-public final class CommonDecoder {
+public final class CommonDecoder
+{
     public static final int BLOCK_LENGTH = 0;
     public static final int TEMPLATE_ID = 1;
     public static final int SCHEMA_ID = 1;
@@ -24,44 +25,54 @@ public final class CommonDecoder {
     int actingBlockLength;
     int actingVersion;
 
-    public int sbeBlockLength() {
+    public int sbeBlockLength()
+    {
         return BLOCK_LENGTH;
     }
 
-    public int sbeTemplateId() {
+    public int sbeTemplateId()
+    {
         return TEMPLATE_ID;
     }
 
-    public int sbeSchemaId() {
+    public int sbeSchemaId()
+    {
         return SCHEMA_ID;
     }
 
-    public int sbeSchemaVersion() {
+    public int sbeSchemaVersion()
+    {
         return SCHEMA_VERSION;
     }
 
-    public String sbeSemanticType() {
+    public String sbeSemanticType()
+    {
         return "";
     }
 
-    public DirectBuffer buffer() {
+    public DirectBuffer buffer()
+    {
         return buffer;
     }
 
-    public int initialOffset() {
+    public int initialOffset()
+    {
         return initialOffset;
     }
 
-    public int offset() {
+    public int offset()
+    {
         return offset;
     }
 
     public CommonDecoder wrap(
-            final DirectBuffer buffer,
-            final int offset,
-            final int actingBlockLength,
-            final int actingVersion) {
-        if (buffer != this.buffer) {
+        final DirectBuffer buffer,
+        final int offset,
+        final int actingBlockLength,
+        final int actingVersion)
+    {
+        if (buffer != this.buffer)
+        {
             this.buffer = buffer;
         }
         this.initialOffset = offset;
@@ -74,28 +85,32 @@ public final class CommonDecoder {
     }
 
     public CommonDecoder wrapAndApplyHeader(
-            final DirectBuffer buffer,
-            final int offset,
-            final MessageHeaderDecoder headerDecoder) {
+        final DirectBuffer buffer,
+        final int offset,
+        final MessageHeaderDecoder headerDecoder)
+    {
         headerDecoder.wrap(buffer, offset);
 
         final int templateId = headerDecoder.templateId();
-        if (TEMPLATE_ID != templateId) {
+        if (TEMPLATE_ID != templateId)
+        {
             throw new IllegalStateException("Invalid TEMPLATE_ID: " + templateId);
         }
 
         return wrap(
-                buffer,
-                offset + MessageHeaderDecoder.ENCODED_LENGTH,
-                headerDecoder.blockLength(),
-                headerDecoder.version());
+            buffer,
+            offset + MessageHeaderDecoder.ENCODED_LENGTH,
+            headerDecoder.blockLength(),
+            headerDecoder.version());
     }
 
-    public CommonDecoder sbeRewind() {
+    public CommonDecoder sbeRewind()
+    {
         return wrap(buffer, initialOffset, actingBlockLength, actingVersion);
     }
 
-    public int sbeDecodedLength() {
+    public int sbeDecodedLength()
+    {
         final int currentLimit = limit();
         sbeSkip();
         final int decodedLength = encodedLength();
@@ -104,20 +119,25 @@ public final class CommonDecoder {
         return decodedLength;
     }
 
-    public int encodedLength() {
+    public int encodedLength()
+    {
         return limit - offset;
     }
 
-    public int limit() {
+    public int limit()
+    {
         return limit;
     }
 
-    public void limit(final int limit) {
+    public void limit(final int limit)
+    {
         this.limit = limit;
     }
 
-    public String toString() {
-        if (null == buffer) {
+    public String toString()
+    {
+        if (null == buffer)
+        {
             return "";
         }
 
@@ -127,8 +147,10 @@ public final class CommonDecoder {
         return decoder.appendTo(new StringBuilder()).toString();
     }
 
-    public StringBuilder appendTo(final StringBuilder builder) {
-        if (null == buffer) {
+    public StringBuilder appendTo(final StringBuilder builder)
+    {
+        if (null == buffer)
+        {
             return builder;
         }
 
@@ -139,13 +161,15 @@ public final class CommonDecoder {
         builder.append("|sbeSchemaId=");
         builder.append(SCHEMA_ID);
         builder.append("|sbeSchemaVersion=");
-        if (parentMessage.actingVersion != SCHEMA_VERSION) {
+        if (parentMessage.actingVersion != SCHEMA_VERSION)
+        {
             builder.append(parentMessage.actingVersion);
             builder.append('/');
         }
         builder.append(SCHEMA_VERSION);
         builder.append("|sbeBlockLength=");
-        if (actingBlockLength != BLOCK_LENGTH) {
+        if (actingBlockLength != BLOCK_LENGTH)
+        {
             builder.append(actingBlockLength);
             builder.append('/');
         }
@@ -156,8 +180,9 @@ public final class CommonDecoder {
 
         return builder;
     }
-
-    public CommonDecoder sbeSkip() {
+    
+    public CommonDecoder sbeSkip()
+    {
         sbeRewind();
 
         return this;

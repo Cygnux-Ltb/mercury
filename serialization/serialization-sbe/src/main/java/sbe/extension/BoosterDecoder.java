@@ -4,7 +4,8 @@ package sbe.extension;
 import org.agrona.DirectBuffer;
 
 @SuppressWarnings("all")
-public final class BoosterDecoder {
+public final class BoosterDecoder
+{
     public static final int SCHEMA_ID = 1;
     public static final int SCHEMA_VERSION = 1;
     public static final String SEMANTIC_VERSION = "5.2";
@@ -14,94 +15,118 @@ public final class BoosterDecoder {
     private int offset;
     private DirectBuffer buffer;
 
-    public BoosterDecoder wrap(final DirectBuffer buffer, final int offset) {
-        if (buffer != this.buffer) {
+    public BoosterDecoder wrap(final DirectBuffer buffer, final int offset)
+    {
+        if (buffer != this.buffer)
+        {
             this.buffer = buffer;
         }
         this.offset = offset;
+
         return this;
     }
 
-    public DirectBuffer buffer() {
+    public DirectBuffer buffer()
+    {
         return buffer;
     }
 
-    public int offset() {
+    public int offset()
+    {
         return offset;
     }
 
-    public int encodedLength() {
+    public int encodedLength()
+    {
         return ENCODED_LENGTH;
     }
 
-    public int sbeSchemaId() {
+    public int sbeSchemaId()
+    {
         return SCHEMA_ID;
     }
 
-    public int sbeSchemaVersion() {
+    public int sbeSchemaVersion()
+    {
         return SCHEMA_VERSION;
     }
 
-    public static int boostTypeEncodingOffset() {
+    public static int boostTypeEncodingOffset()
+    {
         return 0;
     }
 
-    public static int boostTypeEncodingLength() {
+    public static int boostTypeEncodingLength()
+    {
         return 1;
     }
 
-    public static int boostTypeSinceVersion() {
+    public static int boostTypeSinceVersion()
+    {
         return 0;
     }
 
-    public byte boostTypeRaw() {
+    public byte boostTypeRaw()
+    {
         return buffer.getByte(offset + 0);
     }
 
-    public BoostType boostType() {
+    public BoostType boostType()
+    {
         return BoostType.get(buffer.getByte(offset + 0));
     }
 
 
-    public static int horsePowerEncodingOffset() {
+    public static int horsePowerEncodingOffset()
+    {
         return 1;
     }
 
-    public static int horsePowerEncodingLength() {
+    public static int horsePowerEncodingLength()
+    {
         return 1;
     }
 
-    public static int horsePowerSinceVersion() {
+    public static int horsePowerSinceVersion()
+    {
         return 0;
     }
 
-    public static short horsePowerNullValue() {
-        return (short) 255;
+    public static short horsePowerNullValue()
+    {
+        return (short)255;
     }
 
-    public static short horsePowerMinValue() {
-        return (short) 0;
+    public static short horsePowerMinValue()
+    {
+        return (short)0;
     }
 
-    public static short horsePowerMaxValue() {
-        return (short) 254;
+    public static short horsePowerMaxValue()
+    {
+        return (short)254;
     }
 
-    public short horsePower() {
-        return ((short) (buffer.getByte(offset + 1) & 0xFF));
+    public short horsePower()
+    {
+        return ((short)(buffer.getByte(offset + 1) & 0xFF));
     }
 
 
-    public String toString() {
-        if (null == buffer) {
+    public String toString()
+    {
+        if (null == buffer)
+        {
             return "";
         }
 
         return appendTo(new StringBuilder()).toString();
     }
 
-    public StringBuilder appendTo(final StringBuilder builder) {
-        if (null == buffer) {
+    public StringBuilder appendTo(final StringBuilder builder)
+    {
+        if (null == buffer)
+        {
             return builder;
         }
 

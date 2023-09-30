@@ -15,7 +15,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>persistence-chronicle</module>
+        <!-- <module>persistence-chronicle</module> -->
         <module>persistence-h2</module>
         <module>persistence-hsqldb</module>
         <module>persistence-log4j2-hp</module>

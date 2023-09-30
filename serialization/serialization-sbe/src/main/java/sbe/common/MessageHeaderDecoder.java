@@ -8,8 +8,8 @@ import org.agrona.DirectBuffer;
  * Message identifiers and length of message root.
  */
 @SuppressWarnings("all")
-public final class MessageHeaderDecoder {
-
+public final class MessageHeaderDecoder
+{
     public static final int SCHEMA_ID = 1;
     public static final int SCHEMA_VERSION = 0;
     public static final String SEMANTIC_VERSION = "5.2";
@@ -19,8 +19,10 @@ public final class MessageHeaderDecoder {
     private int offset;
     private DirectBuffer buffer;
 
-    public MessageHeaderDecoder wrap(final DirectBuffer buffer, final int offset) {
-        if (buffer != this.buffer) {
+    public MessageHeaderDecoder wrap(final DirectBuffer buffer, final int offset)
+    {
+        if (buffer != this.buffer)
+        {
             this.buffer = buffer;
         }
         this.offset = offset;
@@ -28,152 +30,189 @@ public final class MessageHeaderDecoder {
         return this;
     }
 
-    public DirectBuffer buffer() {
+    public DirectBuffer buffer()
+    {
         return buffer;
     }
 
-    public int offset() {
+    public int offset()
+    {
         return offset;
     }
 
-    public int encodedLength() {
+    public int encodedLength()
+    {
         return ENCODED_LENGTH;
     }
 
-    public int sbeSchemaId() {
+    public int sbeSchemaId()
+    {
         return SCHEMA_ID;
     }
 
-    public int sbeSchemaVersion() {
+    public int sbeSchemaVersion()
+    {
         return SCHEMA_VERSION;
     }
 
-    public static int blockLengthEncodingOffset() {
+    public static int blockLengthEncodingOffset()
+    {
         return 0;
     }
 
-    public static int blockLengthEncodingLength() {
+    public static int blockLengthEncodingLength()
+    {
         return 2;
     }
 
-    public static int blockLengthSinceVersion() {
+    public static int blockLengthSinceVersion()
+    {
         return 0;
     }
 
-    public static int blockLengthNullValue() {
+    public static int blockLengthNullValue()
+    {
         return 65535;
     }
 
-    public static int blockLengthMinValue() {
+    public static int blockLengthMinValue()
+    {
         return 0;
     }
 
-    public static int blockLengthMaxValue() {
+    public static int blockLengthMaxValue()
+    {
         return 65534;
     }
 
-    public int blockLength() {
+    public int blockLength()
+    {
         return (buffer.getShort(offset + 0, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
     }
 
 
-    public static int templateIdEncodingOffset() {
+    public static int templateIdEncodingOffset()
+    {
         return 2;
     }
 
-    public static int templateIdEncodingLength() {
+    public static int templateIdEncodingLength()
+    {
         return 2;
     }
 
-    public static int templateIdSinceVersion() {
+    public static int templateIdSinceVersion()
+    {
         return 0;
     }
 
-    public static int templateIdNullValue() {
+    public static int templateIdNullValue()
+    {
         return 65535;
     }
 
-    public static int templateIdMinValue() {
+    public static int templateIdMinValue()
+    {
         return 0;
     }
 
-    public static int templateIdMaxValue() {
+    public static int templateIdMaxValue()
+    {
         return 65534;
     }
 
-    public int templateId() {
+    public int templateId()
+    {
         return (buffer.getShort(offset + 2, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
     }
 
 
-    public static int schemaIdEncodingOffset() {
+    public static int schemaIdEncodingOffset()
+    {
         return 4;
     }
 
-    public static int schemaIdEncodingLength() {
+    public static int schemaIdEncodingLength()
+    {
         return 2;
     }
 
-    public static int schemaIdSinceVersion() {
+    public static int schemaIdSinceVersion()
+    {
         return 0;
     }
 
-    public static int schemaIdNullValue() {
+    public static int schemaIdNullValue()
+    {
         return 65535;
     }
 
-    public static int schemaIdMinValue() {
+    public static int schemaIdMinValue()
+    {
         return 0;
     }
 
-    public static int schemaIdMaxValue() {
+    public static int schemaIdMaxValue()
+    {
         return 65534;
     }
 
-    public int schemaId() {
+    public int schemaId()
+    {
         return (buffer.getShort(offset + 4, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
     }
 
 
-    public static int versionEncodingOffset() {
+    public static int versionEncodingOffset()
+    {
         return 6;
     }
 
-    public static int versionEncodingLength() {
+    public static int versionEncodingLength()
+    {
         return 2;
     }
 
-    public static int versionSinceVersion() {
+    public static int versionSinceVersion()
+    {
         return 0;
     }
 
-    public static int versionNullValue() {
+    public static int versionNullValue()
+    {
         return 65535;
     }
 
-    public static int versionMinValue() {
+    public static int versionMinValue()
+    {
         return 0;
     }
 
-    public static int versionMaxValue() {
+    public static int versionMaxValue()
+    {
         return 65534;
     }
 
-    public int version() {
+    public int version()
+    {
         return (buffer.getShort(offset + 6, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
     }
 
 
-    public String toString() {
-        if (null == buffer) {
+    public String toString()
+    {
+        if (null == buffer)
+        {
             return "";
         }
 
         return appendTo(new StringBuilder()).toString();
     }
 
-    public StringBuilder appendTo(final StringBuilder builder) {
-        if (null == buffer) {
+    public StringBuilder appendTo(final StringBuilder builder)
+    {
+        if (null == buffer)
+        {
             return builder;
         }
 

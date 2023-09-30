@@ -56,8 +56,8 @@
 
         <dependency>
             <groupId>io.mercury</groupId>
-            <artifactId>library-cryption</artifactId>
-            <version>${project.version}</version>
+            <artifactId>library-encryption</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
