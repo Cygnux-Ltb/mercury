@@ -24,8 +24,8 @@ import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Publisher;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.exception.PublishFailedException;
-import io.mercury.transport.rmq.configurator.RmqConnection;
-import io.mercury.transport.rmq.configurator.RmqPublisherConfig;
+import io.mercury.transport.rmq.cfg.RmqConnection;
+import io.mercury.transport.rmq.cfg.RmqPublisherCfg;
 import io.mercury.transport.rmq.declare.ExchangeRelationship;
 import io.mercury.transport.rmq.exception.DeclareException;
 import io.mercury.transport.rmq.exception.DeclareRuntimeException;
@@ -59,7 +59,7 @@ public class RmqPublisher extends RmqTransport implements Publisher<String, byte
     /**
      * @param cfg RmqPublisherConfig
      */
-    public RmqPublisher(@Nonnull RmqPublisherConfig cfg) {
+    public RmqPublisher(@Nonnull RmqPublisherCfg cfg) {
         this(null, cfg);
     }
 
@@ -67,7 +67,7 @@ public class RmqPublisher extends RmqTransport implements Publisher<String, byte
      * @param tag String
      * @param cfg RmqPublisherConfig
      */
-    public RmqPublisher(@Nullable String tag, @Nonnull RmqPublisherConfig cfg) {
+    public RmqPublisher(@Nullable String tag, @Nonnull RmqPublisherCfg cfg) {
         super(nonEmpty(tag) ? tag : "publisher-" + datetimeOfMillisecond(), cfg.getConnection());
         Asserter.nonNull(cfg.getPublishExchange(), "exchangeRelation");
         this.publishExchange = cfg.getPublishExchange();
@@ -251,7 +251,7 @@ public class RmqPublisher extends RmqTransport implements Publisher<String, byte
         ExchangeRelationship fanoutExchange = ExchangeRelationship.fanout("fanout-test");
 
         try (RmqPublisher publisher = new RmqPublisher(
-                RmqPublisherConfig.configuration(connection, fanoutExchange).build())) {
+                RmqPublisherCfg.configuration(connection, fanoutExchange).build())) {
             ThreadSupport.startNewThread(() -> {
                 int count = 0;
                 while (true) {

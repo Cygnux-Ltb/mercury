@@ -1,4 +1,4 @@
-package io.mercury.common.config;
+package io.mercury.common.cfg;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigException.BadValue;

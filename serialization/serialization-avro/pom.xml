@@ -12,7 +12,7 @@
     <name>serialization-avro</name>
 
     <properties>
-        <avro.version>1.11.2</avro.version>
+        <avro.version>1.11.3</avro.version>
     </properties>
 
     <repositories>
@@ -68,7 +68,7 @@
         <dependency>
             <groupId>com.linkedin.avroutil1</groupId>
             <artifactId>avro-fastserde</artifactId>
-            <version>0.3.13</version>
+            <version>0.3.17</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.commons</groupId>

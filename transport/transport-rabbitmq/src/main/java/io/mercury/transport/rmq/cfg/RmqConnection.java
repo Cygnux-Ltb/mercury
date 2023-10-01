@@ -1,8 +1,8 @@
-package io.mercury.transport.rmq.configurator;
+package io.mercury.transport.rmq.cfg;
 
 import com.rabbitmq.client.ConnectionFactory;
 import com.typesafe.config.Config;
-import io.mercury.common.config.ConfigWrapper;
+import io.mercury.common.cfg.ConfigWrapper;
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.util.StringSupport;
 import io.mercury.serialization.json.JsonWrapper;
@@ -115,11 +115,11 @@ public final class RmqConnection implements TransportConfigurator {
      * @return Builder
      */
     public static Builder with(@Nonnull String module, @Nonnull Config config) {
-        ConfigWrapper<RmqConfigOption> delegate = new ConfigWrapper<>(module, config);
-        return new Builder(delegate.getString(RmqConfigOption.Host),
-                delegate.getInt(RmqConfigOption.Port),
-                delegate.getString(RmqConfigOption.Username),
-                delegate.getString(RmqConfigOption.Password));
+        ConfigWrapper<RmqCfgOption> delegate = new ConfigWrapper<>(module, config);
+        return new Builder(delegate.getString(RmqCfgOption.Host),
+                delegate.getInt(RmqCfgOption.Port),
+                delegate.getString(RmqCfgOption.Username),
+                delegate.getString(RmqCfgOption.Password));
     }
 
     public String getHost() {

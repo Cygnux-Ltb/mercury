@@ -5,7 +5,7 @@ import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
 import io.mercury.common.datetime.DateTimeUtil;
 import io.mercury.common.lang.Asserter;
-import io.mercury.transport.rmq.configurator.RmqConnection;
+import io.mercury.transport.rmq.cfg.RmqConnection;
 import io.mercury.transport.rmq.declare.AmqpExchange;
 import io.mercury.transport.rmq.declare.AmqpQueue;
 import io.mercury.transport.rmq.exception.DeclareException;

@@ -21,7 +21,7 @@ public final class Topics {
         return new Topics(topics);
     }
 
-    public MutableSet<String> getAll() {
+    public MutableSet<String> all() {
         return saved;
     }
 

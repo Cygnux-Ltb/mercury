@@ -1,7 +1,7 @@
 package io.mercury.transport.socket;
 
 import io.mercury.common.annotation.AbstractFunction;
-import io.mercury.common.concurrent.queue.ScQueue;
+import io.mercury.common.collections.queue.Queue;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.api.TransportComponent;
 
@@ -10,7 +10,7 @@ public abstract class BaseTransceiver<T> extends TransportComponent
 
     private final Sender<T> sender;
 
-    private final ScQueue<T> queue;
+    private final Queue<T> queue;
 
     protected BaseTransceiver() {
         this.queue = initSendQueue();
@@ -19,9 +19,9 @@ public abstract class BaseTransceiver<T> extends TransportComponent
 
     private class InnerSender extends TransportComponent implements Sender<T> {
 
-        private final ScQueue<T> queue;
+        private final Queue<T> queue;
 
-        private InnerSender(ScQueue<T> queue) {
+        private InnerSender(Queue<T> queue) {
             this.queue = queue;
         }
 
@@ -55,7 +55,7 @@ public abstract class BaseTransceiver<T> extends TransportComponent
     @Override
     public boolean startSend() {
         try {
-            queue.start();
+           // queue.start();
             return true;
         } catch (Exception e) {
             throw new RuntimeException("start queue exception : " + e.getMessage(), e);
@@ -63,6 +63,6 @@ public abstract class BaseTransceiver<T> extends TransportComponent
     }
 
     @AbstractFunction
-    protected abstract ScQueue<T> initSendQueue();
+    protected abstract Queue<T> initSendQueue();
 
 }
