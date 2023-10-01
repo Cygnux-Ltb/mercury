@@ -284,7 +284,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
     }
 
     @Override
-    public void sent(@Nonnull T msg) throws PublishFailedException {
+    public void send(@Nonnull T msg) throws PublishFailedException {
         publish(msg);
     }
 

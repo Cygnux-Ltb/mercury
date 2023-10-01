@@ -46,7 +46,7 @@ public class ConsumerRepositoryTest {
 
 	@Before
 	public void setUp() throws Exception {
-		consumerRepository = new ConsumerRepository<TestEvent>();
+		consumerRepository = new ConsumerRepository<>();
 		eventProcessor1 = new DummyEventProcessor(new Sequence());
 		eventProcessor2 = new DummyEventProcessor(new Sequence());
 
@@ -61,18 +61,18 @@ public class ConsumerRepositoryTest {
 	}
 
 	@Test
-	public void shouldGetBarrierByHandler() throws Exception {
+	public void shouldGetBarrierByHandler() {
 		consumerRepository.add(eventProcessor1, handler1, barrier1);
 		assertThat(consumerRepository.getBarrierFor(handler1), sameInstance(barrier1));
 	}
 
 	@Test
-	public void shouldReturnNullForBarrierWhenHandlerIsNotRegistered() throws Exception {
+	public void shouldReturnNullForBarrierWhenHandlerIsNotRegistered() {
 		assertThat(consumerRepository.getBarrierFor(handler1), is(nullValue()));
 	}
 
 	@Test
-	public void shouldGetLastEventProcessorsInChain() throws Exception {
+	public void shouldGetLastEventProcessorsInChain() {
 		consumerRepository.add(eventProcessor1, handler1, barrier1);
 		consumerRepository.add(eventProcessor2, handler2, barrier2);
 		consumerRepository.unMarkEventProcessorsAsEndOfChain(eventProcessor2.getSequence());
@@ -83,18 +83,18 @@ public class ConsumerRepositoryTest {
 	}
 
 	@Test
-	public void shouldRetrieveEventProcessorForHandler() throws Exception {
+	public void shouldRetrieveEventProcessorForHandler() {
 		consumerRepository.add(eventProcessor1, handler1, barrier1);
 		assertThat(consumerRepository.getEventProcessorFor(handler1), sameInstance(eventProcessor1));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowExceptionWhenHandlerIsNotRegistered() throws Exception {
+	public void shouldThrowExceptionWhenHandlerIsNotRegistered() {
 		consumerRepository.getEventProcessorFor(new SleepingEventHandler());
 	}
 
 	@Test
-	public void shouldIterateAllEventProcessors() throws Exception {
+	public void shouldIterateAllEventProcessors() {
 		consumerRepository.add(eventProcessor1, handler1, barrier1);
 		consumerRepository.add(eventProcessor2, handler2, barrier2);
 

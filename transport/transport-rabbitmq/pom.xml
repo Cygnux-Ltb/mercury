@@ -14,7 +14,15 @@
     <dependencies>
         <dependency>
             <groupId>io.mercury</groupId>
-            <artifactId>transport-api</artifactId>
+            <artifactId>commons-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mercury</groupId>
+            <artifactId>commons-concurrent</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.mercury</groupId>
+            <artifactId>serialization-json</artifactId>
         </dependency>
 
         <!-- The RabbitMQ Java client library allows Java applications to interface
@@ -22,13 +30,7 @@
         <dependency>
             <groupId>com.rabbitmq</groupId>
             <artifactId>amqp-client</artifactId>
-            <version>5.17.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>5.19.0</version>
         </dependency>
     </dependencies>
 

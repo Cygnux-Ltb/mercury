@@ -60,9 +60,8 @@ public class AeronArchiveUtil {
                             strippedChannel,
                             originalChannel,
                             sourceIdentity);
-                    if (predicate.test(value)) {
+                    if (predicate.test(value))
                         result.set(value);
-                    }
                 });
 
         return result.get();
@@ -103,9 +102,8 @@ public class AeronArchiveUtil {
                         if (result.get() == null && predicate.test(value))
                             result.set(value);
                     });
-            if (result.get() != null || count < step) {
+            if (result.get() != null || count < step)
                 break;
-            }
         }
         return result.get();
     }

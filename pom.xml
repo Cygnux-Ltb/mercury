@@ -26,29 +26,20 @@
         <module>persistence</module>
         <module>serialization</module>
         <module>storage</module>
-        <module>toolkit</module>
         <module>transport</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Java 1.8 -->
-        <!-- <java.version>1.8</java.version> -->
-        <!-- <maven.compiler.target>1.8</maven.compiler.target> -->
-        <!-- <maven.compiler.source>1.8</maven.compiler.source> -->
-        <!-- Java 11 -->
-        <!-- <java.version>11</java.version> -->
-        <!-- <maven.compiler.target>11</maven.compiler.target> -->
-        <!-- <maven.compiler.source>11</maven.compiler.source> -->
-        <!-- Java 20 -->
-        <java.version>20</java.version>
-        <maven.compiler.target>20</maven.compiler.target>
-        <maven.compiler.source>20</maven.compiler.source>
+        <!-- Java 21 -->
+        <java.version>21</java.version>
+        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
         <!-- Common library version -->
         <slf4j.version>1.7.36</slf4j.version>
         <junit.version>4.13.2</junit.version>
-        <jupiter.version>5.9.3</jupiter.version>
-        <netty.version>4.1.93.Final</netty.version>
+        <jupiter.version>5.10.0</jupiter.version>
+        <netty.version>4.1.99.Final</netty.version>
         <jackson.version>2.15.2</jackson.version>
     </properties>
 

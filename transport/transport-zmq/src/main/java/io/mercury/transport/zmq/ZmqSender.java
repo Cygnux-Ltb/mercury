@@ -50,7 +50,7 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
     }
 
     @Override
-    public void sent(T msg) {
+    public void send(T msg) {
         byte[] bytes = serializer.serialization(msg);
         if (bytes != null && bytes.length > 0) {
             socket.send(bytes);
@@ -61,8 +61,8 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
     public static void main(String[] args) {
 
         ZmqConfigurator cfg = ZmqConfigurator.tcp("localhost", 5551);
-        try (ZmqSender<String> sender = new ZmqSender<String>(cfg, String::getBytes)) {
-            sender.sent("TEST MSG");
+        try (ZmqSender<String> sender = new ZmqSender<>(cfg, String::getBytes)) {
+            sender.send("TEST MSG");
         } catch (IOException e) {
             e.printStackTrace();
         }

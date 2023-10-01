@@ -25,7 +25,7 @@ public class SequentialThreeConsumers {
 
 	public static void main(String[] args) {
 
-		Disruptor<MyEvent> disruptor = new Disruptor<MyEvent>(factory, 1024, DaemonThreadFactory.INSTANCE);
+		Disruptor<MyEvent> disruptor = new Disruptor<>(factory, 1024, DaemonThreadFactory.INSTANCE);
 
 		disruptor.handleEventsWith(handler1).then(handler2).then(handler3);
 

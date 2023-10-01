@@ -15,11 +15,11 @@
  */
 package uk.co.real_logic.sbe.examples;
 
-import baseline.BooleanType;
-import baseline.BoostType;
-import extension.CarDecoder.PerformanceFiguresDecoder.AccelerationDecoder;
-import extension.MessageHeaderEncoder;
 import org.agrona.concurrent.UnsafeBuffer;
+import sbe.extension.BooleanType;
+import sbe.extension.BoostType;
+import sbe.extension.CarDecoder.PerformanceFiguresDecoder.AccelerationDecoder;
+import sbe.extension.MessageHeaderEncoder;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -27,10 +27,10 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
-import static extension.CarEncoder.cupHolderCountNullValue;
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.READ;
 import static java.nio.file.StandardOpenOption.WRITE;
+import static sbe.extension.CarEncoder.cupHolderCountNullValue;
 
 /**
  * Example encode and decode of a complex message using generated stub codecs
@@ -47,11 +47,11 @@ public class ExampleUsingGeneratedStubExtension {
 
     static {
         try {
-            VEHICLE_CODE = "abcdef".getBytes(baseline.CarEncoder.vehicleCodeCharacterEncoding());
-            MANUFACTURER_CODE = "123".getBytes(baseline.EngineEncoder.manufacturerCodeCharacterEncoding());
-            MANUFACTURER = "Honda".getBytes(baseline.CarEncoder.manufacturerCharacterEncoding());
-            MODEL = "Civic VTi".getBytes(baseline.CarEncoder.modelCharacterEncoding());
-            ACTIVATION_CODE = new UnsafeBuffer("abcdef".getBytes(baseline
+            VEHICLE_CODE = "abcdef".getBytes(sbe.extension.CarEncoder.vehicleCodeCharacterEncoding());
+            MANUFACTURER_CODE = "123".getBytes(sbe.extension.EngineEncoder.manufacturerCodeCharacterEncoding());
+            MANUFACTURER = "Honda".getBytes(sbe.extension.CarEncoder.manufacturerCharacterEncoding());
+            MODEL = "Civic VTi".getBytes(sbe.extension.CarEncoder.modelCharacterEncoding());
+            ACTIVATION_CODE = new UnsafeBuffer("abcdef".getBytes(sbe.extension
                     .CarEncoder.activationCodeCharacterEncoding()));
         } catch (final UnsupportedEncodingException ex) {
             throw new RuntimeException(ex);
@@ -70,10 +70,10 @@ public class ExampleUsingGeneratedStubExtension {
         final ByteBuffer byteBuffer = ByteBuffer.allocate(4096);
         final UnsafeBuffer directBuffer = new UnsafeBuffer(byteBuffer);
 
-        final extension.MessageHeaderDecoder messageHeaderDecoder = new extension.MessageHeaderDecoder();
-        final baseline.MessageHeaderEncoder messageHeaderEncoder = new baseline.MessageHeaderEncoder();
-        final baseline.CarEncoder carEncoder = new baseline.CarEncoder();
-        final extension.CarDecoder carDecoder = new extension.CarDecoder();
+        final sbe.extension.MessageHeaderDecoder messageHeaderDecoder = new sbe.extension.MessageHeaderDecoder();
+        final sbe.extension.MessageHeaderEncoder messageHeaderEncoder = new sbe.extension.MessageHeaderEncoder();
+        final sbe.extension.CarEncoder carEncoder = new sbe.extension.CarEncoder();
+        final sbe.extension.CarDecoder carDecoder = new sbe.extension.CarDecoder();
 
         final int encodingLengthPlusHeader = encode(carEncoder, directBuffer, messageHeaderEncoder);
 
@@ -96,19 +96,19 @@ public class ExampleUsingGeneratedStubExtension {
         // Lookup the applicable flyweight to decode this type of message based on
         // templateId and version.
         final int templateId = messageHeaderDecoder.templateId();
-        if (templateId != extension.CarEncoder.TEMPLATE_ID) {
+        if (templateId != sbe.extension.CarEncoder.TEMPLATE_ID) {
             throw new IllegalStateException("Template ids do not match");
         }
 
         decode(carDecoder, directBuffer, messageHeaderDecoder);
     }
 
-    static int encode(final baseline.CarEncoder car, final UnsafeBuffer directBuffer,
-                      final baseline.MessageHeaderEncoder headerEncoder) {
+    static int encode(final sbe.extension.CarEncoder car, final UnsafeBuffer directBuffer,
+                      final sbe.extension.MessageHeaderEncoder headerEncoder) {
         car.wrapAndApplyHeader(directBuffer, 0, headerEncoder).serialNumber(1234).modelYear(2013)
-                .available(baseline.BooleanType.T).code(baseline.Model.A).putVehicleCode(VEHICLE_CODE, 0);
+                .available(sbe.extension.BooleanType.T).code(sbe.extension.Model.A).putVehicleCode(VEHICLE_CODE, 0);
 
-        for (int i = 0, size = baseline.CarEncoder.someNumbersLength(); i < size; i++) {
+        for (int i = 0, size = sbe.extension.CarEncoder.someNumbersLength(); i < size; i++) {
             car.someNumbers(i, i);
         }
 
@@ -121,7 +121,7 @@ public class ExampleUsingGeneratedStubExtension {
         car.fuelFiguresCount(3).next().speed(30).mpg(35.9f).usageDescription("Urban Cycle").next().speed(55).mpg(49.0f)
                 .usageDescription("Combined Cycle").next().speed(75).mpg(40.0f).usageDescription("Highway Cycle");
 
-        final baseline.CarEncoder.PerformanceFiguresEncoder figures = car.performanceFiguresCount(2);
+        final sbe.extension.CarEncoder.PerformanceFiguresEncoder figures = car.performanceFiguresCount(2);
         figures.next().octaneRating((short) 95).accelerationCount(3).next().mph(30).seconds(4.0f).next().mph(60)
                 .seconds(7.5f).next().mph(100).seconds(12.2f);
         figures.next().octaneRating((short) 99).accelerationCount(3).next().mph(30).seconds(3.8f).next().mph(60)
@@ -133,8 +133,8 @@ public class ExampleUsingGeneratedStubExtension {
         return MessageHeaderEncoder.ENCODED_LENGTH + car.encodedLength();
     }
 
-    static void decode(final extension.CarDecoder car, final UnsafeBuffer directBuffer,
-                       final extension.MessageHeaderDecoder headerDecoder) throws Exception {
+    static void decode(final sbe.extension.CarDecoder car, final UnsafeBuffer directBuffer,
+                       final sbe.extension.MessageHeaderDecoder headerDecoder) throws Exception {
         final byte[] buffer = new byte[128];
         final StringBuilder sb = new StringBuilder();
 
@@ -146,28 +146,28 @@ public class ExampleUsingGeneratedStubExtension {
         sb.append("\ncar.code=").append(car.code());
 
         sb.append("\ncar.someNumbers=");
-        for (int i = 0, size = extension.CarEncoder.someNumbersLength(); i < size; i++) {
+        for (int i = 0, size = sbe.extension.CarEncoder.someNumbersLength(); i < size; i++) {
             sb.append(car.someNumbers(i)).append(", ");
         }
 
         sb.append("\ncar.vehicleCode=");
-        for (int i = 0, size = extension.CarEncoder.vehicleCodeLength(); i < size; i++) {
+        for (int i = 0, size = sbe.extension.CarEncoder.vehicleCodeLength(); i < size; i++) {
             sb.append((char) car.vehicleCode(i));
         }
 
-        final extension.OptionalExtrasDecoder extras = car.extras();
+        final sbe.extension.OptionalExtrasDecoder extras = car.extras();
         sb.append("\ncar.extras.cruiseControl=").append(extras.cruiseControl());
         sb.append("\ncar.extras.sportsPack=").append(extras.sportsPack());
         sb.append("\ncar.extras.sunRoof=").append(extras.sunRoof());
 
         sb.append("\ncar.discountedModel=").append(car.discountedModel());
 
-        final extension.EngineDecoder engine = car.engine();
+        final sbe.extension.EngineDecoder engine = car.engine();
         sb.append("\ncar.engine.capacity=").append(engine.capacity());
         sb.append("\ncar.engine.numCylinders=").append(engine.numCylinders());
         sb.append("\ncar.engine.maxRpm=").append(engine.maxRpm());
         sb.append("\ncar.engine.manufacturerCode=");
-        for (int i = 0, size = extension.EngineDecoder.manufacturerCodeLength(); i < size; i++) {
+        for (int i = 0, size = sbe.extension.EngineDecoder.manufacturerCodeLength(); i < size; i++) {
             sb.append((char) engine.manufacturerCode(i));
         }
         sb.append("\ncar.engine.efficiency=").append(engine.efficiency());
@@ -182,13 +182,13 @@ public class ExampleUsingGeneratedStubExtension {
                 : String.valueOf(car.cupHolderCount());
         sb.append("\ncar.cupHolderCount=").append(cupHolderCount);
 
-        for (final extension.CarDecoder.FuelFiguresDecoder fuelFigures : car.fuelFigures()) {
+        for (final sbe.extension.CarDecoder.FuelFiguresDecoder fuelFigures : car.fuelFigures()) {
             sb.append("\ncar.fuelFigures.speed=").append(fuelFigures.speed());
             sb.append("\ncar.fuelFigures.mpg=").append(fuelFigures.mpg());
             sb.append("\ncar.fuelFigures.usageDescription=").append(fuelFigures.usageDescription());
         }
 
-        for (final extension.CarDecoder.PerformanceFiguresDecoder performanceFigures : car.performanceFigures()) {
+        for (final sbe.extension.CarDecoder.PerformanceFiguresDecoder performanceFigures : car.performanceFigures()) {
             sb.append("\ncar.performanceFigures.octaneRating=").append(performanceFigures.octaneRating());
 
             for (final AccelerationDecoder acceleration : performanceFigures.acceleration()) {
@@ -198,15 +198,15 @@ public class ExampleUsingGeneratedStubExtension {
         }
 
         sb.append("\ncar.manufacturer=").append(new String(buffer, 0, car.getManufacturer(buffer, 0, buffer.length),
-                extension.CarEncoder.manufacturerCharacterEncoding()));
+                sbe.extension.CarEncoder.manufacturerCharacterEncoding()));
 
         sb.append("\ncar.model=").append(new String(buffer, 0, car.getModel(buffer, 0, buffer.length),
-                extension.CarEncoder.modelCharacterEncoding()));
+                sbe.extension.CarEncoder.modelCharacterEncoding()));
 
         final UnsafeBuffer tempBuffer = new UnsafeBuffer(buffer);
         final int tempBufferLength = car.getActivationCode(tempBuffer, 0, tempBuffer.capacity());
         sb.append("\ncar.activationCode=").append(
-                new String(buffer, 0, tempBufferLength, extension.CarEncoder.activationCodeCharacterEncoding()));
+                new String(buffer, 0, tempBufferLength, sbe.extension.CarEncoder.activationCodeCharacterEncoding()));
 
         sb.append("\ncar.encodedLength=").append(car.encodedLength());
 

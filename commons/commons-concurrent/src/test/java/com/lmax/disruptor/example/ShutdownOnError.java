@@ -1,112 +1,107 @@
 package com.lmax.disruptor.example;
 
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.ExceptionHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 
+import javax.annotation.Nonnull;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class ShutdownOnError {
 
-	private static class Event {
+    private static class Event {
 
-		@SuppressWarnings("unused")
-		public long value;
+        @SuppressWarnings("unused")
+        public long value;
 
-		public static final EventFactory<Event> FACTORY = Event::new;
+        public static final EventFactory<Event> FACTORY = Event::new;
 
-	}
+    }
 
-	private static class DefaultThreadFactory implements ThreadFactory {
+    private static class DefaultThreadFactory implements ThreadFactory {
 
-		@Override
-		public Thread newThread(Runnable r) {
-			return new Thread(r);
-		}
+        @Override
+        public Thread newThread(@Nonnull Runnable r) {
+            return new Thread(r);
+        }
 
-	}
+    }
 
-	private static class Handler implements EventHandler<Event> {
+    private static class Handler implements EventHandler<Event> {
 
-		@Override
-		public void onEvent(Event event, long sequence, boolean endOfBatch) throws Exception {
-			// do work, if a failure occurs throw exception.
-		}
+        @Override
+        public void onEvent(Event event, long sequence, boolean endOfBatch) throws Exception {
+            // do work, if a failure occurs throw exception.
+        }
 
-	}
+    }
 
-	private static final class ErrorHandler implements ExceptionHandler<Event> {
+    private record ErrorHandler(
+            AtomicBoolean running) implements ExceptionHandler<Event> {
 
-		@SuppressWarnings("unused")
-		private final AtomicBoolean running;
+        @Override
+        public void handleEventException(Throwable ex, long sequence, Event event) {
+            if (exceptionIsFatal(ex)) {
+                throw new RuntimeException(ex);
+            }
+        }
 
-		private ErrorHandler(AtomicBoolean running) {
-			this.running = running;
-		}
+        private boolean exceptionIsFatal(Throwable ex) {
+            // Do what is appropriate here.
+            return true;
+        }
 
-		@Override
-		public void handleEventException(Throwable ex, long sequence, Event event) {
-			if (execeptionIsFatal(ex)) {
-				throw new RuntimeException(ex);
-			}
-		}
+        @Override
+        public void handleOnStartException(Throwable ex) {
 
-		private boolean execeptionIsFatal(Throwable ex) {
-			// Do what is appropriate here.
-			return true;
-		}
+        }
 
-		@Override
-		public void handleOnStartException(Throwable ex) {
+        @Override
+        public void handleOnShutdownException(Throwable ex) {
 
-		}
+        }
 
-		@Override
-		public void handleOnShutdownException(Throwable ex) {
+    }
 
-		}
+    public static void main(String[] args) {
 
-	}
+        Disruptor<Event> disruptor = new Disruptor<>(Event.FACTORY, 1024, new DefaultThreadFactory());
 
-	public static void main(String[] args) {
+        AtomicBoolean running = new AtomicBoolean(true);
 
-		Disruptor<Event> disruptor = new Disruptor<>(Event.FACTORY, 1024, new DefaultThreadFactory());
+        ErrorHandler errorHandler = new ErrorHandler(running);
 
-		AtomicBoolean running = new AtomicBoolean(true);
+        final Handler handler = new Handler();
+        disruptor.handleEventsWith(handler);
+        disruptor.handleExceptionsFor(handler).with(errorHandler);
 
-		ErrorHandler errorHandler = new ErrorHandler(running);
+        simplePublish(disruptor, running);
 
-		final Handler handler = new Handler();
-		disruptor.handleEventsWith(handler);
-		disruptor.handleExceptionsFor(handler).with(errorHandler);
+    }
 
-		simplePublish(disruptor, running);
+    private static void simplePublish(Disruptor<Event> disruptor, AtomicBoolean running) {
+        while (running.get()) {
+            disruptor.publishEvent((event, sequence) -> {
+                event.value = sequence;
+            });
+        }
+    }
 
-	}
+    @SuppressWarnings("unused")
+    private static void smarterPublish(Disruptor<Event> disruptor, AtomicBoolean running) {
 
-	private static void simplePublish(Disruptor<Event> disruptor, AtomicBoolean running) {
-		while (running.get()) {
-			disruptor.publishEvent((event, sequence) -> {
-				event.value = sequence;
-			});
-		}
-	}
+        final RingBuffer<Event> ringBuffer = disruptor.getRingBuffer();
 
-	@SuppressWarnings("unused")
-	private static void smarterPublish(Disruptor<Event> disruptor, AtomicBoolean running) {
-		
-		final RingBuffer<Event> ringBuffer = disruptor.getRingBuffer();
+        boolean publishOk;
 
-		boolean publishOk;
-		
-		do {
-			publishOk = ringBuffer.tryPublishEvent((event, sequence) -> {
-				event.value = sequence;
-			});
-		} while (publishOk && running.get());
-		
-	}
+        do {
+            publishOk = ringBuffer.tryPublishEvent((event, sequence) -> {
+                event.value = sequence;
+            });
+        } while (publishOk && running.get());
+
+    }
 }

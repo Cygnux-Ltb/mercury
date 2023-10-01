@@ -24,7 +24,8 @@ public class RPCServer {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
 
-        try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel()) {
+        try (final Connection connection = factory.newConnection();
+             final Channel channel = connection.createChannel()) {
             channel.queueDeclare(RPC_QUEUE_NAME, false, false, false, null);
             channel.queuePurge(RPC_QUEUE_NAME);
 

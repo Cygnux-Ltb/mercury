@@ -16,14 +16,10 @@ public class EventPollerTest {
 		final Sequence gatingSequence = new Sequence();
 		final SingleProducerSequencer sequencer = new SingleProducerSequencer(16, new BusySpinWaitStrategy());
 
-		final EventPoller.Handler<Object> handler = (Object event, long sequence, boolean endOfBatch) -> {
-			return false;
-		};
+		final EventPoller.Handler<Object> handler = (Object event, long sequence, boolean endOfBatch) -> false;
 
 		final Object[] data = new Object[16];
-		final DataProvider<Object> provider = (long sequence) -> {
-			return data[(int) sequence];
-		};
+		final DataProvider<Object> provider = (long sequence) -> data[(int) sequence];
 
 		final EventPoller<Object> poller = sequencer.newPoller(provider, gatingSequence);
 		final Object event = new Object();
@@ -42,7 +38,7 @@ public class EventPollerTest {
 	@Test
 	public void shouldSuccessfullyPollWhenBufferIsFull() throws Exception {
 
-		final ArrayList<byte[]> events = new ArrayList<byte[]>();
+		final ArrayList<byte[]> events = new ArrayList<>();
 
 		final EventPoller.Handler<byte[]> handler = (byte[] event, long sequence, boolean endOfBatch) -> {
 			events.add(event);

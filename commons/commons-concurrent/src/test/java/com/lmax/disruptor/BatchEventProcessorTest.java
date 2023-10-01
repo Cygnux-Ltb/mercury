@@ -273,7 +273,7 @@ public final class BatchEventProcessorTest {
 	}
 
 	private static class DelegatingSequenceBarrier implements SequenceBarrier {
-		private SequenceBarrier delegate;
+		private final SequenceBarrier delegate;
 		private boolean suppress = true;
 
 		public DelegatingSequenceBarrier(SequenceBarrier delegate) {

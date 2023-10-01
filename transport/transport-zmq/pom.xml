@@ -18,8 +18,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>20</source>
-                    <target>20</target>
+                    <source>21</source>
+                    <target>21</target>
                     <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
@@ -29,14 +29,17 @@
     <dependencies>
         <dependency>
             <groupId>io.mercury</groupId>
-            <artifactId>transport-api</artifactId>
+            <artifactId>commons-config</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>io.mercury</groupId>
+            <artifactId>serialization-json</artifactId>
+        </dependency>
         <!-- JeroMq : Pure Java implementation of libzmq -->
         <dependency>
             <groupId>org.zeromq</groupId>
             <artifactId>jeromq</artifactId>
-            <version>0.5.3</version>
+            <version>0.5.4</version>
         </dependency>
     </dependencies>
 

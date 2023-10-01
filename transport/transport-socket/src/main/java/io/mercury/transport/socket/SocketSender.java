@@ -64,7 +64,7 @@ public final class SocketSender extends TransportComponent implements Sender<byt
     }
 
     @Override
-    public void sent(byte[] msg) {
+    public void send(byte[] msg) {
         innerQueue.enqueue(msg);
     }
 
@@ -90,7 +90,7 @@ public final class SocketSender extends TransportComponent implements Sender<byt
     public static void main(String[] args) throws IOException {
         SocketConfigurator configurator = SocketConfigurator.builder().host("192.168.1.138").port(7901).build();
         try (SocketSender sender = new SocketSender(configurator)) {
-            sender.sent("hello".getBytes());
+            sender.send("hello".getBytes());
         }
     }
 

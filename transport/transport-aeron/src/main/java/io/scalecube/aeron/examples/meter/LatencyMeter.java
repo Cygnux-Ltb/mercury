@@ -1,15 +1,15 @@
 package io.scalecube.aeron.examples.meter;
 
-import io.scalecube.aeron.examples.meter.LatencyReporter.Context;
 import org.HdrHistogram.Histogram;
+import org.HdrHistogram.Recorder;
 import org.agrona.CloseHelper;
 
 public class LatencyMeter implements AutoCloseable {
 
     private final String name;
     private final LatencyListener listener;
-    private final org.HdrHistogram.Recorder histogram;
-    private final Context context;
+    private final Recorder histogram;
+    private final LatencyReporter.Context context;
 
     private Histogram accumulatedHistogram;
 
@@ -17,7 +17,7 @@ public class LatencyMeter implements AutoCloseable {
         this.name = name;
         this.listener = listener;
         this.context = context;
-        this.histogram = new org.HdrHistogram.Recorder(
+        this.histogram = new Recorder(
                 context.lowestTrackableValue(),
                 context.highestTrackableValue(),
                 context.numberOfSignificantValueDigits());

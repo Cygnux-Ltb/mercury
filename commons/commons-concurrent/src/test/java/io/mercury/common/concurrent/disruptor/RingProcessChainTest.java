@@ -1,13 +1,14 @@
 package io.mercury.common.concurrent.disruptor;
 
-import io.mercury.common.concurrent.disruptor.example.LongEvent;
+import com.lmax.disruptor.support.LongEvent;
+import io.mercury.common.concurrent.ring.RingProcessChain;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.ThreadSupport;
 import org.junit.Test;
 
 import java.util.concurrent.atomic.LongAdder;
 
-import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Yielding;
+import static io.mercury.common.concurrent.ring.base.WaitStrategyOption.Yielding;
 import static org.junit.Assert.assertEquals;
 
 public class RingProcessChainTest {

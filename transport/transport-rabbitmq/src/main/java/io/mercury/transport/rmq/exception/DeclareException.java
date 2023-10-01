@@ -74,11 +74,11 @@ public final class DeclareException extends Exception {
     }
 
     /**
-     * @param destExchange
-     * @param sourceExchange
-     * @param routingKey
-     * @param cause
-     * @return
+     * @param destExchange   String
+     * @param sourceExchange String
+     * @param routingKey     String
+     * @param cause          Throwable
+     * @return DeclareException
      */
     public static DeclareException bindExchangeError(String destExchange, String sourceExchange, String routingKey,
                                                      Throwable cause) {

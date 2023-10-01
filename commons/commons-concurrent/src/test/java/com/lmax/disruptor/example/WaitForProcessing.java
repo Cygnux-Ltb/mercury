@@ -8,6 +8,7 @@ import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 
 public class WaitForProcessing {
+
 	public static class Consumer implements EventHandler<LongEvent> {
 		@Override
 		public void onEvent(LongEvent event, long sequence, boolean endOfBatch) throws Exception {

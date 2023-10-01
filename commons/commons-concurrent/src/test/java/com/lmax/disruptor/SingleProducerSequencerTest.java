@@ -8,7 +8,7 @@ import org.junit.Test;
 public class SingleProducerSequencerTest {
 	
 	@Test
-	public void shouldNotUpdateCursorDuringHasAvailableCapacity() throws Exception {
+	public void shouldNotUpdateCursorDuringHasAvailableCapacity() {
 		
 		SingleProducerSequencer sequencer = new SingleProducerSequencer(16, new BusySpinWaitStrategy());
 

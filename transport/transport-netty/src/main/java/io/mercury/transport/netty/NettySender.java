@@ -47,7 +47,7 @@ public class NettySender extends TransportComponent implements Sender<byte[]> {
     }
 
     @Override
-    public void sent(byte[] msg) {
+    public void send(byte[] msg) {
         log.debug(SysNanoSequence.getMicros() + " call sender send -> data length : " + msg.length);
         ByteBuf byteBuf = context.alloc().buffer(msg.length);
         byteBuf.writeBytes(msg);

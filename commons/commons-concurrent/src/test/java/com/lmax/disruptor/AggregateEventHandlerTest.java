@@ -25,9 +25,9 @@ import com.lmax.disruptor.support.DummyEventHandler;
 @SuppressWarnings("unchecked")
 public final class AggregateEventHandlerTest {
 
-	private final DummyEventHandler<int[]> eh1 = new DummyEventHandler<int[]>();
-	private final DummyEventHandler<int[]> eh2 = new DummyEventHandler<int[]>();
-	private final DummyEventHandler<int[]> eh3 = new DummyEventHandler<int[]>();
+	private final DummyEventHandler<int[]> eh1 = new DummyEventHandler<>();
+	private final DummyEventHandler<int[]> eh2 = new DummyEventHandler<>();
+	private final DummyEventHandler<int[]> eh3 = new DummyEventHandler<>();
 
 	@Test
 	public void shouldCallOnEventInSequence() throws Exception {
@@ -40,22 +40,22 @@ public final class AggregateEventHandlerTest {
 	}
 
 	@Test
-	public void shouldCallOnStartInSequence() throws Exception {
-		final AggregateEventHandler<int[]> aggregateEventHandler = new AggregateEventHandler<int[]>(eh1, eh2, eh3);
+	public void shouldCallOnStartInSequence() {
+		final AggregateEventHandler<int[]> aggregateEventHandler = new AggregateEventHandler<>(eh1, eh2, eh3);
 		aggregateEventHandler.onStart();
 		assertStartCalls(1, eh1, eh2, eh3);
 	}
 
 	@Test
-	public void shouldCallOnShutdownInSequence() throws Exception {
-		final AggregateEventHandler<int[]> aggregateEventHandler = new AggregateEventHandler<int[]>(eh1, eh2, eh3);
+	public void shouldCallOnShutdownInSequence() {
+		final AggregateEventHandler<int[]> aggregateEventHandler = new AggregateEventHandler<>(eh1, eh2, eh3);
 		aggregateEventHandler.onShutdown();
 		assertShutoownCalls(1, eh1, eh2, eh3);
 	}
 
 	@Test
 	public void shouldHandleEmptyListOfEventHandlers() throws Exception {
-		final AggregateEventHandler<int[]> aggregateEventHandler = new AggregateEventHandler<int[]>();
+		final AggregateEventHandler<int[]> aggregateEventHandler = new AggregateEventHandler<>();
 		aggregateEventHandler.onEvent(new int[] { 7 }, 0L, true);
 		aggregateEventHandler.onStart();
 		aggregateEventHandler.onShutdown();

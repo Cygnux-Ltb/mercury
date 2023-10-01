@@ -15,7 +15,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>persistence-chronicle</module>
+        <!-- <module>persistence-chronicle</module> -->
         <module>persistence-h2</module>
         <module>persistence-hsqldb</module>
         <module>persistence-log4j2-hp</module>
@@ -94,7 +94,7 @@
             <dependency>
                 <groupId>commons-dbutils</groupId>
                 <artifactId>commons-dbutils</artifactId>
-                <version>1.7</version>
+                <version>1.8.0</version>
             </dependency>
 
             <!-- Ultimate JDBC Connection Pool -->
@@ -114,7 +114,7 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
-                <version>1.23.0</version>
+                <version>1.24.0</version>
             </dependency>
 
             <!-- Java ports and bindings of the LZ4 compression algorithm and the

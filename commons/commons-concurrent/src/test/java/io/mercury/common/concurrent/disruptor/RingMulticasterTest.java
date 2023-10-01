@@ -1,15 +1,15 @@
 package io.mercury.common.concurrent.disruptor;
 
-import static io.mercury.common.concurrent.disruptor.CommonWaitStrategy.Yielding;
-import static org.junit.Assert.assertEquals;
+import com.lmax.disruptor.support.LongEvent;
+import io.mercury.common.concurrent.ring.RingMulticaster;
+import io.mercury.common.thread.SleepSupport;
+import io.mercury.common.thread.ThreadSupport;
+import org.junit.Test;
 
 import java.util.concurrent.atomic.LongAdder;
 
-import org.junit.Test;
-
-import io.mercury.common.concurrent.disruptor.example.LongEvent;
-import io.mercury.common.thread.SleepSupport;
-import io.mercury.common.thread.ThreadSupport;
+import static io.mercury.common.concurrent.ring.base.WaitStrategyOption.Yielding;
+import static org.junit.Assert.assertEquals;
 
 public class RingMulticasterTest {
 

@@ -17,7 +17,6 @@ public final class PercentileFile {
                 pFile.add(sample);
             }
             br.close();
-
             Percentile.print(System.out, arg, pFile);
         }
 

@@ -26,7 +26,7 @@ public abstract class BaseTransceiver<T> extends TransportComponent
         }
 
         @Override
-        public void sent(T msg) {
+        public void send(T msg) {
             queue.enqueue(msg);
         }
 

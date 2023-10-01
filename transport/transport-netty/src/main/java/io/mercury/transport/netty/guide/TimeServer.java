@@ -140,7 +140,6 @@ public class TimeServer {
              *
              * 这意味着任何一个请求操作都不会马上被执行, 因为在 Netty 里所有的操作都是异步的.
              */
-
             cf.addListener(future -> {
                 assert cf == future;
                 ctx.close();

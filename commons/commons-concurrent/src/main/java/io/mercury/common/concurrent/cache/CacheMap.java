@@ -63,6 +63,7 @@ public class CacheMap<K, V> {
     public static class CacheMapBuilder {
 
         private long maximumSize = 1024;
+
         private Duration duration = Duration.ofHours(8);
 
         public CacheMapBuilder maximumSize(long maximumSize) {

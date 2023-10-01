@@ -117,7 +117,7 @@ public class SequencerTest {
 	}
 
 	@Test
-	public void shouldCalculateRemainingCapacity() throws Exception {
+	public void shouldCalculateRemainingCapacity() {
 		sequencer.addGatingSequences(gatingSequence);
 
 		assertThat(sequencer.remainingCapacity(), is((long) BUFFER_SIZE));
@@ -128,7 +128,7 @@ public class SequencerTest {
 	}
 
 	@Test
-	public void shouldNotBeAvailableUntilPublished() throws Exception {
+	public void shouldNotBeAvailableUntilPublished() {
 		long next = sequencer.next(6);
 
 		for (int i = 0; i <= 5; i++) {
@@ -145,7 +145,7 @@ public class SequencerTest {
 	}
 
 	@Test
-	public void shouldNotifyWaitStrategyOnPublish() throws Exception {
+	public void shouldNotifyWaitStrategyOnPublish() {
 		final DummyWaitStrategy waitStrategy = new DummyWaitStrategy();
 		final Sequenced sequencer = newProducer(producerType, BUFFER_SIZE, waitStrategy);
 
@@ -155,7 +155,7 @@ public class SequencerTest {
 	}
 
 	@Test
-	public void shouldNotifyWaitStrategyOnPublishBatch() throws Exception {
+	public void shouldNotifyWaitStrategyOnPublishBatch() {
 		final DummyWaitStrategy waitStrategy = new DummyWaitStrategy();
 		final Sequenced sequencer = newProducer(producerType, BUFFER_SIZE, waitStrategy);
 
@@ -203,7 +203,7 @@ public class SequencerTest {
 	}
 
 	@Test
-	public void shouldClaimSpecificSequence() throws Exception {
+	public void shouldClaimSpecificSequence() {
 		long sequence = 14L;
 
 		sequencer.claim(sequence);
@@ -212,12 +212,12 @@ public class SequencerTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotAllowBulkNextLessThanZero() throws Exception {
+	public void shouldNotAllowBulkNextLessThanZero() {
 		sequencer.next(-1);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotAllowBulkNextOfZero() throws Exception {
+	public void shouldNotAllowBulkNextOfZero() {
 		sequencer.next(0);
 	}
 
@@ -232,13 +232,9 @@ public class SequencerTest {
 	}
 
 	private Sequencer newProducer(ProducerType producerType, int bufferSize, WaitStrategy waitStrategy) {
-		switch (producerType) {
-		case SINGLE:
-			return new SingleProducerSequencer(bufferSize, waitStrategy);
-		case MULTI:
-			return new MultiProducerSequencer(bufferSize, waitStrategy);
-		default:
-			throw new IllegalStateException(producerType.toString());
-		}
+        return switch (producerType) {
+            case SINGLE -> new SingleProducerSequencer(bufferSize, waitStrategy);
+            case MULTI -> new MultiProducerSequencer(bufferSize, waitStrategy);
+        };
 	}
 }

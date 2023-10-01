@@ -32,8 +32,8 @@ public final class LifecycleAwareTest {
 	private final RingBuffer<StubEvent> ringBuffer = createMultiProducer(StubEvent.EVENT_FACTORY, 16);
 	private final SequenceBarrier sequenceBarrier = ringBuffer.newBarrier();
 	private final LifecycleAwareEventHandler handler = new LifecycleAwareEventHandler();
-	private final BatchEventProcessor<StubEvent> batchEventProcessor = new BatchEventProcessor<StubEvent>(ringBuffer,
-			sequenceBarrier, handler);
+	private final BatchEventProcessor<StubEvent> batchEventProcessor = new BatchEventProcessor<>(ringBuffer,
+            sequenceBarrier, handler);
 
 	@Test
 	public void shouldNotifyOfBatchProcessorLifecycle() throws Exception {
@@ -44,8 +44,8 @@ public final class LifecycleAwareTest {
 
 		shutdownLatch.await();
 
-		assertThat(Integer.valueOf(handler.startCounter), is(Integer.valueOf(1)));
-		assertThat(Integer.valueOf(handler.shutdownCounter), is(Integer.valueOf(1)));
+		assertThat(handler.startCounter, is(1));
+		assertThat(handler.shutdownCounter, is(1));
 	}
 
 	private final class LifecycleAwareEventHandler implements EventHandler<StubEvent>, LifecycleAware {
@@ -53,7 +53,7 @@ public final class LifecycleAwareTest {
 		private int shutdownCounter = 0;
 
 		@Override
-		public void onEvent(final StubEvent event, final long sequence, final boolean endOfBatch) throws Exception {
+		public void onEvent(final StubEvent event, final long sequence, final boolean endOfBatch) {
 		}
 
 		@Override

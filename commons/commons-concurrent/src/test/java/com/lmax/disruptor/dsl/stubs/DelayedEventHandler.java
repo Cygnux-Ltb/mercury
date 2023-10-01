@@ -61,12 +61,10 @@ public class DelayedEventHandler implements EventHandler<TestEvent>, LifecycleAw
 	public void onStart() {
 		try {
 			barrier.await();
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		} catch (BrokenBarrierException e) {
+		} catch (InterruptedException | BrokenBarrierException e) {
 			throw new RuntimeException(e);
 		}
-	}
+    }
 
 	@Override
 	public void onShutdown() {

@@ -1,6 +1,6 @@
 package io.mercury.common.serialization.specific;
 
-import io.mercury.common.serialization.basic.Serializer;
+import io.mercury.common.serialization.api.Serializer;
 
 import java.nio.ByteBuffer;
 

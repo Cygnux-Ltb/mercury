@@ -22,7 +22,7 @@ public class ConcurrentBlockingObjectQueueTest {
     @Test
     public void testTake() throws Exception {
 
-        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<Integer>();
+        final ConcurrentQueue<Integer> queue = new ConcurrentQueue<>();
 
         // writer thread
         Executors.newSingleThreadExecutor().execute(() -> {
@@ -33,7 +33,7 @@ public class ConcurrentBlockingObjectQueueTest {
             }
         });
 
-        final ArrayBlockingQueue<Integer> actual = new ArrayBlockingQueue<Integer>(1);
+        final ArrayBlockingQueue<Integer> actual = new ArrayBlockingQueue<>(1);
 
         // reader thread
         Executors.newSingleThreadExecutor().execute(() -> {

@@ -1,12 +1,12 @@
 package io.mercury.common.param;
 
+import org.slf4j.Logger;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.Set;
-
-import org.slf4j.Logger;
 
 public interface Params<K extends ParamKey> {
 

@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>io.mercury</groupId>
-            <artifactId>transport-api</artifactId>
+            <artifactId>commons-config</artifactId>
         </dependency>
 
         <!-- jsoup is a Java library for working with real-world HTML. It provides
@@ -48,7 +48,7 @@
         <dependency>
             <groupId>jakarta.activation</groupId>
             <artifactId>jakarta.activation-api</artifactId>
-            <version>2.1.1</version>
+            <version>2.1.2</version>
         </dependency>
 
         <!-- The Async Http Client (AHC) classes -->

@@ -10,6 +10,7 @@ import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 
 public class MultiProducerWithTranslator {
+
 	private static class IMessage {
 	}
 
@@ -61,8 +62,8 @@ public class MultiProducerWithTranslator {
 	static final int RING_SIZE = 1024;
 
 	public static void main(String[] args) throws InterruptedException {
-		Disruptor<ObjectBox> disruptor = new Disruptor<ObjectBox>(ObjectBox.FACTORY, RING_SIZE,
-				DaemonThreadFactory.INSTANCE, ProducerType.MULTI, new BlockingWaitStrategy());
+		Disruptor<ObjectBox> disruptor = new Disruptor<>(ObjectBox.FACTORY, RING_SIZE,
+                DaemonThreadFactory.INSTANCE, ProducerType.MULTI, new BlockingWaitStrategy());
 		disruptor.handleEventsWith(new Consumer()).then(new Consumer());
 		final RingBuffer<ObjectBox> ringBuffer = disruptor.getRingBuffer();
 		Publisher p = new Publisher();

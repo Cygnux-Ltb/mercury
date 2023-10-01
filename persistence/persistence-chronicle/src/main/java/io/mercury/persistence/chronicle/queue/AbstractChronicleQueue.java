@@ -37,14 +37,10 @@ import static io.mercury.common.sys.SysProperties.USER_HOME;
 
 @Immutable
 public abstract class AbstractChronicleQueue<
-        // 写入类型
-        IN,
-        // 读取类型
-        OUT,
-        // 添加器类型
-        AT extends AbstractChronicleAppender<IN>,
-        // 读取器类型
-        RT extends AbstractChronicleReader<OUT>>
+        IN, // 写入类型
+        OUT, // 读取类型
+        AT extends AbstractChronicleAppender<IN>, // 添加器类型
+        RT extends AbstractChronicleReader<OUT>> // 读取器类型
         // 实现特定关闭对象
         implements net.openhft.chronicle.core.io.Closeable {
 

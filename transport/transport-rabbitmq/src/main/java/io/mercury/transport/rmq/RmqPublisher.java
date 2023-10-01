@@ -103,7 +103,7 @@ public class RmqPublisher extends RmqTransport implements Publisher<String, byte
     }
 
     @Override
-    public void sent(@Nonnull byte[] msg) throws PublishFailedException {
+    public void send(@Nonnull byte[] msg) throws PublishFailedException {
         publish(msg);
     }
 

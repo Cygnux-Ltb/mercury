@@ -49,15 +49,12 @@ public class PullWithPoller {
 		
 		final Object[] out = new Object[1];
 
-		poller.poll(new EventPoller.Handler<DataEvent<Object>>() {
-			@Override
-			public boolean onEvent(DataEvent<Object> event, long sequence, boolean endOfBatch) throws Exception {
-				out[0] = event.copyOfData();
+		poller.poll((event, sequence, endOfBatch) -> {
+            out[0] = event.copyOfData();
 
-				// Return false so that only one event is processed at a time.
-				return false;
-			}
-		});
+            // Return false so that only one event is processed at a time.
+            return false;
+        });
 
 		return out[0];
 	}

@@ -20,8 +20,8 @@ public class ShutdownOnFatalExceptionTest {
 
 	@Before
 	public void setUp() {
-		disruptor = new Disruptor<byte[]>(new ByteArrayFactory(256), 1024, DaemonThreadFactory.INSTANCE,
-				ProducerType.SINGLE, new BlockingWaitStrategy());
+		disruptor = new Disruptor<>(new ByteArrayFactory(256), 1024, DaemonThreadFactory.INSTANCE,
+                ProducerType.SINGLE, new BlockingWaitStrategy());
 		disruptor.handleEventsWith(eventHandler);
 		disruptor.setDefaultExceptionHandler(new FatalExceptionHandler());
 	}
@@ -61,7 +61,7 @@ public class ShutdownOnFatalExceptionTest {
 		private int count = 0;
 
 		@Override
-		public void onEvent(byte[] event, long sequence, boolean endOfBatch) throws Exception {
+		public void onEvent(byte[] event, long sequence, boolean endOfBatch) {
 			// some logging
 			count++;
 			if (count == 3) {
@@ -70,17 +70,12 @@ public class ShutdownOnFatalExceptionTest {
 		}
 	}
 
-	private static class ByteArrayFactory implements EventFactory<byte[]> {
-		private int eventSize;
-
-		ByteArrayFactory(int eventSize) {
-			this.eventSize = eventSize;
-		}
+	private record ByteArrayFactory(int eventSize) implements EventFactory<byte[]> {
 
 		@Override
-		public byte[] newInstance() {
-			return new byte[eventSize];
+			public byte[] newInstance() {
+				return new byte[eventSize];
+			}
 		}
-	}
 	
 }

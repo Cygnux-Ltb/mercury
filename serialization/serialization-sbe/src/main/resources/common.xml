@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sbe:messageSchema xmlns:sbe="http://fixprotocol.io/2016/sbe"
-                   package="baseline" id="1" version="0" semanticVersion="5.2"
+                   package="sbe.common" id="1" version="0" semanticVersion="5.2"
                    description="Example base schema which can be extended.">
     <types>
         <composite name="messageHeader"
@@ -33,7 +33,6 @@
             <type name="varData" primitiveType="uint8" length="0"/>
         </composite>
     </types>
-    <sbe:message name="Common" id="1"
-                 description="Common Message">
+    <sbe:message name="Common" id="1" description="Common Message">
     </sbe:message>
 </sbe:messageSchema>

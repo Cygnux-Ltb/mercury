@@ -111,7 +111,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldPreventWrapping() throws Exception {
+	public void shouldPreventWrapping() {
 		Sequence sequence = new Sequence(Sequencer.INITIAL_CURSOR_VALUE);
 		final RingBuffer<StubEvent> ringBuffer = createMultiProducer(StubEvent.EVENT_FACTORY, 4);
 		ringBuffer.addGatingSequences(sequence);
@@ -125,7 +125,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldThrowExceptionIfBufferIsFull() throws Exception {
+	public void shouldThrowExceptionIfBufferIsFull() {
 		ringBuffer.addGatingSequences(new Sequence(ringBuffer.getBufferSize()));
 
 		try {
@@ -139,7 +139,7 @@ public class RingBufferTest {
 		try {
 			ringBuffer.tryNext();
 			fail("Exception should have been thrown");
-		} catch (InsufficientCapacityException e) {
+		} catch (InsufficientCapacityException ignored) {
 		}
 	}
 
@@ -152,24 +152,21 @@ public class RingBufferTest {
 		final TestEventProcessor processor = new TestEventProcessor(buffer2.newBarrier());
 		buffer2.addGatingSequences(processor.getSequence());
 
-		Thread thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				for (int i = 0; i <= ringBufferSize; i++) {
-					long sequence = buffer2.next();
-					StubEvent event = buffer2.get(sequence);
-					event.setValue(i);
-					buffer2.publish(sequence);
-					latch.countDown();
-				}
+		Thread thread = new Thread(() -> {
+            for (int i = 0; i <= ringBufferSize; i++) {
+                long sequence = buffer2.next();
+                StubEvent event = buffer2.get(sequence);
+                event.setValue(i);
+                buffer2.publish(sequence);
+                latch.countDown();
+            }
 
-				publisherComplete.set(true);
-			}
-		});
+            publisherComplete.set(true);
+        });
 		thread.start();
 
 		latch.await();
-		assertThat(Long.valueOf(buffer2.getCursor()), is(Long.valueOf(ringBufferSize - 1)));
+		assertThat(buffer2.getCursor(), is((long) (ringBufferSize - 1)));
 		assertFalse(publisherComplete.get());
 
 		processor.run();
@@ -179,7 +176,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldPublishEvent() throws Exception {
+	public void shouldPublishEvent() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		final EventTranslator<Object[]> translator = new NoArgEventTranslator();
 
@@ -190,7 +187,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldPublishEventOneArg() throws Exception {
+	public void shouldPublishEventOneArg() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorOneArg<Object[], String> translator = new OneArgEventTranslator();
 
@@ -201,7 +198,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldPublishEventTwoArg() throws Exception {
+	public void shouldPublishEventTwoArg() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorTwoArg<Object[], String, String> translator = new TwoArgEventTranslator();
 
@@ -212,7 +209,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldPublishEventThreeArg() throws Exception {
+	public void shouldPublishEventThreeArg() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorThreeArg<Object[], String, String, String> translator = new ThreeArgEventTranslator();
 
@@ -223,7 +220,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldPublishEventVarArg() throws Exception {
+	public void shouldPublishEventVarArg() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorVararg<Object[]> translator = new VarArgEventTranslator();
 
@@ -235,7 +232,7 @@ public class RingBufferTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void shouldPublishEvents() throws Exception {
+	public void shouldPublishEvents() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		final EventTranslator<Object[]> eventTranslator = new NoArgEventTranslator();
 		final EventTranslator<Object[]>[] translators = new EventTranslator[] { eventTranslator, eventTranslator };
@@ -248,7 +245,7 @@ public class RingBufferTest {
 
 	@SuppressWarnings("unchecked")
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsIfBatchIsLargerThanRingBuffer() throws Exception {
+	public void shouldNotPublishEventsIfBatchIsLargerThanRingBuffer() {
 		
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		final EventTranslator<Object[]> eventTranslator = new NoArgEventTranslator();
@@ -264,7 +261,7 @@ public class RingBufferTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void shouldPublishEventsWithBatchSizeOfOne() throws Exception {
+	public void shouldPublishEventsWithBatchSizeOfOne() {
 		
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		final EventTranslator<Object[]> eventTranslator = new NoArgEventTranslator();
@@ -280,7 +277,7 @@ public class RingBufferTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void shouldPublishEventsWithinBatch() throws Exception {
+	public void shouldPublishEventsWithinBatch() {
 		
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		final EventTranslator<Object[]> eventTranslator = new NoArgEventTranslator();
@@ -294,7 +291,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldPublishEventsOneArg() throws Exception {
+	public void shouldPublishEventsOneArg() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorOneArg<Object[], String> translator = new OneArgEventTranslator();
 
@@ -305,7 +302,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsOneArgIfBatchIsLargerThanRingBuffer() throws Exception {
+	public void shouldNotPublishEventsOneArgIfBatchIsLargerThanRingBuffer() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorOneArg<Object[], String> translator = new OneArgEventTranslator();
 
@@ -317,7 +314,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldPublishEventsOneArgBatchSizeOfOne() throws Exception {
+	public void shouldPublishEventsOneArgBatchSizeOfOne() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorOneArg<Object[], String> translator = new OneArgEventTranslator();
 
@@ -329,7 +326,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldPublishEventsOneArgWithinBatch() throws Exception {
+	public void shouldPublishEventsOneArgWithinBatch() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorOneArg<Object[], String> translator = new OneArgEventTranslator();
 
@@ -340,7 +337,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldPublishEventsTwoArg() throws Exception {
+	public void shouldPublishEventsTwoArg() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorTwoArg<Object[], String, String> translator = new TwoArgEventTranslator();
 
@@ -351,7 +348,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsITwoArgIfBatchSizeIsBiggerThanRingBuffer() throws Exception {
+	public void shouldNotPublishEventsITwoArgIfBatchSizeIsBiggerThanRingBuffer() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorTwoArg<Object[], String, String> translator = new TwoArgEventTranslator();
 
@@ -364,7 +361,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldPublishEventsTwoArgWithBatchSizeOfOne() throws Exception {
+	public void shouldPublishEventsTwoArgWithBatchSizeOfOne() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorTwoArg<Object[], String, String> translator = new TwoArgEventTranslator();
 
@@ -376,7 +373,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldPublishEventsTwoArgWithinBatch() throws Exception {
+	public void shouldPublishEventsTwoArgWithinBatch() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorTwoArg<Object[], String, String> translator = new TwoArgEventTranslator();
 
@@ -389,7 +386,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldPublishEventsThreeArg() throws Exception {
+	public void shouldPublishEventsThreeArg() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorThreeArg<Object[], String, String, String> translator = new ThreeArgEventTranslator();
 
@@ -402,7 +399,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsThreeArgIfBatchIsLargerThanRingBuffer() throws Exception {
+	public void shouldNotPublishEventsThreeArgIfBatchIsLargerThanRingBuffer() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorThreeArg<Object[], String, String, String> translator = new ThreeArgEventTranslator();
 
@@ -416,7 +413,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldPublishEventsThreeArgBatchSizeOfOne() throws Exception {
+	public void shouldPublishEventsThreeArgBatchSizeOfOne() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorThreeArg<Object[], String, String, String> translator = new ThreeArgEventTranslator();
 
@@ -430,7 +427,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldPublishEventsThreeArgWithinBatch() throws Exception {
+	public void shouldPublishEventsThreeArgWithinBatch() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorThreeArg<Object[], String, String, String> translator = new ThreeArgEventTranslator();
 
@@ -444,7 +441,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldPublishEventsVarArg() throws Exception {
+	public void shouldPublishEventsVarArg() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorVararg<Object[]> translator = new VarArgEventTranslator();
 
@@ -458,7 +455,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsVarArgIfBatchIsLargerThanRingBuffer() throws Exception {
+	public void shouldNotPublishEventsVarArgIfBatchIsLargerThanRingBuffer() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorVararg<Object[]> translator = new VarArgEventTranslator();
 
@@ -472,7 +469,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldPublishEventsVarArgBatchSizeOfOne() throws Exception {
+	public void shouldPublishEventsVarArgBatchSizeOfOne() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorVararg<Object[]> translator = new VarArgEventTranslator();
 
@@ -486,7 +483,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldPublishEventsVarArgWithinBatch() throws Exception {
+	public void shouldPublishEventsVarArgWithinBatch() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorVararg<Object[]> translator = new VarArgEventTranslator();
 
@@ -501,7 +498,7 @@ public class RingBufferTest {
 
 	@SuppressWarnings("unchecked")
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsWhenBatchSizeIs0() throws Exception {
+	public void shouldNotPublishEventsWhenBatchSizeIs0() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslator<Object[]> translator = new NoArgEventTranslator();
 
@@ -514,7 +511,7 @@ public class RingBufferTest {
 
 	@SuppressWarnings("unchecked")
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsWhenBatchSizeIs0() throws Exception {
+	public void shouldNotTryPublishEventsWhenBatchSizeIs0() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslator<Object[]> translator = new NoArgEventTranslator();
 
@@ -527,7 +524,7 @@ public class RingBufferTest {
 
 	@SuppressWarnings("unchecked")
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsWhenBatchExtendsPastEndOfArray() throws Exception {
+	public void shouldNotPublishEventsWhenBatchExtendsPastEndOfArray() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslator<Object[]> translator = new NoArgEventTranslator();
 
@@ -540,7 +537,7 @@ public class RingBufferTest {
 
 	@SuppressWarnings("unchecked")
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsWhenBatchExtendsPastEndOfArray() throws Exception {
+	public void shouldNotTryPublishEventsWhenBatchExtendsPastEndOfArray() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslator<Object[]> translator = new NoArgEventTranslator();
 
@@ -553,7 +550,7 @@ public class RingBufferTest {
 
 	@SuppressWarnings("unchecked")
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsWhenBatchSizeIsNegative() throws Exception {
+	public void shouldNotPublishEventsWhenBatchSizeIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslator<Object[]> translator = new NoArgEventTranslator();
 
@@ -566,7 +563,7 @@ public class RingBufferTest {
 
 	@SuppressWarnings("unchecked")
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsWhenBatchSizeIsNegative() throws Exception {
+	public void shouldNotTryPublishEventsWhenBatchSizeIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslator<Object[]> translator = new NoArgEventTranslator();
 
@@ -580,7 +577,7 @@ public class RingBufferTest {
 
 	@SuppressWarnings("unchecked")
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsWhenBatchStartsAtIsNegative() throws Exception {
+	public void shouldNotPublishEventsWhenBatchStartsAtIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslator<Object[]> translator = new NoArgEventTranslator();
 		try {
@@ -592,7 +589,7 @@ public class RingBufferTest {
 
 	@SuppressWarnings("unchecked")
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsWhenBatchStartsAtIsNegative() throws Exception {
+	public void shouldNotTryPublishEventsWhenBatchStartsAtIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslator<Object[]> translator = new NoArgEventTranslator();
 
@@ -605,7 +602,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsOneArgWhenBatchSizeIs0() throws Exception {
+	public void shouldNotPublishEventsOneArgWhenBatchSizeIs0() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorOneArg<Object[], String> translator = new OneArgEventTranslator();
 
@@ -617,7 +614,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsOneArgWhenBatchSizeIs0() throws Exception {
+	public void shouldNotTryPublishEventsOneArgWhenBatchSizeIs0() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorOneArg<Object[], String> translator = new OneArgEventTranslator();
 
@@ -629,7 +626,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsOneArgWhenBatchExtendsPastEndOfArray() throws Exception {
+	public void shouldNotPublishEventsOneArgWhenBatchExtendsPastEndOfArray() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorOneArg<Object[], String> translator = new OneArgEventTranslator();
 
@@ -641,7 +638,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsOneArgWhenBatchSizeIsNegative() throws Exception {
+	public void shouldNotPublishEventsOneArgWhenBatchSizeIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorOneArg<Object[], String> translator = new OneArgEventTranslator();
 
@@ -653,7 +650,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsOneArgWhenBatchStartsAtIsNegative() throws Exception {
+	public void shouldNotPublishEventsOneArgWhenBatchStartsAtIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorOneArg<Object[], String> translator = new OneArgEventTranslator();
 		try {
@@ -664,7 +661,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsOneArgWhenBatchExtendsPastEndOfArray() throws Exception {
+	public void shouldNotTryPublishEventsOneArgWhenBatchExtendsPastEndOfArray() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorOneArg<Object[], String> translator = new OneArgEventTranslator();
 
@@ -676,7 +673,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsOneArgWhenBatchSizeIsNegative() throws Exception {
+	public void shouldNotTryPublishEventsOneArgWhenBatchSizeIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorOneArg<Object[], String> translator = new OneArgEventTranslator();
 
@@ -688,7 +685,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsOneArgWhenBatchStartsAtIsNegative() throws Exception {
+	public void shouldNotTryPublishEventsOneArgWhenBatchStartsAtIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorOneArg<Object[], String> translator = new OneArgEventTranslator();
 
@@ -700,7 +697,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsTwoArgWhenBatchSizeIs0() throws Exception {
+	public void shouldNotPublishEventsTwoArgWhenBatchSizeIs0() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorTwoArg<Object[], String, String> translator = new TwoArgEventTranslator();
 
@@ -712,7 +709,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsTwoArgWhenBatchSizeIs0() throws Exception {
+	public void shouldNotTryPublishEventsTwoArgWhenBatchSizeIs0() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorTwoArg<Object[], String, String> translator = new TwoArgEventTranslator();
 
@@ -724,7 +721,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsTwoArgWhenBatchExtendsPastEndOfArray() throws Exception {
+	public void shouldNotPublishEventsTwoArgWhenBatchExtendsPastEndOfArray() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorTwoArg<Object[], String, String> translator = new TwoArgEventTranslator();
 
@@ -736,7 +733,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsTwoArgWhenBatchSizeIsNegative() throws Exception {
+	public void shouldNotPublishEventsTwoArgWhenBatchSizeIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorTwoArg<Object[], String, String> translator = new TwoArgEventTranslator();
 
@@ -748,7 +745,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsTwoArgWhenBatchStartsAtIsNegative() throws Exception {
+	public void shouldNotPublishEventsTwoArgWhenBatchStartsAtIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorTwoArg<Object[], String, String> translator = new TwoArgEventTranslator();
 		try {
@@ -759,7 +756,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsTwoArgWhenBatchExtendsPastEndOfArray() throws Exception {
+	public void shouldNotTryPublishEventsTwoArgWhenBatchExtendsPastEndOfArray() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorTwoArg<Object[], String, String> translator = new TwoArgEventTranslator();
 
@@ -771,7 +768,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsTwoArgWhenBatchSizeIsNegative() throws Exception {
+	public void shouldNotTryPublishEventsTwoArgWhenBatchSizeIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorTwoArg<Object[], String, String> translator = new TwoArgEventTranslator();
 
@@ -784,7 +781,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsTwoArgWhenBatchStartsAtIsNegative() throws Exception {
+	public void shouldNotTryPublishEventsTwoArgWhenBatchStartsAtIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorTwoArg<Object[], String, String> translator = new TwoArgEventTranslator();
 
@@ -797,7 +794,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsThreeArgWhenBatchSizeIs0() throws Exception {
+	public void shouldNotPublishEventsThreeArgWhenBatchSizeIs0() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorThreeArg<Object[], String, String, String> translator = new ThreeArgEventTranslator();
 
@@ -810,7 +807,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsThreeArgWhenBatchSizeIs0() throws Exception {
+	public void shouldNotTryPublishEventsThreeArgWhenBatchSizeIs0() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorThreeArg<Object[], String, String, String> translator = new ThreeArgEventTranslator();
 
@@ -823,7 +820,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsThreeArgWhenBatchExtendsPastEndOfArray() throws Exception {
+	public void shouldNotPublishEventsThreeArgWhenBatchExtendsPastEndOfArray() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorThreeArg<Object[], String, String, String> translator = new ThreeArgEventTranslator();
 
@@ -836,7 +833,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsThreeArgWhenBatchSizeIsNegative() throws Exception {
+	public void shouldNotPublishEventsThreeArgWhenBatchSizeIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorThreeArg<Object[], String, String, String> translator = new ThreeArgEventTranslator();
 
@@ -849,7 +846,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsThreeArgWhenBatchStartsAtIsNegative() throws Exception {
+	public void shouldNotPublishEventsThreeArgWhenBatchStartsAtIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorThreeArg<Object[], String, String, String> translator = new ThreeArgEventTranslator();
 
@@ -862,7 +859,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsThreeArgWhenBatchExtendsPastEndOfArray() throws Exception {
+	public void shouldNotTryPublishEventsThreeArgWhenBatchExtendsPastEndOfArray() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorThreeArg<Object[], String, String, String> translator = new ThreeArgEventTranslator();
 
@@ -875,7 +872,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsThreeArgWhenBatchSizeIsNegative() throws Exception {
+	public void shouldNotTryPublishEventsThreeArgWhenBatchSizeIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorThreeArg<Object[], String, String, String> translator = new ThreeArgEventTranslator();
 
@@ -888,7 +885,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsThreeArgWhenBatchStartsAtIsNegative() throws Exception {
+	public void shouldNotTryPublishEventsThreeArgWhenBatchStartsAtIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		EventTranslatorThreeArg<Object[], String, String, String> translator = new ThreeArgEventTranslator();
 
@@ -901,7 +898,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsVarArgWhenBatchSizeIs0() throws Exception {
+	public void shouldNotPublishEventsVarArgWhenBatchSizeIs0() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		VarArgEventTranslator translator = new VarArgEventTranslator();
 
@@ -914,7 +911,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsVarArgWhenBatchSizeIs0() throws Exception {
+	public void shouldNotTryPublishEventsVarArgWhenBatchSizeIs0() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		VarArgEventTranslator translator = new VarArgEventTranslator();
 
@@ -927,7 +924,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsVarArgWhenBatchExtendsPastEndOfArray() throws Exception {
+	public void shouldNotPublishEventsVarArgWhenBatchExtendsPastEndOfArray() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		VarArgEventTranslator translator = new VarArgEventTranslator();
 
@@ -940,7 +937,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsVarArgWhenBatchSizeIsNegative() throws Exception {
+	public void shouldNotPublishEventsVarArgWhenBatchSizeIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		VarArgEventTranslator translator = new VarArgEventTranslator();
 
@@ -953,7 +950,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotPublishEventsVarArgWhenBatchStartsAtIsNegative() throws Exception {
+	public void shouldNotPublishEventsVarArgWhenBatchStartsAtIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		VarArgEventTranslator translator = new VarArgEventTranslator();
 
@@ -966,7 +963,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsVarArgWhenBatchExtendsPastEndOfArray() throws Exception {
+	public void shouldNotTryPublishEventsVarArgWhenBatchExtendsPastEndOfArray() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		VarArgEventTranslator translator = new VarArgEventTranslator();
 
@@ -979,7 +976,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsVarArgWhenBatchSizeIsNegative() throws Exception {
+	public void shouldNotTryPublishEventsVarArgWhenBatchSizeIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		VarArgEventTranslator translator = new VarArgEventTranslator();
 
@@ -992,7 +989,7 @@ public class RingBufferTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void shouldNotTryPublishEventsVarArgWhenBatchStartsAtIsNegative() throws Exception {
+	public void shouldNotTryPublishEventsVarArgWhenBatchStartsAtIsNegative() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 4);
 		VarArgEventTranslator translator = new VarArgEventTranslator();
 
@@ -1005,7 +1002,7 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldAddAndRemoveSequences() throws Exception {
+	public void shouldAddAndRemoveSequences() {
 		RingBuffer<Object[]> ringBuffer = RingBuffer.createSingleProducer(new ArrayFactory(1), 16);
 
 		Sequence sequenceThree = new Sequence(-1);
@@ -1025,12 +1022,12 @@ public class RingBufferTest {
 	}
 
 	@Test
-	public void shouldHandleResetToAndNotWrapUnnecessarilySingleProducer() throws Exception {
+	public void shouldHandleResetToAndNotWrapUnnecessarilySingleProducer() {
 		assertHandleResetAndNotWrap(RingBuffer.createSingleProducer(StubEvent.EVENT_FACTORY, 4));
 	}
 
 	@Test
-	public void shouldHandleResetToAndNotWrapUnnecessarilyMultiProducer() throws Exception {
+	public void shouldHandleResetToAndNotWrapUnnecessarilyMultiProducer() {
 		assertHandleResetAndNotWrap(RingBuffer.createMultiProducer(StubEvent.EVENT_FACTORY, 4));
 	}
 

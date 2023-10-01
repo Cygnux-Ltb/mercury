@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.codec.Envelope;
-import io.mercury.common.serialization.basic.Serializer;
+import io.mercury.common.serialization.api.Serializer;
 import io.mercury.persistence.chronicle.exception.ChronicleAppendException;
 import io.mercury.persistence.chronicle.queue.AbstractChronicleAppender;
 import net.openhft.chronicle.queue.ExcerptAppender;

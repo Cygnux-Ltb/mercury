@@ -15,9 +15,9 @@
  */
 package uk.co.real_logic.sbe.examples;
 
-import baseline.CarEncoder;
-import baseline.MessageHeaderEncoder;
 import org.agrona.concurrent.UnsafeBuffer;
+import sbe.extension.CarEncoder;
+import sbe.extension.MessageHeaderEncoder;
 import uk.co.real_logic.sbe.ir.Ir;
 import uk.co.real_logic.sbe.ir.IrDecoder;
 import uk.co.real_logic.sbe.ir.IrEncoder;

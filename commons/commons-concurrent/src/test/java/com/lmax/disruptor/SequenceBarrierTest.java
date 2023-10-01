@@ -158,7 +158,7 @@ public final class SequenceBarrierTest {
 		assertFalse(sequenceBarrier.isAlerted());
 	}
 
-	private void fillRingBuffer(long expectedNumberMessages) throws InterruptedException {
+	private void fillRingBuffer(long expectedNumberMessages) {
 		for (long i = 0; i < expectedNumberMessages; i++) {
 			long sequence = ringBuffer.next();
 			StubEvent event = ringBuffer.get(sequence);

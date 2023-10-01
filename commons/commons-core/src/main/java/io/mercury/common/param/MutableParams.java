@@ -161,14 +161,20 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     public LocalDateTime getDateTime(K key) {
         if (key.getValueType() != ValueType.DATETIME)
             throw new IllegalArgumentException(
-                    "Key -> " + key + " paramType is not DATETIME, paramType==" + key.getValueType());
+                    "Key -> [" + key + "] paramType is not DATETIME, paramType==" + key.getValueType());
         return (LocalDateTime) temporalParams.get(key.getParamId());
     }
 
+    /**
+     * @param key K
+     * @return ZonedDateTime
+     */
     @Override
     public ZonedDateTime getZonedDateTime(K key) {
-        // TODO Auto-generated method stub
-        return null;
+        if (key.getValueType() != ValueType.ZONED_DATETIME)
+            throw new IllegalArgumentException(
+                    "Key -> [" + key + "] paramType is not ZONED_DATETIME, paramType==" + key.getValueType());
+        return (ZonedDateTime) temporalParams.get(key.getParamId());
     }
 
     /**

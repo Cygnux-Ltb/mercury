@@ -23,7 +23,7 @@ import org.junit.Test;
 public class FixedSequenceGroupTest {
 
 	@Test
-	public void shouldReturnMinimumOf2Sequences() throws Exception {
+	public void shouldReturnMinimumOf2Sequences() {
 		Sequence sequence1 = new Sequence(34);
 		Sequence sequnece2 = new Sequence(47);
 		Sequence group = new FixedSequenceGroup(new Sequence[] { sequence1, sequnece2 });

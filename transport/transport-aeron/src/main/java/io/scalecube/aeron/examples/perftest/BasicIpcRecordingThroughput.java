@@ -70,39 +70,35 @@ public class BasicIpcRecordingThroughput implements AutoCloseable {
     BasicIpcRecordingThroughput() {
         Path aeronPath = Paths.get(CommonContext.generateRandomDirName());
         String instanceName = aeronPath.getFileName().toString();
-        Path archivePath =
-                AeronHelper.archivePath()
-                        .orElseGet(() -> Paths.get(String.join("-", instanceName, "archive")));
+        Path archivePath = AeronHelper.archivePath()
+                .orElseGet(() -> Paths.get(String.join("-", instanceName, "archive")));
 
-        mediaDriver =
-                MediaDriver.launch(
-                        new Context().aeronDirectoryName(aeronPath.toString()).spiesSimulateConnection(true));
+        mediaDriver = MediaDriver.launch(
+                new Context().aeronDirectoryName(aeronPath.toString()).spiesSimulateConnection(true));
 
-        aeron =
-                Aeron.connect(
-                        new Aeron.Context()
-                                .aeronDirectoryName(aeronPath.toString())
-                                .availableImageHandler(AeronHelper::printAvailableImage)
-                                .unavailableImageHandler(AeronHelper::printUnavailableImage));
+        aeron = Aeron.connect(
+                new Aeron.Context()
+                        .aeronDirectoryName(aeronPath.toString())
+                        .availableImageHandler(AeronHelper::printAvailableImage)
+                        .unavailableImageHandler(AeronHelper::printUnavailableImage));
 
-        archive =
-                Archive.launch(
-                        new Archive.Context()
-                                .aeron(aeron)
-                                .mediaDriverAgentInvoker(mediaDriver.sharedAgentInvoker())
-                                .errorCounter(
-                                        new AtomicCounter(
-                                                mediaDriver.context().countersValuesBuffer(),
-                                                SystemCounterDescriptor.ERRORS.id()))
-                                .errorHandler(mediaDriver.context().errorHandler())
-                                .localControlChannel(localControlChannel(instanceName))
-                                .controlChannel(controlChannel())
-                                .recordingEventsEnabled(false)
-                                .recordingEventsChannel(recordingEventsChannel())
-                                .replicationChannel(replicationChannel())
-                                .aeronDirectoryName(aeronPath.toString())
-                                .archiveDirectoryName(archivePath.toString())
-                                .threadingMode(ArchiveThreadingMode.SHARED));
+        archive = Archive.launch(
+                new Archive.Context()
+                        .aeron(aeron)
+                        .mediaDriverAgentInvoker(mediaDriver.sharedAgentInvoker())
+                        .errorCounter(
+                                new AtomicCounter(
+                                        mediaDriver.context().countersValuesBuffer(),
+                                        SystemCounterDescriptor.ERRORS.id()))
+                        .errorHandler(mediaDriver.context().errorHandler())
+                        .localControlChannel(localControlChannel(instanceName))
+                        .controlChannel(controlChannel())
+                        .recordingEventsEnabled(false)
+                        .recordingEventsChannel(recordingEventsChannel())
+                        .replicationChannel(replicationChannel())
+                        .aeronDirectoryName(aeronPath.toString())
+                        .archiveDirectoryName(archivePath.toString())
+                        .threadingMode(ArchiveThreadingMode.SHARED));
 
         printArchiveContext(archive.context());
 
@@ -118,8 +114,8 @@ public class BasicIpcRecordingThroughput implements AutoCloseable {
     }
 
     private void streamMessagesForRecording() {
-        try (ExclusivePublication publication =
-                     aeron.addExclusivePublication(RECORDING_CHANNEL, STREAM_ID)) {
+        try (ExclusivePublication publication = aeron
+                .addExclusivePublication(RECORDING_CHANNEL, STREAM_ID)) {
 
             aeronArchive.startRecording(
                     ChannelUri.addSessionId(RECORDING_CHANNEL, publication.sessionId()),
