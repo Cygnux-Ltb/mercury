@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 
 public class LongAdaptiveRadixTreeMapTest {
 
-	private static Logger log = LoggerFactory.getLogger(LongAdaptiveRadixTreeMapTest.class);
+	private static final Logger log = LoggerFactory.getLogger(LongAdaptiveRadixTreeMapTest.class);
 
 	private LongAdaptiveRadixTreeMap<String> map;
 	private TreeMap<Long, String> origMap;

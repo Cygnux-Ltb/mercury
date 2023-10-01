@@ -1,12 +1,11 @@
 package io.mercury.common.config;
 
-import java.io.File;
-import java.net.URL;
-
-import org.junit.Test;
-
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import org.junit.Test;
+
+import java.io.File;
+import java.net.URL;
 
 public class ConfigUtilTest {
 
