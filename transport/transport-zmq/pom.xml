@@ -35,12 +35,11 @@
             <groupId>io.mercury</groupId>
             <artifactId>serialization-json</artifactId>
         </dependency>
-
         <!-- JeroMq : Pure Java implementation of libzmq -->
         <dependency>
             <groupId>org.zeromq</groupId>
             <artifactId>jeromq</artifactId>
-            <version>0.5.3</version>
+            <version>0.5.4</version>
         </dependency>
     </dependencies>
 

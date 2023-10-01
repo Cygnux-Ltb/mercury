@@ -26,16 +26,11 @@
         <module>persistence</module>
         <module>serialization</module>
         <module>storage</module>
-        <module>toolkit</module>
         <module>transport</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Java 11 -->
-        <!-- <java.version>11</java.version> -->
-        <!-- <maven.compiler.target>11</maven.compiler.target> -->
-        <!-- <maven.compiler.source>11</maven.compiler.source> -->
         <!-- Java 21 -->
         <java.version>21</java.version>
         <maven.compiler.target>21</maven.compiler.target>
@@ -44,7 +39,7 @@
         <slf4j.version>1.7.36</slf4j.version>
         <junit.version>4.13.2</junit.version>
         <jupiter.version>5.10.0</jupiter.version>
-        <netty.version>4.1.97.Final</netty.version>
+        <netty.version>4.1.99.Final</netty.version>
         <jackson.version>2.15.2</jackson.version>
     </properties>
 
