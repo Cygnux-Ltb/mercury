@@ -35,7 +35,7 @@
         <dependency>
             <groupId>com.lmax</groupId>
             <artifactId>disruptor</artifactId>
-            <version>4.0.0</version>
+            <version>3.4.4</version>
         </dependency>
 
         <!-- A time ticker as a lightweight clock -->
