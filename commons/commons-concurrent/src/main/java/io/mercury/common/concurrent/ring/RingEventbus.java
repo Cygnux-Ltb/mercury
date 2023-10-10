@@ -3,6 +3,7 @@ package io.mercury.common.concurrent.ring;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.EventTranslatorOneArg;
+import com.lmax.disruptor.EventTranslatorThreeArg;
 import com.lmax.disruptor.EventTranslatorTwoArg;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.WaitStrategy;
@@ -154,6 +155,21 @@ public class RingEventbus<E> extends RunnableComponent {
     public <A0, A1> void publish(EventTranslatorTwoArg<E, A0, A1> translator, A0 arg0, A1 arg1) {
         ringBuffer.publishEvent(translator, arg0, arg1);
     }
+
+
+    /**
+     * @param translator EventTranslatorThreeArg<E, A0, A1, A2>
+     * @param arg0       A0
+     * @param arg1       A1
+     * @param arg2       A2
+     * @param <A0>       A0 Type
+     * @param <A1>       A1 Type
+     * @param <A2>       A2 Type
+     */
+    public <A0, A1, A2> void publish(EventTranslatorThreeArg<E, A0, A1, A2> translator, A0 arg0, A1 arg1, A2 arg2) {
+        ringBuffer.publishEvent(translator, arg0, arg1, arg2);
+    }
+
 
     /**
      * @param <E>
