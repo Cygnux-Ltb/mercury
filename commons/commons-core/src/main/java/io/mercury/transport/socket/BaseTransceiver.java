@@ -5,8 +5,7 @@ import io.mercury.common.collections.queue.Queue;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.api.TransportComponent;
 
-public abstract class BaseTransceiver<T> extends TransportComponent
-        implements Transceiver<T> {
+public abstract class BaseTransceiver<T> extends TransportComponent implements Transceiver<T> {
 
     private final Sender<T> sender;
 
@@ -55,7 +54,7 @@ public abstract class BaseTransceiver<T> extends TransportComponent
     @Override
     public boolean startSend() {
         try {
-           // queue.start();
+            // queue.start();
             return true;
         } catch (Exception e) {
             throw new RuntimeException("start queue exception : " + e.getMessage(), e);
