@@ -94,16 +94,13 @@
             <dependency>
                 <groupId>commons-dbutils</groupId>
                 <artifactId>commons-dbutils</artifactId>
-                <version>1.8.0</version>
+                <version>1.8.1</version>
             </dependency>
 
             <!-- Ultimate JDBC Connection Pool -->
             <dependency>
                 <groupId>com.zaxxer</groupId>
                 <artifactId>HikariCP</artifactId>
-                <!-- java 8 -->
-                <!-- <version>4.0.3</version> -->
-                <!-- java 11 -->
                 <version>5.0.1</version>
             </dependency>
 

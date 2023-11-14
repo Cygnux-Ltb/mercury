@@ -13,7 +13,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <log4j.version>2.20.0</log4j.version>
+        <log4j2.version>2.21.1</log4j2.version>
     </properties>
 
     <build>
@@ -92,21 +92,21 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>${log4j.version}</version>
+            <version>${log4j2.version}</version>
         </dependency>
 
         <!-- The Apache Log4j 2.x Implementation -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>${log4j.version}</version>
+            <version>${log4j2.version}</version>
         </dependency>
 
         <!-- The Apache Log4j SLF4J API binding to Log4j 2 Core -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j.version}</version>
+            <version>${log4j2.version}</version>
             <scope>runtime</scope>
             <exclusions>
                 <exclusion>
@@ -118,12 +118,12 @@
 
         <!-- Swing GUI to remotely edit Log4j configurations. -->
         <!-- This includes a JConsole plugin and a StatusLogger monitor. -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-jmx-gui</artifactId>
-            <version>${log4j.version}</version>
-            <scope>runtime</scope>
-        </dependency>
+        <!-- <dependency>-->
+        <!--     <groupId>org.apache.logging.log4j</groupId>-->
+        <!--     <artifactId>log4j-jmx-gui</artifactId>-->
+        <!--     <version>2.20.0</version>-->
+        <!--     <scope>runtime</scope>-->
+        <!-- </dependency>-->
 
     </dependencies>
 </project>

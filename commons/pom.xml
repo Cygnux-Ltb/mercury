@@ -47,7 +47,7 @@
                 <artifactId>commons-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- commons logPoint -->
+            <!-- commons log4j2 -->
             <dependency>
                 <groupId>io.mercury</groupId>
                 <artifactId>commons-log4j2</artifactId>
