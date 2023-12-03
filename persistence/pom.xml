@@ -101,7 +101,7 @@
             <dependency>
                 <groupId>com.zaxxer</groupId>
                 <artifactId>HikariCP</artifactId>
-                <version>5.0.1</version>
+                <version>5.1.0</version>
             </dependency>
 
             <!-- Apache Commons Compress software defines an API for working with
@@ -111,7 +111,7 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
-                <version>1.24.0</version>
+                <version>1.25.0</version>
             </dependency>
 
             <!-- Java ports and bindings of the LZ4 compression algorithm and the
