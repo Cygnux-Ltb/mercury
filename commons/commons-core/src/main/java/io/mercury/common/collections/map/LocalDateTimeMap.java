@@ -40,7 +40,8 @@ public final class LocalDateTimeMap<V> extends TemporalMap<LocalDateTime, V, Loc
      * @return V
      */
     public static <V> LocalDateTimeMap<V> newMapWithSecond() {
-        return new LocalDateTimeMap<>(DateTimeUtil::datetimeOfSecond, key -> key.plusSeconds(1), HasNextKey);
+        return new LocalDateTimeMap<>(DateTimeUtil::datetimeOfSecond,
+                key -> key.plusSeconds(1), HasNextKey);
     }
 
     @Override
