@@ -47,7 +47,7 @@ public class JwtFilter extends GenericFilterBean {
 
             try {
                 // Use JWT parser to check if the signature is valid with the Key "secretkey"
-                final Claims claims = Jwts.parserBuilder().setSigningKey("secretkey").build().parseClaimsJws(token)
+                final Claims claims = Jwts.parser().setSigningKey("secretkey").build().parseClaimsJws(token)
                         .getBody();
 
                 // Add the claim to request header

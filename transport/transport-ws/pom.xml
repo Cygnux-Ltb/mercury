@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>io.mercury</groupId>
-            <artifactId>commons-config</artifactId>
+            <artifactId>commons-concurrent</artifactId>
         </dependency>
 
         <!-- jsoup is a Java library for working with real-world HTML. It provides
