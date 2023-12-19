@@ -46,7 +46,7 @@ public class NativeTime {
                             continue;
                         }
 
-                        System.out.println("Unpacking " + file.getName() + " to " + f);
+                        System.out.println(STR."Unpacking \{file.getName()} to \{f}");
 
                         java.io.InputStream is = jar.getInputStream(file); // get the input stream
                         java.io.FileOutputStream fos = new java.io.FileOutputStream(f);
@@ -86,7 +86,7 @@ public class NativeTime {
 
             loaded = tryLoad("libnativetime.so");
             if (!loaded)
-                loaded = tryLoad(pattern + java.io.File.separator + "libnativetime.so");
+                loaded = tryLoad(STR."\{pattern}\{java.io.File.separator}libnativetime.so");
             if (!loaded)
                 System.loadLibrary("nativetime");
 

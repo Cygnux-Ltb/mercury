@@ -12,10 +12,12 @@ public final class PathParams {
     public record PathParam(
             Object name,
             Object value) {
+
         @Override
         public String toString() {
-            return name + "=" + (value == null ? "" : value);
+            return STR."\{name}=\{value == null ? "" : value}";
         }
+
     }
 
     private final Set<PathParam> set = MutableSets.newUnifiedSet();

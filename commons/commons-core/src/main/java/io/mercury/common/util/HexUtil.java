@@ -247,7 +247,7 @@ public final class HexUtil {
         // a hex string must be in increments of 2
         if ((length % 2) != 0)
             throw new IllegalArgumentException(
-                    "The hex string did not contain an even number of characters [actual=" + length + "]");
+                    STR."The hex string did not contain an even number of characters [actual=\{length}]");
 
         // convert hex string to byte array
         byte[] bytes = new byte[length / 2];

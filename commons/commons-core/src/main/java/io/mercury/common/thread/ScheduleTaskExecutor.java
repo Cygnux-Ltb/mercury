@@ -395,9 +395,9 @@ public final class ScheduleTaskExecutor {
         ScheduleTaskExecutor.multiThreadScheduleAtFixedRate(LocalDateTime.now(), 15, TimeUnit.SECONDS,
                 () -> {
                     LocalDateTime now = LocalDateTime.now();
-                    System.out.println(now + " -> Add task delay 5 SECONDS, Exec time -> " + now.plusSeconds(10));
+                    System.out.println(STR."\{now} -> Add task delay 5 SECONDS, Exec time -> \{now.plusSeconds(10)}");
                     ScheduleTaskExecutor.multiThreadSchedule(10, TimeUnit.SECONDS,
-                            () -> System.out.println(LocalDateTime.now() + " -> Task finish"));
+                            () -> System.out.println(STR."\{LocalDateTime.now()} -> Task finish"));
                 }
         );
     }

@@ -1,43 +1,75 @@
-public class LoginDialog extends javax.swing.JDialog {
-private javax.swing.JPanel contentPane;
-private javax.swing.JButton buttonOK;
-private javax.swing.JButton buttonCancel;
+package io.mercury.swing;
 
-public LoginDialog(){
-setContentPane(contentPane);
-setModal(true);
-getRootPane().setDefaultButton(buttonOK);
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.function.BiConsumer;
 
-buttonOK.addActionListener(new java.awt.event.ActionListener(){public void actionPerformed(java.awt.event.ActionEvent e){onOK();}});
+public final class LoginDialog extends JDialog {
 
-buttonCancel.addActionListener(new java.awt.event.ActionListener(){public void actionPerformed(java.awt.event.ActionEvent e){onCancel();}});
+    private JPanel contentPane;
+    private JPanel mainPanel;
+    private JPanel buttonPanel;
+    private JTextField username;
+    private JPasswordField password;
+    private JButton buttonOK;
+    private JButton buttonCancel;
 
- // call onCancel() when cross is clicked
-setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-addWindowListener(new java.awt.event.WindowAdapter() {
-  public void windowClosing(java.awt.event.WindowEvent e) {
-   onCancel();
-  }
-});
+    private final LoginHandler loginHandler;
 
- // call onCancel() on ESCAPE
-contentPane.registerKeyboardAction(  new java.awt.event.ActionListener() {    public void actionPerformed(java.awt.event.ActionEvent e) {      onCancel();
-    }  },  javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0),  javax.swing.JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);}
+    public LoginDialog(String title, LoginHandler loginHandler) {
+        this.loginHandler = loginHandler;
+        setTitle(title);
+        setContentPane(contentPane);
+        setModal(true);
+        getRootPane().setDefaultButton(buttonOK);
 
-private void onOK(){
- // add your code here
-dispose();
-}
+        buttonOK.addActionListener(e -> onOK());
+        buttonCancel.addActionListener(e -> onClear());
 
-private void onCancel(){
- // add your code here if necessary
-dispose();
-}
+        // call onCancel() when cross is clicked
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                onClear();
+            }
+        });
 
-public static void main(String[] args){
-LoginDialog dialog = new LoginDialog();
-dialog.pack();
-dialog.setVisible(true);
-System.exit(0);
-}
+        // call onCancel() on ESCAPE
+        contentPane.registerKeyboardAction(e -> onClear(),
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+    }
+
+    private void onOK() {
+        loginHandler.onLogin(username.getText(), String.valueOf(password.getPassword()));
+    }
+
+    private void onClear() {
+        dispose();
+    }
+
+    public void showDialog() {
+        this.pack();
+        this.setVisible(true);
+    }
+
+    @FunctionalInterface
+    public interface LoginHandler extends BiConsumer<String, String> {
+
+        void onLogin(String username, String password);
+
+        @Override
+        default void accept(String s0, String s1) {
+            onLogin(s0, s1);
+        }
+    }
+
 }

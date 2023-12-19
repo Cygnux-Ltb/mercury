@@ -64,7 +64,7 @@ public final class SocketSender extends TransportComponent implements Sender<byt
 
     @Override
     public String getName() {
-        return "SocketSender -> " + socket.hashCode();
+        return STR."SocketSender -> \{socket.hashCode()}";
     }
 
     @Override

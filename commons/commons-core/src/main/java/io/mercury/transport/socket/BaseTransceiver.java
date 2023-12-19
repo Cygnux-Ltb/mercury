@@ -57,7 +57,7 @@ public abstract class BaseTransceiver<T> extends TransportComponent implements T
             // queue.start();
             return true;
         } catch (Exception e) {
-            throw new RuntimeException("start queue exception : " + e.getMessage(), e);
+            throw new RuntimeException(STR."start queue exception : \{e.getMessage()}", e);
         }
     }
 

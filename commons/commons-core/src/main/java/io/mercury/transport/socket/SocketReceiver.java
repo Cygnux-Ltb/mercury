@@ -19,6 +19,7 @@ import java.util.function.Consumer;
 public class SocketReceiver extends TransportComponent implements Receiver {
 
     private final SocketConfigurator configurator;
+
     private final Consumer<byte[]> callback;
 
     private Socket socket;

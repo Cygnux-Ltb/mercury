@@ -12,7 +12,7 @@ public final class NetworkAddr {
         this.protocol = protocol;
         this.addr = addr;
         this.port = port;
-        this.completeInfo = protocol.fixAddr(addr) + ":" + port;
+        this.completeInfo = STR."\{protocol.fixAddr(addr)}:\{port}";
     }
 
     /**

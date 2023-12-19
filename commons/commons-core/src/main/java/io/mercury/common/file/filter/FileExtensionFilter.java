@@ -44,7 +44,7 @@ public class FileExtensionFilter implements FileFilter {
         // check each extension
         for (String ext : extensions) {
             if (!FileUtil.isValidFileExtension(ext))
-                throw new IllegalArgumentException("Invalid file extension '" + ext + "' cannot be matched");
+                throw new IllegalArgumentException(STR."Invalid file extension '\{ext}' cannot be matched");
         }
         this.ignoreCase = ignoreCase;
         this.extensions = extensions;

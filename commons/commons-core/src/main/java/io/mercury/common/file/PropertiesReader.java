@@ -67,7 +67,7 @@ public final class PropertiesReader {
      * @return String
      */
     private static String mergePropertiesKey(String fileName, String propName) {
-        return deleteSuffix(fileName) + "." + propName;
+        return STR."\{deleteSuffix(fileName)}.\{propName}";
     }
 
     /**

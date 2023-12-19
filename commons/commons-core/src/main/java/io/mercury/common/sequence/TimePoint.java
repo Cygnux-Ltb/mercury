@@ -12,7 +12,7 @@ import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HH_M
  *
  * @author yellow013
  */
-public class TimePoint implements Serial<TimePoint> {
+public class TimePoint implements SerialObj<TimePoint> {
 
     private final ZonedDateTime datetime;
 

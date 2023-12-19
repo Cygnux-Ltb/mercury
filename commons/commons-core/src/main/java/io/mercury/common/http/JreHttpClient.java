@@ -15,13 +15,15 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 
+import static java.net.http.HttpRequest.newBuilder;
+
 public abstract class JreHttpClient {
 
     private static final Logger log = Log4j2LoggerFactory.getLogger(JreHttpClient.class);
 
     private static final HttpClient HC = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_2)
-            .connectTimeout(Duration.ofSeconds(12))
+            .connectTimeout(Duration.ofSeconds(15))
             .followRedirects(HttpClient.Redirect.NORMAL)
             .authenticator(Authenticator.getDefault())
             .build();
@@ -41,8 +43,9 @@ public abstract class JreHttpClient {
 
     public static HttpResponse<String> GET(@Nonnull URI uri)
             throws IOException, InterruptedException {
-        return GET(HttpRequest.newBuilder()
-                .GET().uri(uri)
+        return GET(newBuilder()
+                .GET()
+                .uri(uri)
                 .headers(HttpHeaderName.CONTENT_TYPE.value(), MimeType.APPLICATION_JSON_UTF8)
                 .build());
     }
@@ -56,9 +59,11 @@ public abstract class JreHttpClient {
     public static HttpResponse<String> POST(@Nonnull URI uri, String body)
             throws IOException, InterruptedException {
         return HC.send(// POST request
-                HttpRequest.newBuilder().uri(uri)
+                newBuilder()
+                        .uri(uri)
                         .POST(HttpRequest.BodyPublishers.ofString(body))
-                        .header(HttpHeaderName.CONTENT_TYPE.value(), MimeType.APPLICATION_JSON_UTF8).build(),
+                        .header(HttpHeaderName.CONTENT_TYPE.value(), MimeType.APPLICATION_JSON_UTF8)
+                        .build(),
                 BodyHandlers.ofString());
     }
 
@@ -66,9 +71,11 @@ public abstract class JreHttpClient {
     public static HttpResponse<String> PUT(@Nonnull URI uri, String body)
             throws IOException, InterruptedException {
         return HC.send(// PUT request
-                HttpRequest.newBuilder().uri(uri)
+                newBuilder()
+                        .uri(uri)
                         .PUT(HttpRequest.BodyPublishers.ofString(body))
-                        .header(HttpHeaderName.CONTENT_TYPE.value(), MimeType.APPLICATION_JSON_UTF8).build(),
+                        .header(HttpHeaderName.CONTENT_TYPE.value(), MimeType.APPLICATION_JSON_UTF8)
+                        .build(),
                 BodyHandlers.ofString());
     }
 
@@ -76,7 +83,7 @@ public abstract class JreHttpClient {
     public static HttpResponse<String> DELETE(URI uri)
             throws IOException, InterruptedException {
         return HC.send(// DELETE request
-                HttpRequest.newBuilder().DELETE().uri(uri).build(),
+                newBuilder().DELETE().uri(uri).build(),
                 BodyHandlers.ofString());
     }
 

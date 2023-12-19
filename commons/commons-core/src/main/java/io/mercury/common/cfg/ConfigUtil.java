@@ -32,8 +32,7 @@ public final class ConfigUtil {
                 log.info("Key -> [{}],  ValueType -> [{}],  Value -> [{}]",
                         entry.getKey(), value.valueType(), value.unwrapped());
             else
-                out.println("Key -> [" + entry.getKey() + "],  ValueType -> [" + value.valueType()
-                        + "],  Value -> [" + value.unwrapped() + "]");
+                out.println(STR."Key -> [\{entry.getKey()}],  ValueType -> [\{value.valueType()}],  Value -> [\{value.unwrapped()}]");
         });
     }
 

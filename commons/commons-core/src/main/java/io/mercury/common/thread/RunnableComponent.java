@@ -29,7 +29,7 @@ public abstract class RunnableComponent {
     /**
      * name
      */
-    protected String name = "Component-[" + YYYYMMDD_L_HHMMSSSSS.fmt(now()) + "]";
+    protected String name = STR."Component-[\{YYYYMMDD_L_HHMMSSSSS.fmt(now())}]";
 
     protected RunnableComponent() {
     }
@@ -111,7 +111,7 @@ public abstract class RunnableComponent {
         if (mode.immediately)
             start();
         else if (mode.delayMillis > 0)
-            ThreadSupport.startNewMaxPriorityThread(name + "-worker", () -> {
+            ThreadSupport.startNewMaxPriorityThread(STR."\{name}-worker", () -> {
                 SleepSupport.sleep(mode.delayMillis);
                 start();
             });
@@ -150,7 +150,7 @@ public abstract class RunnableComponent {
             if (immediately)
                 return "Auto";
             else if (delayMillis > 0)
-                return "Delay(" + delayMillis + "ms)";
+                return STR."Delay(\{delayMillis}ms)";
             else
                 return "Manual";
         }
@@ -166,7 +166,7 @@ public abstract class RunnableComponent {
         private static final long serialVersionUID = -5059741051462133930L;
 
         public ComponentStartException(String componentName, String msg, Throwable cause) {
-            super("Component -> [" + componentName + "] start failed, Msg: " + msg, cause);
+            super(STR."Component -> [\{componentName}] start failed, Msg: \{msg}", cause);
         }
 
     }
@@ -180,7 +180,7 @@ public abstract class RunnableComponent {
         private static final long serialVersionUID = -5298836449881727747L;
 
         public ComponentStopException(String componentName, String msg, Throwable cause) {
-            super("Component -> [" + componentName + "] start failed, Msg: " + msg, cause);
+            super(STR."Component -> [\{componentName}] start failed, Msg: \{msg}", cause);
         }
 
     }
