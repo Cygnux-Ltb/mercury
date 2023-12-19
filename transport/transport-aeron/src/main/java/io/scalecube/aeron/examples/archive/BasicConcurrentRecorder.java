@@ -34,7 +34,9 @@ import static io.scalecube.aeron.examples.AeronHelper.printRecordedPublication;
 public class BasicConcurrentRecorder {
 
     public static final String CHANNEL = "aeron:udp?endpoint=localhost:20121";
+
     public static final String CHANNEL2 = "aeron:udp?endpoint=localhost:20122";
+
     public static final String CHANNEL3 = "aeron:udp?endpoint=localhost:20123";
 
     public static final String RECORDING_EVENTS_CHANNEL_ENDPOINT = "localhost:8030";
