@@ -2,7 +2,7 @@ package io.mercury.common.collections.counter;
 
 import org.junit.Test;
 
-public class ExpirableCounterTest {
+public class ExplorableCounterTest {
 
 	@Test
 	public void test() {
