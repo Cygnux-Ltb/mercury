@@ -1,6 +1,6 @@
 package io.mercury.transport.zmq;
 
-import io.mercury.common.config.ConfigOption;
+import io.mercury.common.cfg.ConfigOption;
 
 public enum ZmqConfigOption implements ConfigOption {
 

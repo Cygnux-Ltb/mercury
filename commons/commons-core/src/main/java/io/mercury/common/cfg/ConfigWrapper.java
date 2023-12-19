@@ -1,4 +1,4 @@
-package io.mercury.common.config;
+package io.mercury.common.cfg;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigException.BadValue;
@@ -32,7 +32,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
         this.module = nonEmpty(module)
                 ? module.endsWith(".")
                 ? module
-                : module + "."
+                : STR."\{module}."
                 : "";
     }
 
@@ -210,7 +210,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
     public int getIntOrThrows(@Nonnull OP option, IntPredicate verify)
             throws Missing, BadValue {
         return getIntOrThrows(option, verify,
-                new IllegalArgumentException("Illegal argument -> " + option.getConfigName(module)));
+                new IllegalArgumentException(STR."Illegal argument -> \{option.getConfigName(module)}"));
     }
 
     /**
@@ -227,7 +227,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
         if (verify.test(value))
             return value;
         else
-            throw new BadValue(option.getConfigName(module), "value == " + value, ex);
+            throw new BadValue(option.getConfigName(module), STR."value == \{value}", ex);
     }
 
     /**
@@ -252,7 +252,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
     public long getLongOrThrows(@Nonnull OP option, LongPredicate verify)
             throws Missing, BadValue {
         return getLongOrThrows(option, verify,
-                new IllegalArgumentException("Illegal argument -> " + option.getConfigName(module)));
+                new IllegalArgumentException(STR."Illegal argument -> \{option.getConfigName(module)}"));
     }
 
     /**
@@ -269,7 +269,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
         if (verify.test(value))
             return value;
         else
-            throw new BadValue(option.getConfigName(module), "value == " + value, ex);
+            throw new BadValue(option.getConfigName(module), STR."value == \{value}", ex);
     }
 
     /**
@@ -294,7 +294,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
     public double getDoubleOrThrows(@Nonnull OP option, DoublePredicate verify)
             throws Missing, BadValue {
         return getDoubleOrThrows(option, verify,
-                new IllegalArgumentException("Illegal argument -> " + option.getConfigName(module)));
+                new IllegalArgumentException(STR."Illegal argument -> \{option.getConfigName(module)}"));
     }
 
     /**
@@ -311,7 +311,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
         if (verify.test(value))
             return value;
         else
-            throw new BadValue(option.getConfigName(module), "value == " + value, ex);
+            throw new BadValue(option.getConfigName(module), STR."value == \{value}", ex);
     }
 
     /**
@@ -336,7 +336,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
     public String getStringOrThrows(@Nonnull OP option, Predicate<String> verify)
             throws Missing, BadValue {
         return getStringOrThrows(option, verify,
-                new IllegalArgumentException("Illegal argument -> " + option.getConfigName(module)));
+                new IllegalArgumentException(STR."Illegal argument -> \{option.getConfigName(module)}"));
     }
 
     /**
@@ -354,7 +354,7 @@ public final class ConfigWrapper<OP extends ConfigOption> {
             return value;
         else
             throw new BadValue(
-                    option.getConfigName(module), "value == " + value, ex);
+                    option.getConfigName(module), STR."value == \{value}", ex);
     }
 
 }

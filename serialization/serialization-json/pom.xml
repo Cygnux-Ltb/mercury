@@ -21,18 +21,21 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <!-- Add-on module to support JSR-310 (Java 8 Date & Time API) data types. -->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <!-- Add-on module for Jackson to support JDK 8 data types. -->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jdk8</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <!-- Add-on module for Jackson to support introspection of method/constructor parameter names,
@@ -40,12 +43,14 @@
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-parameter-names</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <!-- Add-on datatype-support module for Jackson that handles eclipse-collections types -->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-eclipse-collections</artifactId>
+            <version>${jackson.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.eclipse.collections</groupId>

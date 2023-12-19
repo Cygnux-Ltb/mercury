@@ -46,7 +46,7 @@ public final class HexString {
         // though method is private, leaving checks in place to show intent
         if (hex == null)
             throw new IllegalArgumentException("hex string argument cannot be null; use HexString.EMPTY instead");
-        if (hex.equals(""))
+        if (hex.isEmpty())
             throw new IllegalArgumentException("hex string argument cannot be empty; use HexString.EMPTY instead");
         byte[] bytes = HexUtil.toByteArray(hex);
         return new HexString(bytes, hex.toUpperCase());
@@ -108,7 +108,7 @@ public final class HexString {
 
     @Override
     public String toString() {
-        return "0x" + hex;
+        return STR."0x\{hex}";
     }
 
     @Override

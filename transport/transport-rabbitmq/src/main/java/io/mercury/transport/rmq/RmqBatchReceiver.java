@@ -10,7 +10,7 @@ import io.mercury.common.lang.Asserter;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.serialization.specific.BytesDeserializer;
 import io.mercury.transport.api.Receiver;
-import io.mercury.transport.rmq.configurator.RmqReceiverConfig;
+import io.mercury.transport.rmq.cfg.RmqReceiverCfg;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.eclipse.collections.api.list.MutableList;
 import org.slf4j.Logger;
@@ -71,7 +71,7 @@ public class RmqBatchReceiver<T> extends RmqTransport implements Receiver, Runna
 
     private final BatchProcessConsumer<T> consumer;
 
-    public RmqBatchReceiver(String tag, @Nonnull RmqReceiverConfig cfg, long autoFlushInterval,
+    public RmqBatchReceiver(String tag, @Nonnull RmqReceiverCfg cfg, long autoFlushInterval,
                             BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent) {
         super(nonEmpty(tag) ? tag : "batch-recv-" + DateTimeUtil.datetimeOfMillisecond(), cfg.getConnection());
         this.receiveQueue = cfg.getReceiveQueue().getQueueName();
@@ -81,7 +81,7 @@ public class RmqBatchReceiver<T> extends RmqTransport implements Receiver, Runna
                 batchHandler, deserializer, refreshNowEvent, null);
     }
 
-    public RmqBatchReceiver(String tag, @Nonnull RmqReceiverConfig configurator, long autoFlushInterval,
+    public RmqBatchReceiver(String tag, @Nonnull RmqReceiverCfg configurator, long autoFlushInterval,
                             BytesDeserializer<T> deserializer, BatchHandler<T> batchHandler, RefreshNowEvent<T> refreshNowEvent,
                             Predicate<T> filter) {
         super(nonEmpty(tag) ? tag : "batch-receiver-" + DateTimeUtil.datetimeOfMillisecond(),

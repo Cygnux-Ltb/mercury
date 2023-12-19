@@ -1,7 +1,7 @@
 package io.mercury.transport.rmq;
 
 import com.rabbitmq.client.Channel;
-import io.mercury.transport.rmq.configurator.RmqConnection;
+import io.mercury.transport.rmq.cfg.RmqConnection;
 
 import java.time.ZonedDateTime;
 

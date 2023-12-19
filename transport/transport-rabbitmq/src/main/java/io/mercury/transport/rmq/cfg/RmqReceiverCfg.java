@@ -1,4 +1,4 @@
-package io.mercury.transport.rmq.configurator;
+package io.mercury.transport.rmq.cfg;
 
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rmq.declare.ExchangeRelationship;
@@ -12,7 +12,7 @@ import static io.mercury.common.lang.Asserter.nonNull;
 /**
  * @author yellow013
  */
-public final class RmqReceiverConfig extends RmqConfig {
+public final class RmqReceiverCfg extends RmqCfg {
 
     // 接受者QueueDeclare
     private final QueueRelationship receiveQueue;
@@ -38,7 +38,7 @@ public final class RmqReceiverConfig extends RmqConfig {
     /**
      * @param builder Builder
      */
-    private RmqReceiverConfig(Builder builder) {
+    private RmqReceiverCfg(Builder builder) {
         super(builder.connection);
         this.receiveQueue = builder.receiveQueue;
         this.errMsgExchange = builder.errMsgExchange;
@@ -204,8 +204,8 @@ public final class RmqReceiverConfig extends RmqConfig {
             this.args = args;
         }
 
-        public RmqReceiverConfig build() {
-            return new RmqReceiverConfig(this);
+        public RmqReceiverCfg build() {
+            return new RmqReceiverCfg(this);
         }
 
     }

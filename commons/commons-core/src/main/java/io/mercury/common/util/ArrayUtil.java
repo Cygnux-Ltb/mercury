@@ -4,12 +4,14 @@ import io.mercury.common.lang.Asserter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
+import static java.lang.Math.ceil;
+import static java.lang.Math.min;
 import static java.lang.System.arraycopy;
+import static java.util.Arrays.copyOfRange;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.IntStream.range;
 
 public final class ArrayUtil {
 
@@ -195,7 +197,7 @@ public final class ArrayUtil {
         Asserter.requiredLength(origin, 1, "origin");
         if (target == null)
             target = new boolean[origin.length];
-        arraycopy(origin, 0, target, 0, Math.min(target.length, origin.length));
+        arraycopy(origin, 0, target, 0, min(target.length, origin.length));
         return target;
     }
 
@@ -208,7 +210,7 @@ public final class ArrayUtil {
         Asserter.requiredLength(origin, 1, "origin");
         if (target == null)
             target = new byte[origin.length];
-        arraycopy(origin, 0, target, 0, Math.min(target.length, origin.length));
+        arraycopy(origin, 0, target, 0, min(target.length, origin.length));
         return target;
     }
 
@@ -221,7 +223,7 @@ public final class ArrayUtil {
         Asserter.requiredLength(origin, 1, "origin");
         if (target == null)
             target = new char[origin.length];
-        arraycopy(origin, 0, target, 0, Math.min(target.length, origin.length));
+        arraycopy(origin, 0, target, 0, min(target.length, origin.length));
         return target;
     }
 
@@ -234,7 +236,7 @@ public final class ArrayUtil {
         Asserter.requiredLength(origin, 1, "origin");
         if (target == null)
             target = new int[origin.length];
-        arraycopy(origin, 0, target, 0, Math.min(target.length, origin.length));
+        arraycopy(origin, 0, target, 0, min(target.length, origin.length));
         return target;
     }
 
@@ -247,7 +249,7 @@ public final class ArrayUtil {
         Asserter.requiredLength(origin, 1, "origin");
         if (target == null)
             target = new long[origin.length];
-        arraycopy(origin, 0, target, 0, Math.min(target.length, origin.length));
+        arraycopy(origin, 0, target, 0, min(target.length, origin.length));
         return target;
     }
 
@@ -260,7 +262,7 @@ public final class ArrayUtil {
         Asserter.requiredLength(origin, 1, "origin");
         if (target == null)
             target = new float[origin.length];
-        arraycopy(origin, 0, target, 0, Math.min(target.length, origin.length));
+        arraycopy(origin, 0, target, 0, min(target.length, origin.length));
         return target;
     }
 
@@ -273,7 +275,7 @@ public final class ArrayUtil {
         Asserter.requiredLength(origin, 1, "origin");
         if (target == null)
             target = new double[origin.length];
-        arraycopy(origin, 0, target, 0, Math.min(target.length, origin.length));
+        arraycopy(origin, 0, target, 0, min(target.length, origin.length));
         return target;
     }
 
@@ -286,7 +288,7 @@ public final class ArrayUtil {
         Asserter.requiredLength(origin, 1, "origin");
         if (target == null)
             target = new String[origin.length];
-        arraycopy(origin, 0, target, 0, Math.min(target.length, origin.length));
+        arraycopy(origin, 0, target, 0, min(target.length, origin.length));
         return target;
     }
 
@@ -299,70 +301,70 @@ public final class ArrayUtil {
         Asserter.requiredLength(origin, 1, "origin");
         if (target == null)
             target = new Object[origin.length];
-        arraycopy(origin, 0, target, 0, Math.min(target.length, origin.length));
+        arraycopy(origin, 0, target, 0, min(target.length, origin.length));
         return target;
     }
 
 
     @SafeVarargs
     public static <T> List<T[]> splitArray(int chunkSize, T... original) {
-        int numOfChunks = (int) Math.ceil((double) original.length / chunkSize);
-        return IntStream.range(0, numOfChunks)
-                .mapToObj(i -> Arrays.copyOfRange(original,
+        int numOfChunks = (int) ceil((double) original.length / chunkSize);
+        return range(0, numOfChunks)
+                .mapToObj(i -> copyOfRange(original,
                         //from
                         i * chunkSize,
                         //to
-                        Math.min((i + 1) * chunkSize, original.length)
+                        min((i + 1) * chunkSize, original.length)
                 ))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public static List<byte[]> splitArray(int chunkSize, byte... original) {
-        int numOfChunks = (int) Math.ceil((double) original.length / chunkSize);
-        return IntStream.range(0, numOfChunks)
-                .mapToObj(i -> Arrays.copyOfRange(original,
+        int numOfChunks = (int) ceil((double) original.length / chunkSize);
+        return range(0, numOfChunks)
+                .mapToObj(i -> copyOfRange(original,
                         //from
                         i * chunkSize,
                         //to
-                        Math.min((i + 1) * chunkSize, original.length)
+                        min((i + 1) * chunkSize, original.length)
                 ))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public static List<int[]> splitArray(int chunkSize, int... original) {
-        int numOfChunks = (int) Math.ceil((double) original.length / chunkSize);
-        return IntStream.range(0, numOfChunks)
-                .mapToObj(i -> Arrays.copyOfRange(original,
+        int numOfChunks = (int) ceil((double) original.length / chunkSize);
+        return range(0, numOfChunks)
+                .mapToObj(i -> copyOfRange(original,
                         //from
                         i * chunkSize,
                         //to
-                        Math.min((i + 1) * chunkSize, original.length)
+                        min((i + 1) * chunkSize, original.length)
                 ))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public static List<long[]> splitArray(int chunkSize, long... original) {
-        int numOfChunks = (int) Math.ceil((double) original.length / chunkSize);
-        return IntStream.range(0, numOfChunks)
-                .mapToObj(i -> Arrays.copyOfRange(original,
+        int numOfChunks = (int) ceil((double) original.length / chunkSize);
+        return range(0, numOfChunks)
+                .mapToObj(i -> copyOfRange(original,
                         //from
                         i * chunkSize,
                         //to
-                        Math.min((i + 1) * chunkSize, original.length)
+                        min((i + 1) * chunkSize, original.length)
                 ))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public static List<double[]> splitArray(int chunkSize, double... original) {
-        int numOfChunks = (int) Math.ceil((double) original.length / chunkSize);
-        return IntStream.range(0, numOfChunks)
-                .mapToObj(i -> Arrays.copyOfRange(original,
+        int numOfChunks = (int) ceil((double) original.length / chunkSize);
+        return range(0, numOfChunks)
+                .mapToObj(i -> copyOfRange(original,
                         //from
                         i * chunkSize,
                         //to
-                        Math.min((i + 1) * chunkSize, original.length)
+                        min((i + 1) * chunkSize, original.length)
                 ))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
 }

@@ -1,6 +1,6 @@
 package io.mercury.transport;
 
-import io.mercury.common.config.Configurator;
+import io.mercury.common.cfg.Configurator;
 
 public interface TransportConfigurator extends Configurator {
 

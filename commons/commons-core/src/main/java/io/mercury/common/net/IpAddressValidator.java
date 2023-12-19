@@ -75,7 +75,7 @@ public final class IpAddressValidator implements Serializable {
 
         // verify that address subgroups are legal
         for (String ipSegment : groups) {
-            if (ipSegment == null || ipSegment.length() == 0)
+            if (ipSegment == null || ipSegment.isEmpty())
                 return false;
 
             int ipSegmentInt;
@@ -145,7 +145,7 @@ public final class IpAddressValidator implements Serializable {
                 // String.split() drops ending empty segments
                 octetList.add("");
             } else if (address.startsWith("::") && !octetList.isEmpty()) {
-                octetList.remove(0);
+                octetList.removeFirst();
             }
             octets = octetList.toArray(new String[0]);
         }
@@ -157,7 +157,7 @@ public final class IpAddressValidator implements Serializable {
         int emptyOctets = 0; // consecutive empty chunks
         for (int index = 0; index < octets.length; index++) {
             String octet = octets[index];
-            if (octet.length() == 0) {
+            if (octet.isEmpty()) {
                 emptyOctets++;
                 if (emptyOctets > 1)
                     return false;

@@ -45,7 +45,7 @@ public final class ShutdownHooks {
      */
     public static Thread addShutdownHook(Runnable hook) {
         return addShutdownHook(
-                "ShutdownHooksSubThread-" + randomUnsignedInt(), hook);
+                STR."ShutdownHooksSubThread-\{randomUnsignedInt()}", hook);
     }
 
     /**

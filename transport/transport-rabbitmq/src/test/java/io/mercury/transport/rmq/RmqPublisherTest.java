@@ -3,8 +3,8 @@ package io.mercury.transport.rmq;
 import java.io.IOException;
 import java.util.Arrays;
 
-import io.mercury.transport.rmq.configurator.RmqConnection;
-import io.mercury.transport.rmq.configurator.RmqPublisherConfig;
+import io.mercury.transport.rmq.cfg.RmqConnection;
+import io.mercury.transport.rmq.cfg.RmqPublisherCfg;
 import io.mercury.transport.rmq.declare.AmqpQueue;
 import io.mercury.transport.rmq.declare.ExchangeRelationship;
 
@@ -14,7 +14,7 @@ public class RmqPublisherTest {
 
 		RmqConnection connection = RmqConnection.with("10.0.64.201", 5672, "root", "root2018").build();
 
-		RmqPublisherConfig configurator = RmqPublisherConfig
+		RmqPublisherCfg configurator = RmqPublisherCfg
 				.configuration(connection, ExchangeRelationship.fanout("TEST_DIR")
 						.bindingQueues(Arrays.asList(AmqpQueue.named("TEST_D1")), Arrays.asList("K1", "K2")))
 				.setDefaultRoutingKey("K1").build();

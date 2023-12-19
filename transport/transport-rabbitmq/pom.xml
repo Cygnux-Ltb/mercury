@@ -14,10 +14,6 @@
     <dependencies>
         <dependency>
             <groupId>io.mercury</groupId>
-            <artifactId>commons-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.mercury</groupId>
             <artifactId>commons-concurrent</artifactId>
         </dependency>
         <dependency>
@@ -30,7 +26,7 @@
         <dependency>
             <groupId>com.rabbitmq</groupId>
             <artifactId>amqp-client</artifactId>
-            <version>5.19.0</version>
+            <version>5.20.0</version>
         </dependency>
     </dependencies>
 

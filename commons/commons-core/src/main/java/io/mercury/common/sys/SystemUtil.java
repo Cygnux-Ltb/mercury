@@ -62,8 +62,7 @@ public final class SystemUtil {
     /**
      * Return the current process id from the OS.
      *
-     * @return current process id or {@link #PID_NOT_FOUND} if PID was not able to
-     * be found.
+     * @return current process id or {@link #PID_NOT_FOUND} if PID was not able to be found.
      * @see #PID_NOT_FOUND
      */
     public static long getPid() {

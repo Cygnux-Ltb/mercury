@@ -32,37 +32,37 @@ public final class ThreadSupport {
     }
 
     /**
-     * @param threadName String
+     * @param name String
      * @return java.util.concurrent.ThreadFactory
      */
-    public static ThreadFactory newThreadFactory(String threadName) {
-        return newThreadFactory(threadName, ThreadPriority.NORM);
+    public static ThreadFactory newThreadFactory(String name) {
+        return newThreadFactory(name, ThreadPriority.NORM);
     }
 
     /**
-     * @param threadName String
-     * @param priority   ThreadPriority
+     * @param name     String
+     * @param priority ThreadPriority
      * @return java.util.concurrent.ThreadFactory
      */
-    public static ThreadFactory newThreadFactory(String threadName, ThreadPriority priority) {
-        return runnable -> newThread(threadName, runnable, priority);
+    public static ThreadFactory newThreadFactory(String name, ThreadPriority priority) {
+        return runnable -> newThread(name, priority, runnable);
     }
 
     /**
-     * @param threadName String
+     * @param name String
      * @return java.util.concurrent.ThreadFactory
      */
-    public static ThreadFactory newDaemonThreadFactory(String threadName) {
-        return newDaemonThreadFactory(threadName, ThreadPriority.NORM);
+    public static ThreadFactory newDaemonThreadFactory(String name) {
+        return newDaemonThreadFactory(name, ThreadPriority.NORM);
     }
 
     /**
-     * @param threadName String
-     * @param priority   ThreadPriority
+     * @param name     String
+     * @param priority ThreadPriority
      * @return java.util.concurrent.ThreadFactory
      */
-    public static ThreadFactory newDaemonThreadFactory(String threadName, ThreadPriority priority) {
-        return runnable -> setDaemonThread(newThread(threadName, runnable, priority));
+    public static ThreadFactory newDaemonThreadFactory(String name, ThreadPriority priority) {
+        return runnable -> setDaemonThread(newThread(name, priority, runnable));
     }
 
     /**
@@ -112,21 +112,21 @@ public final class ThreadSupport {
     }
 
     /**
-     * @param runnable Runnable
      * @param priority ThreadPriority
+     * @param runnable Runnable
      * @return java.lang.Thread
      */
-    public static Thread newThread(Runnable runnable, ThreadPriority priority) {
+    public static Thread newThread(ThreadPriority priority, Runnable runnable) {
         return setThreadPriority(new Thread(runnable), priority);
     }
 
     /**
      * @param name     String
-     * @param runnable Runnable
      * @param priority ThreadPriority
+     * @param runnable Runnable
      * @return java.lang.Thread
      */
-    public static Thread newThread(String name, Runnable runnable, ThreadPriority priority) {
+    public static Thread newThread(String name, ThreadPriority priority, Runnable runnable) {
         return setThreadPriority(new Thread(runnable, name), priority);
     }
 

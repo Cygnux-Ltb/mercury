@@ -14,7 +14,7 @@ import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.exception.ConnectionBreakException;
 import io.mercury.transport.exception.ConnectionFailedException;
 import io.mercury.transport.exception.ReceiverStartException;
-import io.mercury.transport.rmq.configurator.RmqReceiverConfig;
+import io.mercury.transport.rmq.cfg.RmqReceiverCfg;
 import io.mercury.transport.rmq.declare.ExchangeRelationship;
 import io.mercury.transport.rmq.declare.QueueRelationship;
 import io.mercury.transport.rmq.exception.DeclareException;
@@ -109,7 +109,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport
      * @param consumer Consumer<byte[]>
      * @return AdvancedRmqReceiver<byte [ ]>
      */
-    public static AdvancedRmqReceiver<byte[]> create(@Nonnull RmqReceiverConfig config,
+    public static AdvancedRmqReceiver<byte[]> create(@Nonnull RmqReceiverCfg config,
                                                      @Nonnull Consumer<byte[]> consumer) {
         Asserter.nonNull(config, "config");
         Asserter.nonNull(consumer, "consumer");
@@ -124,7 +124,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport
      * @return AdvancedRmqReceiver<byte [ ]>
      */
     public static AdvancedRmqReceiver<byte[]> create(String tag,
-                                                     @Nonnull RmqReceiverConfig config,
+                                                     @Nonnull RmqReceiverCfg config,
                                                      @Nonnull Consumer<byte[]> consumer) {
         Asserter.nonNull(config, "config");
         Asserter.nonNull(consumer, "consumer");
@@ -141,7 +141,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport
      * @return AdvancedRmqReceiver<T>
      */
     public static <T> AdvancedRmqReceiver<T> create(String tag,
-                                                    @Nonnull RmqReceiverConfig config,
+                                                    @Nonnull RmqReceiverCfg config,
                                                     @Nonnull BytesDeserializer<T> deserializer,
                                                     @Nonnull Consumer<T> consumer) {
         Asserter.nonNull(config, "config");
@@ -156,7 +156,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport
      * @param ackConsumer SelfAckConsumer<byte[]>
      * @return AdvancedRmqReceiver<byte [ ]>
      */
-    public static AdvancedRmqReceiver<byte[]> createWithSelfAck(@Nonnull RmqReceiverConfig config,
+    public static AdvancedRmqReceiver<byte[]> createWithSelfAck(@Nonnull RmqReceiverCfg config,
                                                                 @Nonnull SelfAckConsumer<byte[]> ackConsumer) {
         Asserter.nonNull(config, "config");
         Asserter.nonNull(ackConsumer, "ackConsumer");
@@ -171,7 +171,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport
      * @return AdvancedRmqReceiver<byte [ ]>
      */
     public static AdvancedRmqReceiver<byte[]> createWithSelfAck(String tag,
-                                                                @Nonnull RmqReceiverConfig config,
+                                                                @Nonnull RmqReceiverCfg config,
                                                                 @Nonnull SelfAckConsumer<byte[]> ackConsumer) {
         Asserter.nonNull(config, "config");
         Asserter.nonNull(ackConsumer, "ackConsumer");
@@ -188,7 +188,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport
      * @return AdvancedRmqReceiver<T>
      */
     public static <T> AdvancedRmqReceiver<T> createWithSelfAck(String tag,
-                                                               @Nonnull RmqReceiverConfig config,
+                                                               @Nonnull RmqReceiverCfg config,
                                                                @Nonnull BytesDeserializer<T> deserializer,
                                                                @Nonnull SelfAckConsumer<T> ackConsumer) {
         Asserter.nonNull(config, "config");
@@ -206,7 +206,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport
      * @param ackConsumer  SelfAckConsumer<T>
      */
     private AdvancedRmqReceiver(String tag,
-                                @Nonnull RmqReceiverConfig config,
+                                @Nonnull RmqReceiverCfg config,
                                 @Nonnull BytesDeserializer<T> deserializer,
                                 @Nullable Consumer<T> consumer,
                                 @Nullable SelfAckConsumer<T> ackConsumer)

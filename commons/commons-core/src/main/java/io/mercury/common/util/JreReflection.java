@@ -43,7 +43,7 @@ public final class JreReflection {
             return (R) field.get(obj);
         } catch (IllegalArgumentException | IllegalAccessException e) {
             throw new RuntimeReflectionException(
-                    "Can not access field: [" + fieldName + "] be caused by -> " + e.getMessage(), e);
+                    STR."Can not access field: [\{fieldName}] be caused by -> \{e.getMessage()}", e);
         }
     }
 
@@ -88,8 +88,7 @@ public final class JreReflection {
                  | InvocationTargetException
                  | InstantiationException e) {
             throw new RuntimeReflectionException(
-                    "Can not invoke constructor with class [" + type.getName() + "] be caused by -> "
-                            + e.getMessage(), e);
+                    STR."Can not invoke constructor with class [\{type.getName()}] be caused by -> \{e.getMessage()}", e);
         }
     }
 

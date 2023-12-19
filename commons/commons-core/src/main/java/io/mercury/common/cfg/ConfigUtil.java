@@ -1,4 +1,4 @@
-package io.mercury.common.config;
+package io.mercury.common.cfg;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigValue;
@@ -32,8 +32,7 @@ public final class ConfigUtil {
                 log.info("Key -> [{}],  ValueType -> [{}],  Value -> [{}]",
                         entry.getKey(), value.valueType(), value.unwrapped());
             else
-                out.println("Key -> [" + entry.getKey() + "],  ValueType -> [" + value.valueType()
-                        + "],  Value -> [" + value.unwrapped() + "]");
+                out.println(STR."Key -> [\{entry.getKey()}],  ValueType -> [\{value.valueType()}],  Value -> [\{value.unwrapped()}]");
         });
     }
 

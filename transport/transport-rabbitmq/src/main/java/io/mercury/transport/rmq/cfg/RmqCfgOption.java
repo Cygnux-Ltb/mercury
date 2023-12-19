@@ -1,8 +1,8 @@
-package io.mercury.transport.rmq.configurator;
+package io.mercury.transport.rmq.cfg;
 
-import io.mercury.common.config.ConfigOption;
+import io.mercury.common.cfg.ConfigOption;
 
-public enum RmqConfigOption implements ConfigOption {
+public enum RmqCfgOption implements ConfigOption {
 
     Host("rmq.host", "rabbitmq.host"),
 
@@ -18,7 +18,7 @@ public enum RmqConfigOption implements ConfigOption {
 
     private final String otherConfigName;
 
-    RmqConfigOption(String configName, String otherConfigName) {
+    RmqCfgOption(String configName, String otherConfigName) {
         this.configName = configName;
         this.otherConfigName = otherConfigName;
     }

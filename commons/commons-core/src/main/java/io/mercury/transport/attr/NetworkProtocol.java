@@ -21,7 +21,7 @@ public enum NetworkProtocol {
 
 	NetworkProtocol(String name) {
 		this.name = name;
-		this.prefix = name + "://";
+		this.prefix = STR."\{name}://";
 	}
 
 	public String getName() {

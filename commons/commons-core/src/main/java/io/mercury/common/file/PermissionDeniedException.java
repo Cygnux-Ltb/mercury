@@ -13,7 +13,7 @@ public class PermissionDeniedException extends RuntimeException {
 	}
 
 	public PermissionDeniedException(String filepath) {
-		super("The current user does not have permission to access -> " + filepath);
+		super(STR."The current user does not have permission to access -> \{filepath}");
 	}
 
 }

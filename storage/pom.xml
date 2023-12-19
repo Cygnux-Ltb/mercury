@@ -7,8 +7,9 @@
         <artifactId>mercury</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>storage</artifactId>
 
+    <artifactId>storage</artifactId>
+    <name>storage</name>
     <packaging>pom</packaging>
 
     <modules>
@@ -43,11 +44,6 @@
             <dependency>
                 <groupId>io.mercury</groupId>
                 <artifactId>commons-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.mercury</groupId>
-                <artifactId>commons-config</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- A set of annotations used for code inspection support

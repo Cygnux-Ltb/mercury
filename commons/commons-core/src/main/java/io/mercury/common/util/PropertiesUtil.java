@@ -141,7 +141,7 @@ public final class PropertiesUtil {
         for (int i = 0; i < list.size(); i++) {
             Entry<Object, Object> entry = list.get(i);
             if (log == null)
-                System.out.println("Property " + i + " : key -> " + entry.getKey() + ", value -> " + entry.getValue());
+                System.out.println(STR."Property \{i} : key -> \{entry.getKey()}, value -> \{entry.getValue()}");
             else
                 log.info("Property {} : key -> {}, value -> {}", i, entry.getKey(), entry.getValue());
         }

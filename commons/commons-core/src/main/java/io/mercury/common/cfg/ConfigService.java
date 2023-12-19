@@ -1,4 +1,4 @@
-package io.mercury.common.config;
+package io.mercury.common.cfg;
 
 public class ConfigService {
 

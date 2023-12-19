@@ -64,7 +64,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
             throws NullPointerException, IllegalArgumentException {
         requiredLength(keys, 1, "keys");
         nonNull(prop, "prop");
-        MutableMap<K, String> map = MutableMaps.newUnifiedMap();
+        var map = MutableMaps.<K, String>newUnifiedMap();
         for (K key : keys) {
             if (prop.containsKey(key.getParamName()))
                 map.put(key, prop.get(key.getParamName()).toString());
@@ -83,7 +83,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
     public boolean getBoolean(K key) throws IllegalArgumentException, NullPointerException {
         if (key.getValueType() != ValueType.BOOLEAN)
             throw new IllegalArgumentException(
-                    "Key -> [" + key + "], ValueType is not BOOLEAN, valueType==" + key.getValueType());
+                    STR."Key -> [\{key}], ValueType is not BOOLEAN, valueType==\{key.getValueType()}");
         return parseBoolean(nonNull(params.get(key), key.getParamName()));
     }
 
@@ -98,7 +98,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
     public int getInt(K key) throws IllegalArgumentException, NullPointerException, NumberFormatException {
         if (key.getValueType() != ValueType.INT)
             throw new IllegalArgumentException(
-                    "Key -> [" + key + "], ValueType is not [INT]. valueType==" + key.getValueType());
+                    STR."Key -> [\{key}], ValueType is not [INT]. valueType==\{key.getValueType()}");
         return parseInt(nonNull(params.get(key), key.getParamName()));
     }
 
@@ -113,7 +113,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
     public long getLong(K key) throws IllegalArgumentException, NullPointerException, NumberFormatException {
         if (key.getValueType() != ValueType.LONG)
             throw new IllegalArgumentException(
-                    "Key -> [" + key + "], ValueType is not [LONG]. valueType==" + key.getValueType());
+                    STR."Key -> [\{key}], ValueType is not [LONG]. valueType==\{key.getValueType()}");
         return parseLong(nonNull(params.get(key), key.getParamName()));
     }
 
@@ -128,7 +128,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
     public double getDouble(K key) throws IllegalArgumentException, NullPointerException, NumberFormatException {
         if (key.getValueType() != ValueType.DOUBLE)
             throw new IllegalArgumentException(
-                    "Key -> [" + key + "], ValueType is not [DOUBLE], valueType==" + key.getValueType());
+                    STR."Key -> [\{key}], ValueType is not [DOUBLE], valueType==\{key.getValueType()}");
         return parseDouble(nonNull(params.get(key), key.getParamName()));
     }
 
@@ -142,7 +142,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
     public String getString(K key) throws IllegalArgumentException, NullPointerException {
         if (key.getValueType() != ValueType.STRING)
             throw new IllegalArgumentException(
-                    "Key -> [" + key + "] ValueType is not [STRING], paramType==" + key.getValueType());
+                    STR."Key -> [\{key}] ValueType is not [STRING], paramType==\{key.getValueType()}");
         return nonNull(params.get(key), key.getParamName());
     }
 
@@ -175,7 +175,7 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
     public void printParams(Logger log) {
         if (log == null)
             params.forEachKeyValue((key, value) -> out.println(
-                    "Param id==" + key.getParamId() + ", paramName -> " + key.getParamName() + ", value -> " + value));
+                    STR."Param id==\{key.getParamId()}, paramName -> \{key.getParamName()}, value -> \{value}"));
         else
             params.forEachKeyValue((key, value) -> log.info("Param id=={}, paramName=={}, value -> {}",
                     key.getParamId(), key.getParamName(), value));

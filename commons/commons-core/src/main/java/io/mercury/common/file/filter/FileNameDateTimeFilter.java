@@ -55,18 +55,18 @@ public class FileNameDateTimeFilter implements FileFilter {
             // ignore for matching
             return false;
         }
-        log.debug("Filename '" + file.getName() + "' contained an embedded date of " + datetime);
+        log.debug("Filename {} contained an embedded date of {}", file.getName(), datetime);
 
         // does the cutoff date occur before or equal
         if (datetime.isBefore(cutoffDate) || datetime.isEqual(cutoffDate)) {
-            log.debug("Filename '" + file.getName() + "' embedded date of " + datetime + " occurred beforeOrEquals "
-                    + datetime.isBefore(cutoffDate));
+            log.debug("Filename {} embedded date of {} occurred beforeOrEquals {}",
+                    file.getName(), datetime, datetime.isBefore(cutoffDate));
             return true;
         }
 
         // if we get here, then the date wasn't right
-        log.debug("Skipping filename '" + file.getName() + "' since its embedded date of " + datetime
-                + " occurred after " + cutoffDate);
+        log.debug("Skipping filename {} since its embedded date of {} occurred after {}",
+                file.getName(), datetime, cutoffDate);
         return false;
     }
 

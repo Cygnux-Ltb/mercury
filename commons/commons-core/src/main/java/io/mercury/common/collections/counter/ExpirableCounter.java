@@ -31,8 +31,10 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
 
     // 记录时间和Tag
     private final MutableLongLongMap timeToTag;
+
     // 记录Tag和Delta
     private final MutableLongLongMap tagToDelta;
+
     // 存储Tag的记录时间
     private final MutableLongList effectiveTimes;
 

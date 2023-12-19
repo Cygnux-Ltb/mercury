@@ -173,7 +173,7 @@ public class FileCompressionUtil {
 		// make sure the destination directory is a directory
 		if (!targetDir.isDirectory()) {
 			throw new IOException(
-					"Cannot compress file since target directory " + targetDir + " neither exists or is a directory");
+                    STR."Cannot compress file since target directory \{targetDir} neither exists or is a directory");
 		}
 
 		// try to find compression algorithm
@@ -181,11 +181,11 @@ public class FileCompressionUtil {
 
 		// was it found?
 		if (a == null) {
-			throw new IOException("Compression algorithm '" + algorithm + "' is not supported");
+			throw new IOException(STR."Compression algorithm '\{algorithm}' is not supported");
 		}
 
 		// create a target file with the default file extension for this algorithm
-		File targetFile = new File(targetDir, sourceFile.getName() + "." + a.getFileExtension());
+		File targetFile = new File(targetDir, STR."\{sourceFile.getName()}.\{a.getFileExtension()}");
 
 		compress(a, sourceFile, targetFile, deleteSourceFileAfterCompressed);
 
@@ -234,8 +234,7 @@ public class FileCompressionUtil {
 
 		// was a file extension parsed
 		if (fileExt == null)
-			throw new IOException("File '" + sourceFile
-					+ "' must contain a file extension in order to lookup the compression algorithm");
+			throw new IOException(STR."File '\{sourceFile}' must contain a file extension in order to lookup the compression algorithm");
 
 		// try to find compression algorithm
 		Algorithm algo = Algorithm.findByFileExtension(fileExt);
@@ -243,12 +242,12 @@ public class FileCompressionUtil {
 		// was it not found?
 		if (algo == null)
 			throw new IOException(
-					"Unrecognized or unsupported compression algorithm for file extension '" + fileExt + "'");
+                    STR."Unrecognized or unsupported compression algorithm for file extension '\{fileExt}'");
 
 		// make sure the destination directory is a directory
 		if (!targetDir.isDirectory())
 			throw new IOException(
-					"Cannot uncompress file since target directory " + targetDir + " neither exists or is a directory");
+                    STR."Cannot uncompress file since target directory \{targetDir} neither exists or is a directory");
 
 		// create a target file by stripping the file extension from the original file
 		String filename = sourceFile.getName();
@@ -265,11 +264,11 @@ public class FileCompressionUtil {
 			boolean deleteSourceFileAfterCompressed) throws IOException {
 		// check if the src file exists
 		if (!sourceFile.canRead())
-			throw new IOException("Source file " + sourceFile + " neither exists or can be read");
+			throw new IOException(STR."Source file \{sourceFile} neither exists or can be read");
 
 		// make sure the target file does not exist!
 		if (targetFile.exists())
-			throw new FileAlreadyExistsException("Target file " + targetFile + " already exists - cannot overwrite!");
+			throw new FileAlreadyExistsException(STR."Target file \{targetFile} already exists - cannot overwrite!");
 
 		// try to compress the file
 		algo.getCompressor().compress(sourceFile, targetFile);
@@ -285,11 +284,11 @@ public class FileCompressionUtil {
 			boolean deleteSourceFileAfterUncompressed) throws IOException {
 		// check if the src file exists
 		if (!sourceFile.canRead())
-			throw new IOException("Source file " + sourceFile + " neither exists or can be read");
+			throw new IOException(STR."Source file \{sourceFile} neither exists or can be read");
 
 		// make sure the target file does not exist!
 		if (targetFile.exists())
-			throw new FileAlreadyExistsException("Target file " + targetFile + " already exists - cannot overwrite!");
+			throw new FileAlreadyExistsException(STR."Target file \{targetFile} already exists - cannot overwrite!");
 
 		// try to uncompress the file
 		a.getCompressor().uncompress(sourceFile, targetFile);

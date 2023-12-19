@@ -13,7 +13,7 @@ import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Transport;
 import io.mercury.transport.api.TransportComponent;
 import io.mercury.transport.exception.ConnectionFailedException;
-import io.mercury.transport.rmq.configurator.RmqConnection;
+import io.mercury.transport.rmq.cfg.RmqConnection;
 import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;

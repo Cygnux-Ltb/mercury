@@ -222,9 +222,9 @@ public final class FileUtil {
      */
     public static File[] findFiles(File dir, FileFilter filter) throws FileNotFoundException {
         if (!dir.exists())
-            throw new FileNotFoundException("Directory " + dir + " does not exist.");
+            throw new FileNotFoundException(STR."Directory \{dir} does not exist.");
         if (!dir.isDirectory())
-            throw new FileNotFoundException("File " + dir + " is not a directory.");
+            throw new FileNotFoundException(STR."File \{dir} is not a directory.");
 
         // being matching process, create array for returning results
         List<File> files = new FastList<>();
@@ -369,7 +369,7 @@ public final class FileUtil {
         if (target.exists()) {
             // if overwrite is not allowed, throw an exception
             if (!overwrite)
-                throw new FileAlreadyExistsException("Target file : [" + target.getName() + "] already exists");
+                throw new FileAlreadyExistsException(STR."Target file : [\{target.getName()}] already exists");
         }
         // proceed with copy
         try (final FileInputStream fis = new FileInputStream(source);

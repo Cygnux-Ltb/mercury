@@ -212,11 +212,11 @@ public class BasicReplicatorDestination1 {
                     // no-op
                 }
             } catch (Exception e) {
-                System.err.println("exception occurred: " + e);
+                System.err.println(STR."exception occurred: \{e}");
                 state = State.RESET;
                 return 0;
             }
-            throw new AgentTerminationException(state + " state is not supported");
+            throw new AgentTerminationException(STR."\{state} state is not supported");
         }
 
         @Override
@@ -368,7 +368,7 @@ public class BasicReplicatorDestination1 {
 
             if (signal == RecordingSignal.REPLICATE) {
                 dstRecordingDescriptor = findRecordingDescriptor(dstClient);
-                System.out.println("### replicated dstRecordingDescriptor: " + dstRecordingDescriptor);
+                System.out.println(STR."### replicated dstRecordingDescriptor: \{dstRecordingDescriptor}");
             }
 
             if (signal == RecordingSignal.STOP) {

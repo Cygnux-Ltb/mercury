@@ -11,7 +11,6 @@
 
     <artifactId>transport</artifactId>
     <name>transport</name>
-
     <packaging>pom</packaging>
 
     <modules>
@@ -44,7 +43,7 @@
             <dependency>
                 <groupId>org.jetbrains</groupId>
                 <artifactId>annotations</artifactId>
-                <version>24.0.1</version>
+                <version>24.1.0</version>
             </dependency>
             <dependency>
                 <groupId>io.mercury</groupId>

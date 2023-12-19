@@ -25,7 +25,7 @@ public final class ThreadFactoryImpl implements ThreadFactory {
                               boolean isDaemon, int priority,
                               Supplier<String> incr) {
         this.name = requireNonEmptyElse(name,
-                "ThreadFactory-[" + YYYYMMDD_L_HHMMSSSSS.fmt(now()) + "]");
+                STR."ThreadFactory-[\{YYYYMMDD_L_HHMMSSSSS.fmt(now())}]");
         this.isVirtual = isVirtual;
         this.isDaemon = isDaemon;
         this.priority = priority;
@@ -34,7 +34,7 @@ public final class ThreadFactoryImpl implements ThreadFactory {
 
     @Override
     public Thread newThread(@Nonnull Runnable runnable) {
-        var threadName = name + "-" + incr.get();
+        var threadName = STR."\{name}-\{incr.get()}";
         return isVirtual
                 ? Thread.ofVirtual()
                 .name(name)

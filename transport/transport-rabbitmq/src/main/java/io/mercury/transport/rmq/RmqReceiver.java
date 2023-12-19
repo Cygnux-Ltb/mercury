@@ -12,8 +12,8 @@ import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.exception.ConnectionBreakException;
 import io.mercury.transport.exception.ConnectionFailedException;
 import io.mercury.transport.exception.ReceiverStartException;
-import io.mercury.transport.rmq.configurator.RmqConnection;
-import io.mercury.transport.rmq.configurator.RmqReceiverConfig;
+import io.mercury.transport.rmq.cfg.RmqConnection;
+import io.mercury.transport.rmq.cfg.RmqReceiverCfg;
 import io.mercury.transport.rmq.declare.ExchangeRelationship;
 import io.mercury.transport.rmq.declare.QueueRelationship;
 import io.mercury.transport.rmq.exception.DeclareException;
@@ -96,7 +96,7 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
      * @param consumer Consumer<byte[]>
      * @return RmqReceiver<byte [ ]>
      */
-    public static RmqReceiver<byte[]> create(@Nonnull RmqReceiverConfig config,
+    public static RmqReceiver<byte[]> create(@Nonnull RmqReceiverCfg config,
                                              @Nonnull Consumer<byte[]> consumer) {
         return create(null, config, consumer);
     }
@@ -108,7 +108,7 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
      * @return RmqReceiver<byte [ ]>
      */
     public static RmqReceiver<byte[]> create(@Nullable String tag,
-                                             @Nonnull RmqReceiverConfig config,
+                                             @Nonnull RmqReceiverCfg config,
                                              @Nonnull Consumer<byte[]> consumer) {
         return create(tag, config, msg -> msg, consumer);
     }
@@ -120,7 +120,7 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
      * @param consumer     Consumer<T>
      * @return RmqReceiver<T>
      */
-    public static <T> RmqReceiver<T> create(@Nonnull RmqReceiverConfig config,
+    public static <T> RmqReceiver<T> create(@Nonnull RmqReceiverCfg config,
                                             @Nonnull Function<byte[], T> deserializer,
                                             @Nonnull Consumer<T> consumer) {
         return create(null, config, deserializer, consumer);
@@ -135,7 +135,7 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
      * @return RmqReceiver<T>
      */
     public static <T> RmqReceiver<T> create(@Nullable String tag,
-                                            @Nonnull RmqReceiverConfig config,
+                                            @Nonnull RmqReceiverCfg config,
                                             @Nonnull Function<byte[], T> deserializer,
                                             @Nonnull Consumer<T> consumer) {
         return new RmqReceiver<>(tag, config, deserializer, consumer);
@@ -147,7 +147,7 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
      * @param deserializer Function<byte[], T>
      * @param consumer     Consumer<T>
      */
-    private RmqReceiver(@Nullable String tag, @Nonnull RmqReceiverConfig cfg,
+    private RmqReceiver(@Nullable String tag, @Nonnull RmqReceiverCfg cfg,
                         @Nonnull Function<byte[], T> deserializer,
                         @Nonnull Consumer<T> consumer)
             throws ConnectionFailedException {
@@ -393,7 +393,7 @@ public class RmqReceiver<T> extends RmqTransport implements Receiver, Subscriber
     public static void main(String[] args) {
         try (RmqReceiver<byte[]> receiver = RmqReceiver
                 .create("test",
-                        RmqReceiverConfig.configuration(RmqConnection.with("127.0.0.1", 5672, "user", "u_pass").build(),
+                        RmqReceiverCfg.configuration(RmqConnection.with("127.0.0.1", 5672, "user", "u_pass").build(),
                                 QueueRelationship.named("TEST")).build(),
                         msg -> System.out.println(new String(msg, UTF8)))) {
             receiver.receive();
