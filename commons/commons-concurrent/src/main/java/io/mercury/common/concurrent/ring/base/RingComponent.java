@@ -48,7 +48,7 @@ public abstract class RingComponent<E, I> extends RunnableComponent {
                             WaitStrategy strategy, EventFactory<E> factory,
                             EventTranslatorOneArg<E, I> translator) {
         super(requireNonEmptyElse(name,
-                "RingBuffer-[" + YYYYMMDD_L_HHMMSSSSS.fmt(now()) + "]"));
+                STR."RingBuffer-[\{YYYYMMDD_L_HHMMSSSSS.fmt(now())}]"));
         nonNull(factory, "EventFactory");
         nonNull(translator, "EventTranslator");
         final ProducerType producerType = requireNonNullElse(type, MULTI);
@@ -56,7 +56,7 @@ public abstract class RingComponent<E, I> extends RunnableComponent {
                 // 设置事件工厂, 调整并设置队列容量
                 factory, adjustSize(size),
                 // 使用最高优先级的线程工厂, 使用平台线程
-                ofPlatform(this.name + "-worker").priority(MAX).build(),
+                ofPlatform(STR."\{this.name}-worker").priority(MAX).build(),
                 // 生产者策略, Waiting策略
                 producerType,
                 requireNonNullElse(strategy, WaitStrategyOption.Sleeping.get())

@@ -108,7 +108,7 @@ public abstract class ScQueueWithJCT<E> extends ScQueue<E> implements Runnable {
                         waiting();
                 }
             } catch (Exception e) {
-                throw new QueueWorkingException(name + " process thread throw exception", e);
+                throw new QueueWorkingException(STR."\{name} process thread throw exception", e);
             }
         };
     }
@@ -148,7 +148,7 @@ public abstract class ScQueueWithJCT<E> extends ScQueue<E> implements Runnable {
 
     @Override
     protected void start0() {
-        ThreadSupport.startNewThread(name + "-SubThread", consumer);
+        ThreadSupport.startNewThread(STR."\{name}-SubThread", consumer);
         log.info("Queue -> {}, This queue is already working", name);
     }
 
@@ -172,7 +172,7 @@ public abstract class ScQueueWithJCT<E> extends ScQueue<E> implements Runnable {
                                  Processor<E> processor) {
             super(processor, max(capacity, 16), strategy, sleepMillis);
             super.name = isNullOrEmpty(queueName)
-                    ? "JctSpscQueue-T[" + getCurrentThreadName() + "]"
+                    ? STR."JCT-SPSC-Q[\{getCurrentThreadName()}]"
                     : queueName;
             startWith(mode);
         }
@@ -200,7 +200,7 @@ public abstract class ScQueueWithJCT<E> extends ScQueue<E> implements Runnable {
                                  Processor<E> processor) {
             super(processor, max(capacity, 16), strategy, sleepMillis);
             super.name = isNullOrEmpty(queueName)
-                    ? "JctMpscQueue-T[" + getCurrentThreadName() + "]"
+                    ? STR."JCT-MPSC-Q[\{getCurrentThreadName()}]"
                     : queueName;
             startWith(mode);
         }
@@ -264,7 +264,7 @@ public abstract class ScQueueWithJCT<E> extends ScQueue<E> implements Runnable {
             return switch (type) {
                 case SPSC -> new SpscQueueWithJCT<>(queueName, capacity, mode, strategy, sleepMillis, processor);
                 case MPSC -> new MpscQueueWithJCT<>(queueName, capacity, mode, strategy, sleepMillis, processor);
-                default -> throw new IllegalArgumentException("Error QueueType value[" + type + "]");
+                default -> throw new IllegalArgumentException(STR."Error QueueType value[\{type}]");
             };
         }
     }

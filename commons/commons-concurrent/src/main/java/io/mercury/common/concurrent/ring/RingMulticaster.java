@@ -24,6 +24,7 @@ import java.util.List;
 
 import static io.mercury.common.collections.CollectionUtil.toArray;
 import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
+import static io.mercury.common.lang.Asserter.nonNull;
 import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
 
 /**
@@ -143,14 +144,14 @@ public final class RingMulticaster<E, I> extends RingComponent<E, I> {
         }
 
         public Builder<E, I> addProcessor(@Nonnull Processor<E> processor) {
-            Asserter.nonNull(processor, "processor");
+            nonNull(processor, "processor");
             return addHandler(
                     // 将Processor实现加载到HandlerWrapper中
                     new EventHandlerWrapper<>(processor, log));
         }
 
         public Builder<E, I> addHandler(@Nonnull EventHandler<E> handler) {
-            Asserter.nonNull(handler, "handler");
+            nonNull(handler, "handler");
             this.handlers.add(handler);
             return this;
         }
@@ -185,7 +186,7 @@ public final class RingMulticaster<E, I> extends RingComponent<E, I> {
             if (waitStrategy == null)
                 waitStrategy = handlers.size() > availableProcessors() ? WaitStrategyOption.Sleeping.get() : WaitStrategyOption.Yielding.get();
             if (StringSupport.isNullOrEmpty(name))
-                name = "RingMulticaster-" + YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now());
+                name = STR."RingMulticaster-\{YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now())}";
             return new RingMulticaster<>(name, size, mode, producerType, eventFactory,
                     waitStrategy, eventTranslator, handlers);
         }

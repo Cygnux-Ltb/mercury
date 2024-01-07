@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 public interface BlockingStack<N> extends Stack<N> {
 
     /**
-     * Push an element on the stack, waiting if necessary if the stack is currently
+     * Push an element on the stack, waiting if necessary is the stack is currently
      * full
      *
      * @param n    - the element to push on the stack
@@ -49,7 +49,7 @@ public interface BlockingStack<N> extends Stack<N> {
     void pushInterruptibly(final N n) throws InterruptedException;
 
     /**
-     * Pop an element from the stack, waiting if necessary if the stack is currently
+     * Pop an element from the stack, waiting if necessary is the stack is currently
      * empty
      *
      * @param time - the maximum time to wait

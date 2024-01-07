@@ -159,15 +159,15 @@ public class RingProcessChain<E, I> extends RingComponent<E, I> {
             this.eventTranslator = eventTranslator;
         }
 
-        public Builder<E, I> addFirstProcessor(@Nonnull Processor<E> processor) {
+        public Builder<E, I> firstProcessor(@Nonnull Processor<E> processor) {
             return addProcessor(Integer.MIN_VALUE, processor);
         }
 
-        public Builder<E, I> addSecondProcessor(@Nonnull Processor<E> processor) {
+        public Builder<E, I> secondProcessor(@Nonnull Processor<E> processor) {
             return addProcessor(Integer.MIN_VALUE + 1, processor);
         }
 
-        public Builder<E, I> addLastProcessor(@Nonnull Processor<E> processor) {
+        public Builder<E, I> lastProcessor(@Nonnull Processor<E> processor) {
             return addProcessor(Integer.MAX_VALUE, processor);
         }
 
@@ -178,15 +178,15 @@ public class RingProcessChain<E, I> extends RingComponent<E, I> {
                     new EventHandlerWrapper<>(processor, log));
         }
 
-        public Builder<E, I> addFirstHandler(@Nonnull EventHandler<E> handler) {
+        public Builder<E, I> firstHandler(@Nonnull EventHandler<E> handler) {
             return addHandler(Integer.MIN_VALUE, handler);
         }
 
-        public Builder<E, I> addSecondHandler(@Nonnull EventHandler<E> handler) {
+        public Builder<E, I> secondHandler(@Nonnull EventHandler<E> handler) {
             return addHandler(Integer.MIN_VALUE + 1, handler);
         }
 
-        public Builder<E, I> addLastHandler(@Nonnull EventHandler<E> handler) {
+        public Builder<E, I> lastHandler(@Nonnull EventHandler<E> handler) {
             return addHandler(Integer.MAX_VALUE, handler);
         }
 
@@ -201,16 +201,16 @@ public class RingProcessChain<E, I> extends RingComponent<E, I> {
             return this;
         }
 
-        public Builder<E, I> setWaitStrategy(WaitStrategyOption waitStrategy) {
-            return setWaitStrategy(waitStrategy.get());
+        public Builder<E, I> waitStrategy(WaitStrategyOption waitStrategy) {
+            return waitStrategy(waitStrategy.get());
         }
 
-        public Builder<E, I> setWaitStrategy(WaitStrategy waitStrategy) {
+        public Builder<E, I> waitStrategy(WaitStrategy waitStrategy) {
             this.waitStrategy = waitStrategy;
             return this;
         }
 
-        public Builder<E, I> setStartMode(StartMode mode) {
+        public Builder<E, I> startMode(StartMode mode) {
             this.mode = mode;
             return this;
         }
@@ -227,7 +227,7 @@ public class RingProcessChain<E, I> extends RingComponent<E, I> {
                 waitStrategy = handlersMap.stream().mapToInt(List::size).sum() > availableProcessors() ? Sleeping.get()
                         : Yielding.get();
             if (StringSupport.isNullOrEmpty(name))
-                name = "RingProcessChain-" + YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now());
+                name = STR."RingProcessChain-\{YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now())}";
             return new RingProcessChain<>(name, size, mode, producerType, eventFactory,
                     waitStrategy, eventTranslator, handlersMap);
         }

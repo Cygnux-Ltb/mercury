@@ -20,7 +20,7 @@ public class RingProcessChainTest {
         LongAdder p2 = new LongAdder();
         RingProcessChain<LongEvent, Long> processChain = RingProcessChain
                 .withSingleProducer(LongEvent.class, LongEvent::set)
-                .addFirstHandler((event, sequence, endOfBatch) -> {
+                .firstHandler((event, sequence, endOfBatch) -> {
                     System.out.println("sequence -> " + sequence + " p0 - " + event.get() + " : " + endOfBatch);
                     p0.increment();
                 }).addHandler(1, (event, sequence, endOfBatch) -> {
@@ -29,7 +29,7 @@ public class RingProcessChainTest {
                 }).addHandler(2, (event, sequence, endOfBatch) -> {
                     System.out.println("sequence -> " + sequence + " p2 - " + event.get() + " : " + endOfBatch);
                     p2.increment();
-                }).name("Test-RingProcessChain").size(32).setWaitStrategy(Yielding.get()).create();
+                }).name("Test-RingProcessChain").size(32).waitStrategy(Yielding.get()).create();
 
         Thread thread = ThreadSupport.startNewThread(() -> {
             for (long l = 0L; l < 1000; l++)

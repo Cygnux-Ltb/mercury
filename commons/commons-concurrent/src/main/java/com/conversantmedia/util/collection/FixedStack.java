@@ -1,4 +1,5 @@
 package com.conversantmedia.util.collection;
+
 /**
  * A very high performance stack to replace java.util.Stack. This stack wraps
  * around rather than checking for bounds.
@@ -6,8 +7,8 @@ package com.conversantmedia.util.collection;
  * The java version of Stack is based on Vector and completely outdated. The
  * performance of java.util.Stack is poor at best.
  * <p>
- * This version is a small fast fixed size stack. There is no bounds checking so
- * it should only be used when the stack size is known in advance.
+ * This version is a small fast fixed size stack. There is no bounds checking,
+ * so it should only be used when the stack size is known in advance.
  * <p>
  * This object is not thread safe.
  *
