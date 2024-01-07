@@ -31,7 +31,7 @@ public final class ZmqProxy extends TransportComponent {
         Asserter.nonNull(backend, "backend");
         this.frontend = frontend;
         this.backend = backend;
-        this.name = "[" + frontend.getName() + "]->[" + backend.getName() + "]";
+        this.name = STR."[\{frontend.getName()}]->[\{backend.getName()}]";
         try {
             this.isConnected = ZMQ.proxy(
                     // 代理前端
@@ -43,7 +43,7 @@ public final class ZmqProxy extends TransportComponent {
                     // 控制通道
                     capture != null ? control.getSocket() : null);
         } catch (Exception e) {
-            throw new ZmqProxyException("ZMQ.proxy(frontend, backend, capture, control) -> " + e.getMessage(), e);
+            throw new ZmqProxyException(STR."ZMQ.proxy(frontend, backend, capture, control) -> \{e.getMessage()}", e);
         }
         log.info("ZmqProxy -> {}", name);
         newStartTime();

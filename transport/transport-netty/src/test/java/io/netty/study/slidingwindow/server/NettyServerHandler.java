@@ -73,7 +73,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object obj) throws Exception {
-        System.out.println("第" + count + "次" + ",服务端接受的消息:" + obj);
+        System.out.println(STR."第\{count}次,服务端接受的消息:\{obj}");
         Message msg = JsonParser.toObject(obj.toString(), Message.class);
         String cmd = msg.getCmd();
         // 如果是心跳命令, 则发送给客户端

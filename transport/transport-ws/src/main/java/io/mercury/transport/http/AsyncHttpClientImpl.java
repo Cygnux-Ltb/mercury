@@ -18,9 +18,7 @@ import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 public enum AsyncHttpClientImpl implements AsyncHttpClient {
 
-    INSTANCE
-
-    ;
+    INSTANCE;
 
     private final org.asynchttpclient.AsyncHttpClient client = asyncHttpClient();
 
@@ -95,12 +93,14 @@ public enum AsyncHttpClientImpl implements AsyncHttpClient {
     }
 
     @Override
-    public <T> ListenableFuture<T> executeRequest(Request request, AsyncHandler<T> handler) {
+    public <T> ListenableFuture<T> executeRequest(Request request,
+                                                  AsyncHandler<T> handler) {
         return client.executeRequest(request, handler);
     }
 
     @Override
-    public <T> ListenableFuture<T> executeRequest(RequestBuilder requestBuilder, AsyncHandler<T> handler) {
+    public <T> ListenableFuture<T> executeRequest(RequestBuilder requestBuilder,
+                                                  AsyncHandler<T> handler) {
         return client.executeRequest(requestBuilder, handler);
     }
 
@@ -133,4 +133,5 @@ public enum AsyncHttpClientImpl implements AsyncHttpClient {
     public void close() throws IOException {
         client.close();
     }
+
 }

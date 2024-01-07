@@ -43,7 +43,7 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
             throw new ZmqBindException(addr);
         }
         setTcpKeepAlive(cfg.getTcpKeepAlive());
-        this.name = "zpub$" + addr + "/" + topic;
+        this.name = STR."zpub$\{addr}/\{topic}";
         newStartTime();
     }
 
@@ -86,8 +86,7 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
                 publisher.publish(String.valueOf(random.nextInt()));
                 SleepSupport.sleep(1000);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception _) {
         }
 
     }

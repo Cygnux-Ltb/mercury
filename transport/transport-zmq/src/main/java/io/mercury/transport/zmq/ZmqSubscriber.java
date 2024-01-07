@@ -47,7 +47,7 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber {
                 ? TcpKeepAlive.enable().setKeepAliveCount(10).setKeepAliveIdle(30).setKeepAliveInterval(30)
                 : cfg.getTcpKeepAlive());
         topics.each(topic -> socket.subscribe(topic.getBytes(ZMQ.CHARSET)));
-        this.name = "zsub$" + addr + "/" + topics;
+        this.name = STR."zsub$\{addr}/\{topics}";
         newStartTime();
     }
 
@@ -90,10 +90,9 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber {
     public static void main(String[] args) {
         try (ZmqSubscriber subscriber = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(2).newSubscriber(
                 Topics.with("test"),
-                (topic, msg) -> System.out.println(new String(topic) + " -> " + new String(msg)))) {
+                (topic, msg) -> System.out.println(STR."\{new String(topic)} -> \{new String(msg)}"))) {
             subscriber.subscribe();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException _) {
         }
     }
 

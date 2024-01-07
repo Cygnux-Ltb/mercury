@@ -35,7 +35,7 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
             log.error("ZmqSender unable to connect addr -> {}", addr);
             throw new ZmqConnectionException(addr);
         }
-        this.name = "zreq$" + addr;
+        this.name = STR."zreq$\{addr}";
         newStartTime();
     }
 
@@ -63,8 +63,7 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
         ZmqConfigurator cfg = ZmqConfigurator.tcp("localhost", 5551);
         try (ZmqSender<String> sender = new ZmqSender<>(cfg, String::getBytes)) {
             sender.send("TEST MSG");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException _) {
         }
 
     }
