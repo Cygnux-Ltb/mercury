@@ -1,4 +1,4 @@
-package io.mercury.persistence.sqlite;
+package io.mercury.persistence.rdb;
 
 import org.apache.commons.dbutils.RowProcessor;
 
