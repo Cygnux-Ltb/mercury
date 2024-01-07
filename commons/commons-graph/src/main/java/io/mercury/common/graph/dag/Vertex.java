@@ -113,7 +113,7 @@ public class Vertex implements Cloneable, Serializable {
      * otherwise
      */
     public boolean isLeaf() {
-        return children.size() == 0;
+        return children.isEmpty();
     }
 
     /**
@@ -123,7 +123,7 @@ public class Vertex implements Cloneable, Serializable {
      * otherwise
      */
     public boolean isRoot() {
-        return parents.size() == 0;
+        return parents.isEmpty();
     }
 
     /**
@@ -142,7 +142,7 @@ public class Vertex implements Cloneable, Serializable {
     }
 
     public String toString() {
-        return "Vertex{" + "label='" + label + "'" + "}";
+        return STR."Vertex{label='\{label}'}";
     }
 
 }

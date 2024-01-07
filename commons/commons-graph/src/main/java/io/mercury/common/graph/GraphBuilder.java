@@ -12,27 +12,29 @@ public final class GraphBuilder {
     private static final Logger log = Log4j2LoggerFactory.getLogger(GraphBuilder.class);
 
     /**
-     * @param <V>         V
-     * @param <E>         E
-     * @param vertexClass Class<V>
-     * @param edgeClass   Class<E>
+     * @param <V>    V
+     * @param <E>    E
+     * @param vClass Class<V>
+     * @param eClass Class<E>
      * @return Graph<V, E>
      */
-    public static <V, E extends Edge> Graph<V, E> directed(Class<V> vertexClass, Class<E> edgeClass) {
-        return directed(vertexClass, edgeClass, defaultOptions);
+    public static <V, E extends Edge> Graph<V, E> directed(Class<V> vClass,
+                                                           Class<E> eClass) {
+        return directed(vClass, eClass, defaultOptions);
     }
 
     /**
-     * @param <V>
-     * @param <E>
-     * @param vertexClass
-     * @param edgeClass
-     * @param options
-     * @return
+     * @param <V>     V
+     * @param <E>     E
+     * @param vClass  Class<V>
+     * @param eClass  Class<E>
+     * @param options GraphOptions
+     * @return Graph<V, E>
      */
-    public static <V, E extends Edge> Graph<V, E> directed(Class<V> vertexClass, Class<E> edgeClass,
+    public static <V, E extends Edge> Graph<V, E> directed(Class<V> vClass,
+                                                           Class<E> eClass,
                                                            GraphOptions options) {
-        GraphTypeBuilder<V, E> builder = GraphTypeBuilder.directed().vertexClass(vertexClass).edgeClass(edgeClass)
+        GraphTypeBuilder<V, E> builder = GraphTypeBuilder.directed().vertexClass(vClass).edgeClass(eClass)
                 .allowingMultipleEdges(options.isAllowingMultipleEdges())
                 .allowingSelfLoops(options.isAllowingSelfLoops()).weighted(options.isWeighted());
         log.info("GraphBuilder -> {}", builder.buildType());
@@ -40,46 +42,49 @@ public final class GraphBuilder {
     }
 
     /**
-     * @param <V>
-     * @param vertexClass
-     * @return
+     * @param <V>         V
+     * @param vertexClass Class<V>
+     * @return Graph<V, Edge>
      */
     public static <V> Graph<V, Edge> directed(Class<V> vertexClass) {
         return directed(vertexClass, defaultOptions);
     }
 
     /**
-     * @param <V>
-     * @param vertexClass
-     * @param options
-     * @return
+     * @param <V>     V
+     * @param vClass  Class<V>
+     * @param options GraphOptions
+     * @return Graph<V, Edge>
      */
-    public static <V> Graph<V, Edge> directed(Class<V> vertexClass, GraphOptions options) {
-        return directed(vertexClass, Edge::new, options);
+    public static <V> Graph<V, Edge> directed(Class<V> vClass,
+                                              GraphOptions options) {
+        return directed(vClass, Edge::new, options);
     }
 
     /**
-     * @param <V>
-     * @param <E>
-     * @param vertexClass
-     * @param edgeSupplier
-     * @return
+     * @param <V>          V
+     * @param <E>          E
+     * @param vClass       Class<V>
+     * @param edgeSupplier Supplier<E>
+     * @return Graph<V, E>
      */
-    public static <V, E extends Edge> Graph<V, E> directed(Class<V> vertexClass, Supplier<E> edgeSupplier) {
-        return directed(vertexClass, edgeSupplier, defaultOptions);
+    public static <V, E extends Edge> Graph<V, E> directed(Class<V> vClass,
+                                                           Supplier<E> edgeSupplier) {
+        return directed(vClass, edgeSupplier, defaultOptions);
     }
 
     /**
-     * @param <V>
-     * @param <E>
-     * @param vertexClass
-     * @param edgeSupplier
-     * @param options
-     * @return
+     * @param <V>          V
+     * @param <E>          E
+     * @param vClass       Class<V>
+     * @param edgeSupplier Supplier<E>
+     * @param options      GraphOptions
+     * @return Graph<V, E>
      */
-    public static <V, E extends Edge> Graph<V, E> directed(Class<V> vertexClass, Supplier<E> edgeSupplier,
+    public static <V, E extends Edge> Graph<V, E> directed(Class<V> vClass,
+                                                           Supplier<E> edgeSupplier,
                                                            GraphOptions options) {
-        GraphTypeBuilder<V, E> builder = GraphTypeBuilder.directed().vertexClass(vertexClass).edgeSupplier(edgeSupplier)
+        GraphTypeBuilder<V, E> builder = GraphTypeBuilder.directed().vertexClass(vClass).edgeSupplier(edgeSupplier)
                 .allowingMultipleEdges(options.isAllowingMultipleEdges())
                 .allowingSelfLoops(options.isAllowingSelfLoops()).weighted(options.isWeighted());
         log.info("GraphBuilder -> {}", builder.buildType());

@@ -100,7 +100,7 @@ public class DAG implements Cloneable, Serializable {
             // remove edge which introduced cycle
             removeEdge(from, to);
             throw new CycleDetectedException(
-                    "Edge between '" + from + "' and '" + to + "' introduces to cycle in the graph", cycle);
+                    STR."Edge between '\{from}' and '\{to}' introduces to cycle in the graph", cycle);
         }
     }
 

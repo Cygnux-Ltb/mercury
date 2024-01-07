@@ -29,8 +29,11 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <compilerArgument>-parameters</compilerArgument>
+                    <compilerArgument>--enable-preview</compilerArgument>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <encoding>UTF-8</encoding>
+                    <fork>true</fork>
                 </configuration>
             </plugin>
         </plugins>

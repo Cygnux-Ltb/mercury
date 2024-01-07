@@ -39,7 +39,7 @@
         <junit.version>4.13.2</junit.version>
         <jupiter.version>5.10.1</jupiter.version>
         <netty.version>4.1.104.Final</netty.version>
-        <jackson.version>2.16.0</jackson.version>
+        <jackson.version>2.16.1</jackson.version>
     </properties>
 
     <build>
@@ -48,7 +48,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.11.0</version>
+                    <version>3.12.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>

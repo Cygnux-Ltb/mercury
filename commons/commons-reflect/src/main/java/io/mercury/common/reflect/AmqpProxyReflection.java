@@ -71,7 +71,7 @@ public final class AmqpProxyReflection {
      */
     private void assertionProxyMethod(Method method) {
         if (MethodUtil.notVoidMethod(method))
-            throw new IllegalArgumentException("method [" + method + "] return type is not void");
+            throw new IllegalArgumentException(STR."method [\{method}] return type is not void");
     }
 
     /**
