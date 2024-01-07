@@ -44,12 +44,12 @@ public final class AvroJsonDeserializer<T extends SpecificRecord> implements Jso
             return datumReader.read(reuse, decoder);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
-            throw new RuntimeException("AvroTextDeserializer::deserialization(source) -> " + e.getMessage());
+            throw new RuntimeException(STR."AvroTextDeserializer::deserialization(source) -> \{e.getMessage()}");
         }
     }
 
     public List<T> deserializationMultiple(String source) {
-        throw new AvroRuntimeException("deserializationMultiple() -> " + source);
+        throw new AvroRuntimeException(STR."deserializationMultiple() -> \{source}");
     }
 
 }

@@ -53,7 +53,7 @@ public class AvroJsonSerializer<T extends SpecificRecord> implements JsonSeriali
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             IOUtils.closeQuietly(outputStream);
-            throw new RuntimeException("AvroTextSerializer serialization exception -> " + e.getMessage());
+            throw new RuntimeException(STR."AvroTextSerializer serialization exception -> \{e.getMessage()}");
         }
 
     }

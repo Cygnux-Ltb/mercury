@@ -1,9 +1,9 @@
 package io.mercury.serialization.json;
 
+import io.mercury.common.serialization.specific.JsonSerializable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import io.mercury.common.serialization.specific.JsonSerializable;
 
 public final class JsonMsg implements JsonSerializable {
 
@@ -89,8 +89,8 @@ public final class JsonMsg implements JsonSerializable {
     }
 
     /**
-     * @param json
-     * @return
+     * @param json String
+     * @return JsonMsg
      */
     @Nullable
     public static JsonMsg fromJson(String json) {
