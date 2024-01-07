@@ -7,6 +7,7 @@ import java.time.ZoneOffset;
 
 import static io.mercury.common.datetime.DateTimeUtil.date;
 import static io.mercury.common.datetime.DateTimeUtil.timeOfSecond;
+import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
 
 public final class TimePoint implements Comparable<TimePoint> {
 
@@ -35,7 +36,7 @@ public final class TimePoint implements Comparable<TimePoint> {
      * @return TimePoint
      */
     public static TimePoint now() {
-        return now(LocalDateTime.now(), TimeZone.SYS_DEFAULT);
+        return now(LocalDateTime.now(), SYS_DEFAULT);
     }
 
     /**
@@ -43,7 +44,7 @@ public final class TimePoint implements Comparable<TimePoint> {
      * @return TimePoint
      */
     public static TimePoint now(@Nonnull LocalDateTime datetime) {
-        return now(datetime, TimeZone.SYS_DEFAULT);
+        return now(datetime, SYS_DEFAULT);
     }
 
     /**
@@ -64,7 +65,7 @@ public final class TimePoint implements Comparable<TimePoint> {
      * @return TimePoint
      */
     public static TimePoint of(int date, int time, int nano) {
-        return new TimePoint(date, time, nano, TimeZone.SYS_DEFAULT);
+        return new TimePoint(date, time, nano, SYS_DEFAULT);
     }
 
     /**
@@ -96,7 +97,8 @@ public final class TimePoint implements Comparable<TimePoint> {
 
     @Override
     public int compareTo(@Nullable TimePoint o) {
-        return o == null ? -1 : date < o.date
+        return o == null
+                ? -1 : date < o.date
                 ? -1 : date > o.date
                 ? 1 : time < o.time
                 ? -1 : time > o.time

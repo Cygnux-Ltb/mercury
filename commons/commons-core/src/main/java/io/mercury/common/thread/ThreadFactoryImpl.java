@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
+import static io.mercury.common.thread.ThreadPriority.NORM;
 import static io.mercury.common.util.StringSupport.requireNonEmptyElse;
 import static java.time.LocalDateTime.now;
 
@@ -25,7 +26,7 @@ public final class ThreadFactoryImpl implements ThreadFactory {
                               boolean isDaemon, int priority,
                               Supplier<String> incr) {
         this.name = requireNonEmptyElse(name,
-                STR."ThreadFactory-[\{YYYYMMDD_L_HHMMSSSSS.fmt(now())}]");
+                STR."ThreadFactoryImpl-[\{YYYYMMDD_L_HHMMSSSSS.fmt(now())}]");
         this.isVirtual = isVirtual;
         this.isDaemon = isDaemon;
         this.priority = priority;
@@ -36,13 +37,9 @@ public final class ThreadFactoryImpl implements ThreadFactory {
     public Thread newThread(@Nonnull Runnable runnable) {
         var threadName = STR."\{name}-\{incr.get()}";
         return isVirtual
-                ? Thread.ofVirtual()
-                .name(name)
+                ? Thread.ofVirtual().name(name)
                 .unstarted(runnable)
-                : Thread.ofPlatform()
-                .name(name)
-                .priority(priority)
-                .daemon(isDaemon)
+                : Thread.ofPlatform().name(name).priority(priority).daemon(isDaemon)
                 .unstarted(runnable);
     }
 
@@ -70,7 +67,7 @@ public final class ThreadFactoryImpl implements ThreadFactory {
 
         private boolean isDaemon = false;
 
-        private ThreadPriority priority = ThreadPriority.NORM;
+        private ThreadPriority priority = NORM;
 
         private Supplier<String> incr = new Supplier<>() {
             private final AtomicInteger incr = new AtomicInteger(0);

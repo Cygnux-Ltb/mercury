@@ -61,7 +61,7 @@ public final class BytesUtil {
         checkOffsetLength(bytes.length, offset, length);
         if (length != expectedLength)
             throw new IllegalArgumentException(
-                    "Unexpected length of byte array [expected=" + expectedLength + ", actual=" + length + "]");
+                    STR."Unexpected length of byte array [expected=\{expectedLength}, actual=\{length}]");
     }
 
     /**

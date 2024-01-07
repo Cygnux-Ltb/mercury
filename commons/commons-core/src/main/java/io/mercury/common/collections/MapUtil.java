@@ -37,7 +37,7 @@ public final class MapUtil {
      * @return Map<K, V>
      */
     public static <K, V> Map<K, V> map(@Nonnull K key, @Nonnull V value) {
-        Map<K, V> map = new HashMap<>(1);
+        Map<K, V> map = new HashMap<>(4);
         map.put(key, value);
         return map;
     }

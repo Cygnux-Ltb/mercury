@@ -66,8 +66,7 @@ public final class ShutdownHooks {
         addSubTask(() -> {
             try {
                 closeable.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException _) {
             }
         });
     }

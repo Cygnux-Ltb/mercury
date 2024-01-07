@@ -45,19 +45,19 @@ public class WindowMonitor<K, R, P> implements Runnable {
             }
 
             if (logger.isTraceEnabled())
-                logger.trace("Monitor running... (current window.size [" + window.getSize() + "])");
+                logger.trace(STR."Monitor running... (current window.size [\{window.getSize()}])");
 
             List<WindowFuture<K, R, P>> expired = window.cancelAllExpired();
-            if (expired != null && expired.size() > 0) {
+            if (expired != null && !expired.isEmpty()) {
                 if (logger.isTraceEnabled())
-                    logger.trace("Monitor found [" + expired.size() + "] requests expired");
+                    logger.trace(STR."Monitor found [\{expired.size()}] requests expired");
                 // process each expired request and pass up the chain to handlers
                 for (WindowFuture<K, R, P> future : expired) {
                     for (UnwrappedWeakReference<WindowListener<K, R, P>> listenerRef : window.getListeners()) {
                         WindowListener<K, R, P> listener = listenerRef.get();
                         if (listener == null) {
                             // remove this reference from our array (no good anymore)
-                            window.removeListener(listener);
+                            window.removeListener(null);
                         } else {
                             try {
                                 listener.expired(future);

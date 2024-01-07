@@ -4,28 +4,28 @@ import java.io.File;
 
 public enum SysDirectory {
 
-	IO_TMPDIR(SysProperties.JAVA_IO_TMPDIR),
+    IO_TMPDIR(SysProperties.JAVA_IO_TMPDIR),
 
-	USER_HOME(SysProperties.USER_HOME),
+    USER_HOME(SysProperties.USER_HOME),
 
-	USER_DIR(SysProperties.USER_DIR),
+    USER_DIR(SysProperties.USER_DIR),
 
-	;
+    ;
 
-	private final String absolutePath;
-	private final File file;
+    private final String path;
+    private final File file;
 
-	SysDirectory(String absolutePath) {
-		this.absolutePath = absolutePath;
-		this.file = new File(absolutePath);
-	}
+    SysDirectory(String path) {
+        this.path = path;
+        this.file = new File(path);
+    }
 
-	public String absolutePath() {
-		return absolutePath;
-	}
+    public String path() {
+        return path;
+    }
 
-	public File file() {
-		return file;
-	}
+    public File file() {
+        return file;
+    }
 
 }
