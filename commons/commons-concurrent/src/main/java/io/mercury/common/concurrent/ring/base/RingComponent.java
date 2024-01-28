@@ -5,13 +5,13 @@ import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
-import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.thread.RunnableComponent;
 import org.slf4j.Logger;
 
 import static com.lmax.disruptor.dsl.ProducerType.MULTI;
 import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
 import static io.mercury.common.lang.Asserter.nonNull;
+import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
 import static io.mercury.common.thread.ThreadFactoryImpl.ofPlatform;
 import static io.mercury.common.thread.ThreadPriority.MAX;
 import static io.mercury.common.util.BitOperator.minPow2;
@@ -28,7 +28,7 @@ import static java.util.Objects.requireNonNullElse;
  */
 public abstract class RingComponent<E, I> extends RunnableComponent {
 
-    private static final Logger log = Log4j2LoggerFactory.getLogger(RingComponent.class);
+    private static final Logger log = getLogger(RingComponent.class);
 
     protected final Disruptor<E> disruptor;
 
@@ -56,7 +56,7 @@ public abstract class RingComponent<E, I> extends RunnableComponent {
                 // 设置事件工厂, 调整并设置队列容量
                 factory, adjustSize(size),
                 // 使用最高优先级的线程工厂, 使用平台线程
-                ofPlatform(STR."\{this.name}-worker").priority(MAX).build(),
+                ofPlatform(this.name + "-worker").priority(MAX).build(),
                 // 生产者策略, Waiting策略
                 producerType,
                 requireNonNullElse(strategy, WaitStrategyOption.Sleeping.get())
