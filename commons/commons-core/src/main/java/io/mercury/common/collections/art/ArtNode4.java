@@ -196,11 +196,7 @@ public final class ArtNode4<V> implements ArtNode<V> {
 
     @Override
     public String toString() {
-        return "ArtNode4{" +
-                "nodeKey=" + nodeKey +
-                ", nodeLevel=" + nodeLevel +
-                ", numChildren=" + numChildren +
-                '}';
+        return STR."ArtNode4{nodeKey=\{nodeKey}, nodeLevel=\{nodeLevel}, numChildren=\{numChildren}\{'}'}";
     }
 
     @Override

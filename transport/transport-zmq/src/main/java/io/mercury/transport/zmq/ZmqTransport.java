@@ -64,9 +64,8 @@ public abstract class ZmqTransport extends TransportComponent implements Transpo
      * 设置TcpKeepAlive, 由子类负责调用
      *
      * @param tcpKeepAlive TcpKeepAlive
-     * @return ZMQ.Socket
      */
-    protected ZMQ.Socket setTcpKeepAlive(TcpKeepAlive tcpKeepAlive) {
+    protected void setTcpKeepAlive(TcpKeepAlive tcpKeepAlive) {
         if (tcpKeepAlive != null) {
             log.info("setting ZMQ.Socket TCP KeepAlive with -> {}", tcpKeepAlive);
             KeepAliveOption keepAlive = tcpKeepAlive.getKeepAliveOption();
@@ -90,7 +89,6 @@ public abstract class ZmqTransport extends TransportComponent implements Transpo
                 case Default -> log.info("ZMQ.Socket used [Default] tcpKeepAlive");
             }
         }
-        return socket;
     }
 
     public ZmqConfigurator getConfigurator() {

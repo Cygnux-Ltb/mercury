@@ -208,7 +208,7 @@ public final class HexUtil {
             case 'E', 'e' -> 14;
             case 'F', 'f' -> 15;
             default -> throw new IllegalArgumentException(
-                    "The character [" + c + "] does not represent a valid hex digit");
+                    STR."The character [\{c}] does not represent a valid hex digit");
         };
     }
 

@@ -15,7 +15,6 @@ import io.mercury.common.concurrent.ring.base.EventPublisher;
 import io.mercury.common.concurrent.ring.base.HandlerGraph;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
-import io.mercury.common.thread.MaxPriorityThreadFactory;
 import io.mercury.common.thread.RunnableComponent;
 import org.slf4j.Logger;
 
@@ -25,6 +24,8 @@ import static com.lmax.disruptor.dsl.ProducerType.MULTI;
 import static io.mercury.common.concurrent.ring.base.ReflectionEventFactory.newFactory;
 import static io.mercury.common.concurrent.ring.base.WaitStrategyOption.Yielding;
 import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
+import static io.mercury.common.thread.ThreadFactoryImpl.ofPlatform;
+import static io.mercury.common.thread.ThreadPriority.MAX;
 import static io.mercury.common.util.BitOperator.minPow2;
 import static java.util.Objects.requireNonNullElse;
 
@@ -48,13 +49,13 @@ public class RingEventbus<E> extends RunnableComponent {
                            ProducerType type, EventFactory<E> eventFactory,
                            WaitStrategy waitStrategy, HandlerGraph<E> handleGraph) {
         this.name = requireNonNullElse(name,
-                "REventbus-[" + YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now()) + "]");
+                STR."RingEventbus-[\{YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now())}]");
         final ProducerType producerType = requireNonNullElse(type, MULTI);
         this.disruptor = new Disruptor<>(
                 // EventFactory, 队列容量
                 eventFactory, adjustSize(size),
                 // ThreadFactory
-                new MaxPriorityThreadFactory(this.name + "-worker"),
+                ofPlatform(STR."\{this.name}-worker").priority(MAX).build(),
                 // 生产者策略, Waiting策略
                 producerType, waitStrategy);
         this.handleGraph = handleGraph;

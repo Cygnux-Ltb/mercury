@@ -79,13 +79,13 @@ public final class HandlerGraph<E> {
     private void setPipelineHandler(Disruptor<E> disruptor) {
         if (eventHandlers != null) {
             if (eventHandlers.size() > 1) {
-                var handlerGroup = disruptor.handleEventsWith(eventHandlers.get(0));
+                var handlerGroup = disruptor.handleEventsWith(eventHandlers.getFirst());
                 for (int i = 1; 1 < eventHandlers.size(); i++) {
                     handlerGroup.then(eventHandlers.get(i));
                 }
             } else {
                 // With set single event
-                disruptor.handleEventsWith(eventHandlers.get(0));
+                disruptor.handleEventsWith(eventHandlers.getFirst());
             }
         } else {
             throw new IllegalStateException("List<EventHandler> is null");

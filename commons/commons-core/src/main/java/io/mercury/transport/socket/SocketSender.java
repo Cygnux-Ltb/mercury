@@ -1,19 +1,17 @@
 package io.mercury.transport.socket;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import io.mercury.common.collections.queue.Queue;
-import org.slf4j.Logger;
-
-
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.api.TransportComponent;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
+import org.slf4j.Logger;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class SocketSender extends TransportComponent implements Sender<byte[]> {
 
@@ -56,8 +54,7 @@ public final class SocketSender extends TransportComponent implements Sender<byt
             outputStream.close();
             if (socket != null)
                 socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException _) {
         }
         return true;
     }

@@ -57,7 +57,6 @@ public final class WebSocketClient {
         }
     }
 
-
     record WebSocketListenerImpl(
             String uri, // WebSocket地址
             // [打开/关闭] 连接处理函数

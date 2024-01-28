@@ -49,7 +49,7 @@ public final class AvroBinaryDeserializer<T extends SpecificRecord> implements B
         } catch (Exception e) {
             log.error("deserialization func -> {}", e.getMessage(), e);
             throw new RuntimeException(
-                    "Type -> " + type.getName() + ", deserialization func has Exception -> " + e.getMessage());
+                    STR."Type -> \{type.getName()}, deserialization func has Exception -> \{e.getMessage()}");
         }
     }
 

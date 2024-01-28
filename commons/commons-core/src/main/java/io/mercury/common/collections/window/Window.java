@@ -384,12 +384,12 @@ public class Window<K, R, P> {
                                        boolean callerWaitingHint)
             throws DuplicateKeyException, OfferTimeoutException, PendingOfferAbortedException, InterruptedException {
         if (offerTimeoutMillis < 0) {
-            throw new IllegalArgumentException("offerTimeoutMillis must be >= 0 [actual=" + offerTimeoutMillis + "]");
+            throw new IllegalArgumentException(STR."offerTimeoutMillis must be >= 0 [actual=\{offerTimeoutMillis}]");
         }
 
         // does this key already exist?
         if (this.futures.containsKey(key)) {
-            throw new DuplicateKeyException("The key [" + key + "] already exists in the window");
+            throw new DuplicateKeyException(STR."The key [\{key}] already exists in the window");
         }
 
         long offerTimestamp = System.currentTimeMillis();
@@ -404,7 +404,7 @@ public class Window<K, R, P> {
                 long currentOfferTime = System.currentTimeMillis() - offerTimestamp;
                 if (currentOfferTime >= offerTimeoutMillis) {
                     throw new OfferTimeoutException(
-                            "Unable to accept offer within [" + offerTimeoutMillis + " ms] (window full)");
+                            STR."Unable to accept offer within [\{offerTimeoutMillis} ms] (window full)");
                 }
 
                 // check if slow waiting was canceled (terminate early)
@@ -603,7 +603,7 @@ public class Window<K, R, P> {
      *                              "windowLock".
      */
     public List<WindowFuture<K, R, P>> failAll(Throwable t) throws InterruptedException {
-        if (this.futures.size() == 0) {
+        if (this.futures.isEmpty()) {
             return null;
         }
 
@@ -617,7 +617,7 @@ public class Window<K, R, P> {
                 ((DefaultWindowFuture<K, R, P>) future).failedHelper(t, now);
             }
 
-            if (failed.size() > 0) {
+            if (!failed.isEmpty()) {
                 this.futures.clear();
                 // signal that a future is completed
                 this.completedCondition.signalAll();
@@ -674,7 +674,7 @@ public class Window<K, R, P> {
      *                              "windowLock".
      */
     public List<WindowFuture<K, R, P>> cancelAll() {
-        if (this.futures.size() == 0)
+        if (this.futures.isEmpty())
             return null;
 
         List<WindowFuture<K, R, P>> cancelled = new ArrayList<>();
@@ -687,7 +687,7 @@ public class Window<K, R, P> {
                 ((DefaultWindowFuture<K, R, P>) future).cancelHelper(now);
             }
 
-            if (cancelled.size() > 0) {
+            if (!cancelled.isEmpty()) {
                 this.futures.clear();
                 // signal that a future is completed
                 this.completedCondition.signalAll();
@@ -711,7 +711,7 @@ public class Window<K, R, P> {
      *                              "windowLock".
      */
     public List<WindowFuture<K, R, P>> cancelAllExpired() {
-        if (this.futures.size() == 0)
+        if (this.futures.isEmpty())
             return null;
 
         List<WindowFuture<K, R, P>> expired = new ArrayList<>();
@@ -726,7 +726,7 @@ public class Window<K, R, P> {
                 }
             }
 
-            if (expired.size() > 0) {
+            if (!expired.isEmpty()) {
                 // take all expired requests and remove them from the pendingRequests
                 for (WindowFuture<K, R, P> future : expired) {
                     this.futures.remove(future.getKey());

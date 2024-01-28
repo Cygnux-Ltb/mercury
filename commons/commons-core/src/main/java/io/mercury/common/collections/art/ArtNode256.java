@@ -377,7 +377,7 @@ public final class ArtNode256<V> implements ArtNode<V> {
 
     @Override
     public String toString() {
-        return "ArtNode256{" + "nodeKey=" + nodeKey + ", nodeLevel=" + nodeLevel + ", numChildren=" + numChildren + '}';
+        return STR."ArtNode256{nodeKey=\{nodeKey}, nodeLevel=\{nodeLevel}, numChildren=\{numChildren}\{'}'}";
     }
 
     private short[] createKeysArray() {

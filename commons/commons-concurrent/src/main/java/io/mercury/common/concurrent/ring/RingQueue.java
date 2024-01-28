@@ -10,10 +10,12 @@ import io.mercury.common.concurrent.queue.ScQueue;
 import io.mercury.common.concurrent.ring.base.WaitStrategyOption;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
-import io.mercury.common.thread.MaxPriorityThreadFactory;
 import io.mercury.common.thread.SleepSupport;
 import io.mercury.common.thread.ThreadSupport;
 import org.slf4j.Logger;
+
+import static io.mercury.common.thread.ThreadFactoryImpl.ofPlatform;
+import static io.mercury.common.thread.ThreadPriority.MAX;
 
 /**
  * @param <E>
@@ -41,7 +43,7 @@ public class RingQueue<E> extends ScQueue<E> {
                 // 实现ThreadFactory的Lambda
                 // DaemonThreadFactory.INSTANCE,
                 // (Runnable runnable) -> newMaxPriorityThread(this.name + "-worker", runnable),
-                new MaxPriorityThreadFactory(this.name + "-worker"),
+                ofPlatform(STR."\{this.name}-worker").priority(MAX).build(),
                 // 生产者策略, Waiting策略
                 type, waitStrategy);
         this.disruptor.handleEventsWith(this::process);
@@ -117,7 +119,7 @@ public class RingQueue<E> extends ScQueue<E> {
     public static class Builder {
 
         private final ProducerType type;
-        private String name = "ring-" + System.currentTimeMillis();
+        private String name = STR."ring-\{System.currentTimeMillis()}";
         private int size = 32;
         private StartMode mode = StartMode.auto();
         private WaitStrategy strategy = WaitStrategyOption.Sleeping.get();

@@ -59,7 +59,7 @@ public final class JreReflection {
         } catch (NoSuchFieldException e) {
             Class<?> superClass = clazz.getSuperclass();
             if (superClass == null)
-                throw new RuntimeReflectionException("Can not find field: [" + fieldName + "]", e);
+                throw new RuntimeReflectionException(STR."Can not find field: [\{fieldName}]", e);
             else
                 return getField(superClass, fieldName);
         }

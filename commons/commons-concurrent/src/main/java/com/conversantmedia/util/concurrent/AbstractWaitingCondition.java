@@ -13,7 +13,7 @@ public abstract class AbstractWaitingCondition implements Condition {
 
     private static final int CACHE_LINE_REFS = CACHE_LINE / Long.BYTES;
 
-    // keep track of whos waiting so we don't have to synchronize
+    // keep track of who's waiting, so we don't have to synchronize
     // or notify needlessly - when nobody is waiting
 
     private static final int MAX_WAITERS = 8;

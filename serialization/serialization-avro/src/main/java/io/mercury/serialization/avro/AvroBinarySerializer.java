@@ -60,7 +60,7 @@ public final class AvroBinarySerializer<T extends SpecificRecord> implements Byt
 		} catch (IOException e) {
 			log.error("serialization func -> {}", e.getMessage(), e);
 			throw new RuntimeException(
-					"Type -> " + type.getName() + ", deserialization func has Exception -> " + e.getMessage());
+                    STR."Type -> \{type.getName()}, deserialization func has Exception -> \{e.getMessage()}");
 		}
 	}
 

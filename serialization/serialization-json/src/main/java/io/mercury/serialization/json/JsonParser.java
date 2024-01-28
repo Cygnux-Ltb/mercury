@@ -266,11 +266,11 @@ public final class JsonParser {
         private static final long serialVersionUID = 9000408863460789219L;
 
         public JsonParseException(String json, Throwable cause) {
-            super("Parsing JSON -> " + json + " , Throw exception -> [" + cause.getClass().getName() + "]", cause);
+            super(STR."Parsing JSON -> \{json} , Throw exception -> [\{cause.getClass().getName()}]", cause);
         }
 
         public JsonParseException(Throwable cause) {
-            super("Parsing JSON throw exception -> [" + cause.getClass().getName() + "]", cause);
+            super(STR."Parsing JSON throw exception -> [\{cause.getClass().getName()}]", cause);
         }
 
         public JsonParseException(String message) {

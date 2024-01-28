@@ -1,5 +1,6 @@
 package io.mercury.common.sys;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
@@ -8,6 +9,7 @@ import java.security.CodeSource;
 public class NativeTime {
 
     public static final boolean LOADED;
+    
     private static double ticks_per_nanosecond = 1.0;
 
     static {
@@ -16,7 +18,7 @@ public class NativeTime {
             String destDir = System.getProperty("java.io.tmpdir");
             String osName = System.getProperty("os.name");
             String arch = System.getProperty("os.arch");
-            String pattern = osName + java.io.File.separator + arch;
+            String pattern = osName + File.separator + arch;
 
             try {
                 // TODO
@@ -32,13 +34,13 @@ public class NativeTime {
                         if (!containsIgnoreCase(file.getName(), pattern))
                             continue;
 
-                        java.io.File f = new java.io.File(destDir + java.io.File.separator + file.getName());
+                        File f = new File(destDir + File.separator + file.getName());
 
                         if (!f.exists()) {
-                            java.io.File parent = f.getParentFile();
+                            File parent = f.getParentFile();
                             if (parent != null) {
                                 parent.mkdirs();
-                                f = new java.io.File(destDir + java.io.File.separator + file.getName());
+                                f = new File(destDir + File.separator + file.getName());
                             }
                         }
 
@@ -63,15 +65,14 @@ public class NativeTime {
                         // See
                         // https://stackoverflow.com/questions/5419039/is-djava-library-path-equivalent-to-system-setpropertyjava-library-path
                         String libPath = System.getProperty("java.library.path");
-                        libPath = libPath + java.io.File.pathSeparator + destDir + java.io.File.separator + pattern;
+                        libPath = libPath + File.pathSeparator + destDir + File.separator + pattern;
 
                         try {
                             System.setProperty("java.library.path", libPath);
                             Field fieldSysPath = ClassLoader.class.getDeclaredField("sys_paths");
                             fieldSysPath.setAccessible(true);
                             fieldSysPath.set(null, null);
-                        } catch (IllegalAccessException | NoSuchFieldException e) {
-                            e.printStackTrace();
+                        } catch (IllegalAccessException | NoSuchFieldException _) {
                             // ignored
                         }
 
@@ -80,13 +81,12 @@ public class NativeTime {
                     }
                     jar.close();
                 }
-            } catch (IOException unused) {
-                unused.printStackTrace();
+            } catch (IOException _) {
             }
 
             loaded = tryLoad("libnativetime.so");
             if (!loaded)
-                loaded = tryLoad(STR."\{pattern}\{java.io.File.separator}libnativetime.so");
+                loaded = tryLoad(STR."\{pattern}\{File.separator}libnativetime.so");
             if (!loaded)
                 System.loadLibrary("nativetime");
 
@@ -99,8 +99,7 @@ public class NativeTime {
             t.start();
 
             loaded = true;
-        } catch (UnsatisfiedLinkError ule) {
-            ule.printStackTrace();
+        } catch (UnsatisfiedLinkError _) {
             loaded = false;
         }
 
@@ -114,9 +113,8 @@ public class NativeTime {
                 System.load(url.getFile());
                 return true;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            // ignored.
+        } catch (Exception _) {
+            // ignored
         }
         return false;
     }
@@ -160,7 +158,6 @@ public class NativeTime {
     public static void main(String[] args) {
 
         System.out.println(NativeTime.clocknanos());
-
 
     }
 

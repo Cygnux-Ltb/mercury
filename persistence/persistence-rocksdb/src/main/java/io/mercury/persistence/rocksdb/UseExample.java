@@ -83,7 +83,7 @@ public class UseExample {
         options.setCreateIfMissing(true);
 
         List<byte[]> cfs = RocksDB.listColumnFamilies(options, dbPath);
-        if (cfs.size() > 0) {
+        if (!cfs.isEmpty()) {
             for (byte[] cf : cfs) {
                 columnFamilyDescriptors.add(new ColumnFamilyDescriptor(cf, new ColumnFamilyOptions()));
             }

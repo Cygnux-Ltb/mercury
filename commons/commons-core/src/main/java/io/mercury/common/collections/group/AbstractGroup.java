@@ -37,7 +37,7 @@ public abstract class AbstractGroup<K, V> implements Group<K, V> {
     public V getMember(@Nonnull K key) throws MemberNotExistException {
         V value = savedMap.get(key);
         if (value == null)
-            throw new MemberNotExistException("key -> [" + key + "] no found value");
+            throw new MemberNotExistException(STR."key -> [\{key}] no found value");
         return value;
     }
 

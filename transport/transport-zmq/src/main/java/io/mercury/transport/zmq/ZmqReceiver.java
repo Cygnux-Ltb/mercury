@@ -32,7 +32,7 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
             throw new ZmqBindException(addr);
         }
         setTcpKeepAlive(cfg.getTcpKeepAlive());
-        this.name = "zrec$" + addr;
+        this.name = STR."zrec$\{addr}";
         newStartTime();
     }
 
@@ -76,8 +76,7 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
         })) {
             SleepSupport.sleep(15000);
             ThreadSupport.startNewThread(receiver::receive);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException _) {
         }
     }
 

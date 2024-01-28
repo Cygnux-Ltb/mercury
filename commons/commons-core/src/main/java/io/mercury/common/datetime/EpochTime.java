@@ -109,10 +109,7 @@ public final class EpochTime {
      * @return long
      */
     public static long getEpochMillis(@Nonnull LocalDateTime datetime) {
-        return datetime.toLocalDate().toEpochDay() * MILLIS_PER_DAY
-                + (long) datetime.toLocalTime().toSecondOfDay() * MILLIS_PER_SECONDS
-                + datetime.getNano() / NANOS_PER_MILLIS
-                - (long) SYS_DEFAULT.getTotalSeconds() * MILLIS_PER_SECONDS;
+        return getEpochMillis(datetime, SYS_DEFAULT);
     }
 
     /**
