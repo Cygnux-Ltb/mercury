@@ -14,10 +14,6 @@
     <dependencies>
         <dependency>
             <groupId>io.mercury</groupId>
-            <artifactId>commons-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.mercury</groupId>
             <artifactId>commons-concurrent</artifactId>
         </dependency>
         <dependency>
