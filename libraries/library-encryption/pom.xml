@@ -11,7 +11,7 @@
     <name>library-encryption</name>
 
     <properties>
-        <bouncycastle.version>1.70</bouncycastle.version>
+        <bouncycastle.version>1.78</bouncycastle.version>
     </properties>
 
     <licenses>
@@ -57,7 +57,7 @@
             with the Bouncy Castle Cryptography APIs. -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcpkix-jdk15on</artifactId>
+            <artifactId>bcpkix-jdk18on</artifactId>
             <version>${bouncycastle.version}</version>
         </dependency>
 
@@ -67,7 +67,7 @@
             the NTRU encryption algorithms. -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-ext-jdk15on</artifactId>
+            <artifactId>bcprov-ext-jdk18on</artifactId>
             <version>${bouncycastle.version}</version>
         </dependency>
 
@@ -77,7 +77,7 @@
             Castle Cryptography APIs. -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcpg-jdk15on</artifactId>
+            <artifactId>bcpg-jdk18on</artifactId>
             <version>${bouncycastle.version}</version>
         </dependency>
 
@@ -85,7 +85,7 @@
             for the JSSE. -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bctls-jdk15on</artifactId>
+            <artifactId>bctls-jdk18on</artifactId>
             <version>${bouncycastle.version}</version>
         </dependency>
     </dependencies>

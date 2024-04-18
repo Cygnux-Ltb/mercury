@@ -30,11 +30,6 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.mercury</groupId>
-                <artifactId>commons-config</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.jetbrains</groupId>
                 <artifactId>annotations</artifactId>
                 <version>24.1.0</version>
