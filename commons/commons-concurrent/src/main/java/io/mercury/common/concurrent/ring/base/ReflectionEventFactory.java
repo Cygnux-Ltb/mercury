@@ -1,7 +1,6 @@
 package io.mercury.common.concurrent.ring.base;
 
 import com.lmax.disruptor.EventFactory;
-import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.util.JreReflection;
 import io.mercury.common.util.JreReflection.RuntimeReflectionException;
 import org.slf4j.Logger;
@@ -9,6 +8,7 @@ import org.slf4j.Logger;
 import javax.annotation.Nonnull;
 
 import static io.mercury.common.lang.Asserter.nonNull;
+import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
 
 /**
  * @param <T>
@@ -18,7 +18,7 @@ import static io.mercury.common.lang.Asserter.nonNull;
  */
 public final class ReflectionEventFactory<T> implements EventFactory<T> {
 
-    private static final Logger LOGGER = Log4j2LoggerFactory.getLogger(ReflectionEventFactory.class);
+    private static final Logger LOG = getLogger(ReflectionEventFactory.class);
 
     private final Class<T> type;
 
@@ -54,7 +54,7 @@ public final class ReflectionEventFactory<T> implements EventFactory<T> {
             if (log != null)
                 log.error("Class -> {} :: new instance exception -> {}", type, e.getMessage(), e);
             else
-                LOGGER.error("Class -> {} :: new instance exception -> {}", type, e.getMessage(), e);
+                LOG.error("Class -> {} :: new instance exception -> {}", type, e.getMessage(), e);
             throw e;
         }
     }

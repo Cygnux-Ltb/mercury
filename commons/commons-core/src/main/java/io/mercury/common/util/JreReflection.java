@@ -41,9 +41,11 @@ public final class JreReflection {
             Field field = getField(clazz, fieldName);
             field.setAccessible(true);
             return (R) field.get(obj);
-        } catch (IllegalArgumentException | IllegalAccessException e) {
+        } catch (IllegalArgumentException
+                 | IllegalAccessException e) {
             throw new RuntimeReflectionException(
-                    STR."Can not access field: [\{fieldName}] be caused by -> \{e.getMessage()}", e);
+                    "Can not access field: [" + fieldName + "] be caused by -> "
+                            + e.getMessage(), e);
         }
     }
 
@@ -59,7 +61,7 @@ public final class JreReflection {
         } catch (NoSuchFieldException e) {
             Class<?> superClass = clazz.getSuperclass();
             if (superClass == null)
-                throw new RuntimeReflectionException(STR."Can not find field: [\{fieldName}]", e);
+                throw new RuntimeReflectionException("Can not find field: [" + fieldName + "]", e);
             else
                 return getField(superClass, fieldName);
         }
@@ -88,7 +90,7 @@ public final class JreReflection {
                  | InvocationTargetException
                  | InstantiationException e) {
             throw new RuntimeReflectionException(
-                    STR."Can not invoke constructor with class [\{type.getName()}] be caused by -> \{e.getMessage()}", e);
+                    "Can not invoke constructor with class [" + type.getName() + "] be caused by -> " + e.getMessage(), e);
         }
     }
 

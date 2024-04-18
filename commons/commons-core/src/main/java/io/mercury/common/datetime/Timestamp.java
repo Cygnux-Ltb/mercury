@@ -141,7 +141,7 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
                         floorMod(epoch, MICROS_PER_SECONDS));
                 case NANOS -> this.instant = ofEpochSecond(floorDiv(epoch, NANOS_PER_SECOND),
                         floorMod(epoch, NANOS_PER_SECOND));
-                default -> throw new IllegalStateException(STR."[\{unit}] is illegal");
+                default -> throw new IllegalStateException("[" + unit + "] is illegal");
             }
         }
     }

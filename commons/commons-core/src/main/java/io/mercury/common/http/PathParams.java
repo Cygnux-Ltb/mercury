@@ -15,7 +15,7 @@ public final class PathParams {
 
         @Override
         public String toString() {
-            return STR."\{name}=\{value == null ? "" : value}";
+            return name + "=" + (value == null ? "" : value);
         }
 
     }
