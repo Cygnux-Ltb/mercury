@@ -10,8 +10,8 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
-import io.mercury.common.concurrent.ring.MpRingEventbus.MpRingEventbus.MpWizard;
-import io.mercury.common.concurrent.ring.MpRingEventbus.SpRingEventbus.SpWizard;
+import io.mercury.common.concurrent.ring.RingEventbus.MpRingEventbus.MpWizard;
+import io.mercury.common.concurrent.ring.RingEventbus.SpRingEventbus.SpWizard;
 import io.mercury.common.concurrent.ring.base.EventHandlerWrapper;
 import io.mercury.common.concurrent.ring.base.EventPublisher;
 import io.mercury.common.concurrent.ring.base.HandlerGraph;
@@ -40,7 +40,7 @@ import static java.util.Objects.requireNonNullElse;
  */
 public abstract class RingEventbus<E> extends RunnableComponent {
 
-    private static final Logger log = getLogger(io.mercury.common.concurrent.ring.MpRingEventbus.class);
+    private static final Logger log = getLogger(RingEventbus.class);
 
     protected final Disruptor<E> disruptor;
 
@@ -50,9 +50,9 @@ public abstract class RingEventbus<E> extends RunnableComponent {
 
     protected final boolean isMultiProducer;
 
-    protected MpRingEventbus(String name, int size, StartMode startMode,
-                             ProducerType type, EventFactory<E> eventFactory,
-                             WaitStrategy waitStrategy, HandlerGraph<E> handlerGraph) {
+    protected RingEventbus(String name, int size, StartMode startMode,
+                           ProducerType type, EventFactory<E> eventFactory,
+                           WaitStrategy waitStrategy, HandlerGraph<E> handlerGraph) {
         this.name = requireNonNullElse(name,
                 "RingEventbus-[" + YYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now()) + "]");
         final ProducerType producerType = requireNonNullElse(type, MULTI);
@@ -202,7 +202,7 @@ public abstract class RingEventbus<E> extends RunnableComponent {
      *
      * @param <E>
      */
-    public static class MpRingEventbus<E> extends io.mercury.common.concurrent.ring.MpRingEventbus<E> {
+    public static class MpRingEventbus<E> extends RingEventbus<E> {
 
         private MpRingEventbus(String name, int size, StartMode startMode, EventFactory<E> eventFactory, WaitStrategy waitStrategy, HandlerGraph<E> handleGraph) {
             super(name, size, startMode, MULTI, eventFactory, waitStrategy, handleGraph);
@@ -250,7 +250,7 @@ public abstract class RingEventbus<E> extends RunnableComponent {
     }
 
 
-    public static class SpRingEventbus<E> extends io.mercury.common.concurrent.ring.MpRingEventbus<E> {
+    public static class SpRingEventbus<E> extends RingEventbus<E> {
 
         private SpRingEventbus(String name, int size, StartMode startMode, EventFactory<E> eventFactory, WaitStrategy waitStrategy, HandlerGraph<E> handleGraph) {
             super(name, size, startMode, SINGLE, eventFactory, waitStrategy, handleGraph);

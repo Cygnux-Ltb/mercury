@@ -7,8 +7,7 @@ public final class HttpHeaders {
 
     public record HttpHeader(
             HttpHeaderName name,
-            String value
-    ) {
+            String value) {
     }
 
     private final MutableMap<HttpHeaderName, String> headers = MutableMaps.newUnifiedMap();

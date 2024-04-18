@@ -46,7 +46,7 @@ public final class Throws {
      * @throws NullPointerException exception
      */
     public static void nullPointer(String objName) throws NullPointerException {
-        throw new NullPointerException(STR."object name -> \{objName}");
+        throw new NullPointerException("object name -> [" + objName + "]");
     }
 
     /**
@@ -61,7 +61,7 @@ public final class Throws {
      * @throws IllegalArgumentException exception
      */
     public static void illegalArgument(String argumentName) throws IllegalArgumentException {
-        throw new IllegalArgumentException(STR."illegal argument -> \{argumentName}");
+        throw new IllegalArgumentException("illegal argument -> " + argumentName);
     }
 
     /**
@@ -78,7 +78,7 @@ public final class Throws {
      * @throws IllegalArgumentException exception
      */
     public static void illegalArgument(String msg, Throwable t) throws IllegalArgumentException {
-        throw new IllegalArgumentException(STR."illegal argument -> \{msg}", t);
+        throw new IllegalArgumentException("illegal argument -> " + msg, t);
     }
 
     /**
@@ -93,7 +93,7 @@ public final class Throws {
      * @throws IllegalStateException exception
      */
     public static void illegalState(String state) throws IllegalStateException {
-        throw new IllegalStateException(STR."state -> \{state}");
+        throw new IllegalStateException("state -> " + state);
     }
 
     /**
@@ -110,7 +110,7 @@ public final class Throws {
      * @throws IllegalStateException exception
      */
     public static void illegalState(String state, Throwable t) throws IllegalStateException {
-        throw new IllegalStateException(STR."state -> \{state}", t);
+        throw new IllegalStateException("state -> " + state, t);
     }
 
     /**
