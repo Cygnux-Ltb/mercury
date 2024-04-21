@@ -35,7 +35,7 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
             log.error("ZmqSender unable to connect addr -> {}", addr);
             throw new ZmqConnectionException(addr);
         }
-        this.name = STR."zreq$\{addr}";
+        this.name = "zreq$" + addr;
         newStartTime();
     }
 

@@ -32,7 +32,7 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
             throw new ZmqBindException(addr);
         }
         setTcpKeepAlive(cfg.getTcpKeepAlive());
-        this.name = STR."zrec$\{addr}";
+        this.name = "zrec$" + addr;
         newStartTime();
     }
 
