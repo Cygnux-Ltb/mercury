@@ -83,7 +83,7 @@ public final class EngineDecoder
 
     public int capacity()
     {
-        return (buffer.getShort(offset + 0, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
+        return (buffer.getShort(offset + 0, BYTE_ORDER) & 0xFFFF);
     }
 
 
@@ -442,7 +442,7 @@ public final class EngineDecoder
         builder.append('|');
         builder.append("booster=");
         final BoosterDecoder booster = this.booster();
-        if (booster != null)
+        if (null != booster)
         {
             booster.appendTo(builder);
         }

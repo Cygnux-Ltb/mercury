@@ -78,7 +78,7 @@ public final class EngineEncoder
 
     public EngineEncoder capacity(final int value)
     {
-        buffer.putShort(offset + 0, (short)value, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putShort(offset + 0, (short)value, BYTE_ORDER);
         return this;
     }
 

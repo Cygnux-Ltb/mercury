@@ -48,8 +48,7 @@ public final class AvroBinaryDeserializer<T extends SpecificRecord> implements B
             return reuse;
         } catch (Exception e) {
             log.error("deserialization func -> {}", e.getMessage(), e);
-            throw new RuntimeException(
-                    STR."Type -> \{type.getName()}, deserialization func has Exception -> \{e.getMessage()}");
+            throw new RuntimeException("Type -> " + type.getName() + ", deserialization func has Exception -> " + e.getMessage());
         }
     }
 

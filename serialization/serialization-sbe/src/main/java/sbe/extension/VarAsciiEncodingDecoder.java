@@ -87,7 +87,7 @@ public final class VarAsciiEncodingDecoder
 
     public long length()
     {
-        return (buffer.getInt(offset + 0, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        return (buffer.getInt(offset + 0, BYTE_ORDER) & 0xFFFF_FFFFL);
     }
 
 
