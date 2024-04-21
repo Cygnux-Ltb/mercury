@@ -55,15 +55,15 @@ public interface Params<K extends ParamKey> {
         else
             for (K key : keys) {
                 switch (key.getValueType()) {
-                    case STRING -> System.out.println(STR."Key:\{key} -> Value:\{getString(key)}");
-                    case BOOLEAN -> System.out.println(STR."Key:\{key} -> Value:\{getBoolean(key)}");
-                    case DOUBLE -> System.out.println(STR."Key:\{key} -> Value:\{getDouble(key)}");
-                    case INT -> System.out.println(STR."Key:\{key} -> Value:\{getInt(key)}");
-                    case LONG -> System.out.println(STR."Key:\{key} -> Value:\{getLong(key)}");
-                    case DATE -> System.out.println(STR."Key:\{key} -> Value:\{getDate(key)}");
-                    case TIME -> System.out.println(STR."Key:\{key} -> Value:\{getTime(key)}");
-                    case DATETIME -> System.out.println(STR."Key:\{key} -> Value:\{getDateTime(key)}");
-                    case ZONED_DATETIME -> System.out.println(STR."Key:\{key} -> Value:\{getZonedDateTime(key)}");
+                    case STRING -> System.out.println("Key:" + key + " -> Value:" + getString(key));
+                    case BOOLEAN -> System.out.println("Key:" + key + " -> Value:" + getBoolean(key));
+                    case DOUBLE -> System.out.println("Key:" + key + " -> Value:" + getDouble(key));
+                    case INT -> System.out.println("Key:" + key + " -> Value:" + getInt(key));
+                    case LONG -> System.out.println("Key:" + key + " -> Value:" + getLong(key));
+                    case DATE -> System.out.println("Key:" + key + " -> Value:" + getDate(key));
+                    case TIME -> System.out.println("Key:" + key + "-> Value:" + getTime(key));
+                    case DATETIME -> System.out.println("Key:" + key + " -> Value:" + getDateTime(key));
+                    case ZONED_DATETIME -> System.out.println("Key:" + key + " -> Value:" + getZonedDateTime(key));
                     default -> {
                     }
                 }
