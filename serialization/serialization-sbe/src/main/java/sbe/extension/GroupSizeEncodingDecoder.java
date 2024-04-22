@@ -87,7 +87,7 @@ public final class GroupSizeEncodingDecoder
 
     public int blockLength()
     {
-        return (buffer.getShort(offset + 0, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
+        return (buffer.getShort(offset + 0, BYTE_ORDER) & 0xFFFF);
     }
 
 
@@ -123,7 +123,7 @@ public final class GroupSizeEncodingDecoder
 
     public int numInGroup()
     {
-        return (buffer.getShort(offset + 2, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
+        return (buffer.getShort(offset + 2, BYTE_ORDER) & 0xFFFF);
     }
 
 

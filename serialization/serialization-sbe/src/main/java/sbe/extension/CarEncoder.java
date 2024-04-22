@@ -20,7 +20,6 @@ public final class CarEncoder
 
     private final CarEncoder parentMessage = this;
     private MutableDirectBuffer buffer;
-    private int initialOffset;
     private int offset;
     private int limit;
 
@@ -54,11 +53,6 @@ public final class CarEncoder
         return buffer;
     }
 
-    public int initialOffset()
-    {
-        return initialOffset;
-    }
-
     public int offset()
     {
         return offset;
@@ -70,7 +64,6 @@ public final class CarEncoder
         {
             this.buffer = buffer;
         }
-        this.initialOffset = offset;
         this.offset = offset;
         limit(offset + BLOCK_LENGTH);
 
@@ -152,7 +145,7 @@ public final class CarEncoder
 
     public CarEncoder serialNumber(final long value)
     {
-        buffer.putLong(offset + 0, value, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putLong(offset + 0, value, BYTE_ORDER);
         return this;
     }
 
@@ -204,7 +197,7 @@ public final class CarEncoder
 
     public CarEncoder modelYear(final int value)
     {
-        buffer.putShort(offset + 8, (short)value, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putShort(offset + 8, (short)value, BYTE_ORDER);
         return this;
     }
 
@@ -340,16 +333,16 @@ public final class CarEncoder
         }
 
         final int pos = offset + 12 + (index * 4);
-        buffer.putInt(pos, (int)value, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putInt(pos, (int)value, BYTE_ORDER);
 
         return this;
     }
     public CarEncoder putSomeNumbers(final long value0, final long value1, final long value2, final long value3)
     {
-        buffer.putInt(offset + 12, (int)value0, java.nio.ByteOrder.LITTLE_ENDIAN);
-        buffer.putInt(offset + 16, (int)value1, java.nio.ByteOrder.LITTLE_ENDIAN);
-        buffer.putInt(offset + 20, (int)value2, java.nio.ByteOrder.LITTLE_ENDIAN);
-        buffer.putInt(offset + 24, (int)value3, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putInt(offset + 12, (int)value0, BYTE_ORDER);
+        buffer.putInt(offset + 16, (int)value1, BYTE_ORDER);
+        buffer.putInt(offset + 20, (int)value2, BYTE_ORDER);
+        buffer.putInt(offset + 24, (int)value3, BYTE_ORDER);
 
         return this;
     }
@@ -639,14 +632,14 @@ public final class CarEncoder
         }
 
         final int pos = offset + 45 + (index * 8);
-        buffer.putLong(pos, value, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putLong(pos, value, BYTE_ORDER);
 
         return this;
     }
     public CarEncoder putUuid(final long value0, final long value1)
     {
-        buffer.putLong(offset + 45, value0, java.nio.ByteOrder.LITTLE_ENDIAN);
-        buffer.putLong(offset + 53, value1, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putLong(offset + 45, value0, BYTE_ORDER);
+        buffer.putLong(offset + 53, value1, BYTE_ORDER);
 
         return this;
     }
@@ -748,8 +741,8 @@ public final class CarEncoder
             final int limit = parentMessage.limit();
             initialLimit = limit;
             parentMessage.limit(limit + HEADER_SIZE);
-            buffer.putShort(limit + 0, (short)6, java.nio.ByteOrder.LITTLE_ENDIAN);
-            buffer.putShort(limit + 2, (short)count, java.nio.ByteOrder.LITTLE_ENDIAN);
+            buffer.putShort(limit + 0, (short)6, BYTE_ORDER);
+            buffer.putShort(limit + 2, (short)count, BYTE_ORDER);
         }
 
         public FuelFiguresEncoder next()
@@ -769,7 +762,7 @@ public final class CarEncoder
         public int resetCountToIndex()
         {
             count = index;
-            buffer.putShort(initialLimit + 2, (short)count, java.nio.ByteOrder.LITTLE_ENDIAN);
+            buffer.putShort(initialLimit + 2, (short)count, BYTE_ORDER);
 
             return count;
         }
@@ -841,7 +834,7 @@ public final class CarEncoder
 
         public FuelFiguresEncoder speed(final int value)
         {
-            buffer.putShort(offset + 0, (short)value, java.nio.ByteOrder.LITTLE_ENDIAN);
+            buffer.putShort(offset + 0, (short)value, BYTE_ORDER);
             return this;
         }
 
@@ -893,7 +886,7 @@ public final class CarEncoder
 
         public FuelFiguresEncoder mpg(final float value)
         {
-            buffer.putFloat(offset + 2, value, java.nio.ByteOrder.LITTLE_ENDIAN);
+            buffer.putFloat(offset + 2, value, BYTE_ORDER);
             return this;
         }
 
@@ -933,7 +926,7 @@ public final class CarEncoder
             final int headerLength = 4;
             final int limit = parentMessage.limit();
             parentMessage.limit(limit + headerLength + length);
-            buffer.putInt(limit, length, java.nio.ByteOrder.LITTLE_ENDIAN);
+            buffer.putInt(limit, length, BYTE_ORDER);
             buffer.putBytes(limit + headerLength, src, srcOffset, length);
 
             return this;
@@ -949,7 +942,7 @@ public final class CarEncoder
             final int headerLength = 4;
             final int limit = parentMessage.limit();
             parentMessage.limit(limit + headerLength + length);
-            buffer.putInt(limit, length, java.nio.ByteOrder.LITTLE_ENDIAN);
+            buffer.putInt(limit, length, BYTE_ORDER);
             buffer.putBytes(limit + headerLength, src, srcOffset, length);
 
             return this;
@@ -966,7 +959,7 @@ public final class CarEncoder
             final int headerLength = 4;
             final int limit = parentMessage.limit();
             parentMessage.limit(limit + headerLength + length);
-            buffer.putInt(limit, length, java.nio.ByteOrder.LITTLE_ENDIAN);
+            buffer.putInt(limit, length, BYTE_ORDER);
             buffer.putStringWithoutLengthAscii(limit + headerLength, value);
 
             return this;
@@ -983,7 +976,7 @@ public final class CarEncoder
             final int headerLength = 4;
             final int limit = parentMessage.limit();
             parentMessage.limit(limit + headerLength + length);
-            buffer.putInt(limit, length, java.nio.ByteOrder.LITTLE_ENDIAN);
+            buffer.putInt(limit, length, BYTE_ORDER);
             buffer.putStringWithoutLengthAscii(limit + headerLength, value);
 
             return this;
@@ -1037,8 +1030,8 @@ public final class CarEncoder
             final int limit = parentMessage.limit();
             initialLimit = limit;
             parentMessage.limit(limit + HEADER_SIZE);
-            buffer.putShort(limit + 0, (short)1, java.nio.ByteOrder.LITTLE_ENDIAN);
-            buffer.putShort(limit + 2, (short)count, java.nio.ByteOrder.LITTLE_ENDIAN);
+            buffer.putShort(limit + 0, (short)1, BYTE_ORDER);
+            buffer.putShort(limit + 2, (short)count, BYTE_ORDER);
         }
 
         public PerformanceFiguresEncoder next()
@@ -1058,7 +1051,7 @@ public final class CarEncoder
         public int resetCountToIndex()
         {
             count = index;
-            buffer.putShort(initialLimit + 2, (short)count, java.nio.ByteOrder.LITTLE_ENDIAN);
+            buffer.putShort(initialLimit + 2, (short)count, BYTE_ORDER);
 
             return count;
         }
@@ -1178,8 +1171,8 @@ public final class CarEncoder
                 final int limit = parentMessage.limit();
                 initialLimit = limit;
                 parentMessage.limit(limit + HEADER_SIZE);
-                buffer.putShort(limit + 0, (short)6, java.nio.ByteOrder.LITTLE_ENDIAN);
-                buffer.putShort(limit + 2, (short)count, java.nio.ByteOrder.LITTLE_ENDIAN);
+                buffer.putShort(limit + 0, (short)6, BYTE_ORDER);
+                buffer.putShort(limit + 2, (short)count, BYTE_ORDER);
             }
 
             public AccelerationEncoder next()
@@ -1199,7 +1192,7 @@ public final class CarEncoder
             public int resetCountToIndex()
             {
                 count = index;
-                buffer.putShort(initialLimit + 2, (short)count, java.nio.ByteOrder.LITTLE_ENDIAN);
+                buffer.putShort(initialLimit + 2, (short)count, BYTE_ORDER);
 
                 return count;
             }
@@ -1271,7 +1264,7 @@ public final class CarEncoder
 
             public AccelerationEncoder mph(final int value)
             {
-                buffer.putShort(offset + 0, (short)value, java.nio.ByteOrder.LITTLE_ENDIAN);
+                buffer.putShort(offset + 0, (short)value, BYTE_ORDER);
                 return this;
             }
 
@@ -1323,7 +1316,7 @@ public final class CarEncoder
 
             public AccelerationEncoder seconds(final float value)
             {
-                buffer.putFloat(offset + 2, value, java.nio.ByteOrder.LITTLE_ENDIAN);
+                buffer.putFloat(offset + 2, value, BYTE_ORDER);
                 return this;
             }
 
@@ -1365,7 +1358,7 @@ public final class CarEncoder
         final int headerLength = 4;
         final int limit = parentMessage.limit();
         parentMessage.limit(limit + headerLength + length);
-        buffer.putInt(limit, length, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putInt(limit, length, BYTE_ORDER);
         buffer.putBytes(limit + headerLength, src, srcOffset, length);
 
         return this;
@@ -1381,7 +1374,7 @@ public final class CarEncoder
         final int headerLength = 4;
         final int limit = parentMessage.limit();
         parentMessage.limit(limit + headerLength + length);
-        buffer.putInt(limit, length, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putInt(limit, length, BYTE_ORDER);
         buffer.putBytes(limit + headerLength, src, srcOffset, length);
 
         return this;
@@ -1400,7 +1393,7 @@ public final class CarEncoder
         final int headerLength = 4;
         final int limit = parentMessage.limit();
         parentMessage.limit(limit + headerLength + length);
-        buffer.putInt(limit, length, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putInt(limit, length, BYTE_ORDER);
         buffer.putBytes(limit + headerLength, bytes, 0, length);
 
         return this;
@@ -1441,7 +1434,7 @@ public final class CarEncoder
         final int headerLength = 4;
         final int limit = parentMessage.limit();
         parentMessage.limit(limit + headerLength + length);
-        buffer.putInt(limit, length, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putInt(limit, length, BYTE_ORDER);
         buffer.putBytes(limit + headerLength, src, srcOffset, length);
 
         return this;
@@ -1457,7 +1450,7 @@ public final class CarEncoder
         final int headerLength = 4;
         final int limit = parentMessage.limit();
         parentMessage.limit(limit + headerLength + length);
-        buffer.putInt(limit, length, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putInt(limit, length, BYTE_ORDER);
         buffer.putBytes(limit + headerLength, src, srcOffset, length);
 
         return this;
@@ -1476,7 +1469,7 @@ public final class CarEncoder
         final int headerLength = 4;
         final int limit = parentMessage.limit();
         parentMessage.limit(limit + headerLength + length);
-        buffer.putInt(limit, length, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putInt(limit, length, BYTE_ORDER);
         buffer.putBytes(limit + headerLength, bytes, 0, length);
 
         return this;
@@ -1517,7 +1510,7 @@ public final class CarEncoder
         final int headerLength = 4;
         final int limit = parentMessage.limit();
         parentMessage.limit(limit + headerLength + length);
-        buffer.putInt(limit, length, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putInt(limit, length, BYTE_ORDER);
         buffer.putBytes(limit + headerLength, src, srcOffset, length);
 
         return this;
@@ -1533,7 +1526,7 @@ public final class CarEncoder
         final int headerLength = 4;
         final int limit = parentMessage.limit();
         parentMessage.limit(limit + headerLength + length);
-        buffer.putInt(limit, length, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putInt(limit, length, BYTE_ORDER);
         buffer.putBytes(limit + headerLength, src, srcOffset, length);
 
         return this;
@@ -1550,7 +1543,7 @@ public final class CarEncoder
         final int headerLength = 4;
         final int limit = parentMessage.limit();
         parentMessage.limit(limit + headerLength + length);
-        buffer.putInt(limit, length, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putInt(limit, length, BYTE_ORDER);
         buffer.putStringWithoutLengthAscii(limit + headerLength, value);
 
         return this;
@@ -1567,7 +1560,7 @@ public final class CarEncoder
         final int headerLength = 4;
         final int limit = parentMessage.limit();
         parentMessage.limit(limit + headerLength + length);
-        buffer.putInt(limit, length, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putInt(limit, length, BYTE_ORDER);
         buffer.putStringWithoutLengthAscii(limit + headerLength, value);
 
         return this;
@@ -1591,7 +1584,7 @@ public final class CarEncoder
         }
 
         final CarDecoder decoder = new CarDecoder();
-        decoder.wrap(buffer, initialOffset, BLOCK_LENGTH, SCHEMA_VERSION);
+        decoder.wrap(buffer, offset, BLOCK_LENGTH, SCHEMA_VERSION);
 
         return decoder.appendTo(builder);
     }

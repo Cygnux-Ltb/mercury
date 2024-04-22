@@ -20,7 +20,6 @@ public final class CarDecoder
 
     private final CarDecoder parentMessage = this;
     private DirectBuffer buffer;
-    private int initialOffset;
     private int offset;
     private int limit;
     int actingBlockLength;
@@ -56,11 +55,6 @@ public final class CarDecoder
         return buffer;
     }
 
-    public int initialOffset()
-    {
-        return initialOffset;
-    }
-
     public int offset()
     {
         return offset;
@@ -76,7 +70,6 @@ public final class CarDecoder
         {
             this.buffer = buffer;
         }
-        this.initialOffset = offset;
         this.offset = offset;
         this.actingBlockLength = actingBlockLength;
         this.actingVersion = actingVersion;
@@ -107,7 +100,7 @@ public final class CarDecoder
 
     public CarDecoder sbeRewind()
     {
-        return wrap(buffer, initialOffset, actingBlockLength, actingVersion);
+        return wrap(buffer, offset, actingBlockLength, actingVersion);
     }
 
     public int sbeDecodedLength()
@@ -187,7 +180,7 @@ public final class CarDecoder
 
     public long serialNumber()
     {
-        return buffer.getLong(offset + 0, java.nio.ByteOrder.LITTLE_ENDIAN);
+        return buffer.getLong(offset + 0, BYTE_ORDER);
     }
 
 
@@ -238,7 +231,7 @@ public final class CarDecoder
 
     public int modelYear()
     {
-        return (buffer.getShort(offset + 8, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
+        return (buffer.getShort(offset + 8, BYTE_ORDER) & 0xFFFF);
     }
 
 
@@ -384,7 +377,7 @@ public final class CarDecoder
 
         final int pos = offset + 12 + (index * 4);
 
-        return (buffer.getInt(pos, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        return (buffer.getInt(pos, BYTE_ORDER) & 0xFFFF_FFFFL);
     }
 
 
@@ -689,7 +682,7 @@ public final class CarDecoder
 
         final int pos = offset + 45 + (index * 8);
 
-        return buffer.getLong(pos, java.nio.ByteOrder.LITTLE_ENDIAN);
+        return buffer.getLong(pos, BYTE_ORDER);
     }
 
 
@@ -793,8 +786,8 @@ public final class CarDecoder
             index = 0;
             final int limit = parentMessage.limit();
             parentMessage.limit(limit + HEADER_SIZE);
-            blockLength = (buffer.getShort(limit + 0, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
-            count = (buffer.getShort(limit + 2, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
+            blockLength = (buffer.getShort(limit + 0, BYTE_ORDER) & 0xFFFF);
+            count = (buffer.getShort(limit + 2, BYTE_ORDER) & 0xFFFF);
         }
 
         public FuelFiguresDecoder next()
@@ -903,7 +896,7 @@ public final class CarDecoder
 
         public int speed()
         {
-            return (buffer.getShort(offset + 0, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
+            return (buffer.getShort(offset + 0, BYTE_ORDER) & 0xFFFF);
         }
 
 
@@ -954,7 +947,7 @@ public final class CarDecoder
 
         public float mpg()
         {
-            return buffer.getFloat(offset + 2, java.nio.ByteOrder.LITTLE_ENDIAN);
+            return buffer.getFloat(offset + 2, BYTE_ORDER);
         }
 
 
@@ -991,14 +984,14 @@ public final class CarDecoder
         public int usageDescriptionLength()
         {
             final int limit = parentMessage.limit();
-            return (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+            return (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
         }
 
         public int skipUsageDescription()
         {
             final int headerLength = 4;
             final int limit = parentMessage.limit();
-            final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+            final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
             final int dataOffset = limit + headerLength;
             parentMessage.limit(dataOffset + dataLength);
 
@@ -1009,7 +1002,7 @@ public final class CarDecoder
         {
             final int headerLength = 4;
             final int limit = parentMessage.limit();
-            final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+            final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
             final int bytesCopied = Math.min(length, dataLength);
             parentMessage.limit(limit + headerLength + dataLength);
             buffer.getBytes(limit + headerLength, dst, dstOffset, bytesCopied);
@@ -1021,7 +1014,7 @@ public final class CarDecoder
         {
             final int headerLength = 4;
             final int limit = parentMessage.limit();
-            final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+            final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
             final int bytesCopied = Math.min(length, dataLength);
             parentMessage.limit(limit + headerLength + dataLength);
             buffer.getBytes(limit + headerLength, dst, dstOffset, bytesCopied);
@@ -1033,7 +1026,7 @@ public final class CarDecoder
         {
             final int headerLength = 4;
             final int limit = parentMessage.limit();
-            final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+            final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
             parentMessage.limit(limit + headerLength + dataLength);
             wrapBuffer.wrap(buffer, limit + headerLength, dataLength);
         }
@@ -1042,7 +1035,7 @@ public final class CarDecoder
         {
             final int headerLength = 4;
             final int limit = parentMessage.limit();
-            final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+            final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
             parentMessage.limit(limit + headerLength + dataLength);
 
             if (0 == dataLength)
@@ -1060,7 +1053,7 @@ public final class CarDecoder
         {
             final int headerLength = 4;
             final int limit = parentMessage.limit();
-            final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+            final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
             final int dataOffset = limit + headerLength;
 
             parentMessage.limit(dataOffset + dataLength);
@@ -1146,8 +1139,8 @@ public final class CarDecoder
             index = 0;
             final int limit = parentMessage.limit();
             parentMessage.limit(limit + HEADER_SIZE);
-            blockLength = (buffer.getShort(limit + 0, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
-            count = (buffer.getShort(limit + 2, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
+            blockLength = (buffer.getShort(limit + 0, BYTE_ORDER) & 0xFFFF);
+            count = (buffer.getShort(limit + 2, BYTE_ORDER) & 0xFFFF);
         }
 
         public PerformanceFiguresDecoder next()
@@ -1302,8 +1295,8 @@ public final class CarDecoder
                 index = 0;
                 final int limit = parentMessage.limit();
                 parentMessage.limit(limit + HEADER_SIZE);
-                blockLength = (buffer.getShort(limit + 0, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
-                count = (buffer.getShort(limit + 2, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
+                blockLength = (buffer.getShort(limit + 0, BYTE_ORDER) & 0xFFFF);
+                count = (buffer.getShort(limit + 2, BYTE_ORDER) & 0xFFFF);
             }
 
             public AccelerationDecoder next()
@@ -1412,7 +1405,7 @@ public final class CarDecoder
 
             public int mph()
             {
-                return (buffer.getShort(offset + 0, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF);
+                return (buffer.getShort(offset + 0, BYTE_ORDER) & 0xFFFF);
             }
 
 
@@ -1463,7 +1456,7 @@ public final class CarDecoder
 
             public float seconds()
             {
-                return buffer.getFloat(offset + 2, java.nio.ByteOrder.LITTLE_ENDIAN);
+                return buffer.getFloat(offset + 2, BYTE_ORDER);
             }
 
 
@@ -1573,14 +1566,14 @@ public final class CarDecoder
     public int manufacturerLength()
     {
         final int limit = parentMessage.limit();
-        return (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        return (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
     }
 
     public int skipManufacturer()
     {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
         final int dataOffset = limit + headerLength;
         parentMessage.limit(dataOffset + dataLength);
 
@@ -1591,7 +1584,7 @@ public final class CarDecoder
     {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
         final int bytesCopied = Math.min(length, dataLength);
         parentMessage.limit(limit + headerLength + dataLength);
         buffer.getBytes(limit + headerLength, dst, dstOffset, bytesCopied);
@@ -1603,7 +1596,7 @@ public final class CarDecoder
     {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
         final int bytesCopied = Math.min(length, dataLength);
         parentMessage.limit(limit + headerLength + dataLength);
         buffer.getBytes(limit + headerLength, dst, dstOffset, bytesCopied);
@@ -1615,7 +1608,7 @@ public final class CarDecoder
     {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
         parentMessage.limit(limit + headerLength + dataLength);
         wrapBuffer.wrap(buffer, limit + headerLength, dataLength);
     }
@@ -1624,7 +1617,7 @@ public final class CarDecoder
     {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
         parentMessage.limit(limit + headerLength + dataLength);
 
         if (0 == dataLength)
@@ -1671,14 +1664,14 @@ public final class CarDecoder
     public int modelLength()
     {
         final int limit = parentMessage.limit();
-        return (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        return (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
     }
 
     public int skipModel()
     {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
         final int dataOffset = limit + headerLength;
         parentMessage.limit(dataOffset + dataLength);
 
@@ -1689,7 +1682,7 @@ public final class CarDecoder
     {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
         final int bytesCopied = Math.min(length, dataLength);
         parentMessage.limit(limit + headerLength + dataLength);
         buffer.getBytes(limit + headerLength, dst, dstOffset, bytesCopied);
@@ -1701,7 +1694,7 @@ public final class CarDecoder
     {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
         final int bytesCopied = Math.min(length, dataLength);
         parentMessage.limit(limit + headerLength + dataLength);
         buffer.getBytes(limit + headerLength, dst, dstOffset, bytesCopied);
@@ -1713,7 +1706,7 @@ public final class CarDecoder
     {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
         parentMessage.limit(limit + headerLength + dataLength);
         wrapBuffer.wrap(buffer, limit + headerLength, dataLength);
     }
@@ -1722,7 +1715,7 @@ public final class CarDecoder
     {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
         parentMessage.limit(limit + headerLength + dataLength);
 
         if (0 == dataLength)
@@ -1769,14 +1762,14 @@ public final class CarDecoder
     public int activationCodeLength()
     {
         final int limit = parentMessage.limit();
-        return (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        return (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
     }
 
     public int skipActivationCode()
     {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
         final int dataOffset = limit + headerLength;
         parentMessage.limit(dataOffset + dataLength);
 
@@ -1787,7 +1780,7 @@ public final class CarDecoder
     {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
         final int bytesCopied = Math.min(length, dataLength);
         parentMessage.limit(limit + headerLength + dataLength);
         buffer.getBytes(limit + headerLength, dst, dstOffset, bytesCopied);
@@ -1799,7 +1792,7 @@ public final class CarDecoder
     {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
         final int bytesCopied = Math.min(length, dataLength);
         parentMessage.limit(limit + headerLength + dataLength);
         buffer.getBytes(limit + headerLength, dst, dstOffset, bytesCopied);
@@ -1811,7 +1804,7 @@ public final class CarDecoder
     {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
         parentMessage.limit(limit + headerLength + dataLength);
         wrapBuffer.wrap(buffer, limit + headerLength, dataLength);
     }
@@ -1820,7 +1813,7 @@ public final class CarDecoder
     {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
         parentMessage.limit(limit + headerLength + dataLength);
 
         if (0 == dataLength)
@@ -1838,7 +1831,7 @@ public final class CarDecoder
     {
         final int headerLength = 4;
         final int limit = parentMessage.limit();
-        final int dataLength = (int)(buffer.getInt(limit, java.nio.ByteOrder.LITTLE_ENDIAN) & 0xFFFF_FFFFL);
+        final int dataLength = (int)(buffer.getInt(limit, BYTE_ORDER) & 0xFFFF_FFFFL);
         final int dataOffset = limit + headerLength;
 
         parentMessage.limit(dataOffset + dataLength);
@@ -1855,7 +1848,7 @@ public final class CarDecoder
         }
 
         final CarDecoder decoder = new CarDecoder();
-        decoder.wrap(buffer, initialOffset, actingBlockLength, actingVersion);
+        decoder.wrap(buffer, offset, actingBlockLength, actingVersion);
 
         return decoder.appendTo(new StringBuilder()).toString();
     }
@@ -1868,7 +1861,7 @@ public final class CarDecoder
         }
 
         final int originalLimit = limit();
-        limit(initialOffset + actingBlockLength);
+        limit(offset + actingBlockLength);
         builder.append("[Car](sbeTemplateId=");
         builder.append(TEMPLATE_ID);
         builder.append("|sbeSchemaId=");
@@ -1920,14 +1913,22 @@ public final class CarDecoder
         }
         builder.append('|');
         builder.append("extras=");
-        this.extras().appendTo(builder);
+        final OptionalExtrasDecoder extras = this.extras();
+        if (null != extras)
+        {
+            extras.appendTo(builder);
+        }
+        else
+        {
+            builder.append("null");
+        }
         builder.append('|');
         builder.append("discountedModel=");
         builder.append(this.discountedModel());
         builder.append('|');
         builder.append("engine=");
         final EngineDecoder engine = this.engine();
-        if (engine != null)
+        if (null != engine)
         {
             engine.appendTo(builder);
         }

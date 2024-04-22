@@ -8,7 +8,7 @@ import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.io.JsonEncoder;
 import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecord;
-import org.apache.commons.compress.utils.IOUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
@@ -53,7 +53,7 @@ public class AvroJsonSerializer<T extends SpecificRecord> implements JsonSeriali
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             IOUtils.closeQuietly(outputStream);
-            throw new RuntimeException(STR."AvroTextSerializer serialization exception -> \{e.getMessage()}");
+            throw new RuntimeException("AvroTextSerializer serialization exception -> " + e.getMessage());
         }
 
     }

@@ -43,7 +43,7 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
             throw new ZmqBindException(addr);
         }
         setTcpKeepAlive(cfg.getTcpKeepAlive());
-        this.name = STR."zpub$\{addr}/\{topic}";
+        this.name = "zpub$" + addr + ":" + topic;
         newStartTime();
     }
 

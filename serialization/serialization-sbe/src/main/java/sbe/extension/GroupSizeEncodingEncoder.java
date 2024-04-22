@@ -82,7 +82,7 @@ public final class GroupSizeEncodingEncoder
 
     public GroupSizeEncodingEncoder blockLength(final int value)
     {
-        buffer.putShort(offset + 0, (short)value, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putShort(offset + 0, (short)value, BYTE_ORDER);
         return this;
     }
 
@@ -114,7 +114,7 @@ public final class GroupSizeEncodingEncoder
 
     public GroupSizeEncodingEncoder numInGroup(final int value)
     {
-        buffer.putShort(offset + 2, (short)value, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putShort(offset + 2, (short)value, BYTE_ORDER);
         return this;
     }
 

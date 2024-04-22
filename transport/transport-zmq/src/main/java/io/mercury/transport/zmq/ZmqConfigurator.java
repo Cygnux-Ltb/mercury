@@ -375,7 +375,7 @@ public final class ZmqConfigurator implements
 
         ZmqProtocol(String name) {
             this.name = name;
-            this.prefix = STR."\{name}://";
+            this.prefix = name + "://";
         }
 
         public String fixAddr(String addr) {
@@ -396,7 +396,7 @@ public final class ZmqConfigurator implements
                 if (protocol.prefix.equalsIgnoreCase(name))
                     return protocol;
             }
-            throw new IllegalArgumentException(STR."Unsupported protocol type -> \{name}");
+            throw new IllegalArgumentException("Unsupported protocol type -> " + name);
         }
 
     }
@@ -440,7 +440,7 @@ public final class ZmqConfigurator implements
             Asserter.atWithinRange(port, 4096, 65536, "port");
             if (!addr.equals("*"))
                 IpAddressValidator.assertIpAddress(addr);
-            return new ZmqAddr(ZmqProtocol.TCP, STR."\{addr}:\{port}");
+            return new ZmqAddr(ZmqProtocol.TCP, addr + ":" + port);
         }
 
         /**

@@ -82,7 +82,7 @@ public final class VarStringEncodingEncoder
 
     public VarStringEncodingEncoder length(final long value)
     {
-        buffer.putInt(offset + 0, (int)value, java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.putInt(offset + 0, (int)value, BYTE_ORDER);
         return this;
     }
 

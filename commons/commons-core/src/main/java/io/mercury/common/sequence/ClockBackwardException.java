@@ -17,10 +17,9 @@ public final class ClockBackwardException extends IllegalStateException {
     private final long currentEpochMillis;
 
     ClockBackwardException(long lastEpochMillis, long currentEpochMillis) {
-        super(STR."The clock moved backwards, Refusing to generate seq for \{lastEpochMillis - currentEpochMillis} millis");
+        super("The clock moved backwards, Refusing to generate seq for " + (lastEpochMillis - currentEpochMillis) + "millis");
         this.currentEpochMillis = currentEpochMillis;
         this.lastEpochMillis = lastEpochMillis;
-
     }
 
     public long getLastEpochMillis() {
