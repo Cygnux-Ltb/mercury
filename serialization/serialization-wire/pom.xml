@@ -10,6 +10,7 @@
 
     <artifactId>serialization-wire</artifactId>
     <name>serialization-wire</name>
+    <packaging>jar</packaging>
 
     <properties>
         <chronicle-wire.version>2.22.22</chronicle-wire.version>

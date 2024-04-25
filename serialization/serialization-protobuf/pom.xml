@@ -10,6 +10,7 @@
 
     <artifactId>serialization-protobuf</artifactId>
     <name>serialization-protobuf</name>
+    <packaging>jar</packaging>
 
     <properties>
         <protobuf.version>4.26.1</protobuf.version>
