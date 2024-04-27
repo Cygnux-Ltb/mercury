@@ -40,7 +40,7 @@ public final class Log4j2LoggerFactory {
     /**
      * default log filename
      */
-    public static final String DefaultFileName = STR."runtime-\{now().format(ofPattern("yyMMdd-HHmmss"))}";
+    public static final String DefaultFileName = "runtime-" + now().format(ofPattern("yyMMdd-HHmmss"));
 
     /**
      * @param obj Object
@@ -113,7 +113,7 @@ public final class Log4j2LoggerFactory {
     /**
      * 业务日志目录
      */
-    public static final String BizLogsDir = STR."\{System.getProperty("java.io.tmpdir")}/biz-logs";
+    public static final String BizLogsDir = System.getProperty("java.io.tmpdir") + "/biz-logs";
 
     /**
      * 启动一个动态的logger
@@ -147,15 +147,15 @@ public final class Log4j2LoggerFactory {
         Layout<String> layout = PatternLayout.newBuilder()
                 .withConfiguration(CONF)
                 .withCharset(UTF_8)
-                .withHeader(STR."The business log storage file with [\{loggerName}]")
+                .withHeader("The business log storage file with [" + loggerName + "]")
                 .withPattern("%d{yyyy-MM-dd HH:mm:ss.SSS} | %-5level [%t] [%C{1}.%M] >>> %msg%n")
                 .build();
 
         Appender appender = RollingFileAppender.newBuilder()
                 .setConfiguration(CONF)
                 .setName(loggerName)
-                .withFileName(STR."\{logFile}.log")
-                .withFilePattern(STR."\{logFile}.%d{yyyyMMdd}.log")
+                .withFileName(logFile + ".log")
+                .withFilePattern(logFile + ".%d{yyyyMMdd}.log")
                 .withAppend(true)
                 .withStrategy(strategy)
                 .withPolicy(CompositeTriggeringPolicy.createPolicy(timeBased, sizeBased))

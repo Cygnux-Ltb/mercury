@@ -67,6 +67,14 @@
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
         </dependency>
+
+        <!-- Byte Buddy is a Java library for creating Java classes at run time.
+            This artifact is a build of Byte Buddy with all ASM dependencies repackaged into its own name space. -->
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.14.14</version>
+        </dependency>
     </dependencies>
 
 </project>
