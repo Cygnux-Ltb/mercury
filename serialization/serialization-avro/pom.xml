@@ -69,7 +69,7 @@
         <dependency>
             <groupId>com.linkedin.avroutil1</groupId>
             <artifactId>avro-fastserde</artifactId>
-            <version>0.4.14</version>
+            <version>0.4.16</version>
             <exclusions>
                 <exclusion>
                     <artifactId>slf4j-api</artifactId>
