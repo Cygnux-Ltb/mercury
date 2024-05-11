@@ -13,7 +13,7 @@
 
     <properties>
         <aeron.version>1.44.1</aeron.version>
-        <byte-buddy.version>1.14.13</byte-buddy.version>
+        <byte-buddy.version>1.14.14</byte-buddy.version>
     </properties>
 
     <repositories>
@@ -78,7 +78,7 @@
         <dependency>
             <groupId>org.hdrhistogram</groupId>
             <artifactId>HdrHistogram</artifactId>
-            <version>2.1.12</version>
+            <version>2.2.1</version>
         </dependency>
 
     </dependencies>
