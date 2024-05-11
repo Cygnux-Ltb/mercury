@@ -42,7 +42,6 @@ public final class SocketTransceiver extends BaseTransceiver<String> {
         try {
             this.socket = new Socket(configurator.getHost(), configurator.getPort());
         } catch (IOException e) {
-            e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
     }

@@ -54,10 +54,10 @@ public abstract class BaseTransceiver<T> extends TransportComponent implements T
     @Override
     public boolean startSend() {
         try {
-            // queue.start();
+            //queue.start();
             return true;
         } catch (Exception e) {
-            throw new RuntimeException(STR."start queue exception : \{e.getMessage()}", e);
+            throw new RuntimeException("start queue exception : " + e.getMessage(), e);
         }
     }
 

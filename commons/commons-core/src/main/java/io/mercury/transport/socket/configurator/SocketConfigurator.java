@@ -9,9 +9,6 @@ public final class SocketConfigurator implements TransportConfigurator {
     private final long receiveInterval;
     private final int sendQueueSize;
 
-    private final String configuratorInfo = "SocketConfigurator";
-    private final String connectionInfo = "";
-
     private SocketConfigurator(Builder builder) {
         this.host = builder.host;
         this.port = builder.port;
@@ -41,12 +38,12 @@ public final class SocketConfigurator implements TransportConfigurator {
 
     @Override
     public String getConfigInfo() {
-        return configuratorInfo;
+        return "SocketConfigurator";
     }
 
     @Override
     public String getConnectionInfo() {
-        return connectionInfo;
+        return "";
     }
 
     public static class Builder {
