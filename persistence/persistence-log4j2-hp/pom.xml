@@ -10,7 +10,6 @@
 
     <artifactId>persistence-log4j2-hp</artifactId>
     <name>persistence-log4j2-hp</name>
-    <packaging>jar</packaging>
 
     <properties>
     </properties>

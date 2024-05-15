@@ -10,7 +10,6 @@
 
     <artifactId>persistence-rdb</artifactId>
     <name>persistence-jdbc</name>
-    <packaging>jar</packaging>
 
     <properties>
     </properties>

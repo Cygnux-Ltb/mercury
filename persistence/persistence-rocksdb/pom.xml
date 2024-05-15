@@ -10,7 +10,6 @@
 
     <artifactId>persistence-rocksdb</artifactId>
     <name>persistence-rocksdb</name>
-    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
