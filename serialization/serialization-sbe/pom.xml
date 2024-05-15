@@ -10,7 +10,6 @@
 
     <artifactId>serialization-sbe</artifactId>
     <name>serialization-sbe</name>
-    <packaging>jar</packaging>
 
     <properties>
         <sbe-tool.version>1.31.1</sbe-tool.version>

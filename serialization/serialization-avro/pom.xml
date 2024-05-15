@@ -10,7 +10,6 @@
 
     <artifactId>serialization-avro</artifactId>
     <name>serialization-avro</name>
-    <packaging>jar</packaging>
 
     <properties>
         <avro.version>1.11.3</avro.version>
