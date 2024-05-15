@@ -10,7 +10,6 @@
 
     <artifactId>commons-concurrent</artifactId>
     <name>commons-concurrent</name>
-    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

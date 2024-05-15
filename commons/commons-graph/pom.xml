@@ -10,7 +10,6 @@
 
     <artifactId>commons-graph</artifactId>
     <name>commons-graph</name>
-    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
