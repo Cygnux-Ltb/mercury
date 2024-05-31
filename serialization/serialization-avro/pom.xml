@@ -79,7 +79,6 @@
                     <groupId>org.apache.commons</groupId>
                 </exclusion>
             </exclusions>
-
         </dependency>
 
         <!-- Avro core components -->
