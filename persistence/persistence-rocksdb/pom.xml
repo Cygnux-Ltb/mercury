@@ -10,7 +10,6 @@
 
     <artifactId>persistence-rocksdb</artifactId>
     <name>persistence-rocksdb</name>
-    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
@@ -22,7 +21,7 @@
         <dependency>
             <groupId>org.rocksdb</groupId>
             <artifactId>rocksdbjni</artifactId>
-            <version>9.0.1</version>
+            <version>9.2.1</version>
         </dependency>
         <!-- Netty/Buffer -->
         <dependency>
@@ -36,5 +35,12 @@
             <artifactId>zero-allocation-hashing</artifactId>
         </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>maven_central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
+    </repositories>
 
 </project>

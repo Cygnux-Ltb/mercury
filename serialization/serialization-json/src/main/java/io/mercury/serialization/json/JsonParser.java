@@ -1,29 +1,28 @@
 package io.mercury.serialization.json;
 
-import static com.google.gson.JsonParser.parseString;
-import static io.mercury.common.collections.ImmutableLists.newImmutableList;
-import static io.mercury.common.collections.ImmutableMaps.newImmutableMap;
-import static io.mercury.common.collections.MutableLists.newFastList;
-import static io.mercury.common.collections.MutableMaps.newUnifiedMap;
-
-import java.io.Serial;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.eclipse.collections.api.list.ImmutableList;
-import org.eclipse.collections.api.list.MutableList;
-import org.eclipse.collections.api.map.ImmutableMap;
-import org.eclipse.collections.api.map.MutableMap;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
+import org.eclipse.collections.api.list.ImmutableList;
+import org.eclipse.collections.api.list.MutableList;
+import org.eclipse.collections.api.map.ImmutableMap;
+import org.eclipse.collections.api.map.MutableMap;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.Serial;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.google.gson.JsonParser.parseString;
+import static io.mercury.common.collections.ImmutableLists.newImmutableList;
+import static io.mercury.common.collections.ImmutableMaps.newImmutableMap;
+import static io.mercury.common.collections.MutableLists.newFastList;
+import static io.mercury.common.collections.MutableMaps.newUnifiedMap;
 
 public final class JsonParser {
 
@@ -98,8 +97,10 @@ public final class JsonParser {
      * @return List<T>
      * @throws JsonParseException e
      */
-    public static <T> List<T> toList(@Nonnull final String json) throws JsonParseException {
+    public static <T> List<T> toList(@Nullable final String json) throws JsonParseException {
         try {
+            if (json == null || json.isEmpty())
+                return new ArrayList<>();
             return Mapper.readValue(json, new TypeReference<>() {
             });
         } catch (Exception e) {
@@ -113,8 +114,10 @@ public final class JsonParser {
      * @return List<T>
      * @throws JsonParseException e
      */
-    public static <T> List<T> toList(@Nonnull String json, @Nonnull Class<T> type) throws JsonParseException {
+    public static <T> List<T> toList(@Nullable String json, @Nullable Class<T> type) throws JsonParseException {
         try {
+            if (json == null || json.isEmpty() || type == null)
+                return new ArrayList<>();
             return Mapper.readValue(json,
                     TypeFactory.constructCollectionLikeType(List.class, type));
         } catch (Exception e) {
@@ -266,11 +269,11 @@ public final class JsonParser {
         private static final long serialVersionUID = 9000408863460789219L;
 
         public JsonParseException(String json, Throwable cause) {
-            super(STR."Parsing JSON -> \{json} , Throw exception -> [\{cause.getClass().getName()}]", cause);
+            super("Parsing JSON -> " + json + " , Throw exception -> [" + cause.getClass().getName() + "]", cause);
         }
 
         public JsonParseException(Throwable cause) {
-            super(STR."Parsing JSON throw exception -> [\{cause.getClass().getName()}]", cause);
+            super("Parsing JSON throw exception -> [ " + cause.getClass().getName() + "]", cause);
         }
 
         public JsonParseException(String message) {

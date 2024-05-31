@@ -200,34 +200,34 @@ public class AdvancedRmqReceiver<T> extends RmqTransport
 
     /**
      * @param tag          String
-     * @param config       RmqReceiverConfig
+     * @param cfg          RmqReceiverCfg
      * @param deserializer BytesDeserializer<T>
      * @param consumer     Consumer<T>
      * @param ackConsumer  SelfAckConsumer<T>
      */
     private AdvancedRmqReceiver(String tag,
-                                @Nonnull RmqReceiverCfg config,
+                                @Nonnull RmqReceiverCfg cfg,
                                 @Nonnull BytesDeserializer<T> deserializer,
                                 @Nullable Consumer<T> consumer,
                                 @Nullable SelfAckConsumer<T> ackConsumer)
             throws ConnectionFailedException {
-        super(nonEmpty(tag) ? tag : "adv-recv-" + datetimeOfMillisecond(), config.getConnection());
+        super(nonEmpty(tag) ? tag : "adv-recv-" + datetimeOfMillisecond(), cfg.getConnection());
         if (consumer == null && ackConsumer == null) {
             throw new NullPointerException("[Consumer] and [SelfAckConsumer] cannot all be null");
         }
-        this.receiveQueue = config.getReceiveQueue();
+        this.receiveQueue = cfg.getReceiveQueue();
         this.queueName = receiveQueue.getQueueName();
         this.deserializer = deserializer;
-        this.errMsgExchange = config.getErrMsgExchange();
-        this.errMsgRoutingKey = config.getErrMsgRoutingKey();
-        this.errMsgQueue = config.getErrMsgQueue();
-        this.autoAck = config.getAckOptions().isAutoAck();
-        this.multipleAck = config.getAckOptions().isMultipleAck();
-        this.maxAckTotal = config.getAckOptions().getMaxAckTotal();
-        this.maxAckReconnection = config.getAckOptions().getMaxAckReconnection();
-        this.qos = config.getAckOptions().getQos();
-        this.exclusive = config.isExclusive();
-        this.args = config.getArgs();
+        this.errMsgExchange = cfg.getErrMsgExchange();
+        this.errMsgRoutingKey = cfg.getErrMsgRoutingKey();
+        this.errMsgQueue = cfg.getErrMsgQueue();
+        this.autoAck = cfg.getAckOptions().isAutoAck();
+        this.multipleAck = cfg.getAckOptions().isMultipleAck();
+        this.maxAckTotal = cfg.getAckOptions().getMaxAckTotal();
+        this.maxAckReconnection = cfg.getAckOptions().getMaxAckReconnection();
+        this.qos = cfg.getAckOptions().getQos();
+        this.exclusive = cfg.isExclusive();
+        this.args = cfg.getArgs();
         this.consumer = consumer;
         this.selfAckConsumer = ackConsumer;
         this.receiverName = "receiver::[" + rmqConnection.getConnectionInfo() + "$" + queueName + "]";

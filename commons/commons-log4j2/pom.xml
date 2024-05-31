@@ -10,7 +10,6 @@
 
     <artifactId>commons-log4j2</artifactId>
     <name>commons-log4j2</name>
-    <packaging>jar</packaging>
 
     <properties>
         <log4j2.version>2.23.1</log4j2.version>

@@ -141,7 +141,7 @@ public final class StringSupport {
      */
     @Nonnull
     public static String toText(Object obj) {
-        return STR."\"\{toString(obj)}\"";
+        return toString(obj);
     }
 
     /**

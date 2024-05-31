@@ -13,7 +13,7 @@
 
     <properties>
         <aeron.version>1.44.1</aeron.version>
-        <byte-buddy.version>1.14.13</byte-buddy.version>
+        <byte-buddy.version>1.14.16</byte-buddy.version>
     </properties>
 
     <repositories>
@@ -21,6 +21,11 @@
             <id>aeronic</id>
             <name>aeronic</name>
             <url>https://cloudsmith.io/~lob-software/repos/aeronic/packages/</url>
+        </repository>
+        <repository>
+            <id>maven_central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
         </repository>
     </repositories>
 
@@ -78,7 +83,7 @@
         <dependency>
             <groupId>org.hdrhistogram</groupId>
             <artifactId>HdrHistogram</artifactId>
-            <version>2.1.12</version>
+            <version>2.2.1</version>
         </dependency>
 
     </dependencies>

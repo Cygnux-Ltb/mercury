@@ -43,7 +43,7 @@ public class LocalSocketManager {
     }
 
     private static String socketName(String name, int port) {
-        return STR."\{name}:\{port}";
+        return name + ":" + port;
     }
 
 }

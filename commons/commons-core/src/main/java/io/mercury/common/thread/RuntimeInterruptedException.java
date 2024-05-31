@@ -12,7 +12,7 @@ public class RuntimeInterruptedException extends RuntimeException {
     }
 
     public RuntimeInterruptedException(InterruptedException exception) {
-        super(STR."Catch [InterruptedException] and conversion to [RuntimeInterruptedException]\n message : \{exception.getMessage()}", exception);
+        super("Catch [InterruptedException] and conversion to [RuntimeInterruptedException]\n message : " + exception.getMessage(), exception);
     }
 
 }

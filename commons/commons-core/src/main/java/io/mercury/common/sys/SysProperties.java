@@ -65,7 +65,7 @@ public final class SysProperties {
     /**
      * tmpdir file
      */
-    public static final File JAVA_IO_TMPDIR_FILE = new File(STR."\{JAVA_IO_TMPDIR}/");
+    public static final File JAVA_IO_TMPDIR_FILE = new File(JAVA_IO_TMPDIR);
 
     /**
      * System.getProperty("user.name")
@@ -80,12 +80,12 @@ public final class SysProperties {
     /**
      * user.home file
      */
-    public static final File USER_HOME_FILE = new File(STR."\{USER_HOME}/");
+    public static final File USER_HOME_FILE = new File(USER_HOME);
 
     /**
      * ${user.home}/.config/
      */
-    public static final File USER_HOME_CONFIG_FOLDER = new File(STR."\{USER_HOME_FILE}/.config/");
+    public static final File USER_HOME_CONFIG_FOLDER = new File(USER_HOME_FILE + ".config/");
 
     /**
      * System.getProperty("user.dir")
@@ -95,7 +95,7 @@ public final class SysProperties {
     /**
      * user.dir file
      */
-    public static final File USER_DIR_FILE = new File(STR."\{USER_DIR}/");
+    public static final File USER_DIR_FILE = new File(USER_DIR);
 
     /**
      * System.getProperty("user.timezone")
@@ -126,7 +126,7 @@ public final class SysProperties {
         if (log != null) {
             getProperties().forEach((key, value) -> log.info("{} -> {}", key, value));
         } else {
-            getProperties().forEach((key, value) -> out.println(STR."\{key} -> \{value}"));
+            getProperties().forEach((key, value) -> out.println(key + " -> " + value));
         }
     }
 

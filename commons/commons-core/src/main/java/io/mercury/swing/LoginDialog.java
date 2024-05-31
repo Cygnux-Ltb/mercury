@@ -22,10 +22,10 @@ public final class LoginDialog extends JDialog {
     private JButton buttonOK;
     private JButton buttonCancel;
 
-    private final LoginHandler loginHandler;
+    private final LoginHandler handler;
 
-    public LoginDialog(String title, LoginHandler loginHandler) {
-        this.loginHandler = loginHandler;
+    public LoginDialog(String title, LoginHandler handler) {
+        this.handler = handler;
         setTitle(title);
         setContentPane(contentPane);
         setModal(true);
@@ -49,7 +49,7 @@ public final class LoginDialog extends JDialog {
     }
 
     private void onOK() {
-        loginHandler.onLogin(username.getText(), String.valueOf(password.getPassword()));
+        handler.onLogin(username.getText(), String.valueOf(password.getPassword()));
     }
 
     private void onClear() {
