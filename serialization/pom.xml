@@ -19,7 +19,7 @@
         <module>serialization-kryo</module>
         <module>serialization-protobuf</module>
         <module>serialization-sbe</module>
-        <module>serialization-wire</module>
+        <!--<module>serialization-wire</module>-->
     </modules>
 
     <properties>
