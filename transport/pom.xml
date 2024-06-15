@@ -21,6 +21,7 @@
         <!-- <module>transport-socket</module> -->
         <module>transport-ws</module>
         <module>transport-zmq</module>
+        <module>transport-rsocket</module>
     </modules>
 
     <build>
@@ -45,26 +46,25 @@
                 <artifactId>annotations</artifactId>
                 <version>24.1.0</version>
             </dependency>
+
             <dependency>
                 <groupId>io.mercury</groupId>
                 <artifactId>commons-concurrent</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>io.mercury</groupId>
-                <artifactId>serialization-wire</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>io.mercury</groupId>
                 <artifactId>serialization-sbe</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>io.mercury</groupId>
                 <artifactId>serialization-avro</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>io.mercury</groupId>
                 <artifactId>serialization-json</artifactId>
