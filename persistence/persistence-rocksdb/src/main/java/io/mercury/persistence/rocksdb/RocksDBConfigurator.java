@@ -54,7 +54,7 @@ public final class RocksDBConfigurator {
 
     public static class Builder {
 
-        private String rootPath = STR."\{SysProperties.JAVA_IO_TMPDIR}/";
+        private String rootPath = SysProperties.JAVA_IO_TMPDIR;
         private String folder = "rocksdb/";
 
         private boolean createIfMissing = true;
