@@ -186,7 +186,7 @@ public final class RingMulticaster<E, I> extends RingComponent<E, I> {
             if (waitStrategy == null)
                 waitStrategy = handlers.size() > availableProcessors() ? WaitStrategyOption.Sleeping.get() : WaitStrategyOption.Yielding.get();
             if (StringSupport.isNullOrEmpty(name))
-                name = STR."RingMulticaster-\{YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now())}";
+                name = "RingMulticaster-" + YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now());
             return new RingMulticaster<>(name, size, mode, producerType, eventFactory,
                     waitStrategy, eventTranslator, handlers);
         }

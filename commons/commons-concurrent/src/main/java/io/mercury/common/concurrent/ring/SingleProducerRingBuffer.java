@@ -45,7 +45,7 @@ public abstract class SingleProducerRingBuffer<E, I> extends RunnableComponent {
                                        @Nonnull EventFactory<E> factory,
                                        @Nonnull EventTranslatorOneArg<E, I> translator) {
         super(requireNonEmptyElse(name,
-                STR."SP-Ring-\{YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now())}"));
+                "SP-Ring-" + YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now())));
         Asserter.nonNull(factory, "factory");
         Asserter.nonNull(translator, "translator");
         this.disruptor = new Disruptor<>(
@@ -54,7 +54,7 @@ public abstract class SingleProducerRingBuffer<E, I> extends RunnableComponent {
                 // 调整并设置队列容量
                 adjustSize(size),
                 // 使用最高优先级的线程工厂
-                ofPlatform(STR."\{this.name}-worker").priority(MAX).build(),
+                ofPlatform(this.name + "-worker").priority(MAX).build(),
                 // 生产者策略, 使用单生产者
                 ProducerType.SINGLE,
                 // Waiting策略

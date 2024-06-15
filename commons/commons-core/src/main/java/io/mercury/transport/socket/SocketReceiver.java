@@ -106,7 +106,7 @@ public class SocketReceiver extends TransportComponent implements Receiver {
                     log.error(e.getMessage(), e);
                     try {
                         inputStream.close();
-                    } catch (IOException _) {
+                    } catch (IOException ignored) {
                     }
                     closeIgnoreException();
                 }
@@ -114,7 +114,7 @@ public class SocketReceiver extends TransportComponent implements Receiver {
             if (inputStream != null) {
                 try {
                     inputStream.close();
-                } catch (IOException _) {
+                } catch (IOException ignored) {
                 }
             }
         });
@@ -130,7 +130,7 @@ public class SocketReceiver extends TransportComponent implements Receiver {
 
         try {
             receiver.close();
-        } catch (IOException _) {
+        } catch (IOException ignored) {
         }
 
     }

@@ -7,7 +7,11 @@ import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -141,7 +145,7 @@ public final class PropertiesUtil {
         for (int i = 0; i < list.size(); i++) {
             Entry<Object, Object> entry = list.get(i);
             if (log == null)
-                System.out.println(STR."Property \{i} : key -> \{entry.getKey()}, value -> \{entry.getValue()}");
+                System.out.println("Property " + i + " : key -> " + entry.getKey() + ", value -> " + entry.getValue());
             else
                 log.info("Property {} : key -> {}, value -> {}", i, entry.getKey(), entry.getValue());
         }

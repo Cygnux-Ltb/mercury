@@ -1,10 +1,10 @@
 package io.mercury.common.collections.window;
 
-import java.lang.ref.WeakReference;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.ref.WeakReference;
+import java.util.List;
 
 /**
  * Internal utility class to monitor the window and send events upstream to
@@ -45,12 +45,12 @@ public class WindowMonitor<K, R, P> implements Runnable {
             }
 
             if (logger.isTraceEnabled())
-                logger.trace(STR."Monitor running... (current window.size [\{window.getSize()}])");
+                logger.trace("Monitor running... (current window.size [{}])", window.getSize());
 
             List<WindowFuture<K, R, P>> expired = window.cancelAllExpired();
             if (expired != null && !expired.isEmpty()) {
                 if (logger.isTraceEnabled())
-                    logger.trace(STR."Monitor found [\{expired.size()}] requests expired");
+                    logger.trace("Monitor found [{}] requests expired ", expired.size());
                 // process each expired request and pass up the chain to handlers
                 for (WindowFuture<K, R, P> future : expired) {
                     for (UnwrappedWeakReference<WindowListener<K, R, P>> listenerRef : window.getListeners()) {

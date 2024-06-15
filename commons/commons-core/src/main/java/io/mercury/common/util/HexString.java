@@ -108,7 +108,7 @@ public final class HexString {
 
     @Override
     public String toString() {
-        return STR."0x\{hex}";
+        return "0x" + hex;
     }
 
     @Override

@@ -54,14 +54,14 @@ public final class SocketSender extends TransportComponent implements Sender<byt
             outputStream.close();
             if (socket != null)
                 socket.close();
-        } catch (IOException _) {
+        } catch (IOException ignored) {
         }
         return true;
     }
 
     @Override
     public String getName() {
-        return STR."SocketSender -> \{socket.hashCode()}";
+        return "SocketSender -> " + socket.hashCode();
     }
 
     @Override

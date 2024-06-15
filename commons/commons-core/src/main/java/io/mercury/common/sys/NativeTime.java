@@ -9,7 +9,7 @@ import java.security.CodeSource;
 public class NativeTime {
 
     public static final boolean LOADED;
-    
+
     private static double ticks_per_nanosecond = 1.0;
 
     static {
@@ -48,7 +48,7 @@ public class NativeTime {
                             continue;
                         }
 
-                        System.out.println(STR."Unpacking \{file.getName()} to \{f}");
+                        System.out.println("Unpacking " + file.getName() + " to " + f);
 
                         java.io.InputStream is = jar.getInputStream(file); // get the input stream
                         java.io.FileOutputStream fos = new java.io.FileOutputStream(f);
@@ -72,8 +72,7 @@ public class NativeTime {
                             Field fieldSysPath = ClassLoader.class.getDeclaredField("sys_paths");
                             fieldSysPath.setAccessible(true);
                             fieldSysPath.set(null, null);
-                        } catch (IllegalAccessException | NoSuchFieldException _) {
-                            // ignored
+                        } catch (IllegalAccessException | NoSuchFieldException ignored) {
                         }
 
                         System.load(f.toString());
@@ -81,12 +80,12 @@ public class NativeTime {
                     }
                     jar.close();
                 }
-            } catch (IOException _) {
+            } catch (IOException ignored) {
             }
 
             loaded = tryLoad("libnativetime.so");
             if (!loaded)
-                loaded = tryLoad(STR."\{pattern}\{File.separator}libnativetime.so");
+                loaded = tryLoad(pattern + File.separator + "libnativetime.so");
             if (!loaded)
                 System.loadLibrary("nativetime");
 
@@ -99,7 +98,7 @@ public class NativeTime {
             t.start();
 
             loaded = true;
-        } catch (UnsatisfiedLinkError _) {
+        } catch (UnsatisfiedLinkError e) {
             loaded = false;
         }
 
@@ -113,8 +112,7 @@ public class NativeTime {
                 System.load(url.getFile());
                 return true;
             }
-        } catch (Exception _) {
-            // ignored
+        } catch (Exception ignored) {
         }
         return false;
     }
