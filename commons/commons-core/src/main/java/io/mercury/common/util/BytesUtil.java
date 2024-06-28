@@ -42,10 +42,10 @@ public final class BytesUtil {
         // if its zero, then the check below will validate if it would cause
         // a read past the length of the byte array
         if (offset != 0 && offset >= bytesLength)
-            throw new IllegalArgumentException(STR."The byte[] offset (\{offset}) must be < the length of the byte[] length (\{bytesLength})");
+            throw new IllegalArgumentException("The byte[] offset (" + offset + ") must be < the length of the byte[] length (" + bytesLength + ")");
 
         if (offset + length > bytesLength)
-            throw new IllegalArgumentException(STR."The offset+length (\{offset + length}) would read past the end of the byte[] (length=\{bytesLength})");
+            throw new IllegalArgumentException("The offset+length (" + offset + length + ") would read past the end of the byte[] (length=" + bytesLength + ")");
 
     }
 
@@ -61,7 +61,7 @@ public final class BytesUtil {
         checkOffsetLength(bytes.length, offset, length);
         if (length != expectedLength)
             throw new IllegalArgumentException(
-                    STR."Unexpected length of byte array [expected=\{expectedLength}, actual=\{length}]");
+                    "Unexpected length of byte array [expected=" + expectedLength + ", actual=" + length + "]");
     }
 
     /**

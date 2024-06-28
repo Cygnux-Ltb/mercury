@@ -21,14 +21,14 @@
         <dependency>
             <groupId>org.agrona</groupId>
             <artifactId>agrona</artifactId>
-            <version>1.21.1</version>
+            <version>1.21.2</version>
         </dependency>
 
         <!-- Java Concurrency Tools Core Library -->
         <dependency>
             <groupId>org.jctools</groupId>
             <artifactId>jctools-core</artifactId>
-            <version>4.0.3</version>
+            <version>4.0.5</version>
         </dependency>
 
         <!-- Disruptor - Concurrent Programming Framework -->
@@ -51,5 +51,12 @@
             </exclusions>
         </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>maven_central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
+    </repositories>
 
 </project>

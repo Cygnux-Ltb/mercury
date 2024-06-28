@@ -178,7 +178,7 @@ public class Base64Codec {
                     default ->
                         // Message message = ERR_BASE64_DECODE_INVALID_CHARACTER.get(encodedData,
                         // encodedData.charAt(i + j));
-                            throw new ParseException(STR."Invalid Base64 character '\{encodedData.charAt(i + j)}'", i + j);
+                            throw new ParseException("Invalid Base64 character " + encodedData.charAt(i + j), i + j);
                 }
                 if (!append) {
                     break;

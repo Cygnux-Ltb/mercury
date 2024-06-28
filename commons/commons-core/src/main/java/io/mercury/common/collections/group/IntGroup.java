@@ -32,7 +32,7 @@ public abstract class IntGroup<V> {
     public V getMember(int key) throws MemberNotExistException {
         V value = savedMap.get(key);
         if (value == null)
-            throw new MemberNotExistException(STR."key -> [\{key}] no found value");
+            throw new MemberNotExistException("key -> [" + key + " ] no found value");
         return value;
     }
 

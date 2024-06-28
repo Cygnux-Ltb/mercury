@@ -424,7 +424,7 @@ public final class ArtNode48<V> implements ArtNode<V> {
         if (found != numChildren)
             throw new IllegalStateException("wrong numChildren");
         if (keysSet.size() != numChildren) {
-            throw new IllegalStateException(STR."duplicate keys keysSet=\{keysSet} numChildren=\{numChildren}");
+            throw new IllegalStateException("duplicate keys keysSet=" + keysSet + " numChildren=" + numChildren);
         }
         if (numChildren > 48 || numChildren <= NODE16_SWITCH_THRESHOLD)
             throw new IllegalStateException("unexpected numChildren");
@@ -477,7 +477,7 @@ public final class ArtNode48<V> implements ArtNode<V> {
 
     @Override
     public String toString() {
-        return STR."ArtNode48{nodeKey=\{nodeKey}, nodeLevel=\{nodeLevel}, numChildren=\{numChildren}\{'}'}";
+        return "ArtNode48{nodeKey=" + nodeKey + ", nodeLevel=" + nodeLevel + ", numChildren=" + numChildren + "}";
     }
 
     private short[] createKeysArray() {

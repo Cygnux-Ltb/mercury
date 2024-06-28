@@ -198,7 +198,7 @@ public class MultiSessionReplayReceiver {
                         aeronArchive.stopReplay(bobReplayId);
                         bobRemoved = true;
                         System.err.println(
-                                STR."### \{Instant.now()}| MERGED Bob channel | sessionId: \{bobSessionId}");
+                                "###" + Instant.now() + " | MERGED Bob channel | sessionId: " + bobSessionId);
                     }
 
                     if (!aliceRemoved && aliceImage != null && aliceImage.position() == livePosition) {
@@ -206,7 +206,7 @@ public class MultiSessionReplayReceiver {
                         aeronArchive.stopReplay(aliceReplayId);
                         aliceRemoved = true;
                         System.err.println(
-                                STR."### \{Instant.now()}| MERGED Alice channel  | sessionId: \{aliceSessionId}");
+                                "###" + Instant.now() + " | MERGED Alice channel  | sessionId: " + aliceSessionId);
                     }
                 }
 
@@ -217,7 +217,7 @@ public class MultiSessionReplayReceiver {
                             .addSessionId(replayChannel, bobSessionId = (int) bobReplayId);
                     subscription.asyncAddDestination(bobReplayChannel);
                     System.err.println(
-                            STR."### \{Instant.now()}| ADDED Bob channel | sessionId: \{bobSessionId}");
+                            "###" + Instant.now() + " | ADDED Bob channel | sessionId: " + bobSessionId);
 
                     aliceReplayId = aeronArchive
                             .startReplay(rd.recordingId(), 0, rd.stopPosition(), replayChannel, streamId);
@@ -226,7 +226,7 @@ public class MultiSessionReplayReceiver {
                     subscription.asyncAddDestination(aliceReplayChannel);
 
                     System.err.println(
-                            STR."### \{Instant.now()}| ADDED Alice channel | sessionId: \{aliceSessionId}");
+                            "###" + Instant.now() + " | ADDED Alice channel | sessionId: " + aliceSessionId);
 
                     replaysAdded = true;
                 }

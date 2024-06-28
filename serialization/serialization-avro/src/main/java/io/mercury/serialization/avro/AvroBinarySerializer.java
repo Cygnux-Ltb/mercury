@@ -19,49 +19,48 @@ import java.nio.ByteBuffer;
 @NotThreadSafe
 public final class AvroBinarySerializer<T extends SpecificRecord> implements ByteBufferSerializer<T> {
 
-	private static final Logger log = Log4j2LoggerFactory.getLogger(AvroBinarySerializer.class);
+    private static final Logger log = Log4j2LoggerFactory.getLogger(AvroBinarySerializer.class);
 
-	private final Class<T> type;
+    private final Class<T> type;
 
-	@ThreadSafeField
-	private final DatumWriter<T> writer;
+    @ThreadSafeField
+    private final DatumWriter<T> writer;
 
-	private final NonCopyingByteArrayOutputStream outputStream;
+    private final NonCopyingByteArrayOutputStream outputStream;
 
-	private BinaryEncoder encoder;
+    private BinaryEncoder encoder;
 
-	/**
-	 * Use default ByteArrayOutputStream size : 8192
-	 */
-	public AvroBinarySerializer(Class<T> type) {
-		this(type, 8192);
-	}
+    /**
+     * Use default ByteArrayOutputStream size : 8192
+     */
+    public AvroBinarySerializer(Class<T> type) {
+        this(type, 8192);
+    }
 
-	/**
-	 * 
-	 * @param type    : object type
-	 * @param bufSize : size is inner OutputStream size
-	 */
-	public AvroBinarySerializer(Class<T> type, int bufSize) {
-		this.type = type;
-		this.writer = new SpecificDatumWriter<>(type);
-		this.outputStream = new NonCopyingByteArrayOutputStream(bufSize);
-	}
+    /**
+     * @param type    : object type
+     * @param bufSize : size is inner OutputStream size
+     */
+    public AvroBinarySerializer(Class<T> type, int bufSize) {
+        this.type = type;
+        this.writer = new SpecificDatumWriter<>(type);
+        this.outputStream = new NonCopyingByteArrayOutputStream(bufSize);
+    }
 
-	@Override
-	public ByteBuffer serialization(@Nonnull T obj) {
-		try {
-			encoder = EncoderFactory.get().binaryEncoder(outputStream, encoder);
-			writer.write(obj, encoder);
-			encoder.flush();
-			ByteBuffer buffer = outputStream.asByteBuffer();
-			outputStream.reset();
-			return buffer;
-		} catch (IOException e) {
-			log.error("serialization func -> {}", e.getMessage(), e);
-			throw new RuntimeException(
-                    STR."Type -> \{type.getName()}, deserialization func has Exception -> \{e.getMessage()}");
-		}
-	}
+    @Override
+    public ByteBuffer serialization(@Nonnull T obj) {
+        try {
+            encoder = EncoderFactory.get().binaryEncoder(outputStream, encoder);
+            writer.write(obj, encoder);
+            encoder.flush();
+            ByteBuffer buffer = outputStream.asByteBuffer();
+            outputStream.reset();
+            return buffer;
+        } catch (IOException e) {
+            log.error("serialization func -> {}", e.getMessage(), e);
+            throw new RuntimeException(
+                    "Type -> " + type.getName() + ", deserialization func has Exception -> " + e.getMessage());
+        }
+    }
 
 }

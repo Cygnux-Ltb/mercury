@@ -384,12 +384,12 @@ public class Window<K, R, P> {
                                        boolean callerWaitingHint)
             throws DuplicateKeyException, OfferTimeoutException, PendingOfferAbortedException, InterruptedException {
         if (offerTimeoutMillis < 0) {
-            throw new IllegalArgumentException(STR."offerTimeoutMillis must be >= 0 [actual=\{offerTimeoutMillis}]");
+            throw new IllegalArgumentException("offerTimeoutMillis must be >= 0 [actual=" + offerTimeoutMillis + "]");
         }
 
         // does this key already exist?
         if (this.futures.containsKey(key)) {
-            throw new DuplicateKeyException(STR."The key [\{key}] already exists in the window");
+            throw new DuplicateKeyException("The key [" + key + "] already exists in the window");
         }
 
         long offerTimestamp = System.currentTimeMillis();
@@ -404,7 +404,7 @@ public class Window<K, R, P> {
                 long currentOfferTime = System.currentTimeMillis() - offerTimestamp;
                 if (currentOfferTime >= offerTimeoutMillis) {
                     throw new OfferTimeoutException(
-                            STR."Unable to accept offer within [\{offerTimeoutMillis} ms] (window full)");
+                            "Unable to accept offer within [" + offerTimeoutMillis + " ms] (window full)");
                 }
 
                 // check if slow waiting was canceled (terminate early)

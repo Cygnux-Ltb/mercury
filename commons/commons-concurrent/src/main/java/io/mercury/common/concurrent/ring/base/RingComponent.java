@@ -48,7 +48,7 @@ public abstract class RingComponent<E, I> extends RunnableComponent {
                             WaitStrategy strategy, EventFactory<E> factory,
                             EventTranslatorOneArg<E, I> translator) {
         super(requireNonEmptyElse(name,
-                STR."RingBuffer-[\{YYYYMMDD_L_HHMMSSSSS.fmt(now())}]"));
+                "RingBuf-[" + YYYYMMDD_L_HHMMSSSSS.fmt(now()) + "]"));
         nonNull(factory, "EventFactory");
         nonNull(translator, "EventTranslator");
         final ProducerType producerType = requireNonNullElse(type, MULTI);

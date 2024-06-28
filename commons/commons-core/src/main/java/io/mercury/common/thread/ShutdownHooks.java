@@ -45,7 +45,7 @@ public final class ShutdownHooks {
      */
     public static Thread addShutdownHook(Runnable hook) {
         return addShutdownHook(
-                STR."ShutdownHooksSubThread-\{randomUnsignedInt()}", hook);
+                "ShutdownHooksSubThread-" + randomUnsignedInt(), hook);
     }
 
     /**
@@ -66,7 +66,7 @@ public final class ShutdownHooks {
         addSubTask(() -> {
             try {
                 closeable.close();
-            } catch (IOException _) {
+            } catch (IOException ignored) {
             }
         });
     }

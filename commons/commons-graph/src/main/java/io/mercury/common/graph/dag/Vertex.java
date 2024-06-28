@@ -142,7 +142,7 @@ public class Vertex implements Cloneable, Serializable {
     }
 
     public String toString() {
-        return STR."Vertex{label='\{label}'}";
+        return "Vertex{label=" + label + "}";
     }
 
 }

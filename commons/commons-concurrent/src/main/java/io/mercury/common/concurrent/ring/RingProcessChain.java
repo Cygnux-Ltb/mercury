@@ -227,7 +227,7 @@ public class RingProcessChain<E, I> extends RingComponent<E, I> {
                 waitStrategy = handlersMap.stream().mapToInt(List::size).sum() > availableProcessors() ? Sleeping.get()
                         : Yielding.get();
             if (StringSupport.isNullOrEmpty(name))
-                name = STR."RingProcessChain-\{YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now())}";
+                name = "RingProcessChain-" + YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now());
             return new RingProcessChain<>(name, size, mode, producerType, eventFactory,
                     waitStrategy, eventTranslator, handlersMap);
         }

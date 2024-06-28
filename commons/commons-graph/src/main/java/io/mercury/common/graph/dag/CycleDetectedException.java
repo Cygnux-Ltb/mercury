@@ -51,7 +51,7 @@ public class CycleDetectedException extends Exception {
     }
 
     public String getMessage() {
-        return STR."\{super.getMessage()} \{cycleToString()}";
+        return super.getMessage() + " " + cycleToString();
     }
 
 }

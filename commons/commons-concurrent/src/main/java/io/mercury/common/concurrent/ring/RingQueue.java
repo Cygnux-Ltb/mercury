@@ -43,7 +43,7 @@ public class RingQueue<E> extends ScQueue<E> {
                 // 实现ThreadFactory的Lambda
                 // DaemonThreadFactory.INSTANCE,
                 // (Runnable runnable) -> newMaxPriorityThread(this.name + "-worker", runnable),
-                ofPlatform(STR."\{this.name}-worker").priority(MAX).build(),
+                ofPlatform(this.name + "-worker").priority(MAX).build(),
                 // 生产者策略, Waiting策略
                 type, waitStrategy);
         this.disruptor.handleEventsWith(this::process);
@@ -119,7 +119,7 @@ public class RingQueue<E> extends ScQueue<E> {
     public static class Builder {
 
         private final ProducerType type;
-        private String name = STR."ring-\{System.currentTimeMillis()}";
+        private String name = "ring-" + System.currentTimeMillis();
         private int size = 32;
         private StartMode mode = StartMode.auto();
         private WaitStrategy strategy = WaitStrategyOption.Sleeping.get();

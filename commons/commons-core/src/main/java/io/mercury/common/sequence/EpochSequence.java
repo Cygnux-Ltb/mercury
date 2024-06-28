@@ -137,7 +137,7 @@ public final class EpochSequence {
         }
         long t1 = System.nanoTime();
         System.out.println(System.currentTimeMillis());
-        System.out.println(STR."\{longList.size()} count time ms -> \{(t1 - t0) / 1000000}");
+        System.out.println(longList.size() + " count time ms -> " + (t1 - t0) / 1000000);
 
         System.out.println(longList.get(0));
         System.out.println(EpochSequence.parseEpochMillis(longList.get(0)));

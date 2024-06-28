@@ -208,7 +208,7 @@ public final class HexUtil {
             case 'E', 'e' -> 14;
             case 'F', 'f' -> 15;
             default -> throw new IllegalArgumentException(
-                    STR."The character [\{c}] does not represent a valid hex digit");
+                    "The character [" + c + "] does not represent a valid hex digit");
         };
     }
 
@@ -247,7 +247,7 @@ public final class HexUtil {
         // a hex string must be in increments of 2
         if ((length % 2) != 0)
             throw new IllegalArgumentException(
-                    STR."The hex string did not contain an even number of characters [actual=\{length}]");
+                    "The hex string did not contain an even number of characters [actual=" + length + "]");
 
         // convert hex string to byte array
         byte[] bytes = new byte[length / 2];

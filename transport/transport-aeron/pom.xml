@@ -13,7 +13,7 @@
 
     <properties>
         <aeron.version>1.44.1</aeron.version>
-        <byte-buddy.version>1.14.16</byte-buddy.version>
+        <byte-buddy.version>1.14.17</byte-buddy.version>
     </properties>
 
     <repositories>
