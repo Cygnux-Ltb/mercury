@@ -15,7 +15,7 @@ public final class IntRecorder {
 	private final MutableIntSet intSet;
 
 	public IntRecorder(Capacity capacity) {
-		this.intCounter = MutableMaps.newIntIntHashMap(capacity.value());
+		this.intCounter = MutableMaps.newIntIntMap(capacity.size());
 		this.intSet = MutableSets.newIntHashSet(capacity);
 	}
 

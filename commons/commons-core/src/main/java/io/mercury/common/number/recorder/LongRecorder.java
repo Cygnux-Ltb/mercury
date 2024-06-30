@@ -15,7 +15,7 @@ public final class LongRecorder {
 	private final MutableLongSet longSet;
 
 	public LongRecorder(Capacity capacity) {
-		this.longCounter = MutableMaps.newLongIntHashMap(capacity.value());
+		this.longCounter = MutableMaps.newLongIntMap(capacity.size());
 		this.longSet = MutableSets.newLongHashSet(capacity);
 	}
 

@@ -1,7 +1,6 @@
 package io.mercury.common.collections;
 
-import java.util.Comparator;
-
+import io.mercury.common.util.ArrayUtil;
 import org.eclipse.collections.api.multimap.list.MutableListMultimap;
 import org.eclipse.collections.api.multimap.set.MutableSetMultimap;
 import org.eclipse.collections.api.multimap.sortedset.MutableSortedSetMultimap;
@@ -10,12 +9,11 @@ import org.eclipse.collections.impl.multimap.list.FastListMultimap;
 import org.eclipse.collections.impl.multimap.set.UnifiedSetMultimap;
 import org.eclipse.collections.impl.multimap.set.sorted.TreeSortedSetMultimap;
 
-import io.mercury.common.util.ArrayUtil;
+import java.util.Comparator;
 
-public final class Multimaps {
+public enum Multimaps {
 
-    private Multimaps() {
-    }
+    ;
 
     /**
      * @param <K> K type

@@ -36,16 +36,17 @@ public abstract class TemporalMap<K extends Temporal, V, T extends TemporalMap<K
      */
     private final MutableLongObjectMap<V> savedMap;
 
-    public TemporalMap(ToLongFunction<K> keyFunc, Function<K, K> nextKeyFunc, BiPredicate<K, K> hasNextKey) {
-        this(keyFunc, nextKeyFunc, hasNextKey, Capacity.L07_SIZE);
+    public TemporalMap(ToLongFunction<K> keyFunc, Function<K, K> nextKeyFunc,
+                       BiPredicate<K, K> hasNextKey) {
+        this(keyFunc, nextKeyFunc, hasNextKey, Capacity.L07_128);
     }
 
-    public TemporalMap(ToLongFunction<K> keyFunc, Function<K, K> nextKeyFunc, BiPredicate<K, K> hasNextKey,
-                       Capacity capacity) {
+    public TemporalMap(ToLongFunction<K> keyFunc, Function<K, K> nextKeyFunc,
+                       BiPredicate<K, K> hasNextKey, Capacity capacity) {
         this.keyFunc = keyFunc;
         this.nextKeyFunc = nextKeyFunc;
         this.hasNextKey = hasNextKey;
-        this.savedMap = MutableMaps.newLongObjectHashMap(capacity.value());
+        this.savedMap = MutableMaps.newLongObjectMap(capacity.size());
     }
 
     protected abstract T self();

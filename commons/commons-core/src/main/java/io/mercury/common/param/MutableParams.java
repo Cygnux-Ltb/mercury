@@ -22,17 +22,17 @@ import java.util.function.Supplier;
 
 public final class MutableParams<K extends ParamKey> implements Params<K> {
 
-    private final MutableIntBooleanMap booleanParams = MutableMaps.newIntBooleanHashMap();
+    private final MutableIntBooleanMap booleanParams = MutableMaps.newIntBooleanMap();
 
-    private final MutableIntIntMap intParams = MutableMaps.newIntIntHashMap();
+    private final MutableIntIntMap intParams = MutableMaps.newIntIntMap();
 
-    private final MutableIntLongMap longParams = MutableMaps.newIntLongHashMap();
+    private final MutableIntLongMap longParams = MutableMaps.newIntLongMap();
 
-    private final MutableIntDoubleMap doubleParams = MutableMaps.newIntDoubleHashMap();
+    private final MutableIntDoubleMap doubleParams = MutableMaps.newIntDoubleMap();
 
-    private final MutableIntObjectMap<String> stringParams = MutableMaps.newIntObjectHashMap();
+    private final MutableIntObjectMap<String> stringParams = MutableMaps.newIntObjectMap();
 
-    private final MutableIntObjectMap<Temporal> temporalParams = MutableMaps.newIntObjectHashMap();
+    private final MutableIntObjectMap<Temporal> temporalParams = MutableMaps.newIntObjectMap();
 
     private final MutableSet<K> keys = MutableSets.newUnifiedSet();
 

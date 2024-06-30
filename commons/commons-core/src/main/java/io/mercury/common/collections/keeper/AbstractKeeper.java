@@ -8,7 +8,7 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
-import static io.mercury.common.collections.MutableMaps.newConcurrentHashMap;
+import static io.mercury.common.collections.MutableMaps.newConcurrentMap;
 
 /**
  * @param <K>
@@ -21,11 +21,11 @@ public abstract class AbstractKeeper<K, V> implements Keeper<K, V> {
     protected final ConcurrentMutableMap<K, V> savedMap;
 
     protected AbstractKeeper() {
-        this(Capacity.L06_SIZE);
+        this(Capacity.L06_64);
     }
 
     protected AbstractKeeper(Capacity capacity) {
-        this.savedMap = newConcurrentHashMap(capacity.value());
+        this.savedMap = newConcurrentMap(capacity.size());
     }
 
     @Nonnull

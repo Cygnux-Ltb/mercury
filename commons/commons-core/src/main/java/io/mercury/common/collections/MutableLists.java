@@ -17,14 +17,11 @@ import org.eclipse.collections.impl.list.mutable.primitive.LongArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-public final class MutableLists {
+public enum MutableLists {
 
-    private MutableLists() {
-    }
+    ;
 
-    /*
-     * ******************** primitive list ********************
-     */
+    // ******************** primitive list ********************
 
     /**
      * @return MutableByteList

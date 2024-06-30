@@ -1,4 +1,4 @@
-package io.mercury.common.cfg;
+package io.mercury.common.config;
 
 public class ConfigFileKeeper {
 

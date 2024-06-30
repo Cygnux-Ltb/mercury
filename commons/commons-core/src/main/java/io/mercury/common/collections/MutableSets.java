@@ -20,15 +20,14 @@ import java.util.Iterator;
 
 import static io.mercury.common.collections.Capacity.checkAndGet;
 
-public final class MutableSets {
+public enum MutableSets {
 
-    private MutableSets() {
-    }
+    ;
 
-    /*
-     * primitive int set
-     *
-     * @return
+    // ******************** primitive int set ********************
+
+    /**
+     * @return MutableIntSet
      */
     public static MutableIntSet newIntHashSet() {
         return new IntHashSet();

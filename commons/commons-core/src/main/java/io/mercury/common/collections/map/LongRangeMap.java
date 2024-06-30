@@ -26,14 +26,14 @@ public final class LongRangeMap<V> {
      * Use Capacity.L06_SIZE
      */
     public LongRangeMap() {
-        this(Capacity.L06_SIZE);
+        this(Capacity.L06_64);
     }
 
     /**
      * @param capacity Capacity
      */
     public LongRangeMap(Capacity capacity) {
-        this.savedMap = MutableMaps.newLongObjectHashMap(capacity.value());
+        this.savedMap = MutableMaps.newLongObjectMap(capacity.size());
         this.savedKey = MutableSets.newLongHashSet(capacity);
     }
 
@@ -114,7 +114,7 @@ public final class LongRangeMap<V> {
 //		}
 //		return longHashSet;
         return savedKey.select(key -> key >= startPoint && key <= endPoint,
-                MutableSets.newLongHashSet(Capacity.L06_SIZE));
+                MutableSets.newLongHashSet(Capacity.L06_64));
     }
 
     private void operatingSelect(MutableLongSet selectKey, LongProcedure func) {
@@ -125,7 +125,7 @@ public final class LongRangeMap<V> {
     public static void main(String[] args) {
 
         long startNano = System.nanoTime();
-        LongRangeMap<String> longRangeMap = new LongRangeMap<>(Capacity.L25_SIZE);
+        LongRangeMap<String> longRangeMap = new LongRangeMap<>(Capacity.L25_33554432);
         for (long l = 0L; l < 10000L; l++) {
             longRangeMap.put(l, "l == " + l);
         }

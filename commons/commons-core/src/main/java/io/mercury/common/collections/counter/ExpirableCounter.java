@@ -11,7 +11,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import java.time.Duration;
 
 import static io.mercury.common.collections.MutableLists.newLongArrayList;
-import static io.mercury.common.collections.MutableMaps.newLongLongHashMap;
+import static io.mercury.common.collections.MutableMaps.newLongLongMap;
 
 /**
  * 具备过期特性的累加计数器, 可以清除某个特定delta<br>
@@ -45,7 +45,7 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
      * @param expireTime Duration
      */
     public ExpirableCounter(Duration expireTime) {
-        this(expireTime, Capacity.L12_SIZE);
+        this(expireTime, Capacity.L12_4096);
     }
 
     /**
@@ -54,9 +54,9 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
      */
     public ExpirableCounter(Duration expireTime, Capacity capacity) {
         this.expireNanos = expireTime.toNanos();
-        this.timeToTag = newLongLongHashMap(capacity.value());
-        this.tagToDelta = newLongLongHashMap(capacity.value());
-        this.effectiveTimes = newLongArrayList(capacity.value());
+        this.timeToTag = newLongLongMap(capacity.size());
+        this.tagToDelta = newLongLongMap(capacity.size());
+        this.effectiveTimes = newLongArrayList(capacity.size());
     }
 
     /**
@@ -146,7 +146,7 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
 
     public static void main(String[] args) {
 
-        ExpirableCounter counter = new ExpirableCounter(Duration.ofMillis(10000), Capacity.L10_SIZE);
+        ExpirableCounter counter = new ExpirableCounter(Duration.ofMillis(10000), Capacity.L10_1024);
 
         for (int i = 0; i < 20; i++) {
             counter.add(i, 10);
@@ -158,7 +158,7 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
             SleepSupport.sleep(2000);
         }
 
-        MutableLongLongMap map = MutableMaps.newLongLongHashMap(Capacity.L10_SIZE.value());
+        MutableLongLongMap map = MutableMaps.newLongLongMap(Capacity.L10_1024.size());
         map.put(1, 10);
         System.out.println(-19 - 15);
 

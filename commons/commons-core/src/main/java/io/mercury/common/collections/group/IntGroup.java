@@ -8,8 +8,6 @@ import org.eclipse.collections.api.set.primitive.IntSet;
 import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 
-import static io.mercury.common.collections.ImmutableMaps.getIntObjectMapFactory;
-
 /**
  * @param <V>
  * @author yellow013
@@ -25,7 +23,7 @@ public abstract class IntGroup<V> {
         if (map == null)
             throw new IllegalArgumentException("supplier result is null");
         this.keys = map.keySet();
-        this.savedMap = getIntObjectMapFactory().withAll(map);
+        this.savedMap = map.toImmutable();
     }
 
     @Nonnull

@@ -2,8 +2,9 @@ package io.mercury.common.collections;
 
 import io.mercury.common.util.BitFormatter;
 import io.mercury.common.util.BitOperator;
-import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
-import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
+import org.eclipse.collections.api.map.primitive.ImmutableIntObjectMap;
+
+import static io.mercury.common.collections.MutableMaps.newIntObjectMap;
 
 public enum Capacity {
 
@@ -12,219 +13,215 @@ public enum Capacity {
      * Size : 1 << 2 == 4
      * </pre>
      */
-    L02_SIZE(1 << 2),
+    L02_4(1 << 2),
 
     /**
      * <pre>
      * Size : 1 << 3 == 8
      * </pre>
      */
-    L03_SIZE(1 << 3),
+    L03_8(1 << 3),
 
     /**
      * <pre>
      * Size : 1 << 4 == 16
      * </pre>
      */
-    L04_SIZE(1 << 4),
+    L04_16(1 << 4),
 
     /**
      * <pre>
      * Size : 1 << 5 == 32
      * </pre>
      */
-    L05_SIZE(1 << 5),
+    L05_32(1 << 5),
 
     /**
      * <pre>
      * Size : 1 << 6 == 64
      * </pre>
      */
-    L06_SIZE(1 << 6),
+    L06_64(1 << 6),
 
     /**
      * <pre>
      * Size : 1 << 7 == 128
      * </pre>
      */
-    L07_SIZE(1 << 7),
+    L07_128(1 << 7),
 
     /**
      * <pre>
      * Size : 1 << 8 == 256
      * </pre>
      */
-    L08_SIZE(1 << 8),
+    L08_256(1 << 8),
 
     /**
      * <pre>
      * Size : 1 << 9 == 512
      * </pre>
      */
-    L09_SIZE(1 << 9),
+    L09_512(1 << 9),
 
     /**
      * <pre>
      * Size : 1 << 10 == 1024
      * </pre>
      */
-    L10_SIZE(1 << 10),
+    L10_1024(1 << 10),
 
     /**
      * <pre>
      * Size : 1 << 11 == 2048
      * </pre>
      */
-    L11_SIZE(1 << 11),
+    L11_2048(1 << 11),
 
     /**
      * <pre>
      * Size : 1 << 12 == 4096
      * </pre>
      */
-    L12_SIZE(1 << 12),
+    L12_4096(1 << 12),
 
     /**
      * <pre>
      * Size : 1 << 13 == 8192
      * </pre>
      */
-    L13_SIZE(1 << 13),
+    L13_8192(1 << 13),
 
     /**
      * <pre>
      * Size : 1 << 14 == 16384
      * </pre>
      */
-    L14_SIZE(1 << 14),
+    L14_16384(1 << 14),
 
     /**
      * <pre>
      * Size : 1 << 15 == 32768
      * </pre>
      */
-    L15_SIZE(1 << 15),
+    L15_32768(1 << 15),
 
     /**
      * <pre>
      * Size : 1 << 16 == 65536
      * </pre>
      */
-    L16_SIZE(1 << 16),
+    L16_65536(1 << 16),
 
     /**
      * <pre>
      * Size : 1 << 17 == 131072
      * </pre>
      */
-    L17_SIZE(1 << 17),
+    L17_131072(1 << 17),
 
     /**
      * <pre>
      * Size : 1 << 18 == 262144
      * </pre>
      */
-    L18_SIZE(1 << 18),
+    L18_262144(1 << 18),
 
     /**
      * <pre>
      * Size : 1 << 19 == 524288
      * </pre>
      */
-    L19_SIZE(1 << 19),
+    L19_524288(1 << 19),
 
     /**
      * <pre>
      * Size : 1 << 20 == 1048576
      * </pre>
      */
-    L20_SIZE(1 << 20),
+    L20_1048576(1 << 20),
 
     /**
      * <pre>
      * Size : 1 << 21 == 2097152
      * </pre>
      */
-    L21_SIZE(1 << 21),
+    L21_2097152(1 << 21),
 
     /**
      * <pre>
      * Size : 1 << 22 == 4194304
      * </pre>
      */
-    L22_SIZE(1 << 22),
+    L22_4194304(1 << 22),
 
     /**
      * <pre>
      * Size : 1 << 23 == 8388608
      * </pre>
      */
-    L23_SIZE(1 << 23),
+    L23_8388608(1 << 23),
 
     /**
      * <pre>
      * Size : 1 << 24 == 16777216
      * </pre>
      */
-    L24_SIZE(1 << 24),
+    L24_16777216(1 << 24),
 
     /**
      * <pre>
      * Size : 1 << 25 == 33554432
      * </pre>
      */
-    L25_SIZE(1 << 25),
+    L25_33554432(1 << 25),
 
     /**
      * <pre>
      * Size : 1 << 26 == 67108864
      * </pre>
      */
-    L26_SIZE(1 << 26),
+    L26_67108864(1 << 26),
 
     /**
      * <pre>
      * Size : 1 << 27 == 134217728
      * </pre>
      */
-    L27_SIZE(1 << 27),
+    L27_134217728(1 << 27),
 
     /**
      * <pre>
      * Size : 1 << 28 == 268435456
      * </pre>
      */
-    L28_SIZE(1 << 28),
+    L28_268435456(1 << 28),
 
     /**
      * <pre>
      * Size : 1 << 29 == 536870912
      * </pre>
      */
-    L29_SIZE(1 << 29),
+    L29_536870912(1 << 29),
 
     /**
      * <pre>
      * Size : 1 << 30 == 1073741824
      * </pre>
      */
-    L30_SIZE(1 << 30),
+    L30_1073741824(1 << 30),
 
     ;
 
     public static final int DEFAULT_SIZE = 16;
 
-    private static final MutableIntObjectMap<Capacity> ValueMap = new IntObjectHashMap<>();
+    private static final ImmutableIntObjectMap<Capacity> VALUE_MAP =
+            newIntObjectMap(Capacity::size, Capacity.values()).toImmutable();
 
-    static {
-        for (Capacity capacity : Capacity.values())
-            ValueMap.put(capacity.value, capacity);
-    }
+    private final int size;
 
-    private final int value;
-
-    Capacity(int value) {
-        this.value = value;
+    Capacity(int size) {
+        this.size = size;
     }
 
     /**
@@ -232,29 +229,23 @@ public enum Capacity {
      * @return int
      */
     public static int checkAndGet(Capacity capacity) {
-        return capacity == null ? Capacity.DEFAULT_SIZE : capacity.value();
+        return capacity == null ? Capacity.DEFAULT_SIZE : capacity.size();
     }
 
     /**
      * @return int
      */
-    public int value() {
-        return value;
+    public int size() {
+        return size;
     }
 
     /**
      * @return min size 16
      */
-    public Capacity half() {
-        return get(value >> 1);
+    public Capacity halfSize() {
+        return get(size >> 1);
     }
 
-    /**
-     * @return min size 16
-     */
-    public Capacity quarter() {
-        return get(value >> 2);
-    }
 
     /**
      * @param value int
@@ -262,7 +253,7 @@ public enum Capacity {
      */
     public Capacity get(int value) {
         int pow2 = BitOperator.minPow2(value);
-        return pow2 >= DEFAULT_SIZE ? Capacity.L04_SIZE : ValueMap.get(pow2);
+        return pow2 >= DEFAULT_SIZE ? Capacity.L04_16 : VALUE_MAP.get(pow2);
     }
 
     public static void main(String[] args) {
@@ -272,7 +263,6 @@ public enum Capacity {
         System.out.println(1 << 31);
         System.out.println(BitFormatter.intBinaryFormat(1 << 31));
         System.out.println(BitFormatter.intBinaryFormat(Integer.MIN_VALUE));
-        System.out.println(Capacity.L09_SIZE.quarter());
 
     }
 
