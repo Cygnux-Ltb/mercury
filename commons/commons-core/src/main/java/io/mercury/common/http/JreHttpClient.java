@@ -15,8 +15,6 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 
-import static java.net.http.HttpRequest.newBuilder;
-
 public abstract class JreHttpClient {
 
     private static final Logger log = Log4j2LoggerFactory.getLogger(JreHttpClient.class);
@@ -43,9 +41,7 @@ public abstract class JreHttpClient {
 
     public static HttpResponse<String> GET(@Nonnull URI uri)
             throws IOException, InterruptedException {
-        return GET(newBuilder()
-                .GET()
-                .uri(uri)
+        return GET(HttpRequest.newBuilder().uri(uri).GET()
                 .headers(HttpHeaderName.CONTENT_TYPE.value(), MimeType.APPLICATION_JSON_UTF8)
                 .build());
     }
@@ -59,8 +55,7 @@ public abstract class JreHttpClient {
     public static HttpResponse<String> POST(@Nonnull URI uri, String body)
             throws IOException, InterruptedException {
         return HC.send(// POST request
-                newBuilder()
-                        .uri(uri)
+                HttpRequest.newBuilder().uri(uri)
                         .POST(HttpRequest.BodyPublishers.ofString(body))
                         .header(HttpHeaderName.CONTENT_TYPE.value(), MimeType.APPLICATION_JSON_UTF8)
                         .build(),
@@ -71,8 +66,7 @@ public abstract class JreHttpClient {
     public static HttpResponse<String> PUT(@Nonnull URI uri, String body)
             throws IOException, InterruptedException {
         return HC.send(// PUT request
-                newBuilder()
-                        .uri(uri)
+                HttpRequest.newBuilder().uri(uri)
                         .PUT(HttpRequest.BodyPublishers.ofString(body))
                         .header(HttpHeaderName.CONTENT_TYPE.value(), MimeType.APPLICATION_JSON_UTF8)
                         .build(),
@@ -83,7 +77,7 @@ public abstract class JreHttpClient {
     public static HttpResponse<String> DELETE(URI uri)
             throws IOException, InterruptedException {
         return HC.send(// DELETE request
-                newBuilder().DELETE().uri(uri).build(),
+                HttpRequest.newBuilder().uri(uri).DELETE().build(),
                 BodyHandlers.ofString());
     }
 

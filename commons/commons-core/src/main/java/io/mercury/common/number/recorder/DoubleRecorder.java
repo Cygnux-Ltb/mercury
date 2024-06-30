@@ -6,7 +6,7 @@ import org.eclipse.collections.api.set.primitive.MutableDoubleSet;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
-import static io.mercury.common.collections.MutableMaps.newDoubleIntHashMap;
+import static io.mercury.common.collections.MutableMaps.newDoubleIntMap;
 import static io.mercury.common.collections.MutableSets.newDoubleHashSet;
 
 /**
@@ -24,7 +24,7 @@ public final class DoubleRecorder {
     private final MutableDoubleSet doubleSet;
 
     public DoubleRecorder(Capacity capacity) {
-        this.doubleCounter = newDoubleIntHashMap(capacity.value());
+        this.doubleCounter = newDoubleIntMap(capacity.size());
         this.doubleSet = newDoubleHashSet(capacity);
     }
 

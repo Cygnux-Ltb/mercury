@@ -1,6 +1,6 @@
 package io.mercury.transport.rmq.cfg;
 
-import io.mercury.common.cfg.ConfigOption;
+import io.mercury.common.config.ConfigOption;
 
 public enum RmqCfgOption implements ConfigOption {
 

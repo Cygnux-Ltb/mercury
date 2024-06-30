@@ -2,7 +2,7 @@ package io.mercury.transport.rmq.cfg;
 
 import com.rabbitmq.client.ConnectionFactory;
 import com.typesafe.config.Config;
-import io.mercury.common.cfg.ConfigWrapper;
+import io.mercury.common.config.ConfigWrapper;
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.util.StringSupport;
 import io.mercury.serialization.json.JsonWrapper;

@@ -1,11 +1,6 @@
 package io.mercury.common.collections;
 
 import io.mercury.common.util.ArrayUtil;
-import org.eclipse.collections.api.factory.set.ImmutableSetFactory;
-import org.eclipse.collections.api.factory.set.primitive.ImmutableDoubleSetFactory;
-import org.eclipse.collections.api.factory.set.primitive.ImmutableIntSetFactory;
-import org.eclipse.collections.api.factory.set.primitive.ImmutableLongSetFactory;
-import org.eclipse.collections.api.factory.set.sorted.ImmutableSortedSetFactory;
 import org.eclipse.collections.api.set.ImmutableSet;
 import org.eclipse.collections.api.set.primitive.ImmutableDoubleSet;
 import org.eclipse.collections.api.set.primitive.ImmutableIntSet;
@@ -20,59 +15,23 @@ import org.eclipse.collections.impl.set.sorted.immutable.ImmutableSortedSetFacto
 import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
-public final class ImmutableSets {
+public enum ImmutableSets {
 
-    private ImmutableSets() {
-    }
-
-    /**
-     * @return ImmutableSetFactory Instance
-     */
-    public static ImmutableSetFactory getSetFactory() {
-        return ImmutableSetFactoryImpl.INSTANCE;
-    }
+    INSTANCE;
 
     /**
      * @return E... array
      */
     @SafeVarargs
-    public static <E> ImmutableSet<E> fromStream(@Nonnull E... array) {
-        return fromStream(Stream.of(array));
+    public static <E> ImmutableSet<E> from(@Nonnull E... array) {
+        return from(Stream.of(array));
     }
 
     /**
      * @return ImmutableSet<T> set
      */
-    public static <E> ImmutableSet<E> fromStream(@Nonnull Stream<E> stream) {
+    public static <E> ImmutableSet<E> from(@Nonnull Stream<E> stream) {
         return ImmutableSetFactoryImpl.INSTANCE.fromStream(stream);
-    }
-
-    /**
-     * @return ImmutableSortedSetFactory Instance
-     */
-    public static ImmutableSortedSetFactory getSortedSetFactory() {
-        return ImmutableSortedSetFactoryImpl.INSTANCE;
-    }
-
-    /**
-     * @return ImmutableIntSetFactory Instance
-     */
-    public static ImmutableIntSetFactory getIntSetFactory() {
-        return ImmutableIntSetFactoryImpl.INSTANCE;
-    }
-
-    /**
-     * @return ImmutableLongSetFactory Instance
-     */
-    public static ImmutableLongSetFactory getLongSetFactory() {
-        return ImmutableLongSetFactoryImpl.INSTANCE;
-    }
-
-    /**
-     * @return ImmutableDoubleSetFactory Instance
-     */
-    public static ImmutableDoubleSetFactory getDoubleSetFactory() {
-        return ImmutableDoubleSetFactoryImpl.INSTANCE;
     }
 
     /**

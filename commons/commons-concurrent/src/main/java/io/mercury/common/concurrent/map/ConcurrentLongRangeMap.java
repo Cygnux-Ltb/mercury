@@ -26,11 +26,11 @@ public final class ConcurrentLongRangeMap<V> {
 	private final MutableLongSet savedKey;
 
 	public ConcurrentLongRangeMap() {
-		this(Capacity.L06_SIZE);
+		this(Capacity.L06_64);
 	}
 
 	public ConcurrentLongRangeMap(Capacity capacity) {
-		this.savedMap = MutableMaps.newLongObjectHashMap(capacity.value());
+		this.savedMap = MutableMaps.newLongObjectMap(capacity.size());
 		this.savedKey = MutableSets.newLongHashSet(capacity);
 
 	}
@@ -89,7 +89,7 @@ public final class ConcurrentLongRangeMap<V> {
 //				longHashSet.add(next);
 //		}
 //		return longHashSet;
-		return savedKey.select(key -> key >= startPoint && key <= endPoint, MutableSets.newLongHashSet(Capacity.L06_SIZE));
+		return savedKey.select(key -> key >= startPoint && key <= endPoint, MutableSets.newLongHashSet(Capacity.L06_64));
 	}
 
 	private void operatingSelect(MutableLongSet selectKey, LongProcedure func) {
@@ -100,7 +100,7 @@ public final class ConcurrentLongRangeMap<V> {
 	public static void main(String[] args) {
 
 		long startNano = System.nanoTime();
-		ConcurrentLongRangeMap<String> longRangeMap = new ConcurrentLongRangeMap<>(Capacity.L24_SIZE);
+		ConcurrentLongRangeMap<String> longRangeMap = new ConcurrentLongRangeMap<>(Capacity.L24_16777216);
 		for (long l = 0L; l < 10000L; l++) {
 			longRangeMap.put(l, "l == " + l);
 		}

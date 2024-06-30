@@ -78,7 +78,7 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
             log.warn("ZmqPublisher -> [{}] already closed", name);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         try (ZmqPublisher<String> publisher = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(2)
                 .newPublisherWithString("test")) {
             Random random = new Random();
@@ -86,9 +86,7 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
                 publisher.publish(String.valueOf(random.nextInt()));
                 SleepSupport.sleep(1000);
             }
-        } catch (Exception _) {
         }
-
     }
 
 }

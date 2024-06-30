@@ -2,8 +2,10 @@ package io.mercury.common.collections;
 
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.util.ArrayUtil;
+import org.eclipse.collections.api.collection.ImmutableCollection;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -20,7 +22,7 @@ public final class CollectionUtil {
      * @param collection Collection<E>
      * @return boolean
      */
-    public static <E> boolean onlyOneElement(Collection<E> collection) {
+    public static <E> boolean onlyOneElement(@Nullable Collection<E> collection) {
         return collection != null && collection.size() == 1;
     }
 
@@ -29,8 +31,44 @@ public final class CollectionUtil {
      * @param collection Collection<E>
      * @return boolean
      */
-    public static <E> boolean notEmpty(Collection<E> collection) {
+    public static <E> boolean onlyOneElement(@Nullable ImmutableCollection<E> collection) {
+        return collection != null && collection.size() == 1;
+    }
+
+    /**
+     * @param <E>        E
+     * @param collection ImmutableList<E>
+     * @return boolean
+     */
+    public static <E> boolean isNullOrEmpty(@Nullable Collection<E> collection) {
+        return collection == null || collection.isEmpty();
+    }
+
+    /**
+     * @param <E>        E
+     * @param collection ImmutableList<E>
+     * @return boolean
+     */
+    public static <E> boolean isNullOrEmpty(@Nullable ImmutableCollection<E> collection) {
+        return collection == null || collection.isEmpty();
+    }
+
+    /**
+     * @param <E>        type
+     * @param collection Collection<E>
+     * @return boolean
+     */
+    public static <E> boolean notEmpty(@Nullable Collection<E> collection) {
         return collection != null && !collection.isEmpty();
+    }
+
+    /**
+     * @param <E>        E
+     * @param collection ImmutableList<E>
+     * @return boolean
+     */
+    public static <E> boolean notEmpty(@Nullable ImmutableCollection<E> collection) {
+        return collection != null && collection.notEmpty();
     }
 
     /**

@@ -19,7 +19,7 @@ import io.mercury.common.collections.MutableMaps;
 public final class DeduplicateCounterGroup<T extends Comparable<T>> {
 
     private final DeduplicateCounter<T> counter = new DeduplicateCounter<>();
-    private final MutableIntObjectMap<DeduplicateCounter<T>> groupCounterMap = MutableMaps.newIntObjectHashMap();
+    private final MutableIntObjectMap<DeduplicateCounter<T>> groupCounterMap = MutableMaps.newIntObjectMap();
 
     /**
      * @return DeduplicateCounter<T>

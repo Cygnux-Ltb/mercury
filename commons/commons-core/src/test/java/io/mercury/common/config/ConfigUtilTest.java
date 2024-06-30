@@ -2,7 +2,6 @@ package io.mercury.common.config;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import io.mercury.common.cfg.ConfigUtil;
 import org.junit.Test;
 
 import java.io.File;
