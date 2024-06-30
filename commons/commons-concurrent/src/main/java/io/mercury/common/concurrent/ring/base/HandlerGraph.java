@@ -5,6 +5,7 @@ import com.lmax.disruptor.ExceptionHandler;
 import com.lmax.disruptor.WorkHandler;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.EventHandlerGroup;
+import io.mercury.common.collections.MutableMaps;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
@@ -16,7 +17,7 @@ import java.util.List;
 
 import static io.mercury.common.collections.CollectionUtil.toArray;
 import static io.mercury.common.collections.MutableLists.newFastList;
-import static io.mercury.common.collections.MutableMaps.newIntObjectHashMap;
+import static io.mercury.common.collections.MutableMaps.newIntObjectMap;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNullElse;
 
@@ -270,9 +271,9 @@ public final class HandlerGraph<E> {
 
     public static class ComplexHandlerWizard<E> extends Wizard<E, ComplexHandlerWizard<E>> {
 
-        private final MutableIntObjectMap<List<EventHandler<E>>> sortedEventHandlers = newIntObjectHashMap();
+        private final MutableIntObjectMap<List<EventHandler<E>>> sortedEventHandlers = MutableMaps.newIntObjectMap();
 
-        private final MutableIntObjectMap<List<WorkHandler<E>>> sortedWorkHandlers = newIntObjectHashMap();
+        private final MutableIntObjectMap<List<WorkHandler<E>>> sortedWorkHandlers = MutableMaps.newIntObjectMap();
 
         private int index = 0;
 

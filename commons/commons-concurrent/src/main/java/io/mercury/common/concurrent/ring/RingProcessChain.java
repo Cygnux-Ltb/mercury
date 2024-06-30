@@ -150,7 +150,7 @@ public class RingProcessChain<E, I> extends RingComponent<E, I> {
         private final ProducerType producerType;
         private final EventFactory<E> eventFactory;
         private final EventTranslatorOneArg<E, I> eventTranslator;
-        private final MutableIntObjectMap<List<EventHandler<E>>> handlersMap = MutableMaps.newIntObjectHashMap();
+        private final MutableIntObjectMap<List<EventHandler<E>>> handlersMap = MutableMaps.newIntObjectMap();
 
         private Builder(ProducerType producerType, EventFactory<E> eventFactory,
                         EventTranslatorOneArg<E, I> eventTranslator) {
