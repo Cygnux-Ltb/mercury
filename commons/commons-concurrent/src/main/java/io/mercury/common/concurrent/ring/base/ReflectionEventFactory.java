@@ -14,7 +14,7 @@ import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
  * @param <T>
  * @author yellow013 <br>
  * <br>
- * @implNote 通过反射实现EventFactory
+ * @implNote 通过反射实现[EventFactory]
  */
 public final class ReflectionEventFactory<T> implements EventFactory<T> {
 

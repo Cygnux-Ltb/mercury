@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
 import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
+import static io.mercury.common.thread.ThreadSupport.startNewMaxPriorityThread;
 import static java.time.LocalDateTime.now;
 
 @ThreadSafe
@@ -111,13 +112,16 @@ public abstract class RunnableComponent {
         if (mode.immediately)
             start();
         else if (mode.delayMillis > 0)
-            ThreadSupport.startNewMaxPriorityThread(name + "-worker", () -> {
+            // 使用独立线程启动
+            startNewMaxPriorityThread(name + "-worker", () -> {
+                // 休眠指定延迟时间
                 SleepSupport.sleep(mode.delayMillis);
                 start();
             });
         else
             log.warn("{}, Start mode is [Manual], waiting call start...", name);
     }
+
 
     /**
      * @author yellow013

@@ -1,7 +1,7 @@
 package io.mercury.common.concurrent.queue;
 
 import io.mercury.common.annotation.thread.LockHeld;
-import io.mercury.common.collections.queue.LoadContainer;
+import io.mercury.common.collections.queue.EventContainer;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import org.slf4j.Logger;
 
@@ -16,7 +16,7 @@ public class PreloadingQueue<E> implements McQueue<E> {
 
     private static final Logger log = Log4j2LoggerFactory.getLogger(PreloadingQueue.class);
 
-    private final LoadContainer<E>[] containers;
+    private final EventContainer<E>[] containers;
 
     private final int size;
     private final AtomicInteger count = new AtomicInteger();
@@ -34,9 +34,9 @@ public class PreloadingQueue<E> implements McQueue<E> {
         if (size <= 0) {
             throw new IllegalArgumentException("size is too big.");
         }
-        this.containers = new LoadContainer[size];
+        this.containers = new EventContainer[size];
         for (int i = 0; i < size; i++)
-            containers[i] = new LoadContainer<>();
+            containers[i] = new EventContainer<>();
         this.size = size;
         this.lock = new ReentrantLock();
         this.notEmpty = lock.newCondition();

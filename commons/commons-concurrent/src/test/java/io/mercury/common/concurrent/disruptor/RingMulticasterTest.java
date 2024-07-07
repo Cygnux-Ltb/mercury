@@ -18,7 +18,7 @@ public class RingMulticasterTest {
 		LongAdder p0 = new LongAdder();
 		LongAdder p1 = new LongAdder();
 		LongAdder p2 = new LongAdder();
-		RingMulticaster<LongEvent, Long> multicaster = RingMulticaster.withSingleProducer(LongEvent.class, LongEvent::set).addHandler((event, sequence, endOfBatch) -> {
+		RingMulticaster<LongEvent, Long> multicaster = RingMulticaster.singleProducer(LongEvent.class, LongEvent::set).addHandler((event, sequence, endOfBatch) -> {
 			System.out.println("sequence -> " + sequence + " p0 - " + event.get() + " : " + endOfBatch);
 			p0.increment();
 		}).addHandler((event, sequence, endOfBatch) -> {

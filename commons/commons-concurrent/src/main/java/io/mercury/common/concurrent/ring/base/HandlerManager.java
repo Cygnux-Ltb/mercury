@@ -17,13 +17,17 @@ import java.util.List;
 
 import static io.mercury.common.collections.CollectionUtil.toArray;
 import static io.mercury.common.collections.MutableLists.newFastList;
-import static io.mercury.common.collections.MutableMaps.newIntObjectMap;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNullElse;
 
-public final class HandlerGraph<E> {
+/**
+ * [事情处理器] 管理器
+ *
+ * @param <E> 事件类型
+ */
+public final class HandlerManager<E> {
 
-    private static final Logger log = Log4j2LoggerFactory.getLogger(HandlerGraph.class);
+    private static final Logger log = Log4j2LoggerFactory.getLogger(HandlerManager.class);
 
     private final HandleType type;
 
@@ -37,12 +41,12 @@ public final class HandlerGraph<E> {
 
     private final MutableIntObjectMap<List<WorkHandler<E>>> sortedWorkHandlers;
 
-    private HandlerGraph(@Nonnull HandleType type,
-                         @Nullable ExceptionHandler<E> exceptionHandler,
-                         @Nullable List<EventHandler<E>> eventHandlers,
-                         @Nullable List<WorkHandler<E>> workHandlers,
-                         @Nullable MutableIntObjectMap<List<EventHandler<E>>> sortedEventHandlers,
-                         @Nullable MutableIntObjectMap<List<WorkHandler<E>>> sortedWorkHandlers) {
+    private HandlerManager(@Nonnull HandleType type,
+                           @Nullable ExceptionHandler<E> exceptionHandler,
+                           @Nullable List<EventHandler<E>> eventHandlers,
+                           @Nullable List<WorkHandler<E>> workHandlers,
+                           @Nullable MutableIntObjectMap<List<EventHandler<E>>> sortedEventHandlers,
+                           @Nullable MutableIntObjectMap<List<WorkHandler<E>>> sortedWorkHandlers) {
         this.type = type;
         this.exceptionHandler = exceptionHandler;
         this.eventHandlers = eventHandlers;
@@ -51,33 +55,41 @@ public final class HandlerGraph<E> {
         this.sortedWorkHandlers = sortedWorkHandlers;
     }
 
-    public void deploy(Disruptor<E> disruptor) {
-        disruptor.setDefaultExceptionHandler(requireNonNullElse(exceptionHandler, new ExceptionHandler<>() {
-            @Override
-            public void handleEventException(Throwable ex, long sequence, E event) {
-                log.error("handleEventException -> event == {}, sequence == {}, exception message == {}",
-                        event, sequence, ex.getMessage(), ex);
-            }
+    private static class ExceptionLogger<E> implements ExceptionHandler<E> {
 
-            @Override
-            public void handleOnStartException(Throwable ex) {
-                log.error("handleOnStartException -> {}", ex.getMessage(), ex);
-            }
+        @Override
+        public void handleEventException(Throwable ex, long sequence, E event) {
+            log.error("handleEventException -> event == {}, sequence == {}, exception message == {}",
+                    event, sequence, ex.getMessage(), ex);
+        }
 
-            @Override
-            public void handleOnShutdownException(Throwable ex) {
-                log.error("handleOnShutdownException -> {}", ex.getMessage(), ex);
-            }
-        }));
-        switch (type) {
-            case SINGLE, PIPELINE -> setPipelineHandler(disruptor);
-            case BROADCAST -> setBroadcastHandlers(disruptor);
-            case DISTRIBUTION -> setDistributionHandlers(disruptor);
-            case COMPLEX -> setComplexHandlers(disruptor);
+        @Override
+        public void handleOnStartException(Throwable ex) {
+            log.error("handleOnStartException -> {}", ex.getMessage(), ex);
+        }
+
+        @Override
+        public void handleOnShutdownException(Throwable ex) {
+            log.error("handleOnShutdownException -> {}", ex.getMessage(), ex);
         }
     }
 
-    private void setPipelineHandler(Disruptor<E> disruptor) {
+    public void deploy(Disruptor<E> disruptor) {
+        disruptor.setDefaultExceptionHandler(requireNonNullElse(exceptionHandler, new ExceptionLogger<>()));
+        switch (type) {
+            case SINGLE, PIPELINE -> setPipelineMode(disruptor);
+            case BROADCAST -> setBroadcastMode(disruptor);
+            case DISTRIBUTION -> setDistributionMode(disruptor);
+            case COMPLEX -> setComplexMode(disruptor);
+        }
+    }
+
+    /**
+     * 设置管道模式
+     *
+     * @param disruptor Disruptor<E>
+     */
+    private void setPipelineMode(Disruptor<E> disruptor) {
         if (eventHandlers != null) {
             if (eventHandlers.size() > 1) {
                 var handlerGroup = disruptor.handleEventsWith(eventHandlers.getFirst());
@@ -93,8 +105,13 @@ public final class HandlerGraph<E> {
         }
     }
 
+    /**
+     * 设置广播模式
+     *
+     * @param disruptor Disruptor<E>
+     */
     @SuppressWarnings("unchecked")
-    private void setBroadcastHandlers(Disruptor<E> disruptor) {
+    private void setBroadcastMode(Disruptor<E> disruptor) {
         if (eventHandlers != null)
             disruptor.handleEventsWith(toArray(eventHandlers, EventHandler[]::new));
         else
@@ -102,16 +119,26 @@ public final class HandlerGraph<E> {
 
     }
 
+    /**
+     * 设置分发模式
+     *
+     * @param disruptor Disruptor<E>
+     */
     @SuppressWarnings("unchecked")
-    private void setDistributionHandlers(Disruptor<E> disruptor) {
+    private void setDistributionMode(Disruptor<E> disruptor) {
         if (workHandlers != null)
             disruptor.handleEventsWithWorkerPool(toArray(workHandlers, WorkHandler[]::new));
         else
             throw new IllegalStateException("List<WorkHandler> is null");
     }
 
+    /**
+     * 设置分发模式
+     *
+     * @param disruptor Disruptor<E>
+     */
     @SuppressWarnings("unchecked")
-    private void setComplexHandlers(Disruptor<E> disruptor) {
+    private void setComplexMode(Disruptor<E> disruptor) {
         if (sortedEventHandlers != null && sortedWorkHandlers != null) {
             var keys = sortedEventHandlers.keySet().union(sortedWorkHandlers.keySet()).toList();
             int firstKey = keys.getFirst();
@@ -132,14 +159,14 @@ public final class HandlerGraph<E> {
     }
 
 
-    public static <E> HandlerGraph<E> single(@Nonnull EventHandler<E> handler) {
+    public static <E> HandlerManager<E> single(@Nonnull EventHandler<E> handler) {
         return new EventHandlerWizard<E>(HandleType.SINGLE)
                 .add(handler)
                 .build();
     }
 
-    public static <E> HandlerGraph<E> single(@Nonnull EventHandler<E> handler,
-                                             @Nonnull ExceptionHandler<E> exceptionHandler) {
+    public static <E> HandlerManager<E> single(@Nonnull EventHandler<E> handler,
+                                               @Nonnull ExceptionHandler<E> exceptionHandler) {
         return new EventHandlerWizard<E>(HandleType.SINGLE)
                 .add(handler)
                 .exceptionHandler(exceptionHandler)
@@ -208,7 +235,7 @@ public final class HandlerGraph<E> {
 
         public abstract W returnThis();
 
-        public abstract HandlerGraph<E> build();
+        public abstract HandlerManager<E> build();
 
     }
 
@@ -232,14 +259,13 @@ public final class HandlerGraph<E> {
         }
 
         @Override
-        public HandlerGraph<E> build() {
-            return new HandlerGraph<>(type, exceptionHandler,
+        public HandlerManager<E> build() {
+            return new HandlerManager<>(type, exceptionHandler,
                     eventHandlers, null,
                     null, null);
         }
 
     }
-
 
     public static class WorkHandlerWizard<E> extends Wizard<E, WorkHandlerWizard<E>> {
 
@@ -261,8 +287,8 @@ public final class HandlerGraph<E> {
         }
 
         @Override
-        public HandlerGraph<E> build() {
-            return new HandlerGraph<>(type, exceptionHandler,
+        public HandlerManager<E> build() {
+            return new HandlerManager<>(type, exceptionHandler,
                     null, workHandlers,
                     null, null);
         }
@@ -325,8 +351,8 @@ public final class HandlerGraph<E> {
         }
 
         @Override
-        public HandlerGraph<E> build() {
-            return new HandlerGraph<>(type, exceptionHandler,
+        public HandlerManager<E> build() {
+            return new HandlerManager<>(type, exceptionHandler,
                     null, null,
                     sortedEventHandlers, sortedWorkHandlers);
         }

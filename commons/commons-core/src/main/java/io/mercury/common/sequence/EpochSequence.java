@@ -3,12 +3,12 @@ package io.mercury.common.sequence;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.datetime.EpochTime;
 import io.mercury.common.util.BitFormatter;
-import io.mercury.common.util.BitOperator;
 import org.eclipse.collections.api.list.primitive.MutableLongList;
 
 import javax.annotation.concurrent.ThreadSafe;
 
 import static io.mercury.common.util.BitFormatter.longBinaryFormat;
+import static io.mercury.common.util.BitOperator.maxValueOfBit;
 import static java.lang.System.currentTimeMillis;
 
 /**
@@ -28,17 +28,17 @@ public final class EpochSequence {
     /**
      * 自增位最大限制
      */
-    public static final long IncrLimit = 0xFFFF;
+    public static final long INCR_LIMIT = 0xFFFF;
 
     /**
      * 自增位使用bit位数
      */
-    public static final int IncrBits = 16;
+    public static final int INCR_BITS = 16;
 
     /**
      * 自增位掩码
      */
-    public static final long IncrMask = BitOperator.maxValueOfBit(IncrBits);
+    public static final long INCR_MASK = maxValueOfBit(INCR_BITS);
 
     private static final EpochSequence INSTANCE = new EpochSequence();
 
@@ -85,22 +85,21 @@ public final class EpochSequence {
         }
         // 如果是同一时间生成的, 则进行毫秒内序列
         if (currentEpochMillis == lastEpochMillis) {
-            incr = (incr + 1) & IncrMask;
+            incr = (incr + 1) & INCR_MASK;
             // 毫秒内序列溢出
             if (incr == 0L)
                 // 阻塞到下一个毫秒, 获得新的时间戳
                 currentEpochMillis = nextMillis(lastEpochMillis);
         }
         // 时间戳改变, 毫秒内序列重置
-        else
+        else {
             incr = 0L;
-
+        }
         // 更新最后一次生成ID的时间截
         lastEpochMillis = currentEpochMillis;
         // 返回最终的序列
-        return
-                // 时间戳左移至高位
-                (currentEpochMillis << IncrBits)
+        return  // 时间戳左移至高位
+                (currentEpochMillis << INCR_BITS)
                         // 自增位
                         | incr;
     }
@@ -124,7 +123,7 @@ public final class EpochSequence {
      * @return long
      */
     public static long parseEpochMillis(long seq) {
-        return seq >>> IncrBits;
+        return seq >>> INCR_BITS;
     }
 
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package io.mercury.common.fsm;
+package io.mercury.common.state;
 
 @FunctionalInterface
 public interface State {
