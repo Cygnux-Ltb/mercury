@@ -76,7 +76,7 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
         })) {
             SleepSupport.sleep(15000);
             ThreadSupport.startNewThread(receiver::receive);
-        } catch (IOException _) {
+        } catch (IOException ignored) {
         }
     }
 

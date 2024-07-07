@@ -12,7 +12,7 @@
     <name>serialization-protobuf</name>
 
     <properties>
-        <protobuf.version>4.27.1</protobuf.version>
+        <protobuf.version>4.27.2</protobuf.version>
     </properties>
 
     <dependencies>
@@ -50,12 +50,5 @@
             </exclusions>
         </dependency>
     </dependencies>
-    <repositories>
-        <repository>
-            <id>maven_central</id>
-            <name>Maven Central</name>
-            <url>https://repo.maven.apache.org/maven2/</url>
-        </repository>
-    </repositories>
 
 </project>

@@ -93,7 +93,7 @@ public final class ZmqSubscriber extends ZmqTransport implements Subscriber {
                 Topics.with("test"),
                 (topic, msg) -> System.out.println(Arrays.toString(topic) + " -> " + Arrays.toString(msg)))) {
             subscriber.subscribe();
-        } catch (IOException _) {
+        } catch (IOException ignored) {
         }
     }
 
