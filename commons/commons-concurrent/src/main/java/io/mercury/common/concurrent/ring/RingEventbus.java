@@ -14,11 +14,13 @@ import io.mercury.common.concurrent.ring.RingEventbus.MpRingEventbus.MpWizard;
 import io.mercury.common.concurrent.ring.RingEventbus.SpRingEventbus.SpWizard;
 import io.mercury.common.concurrent.ring.base.EventHandlerWrapper;
 import io.mercury.common.concurrent.ring.base.EventPublisher;
-import io.mercury.common.concurrent.ring.base.HandlerGraph;
+import io.mercury.common.concurrent.ring.base.HandlerManager;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.thread.RunnableComponent;
 import org.slf4j.Logger;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 
 import static com.lmax.disruptor.dsl.ProducerType.MULTI;
@@ -44,30 +46,32 @@ public abstract class RingEventbus<E> extends RunnableComponent {
 
     protected final Disruptor<E> disruptor;
 
-    protected final HandlerGraph<E> handleGraph;
+    protected final HandlerManager<E> manager;
 
     protected final RingBuffer<E> ringBuffer;
 
     protected final boolean isMultiProducer;
 
-    protected RingEventbus(String name, int size, StartMode startMode,
-                           ProducerType type, EventFactory<E> eventFactory,
-                           WaitStrategy waitStrategy, HandlerGraph<E> handlerGraph) {
+    protected RingEventbus(@Nullable String name, int size,
+                           @Nonnull StartMode mode,
+                           @Nonnull ProducerType type,
+                           @Nonnull EventFactory<E> factory,
+                           @Nonnull WaitStrategy strategy,
+                           @Nonnull HandlerManager<E> manager) {
         this.name = requireNonNullElse(name,
                 "RingEventbus-[" + YYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now()) + "]");
-        final ProducerType producerType = requireNonNullElse(type, MULTI);
         this.disruptor = new Disruptor<>(
                 // EventFactory, 队列容量
-                eventFactory, adjustSize(size),
+                factory, adjustSize(size),
                 // ThreadFactory
                 ofPlatform(this.name + "-worker").priority(MAX).build(),
                 // 生产者策略, Waiting策略
-                producerType, waitStrategy);
-        this.handleGraph = handlerGraph;
-        this.handleGraph.deploy(this.disruptor);
+                type, strategy);
+        this.manager = manager;
+        this.manager.deploy(this.disruptor);
         this.ringBuffer = this.disruptor.getRingBuffer();
-        this.isMultiProducer = (producerType == MULTI);
-        startWith(startMode);
+        this.isMultiProducer = (type == MULTI);
+        startWith(mode);
     }
 
     /**
@@ -185,15 +189,16 @@ public abstract class RingEventbus<E> extends RunnableComponent {
     }
 
     protected static class Wizard<E> {
-        protected final EventFactory<E> eventFactory;
+
+        protected final EventFactory<E> factory;
 
         protected String name = null;
         protected int size = 128;
         protected StartMode startMode = StartMode.auto();
-        protected WaitStrategy waitStrategy = Yielding.get();
+        protected WaitStrategy strategy = Yielding.get();
 
-        private Wizard(EventFactory<E> eventFactory) {
-            this.eventFactory = eventFactory;
+        private Wizard(EventFactory<E> factory) {
+            this.factory = factory;
         }
     }
 
@@ -204,14 +209,16 @@ public abstract class RingEventbus<E> extends RunnableComponent {
      */
     public static class MpRingEventbus<E> extends RingEventbus<E> {
 
-        private MpRingEventbus(String name, int size, StartMode startMode, EventFactory<E> eventFactory, WaitStrategy waitStrategy, HandlerGraph<E> handleGraph) {
-            super(name, size, startMode, MULTI, eventFactory, waitStrategy, handleGraph);
+        private MpRingEventbus(String name, int size, StartMode startMode,
+                               EventFactory<E> factory, WaitStrategy strategy,
+                               HandlerManager<E> handlerManager) {
+            super(name, size, startMode, MULTI, factory, strategy, handlerManager);
         }
 
         public static class MpWizard<E> extends Wizard<E> {
 
-            private MpWizard(EventFactory<E> eventFactory) {
-                super(eventFactory);
+            private MpWizard(EventFactory<E> factory) {
+                super(factory);
             }
 
             public MpWizard<E> name(String name) {
@@ -225,7 +232,7 @@ public abstract class RingEventbus<E> extends RunnableComponent {
             }
 
             public MpWizard<E> waitStrategy(WaitStrategy strategy) {
-                this.waitStrategy = strategy;
+                this.strategy = strategy;
                 return this;
             }
 
@@ -239,32 +246,37 @@ public abstract class RingEventbus<E> extends RunnableComponent {
             }
 
             public MpRingEventbus<E> process(EventHandler<E> handler) {
-                return process(HandlerGraph.single(handler));
+                return process(HandlerManager.single(handler));
             }
 
-            public MpRingEventbus<E> process(HandlerGraph<E> handlerGraph) {
+            public MpRingEventbus<E> process(HandlerManager<E> manager) {
                 return new MpRingEventbus<>(name, size, startMode,
-                        eventFactory, waitStrategy, handlerGraph);
+                        factory, strategy, manager);
             }
         }
+
+        
+
     }
 
-
+    /**
+     * 单生产者实现
+     *
+     * @param <E>
+     */
     public static class SpRingEventbus<E> extends RingEventbus<E> {
 
-        private SpRingEventbus(String name, int size, StartMode startMode, EventFactory<E> eventFactory, WaitStrategy waitStrategy, HandlerGraph<E> handleGraph) {
-            super(name, size, startMode, SINGLE, eventFactory, waitStrategy, handleGraph);
+        private SpRingEventbus(String name, int size, StartMode startMode,
+                               EventFactory<E> factory, WaitStrategy strategy,
+                               HandlerManager<E> manager) {
+            super(name, size, startMode, SINGLE, factory, strategy, manager);
         }
 
-        /**
-         * 单生产者实现
-         *
-         * @param <E>
-         */
+
         public static class SpWizard<E> extends Wizard<E> {
 
-            private SpWizard(EventFactory<E> eventFactory) {
-                super(eventFactory);
+            private SpWizard(EventFactory<E> factory) {
+                super(factory);
             }
 
             public SpWizard<E> name(String name) {
@@ -278,7 +290,7 @@ public abstract class RingEventbus<E> extends RunnableComponent {
             }
 
             public SpWizard<E> waitStrategy(WaitStrategy strategy) {
-                this.waitStrategy = strategy;
+                this.strategy = strategy;
                 return this;
             }
 
@@ -292,12 +304,12 @@ public abstract class RingEventbus<E> extends RunnableComponent {
             }
 
             public SpRingEventbus<E> process(EventHandler<E> handler) {
-                return process(HandlerGraph.single(handler));
+                return process(HandlerManager.single(handler));
             }
 
-            public SpRingEventbus<E> process(HandlerGraph<E> handlerGraph) {
+            public SpRingEventbus<E> process(HandlerManager<E> manager) {
                 return new SpRingEventbus<>(name, size, startMode,
-                        eventFactory, waitStrategy, handlerGraph);
+                        factory, strategy, manager);
             }
         }
     }

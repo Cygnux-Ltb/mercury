@@ -1,4 +1,4 @@
-package io.mercury.common.fsm;
+package io.mercury.common.state;
 
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.concurrent.atomic.AtomicBoolean;

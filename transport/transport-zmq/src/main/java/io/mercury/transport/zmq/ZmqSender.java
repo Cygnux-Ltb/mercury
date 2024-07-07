@@ -1,7 +1,6 @@
 package io.mercury.transport.zmq;
 
 import io.mercury.common.lang.Asserter;
-import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.serialization.specific.BytesSerializer;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.zmq.exception.ZmqConnectionException;
@@ -13,10 +12,12 @@ import javax.annotation.concurrent.NotThreadSafe;
 import java.io.Closeable;
 import java.io.IOException;
 
+import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
+
 @NotThreadSafe
 public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
 
-    private static final Logger log = Log4j2LoggerFactory.getLogger(ZmqSender.class);
+    private static final Logger log = getLogger(ZmqSender.class);
 
     private final BytesSerializer<T> serializer;
 
@@ -63,7 +64,7 @@ public class ZmqSender<T> extends ZmqTransport implements Sender<T>, Closeable {
         ZmqConfigurator cfg = ZmqConfigurator.tcp("localhost", 5551);
         try (ZmqSender<String> sender = new ZmqSender<>(cfg, String::getBytes)) {
             sender.send("TEST MSG");
-        } catch (IOException _) {
+        } catch (IOException ignored) {
         }
 
     }

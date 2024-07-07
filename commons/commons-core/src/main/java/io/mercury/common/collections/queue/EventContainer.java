@@ -4,27 +4,27 @@ package io.mercury.common.collections.queue;
  * @param <E>
  * @author yellow013
  */
-public class LoadContainer<E> {
+public class EventContainer<E> {
 
     private int type;
 
-    private E e;
+    private E event;
 
     /**
-     * @param e E
+     * @param event E
      */
-    public void loading(E e) {
+    public void loading(E event) {
         this.type = 0;
-        this.e = e;
+        this.event = event;
     }
 
     /**
-     * @param type int
-     * @param e    E
+     * @param type  int
+     * @param event E
      */
-    public void loading(int type, E e) {
+    public void loading(int type, E event) {
         this.type = type;
-        this.e = e;
+        this.event = event;
     }
 
     public int type() {
@@ -32,7 +32,7 @@ public class LoadContainer<E> {
     }
 
     public E unloading() {
-        return e;
+        return event;
     }
 
 }

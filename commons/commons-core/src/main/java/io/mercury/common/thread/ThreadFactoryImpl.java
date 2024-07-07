@@ -37,10 +37,16 @@ public final class ThreadFactoryImpl implements ThreadFactory {
     public Thread newThread(@Nonnull Runnable runnable) {
         var threadName = name + "-" + incr.get();
         return isVirtual
-                ? Thread.ofVirtual().name(name)
-                .unstarted(runnable)
-                : Thread.ofPlatform().name(name).priority(priority).daemon(isDaemon)
-                .unstarted(runnable);
+                ?
+                Thread.ofVirtual()
+                        .name(name)
+                        .unstarted(runnable)
+                :
+                Thread.ofPlatform()
+                        .name(name)
+                        .priority(priority)
+                        .daemon(isDaemon)
+                        .unstarted(runnable);
     }
 
     public static Builder ofVirtual() {
@@ -70,13 +76,13 @@ public final class ThreadFactoryImpl implements ThreadFactory {
         private ThreadPriority priority = NORM;
 
         private Supplier<String> incr = new Supplier<>() {
+
             private final AtomicInteger incr = new AtomicInteger(0);
 
             @Override
             public String get() {
                 return Integer.toString(incr.incrementAndGet());
             }
-
         };
 
         private Builder(String name, boolean isVirtual) {
@@ -89,12 +95,12 @@ public final class ThreadFactoryImpl implements ThreadFactory {
             return this;
         }
 
-        public Builder priority(ThreadPriority priority) {
+        public Builder priority(@Nonnull ThreadPriority priority) {
             this.priority = priority;
             return this;
         }
 
-        public Builder incrementer(Supplier<String> incr) {
+        public Builder incrementer(@Nonnull Supplier<String> incr) {
             this.incr = incr;
             return this;
         }

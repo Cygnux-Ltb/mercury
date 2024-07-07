@@ -62,62 +62,62 @@ public final class RingMulticaster<E, I> extends RingComponent<E, I> {
     }
 
     // **************** 单生产者广播器 ****************//
-    public static <E, I> Builder<E, I> withSingleProducer(
+    public static <E, I> Builder<E, I> singleProducer(
             @Nonnull Class<E> eventType,
             @Nonnull RingEventPublisher<E, I> publisher) {
-        return withSingleProducer(
+        return singleProducer(
                 // 使用反射EventFactory
                 ReflectionEventFactory.newFactory(eventType, log), publisher);
     }
 
-    public static <E, I> Builder<E, I> withSingleProducer(
+    public static <E, I> Builder<E, I> singleProducer(
             @Nonnull Class<E> eventType,
             @Nonnull EventTranslatorOneArg<E, I> translator) {
-        return withSingleProducer(
+        return singleProducer(
                 // 使用反射EventFactory
                 ReflectionEventFactory.newFactory(eventType, log), translator);
     }
 
-    public static <E, I> Builder<E, I> withSingleProducer(
+    public static <E, I> Builder<E, I> singleProducer(
             @Nonnull EventFactory<E> eventFactory,
             @Nonnull RingEventPublisher<E, I> publisher) {
-        return withSingleProducer(eventFactory,
+        return singleProducer(eventFactory,
                 // EventTranslator实现函数, 负责调用处理In对象到Event对象之间的转换
                 (event, sequence, in) -> publisher.accept(event, in));
     }
 
-    public static <E, I> Builder<E, I> withSingleProducer(
+    public static <E, I> Builder<E, I> singleProducer(
             @Nonnull EventFactory<E> eventFactory,
             @Nonnull EventTranslatorOneArg<E, I> translator) {
         return new Builder<>(ProducerType.SINGLE, eventFactory, translator);
     }
 
     // **************** 多生产者广播器 ****************//
-    public static <E, I> Builder<E, I> withMultiProducer(
+    public static <E, I> Builder<E, I> multiProducer(
             @Nonnull Class<E> eventType,
             @Nonnull RingEventPublisher<E, I> publisher) {
-        return withMultiProducer(
+        return multiProducer(
                 // 使用反射EventFactory
                 ReflectionEventFactory.newFactory(eventType, log), publisher);
     }
 
-    public static <E, I> Builder<E, I> withMultiProducer(
+    public static <E, I> Builder<E, I> multiProducer(
             @Nonnull Class<E> eventType,
             @Nonnull EventTranslatorOneArg<E, I> translator) {
-        return withMultiProducer(
+        return multiProducer(
                 // 使用反射EventFactory
                 ReflectionEventFactory.newFactory(eventType, log), translator);
     }
 
-    public static <E, I> Builder<E, I> withMultiProducer(
+    public static <E, I> Builder<E, I> multiProducer(
             @Nonnull EventFactory<E> eventFactory,
             @Nonnull RingEventPublisher<E, I> publisher) {
-        return withMultiProducer(eventFactory,
+        return multiProducer(eventFactory,
                 // EventTranslator实现函数, 负责调用处理In对象到Event对象之间的转换
                 (event, sequence, in) -> publisher.accept(event, in));
     }
 
-    public static <E, I> Builder<E, I> withMultiProducer(
+    public static <E, I> Builder<E, I> multiProducer(
             @Nonnull EventFactory<E> eventFactory,
             @Nonnull EventTranslatorOneArg<E, I> translator) {
         return new Builder<>(ProducerType.MULTI, eventFactory, translator);
