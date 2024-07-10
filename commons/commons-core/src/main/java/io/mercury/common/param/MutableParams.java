@@ -2,7 +2,6 @@ package io.mercury.common.param;
 
 import io.mercury.common.collections.MutableMaps;
 import io.mercury.common.collections.MutableSets;
-import io.mercury.common.lang.Throws;
 import org.eclipse.collections.api.map.primitive.MutableIntBooleanMap;
 import org.eclipse.collections.api.map.primitive.MutableIntDoubleMap;
 import org.eclipse.collections.api.map.primitive.MutableIntIntMap;
@@ -20,7 +19,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
-public final class MutableParams<K extends ParamKey> implements Params<K> {
+import static io.mercury.common.lang.Throws.illegalArgument;
+
+public class MutableParams<K extends ParamKey> implements Params<K> {
 
     private final MutableIntBooleanMap booleanParams = MutableMaps.newIntBooleanMap();
 
@@ -63,7 +64,7 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
                     case TIME -> putParam(key, (LocalTime) value);
                     case DATETIME -> putParam(key, (LocalDateTime) value);
                     case ZONED_DATETIME -> putParam(key, (ZonedDateTime) value);
-                    default -> Throws.illegalArgument("param: " + key.getParamName());
+                    default -> illegalArgument("Param: " + key.getParamName());
                 }
             });
         }
@@ -76,8 +77,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     @Override
     public boolean getBoolean(K key) {
         if (key.getValueType() != ValueType.BOOLEAN)
-            Throws.illegalArgument(
-                    "Key -> " + key + " paramType is not BOOLEAN, paramType==" + key.getValueType());
+            illegalArgument(
+                    "Key -> " + key + " ParamType is not [BOOLEAN], ParamType==" + key.getValueType());
         return booleanParams.get(key.getParamId());
     }
 
@@ -88,8 +89,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     @Override
     public int getInt(K key) {
         if (key.getValueType() != ValueType.INT)
-            Throws.illegalArgument(
-                    "Key -> " + key + " paramType is not INT, paramType==" + key.getValueType());
+            illegalArgument(
+                    "Key -> " + key + " ParamType is not [INT], ParamType==" + key.getValueType());
         return intParams.get(key.getParamId());
     }
 
@@ -100,8 +101,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     @Override
     public long getLong(K key) {
         if (key.getValueType() != ValueType.LONG)
-            Throws.illegalArgument(
-                    "Key -> " + key + " paramType is not LONG, paramType==" + key.getValueType());
+            illegalArgument(
+                    "Key -> " + key + " ParamType is not [LONG], ParamType==" + key.getValueType());
         return longParams.get(key.getParamId());
     }
 
@@ -112,8 +113,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     @Override
     public double getDouble(K key) {
         if (key.getValueType() != ValueType.DOUBLE)
-            Throws.illegalArgument(
-                    "Key -> " + key + " paramType is not DOUBLE, paramType==" + key.getValueType());
+            illegalArgument(
+                    "Key -> " + key + " ParamType is not [DOUBLE], ParamType==" + key.getValueType());
         return doubleParams.get(key.getParamId());
     }
 
@@ -124,8 +125,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     @Override
     public String getString(K key) {
         if (key.getValueType() != ValueType.STRING)
-            Throws.illegalArgument(
-                    "Key -> " + key + " paramType is not STRING, paramType==" + key.getValueType());
+            illegalArgument(
+                    "Key -> " + key + " ParamType is not [STRING], ParamType==" + key.getValueType());
         return stringParams.get(key.getParamId());
     }
 
@@ -136,8 +137,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     @Override
     public LocalDate getDate(K key) {
         if (key.getValueType() != ValueType.DATE)
-            Throws.illegalArgument(
-                    "Key -> " + key + " paramType is not DATE, paramType==" + key.getValueType());
+            illegalArgument(
+                    "Key -> " + key + " ParamType is not [DATE], ParamType==" + key.getValueType());
         return (LocalDate) temporalParams.get(key.getParamId());
     }
 
@@ -148,8 +149,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     @Override
     public LocalTime getTime(K key) {
         if (key.getValueType() != ValueType.TIME)
-            Throws.illegalArgument(
-                    "Key -> " + key + " paramType is not TIME, getParamType==" + key.getValueType());
+            illegalArgument(
+                    "Key -> " + key + " ParamType is not [TIME], ParamType==" + key.getValueType());
         return (LocalTime) temporalParams.get(key.getParamId());
     }
 
@@ -160,8 +161,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     @Override
     public LocalDateTime getDateTime(K key) {
         if (key.getValueType() != ValueType.DATETIME)
-            Throws.illegalArgument(
-                    "Key -> [" + key + "] paramType is not DATETIME, paramType==" + key.getValueType());
+            illegalArgument(
+                    "Key -> [" + key + "] ParamType is not [DATETIME], ParamType==" + key.getValueType());
         return (LocalDateTime) temporalParams.get(key.getParamId());
     }
 
@@ -172,8 +173,8 @@ public final class MutableParams<K extends ParamKey> implements Params<K> {
     @Override
     public ZonedDateTime getZonedDateTime(K key) {
         if (key.getValueType() != ValueType.ZONED_DATETIME)
-            Throws.illegalArgument(
-                    "Key -> [" + key + "] paramType is not ZONED_DATETIME, paramType==" + key.getValueType());
+            illegalArgument(
+                    "Key -> [" + key + "] ParamType is not [ZONED_DATETIME], ParamType==" + key.getValueType());
         return (ZonedDateTime) temporalParams.get(key.getParamId());
     }
 

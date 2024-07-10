@@ -52,7 +52,8 @@ public abstract class RingEventbus<E> extends RunnableComponent {
 
     protected final boolean isMultiProducer;
 
-    protected RingEventbus(@Nullable String name, int size,
+    protected RingEventbus(@Nullable String name,
+                           int size,
                            @Nonnull StartMode mode,
                            @Nonnull ProducerType type,
                            @Nonnull EventFactory<E> factory,
@@ -192,7 +193,7 @@ public abstract class RingEventbus<E> extends RunnableComponent {
 
         protected final EventFactory<E> factory;
 
-        protected String name = null;
+        protected String name;
         protected int size = 128;
         protected StartMode startMode = StartMode.auto();
         protected WaitStrategy strategy = Yielding.get();
@@ -200,6 +201,7 @@ public abstract class RingEventbus<E> extends RunnableComponent {
         private Wizard(EventFactory<E> factory) {
             this.factory = factory;
         }
+
     }
 
     /**
@@ -253,9 +255,9 @@ public abstract class RingEventbus<E> extends RunnableComponent {
                 return new MpRingEventbus<>(name, size, startMode,
                         factory, strategy, manager);
             }
+
         }
 
-        
 
     }
 

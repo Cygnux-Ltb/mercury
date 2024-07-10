@@ -36,38 +36,25 @@ public interface Params<K extends ParamKey> {
 
     default void printParams(Logger log) {
         Set<K> keys = getParamKeys();
-        if (log != null)
-            for (K key : keys) {
-                switch (key.getValueType()) {
-                    case STRING -> log.info("Key:{} -> Value:{}", key, getString(key));
-                    case BOOLEAN -> log.info("Key:{} -> Value:{}", key, getBoolean(key));
-                    case DOUBLE -> log.info("Key:{} -> Value:{}", key, getDouble(key));
-                    case INT -> log.info("Key:{} -> Value:{}", key, getInt(key));
-                    case LONG -> log.info("Key:{} -> Value:{}", key, getLong(key));
-                    case DATE -> log.info("Key:{} -> Value:{}", key, getDate(key));
-                    case TIME -> log.info("Key:{} -> Value:{}", key, getTime(key));
-                    case DATETIME -> log.info("Key:{} -> Value:{}", key, getDateTime(key));
-                    case ZONED_DATETIME -> log.info("Key:{} -> Value:{}", key, getZonedDateTime(key));
-                    default -> {
-                    }
-                }
-            }
-        else
-            for (K key : keys) {
-                switch (key.getValueType()) {
-                    case STRING -> System.out.println("Key:" + key + " -> Value:" + getString(key));
-                    case BOOLEAN -> System.out.println("Key:" + key + " -> Value:" + getBoolean(key));
-                    case DOUBLE -> System.out.println("Key:" + key + " -> Value:" + getDouble(key));
-                    case INT -> System.out.println("Key:" + key + " -> Value:" + getInt(key));
-                    case LONG -> System.out.println("Key:" + key + " -> Value:" + getLong(key));
-                    case DATE -> System.out.println("Key:" + key + " -> Value:" + getDate(key));
-                    case TIME -> System.out.println("Key:" + key + "-> Value:" + getTime(key));
-                    case DATETIME -> System.out.println("Key:" + key + " -> Value:" + getDateTime(key));
-                    case ZONED_DATETIME -> System.out.println("Key:" + key + " -> Value:" + getZonedDateTime(key));
-                    default -> {
-                    }
-                }
-            }
+        for (K key : keys) {
+            Object value = switch (key.getValueType()) {
+                case STRING -> getString(key);
+                case BOOLEAN -> getBoolean(key);
+                case DOUBLE -> getDouble(key);
+                case INT -> getInt(key);
+                case LONG -> getLong(key);
+                case DATE -> getDate(key);
+                case TIME -> getTime(key);
+                case DATETIME -> getDateTime(key);
+                case ZONED_DATETIME -> getZonedDateTime(key);
+            };
+            if (log != null)
+                log.info("Key:{} -> Value:{}", key, value);
+            else
+                System.out.println("Key:" + key + " -> Value:" + value);
+        }
+
+
     }
 
     /**

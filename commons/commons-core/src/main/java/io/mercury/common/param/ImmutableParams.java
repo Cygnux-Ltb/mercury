@@ -23,9 +23,8 @@ import static java.lang.Boolean.parseBoolean;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
-import static java.lang.System.out;
 
-public final class ImmutableParams<K extends ParamKey> implements Params<K> {
+public class ImmutableParams<K extends ParamKey> implements Params<K> {
 
     private final ImmutableMap<K, String> params;
 
@@ -36,13 +35,10 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
      *
      * @param map  Map<?, ?>
      * @param keys K[]
-     * @throws NullPointerException     e
-     * @throws IllegalArgumentException e
      */
-    public ImmutableParams(@Nonnull Map<?, ?> map, @Nonnull K[] keys)
-            throws NullPointerException, IllegalArgumentException {
-        requiredLength(keys, 1, "keys");
+    public ImmutableParams(@Nonnull Map<String, ?> map, @Nonnull K[] keys) {
         nonEmptyMap(map, "map");
+        requiredLength(keys, 1, "keys");
         MutableMap<K, String> mutableMap = MutableMaps.newUnifiedMap();
         for (K key : keys) {
             if (map.containsKey(key.getParamName()))
@@ -57,11 +53,8 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
      *
      * @param prop Properties
      * @param keys K[]
-     * @throws NullPointerException     e
-     * @throws IllegalArgumentException e
      */
-    public ImmutableParams(@Nonnull Properties prop, @Nonnull K[] keys)
-            throws NullPointerException, IllegalArgumentException {
+    public ImmutableParams(@Nonnull Properties prop, @Nonnull K[] keys) {
         requiredLength(keys, 1, "keys");
         nonNull(prop, "prop");
         var map = MutableMaps.<K, String>newUnifiedMap();
@@ -174,10 +167,10 @@ public final class ImmutableParams<K extends ParamKey> implements Params<K> {
     @Override
     public void printParams(Logger log) {
         if (log == null)
-            params.forEachKeyValue((key, value) -> out.println(
-                    "Param id==" + key.getParamId() + ", paramName -> " + key.getParamName() + ", value -> " + value));
+            params.forEachKeyValue((key, value) -> System.out.println(
+                    "Param ID==" + key.getParamId() + ", ParamName -> " + key.getParamName() + ", Value -> " + value));
         else
-            params.forEachKeyValue((key, value) -> log.info("Param id=={}, paramName=={}, value -> {}",
+            params.forEachKeyValue((key, value) -> log.info("Param ID=={}, ParamName=={}, Value -> {}",
                     key.getParamId(), key.getParamName(), value));
     }
 
