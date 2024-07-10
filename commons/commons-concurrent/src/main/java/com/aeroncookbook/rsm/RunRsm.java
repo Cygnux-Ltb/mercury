@@ -16,12 +16,13 @@
 
 package com.aeroncookbook.rsm;
 
-public class RunRsm
-{
-    public static void main(final String[] args)
-    {
+public class RunRsm {
+
+    public static void main(final String[] args) {
+
         final EventListener eventListener = new EventListener();
         final SimpleStateMachine bsm = new SimpleStateMachine();
+
         bsm.addListener(eventListener);
 
         final AddCommand add = new AddCommand();
@@ -37,6 +38,5 @@ public class RunRsm
         bsm.add(add);
         bsm.multiply(multiply);
     }
-
 
 }

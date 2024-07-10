@@ -25,37 +25,33 @@ import org.agrona.concurrent.broadcast.CopyBroadcastReceiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ReceiveAgent implements Agent, MessageHandler
-{
+public class ReceiveAgent implements Agent, MessageHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReceiveAgent.class);
 
     private final BroadcastReceiver broadcastReceiver;
     private final String name;
     private final CopyBroadcastReceiver copyBroadcastReceiver;
 
-    public ReceiveAgent(final AtomicBuffer atomicBuffer, final String name)
-    {
+    public ReceiveAgent(final AtomicBuffer atomicBuffer, final String name) {
         this.broadcastReceiver = new BroadcastReceiver(atomicBuffer);
         this.name = name;
         this.copyBroadcastReceiver = new CopyBroadcastReceiver(broadcastReceiver);
     }
 
     @Override
-    public int doWork()
-    {
-        copyBroadcastReceiver.receive(this::onMessage);
+    public int doWork() {
+        copyBroadcastReceiver.receive(this);
         return 0;
     }
 
     @Override
-    public String roleName()
-    {
+    public String roleName() {
         return name;
     }
 
     @Override
-    public void onMessage(final int msgTypeId, final MutableDirectBuffer buffer, final int index, final int length)
-    {
+    public void onMessage(final int msgTypeId, final MutableDirectBuffer buffer, final int index, final int length) {
         LOGGER.info("Received {}", buffer.getInt(index));
     }
+
 }

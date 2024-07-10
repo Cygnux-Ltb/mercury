@@ -25,8 +25,8 @@ import org.agrona.concurrent.broadcast.BroadcastTransmitter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SendAgent implements Agent
-{
+public class SendAgent implements Agent {
+
     private final ShutdownSignalBarrier barrier;
     private final int sendCount;
     private final BroadcastTransmitter transmitter;
@@ -35,8 +35,7 @@ public class SendAgent implements Agent
     private final Logger logger = LoggerFactory.getLogger(SendAgent.class);
     private final MutableDirectBuffer msgBuffer = new ExpandableArrayBuffer();
 
-    public SendAgent(final AtomicBuffer buffer, final ShutdownSignalBarrier barrier, final int sendCount)
-    {
+    public SendAgent(final AtomicBuffer buffer, final ShutdownSignalBarrier barrier, final int sendCount) {
         this.barrier = barrier;
         this.sendCount = sendCount;
         this.transmitter = new BroadcastTransmitter(buffer);
@@ -45,15 +44,12 @@ public class SendAgent implements Agent
     }
 
     @Override
-    public int doWork()
-    {
-        if (completed)
-        {
+    public int doWork() {
+        if (completed) {
             return 0;
         }
 
-        if (lastSend == sendCount)
-        {
+        if (lastSend == sendCount) {
             logger.info("completed send: {}", lastSend);
             barrier.signal();
             completed = true;
@@ -69,8 +65,8 @@ public class SendAgent implements Agent
     }
 
     @Override
-    public String roleName()
-    {
+    public String roleName() {
         return "sender";
     }
+
 }

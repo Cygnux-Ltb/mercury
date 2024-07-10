@@ -16,8 +16,7 @@
 
 package com.aeroncookbook.lamport;
 
-public class RunLamportClock
-{
+public class RunLamportClock {
 
     public static final String EVENT_A = "Event A";
     public static final String EVENT_B = "Event B";
@@ -25,8 +24,8 @@ public class RunLamportClock
     public static final String EVENT_D = "Event D";
     public static final String EVENT_E = "Event E";
 
-    public static void main(final String[] args)
-    {
+    public static void main(final String[] args) {
+        
         final Process a = new Process("Process A");
         final Process b = new Process("Process B");
         final Process c = new Process("Process C");

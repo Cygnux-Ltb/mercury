@@ -23,41 +23,36 @@ import org.agrona.concurrent.ringbuffer.ManyToOneRingBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ReceiveAgent implements Agent
-{
+public class ReceiveAgent implements Agent {
+
     private final ShutdownSignalBarrier barrier;
     private final ManyToOneRingBuffer ringBuffer;
     private final int sendCount;
     private final Logger logger = LoggerFactory.getLogger(ReceiveAgent.class);
 
-    public ReceiveAgent(final ManyToOneRingBuffer ringBuffer, final ShutdownSignalBarrier barrier, final int sendCount)
-    {
+    public ReceiveAgent(final ManyToOneRingBuffer ringBuffer, final ShutdownSignalBarrier barrier, final int sendCount) {
         this.ringBuffer = ringBuffer;
         this.barrier = barrier;
         this.sendCount = sendCount;
     }
 
     @Override
-    public int doWork() throws Exception
-    {
+    public int doWork() throws Exception {
         ringBuffer.read(this::handler);
         return 0;
     }
 
-    private void handler(final int messageType, final DirectBuffer buffer, final int offset, final int length)
-    {
+    private void handler(final int messageType, final DirectBuffer buffer, final int offset, final int length) {
         final int lastValue = buffer.getInt(offset);
 
-        if (lastValue == sendCount)
-        {
+        if (lastValue == sendCount) {
             logger.info("received: {}", lastValue);
             barrier.signal();
         }
     }
 
     @Override
-    public String roleName()
-    {
+    public String roleName() {
         return "receiver";
     }
 }

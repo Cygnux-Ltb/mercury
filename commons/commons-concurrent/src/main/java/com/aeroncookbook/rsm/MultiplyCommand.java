@@ -16,7 +16,6 @@
 
 package com.aeroncookbook.rsm;
 
-public class MultiplyCommand
-{
+public class MultiplyCommand {
     public int value;
 }

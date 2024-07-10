@@ -20,29 +20,24 @@ import org.agrona.concurrent.Agent;
 import org.agrona.concurrent.AtomicBuffer;
 import org.agrona.concurrent.ringbuffer.OneToOneRingBuffer;
 
-public class SendAgent implements Agent
-{
+public class SendAgent implements Agent {
     private final int sendCount;
     private final OneToOneRingBuffer ringBuffer;
     private int currentCountItem = 1;
 
-    public SendAgent(final OneToOneRingBuffer ringBuffer, final int sendCount)
-    {
+    public SendAgent(final OneToOneRingBuffer ringBuffer, final int sendCount) {
         this.ringBuffer = ringBuffer;
         this.sendCount = sendCount;
     }
 
     @Override
-    public int doWork()
-    {
-        if (currentCountItem > sendCount)
-        {
+    public int doWork() {
+        if (currentCountItem > sendCount) {
             return 0;
         }
 
         final int claimIndex = ringBuffer.tryClaim(1, Integer.BYTES);
-        if (claimIndex > 0)
-        {
+        if (claimIndex > 0) {
             currentCountItem += 1;
             final AtomicBuffer buffer = ringBuffer.buffer();
             buffer.putInt(claimIndex, currentCountItem);
@@ -52,8 +47,7 @@ public class SendAgent implements Agent
     }
 
     @Override
-    public String roleName()
-    {
+    public String roleName() {
         return "sender";
     }
 }

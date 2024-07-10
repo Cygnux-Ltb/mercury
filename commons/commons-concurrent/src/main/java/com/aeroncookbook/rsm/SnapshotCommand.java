@@ -16,7 +16,6 @@
 
 package com.aeroncookbook.rsm;
 
-public class SnapshotCommand
-{
+public class SnapshotCommand {
 
 }

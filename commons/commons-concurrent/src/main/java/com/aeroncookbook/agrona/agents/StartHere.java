@@ -28,12 +28,10 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 
-public class StartHere
-{
+public class StartHere {
     private static final Logger LOGGER = LoggerFactory.getLogger(StartHere.class);
 
-    public static void main(final String[] args)
-    {
+    public static void main(final String[] args) {
         final int sendCount = 18_000_000;
         final int bufferLength = 16384 + RingBufferDescriptor.TRAILER_LENGTH;
         final UnsafeBuffer unsafeBuffer = new UnsafeBuffer(ByteBuffer.allocateDirect(bufferLength));
@@ -48,9 +46,9 @@ public class StartHere
 
         //construct agent runners
         final AgentRunner sendAgentRunner = new AgentRunner(idleStrategySend,
-            Throwable::printStackTrace, null, sendAgent);
+                Throwable::printStackTrace, null, sendAgent);
         final AgentRunner receiveAgentRunner = new AgentRunner(idleStrategyReceive,
-            Throwable::printStackTrace, null, receiveAgent);
+                Throwable::printStackTrace, null, receiveAgent);
         LOGGER.info("starting");
         //start the runners
         AgentRunner.startOnThread(sendAgentRunner);

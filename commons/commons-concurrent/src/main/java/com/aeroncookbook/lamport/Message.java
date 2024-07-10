@@ -16,24 +16,22 @@
 
 package com.aeroncookbook.lamport;
 
-public class Message
-{
+public class Message {
+
     private final long messageTime;
     private final String message;
 
-    public Message(final long messageTime, final String message)
-    {
+    public Message(final long messageTime, final String message) {
         this.messageTime = messageTime;
         this.message = message;
     }
 
-    public long getTime()
-    {
+    public long getTime() {
         return messageTime;
     }
 
-    public String getMsg()
-    {
+    public String getMsg() {
         return message;
     }
+
 }

@@ -19,12 +19,10 @@ package com.aeroncookbook.rsm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EventListener
-{
+public class EventListener {
     private final Logger logger = LoggerFactory.getLogger(EventListener.class);
 
-    public void newValue(final NewValueEvent event)
-    {
+    public void newValue(final NewValueEvent event) {
         logger.info("Current Value = {}", event.currentValue);
     }
 }

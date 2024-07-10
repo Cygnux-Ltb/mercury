@@ -16,7 +16,6 @@
 
 package com.aeroncookbook.rsm;
 
-public class AddCommand
-{
+public class AddCommand {
     public int value;
 }

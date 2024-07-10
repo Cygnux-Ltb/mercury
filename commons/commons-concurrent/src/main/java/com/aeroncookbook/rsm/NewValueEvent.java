@@ -16,7 +16,6 @@
 
 package com.aeroncookbook.rsm;
 
-public class NewValueEvent
-{
+public class NewValueEvent {
     public int currentValue;
 }

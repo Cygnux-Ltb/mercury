@@ -19,45 +19,37 @@ package com.aeroncookbook.rsm;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleStateMachine
-{
+public class SimpleStateMachine {
     private int currentValue = 0;
     private final List<EventListener> eventListeners = new ArrayList<>();
 
-    public void addListener(final EventListener eventListener)
-    {
+    public void addListener(final EventListener eventListener) {
         eventListeners.add(eventListener);
     }
 
-    public void add(final AddCommand addCommand)
-    {
+    public void add(final AddCommand addCommand) {
         currentValue += addCommand.value;
         notifyListeners();
     }
 
-    public void multiply(final MultiplyCommand multiplyCommand)
-    {
+    public void multiply(final MultiplyCommand multiplyCommand) {
         currentValue *= multiplyCommand.value;
         notifyListeners();
     }
 
-    public void set(final SetCommand setCommand)
-    {
+    public void set(final SetCommand setCommand) {
         currentValue = setCommand.value;
         notifyListeners();
     }
 
-    public void snapshot(final SnapshotCommand snapshotCommand)
-    {
+    public void snapshot(final SnapshotCommand snapshotCommand) {
         notifyListeners();
     }
 
-    private void notifyListeners()
-    {
+    private void notifyListeners() {
         final NewValueEvent newValueEvent = new NewValueEvent();
         newValueEvent.currentValue = currentValue;
-        for (final EventListener eventListener : eventListeners)
-        {
+        for (final EventListener eventListener : eventListeners) {
             eventListener.newValue(newValueEvent);
         }
     }

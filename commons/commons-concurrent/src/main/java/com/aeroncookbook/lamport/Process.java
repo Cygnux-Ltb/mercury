@@ -24,8 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 
-public class Process
-{
+public class Process {
+
     private final String name;
     private final Map<String, Process> bus = new HashMap<>();
     private final Map<String, String> outputMessage = new HashMap<>();
@@ -36,13 +36,11 @@ public class Process
     private String tmpWhenReceiving;
     private String tmpThenSend;
 
-    public Process(final String name)
-    {
+    public Process(final String name) {
         this.name = name;
     }
 
-    public void send(final Process dest, final String message)
-    {
+    public void send(final Process dest, final String message) {
         //update the Lamport timestamp
         time = time + 1;
 
@@ -50,15 +48,13 @@ public class Process
         dest.onMessage(message, time);
     }
 
-    public void onMessage(final String message, final long messageTime)
-    {
+    public void onMessage(final String message, final long messageTime) {
         final Message m = new Message(messageTime, message);
         messages.add(m);
     }
 
     //so that we can manually controlling message polling
-    public void processNextMessage()
-    {
+    public void processNextMessage() {
         final Message nxtMsg = messages.poll();
 
         //update the Lamport timestamp
@@ -68,36 +64,30 @@ public class Process
 
         final Process toSendOn = bus.getOrDefault(nxtMsg.getMsg(), null);
         final String output = outputMessage.getOrDefault(nxtMsg.getMsg(), null);
-        if (toSendOn != null && output != null)
-        {
+        if (toSendOn != null && output != null) {
             send(toSendOn, output);
         }
     }
 
-    public void emit(final String message, final Process destination)
-    {
+    public void emit(final String message, final Process destination) {
         send(destination, message);
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public Process whenReceiving(final String message)
-    {
+    public Process whenReceiving(final String message) {
         tmpWhenReceiving = message;
         return this;
     }
 
-    public Process thenSend(final String message)
-    {
+    public Process thenSend(final String message) {
         tmpThenSend = message;
         return this;
     }
 
-    public void toProcess(final Process process)
-    {
+    public void toProcess(final Process process) {
         outputMessage.put(tmpWhenReceiving, tmpThenSend);
         bus.put(tmpWhenReceiving, process);
         tmpThenSend = null;
