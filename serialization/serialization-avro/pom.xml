@@ -97,13 +97,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
-            <version>1.26.1</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>commons-io</artifactId>
-                    <groupId>commons-io</groupId>
-                </exclusion>
-            </exclusions>
+            <version>1.26.2</version>
         </dependency>
 
         <!-- Avro inter-process communication components -->
@@ -132,25 +126,31 @@
         <!--        </dependency>-->
 
         <!-- Compilers for Avro IDL and Avro Specific Java API -->
-        <dependency>
-            <groupId>org.apache.avro</groupId>
-            <artifactId>avro-compiler</artifactId>
-            <version>${avro.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-api</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.commons</groupId>
-                    <artifactId>commons-lang3</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.commons</groupId>
-                    <artifactId>commons-text</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.avro</groupId>-->
+        <!--            <artifactId>avro-compiler</artifactId>-->
+        <!--            <version>${avro.version}</version>-->
+        <!--            <exclusions>-->
+        <!--                <exclusion>-->
+        <!--                    <artifactId>slf4j-api</artifactId>-->
+        <!--                    <groupId>org.slf4j</groupId>-->
+        <!--                </exclusion>-->
+        <!--                <exclusion>-->
+        <!--                    <artifactId>commons-lang3</artifactId>-->
+        <!--                    <groupId>org.apache.commons</groupId>-->
+        <!--                </exclusion>-->
+        <!--                <exclusion>-->
+        <!--                    <artifactId>commons-text</artifactId>-->
+        <!--                    <groupId>org.apache.commons</groupId>-->
+        <!--                </exclusion>-->
+        <!--            </exclusions>-->
+        <!--        </dependency>-->
+
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.commons</groupId>-->
+        <!--            <artifactId>commons-text</artifactId>-->
+        <!--            <version>1.12.0</version>-->
+        <!--        </dependency>-->
 
     </dependencies>
 
