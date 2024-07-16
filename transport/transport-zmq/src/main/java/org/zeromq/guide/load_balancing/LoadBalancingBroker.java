@@ -57,7 +57,7 @@ public class LoadBalancingBroker {
 				while (!Thread.currentThread().isInterrupted()) {
 					String address = worker.recvStr();
 					String empty = worker.recvStr();
-					assert (empty.length() == 0);
+					assert (empty.isEmpty());
 
 					// Get request, send reply
 					String request = worker.recvStr();
@@ -114,7 +114,7 @@ public class LoadBalancingBroker {
 				items.register(backend, Poller.POLLIN);
 
 				// Poll front-end only if we have available workers
-				if (workerQueue.size() > 0)
+				if (!workerQueue.isEmpty())
 					items.register(frontend, Poller.POLLIN);
 
 				if (items.poll() < 0)
@@ -128,7 +128,7 @@ public class LoadBalancingBroker {
 
 					// Second frame is empty
 					String empty = backend.recvStr();
-					assert (empty.length() == 0);
+					assert (empty.isEmpty());
 
 					// Third frame is READY or else a client reply address
 					String clientAddr = backend.recvStr();
@@ -137,7 +137,7 @@ public class LoadBalancingBroker {
 					if (!clientAddr.equals("READY")) {
 
 						empty = backend.recvStr();
-						assert (empty.length() == 0);
+						assert (empty.isEmpty());
 
 						String reply = backend.recvStr();
 						frontend.sendMore(clientAddr);
@@ -155,7 +155,7 @@ public class LoadBalancingBroker {
 					String clientAddr = frontend.recvStr();
 
 					String empty = frontend.recvStr();
-					assert (empty.length() == 0);
+					assert (empty.isEmpty());
 
 					String request = frontend.recvStr();
 

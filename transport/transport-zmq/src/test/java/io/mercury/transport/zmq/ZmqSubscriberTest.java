@@ -1,21 +1,20 @@
 package io.mercury.transport.zmq;
 
-import static io.mercury.transport.zmq.ZmqConfigurator.ZmqProtocol.IPC;
-
+import io.mercury.transport.zmq.annotation.ZmqSubscribe;
 import org.junit.Test;
 
-import io.mercury.transport.zmq.annotation.ZmqSubscribe;
+import static io.mercury.transport.zmq.base.ZmqProtocol.IPC;
 
 public class ZmqSubscriberTest {
 
-	@Test
-	public void test() {
-		
-	}
-	
-	@ZmqSubscribe(protocol = IPC, addr = "")
-	private void handerZmqMsg() {
-		
-	}
+    @Test
+    public void test() {
+
+    }
+
+    @ZmqSubscribe(protocol = IPC, addr = "", ioThreads = 2)
+    private void handleZmqMsg() {
+
+    }
 
 }

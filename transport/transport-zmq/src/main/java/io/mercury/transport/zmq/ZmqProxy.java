@@ -1,13 +1,15 @@
 package io.mercury.transport.zmq;
 
-import io.mercury.common.lang.Asserter;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
-import io.mercury.transport.api.TransportComponent;
+import io.mercury.transport.TransportComponent;
 import io.mercury.transport.zmq.exception.ZmqProxyException;
 import org.slf4j.Logger;
 import org.zeromq.ZMQ;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import static io.mercury.common.lang.Asserter.nonNull;
 
 public final class ZmqProxy extends TransportComponent {
 
@@ -17,18 +19,18 @@ public final class ZmqProxy extends TransportComponent {
 
     private final boolean isConnected;
 
-    private final ZmqTransport frontend;
+    private final ZmqComponent frontend;
 
-    private final ZmqTransport backend;
+    private final ZmqComponent backend;
 
-    private ZmqTransport capture;
+    private ZmqComponent capture;
 
     private ZmqSender<String> control;
 
-    ZmqProxy(@Nonnull ZmqTransport frontend, @Nonnull ZmqTransport backend, ZmqTransport capture,
-             ZmqTransport control) {
-        Asserter.nonNull(frontend, "frontend");
-        Asserter.nonNull(backend, "backend");
+    ZmqProxy(@Nonnull ZmqComponent frontend, @Nonnull ZmqComponent backend,
+             @Nullable ZmqComponent capture, @Nullable ZmqComponent control) {
+        nonNull(frontend, "frontend");
+        nonNull(backend, "backend");
         this.frontend = frontend;
         this.backend = backend;
         this.name = "[" + frontend.getName() + "]->[" + backend.getName() + "]";
@@ -41,7 +43,7 @@ public final class ZmqProxy extends TransportComponent {
                     // 捕获通道
                     capture != null ? capture.getSocket() : null,
                     // 控制通道
-                    capture != null ? control.getSocket() : null);
+                    control != null ? control.getSocket() : null);
         } catch (Exception e) {
             throw new ZmqProxyException("ZMQ.proxy(frontend, backend, capture, control) -> " + e.getMessage(), e);
         }
@@ -49,15 +51,15 @@ public final class ZmqProxy extends TransportComponent {
         newStartTime();
     }
 
-    public ZmqTransport getFrontend() {
+    public ZmqComponent getFrontend() {
         return frontend;
     }
 
-    public ZmqTransport getBackend() {
+    public ZmqComponent getBackend() {
         return backend;
     }
 
-    public ZmqTransport getCapture() {
+    public ZmqComponent getCapture() {
         return capture;
     }
 
@@ -85,22 +87,22 @@ public final class ZmqProxy extends TransportComponent {
      * @param backend  代理后端
      * @return Builder
      */
-    public static Builder config(ZmqTransport frontend, ZmqTransport backend) {
+    public static Builder config(ZmqComponent frontend, ZmqComponent backend) {
         return new Builder(frontend, backend);
     }
 
     public static class Builder {
         // 代理前端
-        private final ZmqTransport frontend;
+        private final ZmqComponent frontend;
         // 代理后端
-        private final ZmqTransport backend;
+        private final ZmqComponent backend;
 
         // 捕获通道
-        private ZmqTransport capture;
+        private ZmqComponent capture;
         // 控制通道
-        private ZmqTransport control;
+        private ZmqComponent control;
 
-        private Builder(ZmqTransport frontend, ZmqTransport backend) {
+        private Builder(ZmqComponent frontend, ZmqComponent backend) {
             this.frontend = frontend;
             this.backend = backend;
         }
@@ -117,7 +119,7 @@ public final class ZmqProxy extends TransportComponent {
          * @param capture 捕获Socket, 用于接收全部数据
          * @return Builder
          */
-        public Builder setCapture(ZmqTransport capture) {
+        public Builder setCapture(ZmqComponent capture) {
             this.capture = capture;
             return this;
         }
@@ -126,7 +128,7 @@ public final class ZmqProxy extends TransportComponent {
          * @param control 控制通道, 用于接收控制指令
          * @return Builder
          */
-        public Builder setControl(ZmqTransport control) {
+        public Builder setControl(ZmqComponent control) {
             this.control = control;
             return this;
         }

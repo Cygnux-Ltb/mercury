@@ -82,13 +82,13 @@ public final class NettyConfigurator implements TransportConfigurator {
         return connectionInfo;
     }
 
-    private transient String strCache;
+    private transient String toStringCache;
 
     @Override
     public String toString() {
-        if (strCache == null)
-            this.strCache = JsonWrapper.toJson(this);
-        return strCache;
+        if (toStringCache == null)
+            this.toStringCache = JsonWrapper.toJson(this);
+        return toStringCache;
     }
 
     public static class Builder {

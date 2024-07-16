@@ -41,7 +41,7 @@ public final class WebSocketClient {
                                // 异常处理函数
                                WsThrowableHandler throwableHandler) {
         try {
-            WebSocket webSocket = AsyncHttpClientImpl.INSTANCE.prepareGet(uri)
+            var webSocket = AsyncHttpClientImpl.INSTANCE.prepareGet(uri)
                     .execute(new Builder().addWebSocketListener(
                             new WebSocketListenerImpl(
                                     uri, // WebSocket地址

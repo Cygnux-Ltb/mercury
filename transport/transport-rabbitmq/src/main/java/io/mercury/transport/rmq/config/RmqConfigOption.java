@@ -1,9 +1,9 @@
-package io.mercury.transport.rmq.cfg;
+package io.mercury.transport.rmq.config;
 
 import io.mercury.common.config.ConfigOption;
 import lombok.Getter;
 
-public enum RmqCfgOption implements ConfigOption {
+public enum RmqConfigOption implements ConfigOption {
 
     Host("rmq.host", "rabbitmq.host"),
 
@@ -21,7 +21,7 @@ public enum RmqCfgOption implements ConfigOption {
     @Getter
     private final String otherName;
 
-    RmqCfgOption(String configName, String otherName) {
+    RmqConfigOption(String configName, String otherName) {
         this.configName = configName;
         this.otherName = otherName;
     }

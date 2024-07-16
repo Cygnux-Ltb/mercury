@@ -1,4 +1,4 @@
-package io.mercury.transport.rmq.cfg;
+package io.mercury.transport.rmq.config;
 
 import com.rabbitmq.client.ConnectionFactory;
 import com.typesafe.config.Config;
@@ -132,11 +132,11 @@ public final class RmqConnection implements TransportConfigurator {
      * @return Builder
      */
     public static Builder with(@Nonnull String module, @Nonnull Config config) {
-        ConfigWrapper<RmqCfgOption> wrapper = new ConfigWrapper<>(module, config);
-        return new Builder(wrapper.getString(RmqCfgOption.Host),
-                wrapper.getInt(RmqCfgOption.Port),
-                wrapper.getString(RmqCfgOption.Username),
-                wrapper.getString(RmqCfgOption.Password));
+        ConfigWrapper<RmqConfigOption> wrapper = new ConfigWrapper<>(module, config);
+        return new Builder(wrapper.getString(RmqConfigOption.Host),
+                wrapper.getInt(RmqConfigOption.Port),
+                wrapper.getString(RmqConfigOption.Username),
+                wrapper.getString(RmqConfigOption.Password));
     }
 
     @Override

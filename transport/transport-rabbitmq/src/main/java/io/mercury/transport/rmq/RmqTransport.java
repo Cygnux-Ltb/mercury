@@ -9,11 +9,12 @@ import com.rabbitmq.client.ShutdownSignalException;
 import io.mercury.common.functional.ThrowableHandler;
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
+import io.mercury.common.thread.Sleep;
 import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Transport;
-import io.mercury.transport.api.TransportComponent;
+import io.mercury.transport.TransportComponent;
 import io.mercury.transport.exception.ConnectionFailedException;
-import io.mercury.transport.rmq.cfg.RmqConnection;
+import io.mercury.transport.rmq.config.RmqConnection;
 import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
@@ -21,7 +22,6 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-import static io.mercury.common.thread.SleepSupport.sleep;
 import static java.lang.System.currentTimeMillis;
 
 public abstract class RmqTransport extends TransportComponent implements Transport, Closeable {
@@ -91,9 +91,9 @@ public abstract class RmqTransport extends TransportComponent implements Transpo
     protected boolean closeAndReconnection() {
         log.info("Function closeAndReconnection()");
         closeConnection();
-        sleep(rmqConnection.getRecoveryInterval() / 2);
+        Sleep.millis(rmqConnection.getRecoveryInterval() / 2);
         createConnection();
-        sleep(rmqConnection.getRecoveryInterval() / 2);
+        Sleep.millis(rmqConnection.getRecoveryInterval() / 2);
         return isConnected();
     }
 

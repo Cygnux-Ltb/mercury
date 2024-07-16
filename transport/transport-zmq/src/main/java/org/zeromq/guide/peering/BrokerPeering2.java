@@ -42,7 +42,7 @@ public class BrokerPeering2 {
 					System.out.printf("Client: %s\n", reply);
 					try {
 						Thread.sleep(1000);
-					} catch (InterruptedException e) {
+					} catch (InterruptedException ignored) {
 					}
 				}
 			}
@@ -221,7 +221,7 @@ public class BrokerPeering2 {
 						msg.push(argv[random_peer]);
 						msg.send(cloudbe);
 					} else {
-						ZFrame frame = workers.remove(0);
+						ZFrame frame = workers.removeFirst();
 						msg.wrap(frame);
 						msg.send(localbe);
 						capacity--;
@@ -229,8 +229,8 @@ public class BrokerPeering2 {
 				}
 			}
 			// When we're done, clean up properly
-			while (workers.size() > 0) {
-				ZFrame frame = workers.remove(0);
+			while (!workers.isEmpty()) {
+				ZFrame frame = workers.removeFirst();
 				frame.destroy();
 			}
 		}

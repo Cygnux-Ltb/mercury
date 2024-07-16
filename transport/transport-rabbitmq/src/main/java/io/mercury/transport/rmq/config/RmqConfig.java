@@ -1,11 +1,11 @@
-package io.mercury.transport.rmq.cfg;
+package io.mercury.transport.rmq.config;
 
 import lombok.Getter;
 
 /**
  * @author yellow013
  */
-public abstract class RmqCfg {
+public abstract class RmqConfig {
 
     /**
      * 连接配置信息
@@ -13,7 +13,7 @@ public abstract class RmqCfg {
     @Getter
     private final RmqConnection connection;
 
-    protected RmqCfg(RmqConnection connection) {
+    protected RmqConfig(RmqConnection connection) {
         this.connection = connection;
     }
 

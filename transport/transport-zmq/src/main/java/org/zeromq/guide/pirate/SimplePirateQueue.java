@@ -35,7 +35,7 @@ public class SimplePirateQueue {
 
 			// The body of this example is exactly the same as lruqueue2.
 			while (true) {
-				boolean workersAvailable = workers.size() > 0;
+				boolean workersAvailable = !workers.isEmpty();
 				int rc = poller.poll(-1);
 
 				// Poll frontend only if we have available workers
@@ -63,19 +63,19 @@ public class SimplePirateQueue {
 					// Get client request, route to first available worker
 					ZMsg msg = ZMsg.recvMsg(frontend);
 					if (msg != null) {
-						msg.wrap(workers.remove(0));
+						msg.wrap(workers.removeFirst());
 						msg.send(backend);
 					}
 				}
 			}
 
 			// When we're done, clean up properly
-			while (workers.size() > 0) {
-				ZFrame frame = workers.remove(0);
+			while (!workers.isEmpty()) {
+				ZFrame frame = workers.removeFirst();
 				frame.destroy();
 			}
 
-			workers.clear();
+			// workers.clear();
 		}
 	}
 }

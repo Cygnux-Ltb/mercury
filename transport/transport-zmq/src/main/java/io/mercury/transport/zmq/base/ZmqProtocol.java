@@ -1,4 +1,4 @@
-package io.mercury.transport.zmq.enums;
+package io.mercury.transport.zmq.base;
 
 /**
  * 当前支持的协议类型
@@ -7,24 +7,24 @@ package io.mercury.transport.zmq.enums;
  */
 public enum ZmqProtocol {
 
-    TCP("tcp"),
+    TCP("tcp://"),
 
-    IPC("ipc"),
+    IPC("ipc://"),
 
-    INPROC("inproc");
+    INPROC("inproc://");
 
-    private final String name;
     private final String prefix;
 
-    ZmqProtocol(String name) {
-        this.name = name;
-        this.prefix = name + "://";
+    ZmqProtocol(String prefix) {
+        this.prefix = prefix;
     }
 
-    public String fixAddr(String addr) {
-        if (!addr.startsWith(prefix))
-            return prefix + addr;
-        return addr;
+    public String prefix() {
+        return prefix;
+    }
+
+    public ZmqAddr addr(String addr) {
+        return new ZmqAddr(this, addr);
     }
 
     @Override
@@ -32,14 +32,22 @@ public enum ZmqProtocol {
         return name();
     }
 
+    /**
+     * 根据名称检索协议对象
+     *
+     * @param name String
+     * @return ZmqProtocol
+     */
     public static ZmqProtocol of(String name) {
         for (ZmqProtocol protocol : ZmqProtocol.values()) {
-            if (protocol.name.equalsIgnoreCase(name))
-                return protocol;
-            if (protocol.prefix.equalsIgnoreCase(name))
+            if (protocol.prefix.startsWith(name.toLowerCase()))
                 return protocol;
         }
-        throw new IllegalArgumentException("Unsupported protocol type -> " + name);
+        throw new IllegalArgumentException("Unsupported protocol -> " + name);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(ZmqProtocol.of("ipc"));
     }
 
 }

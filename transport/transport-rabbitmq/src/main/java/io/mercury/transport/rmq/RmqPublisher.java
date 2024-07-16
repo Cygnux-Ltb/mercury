@@ -18,14 +18,14 @@ import com.rabbitmq.client.AMQP.BasicProperties;
 import io.mercury.common.character.Charsets;
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
-import io.mercury.common.thread.SleepSupport;
+import io.mercury.common.thread.Sleep;
 import io.mercury.common.thread.ThreadSupport;
 import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Publisher;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.exception.PublishFailedException;
-import io.mercury.transport.rmq.cfg.RmqConnection;
-import io.mercury.transport.rmq.cfg.RmqPublisherCfg;
+import io.mercury.transport.rmq.config.RmqConnection;
+import io.mercury.transport.rmq.config.RmqPublisherConfig;
 import io.mercury.transport.rmq.declare.ExchangeRelationship;
 import io.mercury.transport.rmq.exception.DeclareException;
 import io.mercury.transport.rmq.exception.DeclareRuntimeException;
@@ -59,7 +59,7 @@ public class RmqPublisher extends RmqTransport implements Publisher<String, byte
     /**
      * @param cfg RmqPublisherConfig
      */
-    public RmqPublisher(@Nonnull RmqPublisherCfg cfg) {
+    public RmqPublisher(@Nonnull RmqPublisherConfig cfg) {
         this(null, cfg);
     }
 
@@ -67,7 +67,7 @@ public class RmqPublisher extends RmqTransport implements Publisher<String, byte
      * @param tag String
      * @param cfg RmqPublisherConfig
      */
-    public RmqPublisher(@Nullable String tag, @Nonnull RmqPublisherCfg cfg) {
+    public RmqPublisher(@Nullable String tag, @Nonnull RmqPublisherConfig cfg) {
         super(nonEmpty(tag) ? tag : "publisher-" + datetimeOfMillisecond(), cfg.getConnection());
         Asserter.nonNull(cfg.getPublishExchange(), "exchangeRelation");
         this.publishExchange = cfg.getPublishExchange();
@@ -131,7 +131,7 @@ public class RmqPublisher extends RmqTransport implements Publisher<String, byte
         while (!isConnected()) {
             log.error("Detect connection isConnected() == false, retry {}", (++retry));
             closeIgnoreException();
-            SleepSupport.sleep(rmqConnection.getRecoveryInterval());
+            Sleep.millis(rmqConnection.getRecoveryInterval());
             createConnection();
         }
         if (confirm) {
@@ -251,11 +251,11 @@ public class RmqPublisher extends RmqTransport implements Publisher<String, byte
         ExchangeRelationship fanoutExchange = ExchangeRelationship.fanout("fanout-test");
 
         try (RmqPublisher publisher = new RmqPublisher(
-                RmqPublisherCfg.configuration(connection, fanoutExchange).build())) {
+                RmqPublisherConfig.configuration(connection, fanoutExchange).build())) {
             ThreadSupport.startNewThread(() -> {
                 int count = 0;
                 while (true) {
-                    SleepSupport.sleep(5000);
+                    Sleep.millis(5000);
                     publisher.publish(String.valueOf(++count).getBytes(Charsets.UTF8));
                     System.out.println(count);
                 }

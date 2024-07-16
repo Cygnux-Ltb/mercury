@@ -1,4 +1,4 @@
-package io.mercury.transport.rmq.cfg;
+package io.mercury.transport.rmq.config;
 
 import com.rabbitmq.client.AMQP.BasicProperties;
 import io.mercury.serialization.json.JsonWrapper;
@@ -16,7 +16,7 @@ import static io.mercury.common.lang.Asserter.nonNull;
 /**
  * @author yellow013
  */
-public final class RmqPublisherCfg extends RmqCfg {
+public final class RmqPublisherConfig extends RmqConfig {
 
     // 发布者ExchangeDeclare
     @Getter
@@ -41,7 +41,7 @@ public final class RmqPublisherCfg extends RmqCfg {
     /**
      * @param builder Builder
      */
-    private RmqPublisherCfg(Builder builder) {
+    private RmqPublisherConfig(Builder builder) {
         super(builder.connection);
         this.publishExchange = builder.publishExchange;
         this.defaultRoutingKey = builder.defaultRoutingKey;
@@ -225,8 +225,8 @@ public final class RmqPublisherCfg extends RmqCfg {
         /**
          * @return RmqPublisherConfig
          */
-        public RmqPublisherCfg build() {
-            return new RmqPublisherCfg(this);
+        public RmqPublisherConfig build() {
+            return new RmqPublisherConfig(this);
         }
 
     }

@@ -1,4 +1,4 @@
-package io.mercury.transport.zmq.enums;
+package io.mercury.transport.zmq.base;
 
 public enum ZmqType {
 

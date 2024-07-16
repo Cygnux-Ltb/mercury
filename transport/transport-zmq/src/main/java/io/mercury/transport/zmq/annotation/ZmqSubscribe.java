@@ -1,6 +1,7 @@
 package io.mercury.transport.zmq.annotation;
 
-import io.mercury.transport.zmq.ZmqConfigurator.ZmqProtocol;
+
+import io.mercury.transport.zmq.base.ZmqProtocol;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -17,7 +18,7 @@ public @interface ZmqSubscribe {
 
     String addr();
 
-    boolean handleTopic() default true;
+    int ioThreads() default 1;
 
     String[] topic() default {""};
 

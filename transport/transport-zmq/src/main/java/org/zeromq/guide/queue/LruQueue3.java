@@ -78,7 +78,7 @@ class ClientThread3 extends Thread {
 				String reply = new String(data, ZMQ.CHARSET);
 				try {
 					Thread.sleep(1000);
-				} catch (InterruptedException e) {
+				} catch (InterruptedException ignored) {
 				}
 				System.out.println(Thread.currentThread().getName() + " Client Sent HELLO");
 			}
@@ -121,7 +121,7 @@ class LRUQueueArg {
 	Queue<ZFrame> workers; // List of ready workers
 };
 
-//In the reactor design, each time a message arrives on a socket, the
+//In the reactor design, each time a message arrives at a socket, the
 //reactor passes it to a handler function. We have two handlers; one
 //for the frontend, one for the backend:
 
@@ -136,7 +136,7 @@ class FrontendHandler implements ZLoop.IZLoopHandler {
 			msg.send(arg.backend);
 
 			// Cancel reader on frontend if we went from 1 to 0 workers
-			if (arg.workers.size() == 0) {
+			if (arg.workers.isEmpty()) {
 				PollItem poller = new PollItem(arg.frontend, ZMQ.Poller.POLLIN);
 				loop.removePoller(poller);
 			}

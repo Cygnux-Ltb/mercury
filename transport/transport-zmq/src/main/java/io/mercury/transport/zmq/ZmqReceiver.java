@@ -1,10 +1,9 @@
 package io.mercury.transport.zmq;
 
-import io.mercury.common.lang.Asserter;
-import io.mercury.common.log4j2.Log4j2LoggerFactory;
-import io.mercury.common.thread.SleepSupport;
+import io.mercury.common.thread.Sleep;
 import io.mercury.common.thread.ThreadSupport;
 import io.mercury.transport.api.Receiver;
+import io.mercury.transport.zmq.base.ZmqType;
 import io.mercury.transport.zmq.exception.ZmqBindException;
 import org.slf4j.Logger;
 import org.zeromq.SocketType;
@@ -14,25 +13,29 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.function.Function;
 
-public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
+import static io.mercury.common.lang.Asserter.nonNull;
+import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
 
-    private static final Logger log = Log4j2LoggerFactory.getLogger(ZmqPublisher.class);
+public class ZmqReceiver extends ZmqComponent implements Receiver, Closeable {
+
+    private static final Logger log = getLogger(ZmqPublisher.class);
 
     private final Function<byte[], byte[]> handler;
 
-    ZmqReceiver(@Nonnull ZmqConfigurator cfg, @Nonnull Function<byte[], byte[]> handler) {
-        super(cfg);
-        Asserter.nonNull(handler, "handler");
+    ZmqReceiver(@Nonnull ZmqConfigurator configurator,
+                @Nonnull Function<byte[], byte[]> handler) {
+        super(configurator);
+        nonNull(handler, "handler");
         this.handler = handler;
-        String addr = cfg.getAddr().toString();
+        var addr = configurator.getAddr().getFullUri();
         if (socket.bind(addr)) {
             log.info("ZmqReceiver bound addr -> {}", addr);
         } else {
             log.error("ZmqReceiver unable to bind -> {}", addr);
             throw new ZmqBindException(addr);
         }
-        setTcpKeepAlive(cfg.getTcpKeepAlive());
-        this.name = "zrec$" + addr;
+        setTcpKeepAlive(configurator.getTcpKeepAlive());
+        this.name = "ZReceiver$" + addr;
         newStartTime();
     }
 
@@ -47,7 +50,7 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
 
     @Override
     public ZmqType getZmqType() {
-        return ZmqType.ZmqReceiver;
+        return ZmqType.ZReceiver;
     }
 
     private final byte[] emptyMsg = new byte[]{};
@@ -56,9 +59,9 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
     public void receive() {
         while (isRunning.get()) {
             byte[] recv = socket.recv();
-            byte[] sent = handler.apply(recv);
-            if (sent != null)
-                socket.send(sent);
+            byte[] reply = handler.apply(recv);
+            if (reply != null)
+                socket.send(reply);
             else
                 socket.send(emptyMsg);
         }
@@ -70,11 +73,11 @@ public class ZmqReceiver extends ZmqTransport implements Receiver, Closeable {
     }
 
     public static void main(String[] args) {
-        try (ZmqReceiver receiver = ZmqConfigurator.tcp(5551).newReceiver((byte[] recvMsg) -> {
+        try (ZmqReceiver receiver = ZmqComponent.tcp(5551).createReceiver((byte[] recvMsg) -> {
             System.out.println(new String(recvMsg));
             return null;
         })) {
-            SleepSupport.sleep(15000);
+            Sleep.millis(15000);
             ThreadSupport.startNewThread(receiver::receive);
         } catch (IOException ignored) {
         }
