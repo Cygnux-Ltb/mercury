@@ -52,10 +52,9 @@ public class ParanoidPirateQueue {
 
 		// The next method returns the next available worker address:
 		protected static ZFrame next(ArrayList<Worker> workers) {
-			Worker worker = workers.remove(0);
+			Worker worker = workers.removeFirst();
 			assert (worker != null);
-			ZFrame frame = worker.address;
-			return frame;
+            return worker.address;
 		}
 
 		// The purge method looks for and kills expired workers. We hold workers
@@ -92,7 +91,7 @@ public class ParanoidPirateQueue {
 			poller.register(frontend, Poller.POLLIN);
 
 			while (true) {
-				boolean workersAvailable = workers.size() > 0;
+				boolean workersAvailable = !workers.isEmpty();
 				int rc = poller.poll(HEARTBEAT_INTERVAL);
 				if (rc == -1)
 					break; // Interrupted

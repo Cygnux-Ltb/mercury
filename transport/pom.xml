@@ -18,10 +18,10 @@
         <module>transport-jetty</module>
         <module>transport-netty</module>
         <module>transport-rabbitmq</module>
+        <module>transport-rsocket</module>
         <!-- <module>transport-socket</module> -->
         <module>transport-ws</module>
         <module>transport-zmq</module>
-        <module>transport-rsocket</module>
     </modules>
 
     <build>
@@ -40,6 +40,12 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.34</version>
+            </dependency>
+
             <!-- A set of annotations used for code inspection support and code documentation. -->
             <dependency>
                 <groupId>org.jetbrains</groupId>

@@ -1,7 +1,7 @@
 package io.mercury.common.file;
 
-import io.mercury.common.datetime.pattern.DatePattern;
 import io.mercury.common.datetime.pattern.TemporalPattern;
+import io.mercury.common.datetime.pattern.impl.DatePattern;
 import io.mercury.common.lang.Asserter;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.collections.impl.list.mutable.FastList;
@@ -75,7 +75,6 @@ public final class FileUtil {
             //TODO
             throw new NullPointerException("");
     }
-
 
     /**
      * @param file File
@@ -401,7 +400,6 @@ public final class FileUtil {
      * @param close If true, is closed after the copy.
      * @throws IOException ioe
      */
-
     public static void copy(InputStream is, OutputStream os, byte[] buf, boolean close) throws IOException {
         int len;
         if (buf == null)
@@ -434,7 +432,6 @@ public final class FileUtil {
      * @return bytes from <CODE>f</CODE>
      * @throws IOException ioe
      */
-
     public static byte[] load(File file) throws IOException {
         FileInputStream fis = new FileInputStream(file);
         return load(fis, true);
@@ -447,7 +444,6 @@ public final class FileUtil {
      * @param close If true, InputStream is closed after the copy.
      * @throws IOException ioe
      */
-
     public static byte[] load(InputStream is, boolean close) throws IOException {
         try (final ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             copy(is, os, null, close);
@@ -460,7 +456,7 @@ public final class FileUtil {
      */
     public static class FileNameDateTimeComparator implements Comparator<File> {
 
-        private final TemporalPattern pattern;
+        private final TemporalPattern<?> pattern;
         private final ZoneId zoneId;
 
         /**
@@ -471,7 +467,7 @@ public final class FileUtil {
             this(null, null);
         }
 
-        public FileNameDateTimeComparator(TemporalPattern pattern, ZoneId zoneId) {
+        public FileNameDateTimeComparator(TemporalPattern<?> pattern, ZoneId zoneId) {
             this.pattern = (pattern == null) ? DatePattern.YYYY_MM_DD : pattern;
 
             if (zoneId == null)

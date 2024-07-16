@@ -9,7 +9,7 @@ import akka.actor.Terminated;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import io.mercury.common.thread.ShutdownHooks;
-import io.mercury.common.thread.SleepSupport;
+import io.mercury.common.thread.Sleep;
 import scala.concurrent.Future;
 
 public final class ActorSystemDelegate {
@@ -33,7 +33,7 @@ public final class ActorSystemDelegate {
         logger.info("ActorSystem {} is terminated...", actorSystem.name());
         Future<Terminated> terminate = actorSystem.terminate();
         while (!terminate.isCompleted())
-            SleepSupport.sleep(100);
+            Sleep.millis(100);
     }
 
     public ActorSystem get() {

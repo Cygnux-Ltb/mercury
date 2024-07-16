@@ -26,7 +26,7 @@ public class RouterMama {
 					worker.send("ready", 0);
 					byte[] workerload = worker.recv(0);
 					if (new String(workerload, ZMQ.CHARSET).equals("END")) {
-						System.out.println(String.format("Processs %d tasks.", total));
+						System.out.printf("Processes %d tasks.%n", total);
 						break;
 					}
 					total += 1;

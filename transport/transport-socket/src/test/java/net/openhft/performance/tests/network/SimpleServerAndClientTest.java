@@ -57,7 +57,7 @@ public class SimpleServerAndClientTest extends NetworkTestCommon {
 	static {
 		Log4j2Configurator.setLogFolder("runtime");
 		Log4j2Configurator.setLogFilename("socket-test");
-		Log4j2Configurator.setLogLevel(LogLevel.INFO);
+		Log4j2Configurator.useInfoLogLevel();
 	}
 
 	@Before

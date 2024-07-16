@@ -49,7 +49,7 @@ public class NettyServer extends NettyTransport implements TransportServer {
     }
 
     @Override
-    public void startup() {
+    public void bind() {
         try {
             // Create a new Channel and bind it.
             bootstrap.bind(configurator.getHost(), configurator.getPort()).sync()
@@ -99,7 +99,7 @@ public class NettyServer extends NettyTransport implements TransportServer {
             }
 
         })) {
-            nettyServer.startup();
+            nettyServer.bind();
         }
 
     }

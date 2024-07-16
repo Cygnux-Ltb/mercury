@@ -1,11 +1,10 @@
 package io.mercury.transport.zmq;
 
-import io.mercury.common.lang.Asserter;
-import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.serialization.specific.BytesSerializer;
-import io.mercury.common.thread.SleepSupport;
+import io.mercury.common.thread.Sleep;
 import io.mercury.transport.api.Publisher;
 import io.mercury.transport.exception.PublishFailedException;
+import io.mercury.transport.zmq.base.ZmqType;
 import io.mercury.transport.zmq.exception.ZmqBindException;
 import org.slf4j.Logger;
 import org.zeromq.SocketType;
@@ -15,9 +14,12 @@ import javax.annotation.Nonnull;
 import java.io.Closeable;
 import java.util.Random;
 
-public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byte[], T>, Closeable {
+import static io.mercury.common.lang.Asserter.nonNull;
+import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
 
-    private static final Logger log = Log4j2LoggerFactory.getLogger(ZmqPublisher.class);
+public final class ZmqPublisher<T> extends ZmqComponent implements Publisher<byte[], T>, Closeable {
+
+    private static final Logger log = getLogger(ZmqPublisher.class);
 
     // default topic
     private final byte[] sendMore;
@@ -25,25 +27,27 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
     private final BytesSerializer<T> ser;
 
     /**
-     * @param cfg   ZmqConfigurator
-     * @param topic String
-     * @param ser   BytesSerializer<T>
+     * @param configurator ZmqConfigurator
+     * @param topic        String
+     * @param serializer   BytesSerializer<T>
      */
-    ZmqPublisher(@Nonnull ZmqConfigurator cfg, @Nonnull String topic, @Nonnull BytesSerializer<T> ser) {
-        super(cfg);
-        Asserter.nonNull(topic, "topic");
-        Asserter.nonNull(ser, "ser");
+    ZmqPublisher(@Nonnull ZmqConfigurator configurator,
+                 @Nonnull String topic,
+                 @Nonnull BytesSerializer<T> serializer) {
+        super(configurator);
+        nonNull(topic, "topic");
+        nonNull(serializer, "serializer");
         this.sendMore = topic.getBytes(ZMQ.CHARSET);
-        this.ser = ser;
-        String addr = cfg.getAddr().toString();
+        this.ser = serializer;
+        var addr = configurator.getAddr().getFullUri();
         if (socket.bind(addr)) {
             log.info("ZmqPublisher bound addr -> {}", addr);
         } else {
             log.error("ZmqPublisher unable to bind -> {}", addr);
             throw new ZmqBindException(addr);
         }
-        setTcpKeepAlive(cfg.getTcpKeepAlive());
-        this.name = "zpub$" + addr + ":" + topic;
+        setTcpKeepAlive(configurator.getTcpKeepAlive());
+        this.name = "ZPub$" + addr + ":" + topic;
         newStartTime();
     }
 
@@ -58,7 +62,7 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
 
     @Override
     public ZmqType getZmqType() {
-        return ZmqType.ZmqPublisher;
+        return ZmqType.ZPublisher;
     }
 
     @Override
@@ -79,12 +83,12 @@ public final class ZmqPublisher<T> extends ZmqTransport implements Publisher<byt
     }
 
     public static void main(String[] args) throws Exception {
-        try (ZmqPublisher<String> publisher = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(2)
-                .newPublisherWithString("test")) {
+        try (ZmqPublisher<String> publisher = ZmqComponent.tcp("127.0.0.1", 13001).ioThreads(2)
+                .createPublisherWithString("test")) {
             Random random = new Random();
             while (true) {
                 publisher.publish(String.valueOf(random.nextInt()));
-                SleepSupport.sleep(1000);
+                Sleep.millis(1000);
             }
         }
     }

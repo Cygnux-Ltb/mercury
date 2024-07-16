@@ -11,7 +11,7 @@ public class Log4j2LoggerFactoryTest {
     static {
         System.out.println(System.getProperty("user.home"));
 //		Log4j2Configurator.setLogFilename("test");
-        Log4j2Configurator.setLogLevel(LogLevel.INFO);
+        Log4j2Configurator.useInfoLogLevel();
 //		Log4j2Configurator.setFileSizeOfMb(128);
     }
 

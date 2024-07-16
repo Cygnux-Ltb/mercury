@@ -8,28 +8,28 @@ import org.zeromq.ZMsg;
 //  Freelance server - Model 1
 //  Trivial echo service
 public class FreelanceServer1 {
-	
-	public static void main(String[] args) {
-		if (args.length < 1) {
-			System.out.printf("I: syntax: flserver1 <endpoint>\n");
-			System.exit(0);
-		}
 
-		try (ZContext ctx = new ZContext()) {
-			Socket server = ctx.createSocket(SocketType.REP);
-			server.bind(args[0]);
+    public static void main(String[] args) {
+        if (args.length < 1) {
+            System.out.print("I: syntax: flserver1 <endpoint>\n");
+            System.exit(0);
+        }
 
-			System.out.printf("I: echo service is ready at %s\n", args[0]);
+        try (ZContext ctx = new ZContext()) {
+            Socket server = ctx.createSocket(SocketType.REP);
+            server.bind(args[0]);
 
-			while (true) {
-				ZMsg msg = ZMsg.recvMsg(server);
-				if (msg == null)
-					break; // Interrupted
-				msg.send(server);
-			}
+            System.out.printf("I: echo service is ready at %s\n", args[0]);
 
-			if (Thread.currentThread().isInterrupted())
-				System.out.printf("W: interrupted\n");
-		}
-	}
+            while (true) {
+                ZMsg msg = ZMsg.recvMsg(server);
+                if (msg == null)
+                    break; // Interrupted
+                msg.send(server);
+            }
+
+            if (Thread.currentThread().isInterrupted())
+                System.out.print("W: interrupted\n");
+        }
+    }
 }

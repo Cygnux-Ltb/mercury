@@ -2,15 +2,14 @@ package io.mercury.common.datetime.pattern;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZonedDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.Temporal;
 
+import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
 import static io.mercury.common.datetime.TimeZone.UTC;
 
-public interface TemporalPattern {
+public interface TemporalPattern<T extends Temporal> {
 
     /**
      * @return the pattern string
@@ -39,47 +38,32 @@ public interface TemporalPattern {
     /**
      * @return String
      */
-    default String now() {
-        return fmt(LocalDateTime.now());
-    }
-
-    /**
-     * @return String
-     */
     default String utc() {
-        return fmt(ZonedDateTime.now(UTC));
+        return now(UTC);
     }
 
     /**
-     * @param datetime ZonedDateTime
      * @return String
      */
-    default String fmt(ZonedDateTime datetime) {
-        return fmt(datetime.toLocalDateTime());
+    default String now() {
+        return now(SYS_DEFAULT);
     }
 
     /**
-     * @param datetime LocalDateTime
      * @return String
      */
-    default String fmt(LocalDateTime datetime) {
-        return getFormatter().format(datetime);
-    }
+    String now(ZoneId zoneId);
 
     /**
-     * @param date LocalDate
+     * @param temporalObj T extends Temporal
      * @return String
      */
-    default String fmt(LocalDate date) {
-        return getFormatter().format(date);
-    }
+    String fmt(T temporalObj);
 
     /**
-     * @param time LocalTime
-     * @return String
+     * @param text String
+     * @return T extends Temporal
      */
-    default String fmt(LocalTime time) {
-        return getFormatter().format(time);
-    }
+    T parse(String text);
 
 }

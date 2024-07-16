@@ -12,7 +12,7 @@ import java.time.LocalTime;
 import java.time.ZoneOffset;
 
 import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HH_MM_SS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYY_MM_DD_HH_MM_SS;
 
 /**
  * 时间窗口序列

@@ -3,8 +3,7 @@ package io.mercury.common.concurrent.queue;
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.annotation.thread.SpinLock;
 import io.mercury.common.functional.Processor;
-import io.mercury.common.log4j2.Log4j2LoggerFactory;
-import io.mercury.common.thread.SleepSupport;
+import io.mercury.common.thread.Sleep;
 import io.mercury.common.thread.ThreadSupport;
 import org.jctools.queues.MpscArrayQueue;
 import org.jctools.queues.SpscArrayQueue;
@@ -12,6 +11,7 @@ import org.slf4j.Logger;
 
 import java.util.Queue;
 
+import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
 import static io.mercury.common.thread.ThreadSupport.getCurrentThreadName;
 import static io.mercury.common.util.StringSupport.isNullOrEmpty;
 import static java.lang.Math.max;
@@ -25,7 +25,7 @@ public abstract class ScQueueWithJCT<E> extends ScQueue<E> implements Runnable {
     /**
      * Logger
      */
-    private static final Logger log = Log4j2LoggerFactory.getLogger(ScQueueWithJCT.class);
+    private static final Logger log = getLogger(ScQueueWithJCT.class);
 
     /**
      * internal queue
@@ -121,7 +121,7 @@ public abstract class ScQueueWithJCT<E> extends ScQueue<E> implements Runnable {
      */
     private void waiting() {
         if (strategy == WaitingStrategy.Sleep) {
-            SleepSupport.sleepIgnoreInterrupts(sleepMillis);
+            Sleep.millisIgnored(sleepMillis);
         }
     }
 

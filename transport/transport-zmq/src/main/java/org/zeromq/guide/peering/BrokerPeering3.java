@@ -46,7 +46,7 @@ public class BrokerPeering3 {
 				while (!done) {
 					try {
 						Thread.sleep(rand.nextInt(5) * 1000);
-					} catch (InterruptedException e1) {
+					} catch (InterruptedException ignored) {
 					}
 					int burst = rand.nextInt(15);
 
@@ -103,7 +103,7 @@ public class BrokerPeering3 {
 					// Workers are busy for 0/1 seconds
 					try {
 						Thread.sleep(rand.nextInt(2) * 1000);
-					} catch (InterruptedException e) {
+					} catch (InterruptedException ignored) {
 					}
 
 					msg.send(worker);
@@ -282,7 +282,7 @@ public class BrokerPeering3 {
 						break; // No work, go back to backends
 
 					if (localCapacity > 0) {
-						ZFrame frame = workers.remove(0);
+						ZFrame frame = workers.removeFirst();
 						msg.wrap(frame);
 						msg.send(localbe);
 						localCapacity--;
@@ -305,8 +305,8 @@ public class BrokerPeering3 {
 				}
 			}
 			// When we're done, clean up properly
-			while (workers.size() > 0) {
-				ZFrame frame = workers.remove(0);
+			while (!workers.isEmpty()) {
+				ZFrame frame = workers.removeFirst();
 				frame.destroy();
 			}
 		}

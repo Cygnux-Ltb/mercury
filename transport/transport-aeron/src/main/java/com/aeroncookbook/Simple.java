@@ -37,9 +37,9 @@ public class Simple {
             FragmentHandler handler = (buffer, offset, length, header) ->
                     System.out.println("received:" + buffer.getStringAscii(offset));
 
-            while (sub.poll(handler, 1) <= 0) {
+            while (sub.poll(handler, 1) <= 0)
                 idleStrategy.idle();
-            }
+            
         }
     }
 

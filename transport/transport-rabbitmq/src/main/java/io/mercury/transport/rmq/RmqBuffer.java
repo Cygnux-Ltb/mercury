@@ -9,7 +9,7 @@ import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.serialization.specific.BytesDeserializer;
 import io.mercury.common.serialization.specific.BytesSerializer;
 import io.mercury.serialization.json.JsonWrapper;
-import io.mercury.transport.rmq.cfg.RmqConnection;
+import io.mercury.transport.rmq.config.RmqConnection;
 import io.mercury.transport.rmq.declare.AmqpExchange;
 import io.mercury.transport.rmq.declare.QueueRelationship;
 import io.mercury.transport.rmq.exception.DeclareException;

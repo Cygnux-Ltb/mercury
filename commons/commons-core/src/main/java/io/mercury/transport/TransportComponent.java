@@ -1,4 +1,6 @@
-package io.mercury.transport.api;
+package io.mercury.transport;
+
+import io.mercury.transport.api.Transport;
 
 import static java.lang.System.currentTimeMillis;
 
@@ -32,11 +34,10 @@ public abstract class TransportComponent implements Transport {
 
     @Override
     public long getRunningDuration() {
-        if (endTime > -1) {
+        if (endTime > -1)
             return endTime - startTime;
-        } else {
+        else
             return currentTimeMillis() - startTime;
-        }
     }
 
 }

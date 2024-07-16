@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static io.mercury.common.collections.CollectionUtil.toArray;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
 import static io.mercury.common.lang.Asserter.nonNull;
 import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
 

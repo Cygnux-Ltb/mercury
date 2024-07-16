@@ -370,9 +370,9 @@ public final class ThreadSupport {
     public static void main(String[] args) {
         System.out.println(getCurrentThreadName());
         startNewThread("Test0", () -> System.out.println(getCurrentThreadName()));
-        SleepSupport.sleep(2000);
+        Sleep.millis(2000);
         startNewThread("Test1", () -> System.out.println(dumpThreadInfo()));
-        SleepSupport.sleep(2000);
+        Sleep.millis(2000);
     }
 
 }

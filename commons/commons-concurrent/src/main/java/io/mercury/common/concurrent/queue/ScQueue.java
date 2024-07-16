@@ -1,6 +1,6 @@
 package io.mercury.common.concurrent.queue;
 
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
 
 import java.time.LocalDateTime;
 

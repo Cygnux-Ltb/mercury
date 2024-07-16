@@ -5,46 +5,46 @@ import io.mercury.common.annotation.OnlyOverrideEquals;
 @OnlyOverrideEquals
 public final class TcpKeepAlive {
 
-    private final KeepAliveOption keepAliveOption;
+    private final KeepAliveOption option;
 
-    private int keepAliveCount;
+    private int count;
 
-    private int keepAliveIdle;
+    private int idle;
 
-    private int keepAliveInterval;
+    private int interval;
 
-    private TcpKeepAlive(KeepAliveOption keepAliveOption) {
-        this.keepAliveOption = keepAliveOption;
+    private TcpKeepAlive(KeepAliveOption option) {
+        this.option = option;
     }
 
-    public KeepAliveOption getKeepAliveOption() {
-        return keepAliveOption;
+    public KeepAliveOption getOption() {
+        return option;
     }
 
-    public int getKeepAliveCount() {
-        return keepAliveCount;
+    public int getCount() {
+        return count;
     }
 
-    public int getKeepAliveIdle() {
-        return keepAliveIdle;
+    public int getIdle() {
+        return idle;
     }
 
-    public int getKeepAliveInterval() {
-        return keepAliveInterval;
+    public int getInterval() {
+        return interval;
     }
 
-    public TcpKeepAlive setKeepAliveCount(int keepAliveCount) {
-        this.keepAliveCount = keepAliveCount;
+    public TcpKeepAlive setCount(int count) {
+        this.count = count;
         return this;
     }
 
-    public TcpKeepAlive setKeepAliveIdle(int keepAliveIdle) {
-        this.keepAliveIdle = keepAliveIdle;
+    public TcpKeepAlive setIdle(int idle) {
+        this.idle = idle;
         return this;
     }
 
-    public TcpKeepAlive setKeepAliveInterval(int keepAliveInterval) {
-        this.keepAliveInterval = keepAliveInterval;
+    public TcpKeepAlive setInterval(int interval) {
+        this.interval = interval;
         return this;
     }
 
@@ -53,13 +53,13 @@ public final class TcpKeepAlive {
         if (!(obj instanceof TcpKeepAlive o)) {
             return false;
         } else {
-            if (!this.keepAliveOption.equals(o.getKeepAliveOption()))
+            if (option != o.getOption())
                 return false;
-            if (this.keepAliveCount != o.getKeepAliveCount())
+            if (this.count != o.getCount())
                 return false;
-            if (this.keepAliveIdle != o.getKeepAliveIdle())
+            if (this.idle != o.getIdle())
                 return false;
-            return this.keepAliveInterval == o.getKeepAliveInterval();
+            return this.interval == o.getInterval();
         }
     }
 
@@ -80,7 +80,7 @@ public final class TcpKeepAlive {
     /**
      * @return TcpKeepAlive
      */
-    public static TcpKeepAlive withDefault() {
+    public static TcpKeepAlive sysDefault() {
         return new TcpKeepAlive(KeepAliveOption.Default);
     }
 

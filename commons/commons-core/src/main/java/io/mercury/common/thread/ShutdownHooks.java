@@ -27,7 +27,7 @@ public final class ShutdownHooks {
                 executor.execute(shutdownTask);
             executor.shutdown();
             while (!executor.isTerminated())
-                SleepSupport.sleepIgnoreInterrupts(100);
+                Sleep.millisIgnored(100);
             System.out.println("all shutdown hook execution completed");
         }
     }

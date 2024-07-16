@@ -270,7 +270,7 @@ public final class ConcurrentLongQueue extends AbstractConcurrentQueue {
 	 */
 	public boolean offer(long value) {
 
-		// non volatile read ( which is quicker )
+		// non-volatile read ( which is quicker )
 		final int writeLocation = this.producerWriteLocation;
 
 		// sets the nextWriteLocation my moving it on by 1, this may cause it it wrap
@@ -331,10 +331,10 @@ public final class ConcurrentLongQueue extends AbstractConcurrentQueue {
 	 */
 	public boolean offer(long value, long timeout, TimeUnit unit) throws InterruptedException {
 
-		// non volatile read ( which is quicker )
+		// non-volatile read ( which is quicker )
 		final int writeLocation = this.producerWriteLocation;
 
-		// sets the nextWriteLocation my moving it on by 1, this may cause it it wrap
+		// sets the nextWriteLocation my moving it on by 1, this may cause it is wrap
 		// back to the start.
 		final int nextWriteLocation = (writeLocation + 1 == capacity) ? 0 : writeLocation + 1;
 
@@ -356,7 +356,7 @@ public final class ConcurrentLongQueue extends AbstractConcurrentQueue {
 
 			while (nextWriteLocation == readLocation)
 			// this condition handles the case general case where the read is at the start
-			// of the backing array and we are at the end,
+			// of the backing array, and we are at the end,
 			// blocks as our backing array is full, we will wait for a read, ( which will
 			// cause a change on the read location )
 			{
@@ -393,7 +393,7 @@ public final class ConcurrentLongQueue extends AbstractConcurrentQueue {
 		final int readLocation = this.consumerReadLocation;
 		int nextReadLocation = blockForReadSpace(timeout, unit, readLocation);
 
-		// purposely non volatile as the read memory barrier occurred when we read
+		// purposely non-volatile as the read memory barrier occurred when we read
 		// 'writeLocation'
 		final long value = data[readLocation];
 		setReadLocation(nextReadLocation);
@@ -429,7 +429,7 @@ public final class ConcurrentLongQueue extends AbstractConcurrentQueue {
 			if (o == data[readLocation])
 				return true;
 
-			// sets the readLocation my moving it on by 1, this may cause it it wrap back to
+			// sets the readLocation my moving it on by 1, this may cause it is wrap back to
 			// the start.
 			readLocation = (readLocation + 1 == capacity) ? 0 : readLocation + 1;
 
@@ -492,7 +492,7 @@ public final class ConcurrentLongQueue extends AbstractConcurrentQueue {
 	 */
 	int drainTo(long[] target, int maxElements) {
 
-		// non volatile read ( which is quicker )
+		// non-volatile read ( which is quicker )
 		int readLocation = this.consumerReadLocation;
 
 		int i = 0;

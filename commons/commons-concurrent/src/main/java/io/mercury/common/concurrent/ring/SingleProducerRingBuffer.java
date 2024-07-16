@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
 import static io.mercury.common.thread.ThreadFactoryImpl.ofPlatform;
 import static io.mercury.common.thread.ThreadPriority.MAX;
 import static io.mercury.common.util.StringSupport.requireNonEmptyElse;

@@ -12,7 +12,7 @@
     <name>transport-jetty</name>
 
     <properties>
-        <jetty.version>9.4.54.v20240208</jetty.version>
+        <jetty.version>9.4.55.v20240627</jetty.version>
     </properties>
 
     <dependencies>
@@ -27,4 +27,5 @@
             <version>${jetty.version}</version>
         </dependency>
     </dependencies>
+
 </project>

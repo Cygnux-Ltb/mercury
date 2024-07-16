@@ -2,7 +2,7 @@ package io.mercury.common.concurrent.queue;
 
 import io.mercury.common.annotation.thread.SpinLock;
 import io.mercury.common.collections.Capacity;
-import io.mercury.common.thread.SleepSupport;
+import io.mercury.common.thread.Sleep;
 import io.mercury.common.thread.ThreadSupport;
 import io.mercury.common.util.StringSupport;
 import org.jctools.queues.MpmcArrayQueue;
@@ -54,7 +54,7 @@ public final class ConcurrentQueue<E> implements McQueue<E> {
         switch (strategy) {
             case Spin, Blocking -> {
             }
-            case Sleep -> SleepSupport.sleep(10);
+            case Sleep -> Sleep.millis(10);
         }
     }
 

@@ -4,7 +4,7 @@ import io.mercury.common.collections.queue.Queue;
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.transport.api.Sender;
-import io.mercury.transport.api.TransportComponent;
+import io.mercury.transport.TransportComponent;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
 import org.slf4j.Logger;
 
