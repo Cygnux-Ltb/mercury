@@ -79,7 +79,7 @@ public final class SleepSupport {
      * @param millis long
      * @throws RuntimeInterruptedException e
      */
-    public static void sleep(long millis) throws RuntimeInterruptedException {
+    public static void millis(long millis) throws RuntimeInterruptedException {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
@@ -94,7 +94,7 @@ public final class SleepSupport {
      * @param nanos  int
      * @throws RuntimeInterruptedException e
      */
-    public static void sleep(long millis, int nanos) throws RuntimeInterruptedException {
+    public static void millis(long millis, int nanos) throws RuntimeInterruptedException {
         try {
             Thread.sleep(millis, nanos);
         } catch (InterruptedException e) {
@@ -109,7 +109,7 @@ public final class SleepSupport {
      * @param time     long
      * @throws RuntimeInterruptedException e
      */
-    public static void sleep(@Nonnull TimeUnit timeUnit, long time) throws RuntimeInterruptedException {
+    public static void time(@Nonnull TimeUnit timeUnit, long time) throws RuntimeInterruptedException {
         try {
             timeUnit.sleep(time);
         } catch (InterruptedException e) {

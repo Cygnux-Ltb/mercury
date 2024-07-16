@@ -2,7 +2,6 @@ package io.mercury.transport.zmq;
 
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.lang.Asserter;
-import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Transport;
 import io.mercury.transport.api.TransportComponent;
@@ -17,17 +16,20 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
+
 /**
  * @author yellow013
  *
  * <pre>
  * -XX:+UseBiasedLocking might increase performance a little bit or not
+ * <br>
  * -XX:+UseNUMA could increase performance
- *         </pre>
+ * </pre>
  */
 public abstract class ZmqTransport extends TransportComponent implements Transport, Closeable {
 
-    private static final Logger log = Log4j2LoggerFactory.getLogger(ZmqTransport.class);
+    private static final Logger log = getLogger(ZmqTransport.class);
 
     // ZMQ配置器
     protected final ZmqConfigurator cfg;
@@ -44,7 +46,7 @@ public abstract class ZmqTransport extends TransportComponent implements Transpo
     // 组件名称
     protected String name;
 
-    protected ZmqTransport(final ZmqConfigurator cfg) {
+    ZmqTransport(final ZmqConfigurator cfg) {
         Asserter.nonNull(cfg, "cfg");
         this.cfg = cfg;
         this.context = new ZContext(cfg.getIoThreads());

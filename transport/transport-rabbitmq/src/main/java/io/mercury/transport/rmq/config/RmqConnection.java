@@ -8,6 +8,9 @@ import io.mercury.common.util.StringSupport;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.TransportConfigurator;
 import io.mercury.transport.rmq.RmqTransport.ShutdownSignalHandler;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -16,45 +19,59 @@ import javax.net.ssl.SSLContext;
 public final class RmqConnection implements TransportConfigurator {
 
     // 连接地址
+    @Getter
     private final String host;
 
     // 端口号
+    @Getter
     private final int port;
 
     // 用户名
+    @Getter
     private final String username;
 
     // 密码
+    @Getter
     private final String password;
 
     // 虚拟主机
+    @Getter
     private final String virtualHost;
 
     // SSL
+    @Getter
     private final SSLContext sslContext;
 
     // 连接超时时间
+    @Getter
     private final int connectionTimeout;
 
     // 自动恢复连接
+    @Getter
     private final boolean automaticRecovery;
 
     // 重试连接间隔
+    @Getter
     private final long recoveryInterval;
 
     // 握手通信超时时间
+    @Getter
     private final int handshakeTimeout;
 
     // 关闭超时时间
+    @Getter
     private final int shutdownTimeout;
 
     // 请求心跳超时时间
+    @Getter
     private final int requestedHeartbeat;
 
     // 停机处理回调函数
+    @Getter
     private final transient ShutdownSignalHandler shutdownSignalHandler;
 
     // 配置连接信息
+    @Getter
     private final String connectionInfo;
 
     private RmqConnection(Builder builder) {
@@ -115,68 +132,11 @@ public final class RmqConnection implements TransportConfigurator {
      * @return Builder
      */
     public static Builder with(@Nonnull String module, @Nonnull Config config) {
-        ConfigWrapper<RmqCfgOption> delegate = new ConfigWrapper<>(module, config);
-        return new Builder(delegate.getString(RmqCfgOption.Host),
-                delegate.getInt(RmqCfgOption.Port),
-                delegate.getString(RmqCfgOption.Username),
-                delegate.getString(RmqCfgOption.Password));
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getVirtualHost() {
-        return virtualHost;
-    }
-
-    public SSLContext getSslContext() {
-        return sslContext;
-    }
-
-    public int getConnectionTimeout() {
-        return connectionTimeout;
-    }
-
-    public boolean isAutomaticRecovery() {
-        return automaticRecovery;
-    }
-
-    public long getRecoveryInterval() {
-        return recoveryInterval;
-    }
-
-    public int getHandshakeTimeout() {
-        return handshakeTimeout;
-    }
-
-    public int getShutdownTimeout() {
-        return shutdownTimeout;
-    }
-
-    public int getRequestedHeartbeat() {
-        return requestedHeartbeat;
-    }
-
-    public ShutdownSignalHandler getShutdownSignalHandler() {
-        return shutdownSignalHandler;
-    }
-
-    @Override
-    public String getConnectionInfo() {
-        return connectionInfo;
+        ConfigWrapper<RmqCfgOption> wrapper = new ConfigWrapper<>(module, config);
+        return new Builder(wrapper.getString(RmqCfgOption.Host),
+                wrapper.getInt(RmqCfgOption.Port),
+                wrapper.getString(RmqCfgOption.Username),
+                wrapper.getString(RmqCfgOption.Password));
     }
 
     @Override
@@ -184,13 +144,13 @@ public final class RmqConnection implements TransportConfigurator {
         return toString();
     }
 
-    private transient String cache;
+    private transient String toStringCache;
 
     @Override
     public String toString() {
-        if (cache == null)
-            cache = JsonWrapper.toJsonHasNulls(this);
-        return cache;
+        if (toStringCache == null)
+            toStringCache = JsonWrapper.toJsonHasNulls(this);
+        return toStringCache;
     }
 
     /**
@@ -214,6 +174,8 @@ public final class RmqConnection implements TransportConfigurator {
         return factory;
     }
 
+    @Setter
+    @Accessors(chain = true)
     public static class Builder {
 
         // 连接地址
@@ -270,46 +232,6 @@ public final class RmqConnection implements TransportConfigurator {
             this.password = password;
             if (StringSupport.nonEmpty(virtualHost) && !virtualHost.equals("/"))
                 this.virtualHost = virtualHost;
-        }
-
-        public Builder setSSLContext(SSLContext sslContext) {
-            this.sslContext = sslContext;
-            return this;
-        }
-
-        public Builder setConnectionTimeout(int connectionTimeout) {
-            this.connectionTimeout = connectionTimeout;
-            return this;
-        }
-
-        public Builder setAutomaticRecovery(boolean automaticRecovery) {
-            this.automaticRecovery = automaticRecovery;
-            return this;
-        }
-
-        public Builder setRecoveryInterval(long recoveryInterval) {
-            this.recoveryInterval = recoveryInterval;
-            return this;
-        }
-
-        public Builder setHandshakeTimeout(int handshakeTimeout) {
-            this.handshakeTimeout = handshakeTimeout;
-            return this;
-        }
-
-        public Builder setShutdownTimeout(int shutdownTimeout) {
-            this.shutdownTimeout = shutdownTimeout;
-            return this;
-        }
-
-        public Builder setRequestedHeartbeat(int requestedHeartbeat) {
-            this.requestedHeartbeat = requestedHeartbeat;
-            return this;
-        }
-
-        public Builder setShutdownSignalHandler(ShutdownSignalHandler shutdownSignalHandler) {
-            this.shutdownSignalHandler = shutdownSignalHandler;
-            return this;
         }
 
         public RmqConnection build() {

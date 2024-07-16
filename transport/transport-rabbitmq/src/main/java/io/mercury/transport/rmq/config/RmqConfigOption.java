@@ -1,6 +1,7 @@
 package io.mercury.transport.rmq.cfg;
 
 import io.mercury.common.config.ConfigOption;
+import lombok.Getter;
 
 public enum RmqCfgOption implements ConfigOption {
 
@@ -14,23 +15,15 @@ public enum RmqCfgOption implements ConfigOption {
 
     VirtualHost("rmq.virtualHost", "rabbitmq.virtualHost");
 
+    @Getter
     private final String configName;
 
-    private final String otherConfigName;
+    @Getter
+    private final String otherName;
 
-    RmqCfgOption(String configName, String otherConfigName) {
+    RmqCfgOption(String configName, String otherName) {
         this.configName = configName;
-        this.otherConfigName = otherConfigName;
-    }
-
-    @Override
-    public String getConfigName() {
-        return configName;
-    }
-
-    @Override
-    public String getOtherName() {
-        return otherConfigName;
+        this.otherName = otherName;
     }
 
 }

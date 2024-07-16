@@ -4,6 +4,7 @@ import com.rabbitmq.client.AMQP.BasicProperties;
 import io.mercury.serialization.json.JsonWrapper;
 import io.mercury.transport.rmq.declare.AmqpQueue;
 import io.mercury.transport.rmq.declare.ExchangeRelationship;
+import lombok.Getter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -18,18 +19,23 @@ import static io.mercury.common.lang.Asserter.nonNull;
 public final class RmqPublisherCfg extends RmqCfg {
 
     // 发布者ExchangeDeclare
+    @Getter
     private final ExchangeRelationship publishExchange;
 
     // 消息发布RoutingKey
+    @Getter
     private final String defaultRoutingKey;
 
     // 消息发布参数
+    @Getter
     private final BasicProperties defaultMsgProps;
 
     // 消息参数提供者
+    @Getter
     private final Supplier<BasicProperties> msgPropsSupplier;
 
     // 发布确认选项
+    @Getter
     private final PublishConfirmOptions confirmOptions;
 
     /**
@@ -42,26 +48,6 @@ public final class RmqPublisherCfg extends RmqCfg {
         this.defaultMsgProps = builder.defaultMsgProps;
         this.msgPropsSupplier = builder.msgPropsSupplier;
         this.confirmOptions = builder.confirmOptions;
-    }
-
-    public ExchangeRelationship getPublishExchange() {
-        return publishExchange;
-    }
-
-    public String getDefaultRoutingKey() {
-        return defaultRoutingKey;
-    }
-
-    public BasicProperties getDefaultMsgProps() {
-        return defaultMsgProps;
-    }
-
-    public Supplier<BasicProperties> getMsgPropsSupplier() {
-        return msgPropsSupplier;
-    }
-
-    public PublishConfirmOptions getConfirmOptions() {
-        return confirmOptions;
     }
 
     /**
@@ -147,7 +133,8 @@ public final class RmqPublisherCfg extends RmqCfg {
      */
     public static Builder configuration(@Nonnull RmqConnection connection,
                                         @Nonnull ExchangeRelationship publishExchange) {
-        return new Builder(nonNull(connection, "connection"), nonNull(publishExchange, "publishExchange"));
+        return new Builder(nonNull(connection, "connection"),
+                nonNull(publishExchange, "publishExchange"));
     }
 
     private transient String toStringCache;
@@ -163,6 +150,7 @@ public final class RmqPublisherCfg extends RmqCfg {
 
         // 连接配置
         private final RmqConnection connection;
+        
         // 消息发布Exchange和相关绑定
         private final ExchangeRelationship publishExchange;
 

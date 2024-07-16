@@ -2,7 +2,6 @@ package io.mercury.common.param;
 
 import io.mercury.common.collections.MutableMaps;
 import org.eclipse.collections.api.map.ImmutableMap;
-import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.collections.api.set.ImmutableSet;
 import org.slf4j.Logger;
 
@@ -33,18 +32,20 @@ public class ImmutableParams<K extends ParamKey> implements Params<K> {
     /**
      * 根据传入的Key获取Map中的相应字段
      *
-     * @param map  Map<?, ?>
-     * @param keys K[]
+     * @param inMap Map<String, ?>
+     * @param keys  K[]
+     * @throws NullPointerException     e
+     * @throws IllegalArgumentException e
      */
-    public ImmutableParams(@Nonnull Map<String, ?> map, @Nonnull K[] keys) {
-        nonEmptyMap(map, "map");
+    public ImmutableParams(@Nonnull Map<String, ?> inMap, @Nonnull K[] keys)
+            throws NullPointerException, IllegalArgumentException {
+        nonEmptyMap(inMap, "map");
         requiredLength(keys, 1, "keys");
-        MutableMap<K, String> mutableMap = MutableMaps.newUnifiedMap();
-        for (K key : keys) {
-            if (map.containsKey(key.getParamName()))
-                mutableMap.put(key, map.get(key.getParamName()).toString());
-        }
-        this.params = mutableMap.toImmutable();
+        var map = MutableMaps.<K, String>newUnifiedMap();
+        for (K key : keys)
+            if (inMap.containsKey(key.getParamName()))
+                map.put(key, inMap.get(key.getParamName()).toString());
+        this.params = map.toImmutable();
         this.keys = newImmutableSet(keys);
     }
 
@@ -53,10 +54,13 @@ public class ImmutableParams<K extends ParamKey> implements Params<K> {
      *
      * @param prop Properties
      * @param keys K[]
+     * @throws NullPointerException     e
+     * @throws IllegalArgumentException e
      */
-    public ImmutableParams(@Nonnull Properties prop, @Nonnull K[] keys) {
-        requiredLength(keys, 1, "keys");
+    public ImmutableParams(@Nonnull Properties prop, @Nonnull K[] keys)
+            throws NullPointerException, IllegalArgumentException {
         nonNull(prop, "prop");
+        requiredLength(keys, 1, "keys");
         var map = MutableMaps.<K, String>newUnifiedMap();
         for (K key : keys) {
             if (prop.containsKey(key.getParamName()))
