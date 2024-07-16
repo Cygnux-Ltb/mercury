@@ -57,13 +57,13 @@ import java.time.temporal.Temporal;
  * }       reserved for future use
  * </pre>
  */
-public abstract class BaseTemporalPattern<T extends Temporal> implements TemporalPattern<T> {
+public abstract class SpecifiedPattern<T extends Temporal> implements TemporalPattern<T> {
 
     private final String pattern;
 
     private final DateTimeFormatter formatter;
 
-    public BaseTemporalPattern(String pattern) {
+    public SpecifiedPattern(String pattern) {
         this.pattern = pattern;
         this.formatter = DateTimeFormatter.ofPattern(pattern);
     }
@@ -84,17 +84,16 @@ public abstract class BaseTemporalPattern<T extends Temporal> implements Tempora
         return formatter;
     }
 
-    abstract protected T provideNow();
-
-    abstract protected T provideNow(ZoneId zoneId);
+    /**
+     * @return T extends Temporal
+     */
+    protected abstract T provideNow();
 
     /**
-     * @return String
+     * @param zoneId ZoneId
+     * @return T extends Temporal
      */
-    @Override
-    public String now() {
-        return formatter.format(provideNow());
-    }
+    protected abstract T provideNow(ZoneId zoneId);
 
     /**
      * @param zoneId ZoneId

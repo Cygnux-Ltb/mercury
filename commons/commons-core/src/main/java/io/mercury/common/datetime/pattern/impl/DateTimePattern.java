@@ -1,23 +1,26 @@
-package io.mercury.common.datetime.pattern;
+package io.mercury.common.datetime.pattern.impl;
+
+import io.mercury.common.datetime.pattern.TemporalPattern;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import static io.mercury.common.character.Separator.BLANK;
 import static io.mercury.common.character.Separator.LINE;
-import static io.mercury.common.datetime.pattern.DatePattern.YYMMDD;
-import static io.mercury.common.datetime.pattern.DatePattern.YYYYMMDD;
-import static io.mercury.common.datetime.pattern.DatePattern.YYYY_MM_DD;
-import static io.mercury.common.datetime.pattern.DatePattern.YY_MM_DD;
-import static io.mercury.common.datetime.pattern.TimePattern.HH;
-import static io.mercury.common.datetime.pattern.TimePattern.HHMM;
-import static io.mercury.common.datetime.pattern.TimePattern.HHMMSS;
-import static io.mercury.common.datetime.pattern.TimePattern.HHMMSSSSS;
-import static io.mercury.common.datetime.pattern.TimePattern.HHMMSSSSSSSS;
-import static io.mercury.common.datetime.pattern.TimePattern.HH_MM_SS;
-import static io.mercury.common.datetime.pattern.TimePattern.HH_MM_SS_SSS;
-import static io.mercury.common.datetime.pattern.TimePattern.HH_MM_SS_SSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DatePattern.YYMMDD;
+import static io.mercury.common.datetime.pattern.impl.DatePattern.YYYYMMDD;
+import static io.mercury.common.datetime.pattern.impl.DatePattern.YYYY_MM_DD;
+import static io.mercury.common.datetime.pattern.impl.DatePattern.YY_MM_DD;
+import static io.mercury.common.datetime.pattern.impl.TimePattern.HH;
+import static io.mercury.common.datetime.pattern.impl.TimePattern.HHMM;
+import static io.mercury.common.datetime.pattern.impl.TimePattern.HHMMSS;
+import static io.mercury.common.datetime.pattern.impl.TimePattern.HHMMSSSSS;
+import static io.mercury.common.datetime.pattern.impl.TimePattern.HHMMSSSSSSSS;
+import static io.mercury.common.datetime.pattern.impl.TimePattern.HH_MM_SS;
+import static io.mercury.common.datetime.pattern.impl.TimePattern.HH_MM_SS_SSS;
+import static io.mercury.common.datetime.pattern.impl.TimePattern.HH_MM_SS_SSSSSS;
 
 /**
  * 常用日期时间格式列表
@@ -261,6 +264,7 @@ public enum DateTimePattern implements TemporalPattern<LocalDateTime> {
      * example: 2018-03-14 13:14:23.678789
      */
     YYYY_MM_DD_HH_MM_SS_SSSSSS(YYYY_MM_DD.getPattern() + BLANK + HH_MM_SS_SSSSSS.getPattern()),
+
     ;
 
     private final String pattern;
@@ -298,7 +302,7 @@ public enum DateTimePattern implements TemporalPattern<LocalDateTime> {
      */
     @Override
     public String now(ZoneId zoneId) {
-        return formatter.format(LocalDateTime.now(zoneId));
+        return fmt(LocalDateTime.now(zoneId));
     }
 
     /**
@@ -317,6 +321,21 @@ public enum DateTimePattern implements TemporalPattern<LocalDateTime> {
     @Override
     public LocalDateTime parse(String text) {
         return LocalDateTime.parse(text, formatter);
+    }
+
+    /**
+     * @param text String
+     * @return LocalDateTime
+     * @throws DateTimeParseException e
+     */
+    public static LocalDateTime tryParse(String text) throws DateTimeParseException {
+        for (DateTimePattern pattern : DateTimePattern.values()) {
+            try {
+                return LocalDateTime.parse(text, pattern.formatter);
+            } catch (DateTimeParseException ignored) {
+            }
+        }
+        throw new DateTimeParseException("No matching pattern", text, 0);
     }
 
 }

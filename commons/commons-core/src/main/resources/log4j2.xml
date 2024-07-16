@@ -6,8 +6,8 @@
                     pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} | %-5level [%t] [%C{1}.%M] >>> %msg%n"/>
         </Console>
         <RollingFile name="ROLLING_FILE"
-                     fileName="${sys:java.io.tmpdir}/logs/${sys:log4j2.filename:-started-at-$${date:yyMMdd-HHmmss}}.log"
-                     filePattern="${sys:java.io.tmpdir}/logs/${sys:log4j2.filename:-started-at-$${date:yyMMdd-HHmmss}}.%d{yyMMdd}.log"
+                     fileName="${sys:java.io.tmpdir}/logs/${sys:log4j2.filename:-started-at-${date:yyMMdd-HHmmss}}.log"
+                     filePattern="${sys:java.io.tmpdir}/logs/${sys:log4j2.filename:-started-at-${date:yyMMdd-HHmmss}}.%d{yyMMdd}.log"
                      append="true">
             <!-- 日志输出格式 -->
             <PatternLayout

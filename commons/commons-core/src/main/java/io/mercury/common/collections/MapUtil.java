@@ -60,4 +60,9 @@ public final class MapUtil {
         return capacity < minCapacity ? minCapacity : BitOperator.minPow2(capacity);
     }
 
+    public static <M extends Map<?, ?>> boolean nonEmpty(M map)
+            throws NullPointerException, IllegalArgumentException {
+        return map != null && !map.isEmpty();
+    }
+
 }

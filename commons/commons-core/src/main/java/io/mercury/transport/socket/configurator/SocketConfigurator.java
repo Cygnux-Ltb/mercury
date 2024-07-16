@@ -79,6 +79,6 @@ public final class SocketConfigurator implements TransportConfigurator {
         public SocketConfigurator build() {
             return new SocketConfigurator(this);
         }
-
     }
+
 }

@@ -7,11 +7,11 @@ import javax.annotation.Nonnull;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 
-public final class SleepSupport {
+public final class Sleep {
 
-    private static final Logger log = Log4j2LoggerFactory.getLogger(SleepSupport.class);
+    private static final Logger log = Log4j2LoggerFactory.getLogger(Sleep.class);
 
-    private SleepSupport() {
+    private Sleep() {
     }
 
     /**
@@ -40,11 +40,11 @@ public final class SleepSupport {
     /**
      * @param millis long
      */
-    public static void sleepIgnoreInterrupts(long millis) {
+    public static void millisIgnored(long millis) {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
-            log.error("SleepSupport::sleepIgnoreInterrupts(millis==[{}]) throw InterruptedException -> {}",
+            log.error("Sleep::millisIgnored({}) throw InterruptedException -> {}",
                     millis, e.getMessage(), e);
         }
     }
@@ -53,12 +53,12 @@ public final class SleepSupport {
      * @param millis long
      * @param nanos  int
      */
-    public static void sleepIgnoreInterrupts(long millis, int nanos) {
+    public static void millisIgnored(long millis, int nanos) {
         try {
             Thread.sleep(millis, nanos);
         } catch (InterruptedException e) {
-            log.error("SleepSupport::sleepIgnoreInterrupts(millis==[{}]) throw InterruptedException -> {}",
-                    millis, e.getMessage(), e);
+            log.error("Sleep::millisIgnored({}, {}) throw InterruptedException -> {}",
+                    millis, nanos, e.getMessage(), e);
         }
     }
 
@@ -66,11 +66,11 @@ public final class SleepSupport {
      * @param timeUnit TimeUnit
      * @param time     long
      */
-    public static void sleepIgnoreInterrupts(@Nonnull TimeUnit timeUnit, long time) {
+    public static void timeIgnored(@Nonnull TimeUnit timeUnit, long time) {
         try {
             timeUnit.sleep(time);
         } catch (InterruptedException e) {
-            log.error("SleepSupport::sleepIgnoreInterrupts(timeUnit==[{}], time==[{}]) throw InterruptedException -> {}",
+            log.error("Sleep::timeIgnored({}, {}) throw InterruptedException -> {}",
                     timeUnit, time, e.getMessage(), e);
         }
     }
@@ -83,7 +83,7 @@ public final class SleepSupport {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
-            log.error("SleepSupport::sleep(millis==[{}]) throw InterruptedException -> {}",
+            log.error("Sleep::millis({}) throw InterruptedException -> {}",
                     millis, e.getMessage(), e);
             throw new RuntimeInterruptedException(e);
         }
@@ -98,7 +98,7 @@ public final class SleepSupport {
         try {
             Thread.sleep(millis, nanos);
         } catch (InterruptedException e) {
-            log.error("SleepSupport::sleep(millis==[{}], nanos==[{}]) throw InterruptedException -> {}",
+            log.error("Sleep::millis({}, {}) throw InterruptedException -> {}",
                     millis, nanos, e.getMessage(), e);
             throw new RuntimeInterruptedException(e);
         }
@@ -113,7 +113,7 @@ public final class SleepSupport {
         try {
             timeUnit.sleep(time);
         } catch (InterruptedException e) {
-            log.error("SleepSupport::sleep(timeUnit==[{}], time==[{}]) throw InterruptedException -> {}",
+            log.error("Sleep::time({}, {}) throw InterruptedException -> {}",
                     timeUnit, time, e.getMessage(), e);
             throw new RuntimeInterruptedException(e);
         }

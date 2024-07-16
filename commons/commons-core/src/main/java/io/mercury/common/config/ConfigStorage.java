@@ -1,4 +1,4 @@
-package io.mercury.common.param;
+package io.mercury.common.config;
 
 import io.mercury.common.lang.Throws;
 

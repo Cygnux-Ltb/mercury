@@ -5,7 +5,7 @@ import io.mercury.common.lang.Asserter;
 
 import java.time.ZonedDateTime;
 
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HH_MM_SS;
+import static io.mercury.common.datetime.pattern.impl.ZonedDateTimePattern.YYYY_MM_DD_HH_MM_SS_Z;
 
 /**
  * 时间点序列
@@ -77,7 +77,7 @@ public class TimePoint implements SerialObj<TimePoint> {
     @Override
     public String toString() {
         if (cache == null)
-            cache = epochSecond + " -> " + YYYY_MM_DD_HH_MM_SS.fmt(datetime) + " / " + repeat;
+            cache = epochSecond + " -> " + YYYY_MM_DD_HH_MM_SS_Z.fmt(datetime) + " / " + repeat;
         return cache;
     }
 

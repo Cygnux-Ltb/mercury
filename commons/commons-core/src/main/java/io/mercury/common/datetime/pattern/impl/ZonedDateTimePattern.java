@@ -1,105 +1,109 @@
-package io.mercury.common.datetime.pattern;
+package io.mercury.common.datetime.pattern.impl;
+
+import io.mercury.common.datetime.pattern.TemporalPattern;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYMMDDHH;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYMMDDHHMM;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYMMDDHHMMSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYMMDDHHMMSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYMMDD_HHMMSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYMMDD_HHMMSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYMMDD_HHMMSSSSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYMMDD_HH_MM_SS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYMMDD_HH_MM_SS_SSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYMMDD_HH_MM_SS_SSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYMMDD_L_HHMMSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYMMDD_L_HHMMSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYMMDD_L_HHMMSSSSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYMMDD_L_HH_MM_SS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYMMDD_L_HH_MM_SS_SSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYMMDD_L_HH_MM_SS_SSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDDHH;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDDHHMM;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDDHHMMSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDDHHMMSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_HHMMSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_HHMMSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_HHMMSSSSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_HH_MM_SS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_HH_MM_SS_SSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_HH_MM_SS_SSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HH_MM_SS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HH_MM_SS_SSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HH_MM_SS_SSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HHMMSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HHMMSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HHMMSSSSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HH_MM_SS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HH_MM_SS_SSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYY_MM_DD_HH_MM_SS_SSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YY_MM_DD_HHMMSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YY_MM_DD_HHMMSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YY_MM_DD_HHMMSSSSSSSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YY_MM_DD_HH_MM_SS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YY_MM_DD_HH_MM_SS_SSS;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YY_MM_DD_HH_MM_SS_SSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYMMDDHH;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYMMDDHHMM;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYMMDDHHMMSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYMMDDHHMMSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYMMDD_HHMMSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYMMDD_HHMMSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYMMDD_HHMMSSSSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYMMDD_HH_MM_SS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYMMDD_HH_MM_SS_SSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYMMDD_HH_MM_SS_SSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYMMDD_L_HHMMSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYMMDD_L_HHMMSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYMMDD_L_HHMMSSSSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYMMDD_L_HH_MM_SS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYMMDD_L_HH_MM_SS_SSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYMMDD_L_HH_MM_SS_SSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDDHH;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDDHHMM;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDDHHMMSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDDHHMMSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_HHMMSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_HHMMSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_HHMMSSSSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_HH_MM_SS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_HH_MM_SS_SSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_HH_MM_SS_SSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_L_HHMMSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_L_HHMMSSSSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_L_HH_MM_SS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_L_HH_MM_SS_SSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_L_HH_MM_SS_SSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYY_MM_DD_HHMMSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYY_MM_DD_HHMMSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYY_MM_DD_HHMMSSSSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYY_MM_DD_HH_MM_SS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYY_MM_DD_HH_MM_SS_SSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYY_MM_DD_HH_MM_SS_SSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YY_MM_DD_HHMMSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YY_MM_DD_HHMMSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YY_MM_DD_HHMMSSSSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YY_MM_DD_HH_MM_SS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YY_MM_DD_HH_MM_SS_SSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YY_MM_DD_HH_MM_SS_SSSSSS;
 
 /**
  * 常用日期时间格式(带时区)
  */
-public final class ZonedDateTimePattern extends SpecifiedPattern<ZonedDateTime> {
+public enum ZonedDateTimePattern implements TemporalPattern<ZonedDateTime> {
 
     /**
      * example: 18031413+0900
      */
-    public final static ZonedDateTimePattern YYMMDDHH_Z =
-            new ZonedDateTimePattern(YYMMDDHH.getPattern() + "Z");
+    YYMMDDHH_Z
+            (YYMMDDHH.getPattern() + "Z"),
 
     /**
      * example: 1803141314+0900
      */
-    public final static ZonedDateTimePattern YYMMDDHHMM_Z =
-            new ZonedDateTimePattern(YYMMDDHHMM.getPattern() + "Z");
+    YYMMDDHHMM_Z
+            (YYMMDDHHMM.getPattern() + "Z"),
 
     /**
      * example: 180314131423+0900
      */
-    public final static ZonedDateTimePattern YYMMDDHHMMSS_Z =
-            new ZonedDateTimePattern(YYMMDDHHMMSS.getPattern() + "Z");
+    YYMMDDHHMMSS_Z
+            (YYMMDDHHMMSS.getPattern() + "Z"),
 
     /**
      * example: 180314131423678+0900
      */
-    public final static ZonedDateTimePattern YYMMDDHHMMSSSSS_Z =
-            new ZonedDateTimePattern(YYMMDDHHMMSSSSS.getPattern() + "Z");
+    YYMMDDHHMMSSSSS_Z
+            (YYMMDDHHMMSSSSS.getPattern() + "Z"),
 
     /**
      * example: 2018031413+0900
      */
-    public final static ZonedDateTimePattern YYYYMMDDHH_Z =
-            new ZonedDateTimePattern(YYYYMMDDHH.getPattern() + "Z");
+    YYYYMMDDHH_Z
+            (YYYYMMDDHH.getPattern() + "Z"),
 
     /**
      * example: 201803141314+0900
      */
-    public final static ZonedDateTimePattern YYYYMMDDHHMM_Z =
-            new ZonedDateTimePattern(YYYYMMDDHHMM.getPattern() + "Z");
+    YYYYMMDDHHMM_Z
+            (YYYYMMDDHHMM.getPattern() + "Z"),
 
     /**
      * example: 20180314131423+0900
      */
-    public final static ZonedDateTimePattern YYYYMMDDHHMMSS_Z =
-            new ZonedDateTimePattern(YYYYMMDDHHMMSS.getPattern() + "Z");
+    YYYYMMDDHHMMSS_Z
+            (YYYYMMDDHHMMSS.getPattern() + "Z"),
 
     /**
      * example: 20180314131423678+0900
      */
-    public final static ZonedDateTimePattern YYYYMMDDHHMMSSSSS_Z =
-            new ZonedDateTimePattern(YYYYMMDDHHMMSSSSS.getPattern() + "Z");
+    YYYYMMDDHHMMSSSSS_Z
+            (YYYYMMDDHHMMSSSSS.getPattern() + "Z"),
 
     /*
      * =============================================================================================
@@ -108,74 +112,74 @@ public final class ZonedDateTimePattern extends SpecifiedPattern<ZonedDateTime> 
     /**
      * example: 180314 131423+0900
      */
-    public final static ZonedDateTimePattern YYMMDD_HHMMSS_Z =
-            new ZonedDateTimePattern(YYMMDD_HHMMSS.getPattern() + "Z");
+    YYMMDD_HHMMSS_Z
+            (YYMMDD_HHMMSS.getPattern() + "Z"),
 
     /**
      * example: 180314 131423678+0900
      */
-    public final static ZonedDateTimePattern YYMMDD_HHMMSSSSS_Z =
-            new ZonedDateTimePattern(YYMMDD_HHMMSSSSS.getPattern() + "Z");
+    YYMMDD_HHMMSSSSS_Z
+            (YYMMDD_HHMMSSSSS.getPattern() + "Z"),
 
     /**
      * example: 180314 131423678789+0900
      */
-    public final static ZonedDateTimePattern YYMMDD_HHMMSSSSSSSS_Z =
-            new ZonedDateTimePattern(YYMMDD_HHMMSSSSSSSS.getPattern() + "Z");
+    YYMMDD_HHMMSSSSSSSS_Z
+            (YYMMDD_HHMMSSSSSSSS.getPattern() + "Z"),
 
     /**
      * example: 180314-131423+0900
      */
-    public final static ZonedDateTimePattern YYMMDD_L_HHMMSS_Z =
-            new ZonedDateTimePattern(YYMMDD_L_HHMMSS.getPattern() + "Z");
+    YYMMDD_L_HHMMSS_Z
+            (YYMMDD_L_HHMMSS.getPattern() + "Z"),
 
     /**
      * example: 180314-131423678+0900
      */
-    public final static ZonedDateTimePattern YYMMDD_L_HHMMSSSSS_Z =
-            new ZonedDateTimePattern(YYMMDD_L_HHMMSSSSS.getPattern() + "Z");
+    YYMMDD_L_HHMMSSSSS_Z
+            (YYMMDD_L_HHMMSSSSS.getPattern() + "Z"),
 
     /**
      * example: 180314-131423678789+0900
      */
-    public final static ZonedDateTimePattern YYMMDD_L_HHMMSSSSSSSS_Z =
-            new ZonedDateTimePattern(YYMMDD_L_HHMMSSSSSSSS.getPattern() + "Z");
+    YYMMDD_L_HHMMSSSSSSSS_Z
+            (YYMMDD_L_HHMMSSSSSSSS.getPattern() + "Z"),
 
     /**
      * example: 20180314 131423+0900
      */
-    public final static ZonedDateTimePattern YYYYMMDD_HHMMSS_Z =
-            new ZonedDateTimePattern(YYYYMMDD_HHMMSS.getPattern() + "Z");
+    YYYYMMDD_HHMMSS_Z
+            (YYYYMMDD_HHMMSS.getPattern() + "Z"),
 
     /**
      * example: 20180314 131423678+0900
      */
-    public final static ZonedDateTimePattern YYYYMMDD_HHMMSSSSS_Z =
-            new ZonedDateTimePattern(YYYYMMDD_HHMMSSSSS.getPattern() + "Z");
+    YYYYMMDD_HHMMSSSSS_Z
+            (YYYYMMDD_HHMMSSSSS.getPattern() + "Z"),
 
     /**
      * example: 20180314 131423678789+0900
      */
-    public final static ZonedDateTimePattern YYYYMMDD_HHMMSSSSSSSS_Z =
-            new ZonedDateTimePattern(YYYYMMDD_HHMMSSSSSSSS.getPattern() + "Z");
+    YYYYMMDD_HHMMSSSSSSSS_Z
+            (YYYYMMDD_HHMMSSSSSSSS.getPattern() + "Z"),
 
     /**
      * example: 20180314-131423+0900
      */
-    public final static ZonedDateTimePattern YYYYMMDD_L_HHMMSS_Z =
-            new ZonedDateTimePattern(YYYYMMDD_L_HHMMSS.getPattern() + "Z");
+    YYYYMMDD_L_HHMMSS_Z
+            (YYYYMMDD_L_HHMMSS.getPattern() + "Z"),
 
     /**
      * example: 20180314-131423678+0900
      */
-    public final static ZonedDateTimePattern YYYYMMDD_L_HHMMSSSSS_Z =
-            new ZonedDateTimePattern(YYYYMMDD_L_HHMMSSSSS.getPattern() + "Z");
+    YYYYMMDD_L_HHMMSSSSS_Z
+            (YYYYMMDD_L_HHMMSSSSS.getPattern() + "Z"),
 
     /**
      * example: 20180314-131423678789+0900
      */
-    public final static ZonedDateTimePattern YYYYMMDD_L_HHMMSSSSSSSS_Z =
-            new ZonedDateTimePattern(YYYYMMDD_L_HHMMSSSSSSSS.getPattern() + "Z");
+    YYYYMMDD_L_HHMMSSSSSSSS_Z
+            (YYYYMMDD_L_HHMMSSSSSSSS.getPattern() + "Z"),
 
     /*
      * =============================================================================================
@@ -184,74 +188,74 @@ public final class ZonedDateTimePattern extends SpecifiedPattern<ZonedDateTime> 
     /**
      * example: 180314 13:14:23+0900
      */
-    public final static ZonedDateTimePattern YYMMDD_HH_MM_SS_Z =
-            new ZonedDateTimePattern(YYMMDD_HH_MM_SS.getPattern() + "Z");
+    YYMMDD_HH_MM_SS_Z
+            (YYMMDD_HH_MM_SS.getPattern() + "Z"),
 
     /**
      * example: 180314 13:14:23.678+0900
      */
-    public final static ZonedDateTimePattern YYMMDD_HH_MM_SS_SSS_Z =
-            new ZonedDateTimePattern(YYMMDD_HH_MM_SS_SSS.getPattern() + "Z");
+    YYMMDD_HH_MM_SS_SSS_Z
+            (YYMMDD_HH_MM_SS_SSS.getPattern() + "Z"),
 
     /**
      * example: 180314T13:14:23.678789+0900
      */
-    public final static ZonedDateTimePattern YYMMDD_HH_MM_SS_SSSSSS_Z =
-            new ZonedDateTimePattern(YYMMDD_HH_MM_SS_SSSSSS.getPattern() + "Z");
+    YYMMDD_HH_MM_SS_SSSSSS_Z
+            (YYMMDD_HH_MM_SS_SSSSSS.getPattern() + "Z"),
 
     /**
      * example: 180314-13:14:23+0900
      */
-    public final static ZonedDateTimePattern YYMMDD_L_HH_MM_SS_Z =
-            new ZonedDateTimePattern(YYMMDD_L_HH_MM_SS.getPattern() + "Z");
+    YYMMDD_L_HH_MM_SS_Z
+            (YYMMDD_L_HH_MM_SS.getPattern() + "Z"),
 
     /**
      * example: 180314-13:14:23.678+0900
      */
-    public final static ZonedDateTimePattern YYMMDD_L_HH_MM_SS_SSS_Z =
-            new ZonedDateTimePattern(YYMMDD_L_HH_MM_SS_SSS.getPattern() + "Z");
+    YYMMDD_L_HH_MM_SS_SSS_Z
+            (YYMMDD_L_HH_MM_SS_SSS.getPattern() + "Z"),
 
     /**
      * example: 180314-13:14:23.678789+0900
      */
-    public final static ZonedDateTimePattern YYMMDD_L_HH_MM_SS_SSSSSS_Z =
-            new ZonedDateTimePattern(YYMMDD_L_HH_MM_SS_SSSSSS.getPattern() + "Z");
+    YYMMDD_L_HH_MM_SS_SSSSSS_Z
+            (YYMMDD_L_HH_MM_SS_SSSSSS.getPattern() + "Z"),
 
     /**
      * example: 20180314 13:14:23+0900
      */
-    public final static ZonedDateTimePattern YYYYMMDD_HH_MM_SS_Z =
-            new ZonedDateTimePattern(YYYYMMDD_HH_MM_SS.getPattern() + "Z");
+    YYYYMMDD_HH_MM_SS_Z
+            (YYYYMMDD_HH_MM_SS.getPattern() + "Z"),
 
     /**
      * example: 20180314 13:14:23.678+0900
      */
-    public final static ZonedDateTimePattern YYYYMMDD_HH_MM_SS_SSS_Z =
-            new ZonedDateTimePattern(YYYYMMDD_HH_MM_SS_SSS.getPattern() + "Z");
+    YYYYMMDD_HH_MM_SS_SSS_Z
+            (YYYYMMDD_HH_MM_SS_SSS.getPattern() + "Z"),
 
     /**
      * example: 20180314 13:14:23.678789+0900
      */
-    public final static ZonedDateTimePattern YYYYMMDD_HH_MM_SS_SSSSSS_Z =
-            new ZonedDateTimePattern(YYYYMMDD_HH_MM_SS_SSSSSS.getPattern() + "Z");
+    YYYYMMDD_HH_MM_SS_SSSSSS_Z
+            (YYYYMMDD_HH_MM_SS_SSSSSS.getPattern() + "Z"),
 
     /**
      * example: 20180314-13:14:23+0900
      */
-    public final static ZonedDateTimePattern YYYYMMDD_L_HH_MM_SS_Z =
-            new ZonedDateTimePattern(YYYYMMDD_L_HH_MM_SS.getPattern() + "Z");
+    YYYYMMDD_L_HH_MM_SS_Z
+            (YYYYMMDD_L_HH_MM_SS.getPattern() + "Z"),
 
     /**
      * example: 20180314-13:14:23.678+0900
      */
-    public final static ZonedDateTimePattern YYYYMMDD_L_HH_MM_SS_SSS_Z =
-            new ZonedDateTimePattern(YYYYMMDD_L_HH_MM_SS_SSS.getPattern() + "Z");
+    YYYYMMDD_L_HH_MM_SS_SSS_Z
+            (YYYYMMDD_L_HH_MM_SS_SSS.getPattern() + "Z"),
 
     /**
      * example: 20180314-13:14:23.678789+0900
      */
-    public final static ZonedDateTimePattern YYYYMMDD_L_HH_MM_SS_SSSSSS_Z =
-            new ZonedDateTimePattern(YYYYMMDD_L_HH_MM_SS_SSSSSS.getPattern() + "Z");
+    YYYYMMDD_L_HH_MM_SS_SSSSSS_Z
+            (YYYYMMDD_L_HH_MM_SS_SSSSSS.getPattern() + "Z"),
 
     /*
      * =============================================================================================
@@ -260,38 +264,38 @@ public final class ZonedDateTimePattern extends SpecifiedPattern<ZonedDateTime> 
     /**
      * example: 18-03-14 131423+0900
      */
-    public final static ZonedDateTimePattern YY_MM_DD_HHMMSS_Z =
-            new ZonedDateTimePattern(YY_MM_DD_HHMMSS.getPattern() + "Z");
+    YY_MM_DD_HHMMSS_Z
+            (YY_MM_DD_HHMMSS.getPattern() + "Z"),
 
     /**
      * example: 18-03-14 131423678+0900
      */
-    public final static ZonedDateTimePattern YY_MM_DD_HHMMSSSSS_Z =
-            new ZonedDateTimePattern(YY_MM_DD_HHMMSSSSS.getPattern() + "Z");
+    YY_MM_DD_HHMMSSSSS_Z
+            (YY_MM_DD_HHMMSSSSS.getPattern() + "Z"),
 
     /**
      * example: 18-03-14 131423678789+0900
      */
-    public final static ZonedDateTimePattern YY_MM_DD_HHMMSSSSSSSS_Z =
-            new ZonedDateTimePattern(YY_MM_DD_HHMMSSSSSSSS.getPattern() + "Z");
+    YY_MM_DD_HHMMSSSSSSSS_Z
+            (YY_MM_DD_HHMMSSSSSSSS.getPattern() + "Z"),
 
     /**
      * example: 2018-03-14 131423+0900
      */
-    public final static ZonedDateTimePattern YYYY_MM_DD_HHMMSS_Z =
-            new ZonedDateTimePattern(YYYY_MM_DD_HHMMSS.getPattern() + "Z");
+    YYYY_MM_DD_HHMMSS_Z
+            (YYYY_MM_DD_HHMMSS.getPattern() + "Z"),
 
     /**
      * example: 2018-03-14 131423678+0900
      */
-    public final static ZonedDateTimePattern YYYY_MM_DD_HHMMSSSSS_Z =
-            new ZonedDateTimePattern(YYYY_MM_DD_HHMMSSSSS.getPattern() + "Z");
+    YYYY_MM_DD_HHMMSSSSS_Z
+            (YYYY_MM_DD_HHMMSSSSS.getPattern() + "Z"),
 
     /**
      * example: 2018-03-14 131423678789+0900
      */
-    public final static ZonedDateTimePattern YYYY_MM_DD_HHMMSSSSSSSS_Z =
-            new ZonedDateTimePattern(YYYY_MM_DD_HHMMSSSSSSSS.getPattern() + "Z");
+    YYYY_MM_DD_HHMMSSSSSSSS_Z
+            (YYYY_MM_DD_HHMMSSSSSSSS.getPattern() + "Z"),
 
     /*
      * =============================================================================================
@@ -300,55 +304,84 @@ public final class ZonedDateTimePattern extends SpecifiedPattern<ZonedDateTime> 
     /**
      * example: 18-03-14 13:14:23+0900
      */
-    public final static ZonedDateTimePattern YY_MM_DD_HH_MM_SS_Z =
-            new ZonedDateTimePattern(YY_MM_DD_HH_MM_SS.getPattern() + "Z");
+    YY_MM_DD_HH_MM_SS_Z
+            (YY_MM_DD_HH_MM_SS.getPattern() + "Z"),
 
     /**
      * example: 18-03-14 13:14:23.678+0900
      */
-    public final static ZonedDateTimePattern YY_MM_DD_HH_MM_SS_SSS_Z =
-            new ZonedDateTimePattern(YY_MM_DD_HH_MM_SS_SSS.getPattern() + "Z");
+    YY_MM_DD_HH_MM_SS_SSS_Z
+            (YY_MM_DD_HH_MM_SS_SSS.getPattern() + "Z"),
 
     /**
      * example: 18-03-14 13:14:23.678789+0900
      */
-    public final static ZonedDateTimePattern YY_MM_DD_HH_MM_SS_SSSSSS_Z =
-            new ZonedDateTimePattern(YY_MM_DD_HH_MM_SS_SSSSSS.getPattern() + "Z");
+    YY_MM_DD_HH_MM_SS_SSSSSS_Z
+            (YY_MM_DD_HH_MM_SS_SSSSSS.getPattern() + "Z"),
 
     /**
      * example: 2018-03-14 13:14:23+0900
      */
-    public final static ZonedDateTimePattern YYYY_MM_DD_HH_MM_SS_Z =
-            new ZonedDateTimePattern(YYYY_MM_DD_HH_MM_SS.getPattern() + "Z");
+    YYYY_MM_DD_HH_MM_SS_Z
+            (YYYY_MM_DD_HH_MM_SS.getPattern() + "Z"),
 
     /**
      * example: 2018-03-14 13:14:23.678+0900
      */
-    public final static ZonedDateTimePattern YYYY_MM_DD_HH_MM_SS_SSS_Z =
-            new ZonedDateTimePattern(YYYY_MM_DD_HH_MM_SS_SSS.getPattern() + "Z");
+    YYYY_MM_DD_HH_MM_SS_SSS_Z
+            (YYYY_MM_DD_HH_MM_SS_SSS.getPattern() + "Z"),
 
     /**
      * example: 2018-03-14 13:14:23.678789+0900
      */
-    public final static ZonedDateTimePattern YYYY_MM_DD_HH_MM_SS_SSSSSS_Z =
-            new ZonedDateTimePattern(YYYY_MM_DD_HH_MM_SS_SSSSSS.getPattern() + "Z");
+    YYYY_MM_DD_HH_MM_SS_SSSSSS_Z
+            (YYYY_MM_DD_HH_MM_SS_SSSSSS.getPattern() + "Z"),
+
+
+    ;
+
+    private final String pattern;
+
+    private final DateTimeFormatter formatter;
+
+    ZonedDateTimePattern(String pattern) {
+        this.pattern = pattern;
+        this.formatter = DateTimeFormatter.ofPattern(pattern);
+    }
 
 
     /**
-     * @param pattern String
+     * @return the pattern string
      */
-    private ZonedDateTimePattern(String pattern) {
-        super(pattern);
+    @Override
+    public String getPattern() {
+        return pattern;
     }
 
+    /**
+     * @return the DateTimeFormatter instance
+     */
     @Override
-    protected ZonedDateTime provideNow() {
-        return ZonedDateTime.now();
+    public DateTimeFormatter getFormatter() {
+        return formatter;
     }
 
+    /**
+     * @param zoneId ZoneId
+     * @return String
+     */
     @Override
-    protected ZonedDateTime provideNow(ZoneId zoneId) {
-        return ZonedDateTime.now(zoneId);
+    public String now(ZoneId zoneId) {
+        return fmt(ZonedDateTime.now(zoneId));
+    }
+
+    /**
+     * @param temporalObj T extends Temporal
+     * @return String
+     */
+    @Override
+    public String fmt(ZonedDateTime temporalObj) {
+        return formatter.format(temporalObj);
     }
 
     /**
@@ -357,11 +390,22 @@ public final class ZonedDateTimePattern extends SpecifiedPattern<ZonedDateTime> 
      */
     @Override
     public ZonedDateTime parse(String text) {
-        return ZonedDateTime.parse(text, getFormatter());
+        return ZonedDateTime.parse(text, formatter);
     }
 
-    public static void main(String[] args) {
-        System.out.println(YYYY_MM_DD_HH_MM_SS_SSSSSS_Z.now());
+    /**
+     * @param text String
+     * @return ZonedDateTime
+     * @throws DateTimeParseException e
+     */
+    public static ZonedDateTime tryParse(String text) throws DateTimeParseException {
+        for (ZonedDateTimePattern pattern : ZonedDateTimePattern.values()) {
+            try {
+                return ZonedDateTime.parse(text, pattern.formatter);
+            } catch (DateTimeParseException ignored) {
+            }
+        }
+        throw new DateTimeParseException("No matching pattern", text, 0);
     }
 
 }

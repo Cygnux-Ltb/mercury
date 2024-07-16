@@ -28,6 +28,27 @@ public final class Log4j2Configurator {
     }
 
     /**
+     *
+     */
+    public static synchronized void useInfoLogLevel() {
+        setLogLevel(LogLevel.INFO);
+    }
+
+    /**
+     *
+     */
+    public static synchronized void useWarnLogLevel() {
+        setLogLevel(LogLevel.WARN);
+    }
+
+    /**
+     *
+     */
+    public static synchronized void useErrorLogLevel() {
+        setLogLevel(LogLevel.ERROR);
+    }
+
+    /**
      * @param level LogLevel
      */
     public static synchronized void setLogLevel(LogLevel level) {

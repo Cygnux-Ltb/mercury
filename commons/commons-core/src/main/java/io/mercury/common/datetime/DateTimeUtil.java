@@ -1,9 +1,9 @@
 package io.mercury.common.datetime;
 
-import io.mercury.common.datetime.pattern.DatePattern;
-import io.mercury.common.datetime.pattern.DateTimePattern;
+import io.mercury.common.datetime.pattern.spec.SpecifiedDatePattern;
+import io.mercury.common.datetime.pattern.impl.DateTimePattern;
 import io.mercury.common.datetime.pattern.TemporalPattern;
-import io.mercury.common.datetime.pattern.TimePattern;
+import io.mercury.common.datetime.pattern.impl.TimePattern;
 import io.mercury.common.util.StringSupport;
 
 import javax.annotation.Nonnull;
@@ -381,7 +381,7 @@ public final class DateTimeUtil {
      * @throws IllegalArgumentException iae
      * @throws DateTimeParseException   dte
      */
-    public static LocalDate toLocalDate(@Nonnull DatePattern pattern,
+    public static LocalDate toLocalDate(@Nonnull SpecifiedDatePattern pattern,
                                         @Nonnull String str)
             throws IllegalArgumentException, DateTimeParseException {
         checkFormatParam(pattern, str);
@@ -416,7 +416,7 @@ public final class DateTimeUtil {
         return LocalDateTime.parse(datetime, pattern.getFormatter());
     }
 
-    private static void checkFormatParam(TemporalPattern pattern, String str) {
+    private static void checkFormatParam(TemporalPattern<?> pattern, String str) {
         if (pattern == null)
             throw new IllegalArgumentException("pattern cannot null");
         if (StringSupport.isNullOrEmpty(str))
@@ -447,7 +447,7 @@ public final class DateTimeUtil {
      * @param pattern DatePattern
      * @return String
      */
-    public static String fmtDate(@Nonnull DatePattern pattern) {
+    public static String fmtDate(@Nonnull SpecifiedDatePattern pattern) {
         return pattern.getFormatter().format(LocalDate.now());
     }
 
@@ -456,7 +456,7 @@ public final class DateTimeUtil {
      * @param pattern LocalDate
      * @return String
      */
-    public static String fmtDate(@Nonnull DatePattern pattern,
+    public static String fmtDate(@Nonnull SpecifiedDatePattern pattern,
                                  @Nonnull LocalDate date) {
         return pattern.getFormatter().format(date);
     }

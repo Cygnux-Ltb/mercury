@@ -1,4 +1,6 @@
-package io.mercury.transport.api;
+package io.mercury.transport;
+
+import io.mercury.transport.api.Transport;
 
 import static java.lang.System.currentTimeMillis;
 

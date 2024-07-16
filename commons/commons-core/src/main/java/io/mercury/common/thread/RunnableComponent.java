@@ -7,7 +7,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import java.io.Serial;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
 import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
 import static io.mercury.common.thread.ThreadSupport.startNewMaxPriorityThread;
 import static java.time.LocalDateTime.now;
@@ -115,7 +115,7 @@ public abstract class RunnableComponent {
             // 使用独立线程启动
             startNewMaxPriorityThread(name + "-worker", () -> {
                 // 休眠指定延迟时间
-                SleepSupport.sleep(mode.delayMillis);
+                Sleep.millis(mode.delayMillis);
                 start();
             });
         else

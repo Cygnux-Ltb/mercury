@@ -1,4 +1,6 @@
-package io.mercury.common.datetime.pattern;
+package io.mercury.common.datetime.pattern.impl;
+
+import io.mercury.common.datetime.pattern.TemporalPattern;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -85,7 +87,7 @@ public enum DatePattern implements TemporalPattern<LocalDate> {
      */
     @Override
     public String now(ZoneId zoneId) {
-        return formatter.format(LocalDate.now(zoneId));
+        return fmt(LocalDate.now(zoneId));
     }
 
     /**

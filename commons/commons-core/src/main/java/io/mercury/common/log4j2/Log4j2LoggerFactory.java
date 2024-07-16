@@ -16,18 +16,8 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
-import java.io.File;
-
 import static io.mercury.common.log4j2.Log4j2Configurator.LogLevel;
-import static io.mercury.common.log4j2.Log4j2Configurator.LogLevel.ERROR;
-import static io.mercury.common.log4j2.Log4j2Configurator.getFileSizeOfMb;
-import static io.mercury.common.log4j2.Log4j2Configurator.getFilename;
-import static io.mercury.common.log4j2.Log4j2Configurator.getFolder;
-import static io.mercury.common.log4j2.Log4j2Configurator.getLogLevel;
-import static io.mercury.common.log4j2.Log4j2Configurator.setFileSizeOfMb;
-import static io.mercury.common.log4j2.Log4j2Configurator.setLogFilename;
-import static io.mercury.common.log4j2.Log4j2Configurator.setLogFolder;
-import static io.mercury.common.log4j2.Log4j2Configurator.setLogLevel;
+import static java.io.File.separator;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.LocalDateTime.now;
 import static java.time.format.DateTimeFormatter.ofPattern;
@@ -46,7 +36,7 @@ public final class Log4j2LoggerFactory {
      * @param obj Object
      * @return org.slf4j.Logger
      */
-    public static org.slf4j.Logger getLogger(Object obj) {
+    public static synchronized org.slf4j.Logger getLogger(Object obj) {
         if (obj == null)
             return Log4j2LoggerFactory.getLogger("Unnamed-Logger");
         if (obj instanceof String)
@@ -75,26 +65,26 @@ public final class Log4j2LoggerFactory {
     /**
      * Internal Logger Settings
      */
-    private static void checkAndSettings() {
+    private static synchronized void checkAndSettings() {
         // 配置日志存储目录, 基于${user.home}
-        String folder = getFolder();
+        String folder = Log4j2Configurator.getFolder();
         if (folder == null || folder.isEmpty()) {
-            setLogFolder("default");
+            Log4j2Configurator.setLogFolder("default");
         }
         // 配置日志文件名
-        String filename = getFilename();
+        String filename = Log4j2Configurator.getFilename();
         if (filename == null || filename.isEmpty()) {
-            setLogFilename(DefaultFileName);
+            Log4j2Configurator.setLogFilename(DefaultFileName);
         }
         // 配置日志級別
-        String level = getLogLevel();
+        String level = Log4j2Configurator.getLogLevel();
         if (level == null || level.isEmpty()) {
-            setLogLevel(ERROR);
+            Log4j2Configurator.setLogLevel(LogLevel.ERROR);
         }
         // 配置日志文件大小
-        String sizeOfMb = getFileSizeOfMb();
+        String sizeOfMb = Log4j2Configurator.getFileSizeOfMb();
         if (sizeOfMb == null || sizeOfMb.isEmpty()) {
-            setFileSizeOfMb(255);
+            Log4j2Configurator.setFileSizeOfMb(255);
         }
     }
 
@@ -136,7 +126,7 @@ public final class Log4j2LoggerFactory {
         // 基于文件大小分割日志文件
         TriggeringPolicy sizeBased = SizeBasedTriggeringPolicy.createPolicy("255MB");
 
-        String logFile = BizLogsDir + File.separator + loggerName;
+        String logFile = BizLogsDir + separator + loggerName;
 
         RolloverStrategy strategy = DefaultRolloverStrategy.newBuilder()
                 .withMax("120")

@@ -1,8 +1,8 @@
 package io.mercury.common.file.filter;
 
 import io.mercury.common.datetime.TimeZone;
-import io.mercury.common.datetime.pattern.DatePattern;
 import io.mercury.common.datetime.pattern.TemporalPattern;
+import io.mercury.common.datetime.pattern.impl.DatePattern;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import org.slf4j.Logger;
 
@@ -17,7 +17,7 @@ public class FileNameDateTimeFilter implements FileFilter {
 
     private static final Logger log = Log4j2LoggerFactory.getLogger(FileNameDateTimeFilter.class);
 
-    private final TemporalPattern pattern;
+    private final TemporalPattern<?> pattern;
     private final ZoneId zoneId;
     private final ZonedDateTime cutoffDate;
 
@@ -29,11 +29,11 @@ public class FileNameDateTimeFilter implements FileFilter {
         this(cutoffDate, null, zoneId);
     }
 
-    public FileNameDateTimeFilter(@Nonnull LocalDateTime cutoffDate, TemporalPattern pattern) {
+    public FileNameDateTimeFilter(@Nonnull LocalDateTime cutoffDate, TemporalPattern<?> pattern) {
         this(cutoffDate, pattern, null);
     }
 
-    public FileNameDateTimeFilter(@Nonnull LocalDateTime cutoffDate, TemporalPattern pattern, ZoneId zoneId) {
+    public FileNameDateTimeFilter(@Nonnull LocalDateTime cutoffDate, TemporalPattern<?> pattern, ZoneId zoneId) {
         if (pattern == null) {
             pattern = DatePattern.YYYY_MM_DD;
         }

@@ -2,41 +2,44 @@ package io.mercury.common.param;
 
 import org.slf4j.Logger;
 
+import java.io.Serial;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.Set;
 
-public interface Params<K extends ParamKey> {
+public interface Params {
 
-    boolean getBoolean(K key);
+    boolean getBoolean(ParamKey key);
 
-    int getInt(K key);
+    int getInt(ParamKey key);
 
-    long getLong(K key);
+    long getLong(ParamKey key);
 
-    double getDouble(K key);
+    double getDouble(ParamKey key);
 
-    String getString(K key);
+    String getString(ParamKey key);
 
-    LocalDate getDate(K key);
+    LocalDate getDate(ParamKey key);
 
-    LocalTime getTime(K key);
+    LocalTime getTime(ParamKey key);
 
-    LocalDateTime getDateTime(K key);
+    LocalDateTime getDateTime(ParamKey key);
 
-    ZonedDateTime getZonedDateTime(K key);
+    ZonedDateTime getZonedDateTime(ParamKey key);
 
-    Set<K> getParamKeys();
+    boolean isImmutable();
+
+    Set<ParamKey> getParamKeys();
 
     default void printParams() {
         printParams(null);
     }
 
     default void printParams(Logger log) {
-        Set<K> keys = getParamKeys();
-        for (K key : keys) {
+        Set<ParamKey> keys = getParamKeys();
+        for (ParamKey key : keys) {
             Object value = switch (key.getValueType()) {
                 case STRING -> getString(key);
                 case BOOLEAN -> getBoolean(key);
@@ -81,5 +84,18 @@ public interface Params<K extends ParamKey> {
         ZONED_DATETIME
 
     }
+
+
+    class ParamGettingException extends RuntimeException {
+
+        @Serial
+        private static final long serialVersionUID = -862085066844906L;
+
+        public ParamGettingException(String message) {
+            super(message);
+        }
+
+    }
+
 
 }

@@ -1,7 +1,7 @@
 package io.mercury.transport.socket;
 
 import io.mercury.common.collections.queue.Queue;
-import io.mercury.common.thread.SleepSupport;
+import io.mercury.common.thread.Sleep;
 import io.mercury.common.thread.ThreadSupport;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
 import org.apache.commons.io.IOUtils;
@@ -92,7 +92,7 @@ public final class SocketTransceiver extends BaseTransceiver<String> {
                     inputStream = socket.getInputStream();
                     int available = inputStream.available();
                     if (available == 0) {
-                        SleepSupport.sleep(configurator.receiveInterval());
+                        Sleep.millis(configurator.receiveInterval());
                         continue;
                     }
                     byte[] bytes = new byte[available];

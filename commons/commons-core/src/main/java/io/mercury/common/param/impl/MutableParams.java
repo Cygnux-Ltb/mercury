@@ -1,73 +1,53 @@
-package io.mercury.common.param;
+package io.mercury.common.param.impl;
 
 import io.mercury.common.collections.MutableMaps;
 import io.mercury.common.collections.MutableSets;
-import org.eclipse.collections.api.map.primitive.MutableIntBooleanMap;
-import org.eclipse.collections.api.map.primitive.MutableIntDoubleMap;
-import org.eclipse.collections.api.map.primitive.MutableIntIntMap;
-import org.eclipse.collections.api.map.primitive.MutableIntLongMap;
+import io.mercury.common.datetime.pattern.StandardPattern;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
+import io.mercury.common.param.ParamKey;
+import io.mercury.common.param.Params;
 import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
 import org.eclipse.collections.api.set.MutableSet;
+import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
-import java.time.temporal.Temporal;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import static io.mercury.common.lang.Throws.illegalArgument;
+import static io.mercury.common.collections.MapUtil.nonEmpty;
 
-public class MutableParams<K extends ParamKey> implements Params<K> {
+public class MutableParams implements Params {
 
-    private final MutableIntBooleanMap booleanParams = MutableMaps.newIntBooleanMap();
+    private static final Logger log = Log4j2LoggerFactory.getLogger(MutableParams.class);
 
-    private final MutableIntIntMap intParams = MutableMaps.newIntIntMap();
+    private final MutableIntObjectMap<String> params = MutableMaps.newIntObjectMap();
 
-    private final MutableIntLongMap longParams = MutableMaps.newIntLongMap();
-
-    private final MutableIntDoubleMap doubleParams = MutableMaps.newIntDoubleMap();
-
-    private final MutableIntObjectMap<String> stringParams = MutableMaps.newIntObjectMap();
-
-    private final MutableIntObjectMap<Temporal> temporalParams = MutableMaps.newIntObjectMap();
-
-    private final MutableSet<K> keys = MutableSets.newUnifiedSet();
+    private final MutableSet<ParamKey> keys = MutableSets.newUnifiedSet();
 
     public MutableParams() {
         this(() -> null);
     }
 
     /**
-     * @param initializer Supplier<Map<K, ?>>
+     * @param initializer Supplier<Map<ParamKey, String>>
      */
-    public MutableParams(@Nonnull Supplier<Map<K, ?>> initializer) {
+    public MutableParams(@Nonnull Supplier<Map<ParamKey, String>> initializer) {
         this(initializer.get());
     }
 
     /**
-     * @param map Map<K, ?>
+     * @param map Map<ParamKey, String>
      */
-    public MutableParams(Map<K, ?> map) {
-        if (map != null) {
-            map.forEach((K key, Object value) -> {
-                switch (key.getValueType()) {
-                    case BOOLEAN -> putParam(key, (boolean) value);
-                    case INT -> putParam(key, (int) value);
-                    case LONG -> putParam(key, (long) value);
-                    case DOUBLE -> putParam(key, (double) value);
-                    case STRING -> putParam(key, (String) value);
-                    case DATE -> putParam(key, (LocalDate) value);
-                    case TIME -> putParam(key, (LocalTime) value);
-                    case DATETIME -> putParam(key, (LocalDateTime) value);
-                    case ZONED_DATETIME -> putParam(key, (ZonedDateTime) value);
-                    default -> illegalArgument("Param: " + key.getParamName());
-                }
-            });
-        }
+    public MutableParams(Map<ParamKey, String> map) {
+        if (nonEmpty(map))
+            map.forEach((key, value) -> params.put(key.getParamId(), value));
+        else
+            log.warn("Input map is empty when initialized");
     }
 
     /**
@@ -75,11 +55,11 @@ public class MutableParams<K extends ParamKey> implements Params<K> {
      * @return boolean
      */
     @Override
-    public boolean getBoolean(K key) {
+    public boolean getBoolean(ParamKey key) {
         if (key.getValueType() != ValueType.BOOLEAN)
-            illegalArgument(
+            throw new ParamGettingException(
                     "Key -> " + key + " ParamType is not [BOOLEAN], ParamType==" + key.getValueType());
-        return booleanParams.get(key.getParamId());
+        return Boolean.parseBoolean(params.get(key.getParamId()));
     }
 
     /**
@@ -87,11 +67,11 @@ public class MutableParams<K extends ParamKey> implements Params<K> {
      * @return int
      */
     @Override
-    public int getInt(K key) {
+    public int getInt(ParamKey key) {
         if (key.getValueType() != ValueType.INT)
-            illegalArgument(
+            throw new ParamGettingException(
                     "Key -> " + key + " ParamType is not [INT], ParamType==" + key.getValueType());
-        return intParams.get(key.getParamId());
+        return Integer.parseInt(params.get(key.getParamId()));
     }
 
     /**
@@ -99,11 +79,11 @@ public class MutableParams<K extends ParamKey> implements Params<K> {
      * @return long
      */
     @Override
-    public long getLong(K key) {
+    public long getLong(ParamKey key) {
         if (key.getValueType() != ValueType.LONG)
-            illegalArgument(
+            throw new ParamGettingException(
                     "Key -> " + key + " ParamType is not [LONG], ParamType==" + key.getValueType());
-        return longParams.get(key.getParamId());
+        return Long.parseLong(params.get(key.getParamId()));
     }
 
     /**
@@ -111,11 +91,11 @@ public class MutableParams<K extends ParamKey> implements Params<K> {
      * @return double
      */
     @Override
-    public double getDouble(K key) {
+    public double getDouble(ParamKey key) {
         if (key.getValueType() != ValueType.DOUBLE)
-            illegalArgument(
+            throw new ParamGettingException(
                     "Key -> " + key + " ParamType is not [DOUBLE], ParamType==" + key.getValueType());
-        return doubleParams.get(key.getParamId());
+        return Double.parseDouble(params.get(key.getParamId()));
     }
 
     /**
@@ -123,11 +103,11 @@ public class MutableParams<K extends ParamKey> implements Params<K> {
      * @return String
      */
     @Override
-    public String getString(K key) {
+    public String getString(ParamKey key) {
         if (key.getValueType() != ValueType.STRING)
-            illegalArgument(
+            throw new ParamGettingException(
                     "Key -> " + key + " ParamType is not [STRING], ParamType==" + key.getValueType());
-        return stringParams.get(key.getParamId());
+        return params.get(key.getParamId());
     }
 
     /**
@@ -135,11 +115,11 @@ public class MutableParams<K extends ParamKey> implements Params<K> {
      * @return LocalDate
      */
     @Override
-    public LocalDate getDate(K key) {
+    public LocalDate getDate(ParamKey key) {
         if (key.getValueType() != ValueType.DATE)
-            illegalArgument(
+            throw new ParamGettingException(
                     "Key -> " + key + " ParamType is not [DATE], ParamType==" + key.getValueType());
-        return (LocalDate) temporalParams.get(key.getParamId());
+        return StandardPattern.toDate(params.get(key.getParamId()));
     }
 
     /**
@@ -147,11 +127,11 @@ public class MutableParams<K extends ParamKey> implements Params<K> {
      * @return LocalTime
      */
     @Override
-    public LocalTime getTime(K key) {
+    public LocalTime getTime(ParamKey key) {
         if (key.getValueType() != ValueType.TIME)
-            illegalArgument(
+            throw new ParamGettingException(
                     "Key -> " + key + " ParamType is not [TIME], ParamType==" + key.getValueType());
-        return (LocalTime) temporalParams.get(key.getParamId());
+        return StandardPattern.toTime(params.get(key.getParamId()));
     }
 
     /**
@@ -159,11 +139,11 @@ public class MutableParams<K extends ParamKey> implements Params<K> {
      * @return LocalDateTime
      */
     @Override
-    public LocalDateTime getDateTime(K key) {
+    public LocalDateTime getDateTime(ParamKey key) {
         if (key.getValueType() != ValueType.DATETIME)
-            illegalArgument(
+            throw new ParamGettingException(
                     "Key -> [" + key + "] ParamType is not [DATETIME], ParamType==" + key.getValueType());
-        return (LocalDateTime) temporalParams.get(key.getParamId());
+        return StandardPattern.toDateTime(params.get(key.getParamId()));
     }
 
     /**
@@ -171,97 +151,103 @@ public class MutableParams<K extends ParamKey> implements Params<K> {
      * @return ZonedDateTime
      */
     @Override
-    public ZonedDateTime getZonedDateTime(K key) {
+    public ZonedDateTime getZonedDateTime(ParamKey key) {
         if (key.getValueType() != ValueType.ZONED_DATETIME)
-            illegalArgument(
+            throw new ParamGettingException(
                     "Key -> [" + key + "] ParamType is not [ZONED_DATETIME], ParamType==" + key.getValueType());
-        return (ZonedDateTime) temporalParams.get(key.getParamId());
+        return StandardPattern.toZonedDateTime(params.get(key.getParamId()));
+    }
+
+    @Override
+    public boolean isImmutable() {
+        return false;
     }
 
     /**
      * @param key   K
      * @param value boolean
      */
-    public void putParam(K key, boolean value) {
+    public void putParam(ParamKey key, boolean value) {
         keys.add(key);
-        booleanParams.put(key.getParamId(), value);
+        params.put(key.getParamId(), Boolean.toString(value));
     }
 
     /**
      * @param key   K
      * @param value int
      */
-    public void putParam(K key, int value) {
+    public void putParam(ParamKey key, int value) {
         keys.add(key);
-        intParams.put(key.getParamId(), value);
+        params.put(key.getParamId(), Integer.toString(value));
     }
 
     /**
      * @param key   K
      * @param value long
      */
-    public void putParam(K key, long value) {
+    public void putParam(ParamKey key, long value) {
         keys.add(key);
-        doubleParams.put(key.getParamId(), value);
+        params.put(key.getParamId(), Long.toString(value));
     }
 
     /**
      * @param key   K
      * @param value double
      */
-    public void putParam(K key, double value) {
+    public void putParam(ParamKey key, double value) {
         keys.add(key);
-        doubleParams.put(key.getParamId(), value);
+        params.put(key.getParamId(), Double.toString(value));
     }
 
     /**
      * @param key   K
      * @param value String
      */
-    public void putParam(K key, String value) {
+    public void putParam(ParamKey key, String value) {
         keys.add(key);
-        stringParams.put(key.getParamId(), value);
+        params.put(key.getParamId(), value);
     }
 
     /**
      * @param key   K
      * @param value LocalDate
      */
-    public void putParam(K key, LocalDate value) {
+    public void putParam(ParamKey key, LocalDate value) {
         keys.add(key);
-        temporalParams.put(key.getParamId(), value);
+        params.put(key.getParamId(), StandardPattern.fmt(value));
     }
 
     /**
      * @param key   K
      * @param value LocalTime
      */
-    public void putParam(K key, LocalTime value) {
+    public void putParam(ParamKey key, LocalTime value) {
         keys.add(key);
-        temporalParams.put(key.getParamId(), value);
+        params.put(key.getParamId(), StandardPattern.fmt(value));
     }
 
     /**
      * @param key   K
      * @param value LocalDateTime
      */
-    public void putParam(K key, LocalDateTime value) {
+    public void putParam(ParamKey key, LocalDateTime value) {
         keys.add(key);
-        temporalParams.put(key.getParamId(), value);
+        params.put(key.getParamId(), StandardPattern.fmt(value));
     }
 
     /**
      * @param key   K
      * @param value ZonedDateTime
      */
-    public void putParam(K key, ZonedDateTime value) {
+    public void putParam(ParamKey key, ZonedDateTime value) {
         keys.add(key);
-        temporalParams.put(key.getParamId(), value);
+        String fmt = StandardPattern.fmt(value);
+        params.put(key.getParamId(), fmt);
     }
 
     @Override
-    public Set<K> getParamKeys() {
-        return keys;
+    public Set<ParamKey> getParamKeys() {
+        return Set.of(keys.toArray(new ParamKey[keys.size()]));
     }
 
 }
