@@ -10,7 +10,7 @@ import io.mercury.common.concurrent.queue.ScQueue;
 import io.mercury.common.concurrent.ring.base.WaitStrategyOption;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
-import io.mercury.common.thread.SleepSupport;
+import io.mercury.common.thread.Sleep;
 import io.mercury.common.thread.ThreadSupport;
 import org.slf4j.Logger;
 
@@ -176,7 +176,7 @@ public class RingQueue<E> extends ScQueue<E> {
                 queue.enqueue(++i);
         });
 
-        SleepSupport.sleep(10000);
+        Sleep.millis(10000);
         queue.stop();
     }
 

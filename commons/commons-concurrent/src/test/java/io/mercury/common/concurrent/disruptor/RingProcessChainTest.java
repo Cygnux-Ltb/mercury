@@ -2,7 +2,7 @@ package io.mercury.common.concurrent.disruptor;
 
 import com.lmax.disruptor.support.LongEvent;
 import io.mercury.common.concurrent.ring.RingProcessChain;
-import io.mercury.common.thread.SleepSupport;
+import io.mercury.common.thread.Sleep;
 import io.mercury.common.thread.ThreadSupport;
 import org.junit.Test;
 
@@ -36,7 +36,7 @@ public class RingProcessChainTest {
                 processChain.publishEvent(l);
         });
 
-        SleepSupport.sleep(2000);
+        Sleep.millis(2000);
 
         System.out.println("p0 - " + p0.intValue());
         assertEquals(p0.intValue(), 1000L);

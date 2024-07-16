@@ -16,6 +16,8 @@
 
 package com.aeroncookbook.agrona.ringbuffer;
 
+import io.mercury.common.log4j2.Log4j2Configurator;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import org.agrona.concurrent.AgentRunner;
 import org.agrona.concurrent.BusySpinIdleStrategy;
 import org.agrona.concurrent.IdleStrategy;
@@ -24,13 +26,16 @@ import org.agrona.concurrent.UnsafeBuffer;
 import org.agrona.concurrent.ringbuffer.ManyToOneRingBuffer;
 import org.agrona.concurrent.ringbuffer.RingBufferDescriptor;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 
 public class StartHere {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(StartHere.class);
+    static {
+        Log4j2Configurator.useInfoLogLevel();
+    }
+
+    private static final Logger LOGGER = Log4j2LoggerFactory.getLogger(StartHere.class);
 
     public static void main(final String[] args) {
         final int sendCount = 10_000_000;

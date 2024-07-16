@@ -9,7 +9,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpmcArrayQueue;
 
-import io.mercury.common.thread.SleepSupport;
+import io.mercury.common.thread.Sleep;
 import io.mercury.common.thread.ThreadSupport;
 
 @ThreadSafe
@@ -87,7 +87,7 @@ public final class ConcurrentPriorityQueue<E> implements Comparable<ConcurrentPr
                 } else {
                     queue.offer("TEST[0] put : " + i);
                 }
-                SleepSupport.sleep(2);
+                Sleep.millis(2);
             }
         });
         ThreadSupport.startNewMaxPriorityThread("test1", () -> {
@@ -97,7 +97,7 @@ public final class ConcurrentPriorityQueue<E> implements Comparable<ConcurrentPr
                 } else {
                     queue.offer("TEST[1] put : " + i);
                 }
-                SleepSupport.sleep(3);
+                Sleep.millis(3);
             }
         });
         ThreadSupport.startNewMaxPriorityThread("test2", () -> {
@@ -107,7 +107,7 @@ public final class ConcurrentPriorityQueue<E> implements Comparable<ConcurrentPr
                     System.out.println(e);
                 } else {
                     System.out.println("Grab null sleep 1 ms");
-                    SleepSupport.sleep(1);
+                    Sleep.millis(1);
                 }
             } while (true);
         });

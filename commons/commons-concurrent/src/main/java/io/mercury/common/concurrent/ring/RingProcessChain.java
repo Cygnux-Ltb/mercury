@@ -27,7 +27,7 @@ import static io.mercury.common.collections.CollectionUtil.toArray;
 import static io.mercury.common.concurrent.ring.base.ReflectionEventFactory.newFactory;
 import static io.mercury.common.concurrent.ring.base.WaitStrategyOption.Sleeping;
 import static io.mercury.common.concurrent.ring.base.WaitStrategyOption.Yielding;
-import static io.mercury.common.datetime.pattern.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
 import static io.mercury.common.lang.Asserter.nonNull;
 import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
 

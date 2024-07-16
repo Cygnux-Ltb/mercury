@@ -214,7 +214,7 @@ public final class ConcurrentIntQueue extends AbstractConcurrentQueue {
      */
     public int take() {
 
-        // non volatile read ( which is quicker )
+        // non-volatile read ( which is quicker )
         final int readLocation = this.consumerReadLocation;
 
         // sets the nextReadLocation my moving it on by 1, this may cause it it wrap
@@ -243,7 +243,7 @@ public final class ConcurrentIntQueue extends AbstractConcurrentQueue {
 
     public int peek(long timeout, TimeUnit unit) throws InterruptedException, TimeoutException {
 
-        // non volatile read ( which is quicker )
+        // non-volatile read ( which is quicker )
         final int readLocation = this.consumerReadLocation;
 
         blockForReadSpace(timeout, unit, readLocation);
@@ -271,10 +271,10 @@ public final class ConcurrentIntQueue extends AbstractConcurrentQueue {
      */
     public boolean offer(int value) {
 
-        // non volatile read ( which is quicker )
+        // non-volatile read ( which is quicker )
         final int writeLocation = this.producerWriteLocation;
 
-        // sets the nextWriteLocation my moving it on by 1, this may cause it it wrap
+        // sets the nextWriteLocation my moving it on by 1, this may cause it is wrap
         // back to the start.
         final int nextWriteLocation = (writeLocation + 1 == capacity) ? 0 : writeLocation + 1;
 
@@ -327,10 +327,10 @@ public final class ConcurrentIntQueue extends AbstractConcurrentQueue {
      */
     public boolean offer(int value, long timeout, TimeUnit unit) throws InterruptedException {
 
-        // non volatile read ( which is quicker )
+        // non-volatile read ( which is quicker )
         final int writeLocation = this.producerWriteLocation;
 
-        // sets the nextWriteLocation my moving it on by 1, this may cause it it wrap
+        // sets the nextWriteLocation my moving it on by 1, this may cause it is wrap
         // back to the start.
         final int nextWriteLocation = (writeLocation + 1 == capacity) ? 0 : writeLocation + 1;
 
@@ -352,7 +352,7 @@ public final class ConcurrentIntQueue extends AbstractConcurrentQueue {
 
             while (nextWriteLocation == readLocation)
             // this condition handles the case general case where the read is at the start
-            // of the backing array and we are at the end,
+            // of the backing array, and we are at the end,
             // blocks as our backing array is full, we will wait for a read, ( which will
             // cause a change on the read location )
             {
@@ -389,7 +389,7 @@ public final class ConcurrentIntQueue extends AbstractConcurrentQueue {
         final int readLocation = this.consumerReadLocation;
         int nextReadLocation = blockForReadSpace(timeout, unit, readLocation);
 
-        // purposely non volatile as the read memory barrier occurred when we read
+        // purposely non-volatile as the read memory barrier occurred when we read
         // 'writeLocation'
         final int value = data[readLocation];
         setReadLocation(nextReadLocation);
@@ -425,7 +425,7 @@ public final class ConcurrentIntQueue extends AbstractConcurrentQueue {
             if (o == data[readLocation])
                 return true;
 
-            // sets the readLocation my moving it on by 1, this may cause it it wrap back to
+            // sets the readLocation my moving it on by 1, this may cause it is wrap back to
             // the start.
             readLocation = (readLocation + 1 == capacity) ? 0 : readLocation + 1;
 
@@ -466,7 +466,7 @@ public final class ConcurrentIntQueue extends AbstractConcurrentQueue {
      * Removes at most the given number of available elements from this queue and
      * adds them to the given collection. A failure encountered while attempting to
      * add elements to collection <tt>c</tt> may result in elements being in
-     * neither, either or both collections when the associated exception is thrown.
+     * neither, either nor both collections when the associated exception is thrown.
      * Attempts to drain a queue to itself result in
      * <tt>IllegalArgumentException</tt>. Further, the behavior of this operation is
      * undefined if the specified collection is modified while the operation is in
@@ -488,7 +488,7 @@ public final class ConcurrentIntQueue extends AbstractConcurrentQueue {
      */
     int drainTo(int[] target, int maxElements) {
 
-        // non volatile read ( which is quicker )
+        // non-volatile read ( which is quicker )
         int readLocation = this.consumerReadLocation;
 
         int i = 0;
