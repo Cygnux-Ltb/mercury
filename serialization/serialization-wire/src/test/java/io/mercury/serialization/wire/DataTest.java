@@ -5,7 +5,6 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 
 import io.mercury.common.log4j2.Log4j2Configurator;
-import io.mercury.common.log4j2.Log4j2Configurator.LogLevel;
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.wire.WireOut;
 import net.openhft.chronicle.wire.YamlWire;
@@ -13,7 +12,7 @@ import net.openhft.chronicle.wire.YamlWire;
 public class DataTest {
 	
 	static {
-		Log4j2Configurator.setLogLevel(LogLevel.ERROR);
+		Log4j2Configurator.useInfoLogLevel();
 	}
 
 	@Test
