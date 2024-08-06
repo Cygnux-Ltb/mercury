@@ -1,7 +1,7 @@
-package io.mercury.common.concurrent.ring;
+package io.mercury.common.concurrent.disruptor;
 
 import com.lmax.disruptor.WorkHandler;
-import io.mercury.common.concurrent.ring.base.HandlerManager;
+import io.mercury.common.concurrent.disruptor.base.HandlerManager;
 import org.junit.Test;
 
 public class RingEventbusTest {

@@ -22,7 +22,7 @@ import static com.lmax.disruptor.RingBuffer.createMultiProducer;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class EventPublisher1ArgTest implements EventTranslator<LongEvent> {
+public class EventPublisherArg1Test implements EventTranslator<LongEvent> {
     private static final int BUFFER_SIZE = 32;
     private final RingBuffer<LongEvent> ringBuffer = createMultiProducer(LongEvent.FACTORY, BUFFER_SIZE);
 

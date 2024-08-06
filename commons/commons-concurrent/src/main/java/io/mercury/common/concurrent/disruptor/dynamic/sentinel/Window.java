@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.ring.dynamic.sentinel;
+package io.mercury.common.concurrent.disruptor.dynamic.sentinel;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

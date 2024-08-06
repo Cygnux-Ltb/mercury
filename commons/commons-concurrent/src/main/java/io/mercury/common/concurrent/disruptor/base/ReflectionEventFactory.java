@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.ring.base;
+package io.mercury.common.concurrent.disruptor.base;
 
 import com.lmax.disruptor.EventFactory;
 import io.mercury.common.util.JreReflection;

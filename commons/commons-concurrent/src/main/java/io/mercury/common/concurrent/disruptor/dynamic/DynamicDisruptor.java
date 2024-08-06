@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.ring.dynamic;
+package io.mercury.common.concurrent.disruptor.dynamic;
 
 
 import com.lmax.disruptor.EventTranslatorVararg;
@@ -9,15 +9,15 @@ import com.lmax.disruptor.Sequencer;
 import com.lmax.disruptor.WorkProcessor;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ExceptionHandlerWrapper;
-import io.mercury.common.concurrent.ring.dynamic.core.AbstractSentinelHandler;
-import io.mercury.common.concurrent.ring.dynamic.core.DynamicConsumer;
-import io.mercury.common.concurrent.ring.dynamic.core.HandlerEvent;
-import io.mercury.common.concurrent.ring.dynamic.core.HandlerFactory;
-import io.mercury.common.concurrent.ring.dynamic.sentinel.SentinelClient;
-import io.mercury.common.concurrent.ring.dynamic.sentinel.SentinelEvent;
-import io.mercury.common.concurrent.ring.dynamic.sentinel.SentinelListener;
-import io.mercury.common.concurrent.ring.dynamic.strategy.PidStrategy;
-import io.mercury.common.concurrent.ring.dynamic.strategy.RegulateStrategy;
+import io.mercury.common.concurrent.disruptor.dynamic.core.AbstractSentinelHandler;
+import io.mercury.common.concurrent.disruptor.dynamic.core.HandlerFactory;
+import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelClient;
+import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelEvent;
+import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelListener;
+import io.mercury.common.concurrent.disruptor.dynamic.strategy.PidStrategy;
+import io.mercury.common.concurrent.disruptor.dynamic.core.DynamicConsumer;
+import io.mercury.common.concurrent.disruptor.dynamic.core.HandlerEvent;
+import io.mercury.common.concurrent.disruptor.dynamic.strategy.RegulateStrategy;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.SynchronousQueue;

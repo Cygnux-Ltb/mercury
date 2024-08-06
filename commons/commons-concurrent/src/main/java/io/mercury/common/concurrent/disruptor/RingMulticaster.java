@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.ring;
+package io.mercury.common.concurrent.disruptor;
 
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
@@ -6,10 +6,10 @@ import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.dsl.ProducerType;
 import io.mercury.common.collections.MutableLists;
-import io.mercury.common.concurrent.ring.base.EventHandlerWrapper;
-import io.mercury.common.concurrent.ring.base.ReflectionEventFactory;
-import io.mercury.common.concurrent.ring.base.RingComponent;
-import io.mercury.common.concurrent.ring.base.WaitStrategyOption;
+import io.mercury.common.concurrent.disruptor.base.EventHandlerWrapper;
+import io.mercury.common.concurrent.disruptor.base.ReflectionEventFactory;
+import io.mercury.common.concurrent.disruptor.base.RingComponent;
+import io.mercury.common.concurrent.disruptor.base.CommonStrategy;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.lang.Throws;
@@ -154,7 +154,7 @@ public final class RingMulticaster<E, I> extends RingComponent<E, I> {
             return this;
         }
 
-        public Builder<E, I> setWaitStrategy(WaitStrategyOption waitStrategy) {
+        public Builder<E, I> setWaitStrategy(CommonStrategy waitStrategy) {
             return setWaitStrategy(waitStrategy.get());
         }
 
@@ -177,7 +177,7 @@ public final class RingMulticaster<E, I> extends RingComponent<E, I> {
             if (handlers.isEmpty())
                 Throws.illegalArgument("handlers");
             if (waitStrategy == null)
-                waitStrategy = handlers.size() > availableProcessors() ? WaitStrategyOption.Sleeping.get() : WaitStrategyOption.Yielding.get();
+                waitStrategy = handlers.size() > availableProcessors() ? CommonStrategy.Sleeping.get() : CommonStrategy.Yielding.get();
             if (StringSupport.isNullOrEmpty(name))
                 name = "RingMulticaster-" + YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now());
             return new RingMulticaster<>(name, size, mode, producerType, eventFactory,

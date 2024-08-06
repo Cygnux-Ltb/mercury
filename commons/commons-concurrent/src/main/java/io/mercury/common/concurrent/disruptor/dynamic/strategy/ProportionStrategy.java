@@ -1,7 +1,9 @@
-package io.mercury.common.concurrent.ring.dynamic.strategy;
+package io.mercury.common.concurrent.disruptor.dynamic.strategy;
 
-import io.mercury.common.concurrent.ring.dynamic.DynamicDisruptor;
-import io.mercury.common.concurrent.ring.dynamic.sentinel.SentinelEvent;
+import io.mercury.common.concurrent.disruptor.dynamic.DynamicDisruptor;
+import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelEvent;
+
+import static io.mercury.common.concurrent.disruptor.dynamic.strategy.RegulateStrategy.updateThreadCount;
 
 /**
  * 比例调节策略, 如果WINDOWS_COUNT时间窗口内不能处理玩所有消息,
@@ -17,7 +19,7 @@ public class ProportionStrategy implements RegulateStrategy {
 
     @Override
     public void regulate(DynamicDisruptor dynamicDisruptor, SentinelEvent sentinelEvent) {
-        RegulateStrategy.updateThreadCount(dynamicDisruptor, getNeedUpdateCount(sentinelEvent));
+        updateThreadCount(dynamicDisruptor, getNeedUpdateCount(sentinelEvent));
     }
 
     @Override

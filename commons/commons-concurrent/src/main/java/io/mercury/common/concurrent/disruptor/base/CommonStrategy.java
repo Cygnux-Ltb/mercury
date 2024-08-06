@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 /**
  *
  */
-public enum WaitStrategyOption implements Supplier<WaitStrategy> {
+public enum CommonStrategy implements Supplier<WaitStrategy> {
 
     /**
      * Internally the BlockingWaitStrategy uses a typical lock and condition

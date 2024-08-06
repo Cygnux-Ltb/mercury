@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.ring;
+package io.mercury.common.concurrent.disruptor;
 
 import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.RingBuffer;
@@ -7,7 +7,7 @@ import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import io.mercury.common.collections.queue.EventContainer;
 import io.mercury.common.concurrent.queue.ScQueue;
-import io.mercury.common.concurrent.ring.base.WaitStrategyOption;
+import io.mercury.common.concurrent.disruptor.base.CommonStrategy;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.thread.Sleep;
@@ -128,7 +128,7 @@ public class RingQueue<E> extends ScQueue<E> {
         private String name = "ring-" + currentTimeMillis();
         private int size = 32;
         private StartMode mode = StartMode.auto();
-        private WaitStrategy strategy = WaitStrategyOption.Sleeping.get();
+        private WaitStrategy strategy = CommonStrategy.Sleeping.get();
 
         private Builder(ProducerType type) {
             this.type = type;
@@ -149,7 +149,7 @@ public class RingQueue<E> extends ScQueue<E> {
             return this;
         }
 
-        public Builder waitStrategy(WaitStrategyOption strategy) {
+        public Builder waitStrategy(CommonStrategy strategy) {
             this.strategy = strategy.get();
             return this;
         }

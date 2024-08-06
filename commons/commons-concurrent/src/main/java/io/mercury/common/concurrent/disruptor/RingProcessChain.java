@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.ring;
+package io.mercury.common.concurrent.disruptor;
 
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
@@ -8,9 +8,9 @@ import com.lmax.disruptor.dsl.EventHandlerGroup;
 import com.lmax.disruptor.dsl.ProducerType;
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.concurrent.ring.base.EventHandlerWrapper;
-import io.mercury.common.concurrent.ring.base.RingComponent;
-import io.mercury.common.concurrent.ring.base.WaitStrategyOption;
+import io.mercury.common.concurrent.disruptor.base.CommonStrategy;
+import io.mercury.common.concurrent.disruptor.base.EventHandlerWrapper;
+import io.mercury.common.concurrent.disruptor.base.RingComponent;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.lang.Throws;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
@@ -24,9 +24,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static io.mercury.common.collections.CollectionUtil.toArray;
-import static io.mercury.common.concurrent.ring.base.ReflectionEventFactory.newFactory;
-import static io.mercury.common.concurrent.ring.base.WaitStrategyOption.Sleeping;
-import static io.mercury.common.concurrent.ring.base.WaitStrategyOption.Yielding;
+import static io.mercury.common.concurrent.disruptor.base.CommonStrategy.Sleeping;
+import static io.mercury.common.concurrent.disruptor.base.CommonStrategy.Yielding;
+import static io.mercury.common.concurrent.disruptor.base.ReflectionEventFactory.newFactory;
 import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
 import static io.mercury.common.lang.Asserter.nonNull;
 import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
@@ -76,10 +76,10 @@ public class RingProcessChain<E, I> extends RingComponent<E, I> {
 
     // **************** 单生产者处理链 ****************//
 
-    public static <E, I> Builder<E, I> withSingleProducer(
+    public static <E, I> Builder<E, I> singleProducer(
             @Nonnull Class<E> eventType,
             @Nonnull RingEventPublisher<E, I> publisher) {
-        return withSingleProducer(
+        return singleProducer(
                 // 使用反射EventFactory
                 newFactory(eventType, log), publisher);
     }
@@ -91,52 +91,52 @@ public class RingProcessChain<E, I> extends RingComponent<E, I> {
      * @param <I>             input type
      * @return Builder<E, I>
      */
-    public static <E, I> Builder<E, I> withSingleProducer(
+    public static <E, I> Builder<E, I> singleProducer(
             @Nonnull Class<E> eventType,
             @Nonnull EventTranslatorOneArg<E, I> eventTranslator) {
-        return withSingleProducer(
+        return singleProducer(
                 // 使用反射EventFactory
                 newFactory(eventType, log), eventTranslator);
     }
 
-    public static <E, I> Builder<E, I> withSingleProducer(@Nonnull EventFactory<E> eventFactory,
-                                                          @Nonnull RingEventPublisher<E, I> publisher) {
-        return withSingleProducer(eventFactory,
+    public static <E, I> Builder<E, I> singleProducer(@Nonnull EventFactory<E> eventFactory,
+                                                      @Nonnull RingEventPublisher<E, I> publisher) {
+        return singleProducer(eventFactory,
                 // EventTranslator实现函数, 负责调用处理In对象到Event对象之间的转换
                 (event, sequence, in) -> publisher.accept(event, in));
     }
 
-    public static <E, I> Builder<E, I> withSingleProducer(@Nonnull EventFactory<E> eventFactory,
-                                                          @Nonnull EventTranslatorOneArg<E, I> eventTranslator) {
+    public static <E, I> Builder<E, I> singleProducer(@Nonnull EventFactory<E> eventFactory,
+                                                      @Nonnull EventTranslatorOneArg<E, I> eventTranslator) {
         return new Builder<>(ProducerType.SINGLE, eventFactory, eventTranslator);
     }
 
     // **************** 多生产者处理链 ****************//
 
-    public static <E, I> Builder<E, I> withMultiProducer(@Nonnull Class<E> eventType,
-                                                         @Nonnull RingEventPublisher<E, I> publisher) {
-        return withMultiProducer(
+    public static <E, I> Builder<E, I> multiProducer(@Nonnull Class<E> eventType,
+                                                     @Nonnull RingEventPublisher<E, I> publisher) {
+        return multiProducer(
                 // 使用反射EventFactory
                 newFactory(eventType, log), publisher);
     }
 
-    public static <E, I> Builder<E, I> withMultiProducer(@Nonnull Class<E> eventType,
-                                                         @Nonnull EventTranslatorOneArg<E, I> eventTranslator) {
-        return withMultiProducer(
+    public static <E, I> Builder<E, I> multiProducer(@Nonnull Class<E> eventType,
+                                                     @Nonnull EventTranslatorOneArg<E, I> eventTranslator) {
+        return multiProducer(
                 // 使用反射EventFactory
                 newFactory(eventType, log), eventTranslator);
     }
 
-    public static <E, I> Builder<E, I> withMultiProducer(@Nonnull EventFactory<E> eventFactory,
-                                                         @Nonnull RingEventPublisher<E, I> publisher) {
-        return withMultiProducer(eventFactory,
+    public static <E, I> Builder<E, I> multiProducer(@Nonnull EventFactory<E> eventFactory,
+                                                     @Nonnull RingEventPublisher<E, I> publisher) {
+        return multiProducer(eventFactory,
                 // EventTranslator实现函数, 负责调用处理In对象到Event对象之间的转换
                 (event, sequence, in) -> publisher.accept(event, in));
     }
 
-    public static <E, I> Builder<E, I> withMultiProducer(@Nonnull EventFactory<E> eventFactory,
-                                                         @Nonnull EventTranslatorOneArg<E, I> eventTranslator) {
-        return new Builder<>(ProducerType.SINGLE, eventFactory, eventTranslator);
+    public static <E, I> Builder<E, I> multiProducer(@Nonnull EventFactory<E> eventFactory,
+                                                     @Nonnull EventTranslatorOneArg<E, I> eventTranslator) {
+        return new Builder<>(ProducerType.MULTI, eventFactory, eventTranslator);
     }
 
     @NotThreadSafe
@@ -200,7 +200,7 @@ public class RingProcessChain<E, I> extends RingComponent<E, I> {
             return this;
         }
 
-        public Builder<E, I> waitStrategy(WaitStrategyOption waitStrategy) {
+        public Builder<E, I> waitStrategy(CommonStrategy waitStrategy) {
             return waitStrategy(waitStrategy.get());
         }
 

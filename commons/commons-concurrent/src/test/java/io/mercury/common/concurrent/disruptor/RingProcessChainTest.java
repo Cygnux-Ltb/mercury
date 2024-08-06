@@ -1,14 +1,13 @@
 package io.mercury.common.concurrent.disruptor;
 
 import com.lmax.disruptor.support.LongEvent;
-import io.mercury.common.concurrent.ring.RingProcessChain;
 import io.mercury.common.thread.Sleep;
 import io.mercury.common.thread.ThreadSupport;
 import org.junit.Test;
 
 import java.util.concurrent.atomic.LongAdder;
 
-import static io.mercury.common.concurrent.ring.base.WaitStrategyOption.Yielding;
+import static io.mercury.common.concurrent.disruptor.base.CommonStrategy.Yielding;
 import static org.junit.Assert.assertEquals;
 
 public class RingProcessChainTest {
@@ -19,7 +18,7 @@ public class RingProcessChainTest {
         LongAdder p1 = new LongAdder();
         LongAdder p2 = new LongAdder();
         RingProcessChain<LongEvent, Long> processChain = RingProcessChain
-                .withSingleProducer(LongEvent.class, LongEvent::set)
+                .singleProducer(LongEvent.class, LongEvent::set)
                 .firstHandler((event, sequence, endOfBatch) -> {
                     System.out.println("sequence -> " + sequence + " p0 - " + event.get() + " : " + endOfBatch);
                     p0.increment();

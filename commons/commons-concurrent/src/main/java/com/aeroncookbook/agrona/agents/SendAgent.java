@@ -50,4 +50,5 @@ public class SendAgent implements Agent {
     public String roleName() {
         return "sender";
     }
+
 }

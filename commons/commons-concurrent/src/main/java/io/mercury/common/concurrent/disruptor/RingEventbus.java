@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.ring;
+package io.mercury.common.concurrent.disruptor;
 
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
@@ -10,11 +10,13 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
-import io.mercury.common.concurrent.ring.RingEventbus.MpRingEventbus.MpWizard;
-import io.mercury.common.concurrent.ring.RingEventbus.SpRingEventbus.SpWizard;
-import io.mercury.common.concurrent.ring.base.EventHandlerWrapper;
-import io.mercury.common.concurrent.ring.base.EventPublisher;
-import io.mercury.common.concurrent.ring.base.HandlerManager;
+import io.mercury.common.concurrent.disruptor.RingEventbus.MpRingEventbus.MpWizard;
+import io.mercury.common.concurrent.disruptor.RingEventbus.SpRingEventbus.SpWizard;
+import io.mercury.common.concurrent.disruptor.base.EventHandlerWrapper;
+import io.mercury.common.concurrent.disruptor.base.EventPublisherArg1;
+import io.mercury.common.concurrent.disruptor.base.EventPublisherArg2;
+import io.mercury.common.concurrent.disruptor.base.EventPublisherArg3;
+import io.mercury.common.concurrent.disruptor.base.HandlerManager;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.thread.RunnableComponent;
 import org.slf4j.Logger;
@@ -25,8 +27,8 @@ import java.time.LocalDateTime;
 
 import static com.lmax.disruptor.dsl.ProducerType.MULTI;
 import static com.lmax.disruptor.dsl.ProducerType.SINGLE;
-import static io.mercury.common.concurrent.ring.base.ReflectionEventFactory.newFactory;
-import static io.mercury.common.concurrent.ring.base.WaitStrategyOption.Yielding;
+import static io.mercury.common.concurrent.disruptor.base.CommonStrategy.Yielding;
+import static io.mercury.common.concurrent.disruptor.base.ReflectionEventFactory.newFactory;
 import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYMMDD_L_HHMMSSSSS;
 import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
 import static io.mercury.common.thread.ThreadFactoryImpl.ofPlatform;
@@ -40,7 +42,8 @@ import static java.util.Objects.requireNonNullElse;
  * <p>
  * 扩展多写和单写
  */
-public abstract class RingEventbus<E> extends RunnableComponent {
+public abstract sealed class RingEventbus<E> extends RunnableComponent
+        permits RingEventbus.MpRingEventbus, RingEventbus.SpRingEventbus {
 
     private static final Logger log = getLogger(RingEventbus.class);
 
@@ -138,13 +141,30 @@ public abstract class RingEventbus<E> extends RunnableComponent {
      * @param <A>        another object type
      * @return the new EventPublisher<E, A> object
      */
-    public <A> EventPublisher<E, A> newPublisher(EventTranslatorOneArg<E, A> translator)
+    public <A> EventPublisherArg1<E, A> newPublisher(EventTranslatorOneArg<E, A> translator)
             throws IllegalStateException {
-        if (isMultiProducer)
-            return new EventPublisher<>(disruptor.getRingBuffer(), translator);
-        else {
-            log.error("RingBuffer -> {} is not multi producer mode", name);
-            throw new IllegalStateException("isMultiProducer == false");
+        assertIsMultiProducer();
+        return new EventPublisherArg1<>(disruptor.getRingBuffer(), translator);
+    }
+
+
+    public <A0, A1> EventPublisherArg2<E, A0, A1> newPublisher(EventTranslatorTwoArg<E, A0, A1> translator)
+            throws IllegalStateException {
+        assertIsMultiProducer();
+        return new EventPublisherArg2<>(disruptor.getRingBuffer(), translator);
+    }
+
+
+    public <A0, A1, A2> EventPublisherArg3<E, A0, A1, A2> newPublisher(EventTranslatorThreeArg<E, A0, A1, A2> translator)
+            throws IllegalStateException {
+        assertIsMultiProducer();
+        return new EventPublisherArg3<>(disruptor.getRingBuffer(), translator);
+    }
+
+    private void assertIsMultiProducer() {
+        if (!isMultiProducer) {
+            log.error("RingEventbus -> {} is not multi producer mode", name);
+            throw new IllegalStateException(name + " not a Multi-Producer");
         }
     }
 
@@ -189,12 +209,13 @@ public abstract class RingEventbus<E> extends RunnableComponent {
         ringBuffer.publishEvent(translator, arg0, arg1, arg2);
     }
 
-    protected static class Wizard<E> {
+    protected static sealed class Wizard<E>
+            permits MpWizard, SpWizard {
 
         protected final EventFactory<E> factory;
 
         protected String name;
-        protected int size = 128;
+        protected int size = 256;
         protected StartMode startMode = StartMode.auto();
         protected WaitStrategy strategy = Yielding.get();
 
@@ -209,7 +230,7 @@ public abstract class RingEventbus<E> extends RunnableComponent {
      *
      * @param <E>
      */
-    public static class MpRingEventbus<E> extends RingEventbus<E> {
+    public static final class MpRingEventbus<E> extends RingEventbus<E> {
 
         private MpRingEventbus(String name, int size, StartMode startMode,
                                EventFactory<E> factory, WaitStrategy strategy,
@@ -217,7 +238,7 @@ public abstract class RingEventbus<E> extends RunnableComponent {
             super(name, size, startMode, MULTI, factory, strategy, handlerManager);
         }
 
-        public static class MpWizard<E> extends Wizard<E> {
+        public static final class MpWizard<E> extends Wizard<E> {
 
             private MpWizard(EventFactory<E> factory) {
                 super(factory);
@@ -252,8 +273,7 @@ public abstract class RingEventbus<E> extends RunnableComponent {
             }
 
             public MpRingEventbus<E> process(HandlerManager<E> manager) {
-                return new MpRingEventbus<>(name, size, startMode,
-                        factory, strategy, manager);
+                return new MpRingEventbus<>(name, size, startMode, factory, strategy, manager);
             }
 
         }
@@ -265,7 +285,7 @@ public abstract class RingEventbus<E> extends RunnableComponent {
      *
      * @param <E>
      */
-    public static class SpRingEventbus<E> extends RingEventbus<E> {
+    public static final class SpRingEventbus<E> extends RingEventbus<E> {
 
         private SpRingEventbus(String name, int size, StartMode startMode,
                                EventFactory<E> factory, WaitStrategy strategy,
@@ -273,7 +293,7 @@ public abstract class RingEventbus<E> extends RunnableComponent {
             super(name, size, startMode, SINGLE, factory, strategy, manager);
         }
 
-        public static class SpWizard<E> extends Wizard<E> {
+        public static final class SpWizard<E> extends Wizard<E> {
 
             private SpWizard(EventFactory<E> factory) {
                 super(factory);

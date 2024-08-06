@@ -14,11 +14,11 @@ public interface Deserializer<T, R> extends Function<T, R> {
     }
 
     @Nonnull
-    default R deserialization(@Nonnull T source) {
+    default R deserialization(@Nonnull T source) throws RuntimeException {
         return deserialization(source, null);
     }
 
     @Nonnull
-    R deserialization(@Nonnull T source, @Nullable R reuse);
+    R deserialization(@Nonnull T source, @Nullable R reuse) throws RuntimeException;
 
 }

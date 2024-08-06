@@ -14,13 +14,13 @@ import javax.annotation.Nonnull;
  * @param <A>
  * @author yellow013
  */
-public final class EventPublisher1Arg<E, A> {
+public final class EventPublisherArg1<E, A> {
 
     private final RingBuffer<E> ringBuffer;
 
     private final EventTranslatorOneArg<E, A> translator;
 
-    public EventPublisher1Arg(@Nonnull RingBuffer<E> ringBuffer,
+    public EventPublisherArg1(@Nonnull RingBuffer<E> ringBuffer,
                               @Nonnull EventTranslatorOneArg<E, A> translator) {
         this.ringBuffer = ringBuffer;
         this.translator = translator;

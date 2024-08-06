@@ -1,12 +1,12 @@
-package io.mercury.common.concurrent.ring;
+package io.mercury.common.concurrent.disruptor;
 
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
-import io.mercury.common.concurrent.ring.base.EventPublisher;
-import io.mercury.common.concurrent.ring.base.WaitStrategyOption;
+import io.mercury.common.concurrent.disruptor.base.EventPublisherArg1;
+import io.mercury.common.concurrent.disruptor.base.CommonStrategy;
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.thread.RunnableComponent;
@@ -38,7 +38,7 @@ public abstract class SingleProducerRingBuffer<E, I> extends RunnableComponent {
 
     protected final Disruptor<E> disruptor;
 
-    protected final EventPublisher<E, I> publisherWrapper;
+    protected final EventPublisherArg1<E, I> publisherWrapper;
 
     protected SingleProducerRingBuffer(String name, int size,
                                        @Nullable WaitStrategy strategy,
@@ -58,9 +58,9 @@ public abstract class SingleProducerRingBuffer<E, I> extends RunnableComponent {
                 // 生产者策略, 使用单生产者
                 ProducerType.SINGLE,
                 // Waiting策略
-                Objects.requireNonNullElse(strategy, WaitStrategyOption.Sleeping.get())
+                Objects.requireNonNullElse(strategy, CommonStrategy.Sleeping.get())
         );
-        this.publisherWrapper = new EventPublisher<>(disruptor.getRingBuffer(), translator);
+        this.publisherWrapper = new EventPublisherArg1<>(disruptor.getRingBuffer(), translator);
     }
 
     @Override

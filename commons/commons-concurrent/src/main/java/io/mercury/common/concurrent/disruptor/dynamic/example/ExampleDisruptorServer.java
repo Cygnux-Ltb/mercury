@@ -1,7 +1,7 @@
-package io.mercury.common.concurrent.ring.dynamic.example;
+package io.mercury.common.concurrent.disruptor.dynamic.example;
 
-import io.mercury.common.concurrent.ring.dynamic.DynamicDisruptor;
-import io.mercury.common.concurrent.ring.dynamic.sentinel.SentinelClient;
+import io.mercury.common.concurrent.disruptor.dynamic.DynamicDisruptor;
+import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelClient;
 
 /**
  * @author : Rookiex

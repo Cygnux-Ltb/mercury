@@ -15,57 +15,57 @@
  */
 package com.lmax.disruptor;
 
-import static com.lmax.disruptor.RingBuffer.createMultiProducer;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import java.util.concurrent.CountDownLatch;
-
 import com.lmax.disruptor.support.StubEvent;
 import org.junit.Test;
 
-public final class LifecycleAwareTest {
-	
-	private final CountDownLatch startLatch = new CountDownLatch(1);
-	private final CountDownLatch shutdownLatch = new CountDownLatch(1);
+import java.util.concurrent.CountDownLatch;
 
-	private final RingBuffer<StubEvent> ringBuffer = createMultiProducer(StubEvent.EVENT_FACTORY, 16);
-	private final SequenceBarrier sequenceBarrier = ringBuffer.newBarrier();
-	private final LifecycleAwareEventHandler handler = new LifecycleAwareEventHandler();
-	private final BatchEventProcessor<StubEvent> batchEventProcessor = new BatchEventProcessor<>(ringBuffer,
+import static com.lmax.disruptor.RingBuffer.createMultiProducer;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+
+public final class LifecycleAwareTest {
+
+    private final CountDownLatch startLatch = new CountDownLatch(1);
+    private final CountDownLatch shutdownLatch = new CountDownLatch(1);
+
+    private final RingBuffer<StubEvent> ringBuffer = createMultiProducer(StubEvent.EVENT_FACTORY, 16);
+    private final SequenceBarrier sequenceBarrier = ringBuffer.newBarrier();
+    private final LifecycleAwareEventHandler handler = new LifecycleAwareEventHandler();
+    private final BatchEventProcessor<StubEvent> batchEventProcessor = new BatchEventProcessor<>(ringBuffer,
             sequenceBarrier, handler);
 
-	@Test
-	public void shouldNotifyOfBatchProcessorLifecycle() throws Exception {
-		new Thread(batchEventProcessor).start();
+    @Test
+    public void shouldNotifyOfBatchProcessorLifecycle() throws Exception {
+        new Thread(batchEventProcessor).start();
 
-		startLatch.await();
-		batchEventProcessor.halt();
+        startLatch.await();
+        batchEventProcessor.halt();
 
-		shutdownLatch.await();
+        shutdownLatch.await();
 
-		assertThat(handler.startCounter, is(1));
-		assertThat(handler.shutdownCounter, is(1));
-	}
+        assertThat(handler.startCounter, is(1));
+        assertThat(handler.shutdownCounter, is(1));
+    }
 
-	private final class LifecycleAwareEventHandler implements EventHandler<StubEvent>, LifecycleAware {
-		private int startCounter = 0;
-		private int shutdownCounter = 0;
+    private final class LifecycleAwareEventHandler implements EventHandler<StubEvent>, LifecycleAware {
+        private int startCounter = 0;
+        private int shutdownCounter = 0;
 
-		@Override
-		public void onEvent(final StubEvent event, final long sequence, final boolean endOfBatch) {
-		}
+        @Override
+        public void onEvent(final StubEvent event, final long sequence, final boolean endOfBatch) {
+        }
 
-		@Override
-		public void onStart() {
-			++startCounter;
-			startLatch.countDown();
-		}
+        @Override
+        public void onStart() {
+            ++startCounter;
+            startLatch.countDown();
+        }
 
-		@Override
-		public void onShutdown() {
-			++shutdownCounter;
-			shutdownLatch.countDown();
-		}
-	}
+        @Override
+        public void onShutdown() {
+            ++shutdownCounter;
+            shutdownLatch.countDown();
+        }
+    }
 }

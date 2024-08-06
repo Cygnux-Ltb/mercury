@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.ring;
+package io.mercury.common.concurrent.disruptor;
 
 import java.util.function.BiConsumer;
 

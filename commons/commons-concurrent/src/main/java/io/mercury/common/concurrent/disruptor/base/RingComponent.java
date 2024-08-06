@@ -1,4 +1,4 @@
-package io.mercury.common.concurrent.ring.base;
+package io.mercury.common.concurrent.disruptor.base;
 
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventTranslatorOneArg;
@@ -32,7 +32,7 @@ public abstract class RingComponent<E, I> extends RunnableComponent {
 
     protected final Disruptor<E> disruptor;
 
-    protected final EventPublisher<E, I> publisher;
+    protected final EventPublisherArg1<E, I> publisher;
 
     protected final boolean isMultiProducer;
 
@@ -59,10 +59,10 @@ public abstract class RingComponent<E, I> extends RunnableComponent {
                 ofPlatform(this.name + "-worker").priority(MAX).build(),
                 // 生产者策略, Waiting策略
                 producerType,
-                requireNonNullElse(strategy, WaitStrategyOption.Sleeping.get())
+                requireNonNullElse(strategy, CommonStrategy.Sleeping.get())
         );
         this.isMultiProducer = producerType == MULTI;
-        this.publisher = new EventPublisher<>(disruptor.getRingBuffer(), translator);
+        this.publisher = new EventPublisherArg1<>(disruptor.getRingBuffer(), translator);
     }
 
     @Override
@@ -97,7 +97,7 @@ public abstract class RingComponent<E, I> extends RunnableComponent {
     /**
      * @return EventPublisher<E, I>
      */
-    public EventPublisher<E, I> getPublisher() {
+    public EventPublisherArg1<E, I> getPublisher() {
         return publisher;
     }
 
@@ -106,10 +106,10 @@ public abstract class RingComponent<E, I> extends RunnableComponent {
      * @param <A>        another object type
      * @return the new EventPublisher<E, A> object
      */
-    public <A> EventPublisher<E, A> newPublisher(EventTranslatorOneArg<E, A> translator)
+    public <A> EventPublisherArg1<E, A> newPublisher(EventTranslatorOneArg<E, A> translator)
             throws IllegalStateException {
         if (isMultiProducer)
-            return new EventPublisher<>(disruptor.getRingBuffer(), translator);
+            return new EventPublisherArg1<>(disruptor.getRingBuffer(), translator);
         else {
             log.error("RingBuffer -> {} is not multi producer mode", name);
             throw new IllegalStateException("isMultiProducer == false");
