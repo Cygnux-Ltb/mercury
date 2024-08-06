@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-public class JsonWrapperTest {
+public class JsonWriterTest {
 
 	@Test
 	public void test() {
@@ -17,10 +17,10 @@ public class JsonWrapperTest {
 		map.put("D", null);
 		map.put("E", null);
 
-		System.out.println(JsonWrapper.toJson(null));
-		System.out.println(JsonWrapper.toJsonHasNulls(null));
-		System.out.println(JsonWrapper.toJson(map));
-		System.out.println(JsonWrapper.toJsonHasNulls(map));
+		System.out.println(JsonWriter.toJson(null));
+		System.out.println(JsonWriter.toJsonHasNulls(null));
+		System.out.println(JsonWriter.toJson(map));
+		System.out.println(JsonWriter.toJsonHasNulls(map));
 
 	}
 

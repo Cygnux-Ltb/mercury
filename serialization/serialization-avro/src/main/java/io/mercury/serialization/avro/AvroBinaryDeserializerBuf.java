@@ -1,16 +1,15 @@
 package io.mercury.serialization.avro;
 
+import io.mercury.common.concurrent.map.NonBlockingMaps;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.serialization.specific.BytesDeserializer;
 import org.apache.avro.specific.SpecificRecord;
+import org.jctools.maps.NonBlockingHashMapLong;
 import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
-import java.util.concurrent.ConcurrentMap;
-
-import static io.mercury.common.concurrent.map.JctConcurrentMaps.newNonBlockingLongMap;
 
 /**
  * @param <T>
@@ -23,7 +22,7 @@ public final class AvroBinaryDeserializerBuf<T extends SpecificRecord> implement
 
     private final Class<T> type;
 
-    private final ConcurrentMap<Long, AvroBinaryDeserializer<T>> deserializers = newNonBlockingLongMap(16);
+    private final NonBlockingHashMapLong<AvroBinaryDeserializer<T>> deserializers = NonBlockingMaps.newLongHashMap(16);
 
     /**
      * @param type Class<T>

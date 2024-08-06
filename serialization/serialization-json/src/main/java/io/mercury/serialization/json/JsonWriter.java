@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
  * <p>
  *         TODO 优化实现
  */
-public final class JsonWrapper {
+public final class JsonWriter {
 
     /**
      * 普通JSON序列化

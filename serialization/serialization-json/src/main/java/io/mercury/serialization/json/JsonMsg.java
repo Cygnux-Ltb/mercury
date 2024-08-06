@@ -85,7 +85,7 @@ public final class JsonMsg implements JsonSerializable {
     @Nonnull
     @Override
     public String toJson() {
-        return JsonWrapper.toJson(this);
+        return JsonWriter.toJson(this);
     }
 
     /**

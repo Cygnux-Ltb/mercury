@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
+import io.mercury.common.util.StringSupport;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.map.ImmutableMap;
@@ -66,7 +67,7 @@ public final class JsonParser {
     @Nullable
     public static <T> T toObject(@Nullable final String json) throws JsonParseException {
         try {
-            if (json == null || json.isEmpty())
+            if (StringSupport.isNullOrEmpty(json))
                 return null;
             return Mapper.readValue(json, new TypeReference<>() {
             });
@@ -289,7 +290,7 @@ public final class JsonParser {
         map0.put("C", "11");
         map0.put("D", null);
         map0.put("E", null);
-        String json = JsonWrapper.toJsonHasNulls(map0);
+        String json = JsonWriter.toJsonHasNulls(map0);
         System.out.println(json);
         Map<Object, Object> map1 = JsonParser.toMap(json);
         System.out.println(map1);
