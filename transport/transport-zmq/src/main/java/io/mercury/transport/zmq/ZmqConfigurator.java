@@ -6,7 +6,7 @@ import io.mercury.common.serialization.specific.BytesSerializer;
 import io.mercury.common.serialization.specific.JsonDeserializable;
 import io.mercury.common.serialization.specific.JsonSerializable;
 import io.mercury.serialization.json.JsonParser;
-import io.mercury.serialization.json.JsonWrapper;
+import io.mercury.serialization.json.JsonWriter;
 import io.mercury.transport.TransportConfigurator;
 import io.mercury.transport.attr.TcpKeepAlive;
 import io.mercury.transport.attr.Topics;
@@ -223,7 +223,7 @@ public final class ZmqConfigurator implements
     @Override
     public String toString() {
         if (toStringCache == null)
-            this.toStringCache = JsonWrapper.toJson(this);
+            this.toStringCache = JsonWriter.toJson(this);
         return toStringCache;
     }
 
@@ -253,7 +253,7 @@ public final class ZmqConfigurator implements
     @Nonnull
     @Override
     public String toJson() {
-        return JsonWrapper.toJsonHasNulls(this);
+        return JsonWriter.toJsonHasNulls(this);
     }
 
     @Nonnull

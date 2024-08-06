@@ -1,6 +1,6 @@
 package io.mercury.transport.netty.configurator;
 
-import io.mercury.serialization.json.JsonWrapper;
+import io.mercury.serialization.json.JsonWriter;
 import io.mercury.transport.TransportConfigurator;
 
 import java.util.concurrent.TimeUnit;
@@ -87,7 +87,7 @@ public final class NettyConfigurator implements TransportConfigurator {
     @Override
     public String toString() {
         if (toStringCache == null)
-            this.toStringCache = JsonWrapper.toJson(this);
+            this.toStringCache = JsonWriter.toJson(this);
         return toStringCache;
     }
 

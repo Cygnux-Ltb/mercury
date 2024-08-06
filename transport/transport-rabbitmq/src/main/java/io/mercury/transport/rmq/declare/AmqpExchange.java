@@ -2,7 +2,7 @@ package io.mercury.transport.rmq.declare;
 
 import io.mercury.common.collections.MapUtil;
 import io.mercury.common.lang.Asserter;
-import io.mercury.serialization.json.JsonWrapper;
+import io.mercury.serialization.json.JsonWriter;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
@@ -120,7 +120,7 @@ public final class AmqpExchange {
 
     @Override
     public String toString() {
-        return JsonWrapper.toJsonHasNulls(this);
+        return JsonWriter.toJsonHasNulls(this);
     }
 
     /**

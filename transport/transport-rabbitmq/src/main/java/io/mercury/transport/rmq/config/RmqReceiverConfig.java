@@ -1,6 +1,6 @@
 package io.mercury.transport.rmq.config;
 
-import io.mercury.serialization.json.JsonWrapper;
+import io.mercury.serialization.json.JsonWriter;
 import io.mercury.transport.rmq.declare.ExchangeRelationship;
 import io.mercury.transport.rmq.declare.QueueRelationship;
 
@@ -97,7 +97,7 @@ public final class RmqReceiverConfig extends RmqConfig {
     @Override
     public String toString() {
         if (toStringCache == null)
-            toStringCache = JsonWrapper.toJson(this);
+            toStringCache = JsonWriter.toJson(this);
         return toStringCache;
     }
 

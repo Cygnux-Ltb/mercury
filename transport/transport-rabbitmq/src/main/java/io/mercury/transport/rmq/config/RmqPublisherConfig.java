@@ -1,7 +1,7 @@
 package io.mercury.transport.rmq.config;
 
 import com.rabbitmq.client.AMQP.BasicProperties;
-import io.mercury.serialization.json.JsonWrapper;
+import io.mercury.serialization.json.JsonWriter;
 import io.mercury.transport.rmq.declare.AmqpQueue;
 import io.mercury.transport.rmq.declare.ExchangeRelationship;
 import lombok.Getter;
@@ -142,7 +142,7 @@ public final class RmqPublisherConfig extends RmqConfig {
     @Override
     public String toString() {
         if (toStringCache == null)
-            toStringCache = JsonWrapper.toJson(this);
+            toStringCache = JsonWriter.toJson(this);
         return toStringCache;
     }
 

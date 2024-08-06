@@ -1,6 +1,6 @@
 package io.netty.study.slidingwindow.pojo;
 
-import io.mercury.serialization.json.JsonWrapper;
+import io.mercury.serialization.json.JsonWriter;
 
 /**
  * @author pancm
@@ -44,7 +44,7 @@ public class Message {
      */
     @Override
     public String toString() {
-        return JsonWrapper.toJson(this);
+        return JsonWriter.toJson(this);
     }
 
 }
