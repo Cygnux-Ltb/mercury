@@ -6,13 +6,11 @@ import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.dsl.ProducerType;
 import io.mercury.common.collections.MutableLists;
+import io.mercury.common.concurrent.disruptor.base.CommonStrategy;
 import io.mercury.common.concurrent.disruptor.base.EventHandlerWrapper;
 import io.mercury.common.concurrent.disruptor.base.ReflectionEventFactory;
 import io.mercury.common.concurrent.disruptor.base.RingComponent;
-import io.mercury.common.concurrent.disruptor.base.CommonStrategy;
 import io.mercury.common.functional.Processor;
-import io.mercury.common.lang.Asserter;
-import io.mercury.common.lang.Throws;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.util.StringSupport;
 import org.slf4j.Logger;
@@ -25,6 +23,8 @@ import java.util.List;
 import static io.mercury.common.collections.CollectionUtil.toArray;
 import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
 import static io.mercury.common.lang.Asserter.nonNull;
+import static io.mercury.common.lang.Asserter.requiredLength;
+import static io.mercury.common.lang.Throws.illegalArgument;
 import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
 
 /**
@@ -52,27 +52,25 @@ public final class RingMulticaster<E, I> extends RingComponent<E, I> {
                             EventTranslatorOneArg<E, I> translator,
                             Collection<EventHandler<E>> handlers) {
         super(name, size, type, strategy, factory, translator);
-        Asserter.requiredLength(handlers, 1, "handlers");
+        requiredLength(handlers, 1, "handlers");
         // 将处理器添加进Disruptor中, 各个处理器进行并行处理
         disruptor.handleEventsWith(toArray(handlers, EventHandler[]::new));
-        log.info(
-                "Initialized RingMulticaster -> {}, size -> {}, WaitStrategy -> {}, StartMode -> {}, EventHandler count -> {}",
-                this.name, size, strategy, mode, handlers.size());
+        log.info("Initialized RingMulticaster -> {}, size -> {}, ProducerType -> {}, " +
+                        "WaitStrategy -> {}, StartMode -> {}, EventHandler count -> {}",
+                this.name, size, type, strategy, mode, handlers.size());
         startWith(mode);
     }
 
     // **************** 单生产者广播器 ****************//
     public static <E, I> Builder<E, I> singleProducer(@Nonnull Class<E> eventType,
                                                       @Nonnull RingEventPublisher<E, I> publisher) {
-        return singleProducer(
-                // 使用反射EventFactory
+        return singleProducer( // 使用反射EventFactory
                 ReflectionEventFactory.newFactory(eventType, log), publisher);
     }
 
     public static <E, I> Builder<E, I> singleProducer(@Nonnull Class<E> eventType,
                                                       @Nonnull EventTranslatorOneArg<E, I> translator) {
-        return singleProducer(
-                // 使用反射EventFactory
+        return singleProducer( // 使用反射EventFactory
                 ReflectionEventFactory.newFactory(eventType, log), translator);
     }
 
@@ -91,21 +89,18 @@ public final class RingMulticaster<E, I> extends RingComponent<E, I> {
     // **************** 多生产者广播器 ****************//
     public static <E, I> Builder<E, I> multiProducer(@Nonnull Class<E> eventType,
                                                      @Nonnull RingEventPublisher<E, I> publisher) {
-        return multiProducer(
-                // 使用反射EventFactory
+        return multiProducer( // 使用反射EventFactory
                 ReflectionEventFactory.newFactory(eventType, log), publisher);
     }
 
     public static <E, I> Builder<E, I> multiProducer(@Nonnull Class<E> eventType,
                                                      @Nonnull EventTranslatorOneArg<E, I> translator) {
-        return multiProducer(
-                // 使用反射EventFactory
+        return multiProducer( // 使用反射EventFactory
                 ReflectionEventFactory.newFactory(eventType, log), translator);
     }
 
-    public static <E, I> Builder<E, I> multiProducer(
-            @Nonnull EventFactory<E> eventFactory,
-            @Nonnull RingEventPublisher<E, I> publisher) {
+    public static <E, I> Builder<E, I> multiProducer(@Nonnull EventFactory<E> eventFactory,
+                                                     @Nonnull RingEventPublisher<E, I> publisher) {
         return multiProducer(eventFactory,
                 // EventTranslator实现函数, 负责调用处理In对象到Event对象之间的转换
                 (event, sequence, in) -> publisher.accept(event, in));
@@ -175,7 +170,7 @@ public final class RingMulticaster<E, I> extends RingComponent<E, I> {
 
         public RingMulticaster<E, I> create() {
             if (handlers.isEmpty())
-                Throws.illegalArgument("handlers");
+                illegalArgument("handlers");
             if (waitStrategy == null)
                 waitStrategy = handlers.size() > availableProcessors() ? CommonStrategy.Sleeping.get() : CommonStrategy.Yielding.get();
             if (StringSupport.isNullOrEmpty(name))
