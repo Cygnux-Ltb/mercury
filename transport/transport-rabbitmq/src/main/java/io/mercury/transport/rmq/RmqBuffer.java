@@ -4,7 +4,7 @@ import com.rabbitmq.client.Envelope;
 import com.rabbitmq.client.GetResponse;
 import io.mercury.common.character.Charsets;
 import io.mercury.common.collections.MutableLists;
-import io.mercury.common.concurrent.queue.McQueue;
+import io.mercury.common.concurrent.queue.MultiConsumerQueue;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.serialization.specific.BytesDeserializer;
 import io.mercury.common.serialization.specific.BytesSerializer;
@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RmqBuffer<E> implements McQueue<E>, Closeable {
+public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 
     private static final Logger log = Log4j2LoggerFactory.getLogger(RmqBuffer.class);
 
