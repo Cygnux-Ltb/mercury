@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.File;
 
 import static java.lang.System.out;
 
@@ -13,6 +14,10 @@ import static java.lang.System.out;
  * @author yellow013
  */
 public final class ConfigUtil {
+
+    public static File findConfigFileAtHome(@Nonnull final String filename) {
+        return null;
+    }
 
     /**
      * @param config Config

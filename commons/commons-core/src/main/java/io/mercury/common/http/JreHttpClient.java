@@ -23,7 +23,6 @@ public abstract class JreHttpClient {
             .version(HttpClient.Version.HTTP_2)
             .connectTimeout(Duration.ofSeconds(15))
             .followRedirects(HttpClient.Redirect.NORMAL)
-            .authenticator(Authenticator.getDefault())
             .build();
 
     private JreHttpClient() {

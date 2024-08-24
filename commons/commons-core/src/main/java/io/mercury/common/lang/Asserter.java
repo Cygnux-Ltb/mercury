@@ -178,7 +178,7 @@ public final class Asserter {
             throws NullPointerException {
         return requireNonNull(t, isNullOrEmpty(objName)
                 ? "param cannot be null"
-                : "[" + objName + "] cannot be null"
+                : "param [" + objName + "] cannot be null"
         );
     }
 

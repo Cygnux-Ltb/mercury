@@ -34,15 +34,14 @@ public final class JreReflection {
      * @param fieldName String
      * @return R
      */
-    @SuppressWarnings("unchecked")
     public static <R, T> R extractField(Class<T> clazz, T obj, String fieldName)
             throws RuntimeReflectionException {
         try {
             Field field = getField(clazz, fieldName);
             field.setAccessible(true);
+            //noinspection unchecked
             return (R) field.get(obj);
-        } catch (IllegalArgumentException
-                 | IllegalAccessException e) {
+        } catch (IllegalArgumentException | IllegalAccessException e) {
             throw new RuntimeReflectionException(
                     "Can not access field: [" + fieldName + "] be caused by -> "
                             + e.getMessage(), e);

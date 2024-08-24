@@ -1,6 +1,5 @@
 package io.mercury.common.collections;
 
-import io.mercury.common.lang.Asserter;
 import io.mercury.common.util.ArrayUtil;
 import org.eclipse.collections.api.collection.ImmutableCollection;
 
@@ -11,6 +10,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.IntFunction;
+
+import static io.mercury.common.lang.Asserter.nonNull;
 
 public final class CollectionUtil {
 
@@ -81,7 +82,7 @@ public final class CollectionUtil {
     @SafeVarargs
     public static <E, C extends Collection<E>> C addAll(@Nonnull final C collection,
                                                         @Nonnull final E... values) {
-        Asserter.nonNull(collection, "collection");
+        nonNull(collection, "collection");
         if (ArrayUtil.isNullOrEmpty(values))
             return collection;
         Collections.addAll(collection, values);
@@ -101,8 +102,8 @@ public final class CollectionUtil {
     public static <E, V, C extends Collection<E>> C addAll(@Nonnull final C collection,
                                                            @Nonnull final Function<V, E> converter,
                                                            @Nonnull final V... values) {
-        Asserter.nonNull(collection, "collection");
-        Asserter.nonNull(converter, "converter");
+        nonNull(collection, "collection");
+        nonNull(converter, "converter");
         if (ArrayUtil.isNullOrEmpty(values))
             return collection;
         for (V v : values)
@@ -118,7 +119,7 @@ public final class CollectionUtil {
      */
     public static <E> E[] toArray(@Nonnull final Collection<E> collection,
                                   @Nonnull final IntFunction<E[]> arrayBuilder) {
-        Asserter.nonNull(collection, "collection");
+        nonNull(collection, "collection");
         E[] values = arrayBuilder.apply(collection.size());
         Iterator<E> iterator = collection.iterator();
         int i = 0;

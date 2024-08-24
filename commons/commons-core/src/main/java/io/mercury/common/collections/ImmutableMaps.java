@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 public enum ImmutableMaps {
 
-    INSTANCE;
+    ;
 
     /**
      * @param <K>   Key type

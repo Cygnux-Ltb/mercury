@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 public enum ImmutableSets {
 
-    INSTANCE;
+    ;
 
     /**
      * @return E... array
