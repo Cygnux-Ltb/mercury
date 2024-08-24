@@ -876,7 +876,7 @@ public final class CarEncoder
 
         public static float mpgMinValue()
         {
-            return 1.401298464324817E-45f;
+            return -3.4028234663852886E38f;
         }
 
         public static float mpgMaxValue()
@@ -1306,7 +1306,7 @@ public final class CarEncoder
 
             public static float secondsMinValue()
             {
-                return 1.401298464324817E-45f;
+                return -3.4028234663852886E38f;
             }
 
             public static float secondsMaxValue()
