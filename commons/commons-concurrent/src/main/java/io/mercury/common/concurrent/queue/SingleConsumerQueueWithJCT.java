@@ -3,6 +3,7 @@ package io.mercury.common.concurrent.queue;
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.annotation.thread.SpinLock;
 import io.mercury.common.functional.Processor;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.thread.Sleep;
 import io.mercury.common.thread.ThreadSupport;
 import org.jctools.queues.MpscArrayQueue;
@@ -11,7 +12,6 @@ import org.slf4j.Logger;
 
 import java.util.Queue;
 
-import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
 import static io.mercury.common.thread.ThreadSupport.getCurrentThreadName;
 import static io.mercury.common.util.StringSupport.isNullOrEmpty;
 import static java.lang.Math.max;
@@ -20,12 +20,12 @@ import static java.lang.Math.max;
  * @param <E> Single consumer queue use jctools implements
  * @author yellow013
  */
-public abstract class ScQueueWithJCT<E> extends ScQueue<E> implements Runnable {
+public abstract class SingleConsumerQueueWithJCT<E> extends SingleConsumerQueue<E> implements Runnable {
 
     /**
      * Logger
      */
-    private static final Logger log = getLogger(ScQueueWithJCT.class);
+    private static final Logger log = Log4j2LoggerFactory.getLogger(SingleConsumerQueueWithJCT.class);
 
     /**
      * internal queue
@@ -91,8 +91,8 @@ public abstract class ScQueueWithJCT<E> extends ScQueue<E> implements Runnable {
      * @param strategy    WaitingStrategy
      * @param sleepMillis long
      */
-    protected ScQueueWithJCT(Processor<E> processor, int capacity,
-                             WaitingStrategy strategy, long sleepMillis) {
+    protected SingleConsumerQueueWithJCT(Processor<E> processor, int capacity,
+                                         WaitingStrategy strategy, long sleepMillis) {
         super(processor);
         this.queue = createQueue(capacity);
         this.strategy = strategy;
@@ -165,7 +165,7 @@ public abstract class ScQueueWithJCT<E> extends ScQueue<E> implements Runnable {
      * @param <E> Single Producer Single Consumer Queue
      * @author yellow013
      */
-    private static final class SpscQueueWithJCT<E> extends ScQueueWithJCT<E> {
+    private static final class SpscQueueWithJCT<E> extends SingleConsumerQueueWithJCT<E> {
 
         private SpscQueueWithJCT(String queueName, int capacity, StartMode mode,
                                  WaitingStrategy strategy, long sleepMillis,
@@ -193,7 +193,7 @@ public abstract class ScQueueWithJCT<E> extends ScQueue<E> implements Runnable {
      * @param <E> Multiple Producer Single Consumer Queue
      * @author yellow013
      */
-    private static final class MpscQueueWithJCT<E> extends ScQueueWithJCT<E> {
+    private static final class MpscQueueWithJCT<E> extends SingleConsumerQueueWithJCT<E> {
 
         private MpscQueueWithJCT(String queueName, int capacity, StartMode mode,
                                  WaitingStrategy strategy, long sleepMillis,
@@ -260,7 +260,7 @@ public abstract class ScQueueWithJCT<E> extends ScQueue<E> implements Runnable {
             return this;
         }
 
-        public final <E> ScQueueWithJCT<E> process(Processor<E> processor) {
+        public final <E> SingleConsumerQueueWithJCT<E> process(Processor<E> processor) {
             return switch (type) {
                 case SPSC -> new SpscQueueWithJCT<>(queueName, capacity, mode, strategy, sleepMillis, processor);
                 case MPSC -> new MpscQueueWithJCT<>(queueName, capacity, mode, strategy, sleepMillis, processor);

@@ -10,8 +10,8 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
-import io.mercury.common.concurrent.disruptor.RingEventbus.MpRingEventbus.MpWizard;
-import io.mercury.common.concurrent.disruptor.RingEventbus.SpRingEventbus.SpWizard;
+import io.mercury.common.concurrent.disruptor.RingEventbus.MultiProducerRingEventbus.MultiProducerWizard;
+import io.mercury.common.concurrent.disruptor.RingEventbus.SingleProducerRingEventbus.SingleProducerWizard;
 import io.mercury.common.concurrent.disruptor.base.EventHandlerWrapper;
 import io.mercury.common.concurrent.disruptor.base.EventPublisherArg1;
 import io.mercury.common.concurrent.disruptor.base.EventPublisherArg2;
@@ -43,7 +43,7 @@ import static java.util.Objects.requireNonNullElse;
  * 扩展多写和单写
  */
 public abstract sealed class RingEventbus<E> extends RunnableComponent
-        permits RingEventbus.MpRingEventbus, RingEventbus.SpRingEventbus {
+        permits RingEventbus.MultiProducerRingEventbus, RingEventbus.SingleProducerRingEventbus {
 
     private static final Logger log = getLogger(RingEventbus.class);
 
@@ -105,7 +105,7 @@ public abstract sealed class RingEventbus<E> extends RunnableComponent
      * @param <E>       Class type
      * @return Wizard<E>
      */
-    public static <E> MpWizard<E> multiProducer(Class<E> eventType) {
+    public static <E> MultiProducerWizard<E> multiProducer(Class<E> eventType) {
         return multiProducer(newFactory(eventType, log));
     }
 
@@ -114,8 +114,8 @@ public abstract sealed class RingEventbus<E> extends RunnableComponent
      * @param <E>     Class type
      * @return Wizard<E>
      */
-    public static <E> MpWizard<E> multiProducer(EventFactory<E> factory) {
-        return new MpWizard<>(factory);
+    public static <E> MultiProducerWizard<E> multiProducer(EventFactory<E> factory) {
+        return new MultiProducerWizard<>(factory);
     }
 
     /**
@@ -123,7 +123,7 @@ public abstract sealed class RingEventbus<E> extends RunnableComponent
      * @param <E>       Class type
      * @return Wizard<E>
      */
-    public static <E> SpWizard<E> singleProducer(Class<E> eventType) {
+    public static <E> SingleProducerWizard<E> singleProducer(Class<E> eventType) {
         return singleProducer(newFactory(eventType, log));
     }
 
@@ -132,8 +132,8 @@ public abstract sealed class RingEventbus<E> extends RunnableComponent
      * @param <E>     Class type
      * @return Wizard<E>
      */
-    public static <E> SpWizard<E> singleProducer(EventFactory<E> factory) {
-        return new SpWizard<>(factory);
+    public static <E> SingleProducerWizard<E> singleProducer(EventFactory<E> factory) {
+        return new SingleProducerWizard<>(factory);
     }
 
     /**
@@ -147,14 +147,27 @@ public abstract sealed class RingEventbus<E> extends RunnableComponent
         return new EventPublisherArg1<>(disruptor.getRingBuffer(), translator);
     }
 
-
+    /**
+     * @param translator EventTranslatorTwoArg<E, A0, A1>
+     * @param <A0>       another 0 object type
+     * @param <A1>       another 1 object type
+     * @return EventPublisherArg2<E, A0, A1>
+     * @throws IllegalStateException ise
+     */
     public <A0, A1> EventPublisherArg2<E, A0, A1> newPublisher(EventTranslatorTwoArg<E, A0, A1> translator)
             throws IllegalStateException {
         assertIsMultiProducer();
         return new EventPublisherArg2<>(disruptor.getRingBuffer(), translator);
     }
 
-
+    /**
+     * @param translator EventTranslatorThreeArg<E, A0, A1, A2>
+     * @param <A0>       another 0 object type
+     * @param <A1>       another 1 object type
+     * @param <A2>       another 2 object type
+     * @return EventPublisherArg3<E, A0, A1, A2>
+     * @throws IllegalStateException ise
+     */
     public <A0, A1, A2> EventPublisherArg3<E, A0, A1, A2> newPublisher(EventTranslatorThreeArg<E, A0, A1, A2> translator)
             throws IllegalStateException {
         assertIsMultiProducer();
@@ -209,8 +222,7 @@ public abstract sealed class RingEventbus<E> extends RunnableComponent
         ringBuffer.publishEvent(translator, arg0, arg1, arg2);
     }
 
-    protected static sealed class Wizard<E>
-            permits MpWizard, SpWizard {
+    protected static sealed class Wizard<E> permits MultiProducerWizard, SingleProducerWizard {
 
         protected final EventFactory<E> factory;
 
@@ -230,54 +242,53 @@ public abstract sealed class RingEventbus<E> extends RunnableComponent
      *
      * @param <E>
      */
-    public static final class MpRingEventbus<E> extends RingEventbus<E> {
+    public static final class MultiProducerRingEventbus<E> extends RingEventbus<E> {
 
-        private MpRingEventbus(String name, int size, StartMode startMode,
-                               EventFactory<E> factory, WaitStrategy strategy,
-                               HandlerManager<E> handlerManager) {
+        private MultiProducerRingEventbus(String name, int size, StartMode startMode,
+                                          EventFactory<E> factory, WaitStrategy strategy,
+                                          HandlerManager<E> handlerManager) {
             super(name, size, startMode, MULTI, factory, strategy, handlerManager);
         }
 
-        public static final class MpWizard<E> extends Wizard<E> {
+        public static final class MultiProducerWizard<E> extends Wizard<E> {
 
-            private MpWizard(EventFactory<E> factory) {
+            private MultiProducerWizard(EventFactory<E> factory) {
                 super(factory);
             }
 
-            public MpWizard<E> name(String name) {
+            public MultiProducerWizard<E> name(String name) {
                 this.name = name;
                 return this;
             }
 
-            public MpWizard<E> size(int size) {
+            public MultiProducerWizard<E> size(int size) {
                 this.size = size;
                 return this;
             }
 
-            public MpWizard<E> waitStrategy(WaitStrategy strategy) {
+            public MultiProducerWizard<E> waitStrategy(WaitStrategy strategy) {
                 this.strategy = strategy;
                 return this;
             }
 
-            public MpWizard<E> startMode(StartMode startMode) {
+            public MultiProducerWizard<E> startMode(StartMode startMode) {
                 this.startMode = startMode;
                 return this;
             }
 
-            public MpRingEventbus<E> process(Processor<E> processor) {
+            public MultiProducerRingEventbus<E> process(Processor<E> processor) {
                 return process(new EventHandlerWrapper<>(processor, log));
             }
 
-            public MpRingEventbus<E> process(EventHandler<E> handler) {
+            public MultiProducerRingEventbus<E> process(EventHandler<E> handler) {
                 return process(HandlerManager.single(handler));
             }
 
-            public MpRingEventbus<E> process(HandlerManager<E> manager) {
-                return new MpRingEventbus<>(name, size, startMode, factory, strategy, manager);
+            public MultiProducerRingEventbus<E> process(HandlerManager<E> manager) {
+                return new MultiProducerRingEventbus<>(name, size, startMode, factory, strategy, manager);
             }
 
         }
-
     }
 
     /**
@@ -285,50 +296,50 @@ public abstract sealed class RingEventbus<E> extends RunnableComponent
      *
      * @param <E>
      */
-    public static final class SpRingEventbus<E> extends RingEventbus<E> {
+    public static final class SingleProducerRingEventbus<E> extends RingEventbus<E> {
 
-        private SpRingEventbus(String name, int size, StartMode startMode,
-                               EventFactory<E> factory, WaitStrategy strategy,
-                               HandlerManager<E> manager) {
+        private SingleProducerRingEventbus(String name, int size, StartMode startMode,
+                                           EventFactory<E> factory, WaitStrategy strategy,
+                                           HandlerManager<E> manager) {
             super(name, size, startMode, SINGLE, factory, strategy, manager);
         }
 
-        public static final class SpWizard<E> extends Wizard<E> {
+        public static final class SingleProducerWizard<E> extends Wizard<E> {
 
-            private SpWizard(EventFactory<E> factory) {
+            private SingleProducerWizard(EventFactory<E> factory) {
                 super(factory);
             }
 
-            public SpWizard<E> name(String name) {
+            public SingleProducerWizard<E> name(String name) {
                 this.name = name;
                 return this;
             }
 
-            public SpWizard<E> size(int size) {
+            public SingleProducerWizard<E> size(int size) {
                 this.size = size;
                 return this;
             }
 
-            public SpWizard<E> waitStrategy(WaitStrategy strategy) {
+            public SingleProducerWizard<E> waitStrategy(WaitStrategy strategy) {
                 this.strategy = strategy;
                 return this;
             }
 
-            public SpWizard<E> startMode(StartMode startMode) {
+            public SingleProducerWizard<E> startMode(StartMode startMode) {
                 this.startMode = startMode;
                 return this;
             }
 
-            public SpRingEventbus<E> process(Processor<E> processor) {
+            public SingleProducerRingEventbus<E> process(Processor<E> processor) {
                 return process(new EventHandlerWrapper<>(processor, log));
             }
 
-            public SpRingEventbus<E> process(EventHandler<E> handler) {
+            public SingleProducerRingEventbus<E> process(EventHandler<E> handler) {
                 return process(HandlerManager.single(handler));
             }
 
-            public SpRingEventbus<E> process(HandlerManager<E> manager) {
-                return new SpRingEventbus<>(name, size, startMode,
+            public SingleProducerRingEventbus<E> process(HandlerManager<E> manager) {
+                return new SingleProducerRingEventbus<>(name, size, startMode,
                         factory, strategy, manager);
             }
         }

@@ -12,11 +12,11 @@ import static io.mercury.common.datetime.DateTimeUtil.datetimeOfMillisecond;
 
 public final class AsyncSwap<E> extends RunnableComponent implements Runnable {
 
+    private static final Logger log = Log4j2LoggerFactory.getLogger(AsyncSwap.class);
+
     private final SynchronousQueue<E> swap = new SynchronousQueue<>();
 
     private final Consumer<E> consumer;
-
-    private static final Logger log = Log4j2LoggerFactory.getLogger(AsyncSwap.class);
 
     public AsyncSwap(Consumer<E> consumer) {
         this("swap-" + datetimeOfMillisecond(), consumer);

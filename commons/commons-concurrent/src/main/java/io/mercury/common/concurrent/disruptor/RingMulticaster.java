@@ -46,7 +46,6 @@ public final class RingMulticaster<E, I> extends RingComponent<E, I> {
      * @param translator EventTranslator
      * @param handlers   EventHandler collection
      */
-    @SuppressWarnings("unchecked")
     private RingMulticaster(String name, int size, StartMode mode, ProducerType type,
                             EventFactory<E> factory, WaitStrategy strategy,
                             EventTranslatorOneArg<E, I> translator,
@@ -54,6 +53,7 @@ public final class RingMulticaster<E, I> extends RingComponent<E, I> {
         super(name, size, type, strategy, factory, translator);
         requiredLength(handlers, 1, "handlers");
         // 将处理器添加进Disruptor中, 各个处理器进行并行处理
+        // noinspection unchecked
         disruptor.handleEventsWith(toArray(handlers, EventHandler[]::new));
         log.info("Initialized RingMulticaster -> {}, size -> {}, ProducerType -> {}, " +
                         "WaitStrategy -> {}, StartMode -> {}, EventHandler count -> {}",

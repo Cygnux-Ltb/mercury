@@ -2,14 +2,14 @@ package io.mercury.common.concurrent.cache;
 
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.concurrent.queue.ScQueue;
+import io.mercury.common.concurrent.queue.SingleConsumerQueue;
 import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
 
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.function.Consumer;
 
-import static io.mercury.common.concurrent.queue.ScQueueWithJCT.mpscQueue;
+import static io.mercury.common.concurrent.queue.SingleConsumerQueueWithJCT.mpscQueue;
 import static io.mercury.common.util.StringSupport.isNullOrEmpty;
 
 /**
@@ -27,9 +27,9 @@ public final class AsyncCacheMap<K, V> {
 
     private final String cacheName;
 
-    private final ScQueue<ExecEvent> execQueue;
+    private final SingleConsumerQueue<ExecEvent> execQueue;
 
-    private final ScQueue<QueryResult> queryQueue;
+    private final SingleConsumerQueue<QueryResult> queryQueue;
 
     // private ExecutorService executor = Executors.newSingleThreadExecutor();
 

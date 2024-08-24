@@ -1,13 +1,12 @@
 package io.mercury.common.concurrent.counter;
 
-import javax.annotation.concurrent.ThreadSafe;
-
-import org.eclipse.collections.api.set.ImmutableSet;
-import org.eclipse.collections.api.set.MutableSet;
-
 import io.mercury.common.annotation.thread.LockHeld;
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.MutableSets;
+import org.eclipse.collections.api.set.ImmutableSet;
+import org.eclipse.collections.api.set.MutableSet;
+
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * 去除重复数据的计数器, 使用Set去除重复
@@ -77,14 +76,14 @@ public final class DeduplicateCounter<T extends Comparable<T>> {
     /**
      * @return ImmutableSet<T>
      */
-    public ImmutableSet<T> getDeRepeatSet() {
+    public synchronized ImmutableSet<T> getDeRepeatSet() {
         return deRepeatSet.toImmutable();
     }
 
     /**
      * @return long
      */
-    public long count() {
+    public synchronized long count() {
         return initCount + count;
     }
 

@@ -17,9 +17,9 @@ public final class NonBlockingMaps {
     }
 
     /**
+     * @param capacity int
      * @param <K>      Key type
      * @param <V>      Value type
-     * @param capacity int
      * @return ConcurrentMap<K, V>
      */
     public static <K, V> NonBlockingHashMap<K, V> newHashMap(int capacity) {
@@ -27,9 +27,9 @@ public final class NonBlockingMaps {
     }
 
     /**
+     * @param capacity Capacity
      * @param <K>      Key type
      * @param <V>      Value type
-     * @param capacity Capacity
      * @return ConcurrentMap<K, V>
      */
     public static <K, V> NonBlockingHashMap<K, V> newHashMap(Capacity capacity) {
@@ -45,8 +45,8 @@ public final class NonBlockingMaps {
     }
 
     /**
-     * @param <V>      Value type
      * @param capacity int
+     * @param <V>      Value type
      * @return NonBlockingHashMapLong<V>
      */
     public static <V> NonBlockingHashMapLong<V> newLongHashMap(int capacity) {
@@ -54,8 +54,8 @@ public final class NonBlockingMaps {
     }
 
     /**
-     * @param <V>      Value type
      * @param capacity Capacity
+     * @param <V>      Value type
      * @return NonBlockingHashMapLong<V>
      */
     public static <V> NonBlockingHashMapLong<V> newLongHashMap(Capacity capacity) {
@@ -63,8 +63,8 @@ public final class NonBlockingMaps {
     }
 
     /**
-     * @param <V>               Value type
      * @param spaceOptimization boolean
+     * @param <V>               Value type
      * @return NonBlockingHashMapLong<V>
      */
     public static <V> NonBlockingHashMapLong<V> newLongHashMap(boolean spaceOptimization) {
@@ -72,9 +72,9 @@ public final class NonBlockingMaps {
     }
 
     /**
-     * @param <V>               Value type
      * @param capacity          int
      * @param spaceOptimization boolean
+     * @param <V>               Value type
      * @return NonBlockingHashMapLong<V>
      */
     public static <V> NonBlockingHashMapLong<V> newLongHashMap(int capacity,
@@ -84,9 +84,9 @@ public final class NonBlockingMaps {
     }
 
     /**
-     * @param <V>               Value type
      * @param capacity          Capacity
      * @param spaceOptimization boolean
+     * @param <V>               Value type
      * @return NonBlockingHashMapLong<V>
      */
     public static <V> NonBlockingHashMapLong<V> newLongHashMap(Capacity capacity,

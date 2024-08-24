@@ -1,9 +1,6 @@
 package io.mercury.common.concurrent.map;
 
 import io.mercury.common.collections.Capacity;
-import io.mercury.common.collections.MutableLists;
-import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.collections.MutableSets;
 import org.eclipse.collections.api.block.procedure.primitive.LongProcedure;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
@@ -13,74 +10,76 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
+import static io.mercury.common.collections.MutableLists.newFastList;
+import static io.mercury.common.collections.MutableMaps.newLongObjectMap;
+import static io.mercury.common.collections.MutableSets.newLongHashSet;
+
 /**
- *
- * @author yellow013
- *
  * @param <V>
+ * @author yellow013
  */
 @ThreadSafe
 public final class ConcurrentLongRangeMap<V> {
 
-	private final MutableLongObjectMap<V> savedMap;
-	private final MutableLongSet savedKey;
+    private final MutableLongObjectMap<V> savedMap;
+    private final MutableLongSet savedKey;
 
-	public ConcurrentLongRangeMap() {
-		this(Capacity.L06_64);
-	}
+    public ConcurrentLongRangeMap() {
+        this(Capacity.L06_64);
+    }
 
-	public ConcurrentLongRangeMap(Capacity capacity) {
-		this.savedMap = MutableMaps.newLongObjectMap(capacity.size());
-		this.savedKey = MutableSets.newLongHashSet(capacity);
+    public ConcurrentLongRangeMap(Capacity capacity) {
+        this.savedMap = newLongObjectMap(capacity.size());
+        this.savedKey = newLongHashSet(capacity);
 
-	}
+    }
 
-	@Nonnull
-	public synchronized ConcurrentLongRangeMap<V> put(long key, V value) {
-		savedMap.put(key, value);
-		savedKey.add(key);
-		return this;
-	}
+    @Nonnull
+    public synchronized ConcurrentLongRangeMap<V> put(long key, V value) {
+        savedMap.put(key, value);
+        savedKey.add(key);
+        return this;
+    }
 
-	@CheckForNull
-	public V get(long key) {
-		return savedMap.get(key);
-	}
+    @CheckForNull
+    public V get(long key) {
+        return savedMap.get(key);
+    }
 
-	@CheckForNull
-	public synchronized V remove(long key) {
-		savedKey.remove(key);
-		return savedMap.remove(key);
-	}
+    @CheckForNull
+    public synchronized V remove(long key) {
+        savedKey.remove(key);
+        return savedMap.remove(key);
+    }
 
-	@Nonnull
-	public MutableList<V> getAll() {
-		return MutableLists.newFastList(savedMap.values());
-	}
+    @Nonnull
+    public MutableList<V> getAll() {
+        return newFastList(savedMap.values());
+    }
 
-	public synchronized void clear() {
-		savedMap.clear();
-		savedKey.clear();
-	}
+    public synchronized void clear() {
+        savedMap.clear();
+        savedKey.clear();
+    }
 
-	@Nonnull
-	public synchronized MutableList<V> scan(long startPoint, long endPoint) {
-		MutableLongSet selectKey = selectKey(startPoint, endPoint);
-		MutableList<V> selected = MutableLists.newFastList(selectKey.size());
-		operatingSelect(selectKey, key -> selected.add(get(key)));
-		return selected;
-	}
+    @Nonnull
+    public synchronized MutableList<V> scan(long startPoint, long endPoint) {
+        MutableLongSet selectKey = selectKey(startPoint, endPoint);
+        MutableList<V> selected = newFastList(selectKey.size());
+        operatingSelect(selectKey, key -> selected.add(get(key)));
+        return selected;
+    }
 
-	@Nonnull
-	public synchronized MutableList<V> remove(long startPoint, long endPoint) {
-		MutableLongSet selectKey = selectKey(startPoint, endPoint);
-		MutableList<V> removed = MutableLists.newFastList(selectKey.size());
-		operatingSelect(selectKey, key -> removed.add(remove(key)));
-		return removed;
-	}
+    @Nonnull
+    public synchronized MutableList<V> remove(long startPoint, long endPoint) {
+        MutableLongSet selectKey = selectKey(startPoint, endPoint);
+        MutableList<V> removed = newFastList(selectKey.size());
+        operatingSelect(selectKey, key -> removed.add(remove(key)));
+        return removed;
+    }
 
-	// TODO 性能优化
-	public MutableLongSet selectKey(long startPoint, long endPoint) {
+    // TODO 性能优化
+    public MutableLongSet selectKey(long startPoint, long endPoint) {
 //		MutableLongIterator longIterator = savedKey.longIterator();
 //		MutableLongSet longHashSet = MutableSets.newLongHashSet(512);
 //		while (longIterator.hasNext()) {
@@ -89,34 +88,34 @@ public final class ConcurrentLongRangeMap<V> {
 //				longHashSet.add(next);
 //		}
 //		return longHashSet;
-		return savedKey.select(key -> key >= startPoint && key <= endPoint, MutableSets.newLongHashSet(Capacity.L06_64));
-	}
+        return savedKey.select(key -> key >= startPoint && key <= endPoint, newLongHashSet(Capacity.L06_64));
+    }
 
-	private void operatingSelect(MutableLongSet selectKey, LongProcedure func) {
-		if (!selectKey.isEmpty())
-			selectKey.each(func::accept);
-	}
+    private void operatingSelect(MutableLongSet selectKey, LongProcedure func) {
+        if (!selectKey.isEmpty())
+            selectKey.each(func::accept);
+    }
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		long startNano = System.nanoTime();
-		ConcurrentLongRangeMap<String> longRangeMap = new ConcurrentLongRangeMap<>(Capacity.L24_16777216);
-		for (long l = 0L; l < 10000L; l++) {
-			longRangeMap.put(l, "l == " + l);
-		}
-		long endNano = System.nanoTime();
-		System.out.println((endNano - startNano) / 1000000);
+        long startNano = System.nanoTime();
+        ConcurrentLongRangeMap<String> longRangeMap = new ConcurrentLongRangeMap<>(Capacity.L24_16777216);
+        for (long l = 0L; l < 10000L; l++) {
+            longRangeMap.put(l, "l == " + l);
+        }
+        long endNano = System.nanoTime();
+        System.out.println((endNano - startNano) / 1000000);
 
-		for (int i = 0; i < 200; i++) {
-			long startNano1 = System.nanoTime();
-			for (long l = 1000L; l < 1300L; l++) {
-				@SuppressWarnings("unused")
-				MutableLongSet selectKey = longRangeMap.selectKey(0, l);
-				// longRangeMap.get(1000, l);
-			}
-			long endNano1 = System.nanoTime();
-			System.out.println((endNano1 - startNano1) / 1000000);
-		}
+        for (int i = 0; i < 200; i++) {
+            long startNano1 = System.nanoTime();
+            for (long l = 1000L; l < 1300L; l++) {
+                @SuppressWarnings("unused")
+                MutableLongSet selectKey = longRangeMap.selectKey(0, l);
+                // longRangeMap.get(1000, l);
+            }
+            long endNano1 = System.nanoTime();
+            System.out.println((endNano1 - startNano1) / 1000000);
+        }
 
 //		MutableMap<LocalDate, String> unifiedMap = MutableMaps.newUnifiedMap();
 //
@@ -127,6 +126,6 @@ public final class ConcurrentLongRangeMap<V> {
 //		System.out.println(LocalDate.now().hashCode());
 //		
 //		System.out.println(LocalDate.now() == LocalDate.now());
-	}
+    }
 
 }

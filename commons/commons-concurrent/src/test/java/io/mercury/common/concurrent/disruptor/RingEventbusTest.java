@@ -12,9 +12,7 @@ public class RingEventbusTest {
         RingEventbus.multiProducer(EventBean.class).process(
                 HandlerManager.complexWithFirst((WorkHandler<EventBean>) event -> {
 
-                        }
-
-                ).build()
+                }).build()
         );
 
         new EventBean();
@@ -23,7 +21,6 @@ public class RingEventbusTest {
     private static class EventBean {
 
         private long count;
-
 
     }
 

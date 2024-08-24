@@ -18,7 +18,7 @@ public final class SyncCacheMap<K, V> {
 
     private final ConcurrentMap<K, Saved> valueMap = new NonBlockingHashMap<>();
 
-    private final Function<K, V> refresher;
+    private final Function<K, V> updater;
 
     private class Saved {
 
@@ -32,10 +32,10 @@ public final class SyncCacheMap<K, V> {
 
     }
 
-    public SyncCacheMap(Function<K, V> refresher) {
-        if (refresher == null)
+    public SyncCacheMap(Function<K, V> updater) {
+        if (updater == null)
             throw new IllegalArgumentException("refresher is can't null...");
-        this.refresher = refresher;
+        this.updater = updater;
     }
 
     public SyncCacheMap<K, V> put(@Nonnull K key, @Nonnull V value) {
@@ -46,7 +46,7 @@ public final class SyncCacheMap<K, V> {
     public Optional<V> get(@Nonnull K key) {
         Saved saved = valueMap.get(key);
         if (saved == null || !saved.available) {
-            V refreshed = refresher.apply(key);
+            V refreshed = updater.apply(key);
             return refreshed == null ? Optional.empty() : put(key, refreshed).get(key);
         } else
             // return saved.isAvailable ? Optional.of(saved.value) : get(key);
