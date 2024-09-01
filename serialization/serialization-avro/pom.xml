@@ -21,6 +21,11 @@
             <name>avro-util</name>
             <url>https://linkedin.jfrog.io/artifactory/avro-util/</url>
         </repository>
+        <repository>
+            <id>maven_central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
     </repositories>
 
     <build>
@@ -68,7 +73,7 @@
         <dependency>
             <groupId>com.linkedin.avroutil1</groupId>
             <artifactId>avro-fastserde</artifactId>
-            <version>0.4.18</version>
+            <version>0.4.20</version>
             <exclusions>
                 <exclusion>
                     <artifactId>slf4j-api</artifactId>
@@ -97,7 +102,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
-            <version>1.26.2</version>
+            <version>1.27.1</version>
         </dependency>
 
         <!-- Avro inter-process communication components -->
