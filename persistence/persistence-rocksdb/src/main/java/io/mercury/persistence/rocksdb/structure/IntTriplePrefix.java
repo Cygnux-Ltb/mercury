@@ -24,7 +24,8 @@ public class IntTriplePrefix {
 		this.first = first;
 		this.second = second;
 		this.third = third;
-		this.byteBuffer = ByteBuffer.allocate(PrefixLength + extLength).putInt(first).putInt(second).putInt(third);
+		this.byteBuffer = ByteBuffer.allocate(PrefixLength + extLength)
+				.putInt(first).putInt(second).putInt(third);
 	}
 
 }

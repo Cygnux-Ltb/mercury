@@ -15,12 +15,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>io.mercury</groupId>
-            <artifactId>commons-log4j2</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
         <!-- OpenHFT/Chronicle Logger/logger Log4j 2 -->
         <dependency>
             <groupId>net.openhft</groupId>
