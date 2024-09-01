@@ -22,7 +22,7 @@ public class StdIn {
     }
 
     public static boolean isStr(final String str) {
-        if (str == null || str.length() == 0)
+        if (str == null || str.isEmpty())
             return false;
         if (str.length() % 2 > 0)
             return false;

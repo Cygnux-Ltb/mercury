@@ -12,7 +12,7 @@
     <name>actors</name>
 
     <properties>
-        <akka.version>2.8.6</akka.version>
+        <akka.version>2.9.5</akka.version>
     </properties>
 
     <build>
@@ -41,12 +41,16 @@
             <version>${project.version}</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>jackson-databind</artifactId>
                     <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>jackson-core</artifactId>
                     <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -63,10 +67,6 @@
                     <artifactId>scala3-library_3</artifactId>
                     <groupId>org.scala-lang</groupId>
                 </exclusion>
-                <exclusion>
-                    <artifactId>config</artifactId>
-                    <groupId>com.typesafe</groupId>
-                </exclusion>
             </exclusions>
         </dependency>
 
@@ -79,6 +79,10 @@
                     <artifactId>scala3-library_3</artifactId>
                     <groupId>org.scala-lang</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -90,10 +94,6 @@
                 <exclusion>
                     <artifactId>scala3-library_3</artifactId>
                     <groupId>org.scala-lang</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>config</artifactId>
-                    <groupId>com.typesafe</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -117,11 +117,15 @@
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-http_3</artifactId>
-            <version>10.5.3</version>
+            <version>10.6.3</version>
             <exclusions>
                 <exclusion>
                     <artifactId>scala3-library_3</artifactId>
                     <groupId>org.scala-lang</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -168,6 +172,11 @@
 
     </dependencies>
     <repositories>
+        <repository>
+            <id>akka_maven_central</id>
+            <name>Akka Maven Central</name>
+            <url>https://repo.akka.io/maven/</url>
+        </repository>
         <repository>
             <id>maven_central</id>
             <name>Maven Central</name>
