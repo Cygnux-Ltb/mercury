@@ -1,12 +1,10 @@
 package io.mercury.common.http;
 
-import io.mercury.common.http.PathParams.PathParam;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
-import java.net.Authenticator;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -30,10 +28,10 @@ public abstract class JreHttpClient {
 
     public static HttpResponse<String> GET(@Nonnull String uri, PathParam... params)
             throws IOException, InterruptedException, URISyntaxException {
-        return GET(uri, PathParams.with(params));
+        return GET(uri, PathParamSet.with(params));
     }
 
-    public static HttpResponse<String> GET(@Nonnull String uri, PathParams params)
+    public static HttpResponse<String> GET(@Nonnull String uri, PathParamSet params)
             throws IOException, InterruptedException, URISyntaxException {
         return GET(params.toFullUri(uri));
     }
@@ -47,13 +45,15 @@ public abstract class JreHttpClient {
 
     public static HttpResponse<String> GET(@Nonnull HttpRequest request)
             throws IOException, InterruptedException {
-        return HC.send(// GET request
+        return HC.send(
+                // GET request
                 request, BodyHandlers.ofString());
     }
 
     public static HttpResponse<String> POST(@Nonnull URI uri, String body)
             throws IOException, InterruptedException {
-        return HC.send(// POST request
+        return HC.send(
+                // POST request
                 HttpRequest.newBuilder().uri(uri)
                         .POST(HttpRequest.BodyPublishers.ofString(body))
                         .header(HttpHeaderName.CONTENT_TYPE.value(), MimeType.APPLICATION_JSON_UTF8)
@@ -64,7 +64,8 @@ public abstract class JreHttpClient {
 
     public static HttpResponse<String> PUT(@Nonnull URI uri, String body)
             throws IOException, InterruptedException {
-        return HC.send(// PUT request
+        return HC.send(
+                // PUT request
                 HttpRequest.newBuilder().uri(uri)
                         .PUT(HttpRequest.BodyPublishers.ofString(body))
                         .header(HttpHeaderName.CONTENT_TYPE.value(), MimeType.APPLICATION_JSON_UTF8)
@@ -75,7 +76,8 @@ public abstract class JreHttpClient {
 
     public static HttpResponse<String> DELETE(URI uri)
             throws IOException, InterruptedException {
-        return HC.send(// DELETE request
+        return HC.send(
+                // DELETE request
                 HttpRequest.newBuilder().uri(uri).DELETE().build(),
                 BodyHandlers.ofString());
     }

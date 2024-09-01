@@ -58,7 +58,16 @@
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>maven_central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
+
         <!-- JSR305 Annotations for Find bugs -->
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -115,13 +124,13 @@
         <!-- The Apache Log4j SLF4J API binding to Log4j 2 Core -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
             <version>${log4j2.version}</version>
             <scope>runtime</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -135,13 +144,12 @@
         <!--     <scope>runtime</scope>-->
         <!-- </dependency>-->
 
-        <!-- Apache Commons a package of Java utility classes for the classes that
-            are in java.l hierarchy, or are considered to be so standard as to justify
-            existence in java.lang. -->
+        <!-- Apache Commons a package of Java utility classes for the classes that are in java.l hierarchy,
+            or are considered to be so standard as to justify existence in java.lang. -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.15.0</version>
+            <version>3.17.0</version>
         </dependency>
 
         <!-- The Apache ons Collections package contains types that extend and
@@ -168,12 +176,18 @@
             <version>11.1.0</version>
         </dependency>
 
-        <!-- Guava is a suite of core and expanded libraries that include utility
-            classes, google collections, io classes, and much, much more. -->
+        <!-- Guava is a suite of core and expanded libraries that include utility classes,
+            google collections, io classes, and much, much more. -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>33.2.1-jre</version>
+            <version>33.3.0-jre</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>error_prone_annotations</artifactId>
+                    <groupId>com.google.errorprone</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- configuration library for JVM languages using HOCON files -->
@@ -195,17 +209,9 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>5.12.0</version>
+            <version>5.13.0</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
-    <repositories>
-        <repository>
-            <id>maven_central</id>
-            <name>Maven Central</name>
-            <url>https://repo.maven.apache.org/maven2/</url>
-        </repository>
-    </repositories>
 
 </project>

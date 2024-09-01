@@ -8,9 +8,12 @@ import org.eclipse.collections.impl.list.immutable.ImmutableListFactoryImpl;
 import org.eclipse.collections.impl.list.immutable.primitive.ImmutableIntListFactoryImpl;
 import org.eclipse.collections.impl.list.immutable.primitive.ImmutableLongListFactoryImpl;
 
-public enum ImmutableLists {
+import javax.annotation.Nullable;
 
-    ;
+public final class ImmutableLists {
+
+    private ImmutableLists() {
+    }
 
     /**
      * @param values int...
@@ -37,7 +40,7 @@ public enum ImmutableLists {
      * @param iterable Iterable<E>
      * @return ImmutableList<E>
      */
-    public static <E> ImmutableList<E> newImmutableList(Iterable<E> iterable) {
+    public static <E> ImmutableList<E> newImmutableList(@Nullable Iterable<E> iterable) {
         if (iterable == null)
             return ImmutableListFactoryImpl.INSTANCE.empty();
         return ImmutableListFactoryImpl.INSTANCE.withAll(iterable);
@@ -48,7 +51,7 @@ public enum ImmutableLists {
      * @param e   E
      * @return ImmutableList<E>
      */
-    public static <E> ImmutableList<E> newImmutableList(E e) {
+    public static <E> ImmutableList<E> newImmutableList(@Nullable E e) {
         if (e == null)
             return ImmutableListFactoryImpl.INSTANCE.empty();
         return ImmutableListFactoryImpl.INSTANCE.with(e);
@@ -60,11 +63,10 @@ public enum ImmutableLists {
      * @return ImmutableList<E>
      */
     @SafeVarargs
-    public static <E> ImmutableList<E> newImmutableList(E... values) {
+    public static <E> ImmutableList<E> newImmutableList(@Nullable E... values) {
         if (ArrayUtil.isNullOrEmpty(values))
             return ImmutableListFactoryImpl.INSTANCE.empty();
         return ImmutableListFactoryImpl.INSTANCE.with(values);
     }
-
 
 }

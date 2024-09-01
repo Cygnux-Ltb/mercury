@@ -47,15 +47,17 @@ import org.eclipse.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import org.eclipse.collections.impl.map.sorted.mutable.TreeSortedMap;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 
 import static io.mercury.common.collections.MapUtil.optimizationCapacity;
 
-public enum MutableMaps {
+public final class MutableMaps {
 
-    ;
+    private MutableMaps() {
+    }
 
     // ******************** key -> int ********************
 
@@ -147,7 +149,8 @@ public enum MutableMaps {
      * @return MutableIntObjectMap<V>
      */
     @SafeVarargs
-    public static <V> MutableIntObjectMap<V> newIntObjectMap(@Nonnull ToIntFunction<V> keyFunc, V... values) {
+    public static <V> MutableIntObjectMap<V> newIntObjectMap(@Nonnull ToIntFunction<V> keyFunc,
+                                                             @Nullable V... values) {
         Asserter.nonNull(keyFunc, "keyFunc");
         if (ArrayUtil.isNullOrEmpty(values))
             return newIntObjectMap();
@@ -390,7 +393,7 @@ public enum MutableMaps {
      * @param <V> Value type
      * @return MutableMap<K, V>
      */
-    public static <K, V> MutableMap<K, V> newUnifiedMap(Map<K, V> map) {
+    public static <K, V> MutableMap<K, V> newUnifiedMap(@Nullable Map<K, V> map) {
         if (map == null || map.isEmpty()) return new UnifiedMap<>();
         return new UnifiedMap<>(map);
     }
@@ -401,7 +404,7 @@ public enum MutableMaps {
      * @param supplier Supplier<Map<K, V>>
      * @return MutableMap<K, V>
      */
-    public static <K, V> MutableMap<K, V> newUnifiedMap(Supplier<Map<K, V>> supplier) {
+    public static <K, V> MutableMap<K, V> newUnifiedMap(@Nullable Supplier<Map<K, V>> supplier) {
         if (supplier == null) return new UnifiedMap<>();
         return newUnifiedMap(supplier.get());
     }
@@ -505,7 +508,7 @@ public enum MutableMaps {
      * @param map Map<K, V>
      * @return MutableSortedMap<K, V>
      */
-    public static <K, V> MutableSortedMap<K, V> newSortedMap(Map<K, V> map) {
+    public static <K, V> MutableSortedMap<K, V> newSortedMap(@Nullable Map<K, V> map) {
         if (map == null || map.isEmpty()) return TreeSortedMap.newMap();
         return TreeSortedMap.newMap(map);
     }
@@ -516,7 +519,7 @@ public enum MutableMaps {
      * @param supplier Supplier<Map<K, V>>
      * @return MutableSortedMap<K, V>
      */
-    public static <K, V> MutableSortedMap<K, V> newSortedMap(Supplier<Map<K, V>> supplier) {
+    public static <K, V> MutableSortedMap<K, V> newSortedMap(@Nullable Supplier<Map<K, V>> supplier) {
         if (supplier == null) return TreeSortedMap.newMap();
         return newSortedMap(supplier.get());
     }
@@ -551,7 +554,7 @@ public enum MutableMaps {
      * @param map Map<K, V>
      * @return ConcurrentMutableMap<K, V>
      */
-    public static <K, V> ConcurrentMutableMap<K, V> newConcurrentMap(Map<K, V> map) {
+    public static <K, V> ConcurrentMutableMap<K, V> newConcurrentMap(@Nullable Map<K, V> map) {
         if (map == null || map.isEmpty()) return ConcurrentHashMap.newMap();
         return ConcurrentHashMap.newMap(map);
     }
@@ -562,7 +565,7 @@ public enum MutableMaps {
      * @param supplier Supplier<Map<K, V>>
      * @return ConcurrentMutableMap<K, V>
      */
-    public static <K, V> ConcurrentMutableMap<K, V> newConcurrentMap(Supplier<Map<K, V>> supplier) {
+    public static <K, V> ConcurrentMutableMap<K, V> newConcurrentMap(@Nullable Supplier<Map<K, V>> supplier) {
         if (supplier == null) return ConcurrentHashMap.newMap();
         return newConcurrentMap(supplier.get());
     }
@@ -593,7 +596,7 @@ public enum MutableMaps {
      * @param map Map<K, V>
      * @return ConcurrentMutableMap<K, V>
      */
-    public static <K, V> ConcurrentMutableMap<K, V> newConcurrentMapUnsafe(Map<K, V> map) {
+    public static <K, V> ConcurrentMutableMap<K, V> newConcurrentMapUnsafe(@Nullable Map<K, V> map) {
         if (map == null || map.isEmpty()) return ConcurrentHashMapUnsafe.newMap();
         return ConcurrentHashMapUnsafe.newMap(map);
     }
@@ -604,7 +607,7 @@ public enum MutableMaps {
      * @param supplier Supplier<Map<K, V>>
      * @return ConcurrentMutableMap<K, V>
      */
-    public static <K, V> ConcurrentMutableMap<K, V> newConcurrentMapUnsafe(Supplier<Map<K, V>> supplier) {
+    public static <K, V> ConcurrentMutableMap<K, V> newConcurrentMapUnsafe(@Nullable Supplier<Map<K, V>> supplier) {
         if (supplier == null) return ConcurrentHashMapUnsafe.newMap();
         return newConcurrentMapUnsafe(supplier.get());
     }

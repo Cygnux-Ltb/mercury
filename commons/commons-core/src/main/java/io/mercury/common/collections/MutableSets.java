@@ -13,6 +13,7 @@ import org.eclipse.collections.impl.set.mutable.primitive.LongHashSet;
 import org.eclipse.collections.impl.set.sorted.mutable.TreeSortedSet;
 import org.eclipse.collections.impl.utility.Iterate;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,9 +21,10 @@ import java.util.Iterator;
 
 import static io.mercury.common.collections.Capacity.checkAndGet;
 
-public enum MutableSets {
+public final class MutableSets {
 
-    ;
+    private MutableSets() {
+    }
 
     // ******************** primitive int set ********************
 
@@ -136,7 +138,7 @@ public enum MutableSets {
      */
     @SafeVarargs
     public static <E> MutableSet<E> newUnifiedSet(E... values) {
-        MutableSet<E> set = new UnifiedSet<>();
+        UnifiedSet<E> set = new UnifiedSet<>();
         if (ArrayUtil.isNullOrEmpty(values))
             return set;
         Collections.addAll(set, values);
@@ -161,7 +163,7 @@ public enum MutableSets {
      * @param iterator Iterator<E>
      * @return MutableSet<E>
      */
-    public static <E> MutableSet<E> newUnifiedSet(Iterator<E> iterator) {
+    public static <E> MutableSet<E> newUnifiedSet(@Nullable Iterator<E> iterator) {
         MutableSet<E> mutableSet = newUnifiedSet();
         if (iterator != null && iterator.hasNext())
             while (iterator.hasNext())
@@ -176,7 +178,7 @@ public enum MutableSets {
      * @param collection Collection<E>
      * @return MutableSet<E>
      */
-    public static <E> MutableSet<E> newUnifiedSet(Collection<E> collection) {
+    public static <E> MutableSet<E> newUnifiedSet(@Nullable Collection<E> collection) {
         if (collection == null || collection.isEmpty())
             return newUnifiedSet();
         return new UnifiedSet<>(collection);
@@ -215,7 +217,7 @@ public enum MutableSets {
      * @param comparator Comparator<E>
      * @return MutableSortedSet<E>
      */
-    public static <E> MutableSortedSet<E> newTreeSortedSet(Comparator<E> comparator) {
+    public static <E> MutableSortedSet<E> newTreeSortedSet(@Nullable Comparator<E> comparator) {
         if (comparator == null)
             return newTreeSortedSet();
         return new TreeSortedSet<>(comparator);
@@ -228,7 +230,7 @@ public enum MutableSets {
      * @param iterable Iterable<E>
      * @return MutableSortedSet<E>
      */
-    public static <E> MutableSortedSet<E> newTreeSortedSet(Iterable<E> iterable) {
+    public static <E> MutableSortedSet<E> newTreeSortedSet(@Nullable Iterable<E> iterable) {
         if (Iterate.isEmpty(iterable))
             return newTreeSortedSet();
         return new TreeSortedSet<>(iterable);
@@ -242,7 +244,8 @@ public enum MutableSets {
      * @param iterable   Iterable<E>
      * @return MutableSortedSet<E>
      */
-    public static <E> MutableSortedSet<E> newTreeSortedSet(Comparator<E> comparator, Iterable<E> iterable) {
+    public static <E> MutableSortedSet<E> newTreeSortedSet(@Nullable Comparator<E> comparator,
+                                                           @Nullable Iterable<E> iterable) {
         if (comparator != null && iterable != null)
             return new TreeSortedSet<>(comparator, iterable);
         if (comparator != null)

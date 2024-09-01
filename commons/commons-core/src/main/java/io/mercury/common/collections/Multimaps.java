@@ -9,11 +9,13 @@ import org.eclipse.collections.impl.multimap.list.FastListMultimap;
 import org.eclipse.collections.impl.multimap.set.UnifiedSetMultimap;
 import org.eclipse.collections.impl.multimap.set.sorted.TreeSortedSetMultimap;
 
+import javax.annotation.Nullable;
 import java.util.Comparator;
 
-public enum Multimaps {
+public final class Multimaps {
 
-    ;
+    private Multimaps() {
+    }
 
     /**
      * @param <K> K type
@@ -30,7 +32,8 @@ public enum Multimaps {
      * @param iterable Iterable<Pair<K, V>>
      * @return MutableListMultimap
      */
-    public static <K, V> MutableListMultimap<K, V> newFastListMultimap(Iterable<Pair<K, V>> iterable) {
+    public static <K, V> MutableListMultimap<K, V> newFastListMultimap(
+            @Nullable Iterable<Pair<K, V>> iterable) {
         if (iterable == null)
             return FastListMultimap.newMultimap();
         return FastListMultimap.newMultimap(iterable);
@@ -43,7 +46,8 @@ public enum Multimaps {
      * @return MutableListMultimap
      */
     @SafeVarargs
-    public static <K, V> MutableListMultimap<K, V> newFastListMultimap(Pair<K, V>... pairs) {
+    public static <K, V> MutableListMultimap<K, V> newFastListMultimap(
+            @Nullable Pair<K, V>... pairs) {
         if (ArrayUtil.isNullOrEmpty(pairs))
             return FastListMultimap.newMultimap();
         return FastListMultimap.newMultimap(pairs);
@@ -64,7 +68,8 @@ public enum Multimaps {
      * @param iterable Iterable<Pair<K, V>>
      * @return MutableSetMultimap
      */
-    public static <K, V> MutableSetMultimap<K, V> newUnifiedSetMultimap(Iterable<Pair<K, V>> iterable) {
+    public static <K, V> MutableSetMultimap<K, V> newUnifiedSetMultimap(
+            @Nullable Iterable<Pair<K, V>> iterable) {
         if (iterable == null)
             return UnifiedSetMultimap.newMultimap();
         return UnifiedSetMultimap.newMultimap(iterable);
@@ -77,7 +82,8 @@ public enum Multimaps {
      * @return MutableSetMultimap
      */
     @SafeVarargs
-    public static <K, V> MutableSetMultimap<K, V> newUnifiedSetMultimap(Pair<K, V>... pairs) {
+    public static <K, V> MutableSetMultimap<K, V> newUnifiedSetMultimap(
+            @Nullable Pair<K, V>... pairs) {
         if (ArrayUtil.isNullOrEmpty(pairs))
             return UnifiedSetMultimap.newMultimap();
         return UnifiedSetMultimap.newMultimap(pairs);
@@ -98,7 +104,8 @@ public enum Multimaps {
      * @param comparator Comparator<V>
      * @return MutableSortedSetMultimap
      */
-    public static <K, V> MutableSortedSetMultimap<K, V> newTreeSortedSetMultimap(Comparator<V> comparator) {
+    public static <K, V> MutableSortedSetMultimap<K, V> newTreeSortedSetMultimap(
+            @Nullable Comparator<V> comparator) {
         if (comparator == null)
             return TreeSortedSetMultimap.newMultimap();
         return TreeSortedSetMultimap.newMultimap(comparator);
@@ -110,7 +117,8 @@ public enum Multimaps {
      * @param iterable Iterable<Pair<K, V>>
      * @return MutableSortedSetMultimap
      */
-    public static <K, V> MutableSortedSetMultimap<K, V> newTreeSortedSetMultimap(Iterable<Pair<K, V>> iterable) {
+    public static <K, V> MutableSortedSetMultimap<K, V> newTreeSortedSetMultimap(
+            @Nullable Iterable<Pair<K, V>> iterable) {
         if (iterable == null)
             return TreeSortedSetMultimap.newMultimap();
         return TreeSortedSetMultimap.newMultimap(iterable);
@@ -123,7 +131,8 @@ public enum Multimaps {
      * @return MutableSortedSetMultimap
      */
     @SafeVarargs
-    public static <K, V> MutableSortedSetMultimap<K, V> newTreeSortedSetMultimap(Pair<K, V>... pairs) {
+    public static <K, V> MutableSortedSetMultimap<K, V> newTreeSortedSetMultimap(
+            @Nullable Pair<K, V>... pairs) {
         if (ArrayUtil.isNullOrEmpty(pairs))
             return TreeSortedSetMultimap.newMultimap();
         return TreeSortedSetMultimap.newMultimap(pairs);

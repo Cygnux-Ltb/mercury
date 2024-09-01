@@ -7,37 +7,26 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.Set;
 
-public final class PathParams {
-
-    public record PathParam(
-            Object name,
-            Object value) {
-
-        @Override
-        public String toString() {
-            return name + "=" + (value == null ? "" : value);
-        }
-
-    }
+public final class PathParamSet {
 
     private final Set<PathParam> set = MutableSets.newUnifiedSet();
 
-    private PathParams() {
+    private PathParamSet() {
     }
 
-    public static PathParams empty() {
-        return new PathParams();
+    public static PathParamSet empty() {
+        return new PathParamSet();
     }
 
-    public static PathParams with(PathParam... params) {
-        return new PathParams().addParams(params);
+    public static PathParamSet with(PathParam... params) {
+        return new PathParamSet().addParams(params);
     }
 
-    public PathParams addParams(Object name, Object value) {
+    public PathParamSet addParams(Object name, Object value) {
         return addParams(new PathParam(name, value == null ? "" : value));
     }
 
-    public PathParams addParams(PathParam... params) {
+    public PathParamSet addParams(PathParam... params) {
         Collections.addAll(set, params);
         return this;
     }
@@ -49,7 +38,7 @@ public final class PathParams {
     }
 
     public URI toFullUri(@Nonnull String uri) {
-        return URI.create(uri + this.toUriParams());
+        return URI.create(uri + toUriParams());
     }
 
 }

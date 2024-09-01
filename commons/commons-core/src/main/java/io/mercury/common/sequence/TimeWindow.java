@@ -31,7 +31,8 @@ public class TimeWindow implements SerialObj<TimeWindow> {
 
     private final Duration duration;
 
-    protected TimeWindow(@Nonnull LocalDateTime start, @Nonnull LocalDateTime end, @Nonnull ZoneOffset offset) {
+    protected TimeWindow(@Nonnull LocalDateTime start, @Nonnull LocalDateTime end,
+                         @Nonnull ZoneOffset offset) {
         Asserter.nonNull(start, "start");
         Asserter.nonNull(end, "end");
         Asserter.nonNull(offset, "offset");
@@ -141,7 +142,7 @@ public class TimeWindow implements SerialObj<TimeWindow> {
                                                                @Nonnull ZoneOffset offset,
                                                                @Nonnull Duration duration) {
         if (end.isBefore(start))
-            throw new IllegalArgumentException("the end time can not before start time");
+            throw new IllegalArgumentException("the [end time] can not before [start time]");
         var between = Duration.between(start, end);
         long seconds = duration.getSeconds();
         long count = between.getSeconds() / seconds;
@@ -199,14 +200,14 @@ public class TimeWindow implements SerialObj<TimeWindow> {
         return offset;
     }
 
-    private transient String cache;
+    private transient String toStringCache;
 
     @Override
     public String toString() {
-        if (cache == null)
-            cache = epochSecond + " -> [" + offset + "][" + YYYY_MM_DD_HH_MM_SS.fmt(start) + " - "
+        if (toStringCache == null)
+            toStringCache = epochSecond + " -> [" + offset + "][" + YYYY_MM_DD_HH_MM_SS.fmt(start) + " - "
                     + YYYY_MM_DD_HH_MM_SS.fmt(end) + "][" + duration.getSeconds() + "s]";
-        return cache;
+        return toStringCache;
     }
 
     public static void main(String[] args) {
@@ -218,9 +219,9 @@ public class TimeWindow implements SerialObj<TimeWindow> {
         System.out.println();
 
         TimeWindow last = windows.getLast();
-        TimeWindow last_1 = windows.get(windows.size() - 2);
+        TimeWindow last1 = windows.get(windows.size() - 2);
 
-        System.out.println(last_1 + " -> " + last_1.isPeriod(LocalDateTime.of(2021, 10, 15, 9, 15)));
+        System.out.println(last1 + " -> " + last1.isPeriod(LocalDateTime.of(2021, 10, 15, 9, 15)));
         System.out.println(last + " -> " + last.isPeriod(LocalDateTime.of(2021, 10, 15, 9, 15)));
 
     }

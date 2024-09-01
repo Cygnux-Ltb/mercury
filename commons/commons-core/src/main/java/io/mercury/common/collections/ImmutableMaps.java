@@ -1,22 +1,45 @@
 package io.mercury.common.collections;
 
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.util.ArrayUtil;
+import org.eclipse.collections.api.RichIterable;
 import org.eclipse.collections.api.map.ImmutableMap;
+import org.eclipse.collections.api.map.primitive.ImmutableIntObjectMap;
+import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
 import org.eclipse.collections.api.map.sorted.ImmutableSortedMap;
 import org.eclipse.collections.api.tuple.Pair;
 import org.eclipse.collections.impl.map.immutable.ImmutableMapFactoryImpl;
 import org.eclipse.collections.impl.map.sorted.immutable.ImmutableSortedMapFactoryImpl;
 import org.eclipse.collections.impl.map.sorted.mutable.TreeSortedMap;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.function.Supplier;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public enum ImmutableMaps {
+public final class ImmutableMaps {
 
-    ;
+    private ImmutableMaps() {
+    }
+
+    /**
+     * @param <V>      Value type
+     * @param keyFunc  IntFunction<V>
+     * @param iterable RichIterable<V>
+     * @return ImmutableIntObjectMap<V>
+     */
+    public static <V> ImmutableIntObjectMap<V> newImmutableIntMap(ToIntFunction<V> keyFunc,
+                                                                  RichIterable<V> iterable) {
+        Asserter.nonNull(keyFunc, "keyFunc");
+        Asserter.nonNull(iterable, "iterable");
+        MutableIntObjectMap<V> intObjectMap = MutableMaps.newIntObjectMap(iterable.size());
+        for (V value : iterable)
+            intObjectMap.put(keyFunc.applyAsInt(value), value);
+        return intObjectMap.toImmutable();
+    }
 
     /**
      * @param <K>   Key type
@@ -37,7 +60,7 @@ public enum ImmutableMaps {
      * @return The new ImmutableMap<K, V>
      */
     @SafeVarargs
-    public static <K, V> ImmutableMap<K, V> newImmutableMap(Pair<K, V>... pairs) {
+    public static <K, V> ImmutableMap<K, V> newImmutableMap(@Nullable Pair<K, V>... pairs) {
         if (ArrayUtil.isNullOrEmpty(pairs))
             return ImmutableMapFactoryImpl.INSTANCE.empty();
         switch (pairs.length) {
@@ -76,7 +99,7 @@ public enum ImmutableMaps {
      * @param map Map<K, V>
      * @return The new ImmutableMap<K, V>
      */
-    public static <K, V> ImmutableMap<K, V> newImmutableMap(Map<K, V> map) {
+    public static <K, V> ImmutableMap<K, V> newImmutableMap(@Nullable Map<K, V> map) {
         if (map == null || map.isEmpty())
             return ImmutableMapFactoryImpl.INSTANCE.empty();
         return ImmutableMapFactoryImpl.INSTANCE.withAll(map);
@@ -89,7 +112,7 @@ public enum ImmutableMaps {
      * @return The new ImmutableMap<K, V>
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> ImmutableMap<K, V> newImmutableMap(Supplier<Map<K, V>> supplier) {
+    public static <K, V> ImmutableMap<K, V> newImmutableMap(@Nullable Supplier<Map<K, V>> supplier) {
         if (supplier == null)
             return ImmutableMapFactoryImpl.INSTANCE.empty();
         Map<K, V> map = supplier.get();
@@ -106,7 +129,7 @@ public enum ImmutableMaps {
      * @param map Map<K, V>
      * @return ImmutableSortedMap<K, V>
      */
-    public static <K, V> ImmutableSortedMap<K, V> newImmutableSortedMap(Map<K, V> map) {
+    public static <K, V> ImmutableSortedMap<K, V> newImmutableSortedMap(@Nullable Map<K, V> map) {
         if (map == null)
             return ImmutableSortedMapFactoryImpl.INSTANCE.empty();
         if (map instanceof SortedMap)
@@ -121,7 +144,7 @@ public enum ImmutableMaps {
      * @param supplier Map<K, V> supplier
      * @return ImmutableSortedMap<K, V>
      */
-    public static <K, V> ImmutableSortedMap<K, V> newImmutableSortedMap(Supplier<Map<K, V>> supplier) {
+    public static <K, V> ImmutableSortedMap<K, V> newImmutableSortedMap(@Nullable Supplier<Map<K, V>> supplier) {
         if (supplier == null)
             return ImmutableSortedMapFactoryImpl.INSTANCE.empty();
         Map<K, V> map = supplier.get();
