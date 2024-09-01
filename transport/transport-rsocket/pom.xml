@@ -36,6 +36,10 @@
                     <artifactId>reactor-core</artifactId>
                     <groupId>io.projectreactor</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 
