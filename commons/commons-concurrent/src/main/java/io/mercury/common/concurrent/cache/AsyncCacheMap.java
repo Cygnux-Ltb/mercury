@@ -66,7 +66,7 @@ public final class AsyncCacheMap<K, V> {
     public AsyncCacheMap(String cacheName) {
         this.cacheName = isNullOrEmpty(cacheName) ? "AsyncCacheMap-" + hashCode() : cacheName;
         this.execQueue = mpscQueue(this.cacheName + "-ExecQueue")
-                .capacity(64).process(event -> asyncExec(event));
+                .capacity(64).process(this::asyncExec);
         this.queryQueue = mpscQueue(this.cacheName + "-QueryQueue")
                 .capacity(64).process(result -> consumerMap.remove(result.nanoTime).accept(result.value));
     }

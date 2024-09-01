@@ -3,11 +3,8 @@ Commons library
 
 Common module
 - commons-concurrent
-- commons-config
 - commons-core
 - commons-graph
-- commons-injection
-- commons-log4j2
 - commons-reflect
 
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)

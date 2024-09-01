@@ -267,6 +267,7 @@ public abstract class SingleConsumerQueueWithJCT<E> extends SingleConsumerQueue<
                 default -> throw new IllegalArgumentException("Error QueueType value[ " + type + "]");
             };
         }
+
     }
 
 }
