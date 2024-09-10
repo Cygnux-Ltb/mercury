@@ -5,7 +5,7 @@ import io.mercury.common.serialization.specific.JsonSerializable;
 
 import javax.annotation.Nonnull;
 
-public abstract class JsonConvertible implements JsonSerializable {
+public abstract class JsonBean implements JsonSerializable {
 
     @Nonnull
     @Override

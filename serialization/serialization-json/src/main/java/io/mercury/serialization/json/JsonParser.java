@@ -1,11 +1,10 @@
 package io.mercury.serialization.json;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONReader.Feature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonSyntaxException;
-import io.mercury.common.util.StringSupport;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.map.ImmutableMap;
@@ -13,50 +12,62 @@ import org.eclipse.collections.api.map.MutableMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.Serial;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.gson.JsonParser.parseString;
 import static io.mercury.common.collections.ImmutableLists.newImmutableList;
 import static io.mercury.common.collections.ImmutableMaps.newImmutableMap;
 import static io.mercury.common.collections.MutableLists.newFastList;
 import static io.mercury.common.collections.MutableMaps.newUnifiedMap;
+import static io.mercury.common.util.StringSupport.isNullOrEmpty;
 
 public final class JsonParser {
 
-    private static final ObjectMapper Mapper = new ObjectMapper()
-            // TODO 添加反序列化属性
-            ;
+    private JsonParser() {
+    }
 
-    private static final TypeFactory TypeFactory = Mapper.getTypeFactory()
-            // TODO 添加配置信息
-            ;
+    // TODO 添加反序列化属性
+    private static final ObjectMapper Mapper = new ObjectMapper();
+
+    // TODO 添加配置信息
+    private static final TypeFactory TYPE_FACTORY = Mapper.getTypeFactory();
 
     /**
      * @param json String
      * @return JsonElement
      */
-    public static JsonElement parseJson(@Nonnull final String json) throws JsonSyntaxException {
-        return parseString(json);
+    public static JSONObject parseJson(String json) throws JsonParseException {
+        try {
+            return JSON.parseObject(json, Feature.UseBigDecimalForDoubles);
+        } catch (Exception e) {
+            throw new JsonParseException(e);
+        }
     }
 
     /**
      * @param json String
      * @return boolean
      */
-    public static boolean isJsonArray(@Nonnull final String json) throws JsonSyntaxException {
-        return parseString(json).isJsonArray();
+    public static boolean isJsonArray(String json) throws JsonParseException {
+        try {
+            return JSON.isValidArray(json);
+        } catch (Exception e) {
+            throw new JsonParseException(e);
+        }
     }
 
     /**
      * @param json String
      * @return boolean
      */
-    public static boolean isJsonObject(@Nonnull final String json) throws JsonSyntaxException {
-        return parseString(json).isJsonObject();
+    public static boolean isJsonObject(String json) throws JsonParseException {
+        try {
+            return JSON.isValidObject(json);
+        } catch (Exception e) {
+            throw new JsonParseException(e);
+        }
     }
 
     /**
@@ -65,11 +76,9 @@ public final class JsonParser {
      * @throws JsonParseException e
      */
     @Nullable
-    public static <T> T toObject(@Nullable final String json) throws JsonParseException {
+    public static <T> T toObject(String json) throws JsonParseException {
         try {
-            if (StringSupport.isNullOrEmpty(json))
-                return null;
-            return Mapper.readValue(json, new TypeReference<>() {
+            return JSON.parseObject(json, new com.alibaba.fastjson2.TypeReference<>() {
             });
         } catch (Exception e) {
             throw new JsonParseException(json, e);
@@ -83,11 +92,28 @@ public final class JsonParser {
      * @throws JsonParseException e
      */
     @Nullable
-    public static <T> T toObject(@Nullable final String json, @Nullable final Class<T> type) throws JsonParseException {
+    public static <T> T toObject(String json, Class<T> type) throws JsonParseException {
         try {
-            if (json == null || json.isEmpty() || type == null)
-                return null;
-            return Mapper.readValue(json, type);
+            return JSON.parseObject(json, type);
+        } catch (Exception e) {
+            throw new JsonParseException(json, e);
+        }
+    }
+
+    //**************************** LIST CONVERT ****************************//
+
+    /**
+     * @param json String
+     * @return List<T>
+     * @throws JsonParseException e
+     */
+    @Nonnull
+    public static <T> List<T> toList(String json) throws JsonParseException {
+        try {
+            if (isNullOrEmpty(json))
+                return new ArrayList<>();
+            return Mapper.readValue(json, new com.fasterxml.jackson.core.type.TypeReference<>() {
+            });
         } catch (Exception e) {
             throw new JsonParseException(json, e);
         }
@@ -95,133 +121,84 @@ public final class JsonParser {
 
     /**
      * @param json String
+     * @return MutableList<T>
+     * @throws JsonParseException e
+     */
+    @Nonnull
+    public static <T> MutableList<T> toMutableList(String json) throws JsonParseException {
+        return newFastList(
+                // List convert to MutableList
+                toList(json));
+    }
+
+    /**
+     * @param json String
+     * @return ImmutableList<T>
+     * @throws JsonParseException e
+     */
+    @Nonnull
+    public static <T> ImmutableList<T> toImmutableList(String json) throws JsonParseException {
+        return newImmutableList(
+                // List convert to MutableList
+                toList(json));
+    }
+
+    /**
+     * @param json String
+     * @param type Class<T>
      * @return List<T>
      * @throws JsonParseException e
      */
-    public static <T> List<T> toList(@Nullable final String json) throws JsonParseException {
+    @Nonnull
+    public static <T> List<T> toList(String json, Class<T> type) throws JsonParseException {
+        try {
+            if (json == null || json.isEmpty() || type == null)
+                return new ArrayList<>();
+            return JSON.parseArray(json, type);
+        } catch (Exception e) {
+            throw new JsonParseException(json, e);
+        }
+    }
+
+    /**
+     * @param json String
+     * @return MutableList<T>
+     * @throws JsonParseException e
+     */
+    @Nonnull
+    public static <T> MutableList<T> toMutableList(String json, Class<T> type) throws JsonParseException {
+        return newFastList(
+                // List convert to MutableList
+                toList(json, type));
+    }
+
+    /**
+     * @param json String
+     * @return ImmutableList<T>
+     * @throws JsonParseException e
+     */
+    @Nonnull
+    public static <T> ImmutableList<T> toImmutableList(String json, Class<T> type) throws JsonParseException {
+        return newImmutableList(
+                // List convert to MutableList
+                toList(json, type));
+    }
+
+
+    //**************************** MAP CONVERT ****************************//
+
+    /**
+     * @param json String
+     * @return Map<K, V>
+     * @throws JsonParseException e
+     */
+    @Nonnull
+    public static <K, V> Map<K, V> toMap(String json) throws JsonParseException {
         try {
             if (json == null || json.isEmpty())
-                return new ArrayList<>();
-            return Mapper.readValue(json, new TypeReference<>() {
+                return new HashMap<>();
+            return JSON.parseObject(json, new com.alibaba.fastjson2.TypeReference<>() {
             });
-        } catch (Exception e) {
-            throw new JsonParseException(json, e);
-        }
-    }
-
-    /**
-     * @param json String
-     * @param type Class<T>
-     * @return List<T>
-     * @throws JsonParseException e
-     */
-    public static <T> List<T> toList(@Nullable String json, @Nullable Class<T> type) throws JsonParseException {
-        try {
-            if (json == null || json.isEmpty() || type == null)
-                return new ArrayList<>();
-            return Mapper.readValue(json,
-                    TypeFactory.constructCollectionLikeType(List.class, type));
-        } catch (Exception e) {
-            throw new JsonParseException(json, e);
-        }
-    }
-
-    /**
-     * @param json String
-     * @return MutableList<T>
-     * @throws JsonParseException e
-     */
-    public static <T> MutableList<T> toMutableList(@Nonnull final String json) throws JsonParseException {
-        try {
-            return newFastList(
-                    // List convert to MutableList
-                    Mapper.readValue(json, new TypeReference<List<T>>() {
-                    }));
-        } catch (Exception e) {
-            throw new JsonParseException(json, e);
-        }
-    }
-
-    /**
-     * @param json String
-     * @param type Class<T>
-     * @return MutableList<T>
-     * @throws JsonParseException e
-     */
-    public static <T> MutableList<T> toMutableList(@Nonnull final String json, @Nonnull final Class<T> type)
-            throws JsonParseException {
-        try {
-            final List<T> list = Mapper.readValue(json,
-                    TypeFactory.constructCollectionLikeType(List.class, type));
-            return newFastList(
-                    // List convert to MutableList
-                    list);
-        } catch (Exception e) {
-            throw new JsonParseException(json, e);
-        }
-    }
-
-    /**
-     * @param json String
-     * @return ImmutableList<T>
-     * @throws JsonParseException e
-     */
-    public static <T> ImmutableList<T> toImmutableList(@Nonnull final String json) throws JsonParseException {
-        try {
-            return newImmutableList(
-                    // List convert to MutableList
-                    Mapper.readValue(json, new TypeReference<List<T>>() {
-                    }));
-        } catch (Exception e) {
-            throw new JsonParseException(json, e);
-        }
-    }
-
-    /**
-     * @param json String
-     * @param type Class<T>
-     * @return ImmutableList<T>
-     * @throws JsonParseException e
-     */
-    public static <T> ImmutableList<T> toImmutableList(@Nonnull final String json, @Nonnull final Class<T> type)
-            throws JsonParseException {
-        try {
-            final List<T> list = Mapper.readValue(json,
-                    TypeFactory.constructCollectionLikeType(List.class, type));
-            return newImmutableList(
-                    // List convert to MutableList
-                    list);
-        } catch (Exception e) {
-            throw new JsonParseException(json, e);
-        }
-    }
-
-    /**
-     * @param json String
-     * @return Map<K, V>
-     * @throws JsonParseException e
-     */
-    public static <K, V> Map<K, V> toMap(@Nonnull final String json) throws JsonParseException {
-        try {
-            return Mapper.readValue(json, new TypeReference<>() {
-            });
-        } catch (Exception e) {
-            throw new JsonParseException(json, e);
-        }
-    }
-
-    /**
-     * @param json      String
-     * @param keyType   Class<K>
-     * @param valueType Class<V>
-     * @return Map<K, V>
-     * @throws JsonParseException e
-     */
-    public static <K, V> Map<K, V> toMap(@Nonnull final String json, @Nonnull final Class<K> keyType,
-                                         @Nonnull final Class<V> valueType)
-            throws JsonParseException {
-        try {
-            return Mapper.readValue(json, TypeFactory.constructMapLikeType(Map.class, keyType, valueType));
         } catch (Exception e) {
             throw new JsonParseException(json, e);
         }
@@ -232,16 +209,11 @@ public final class JsonParser {
      * @return MutableMap<K, V>
      * @throws JsonParseException e
      */
-    public static <K, V> MutableMap<K, V> toMutableMap(@Nonnull final String json)
-            throws JsonParseException {
-        try {
-            return newUnifiedMap(
-                    // Map convert to MutableMap
-                    Mapper.readValue(json, new TypeReference<Map<K, V>>() {
-                    }));
-        } catch (Exception e) {
-            throw new JsonParseException(json, e);
-        }
+    @Nonnull
+    public static <K, V> MutableMap<K, V> toMutableMap(String json) throws JsonParseException {
+        return newUnifiedMap(
+                // Map convert to MutableMap
+                toMap(json));
     }
 
     /**
@@ -249,39 +221,65 @@ public final class JsonParser {
      * @return ImmutableMap<K, V>
      * @throws JsonParseException e
      */
-    public static <K, V> ImmutableMap<K, V> toImmutableMap(@Nonnull final String json)
+    @Nonnull
+    public static <K, V> ImmutableMap<K, V> toImmutableMap(String json) throws JsonParseException {
+        return newImmutableMap(
+                // Map convert to ImmutableMap
+                toMap(json));
+    }
+
+    /**
+     * @param json      String
+     * @param keyType   Class<K>
+     * @param valueType Class<V>
+     * @return Map<K, V>
+     * @throws JsonParseException e
+     */
+    @Nonnull
+    public static <K, V> Map<K, V> toMap(String json, Class<K> keyType, Class<V> valueType)
             throws JsonParseException {
         try {
-            return newImmutableMap(
-                    // Map convert to ImmutableMap
-                    Mapper.readValue(json, new TypeReference<Map<K, V>>() {
-                    }));
+            if (json == null || json.isEmpty())
+                return new HashMap<>();
+            if (keyType == null || valueType == null)
+                return toMap(json);
+            return Mapper.readValue(json, TYPE_FACTORY.constructMapLikeType(Map.class, keyType, valueType));
         } catch (Exception e) {
             throw new JsonParseException(json, e);
         }
     }
 
+
     /**
-     * @author yellow013
+     * @param json      String
+     * @param keyType   Class<K>
+     * @param valueType Class<V>
+     * @return MutableMap<K, V>
+     * @throws JsonParseException e
      */
-    public static final class JsonParseException extends RuntimeException {
-
-        @Serial
-        private static final long serialVersionUID = 9000408863460789219L;
-
-        public JsonParseException(String json, Throwable cause) {
-            super("Parsing JSON -> " + json + " , Throw exception -> [" + cause.getClass().getName() + "]", cause);
-        }
-
-        public JsonParseException(Throwable cause) {
-            super("Parsing JSON throw exception -> [ " + cause.getClass().getName() + "]", cause);
-        }
-
-        public JsonParseException(String message) {
-            super(message);
-        }
-
+    @Nonnull
+    public static <K, V> MutableMap<K, V> toMutableMap(String json, Class<K> keyType, Class<V> valueType)
+            throws JsonParseException {
+        return newUnifiedMap(
+                // Map convert to MutableMap
+                toMap(json, keyType, valueType));
     }
+
+    /**
+     * @param json      String
+     * @param keyType   Class<K>
+     * @param valueType Class<V>
+     * @return ImmutableMap<K, V>
+     * @throws JsonParseException e
+     */
+    @Nonnull
+    public static <K, V> ImmutableMap<K, V> toImmutableMap(String json, Class<K> keyType, Class<V> valueType)
+            throws JsonParseException {
+        return newImmutableMap(
+                // Map convert to ImmutableMap
+                toMap(json, keyType, valueType));
+    }
+
 
     public static void main(String[] args) {
         Map<String, String> map0 = new HashMap<>();

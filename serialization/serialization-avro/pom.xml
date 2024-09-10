@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.mercury</groupId>
         <artifactId>serialization</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>serialization-avro</artifactId>
@@ -51,10 +51,10 @@
                             <goal>schema</goal>
                         </goals>
                         <configuration>
-                            <templateDirectory>${project.basedir}/src/main/resources/template/</templateDirectory>
-                            <sourceDirectory>${project.basedir}/src/main/resources/schema</sourceDirectory>
-                            <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
                             <stringType>String</stringType>
+                            <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
+                            <sourceDirectory>${project.basedir}/src/main/resources/schema</sourceDirectory>
+                            <templateDirectory>${project.basedir}/src/main/resources/template/</templateDirectory>
                         </configuration>
                     </execution>
                 </executions>

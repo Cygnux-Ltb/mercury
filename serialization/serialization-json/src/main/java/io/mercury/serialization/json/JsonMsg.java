@@ -1,6 +1,8 @@
 package io.mercury.serialization.json;
 
+import io.mercury.common.epoch.EpochUnit;
 import io.mercury.common.serialization.specific.JsonSerializable;
+import io.mercury.common.serialization.ContentType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -9,7 +11,7 @@ public final class JsonMsg implements JsonSerializable {
 
     private long sequence;
     private long epoch;
-    private EpochType epochType = EpochType.MILLISECOND;
+    private EpochUnit epochUnit = EpochUnit.MILLIS;
     private int envelope;
     private int version = 1;
     private ContentType contentType;
@@ -23,8 +25,8 @@ public final class JsonMsg implements JsonSerializable {
         return epoch;
     }
 
-    public EpochType getEpochType() {
-        return epochType;
+    public EpochUnit getEpochUnit() {
+        return epochUnit;
     }
 
     public int getEnvelope() {
@@ -52,8 +54,8 @@ public final class JsonMsg implements JsonSerializable {
         this.epoch = epoch;
     }
 
-    public JsonMsg setEpochType(EpochType epochType) {
-        this.epochType = epochType;
+    public JsonMsg setEpochUnit(EpochUnit epochUnit) {
+        this.epochUnit = epochUnit;
         return this;
     }
 
@@ -95,23 +97,6 @@ public final class JsonMsg implements JsonSerializable {
     @Nullable
     public static JsonMsg fromJson(String json) {
         return JsonParser.toObject(json, JsonMsg.class);
-    }
-
-    /**
-     * @author yellow013
-     */
-    public enum ContentType {
-
-        INT, LONG, DOUBLE, STRING, OBJECT,
-
-        LIST, MAP
-
-    }
-
-    public enum EpochType {
-
-        MILLISECOND, MICROSECONDS, NANOSECOND
-
     }
 
 }
