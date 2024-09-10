@@ -28,14 +28,14 @@ public class ZmqReceiver extends ZmqComponent implements Receiver, Closeable {
         nonNull(handler, "handler");
         this.handler = handler;
         var addr = configurator.getAddr().getFullUri();
-        if (socket.bind(addr)) {
+        if (socket.bind(addr))
             log.info("ZmqReceiver bound addr -> {}", addr);
-        } else {
+        else {
             log.error("ZmqReceiver unable to bind -> {}", addr);
             throw new ZmqBindException(addr);
         }
         setTcpKeepAlive(configurator.getTcpKeepAlive());
-        this.name = "ZReceiver$" + addr;
+        this.name = "ZRecv$" + addr;
         newStartTime();
     }
 

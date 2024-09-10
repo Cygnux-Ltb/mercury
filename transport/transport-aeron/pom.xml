@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.mercury</groupId>
         <artifactId>transport</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>transport-aeron</artifactId>
@@ -18,14 +18,14 @@
 
     <repositories>
         <repository>
+            <id>aeronic</id>
+            <name>aeronic</name>
+            <url>https://dl.cloudsmith.io/public/lob-software/aeronic/maven/</url>
+        </repository>
+        <repository>
             <id>maven_central</id>
             <name>Maven Central</name>
             <url>https://repo.maven.apache.org/maven2/</url>
-        </repository>
-        <repository>
-            <id>aeronic</id>
-            <name>aeronic</name>
-            <url>https://cloudsmith.io/~lob-software/repos/aeronic/packages/</url>
         </repository>
     </repositories>
 

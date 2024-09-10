@@ -1,4 +1,4 @@
-package io.mercury.common.datetime;
+package io.mercury.common.epoch;
 
 import javax.annotation.Nonnull;
 import java.time.Instant;
@@ -29,7 +29,7 @@ import static java.time.Instant.EPOCH;
  *
  * @author yellow013
  */
-public final class EpochTime {
+public final class EpochTimeUtil {
 
     /**
      * EpochTime Zero Point : UTC 1970-01-01 00:00:00.0000
@@ -59,7 +59,7 @@ public final class EpochTime {
      * @param unit EpochUnit
      * @return long
      */
-    public static long getEpochs(@Nonnull EpochUnit unit) {
+    public static long getEpochTime(@Nonnull EpochUnit unit) {
         nonNull(unit, "unit");
         return switch (unit) {
             case SECOND -> getEpochSeconds();

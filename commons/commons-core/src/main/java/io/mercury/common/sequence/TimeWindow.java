@@ -19,7 +19,7 @@ import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYY_MM_DD
  *
  * @author yellow013
  */
-public class TimeWindow implements SerialObj<TimeWindow> {
+public class TimeWindow implements SerialObject<TimeWindow> {
 
     private final long epochSecond;
 

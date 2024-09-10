@@ -15,8 +15,6 @@
  */
 package io.aeron.official.raw;
 
-import org.agrona.nio.NioSelectedKeySet;
-
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
@@ -69,20 +67,20 @@ public class Common {
         channel.connect(sendAddress);
     }
 
-    public static NioSelectedKeySet keySet(final Selector selector) {
-        NioSelectedKeySet tmpSet = null;
+//    public static NioSelectedKeySet keySet(final Selector selector) {
+//        NioSelectedKeySet tmpSet = null;
+//
+//        if (null != PUBLIC_SELECTED_KEYS_FIELD) {
+//            try {
+//                tmpSet = new NioSelectedKeySet();
+//
+//                SELECTED_KEYS_FIELD.set(selector, tmpSet);
+//                PUBLIC_SELECTED_KEYS_FIELD.set(selector, tmpSet);
+//            } catch (final Exception ignore) {
+//                tmpSet = null;
+//            }
+//        }
+//        return tmpSet;
+//    }
 
-        if (null != PUBLIC_SELECTED_KEYS_FIELD) {
-            try {
-                tmpSet = new NioSelectedKeySet();
-
-                SELECTED_KEYS_FIELD.set(selector, tmpSet);
-                PUBLIC_SELECTED_KEYS_FIELD.set(selector, tmpSet);
-            } catch (final Exception ignore) {
-                tmpSet = null;
-            }
-        }
-
-        return tmpSet;
-    }
 }

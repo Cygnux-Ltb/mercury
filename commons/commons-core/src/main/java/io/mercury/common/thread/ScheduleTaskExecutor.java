@@ -4,7 +4,6 @@ import io.mercury.common.sys.CurrentRuntime;
 import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -14,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
 import static io.mercury.common.thread.ThreadSupport.newMaxPriorityThread;
+import static java.time.Duration.between;
 import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 
 public final class ScheduleTaskExecutor {
@@ -32,7 +32,7 @@ public final class ScheduleTaskExecutor {
     public static Timer startDelayTask(@Nonnull LocalDateTime firstTime,
                                        @Nonnull Runnable runnable) {
         return startDelayTask(
-                Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+                between(LocalDateTime.now(), firstTime).toMillis(),
                 TimeUnit.MILLISECONDS, runnable);
     }
 
@@ -73,7 +73,7 @@ public final class ScheduleTaskExecutor {
                                        @Nonnull TimeUnit unit,
                                        @Nonnull Runnable runnable) {
         return startCycleTask(
-                Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+                between(LocalDateTime.now(), firstTime).toMillis(),
                 unit.toMillis(period), TimeUnit.MILLISECONDS, runnable);
     }
 
@@ -116,7 +116,7 @@ public final class ScheduleTaskExecutor {
                                                 @Nonnull TimeUnit unit,
                                                 @Nonnull Runnable runnable) {
         return startFixedRateCycleTask(
-                Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+                between(LocalDateTime.now(), firstTime).toMillis(),
                 unit.toMillis(period), TimeUnit.MILLISECONDS, runnable);
     }
 
@@ -149,8 +149,9 @@ public final class ScheduleTaskExecutor {
     /**
      * SingleThreadExecutor
      */
-    public static final ScheduledExecutorService SINGLE_THREAD_SCHEDULED_EXECUTOR =
-            newSingleThreadScheduledExecutor(runnable -> newMaxPriorityThread("SingleThreadScheduledExecutor", runnable));
+    public static final ScheduledExecutorService SINGLE_THREAD_SCHEDULED_EXECUTOR
+            = newSingleThreadScheduledExecutor(
+            runnable -> newMaxPriorityThread("SingleThreadScheduledExecutor", runnable));
 
     /**
      * Creates and executes a one-shot action that becomes enabled after the given
@@ -161,7 +162,7 @@ public final class ScheduleTaskExecutor {
      */
     public static void singleThreadSchedule(@Nonnull LocalDateTime firstTime,
                                             @Nonnull Runnable runnable) {
-        singleThreadSchedule(Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+        singleThreadSchedule(between(LocalDateTime.now(), firstTime).toMillis(),
                 TimeUnit.MILLISECONDS, runnable);
     }
 
@@ -199,7 +200,7 @@ public final class ScheduleTaskExecutor {
                                                           @Nonnull TimeUnit unit,
                                                           @Nonnull Runnable runnable) {
         singleThreadScheduleWithFixedDelay(
-                Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+                between(LocalDateTime.now(), firstTime).toMillis(),
                 unit.toMillis(period), TimeUnit.MILLISECONDS, runnable);
     }
 
@@ -246,7 +247,7 @@ public final class ScheduleTaskExecutor {
                                                        @Nonnull TimeUnit unit,
                                                        @Nonnull Runnable runnable) {
         singleThreadScheduleAtFixedRate(
-                Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+                between(LocalDateTime.now(), firstTime).toMillis(),
                 unit.toMillis(period), TimeUnit.MILLISECONDS, runnable);
     }
 
@@ -291,7 +292,7 @@ public final class ScheduleTaskExecutor {
     public static void multiThreadSchedule(@Nonnull LocalDateTime firstTime,
                                            @Nonnull Runnable runnable) {
         multiThreadSchedule(
-                Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+                between(LocalDateTime.now(), firstTime).toMillis(),
                 TimeUnit.MILLISECONDS, runnable);
     }
 
@@ -329,7 +330,7 @@ public final class ScheduleTaskExecutor {
                                                          @Nonnull TimeUnit unit,
                                                          @Nonnull Runnable runnable) {
         multiThreadScheduleWithFixedDelay(
-                Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+                between(LocalDateTime.now(), firstTime).toMillis(),
                 unit.toMillis(period), TimeUnit.MILLISECONDS, runnable);
     }
 
@@ -375,7 +376,7 @@ public final class ScheduleTaskExecutor {
                                                       long period,
                                                       @Nonnull TimeUnit unit,
                                                       @Nonnull Runnable runnable) {
-        multiThreadScheduleAtFixedRate(Duration.between(LocalDateTime.now(), firstTime).toMillis(),
+        multiThreadScheduleAtFixedRate(between(LocalDateTime.now(), firstTime).toMillis(),
                 unit.toMillis(period), TimeUnit.MILLISECONDS, runnable);
     }
 

@@ -20,7 +20,8 @@ import static io.mercury.common.util.StringSupport.isNullOrEmpty;
 @ThreadSafe
 public final class AsyncCacheMap<K, V> {
 
-    private final MutableMap<K, V> mutableMap = MutableMaps.newUnifiedMap(Capacity.L08_256.size());
+    private final MutableMap<K, V> mutableMap = MutableMaps
+            .newUnifiedMap(Capacity.L08_256.size());
 
     private final MutableLongObjectMap<Consumer<V>> consumerMap = MutableMaps
             .newLongObjectMap(Capacity.L07_128.size());
@@ -29,7 +30,7 @@ public final class AsyncCacheMap<K, V> {
 
     private final SingleConsumerQueue<ExecEvent> execQueue;
 
-    private final SingleConsumerQueue<QueryResult> queryQueue;
+    private final SingleConsumerQueue<QueryResult<V>> queryQueue;
 
     // private ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -49,18 +50,13 @@ public final class AsyncCacheMap<K, V> {
         }
     }
 
-    private final class QueryResult {
-        private final V value;
-        private final long nanoTime;
-
-        public QueryResult(V value, long nanoTime) {
-            this.value = value;
-            this.nanoTime = nanoTime;
-        }
+    private record QueryResult<V>(
+            V value,
+            long nanoTime
+    ) {
     }
 
     /**
-     *
      * @param cacheName String
      */
     public AsyncCacheMap(String cacheName) {
@@ -81,7 +77,7 @@ public final class AsyncCacheMap<K, V> {
                 mutableMap.put(event.key, event.value);
         } else {
             V v = mutableMap.get(event.key);
-            queryQueue.enqueue(new QueryResult(v, event.nanoTime));
+            queryQueue.enqueue(new QueryResult<>(v, event.nanoTime));
         }
     }
 

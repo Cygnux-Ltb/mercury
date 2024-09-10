@@ -1,7 +1,7 @@
 package io.mercury.common.sequence;
 
 @FunctionalInterface
-public interface SerialObj<S extends SerialObj<S>> extends Comparable<S> {
+public interface SerialObject<S extends SerialObject<S>> extends Comparable<S> {
 
     long serialId();
 

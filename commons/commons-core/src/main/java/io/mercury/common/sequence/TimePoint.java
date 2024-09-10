@@ -1,6 +1,6 @@
 package io.mercury.common.sequence;
 
-import io.mercury.common.datetime.EpochTime;
+import io.mercury.common.epoch.EpochTimeUtil;
 import io.mercury.common.lang.Asserter;
 
 import java.time.ZonedDateTime;
@@ -12,7 +12,7 @@ import static io.mercury.common.datetime.pattern.impl.ZonedDateTimePattern.YYYY_
  *
  * @author yellow013
  */
-public class TimePoint implements SerialObj<TimePoint> {
+public class TimePoint implements SerialObject<TimePoint> {
 
     private final ZonedDateTime datetime;
 
@@ -100,8 +100,8 @@ public class TimePoint implements SerialObj<TimePoint> {
         System.out.println(timeStarted1.getEpochSecond());
         System.out.println(timeStarted1.serialId());
 
-        System.out.println(EpochTime.getEpochMillis());
-        System.out.println(EpochTime.getEpochSeconds());
+        System.out.println(EpochTimeUtil.getEpochMillis());
+        System.out.println(EpochTimeUtil.getEpochSeconds());
 
         System.out.println(Long.MAX_VALUE);
 

@@ -24,7 +24,7 @@ public final class ZmqPublisher<T> extends ZmqComponent implements Publisher<byt
     // default topic
     private final byte[] sendMore;
 
-    private final BytesSerializer<T> ser;
+    private final BytesSerializer<T> serializer;
 
     /**
      * @param configurator ZmqConfigurator
@@ -38,11 +38,11 @@ public final class ZmqPublisher<T> extends ZmqComponent implements Publisher<byt
         nonNull(topic, "topic");
         nonNull(serializer, "serializer");
         this.sendMore = topic.getBytes(ZMQ.CHARSET);
-        this.ser = serializer;
+        this.serializer = serializer;
         var addr = configurator.getAddr().getFullUri();
-        if (socket.bind(addr)) {
+        if (socket.bind(addr))
             log.info("ZmqPublisher bound addr -> {}", addr);
-        } else {
+        else {
             log.error("ZmqPublisher unable to bind -> {}", addr);
             throw new ZmqBindException(addr);
         }
@@ -52,7 +52,7 @@ public final class ZmqPublisher<T> extends ZmqComponent implements Publisher<byt
     }
 
     public BytesSerializer<T> getSerializer() {
-        return ser;
+        return serializer;
     }
 
     @Override
@@ -73,7 +73,7 @@ public final class ZmqPublisher<T> extends ZmqComponent implements Publisher<byt
     @Override
     public void publish(@Nonnull byte[] target, @Nonnull T msg) throws PublishFailedException {
         if (isRunning.get()) {
-            byte[] bytes = ser.serialization(msg);
+            byte[] bytes = serializer.serialization(msg);
             if (bytes != null && bytes.length > 0) {
                 socket.sendMore(target);
                 socket.send(bytes, ZMQ.NOBLOCK);

@@ -17,7 +17,6 @@ package io.aeron.official.raw;
 
 import org.agrona.concurrent.SigInt;
 import org.agrona.hints.ThreadHints;
-import org.agrona.nio.NioSelectedKeySet;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -62,7 +61,7 @@ public class HackSelectReceiveSendUdpPong {
         Common.init(sendChannel);
 
         final Selector selector = Selector.open();
-        final NioSelectedKeySet keySet = Common.keySet(selector);
+        // final NioSelectedKeySet keySet = Common.keySet(selector);
 
         final ToIntFunction<SelectionKey> handler = (key) -> {
             try {
@@ -81,7 +80,6 @@ public class HackSelectReceiveSendUdpPong {
             } catch (final IOException ex) {
                 ex.printStackTrace();
             }
-
             return 1;
         };
 
@@ -98,7 +96,7 @@ public class HackSelectReceiveSendUdpPong {
                 ThreadHints.onSpinWait();
             }
 
-            keySet.forEach(handler);
+            // keySet.forEach(handler);
         }
     }
 }

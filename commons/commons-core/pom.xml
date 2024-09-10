@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.mercury</groupId>
         <artifactId>commons</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>commons-core</artifactId>
@@ -197,11 +197,11 @@
             <version>1.4.3</version>
         </dependency>
 
+        <!-- A set of annotations used for code inspection support and code documentation. -->
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>24.1.0</version>
-            <scope>provided</scope>
         </dependency>
 
         <!-- ####### Unit test mock tool ####### -->

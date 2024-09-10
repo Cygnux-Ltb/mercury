@@ -1,5 +1,22 @@
 package io.mercury.transport.zmq;
 
-public class ZmqBroker {
+import io.mercury.transport.zmq.base.ZmqType;
+import org.zeromq.SocketType;
+
+public class ZmqBroker extends ZmqComponent {
+
+    ZmqBroker(ZmqConfigurator configurator) {
+        super(configurator);
+    }
+
+    @Override
+    protected SocketType getSocketType() {
+        return SocketType.ROUTER;
+    }
+
+    @Override
+    public ZmqType getZmqType() {
+        return ZmqType.ZBroker;
+    }
 
 }

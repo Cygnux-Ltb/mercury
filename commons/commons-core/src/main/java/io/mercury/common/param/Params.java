@@ -33,11 +33,11 @@ public interface Params {
 
     Set<ParamKey> getParamKeys();
 
-    default void printParams() {
-        printParams(null);
+    default void showParams() {
+        showParams(null);
     }
 
-    default void printParams(Logger log) {
+    default void showParams(Logger log) {
         Set<ParamKey> keys = getParamKeys();
         for (ParamKey key : keys) {
             Object value = switch (key.getValueType()) {
