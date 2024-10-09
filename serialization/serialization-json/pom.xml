@@ -63,7 +63,7 @@
         <dependency>
             <groupId>com.alibaba.fastjson2</groupId>
             <artifactId>fastjson2</artifactId>
-            <version>2.0.52</version>
+            <version>2.0.53</version>
         </dependency>
 
         <!-- Gson is a Java library that can be used to convert Java Objects into their JSON representation.

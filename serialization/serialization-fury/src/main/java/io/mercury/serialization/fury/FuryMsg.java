@@ -5,25 +5,14 @@ import io.mercury.common.sequence.SerialObject;
 import io.mercury.common.serialization.ContentType;
 import io.mercury.common.serialization.specific.BytesDeserializable;
 import io.mercury.common.serialization.specific.BytesSerializable;
-import org.apache.fury.Fury;
-import org.apache.fury.ThreadLocalFury;
-import org.apache.fury.ThreadSafeFury;
-import org.apache.fury.config.Language;
 
 import javax.annotation.Nonnull;
 
-
-public final class FuryMsg implements SerialObject<FuryMsg>, BytesSerializable, BytesDeserializable<FuryMsg> {
-
-    private static final ThreadSafeFury THREAD_SAFE_FURY = new ThreadLocalFury(classLoader -> {
-        Fury fury = Fury.builder()
-                .withLanguage(Language.JAVA)
-                .withClassLoader(classLoader)
-                .build();
-        fury.register(FuryMsg.class);
-        return fury;
-    });
-
+/**
+ *
+ */
+public final class FuryMsg implements SerialObject<FuryMsg>,
+        BytesSerializable, BytesDeserializable<FuryMsg> {
 
     private long sequence;
     private long epoch;
@@ -37,37 +26,22 @@ public final class FuryMsg implements SerialObject<FuryMsg>, BytesSerializable, 
         return sequence;
     }
 
-    public long getEpoch() {
-        return epoch;
-    }
-
-    public EpochUnit getEpochUnit() {
-        return epochUnit;
-    }
-
-    public int getEnvelope() {
-        return envelope;
-    }
-
-    public int getVersion() {
-        return version;
-    }
-
-    public ContentType getContentType() {
-        return contentType;
-    }
-
-    public byte[] getContent() {
-        return content;
-    }
-
     public FuryMsg setSequence(long sequence) {
         this.sequence = sequence;
         return this;
     }
 
-    public void setEpoch(long epoch) {
+    public long getEpoch() {
+        return epoch;
+    }
+
+    public FuryMsg setEpoch(long epoch) {
         this.epoch = epoch;
+        return this;
+    }
+
+    public EpochUnit getEpochUnit() {
+        return epochUnit;
     }
 
     public FuryMsg setEpochUnit(EpochUnit epochUnit) {
@@ -75,9 +49,17 @@ public final class FuryMsg implements SerialObject<FuryMsg>, BytesSerializable, 
         return this;
     }
 
+    public int getEnvelope() {
+        return envelope;
+    }
+
     public FuryMsg setEnvelope(int envelope) {
         this.envelope = envelope;
         return this;
+    }
+
+    public int getVersion() {
+        return version;
     }
 
     public FuryMsg setVersion(int version) {
@@ -85,9 +67,17 @@ public final class FuryMsg implements SerialObject<FuryMsg>, BytesSerializable, 
         return this;
     }
 
+    public ContentType getContentType() {
+        return contentType;
+    }
+
     public FuryMsg setContentType(ContentType contentType) {
         this.contentType = contentType;
         return this;
+    }
+
+    public byte[] getContent() {
+        return content;
     }
 
     public FuryMsg setContent(byte[] content) {
@@ -103,12 +93,13 @@ public final class FuryMsg implements SerialObject<FuryMsg>, BytesSerializable, 
     @Nonnull
     @Override
     public FuryMsg fromBytes(@Nonnull byte[] bytes) {
-        return THREAD_SAFE_FURY.deserializeJavaObject(bytes, FuryMsg.class);
+        return FuryKeeper.FURY_MSG_USED.deserializeJavaObject(bytes, FuryMsg.class);
     }
 
     @Nonnull
     @Override
     public byte[] toBytes() {
-        return THREAD_SAFE_FURY.serializeJavaObject(this);
+        return FuryKeeper.FURY_MSG_USED.serializeJavaObject(this);
     }
+
 }

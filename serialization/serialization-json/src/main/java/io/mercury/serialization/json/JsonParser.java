@@ -11,7 +11,6 @@ import org.eclipse.collections.api.map.ImmutableMap;
 import org.eclipse.collections.api.map.MutableMap;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +37,7 @@ public final class JsonParser {
      * @param json String
      * @return JsonElement
      */
-    public static JSONObject parseJson(String json) throws JsonParseException {
+    public static JSONObject parseJson(@Nonnull String json) throws JsonParseException {
         try {
             return JSON.parseObject(json, Feature.UseBigDecimalForDoubles);
         } catch (Exception e) {
@@ -50,7 +49,7 @@ public final class JsonParser {
      * @param json String
      * @return boolean
      */
-    public static boolean isJsonArray(String json) throws JsonParseException {
+    public static boolean isJsonArray(@Nonnull String json) throws JsonParseException {
         try {
             return JSON.isValidArray(json);
         } catch (Exception e) {
@@ -62,7 +61,7 @@ public final class JsonParser {
      * @param json String
      * @return boolean
      */
-    public static boolean isJsonObject(String json) throws JsonParseException {
+    public static boolean isJsonObject(@Nonnull String json) throws JsonParseException {
         try {
             return JSON.isValidObject(json);
         } catch (Exception e) {
@@ -75,8 +74,7 @@ public final class JsonParser {
      * @return T
      * @throws JsonParseException e
      */
-    @Nullable
-    public static <T> T toObject(String json) throws JsonParseException {
+    public static <T> T toObject(@Nonnull String json) throws JsonParseException {
         try {
             return JSON.parseObject(json, new com.alibaba.fastjson2.TypeReference<>() {
             });
@@ -91,8 +89,7 @@ public final class JsonParser {
      * @return T
      * @throws JsonParseException e
      */
-    @Nullable
-    public static <T> T toObject(String json, Class<T> type) throws JsonParseException {
+    public static <T> T toObject(@Nonnull String json, Class<T> type) throws JsonParseException {
         try {
             return JSON.parseObject(json, type);
         } catch (Exception e) {
@@ -108,7 +105,7 @@ public final class JsonParser {
      * @throws JsonParseException e
      */
     @Nonnull
-    public static <T> List<T> toList(String json) throws JsonParseException {
+    public static <T> List<T> toList(@Nonnull String json) throws JsonParseException {
         try {
             if (isNullOrEmpty(json))
                 return new ArrayList<>();
@@ -125,7 +122,7 @@ public final class JsonParser {
      * @throws JsonParseException e
      */
     @Nonnull
-    public static <T> MutableList<T> toMutableList(String json) throws JsonParseException {
+    public static <T> MutableList<T> toMutableList(@Nonnull String json) throws JsonParseException {
         return newFastList(
                 // List convert to MutableList
                 toList(json));
@@ -137,7 +134,7 @@ public final class JsonParser {
      * @throws JsonParseException e
      */
     @Nonnull
-    public static <T> ImmutableList<T> toImmutableList(String json) throws JsonParseException {
+    public static <T> ImmutableList<T> toImmutableList(@Nonnull String json) throws JsonParseException {
         return newImmutableList(
                 // List convert to MutableList
                 toList(json));
@@ -150,9 +147,9 @@ public final class JsonParser {
      * @throws JsonParseException e
      */
     @Nonnull
-    public static <T> List<T> toList(String json, Class<T> type) throws JsonParseException {
+    public static <T> List<T> toList(@Nonnull String json, Class<T> type) throws JsonParseException {
         try {
-            if (json == null || json.isEmpty() || type == null)
+            if (json.isEmpty() || type == null)
                 return new ArrayList<>();
             return JSON.parseArray(json, type);
         } catch (Exception e) {
@@ -166,7 +163,7 @@ public final class JsonParser {
      * @throws JsonParseException e
      */
     @Nonnull
-    public static <T> MutableList<T> toMutableList(String json, Class<T> type) throws JsonParseException {
+    public static <T> MutableList<T> toMutableList(@Nonnull String json, Class<T> type) throws JsonParseException {
         return newFastList(
                 // List convert to MutableList
                 toList(json, type));
@@ -178,7 +175,7 @@ public final class JsonParser {
      * @throws JsonParseException e
      */
     @Nonnull
-    public static <T> ImmutableList<T> toImmutableList(String json, Class<T> type) throws JsonParseException {
+    public static <T> ImmutableList<T> toImmutableList(@Nonnull String json, Class<T> type) throws JsonParseException {
         return newImmutableList(
                 // List convert to MutableList
                 toList(json, type));
@@ -193,9 +190,9 @@ public final class JsonParser {
      * @throws JsonParseException e
      */
     @Nonnull
-    public static <K, V> Map<K, V> toMap(String json) throws JsonParseException {
+    public static <K, V> Map<K, V> toMap(@Nonnull String json) throws JsonParseException {
         try {
-            if (json == null || json.isEmpty())
+            if (json.isEmpty())
                 return new HashMap<>();
             return JSON.parseObject(json, new com.alibaba.fastjson2.TypeReference<>() {
             });
@@ -210,7 +207,7 @@ public final class JsonParser {
      * @throws JsonParseException e
      */
     @Nonnull
-    public static <K, V> MutableMap<K, V> toMutableMap(String json) throws JsonParseException {
+    public static <K, V> MutableMap<K, V> toMutableMap(@Nonnull String json) throws JsonParseException {
         return newUnifiedMap(
                 // Map convert to MutableMap
                 toMap(json));
@@ -222,7 +219,7 @@ public final class JsonParser {
      * @throws JsonParseException e
      */
     @Nonnull
-    public static <K, V> ImmutableMap<K, V> toImmutableMap(String json) throws JsonParseException {
+    public static <K, V> ImmutableMap<K, V> toImmutableMap(@Nonnull String json) throws JsonParseException {
         return newImmutableMap(
                 // Map convert to ImmutableMap
                 toMap(json));
@@ -236,10 +233,10 @@ public final class JsonParser {
      * @throws JsonParseException e
      */
     @Nonnull
-    public static <K, V> Map<K, V> toMap(String json, Class<K> keyType, Class<V> valueType)
+    public static <K, V> Map<K, V> toMap(@Nonnull String json, Class<K> keyType, Class<V> valueType)
             throws JsonParseException {
         try {
-            if (json == null || json.isEmpty())
+            if (json.isEmpty())
                 return new HashMap<>();
             if (keyType == null || valueType == null)
                 return toMap(json);
@@ -258,7 +255,7 @@ public final class JsonParser {
      * @throws JsonParseException e
      */
     @Nonnull
-    public static <K, V> MutableMap<K, V> toMutableMap(String json, Class<K> keyType, Class<V> valueType)
+    public static <K, V> MutableMap<K, V> toMutableMap(@Nonnull String json, Class<K> keyType, Class<V> valueType)
             throws JsonParseException {
         return newUnifiedMap(
                 // Map convert to MutableMap
@@ -273,7 +270,7 @@ public final class JsonParser {
      * @throws JsonParseException e
      */
     @Nonnull
-    public static <K, V> ImmutableMap<K, V> toImmutableMap(String json, Class<K> keyType, Class<V> valueType)
+    public static <K, V> ImmutableMap<K, V> toImmutableMap(@Nonnull String json, Class<K> keyType, Class<V> valueType)
             throws JsonParseException {
         return newImmutableMap(
                 // Map convert to ImmutableMap

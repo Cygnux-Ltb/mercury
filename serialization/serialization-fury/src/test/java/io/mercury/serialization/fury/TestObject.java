@@ -1,7 +1,5 @@
 package io.mercury.serialization.fury;
 
-import com.alibaba.fastjson2.JSON;
-
 /**
  * Test
  */
@@ -49,11 +47,6 @@ public class TestObject {
     public TestObject setRemark(String remark) {
         this.remark = remark;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return JSON.toJSONString(this);
     }
 
 }

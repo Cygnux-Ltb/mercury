@@ -15,7 +15,6 @@
 
     <modules>
         <module>library-encryption</module>
-        <module>library-jmx</module>
         <module>library-nacos</module>
     </modules>
 
