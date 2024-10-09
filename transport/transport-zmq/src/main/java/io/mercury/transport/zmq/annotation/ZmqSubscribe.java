@@ -1,7 +1,7 @@
 package io.mercury.transport.zmq.annotation;
 
 
-import io.mercury.transport.zmq.base.ZmqProtocol;
+import io.mercury.transport.zmq.ZmqProtocol;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

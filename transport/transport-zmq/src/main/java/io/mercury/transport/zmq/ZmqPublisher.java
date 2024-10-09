@@ -4,7 +4,6 @@ import io.mercury.common.serialization.specific.BytesSerializer;
 import io.mercury.common.thread.Sleep;
 import io.mercury.transport.api.Publisher;
 import io.mercury.transport.exception.PublishFailedException;
-import io.mercury.transport.zmq.base.ZmqType;
 import io.mercury.transport.zmq.exception.ZmqBindException;
 import org.slf4j.Logger;
 import org.zeromq.SocketType;
@@ -39,7 +38,7 @@ public final class ZmqPublisher<T> extends ZmqComponent implements Publisher<byt
         nonNull(serializer, "serializer");
         this.sendMore = topic.getBytes(ZMQ.CHARSET);
         this.serializer = serializer;
-        var addr = configurator.getAddr().getFullUri();
+        var addr = configurator.getAddr().fullUri();
         if (socket.bind(addr))
             log.info("ZmqPublisher bound addr -> {}", addr);
         else {
@@ -83,7 +82,8 @@ public final class ZmqPublisher<T> extends ZmqComponent implements Publisher<byt
     }
 
     public static void main(String[] args) throws Exception {
-        try (ZmqPublisher<String> publisher = ZmqComponent.tcp("127.0.0.1", 13001).ioThreads(2)
+        try (ZmqPublisher<String> publisher = ZmqConfigurator.tcp("127.0.0.1", 13001)
+                .ioThreads(2)
                 .createPublisherWithString("test")) {
             Random random = new Random();
             while (true) {

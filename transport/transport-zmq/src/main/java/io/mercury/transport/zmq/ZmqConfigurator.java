@@ -1,17 +1,20 @@
 package io.mercury.transport.zmq;
 
+import com.typesafe.config.Config;
 import io.mercury.common.annotation.OnlyOverrideEquals;
+import io.mercury.common.config.ConfigWrapper;
+import io.mercury.common.lang.Asserter;
+import io.mercury.common.net.IpAddressIllegalException;
 import io.mercury.common.net.IpAddressValidator;
 import io.mercury.common.serialization.specific.BytesSerializer;
 import io.mercury.common.serialization.specific.JsonDeserializable;
 import io.mercury.common.serialization.specific.JsonSerializable;
+import io.mercury.common.util.StringSupport;
 import io.mercury.serialization.json.JsonParser;
 import io.mercury.serialization.json.JsonWriter;
 import io.mercury.transport.TransportConfigurator;
 import io.mercury.transport.attr.TcpKeepAlive;
 import io.mercury.transport.attr.Topics;
-import io.mercury.transport.zmq.base.ZmqAddr;
-import io.mercury.transport.zmq.base.ZmqProtocol;
 import org.slf4j.Logger;
 import org.zeromq.ZMQ;
 
@@ -26,12 +29,116 @@ import static io.mercury.common.lang.Asserter.greaterThan;
 import static io.mercury.common.lang.Asserter.nonNull;
 import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
 import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
+import static io.mercury.transport.zmq.ZmqConfigOption.Addr;
+import static io.mercury.transport.zmq.ZmqConfigOption.IoThreads;
+import static io.mercury.transport.zmq.ZmqConfigOption.Port;
+import static io.mercury.transport.zmq.ZmqConfigOption.Protocol;
 
 @OnlyOverrideEquals
-public final class ZmqConfigurator implements
-        TransportConfigurator, JsonSerializable, JsonDeserializable<ZmqConfigurator> {
+public final class ZmqConfigurator implements TransportConfigurator,
+        JsonSerializable, JsonDeserializable<ZmqConfigurator> {
 
     private static final Logger log = getLogger(ZmqConfigurator.class);
+
+    /**
+     * @param config Config
+     * @return ZmqConfigurator
+     */
+    public static ZmqConfigurator config(@Nonnull Config config) {
+        return config("", config);
+    }
+
+    /**
+     * @param config String
+     * @param module Config
+     * @return ZmqConfigurator
+     */
+    public static ZmqConfigurator config(String module, @Nonnull Config config) {
+        nonNull(config, "config");
+        var wrapper = new ConfigWrapper<ZmqConfigOption>(module, config);
+        var protocol = ZmqProtocol.of(wrapper.getStringOrThrows(Protocol));
+        ZmqConfigurator conf;
+        switch (protocol) {
+            // 使用tcp协议
+            case tcp -> {
+                int port = wrapper.getIntOrThrows(Port);
+                if (wrapper.hasOption(Addr)) {
+                    var tcpAddr = wrapper.getStringOrThrows(Addr);
+                    Asserter.isValid(tcpAddr, IpAddressValidator::isIpAddress,
+                            new IpAddressIllegalException(tcpAddr));
+                    conf = new ZmqConfigurator(ZmqAddr.tcp(tcpAddr, port));
+                } else {
+                    // 没有addr配置项, 使用本地地址
+                    conf = new ZmqConfigurator(ZmqAddr.tcp(port));
+                }
+            }
+            // 使用ipc或inproc协议
+            case ipc, inproc -> {
+                var localAddr = wrapper.getStringOrThrows(Addr);
+                var addr = switch (protocol) {
+                    case ipc -> ZmqAddr.ipc(localAddr);
+                    case inproc -> ZmqAddr.inproc(localAddr);
+                    default -> null;
+                };
+                conf = new ZmqConfigurator(addr);
+            }
+            default -> throw new UnsupportedOperationException(StringSupport.toString(protocol));
+        }
+        conf.ioThreads(wrapper.getInt(IoThreads, 1));
+        log.info("created ZmqConfigurator object -> {}", conf);
+        return conf;
+    }
+
+    /**
+     * 创建[Configurator]
+     *
+     * @param addr ZmqAddr
+     * @return ZmqConfigurator
+     */
+    public static ZmqConfigurator addr(@Nonnull ZmqAddr addr) {
+        return new ZmqConfigurator(addr);
+    }
+
+    /**
+     * 创建TCP协议连接
+     *
+     * @param port int
+     * @return ZmqConfigurator
+     */
+    public static ZmqConfigurator tcp(int port) {
+        return tcp("*", port);
+    }
+
+    /**
+     * 创建TCP协议连接
+     *
+     * @param addr String
+     * @param port int
+     * @return ZmqConfigurator
+     */
+    public static ZmqConfigurator tcp(@Nonnull String addr, int port) {
+        return new ZmqConfigurator(ZmqAddr.tcp(addr, port));
+    }
+
+    /**
+     * 使用[IPC]协议连接, 用于进程间通信
+     *
+     * @param addr ZmqConfigurator
+     * @return String
+     */
+    public static ZmqConfigurator ipc(@Nonnull String addr) {
+        return new ZmqConfigurator(ZmqAddr.ipc(addr));
+    }
+
+    /**
+     * 使用[INPROC]协议连接, 用于线程间通信
+     *
+     * @param addr String
+     * @return ZmqConfigurator
+     */
+    public static ZmqConfigurator inproc(@Nonnull String addr) {
+        return new ZmqConfigurator(ZmqAddr.inproc(addr));
+    }
 
     private final ZmqAddr addr;
 
@@ -44,10 +151,9 @@ public final class ZmqConfigurator implements
     /**
      * @param addr ZmqAddr
      */
-    ZmqConfigurator(ZmqAddr addr) {
+    private ZmqConfigurator(ZmqAddr addr) {
         this.addr = addr;
     }
-
 
     public ZmqAddr getAddr() {
         return addr;
@@ -109,13 +215,13 @@ public final class ZmqConfigurator implements
     }
 
     /**
-     * @param <T> T type
-     * @param ser BytesSerializer<T>
+     * @param <T>        T type
+     * @param serializer BytesSerializer<T>
      * @return ZmqSender<T>
      */
-    public <T> ZmqSender<T> createSender(@Nonnull BytesSerializer<T> ser) {
-        nonNull(ser, "ser");
-        return new ZmqSender<>(this, ser);
+    public <T> ZmqSender<T> createSender(@Nonnull BytesSerializer<T> serializer) {
+        nonNull(serializer, "ser");
+        return new ZmqSender<>(this, serializer);
     }
 
     /**
@@ -197,25 +303,25 @@ public final class ZmqConfigurator implements
     }
 
     /**
-     * @param <T> T type
-     * @param ser BytesSerializer<T>
+     * @param <T>        T type
+     * @param serializer BytesSerializer<T>
      * @return ZmqPublisher
      */
-    public <T> ZmqPublisher<T> createPublisher(@Nonnull BytesSerializer<T> ser) {
-        return createPublisher("", ser);
+    public <T> ZmqPublisher<T> createPublisher(@Nonnull BytesSerializer<T> serializer) {
+        return createPublisher("", serializer);
     }
 
     /**
-     * @param <T>   T type
-     * @param topic String
-     * @param ser   BytesSerializer<T>
+     * @param <T>        T type
+     * @param topic      String
+     * @param serializer BytesSerializer<T>
      * @return ZmqPublisher
      */
     public <T> ZmqPublisher<T> createPublisher(@Nonnull String topic,
-                                               @Nonnull BytesSerializer<T> ser) {
+                                               @Nonnull BytesSerializer<T> serializer) {
         nonNull(topic, "topic");
-        nonNull(ser, "ser");
-        return new ZmqPublisher<>(this, topic, ser);
+        nonNull(serializer, "serializer");
+        return new ZmqPublisher<>(this, topic, serializer);
     }
 
     private transient String toStringCache;
@@ -269,7 +375,7 @@ public final class ZmqConfigurator implements
     }
 
     public static void main(String[] args) {
-        ZmqConfigurator configurator = ZmqComponent.tcp("192.168.1.1", 5551)
+        ZmqConfigurator configurator = ZmqConfigurator.tcp("192.168.1.1", 5551)
                 .ioThreads(3).tcpKeepAlive(TcpKeepAlive.sysDefault());
         System.out.println(configurator);
         System.out.println(ZmqConfigurator.getZmqVersion());

@@ -1,4 +1,4 @@
-package io.mercury.transport.zmq.base;
+package io.mercury.transport.zmq;
 
 import io.mercury.common.net.IpAddressValidator;
 
@@ -16,7 +16,7 @@ public final class ZmqAddr {
     private final String addr;
     private final String fullUri;
 
-    public ZmqAddr(ZmqProtocol protocol, String addr, String fullUri) {
+    ZmqAddr(ZmqProtocol protocol, String addr, String fullUri) {
         this.protocol = protocol;
         this.addr = addr;
         this.fullUri = fullUri;
@@ -44,7 +44,7 @@ public final class ZmqAddr {
      * @param port int
      * @return ZmqAddr
      */
-    public static ZmqAddr tcp(int port) {
+    static ZmqAddr tcp(int port) {
         return tcp("*", port);
     }
 
@@ -55,7 +55,7 @@ public final class ZmqAddr {
      * @param port int
      * @return ZmqAddr
      */
-    public static ZmqAddr tcp(@Nonnull String addr, int port) {
+    static ZmqAddr tcp(@Nonnull String addr, int port) {
         nonEmpty(addr, "addr");
         atWithinRange(port, 4096, 65536, "port");
         if (!addr.equals("*"))
@@ -69,7 +69,7 @@ public final class ZmqAddr {
      * @param addr String
      * @return ZmqAddr
      */
-    public static ZmqAddr ipc(@Nonnull String addr) {
+     static ZmqAddr ipc(@Nonnull String addr) {
         nonEmpty(addr, "addr");
         return new ZmqAddr(ZmqProtocol.ipc, addr);
     }

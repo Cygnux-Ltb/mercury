@@ -1,4 +1,4 @@
-package io.mercury.transport.zmq.base;
+package io.mercury.transport.zmq;
 
 /**
  * 当前支持的协议类型

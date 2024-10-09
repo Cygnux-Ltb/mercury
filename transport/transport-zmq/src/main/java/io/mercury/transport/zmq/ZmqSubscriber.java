@@ -2,7 +2,6 @@ package io.mercury.transport.zmq;
 
 import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.attr.Topics;
-import io.mercury.transport.zmq.base.ZmqType;
 import io.mercury.transport.zmq.exception.ZmqConnectionException;
 import org.slf4j.Logger;
 import org.zeromq.SocketType;
@@ -29,7 +28,8 @@ public final class ZmqSubscriber extends ZmqComponent implements Subscriber {
     // 订阅消息消费者
     private final BiConsumer<byte[], byte[]> consumer;
 
-    ZmqSubscriber(@Nonnull ZmqConfigurator configurator, @Nonnull Topics topics,
+    ZmqSubscriber(@Nonnull ZmqConfigurator configurator,
+                  @Nonnull Topics topics,
                   @Nonnull BiConsumer<byte[], byte[]> consumer)
             throws ZmqConnectionException {
         super(configurator);
@@ -37,7 +37,7 @@ public final class ZmqSubscriber extends ZmqComponent implements Subscriber {
         nonNull(consumer, "consumer");
         this.topics = topics;
         this.consumer = consumer;
-        var addr = configurator.getAddr().getFullUri();
+        var addr = configurator.getAddr().fullUri();
         if (socket.connect(addr)) {
             log.info("ZmqSubscriber connected addr -> {}", addr);
         } else {
@@ -92,7 +92,7 @@ public final class ZmqSubscriber extends ZmqComponent implements Subscriber {
     }
 
     public static void main(String[] args) {
-        try (ZmqSubscriber subscriber = ZmqComponent.tcp("127.0.0.1", 13001).ioThreads(2).createSubscriber(
+        try (ZmqSubscriber subscriber = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(2).createSubscriber(
                 Topics.with("test"),
                 (topic, msg) -> System.out.println(Arrays.toString(topic) + " -> " + Arrays.toString(msg)))) {
             subscriber.subscribe();

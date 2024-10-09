@@ -1,6 +1,5 @@
 package io.mercury.transport.zmq;
 
-import io.mercury.transport.zmq.base.ZmqType;
 import org.zeromq.SocketType;
 
 public class ZmqBroker extends ZmqComponent {
