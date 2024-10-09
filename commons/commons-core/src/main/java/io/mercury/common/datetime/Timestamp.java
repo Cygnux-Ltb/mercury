@@ -2,6 +2,7 @@ package io.mercury.common.datetime;
 
 import io.mercury.common.epoch.EpochTimeUtil;
 import io.mercury.common.epoch.EpochUnit;
+import io.mercury.common.epoch.HighResolutionEpoch;
 import io.mercury.common.serialization.specific.JsonSerializable;
 
 import javax.annotation.Nonnull;
@@ -12,13 +13,13 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import static io.mercury.common.datetime.TimeConst.MICROS_PER_SECONDS;
+import static io.mercury.common.datetime.TimeConst.NANOS_PER_SECOND;
+import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
 import static io.mercury.common.epoch.EpochUnit.MICROS;
 import static io.mercury.common.epoch.EpochUnit.MILLIS;
 import static io.mercury.common.epoch.EpochUnit.NANOS;
 import static io.mercury.common.epoch.EpochUnit.SECOND;
-import static io.mercury.common.datetime.TimeConst.MICROS_PER_SECONDS;
-import static io.mercury.common.datetime.TimeConst.NANOS_PER_SECOND;
-import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
 import static java.lang.Math.floorDiv;
 import static java.lang.Math.floorMod;
 import static java.lang.System.currentTimeMillis;
@@ -64,11 +65,11 @@ public final class Timestamp implements Comparable<Timestamp>, JsonSerializable 
     }
 
     public static Timestamp nowWithMicros() {
-        return new Timestamp(EpochTimeUtil.getEpochMicros(), MICROS);
+        return new Timestamp(HighResolutionEpoch.micros(), MICROS);
     }
 
     public static Timestamp nowWithNanos() {
-        return new Timestamp(EpochTimeUtil.getEpochNanos(), NANOS);
+        return new Timestamp(HighResolutionEpoch.nanos(), NANOS);
     }
 
     public static Timestamp withEpochSecond(long epochSecond) {

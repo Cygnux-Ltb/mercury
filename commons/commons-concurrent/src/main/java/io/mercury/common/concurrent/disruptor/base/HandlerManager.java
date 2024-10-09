@@ -5,7 +5,6 @@ import com.lmax.disruptor.ExceptionHandler;
 import com.lmax.disruptor.WorkHandler;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.EventHandlerGroup;
-import io.mercury.common.collections.MutableMaps;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
@@ -17,6 +16,7 @@ import java.util.List;
 
 import static io.mercury.common.collections.CollectionUtil.toArray;
 import static io.mercury.common.collections.MutableLists.newFastList;
+import static io.mercury.common.collections.MutableMaps.newIntObjectMap;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNullElse;
 
@@ -59,7 +59,7 @@ public final class HandlerManager<E> {
 
         @Override
         public void handleEventException(Throwable ex, long sequence, E event) {
-            log.error("handleEventException -> event == {}, sequence == {}, exception message == {}",
+            log.error("handleEventException -> event==[{}], sequence==[{}], exception message==[{}]",
                     event, sequence, ex.getMessage(), ex);
         }
 
@@ -144,9 +144,11 @@ public final class HandlerManager<E> {
             int firstKey = keys.getFirst();
             EventHandlerGroup<E> handlerGroup;
             if (sortedEventHandlers.containsKey(firstKey))
-                handlerGroup = disruptor.handleEventsWith(toArray(sortedEventHandlers.get(firstKey), EventHandler[]::new));
+                handlerGroup = disruptor
+                        .handleEventsWith(toArray(sortedEventHandlers.get(firstKey), EventHandler[]::new));
             else
-                handlerGroup = disruptor.handleEventsWithWorkerPool(toArray(sortedWorkHandlers.get(firstKey), WorkHandler[]::new));
+                handlerGroup = disruptor
+                        .handleEventsWithWorkerPool(toArray(sortedWorkHandlers.get(firstKey), WorkHandler[]::new));
             for (int i = 1; i < keys.size(); i++) {
                 int key = keys.get(i);
                 if (sortedEventHandlers.containsKey(key))
@@ -154,8 +156,9 @@ public final class HandlerManager<E> {
                 else
                     handlerGroup.thenHandleEventsWithWorkerPool(toArray(sortedWorkHandlers.get(key), WorkHandler[]::new));
             }
-        } else
+        } else {
             throw new IllegalStateException("SortedEventHandlerList OR SortedWorkHandlerList is null");
+        }
     }
 
 
@@ -210,12 +213,14 @@ public final class HandlerManager<E> {
 
     @SafeVarargs
     public static <E> ComplexHandlerWizard<E> complexWithFirst(EventHandler<E>... handlers) {
-        return new ComplexHandlerWizard<E>().first(handlers);
+        return new ComplexHandlerWizard<E>()
+                .first(handlers);
     }
 
     @SafeVarargs
     public static <E> ComplexHandlerWizard<E> complexWithFirst(WorkHandler<E>... handlers) {
-        return new ComplexHandlerWizard<E>().first(handlers);
+        return new ComplexHandlerWizard<E>()
+                .first(handlers);
     }
 
     private abstract static class Wizard<E, W extends Wizard<E, W>> {
@@ -260,9 +265,8 @@ public final class HandlerManager<E> {
 
         @Override
         public HandlerManager<E> build() {
-            return new HandlerManager<>(type, exceptionHandler,
-                    eventHandlers, null,
-                    null, null);
+            return new HandlerManager<>(type, exceptionHandler, eventHandlers,
+                    null, null, null);
         }
 
     }
@@ -297,9 +301,9 @@ public final class HandlerManager<E> {
 
     public static class ComplexHandlerWizard<E> extends Wizard<E, ComplexHandlerWizard<E>> {
 
-        private final MutableIntObjectMap<List<EventHandler<E>>> sortedEventHandlers = MutableMaps.newIntObjectMap();
+        private final MutableIntObjectMap<List<EventHandler<E>>> sortedEventHandlers = newIntObjectMap();
 
-        private final MutableIntObjectMap<List<WorkHandler<E>>> sortedWorkHandlers = MutableMaps.newIntObjectMap();
+        private final MutableIntObjectMap<List<WorkHandler<E>>> sortedWorkHandlers = newIntObjectMap();
 
         private int index = 0;
 

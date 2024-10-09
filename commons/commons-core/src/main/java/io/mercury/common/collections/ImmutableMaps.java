@@ -2,13 +2,12 @@ package io.mercury.common.collections;
 
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.util.ArrayUtil;
-import org.eclipse.collections.api.RichIterable;
 import org.eclipse.collections.api.map.ImmutableMap;
 import org.eclipse.collections.api.map.primitive.ImmutableIntObjectMap;
-import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
 import org.eclipse.collections.api.map.sorted.ImmutableSortedMap;
 import org.eclipse.collections.api.tuple.Pair;
 import org.eclipse.collections.impl.map.immutable.ImmutableMapFactoryImpl;
+import org.eclipse.collections.impl.map.immutable.primitive.ImmutableIntObjectMapFactoryImpl;
 import org.eclipse.collections.impl.map.sorted.immutable.ImmutableSortedMapFactoryImpl;
 import org.eclipse.collections.impl.map.sorted.mutable.TreeSortedMap;
 
@@ -31,14 +30,11 @@ public final class ImmutableMaps {
      * @param iterable RichIterable<V>
      * @return ImmutableIntObjectMap<V>
      */
-    public static <V> ImmutableIntObjectMap<V> newImmutableIntMap(ToIntFunction<V> keyFunc,
-                                                                  RichIterable<V> iterable) {
-        Asserter.nonNull(keyFunc, "keyFunc");
+    public static <V> ImmutableIntObjectMap<V> newImmutableIntMap(Iterable<V> iterable,
+                                                                  ToIntFunction<V> keyFunc) {
         Asserter.nonNull(iterable, "iterable");
-        MutableIntObjectMap<V> intObjectMap = MutableMaps.newIntObjectMap(iterable.size());
-        for (V value : iterable)
-            intObjectMap.put(keyFunc.applyAsInt(value), value);
-        return intObjectMap.toImmutable();
+        Asserter.nonNull(keyFunc, "keyFunc");
+        return ImmutableIntObjectMapFactoryImpl.INSTANCE.from(iterable, keyFunc::applyAsInt, v -> v);
     }
 
     /**

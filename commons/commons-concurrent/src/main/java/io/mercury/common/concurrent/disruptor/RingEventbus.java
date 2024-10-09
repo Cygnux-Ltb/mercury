@@ -40,7 +40,7 @@ import static java.util.Objects.requireNonNullElse;
  * @param <E>
  * @author yellow013
  * <p>
- * 扩展多写和单写
+ * 扩展多写和单写 [DONE]
  */
 public abstract sealed class RingEventbus<E> extends RunnableComponent
         permits RingEventbus.MultiProducerRingEventbus, RingEventbus.SingleProducerRingEventbus {
@@ -55,10 +55,8 @@ public abstract sealed class RingEventbus<E> extends RunnableComponent
 
     protected final boolean isMultiProducer;
 
-    protected RingEventbus(@Nullable String name,
-                           int size,
-                           @Nonnull StartMode mode,
-                           @Nonnull ProducerType type,
+    protected RingEventbus(@Nullable String name, int size,
+                           @Nonnull StartMode mode, @Nonnull ProducerType type,
                            @Nonnull EventFactory<E> factory,
                            @Nonnull WaitStrategy strategy,
                            @Nonnull HandlerManager<E> manager) {

@@ -7,11 +7,11 @@ package io.mercury.transport.zmq.base;
  */
 public enum ZmqProtocol {
 
-    TCP("tcp://"),
+    tcp("tcp://"),
 
-    IPC("ipc://"),
+    ipc("ipc://"),
 
-    INPROC("inproc://");
+    inproc("inproc://");
 
     private final String prefix;
 

@@ -78,36 +78,6 @@ public final class StringSupport {
     }
 
     /**
-     * call toString() method
-     *
-     * @param obj Object
-     * @return String
-     */
-    @Nonnull
-    public static String toString(@Nullable Object obj) {
-        if (obj == null)
-            return CONST_NULL;
-        return obj.toString();
-    }
-
-    /**
-     * @param objs Object[]
-     * @return String
-     */
-    @Nonnull
-    public static String toString(@Nullable Object... objs) {
-        if (objs == null)
-            return CONST_EMPTY;
-        StringBuilder builder = new StringBuilder(objs.length * 16).append('[');
-        for (int i = 0, j = objs.length - 1; i < objs.length; i++) {
-            builder.append(toString(objs[i]));
-            if (i < j)
-                builder.append(',');
-        }
-        return builder.append(']').toString();
-    }
-
-    /**
      * @param bs byte[]
      * @return String
      */
@@ -136,12 +106,55 @@ public final class StringSupport {
     }
 
     /**
+     * @param strings String[]
+     * @return String
+     */
+    public static String toString(@Nullable String[] strings) {
+        return strings == null ? CONST_NULL : toString(String::toString, strings);
+    }
+
+    /**
+     * call toString() method
+     *
      * @param obj Object
      * @return String
      */
     @Nonnull
-    public static String toText(Object obj) {
-        return toString(obj);
+    public static <T> String toString(@Nullable T obj) {
+        if (obj == null)
+            return CONST_NULL;
+        return obj.toString();
+    }
+
+    /**
+     * @param objs T[]
+     * @param <T>  T
+     * @return String
+     */
+    @Nonnull
+    @SafeVarargs
+    public static <T> String toString(@Nullable T... objs) {
+        return toString(StringSupport::toString, objs);
+    }
+
+    /**
+     * @param toStringFunc Function<T, String>
+     * @param objs         T[]
+     * @param <T>          T
+     * @return String
+     */
+    @Nonnull
+    @SafeVarargs
+    public static <T> String toString(Function<T, String> toStringFunc, T... objs) {
+        if (objs == null)
+            return CONST_EMPTY;
+        var builder = new StringBuilder(objs.length * 8).append('[');
+        for (int i = 0, j = objs.length - 1; i < objs.length; i++) {
+            builder.append(toStringFunc.apply(objs[i]));
+            if (i < j)
+                builder.append(", ");
+        }
+        return builder.append(']').toString();
     }
 
     /**
@@ -200,7 +213,6 @@ public final class StringSupport {
         return value != null && !value.isEmpty();
     }
 
-
     /**
      * @param value    String
      * @param defValue String
@@ -227,7 +239,6 @@ public final class StringSupport {
     public static <T> String requireNonEmptyElseGet(String value, Function<T, String> func, T t) {
         return nonEmpty(value) ? value : func.apply(t);
     }
-
 
     /**
      * @param str1 String

@@ -39,24 +39,17 @@
         </dependency>
 
         <!-- A time ticker as a lightweight clock -->
-        <dependency>
-            <groupId>net.openhft</groupId>
-            <artifactId>chronicle-ticker</artifactId>
-            <version>2.23.3</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>net.openhft</groupId>-->
+<!--            <artifactId>chronicle-ticker</artifactId>-->
+<!--            <version>2.23.3</version>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.slf4j</groupId>-->
+<!--                    <artifactId>slf4j-api</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
     </dependencies>
-    <repositories>
-        <repository>
-            <id>maven_central</id>
-            <name>Maven Central</name>
-            <url>https://repo.maven.apache.org/maven2/</url>
-        </repository>
-    </repositories>
 
 </project>

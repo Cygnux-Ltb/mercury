@@ -6,11 +6,10 @@ import static io.mercury.common.epoch.EpochUnit.MILLIS;
 import static io.mercury.common.epoch.EpochUnit.NANOS;
 import static io.mercury.common.epoch.EpochUnit.SECOND;
 
-public record EpochRecord
-        (
-                long epochTime,
-                EpochUnit epochUnit
-        ) {
+public record EpochRecord(
+        long epochTime,
+        EpochUnit epochUnit
+) {
 
     public static EpochRecord nowEpochRecord(long epochTime, EpochUnit epochUnit) {
         return new EpochRecord(epochTime, epochUnit);

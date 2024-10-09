@@ -2,7 +2,6 @@ package io.mercury.common.concurrent.util;
 
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.thread.RunnableComponent;
-import net.openhft.chronicle.ticker.NanoTicker;
 import org.slf4j.Logger;
 
 import java.util.concurrent.SynchronousQueue;
@@ -55,9 +54,4 @@ public final class AsyncSwap<E> extends RunnableComponent implements Runnable {
 
     }
 
-
-    public static void main(String[] args) {
-        System.out.println(System.currentTimeMillis());
-        System.out.println(NanoTicker.INSTANCE.countFromEpoch());
-    }
 }

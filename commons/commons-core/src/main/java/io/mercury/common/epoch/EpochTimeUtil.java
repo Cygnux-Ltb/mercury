@@ -8,12 +8,10 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
-import static io.mercury.common.datetime.TimeConst.MICROS_PER_MILLIS;
 import static io.mercury.common.datetime.TimeConst.MILLIS_PER_DAY;
 import static io.mercury.common.datetime.TimeConst.MILLIS_PER_HOUR;
 import static io.mercury.common.datetime.TimeConst.MILLIS_PER_MINUTE;
 import static io.mercury.common.datetime.TimeConst.MILLIS_PER_SECONDS;
-import static io.mercury.common.datetime.TimeConst.NANOS_PER_MICROS;
 import static io.mercury.common.datetime.TimeConst.NANOS_PER_MILLIS;
 import static io.mercury.common.datetime.TimeConst.SECONDS_PER_HOUR;
 import static io.mercury.common.datetime.TimeConst.SECONDS_PER_MINUTE;
@@ -21,7 +19,6 @@ import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
 import static io.mercury.common.datetime.TimeZone.UTC;
 import static io.mercury.common.lang.Asserter.nonNull;
 import static java.lang.System.currentTimeMillis;
-import static java.lang.System.nanoTime;
 import static java.time.Instant.EPOCH;
 
 /**
@@ -36,25 +33,6 @@ public final class EpochTimeUtil {
      */
     public static final ZonedDateTime EPOCH_ZERO = ZonedDateTime.ofInstant(EPOCH, UTC);
 
-    private static final long NANOS_EPOCH_OFFSET;
-
-    private static final long MICROS_EPOCH_OFFSET;
-
-    static {
-        // 当前Epoch毫秒数
-        long millisEpoch = currentTimeMillis();
-        // 当前系统纳秒数
-        long baseline = nanoTime();
-        // 当前Epoch纳秒数
-        long nanosEpoch = millisEpoch * NANOS_PER_MILLIS;
-        // 计算系统纳秒函数与Epoch函数的纳秒偏移量
-        NANOS_EPOCH_OFFSET = nanosEpoch - baseline;
-        // 当前Epoch微秒数
-        long microsEpoch = millisEpoch * MICROS_PER_MILLIS;
-        // 计算系统纳秒函数与Epoch函数的微秒偏移量
-        MICROS_EPOCH_OFFSET = microsEpoch - (baseline / NANOS_PER_MICROS);
-    }
-
     /**
      * @param unit EpochUnit
      * @return long
@@ -64,28 +42,11 @@ public final class EpochTimeUtil {
         return switch (unit) {
             case SECOND -> getEpochSeconds();
             case MILLIS -> getEpochMillis();
-            case MICROS -> getEpochMicros();
-            case NANOS -> getEpochNanos();
+            case MICROS -> HighResolutionEpoch.micros();
+            case NANOS -> HighResolutionEpoch.nanos();
         };
     }
 
-    /**
-     * 获取 Epoch<b> 纳秒 </b>数
-     *
-     * @return long
-     */
-    public static long getEpochNanos() {
-        return nanoTime() + NANOS_EPOCH_OFFSET;
-    }
-
-    /**
-     * 获取 Epoch<b> 微秒 </b>数
-     *
-     * @return long
-     */
-    public static long getEpochMicros() {
-        return nanoTime() / NANOS_PER_MICROS + MICROS_EPOCH_OFFSET;
-    }
 
     /**
      * 获取 Epoch<b> 毫秒 </b>数
@@ -296,8 +257,8 @@ public final class EpochTimeUtil {
         long[] nss = new long[50];
         long ms = System.currentTimeMillis();
         for (int i = 0; i < nss.length; i++) {
-            mss[i] = getEpochMicros();
-            nss[i] = getEpochNanos();
+            mss[i] = HighResolutionEpoch.micros();
+            nss[i] = HighResolutionEpoch.nanos();
         }
         System.out.println(ms);
         for (int i = 0; i < nss.length; i++) {

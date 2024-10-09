@@ -22,19 +22,19 @@ public final class ZmqAddr {
         this.fullUri = fullUri;
     }
 
-    public ZmqAddr(ZmqProtocol protocol, String addr) {
+    ZmqAddr(ZmqProtocol protocol, String addr) {
         this(protocol, addr, protocol.prefix() + addr);
     }
 
-    public ZmqProtocol getProtocol() {
+    public ZmqProtocol protocol() {
         return protocol;
     }
 
-    public String getAddr() {
+    public String addr() {
         return addr;
     }
 
-    public String getFullUri() {
+    public String fullUri() {
         return fullUri;
     }
 
@@ -60,7 +60,7 @@ public final class ZmqAddr {
         atWithinRange(port, 4096, 65536, "port");
         if (!addr.equals("*"))
             IpAddressValidator.assertIpAddress(addr);
-        return new ZmqAddr(ZmqProtocol.TCP, addr + ":" + port);
+        return new ZmqAddr(ZmqProtocol.tcp, addr + ":" + port);
     }
 
     /**
@@ -71,7 +71,7 @@ public final class ZmqAddr {
      */
     public static ZmqAddr ipc(@Nonnull String addr) {
         nonEmpty(addr, "addr");
-        return new ZmqAddr(ZmqProtocol.IPC, addr);
+        return new ZmqAddr(ZmqProtocol.ipc, addr);
     }
 
     /**
@@ -82,7 +82,7 @@ public final class ZmqAddr {
      */
     public static ZmqAddr inproc(@Nonnull String addr) {
         nonEmpty(addr, "addr");
-        return new ZmqAddr(ZmqProtocol.INPROC, addr);
+        return new ZmqAddr(ZmqProtocol.inproc, addr);
     }
 
     @Override
