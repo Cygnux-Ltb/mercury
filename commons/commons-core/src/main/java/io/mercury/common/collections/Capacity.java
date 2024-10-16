@@ -10,13 +10,6 @@ public enum Capacity {
 
     /**
      * <pre>
-     * Size : 1 << 2 == 4
-     * </pre>
-     */
-    L02_4(1 << 2),
-
-    /**
-     * <pre>
      * Size : 1 << 3 == 8
      * </pre>
      */

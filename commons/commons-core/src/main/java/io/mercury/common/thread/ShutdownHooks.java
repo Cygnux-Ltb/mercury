@@ -8,13 +8,14 @@ import java.io.IOException;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import static io.mercury.common.number.ThreadSafeRandoms.randomUnsignedInt;
+import static java.lang.Runtime.getRuntime;
 
 public final class ShutdownHooks {
 
     private static final ShutdownHooks INSTANCE = new ShutdownHooks();
 
     private ShutdownHooks() {
-        Runtime.getRuntime().addShutdownHook(
+        getRuntime().addShutdownHook(
                 new Thread(this::executeShutdownHook, "ShutdownHooksQueueHandleThread"));
     }
 
@@ -55,7 +56,7 @@ public final class ShutdownHooks {
      */
     public static Thread addShutdownHook(String threadName, Runnable hook) {
         Thread thread = ThreadSupport.newThread(threadName, hook);
-        Runtime.getRuntime().addShutdownHook(thread);
+        getRuntime().addShutdownHook(thread);
         return thread;
     }
 

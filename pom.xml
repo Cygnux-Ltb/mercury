@@ -5,7 +5,7 @@
 
     <groupId>io.mercury</groupId>
     <artifactId>mercury</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.1</version>
 
     <inceptionYear>2015</inceptionYear>
     <url>https://github.com/yellow013/mercury.git</url>
@@ -35,11 +35,11 @@
         <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.source>21</maven.compiler.source>
         <!-- Common library version -->
-        <slf4j.version>1.7.36</slf4j.version>
+        <slf4j.version>2.0.16</slf4j.version>
         <junit.version>4.13.2</junit.version>
-        <jupiter.version>5.10.3</jupiter.version>
-        <netty.version>4.1.111.Final</netty.version>
-        <jackson.version>2.17.2</jackson.version>
+        <jupiter.version>5.11.2</jupiter.version>
+        <netty.version>4.1.114.Final</netty.version>
+        <jackson.version>2.18.0</jackson.version>
     </properties>
 
     <build>
@@ -68,15 +68,28 @@
     </build>
 
     <dependencies>
+        <!-- JUnit is a unit testing framework to write and run repeatable automated tests on Java.
+            It provides a robust environment to write, organize,
+            and execute automated tests, ensuring code reliability and repeatability.
+            Its user-friendly annotations and assert methods facilitate the development and running of test cases,
+            making it a foundational tool for Java developers focusing on quality assurance and test-driven development. -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- Module "junit-jupiter" of JUnit 5. -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
+        </dependency>
+        <!-- Annotations for Error Prone,
+            a static analysis tool for Java that catches common programming mistakes at compile-time. -->
+        <dependency>
+            <groupId>com.google.errorprone</groupId>
+            <artifactId>error_prone_annotations</artifactId>
+            <version>2.33.0</version>
         </dependency>
     </dependencies>
 
@@ -99,6 +112,12 @@
                 <groupId>com.google.code.findbugs</groupId>
                 <artifactId>jsr305</artifactId>
                 <version>3.0.2</version>
+            </dependency>
+            <!-- A set of annotations used for code inspection support and code documentation. -->
+            <dependency>
+                <groupId>org.jetbrains</groupId>
+                <artifactId>annotations</artifactId>
+                <version>26.0.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

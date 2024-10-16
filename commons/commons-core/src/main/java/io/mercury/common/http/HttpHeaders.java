@@ -24,7 +24,6 @@ public final class HttpHeaders {
     }
 
     public HttpHeaders addHeader(HttpHeader... headers) {
-
         return this;
     }
 

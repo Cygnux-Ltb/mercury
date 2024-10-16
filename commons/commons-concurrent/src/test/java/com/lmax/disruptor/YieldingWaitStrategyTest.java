@@ -20,9 +20,9 @@ import org.junit.Test;
 
 public class YieldingWaitStrategyTest {
 
-	@Test
-	public void shouldWaitForValue() throws Exception {
-		WaitStrategyTestUtil.assertWaitForWithDelayOf(50, new YieldingWaitStrategy());
-	}
-	
+    @Test
+    public void shouldWaitForValue() throws Exception {
+        WaitStrategyTestUtil.assertWaitForWithDelayOf(50, new YieldingWaitStrategy());
+    }
+
 }

@@ -11,8 +11,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import static io.mercury.common.datetime.EpochTime.EPOCH_ZERO;
 import static io.mercury.common.datetime.TimeZone.UTC;
+import static io.mercury.common.epoch.EpochTimeUtil.EPOCH_ZERO;
 import static io.mercury.common.util.BitOperator.maxValueOfBit;
 import static java.lang.System.currentTimeMillis;
 import static java.time.LocalTime.MIN;
@@ -32,10 +32,10 @@ import static java.time.LocalTime.MIN;
 public final class SnowflakeAlgo {
 
     /**
-     * 最小基线时间, UTC 2000-01-01 00:00:00.000
+     * 最小基线时间, UTC 2010-01-01 00:00:00.000
      */
     public static final ZonedDateTime MinimumBaseline =
-            ZonedDateTime.of(LocalDate.of(2000, 1, 1), MIN, UTC);
+            ZonedDateTime.of(LocalDate.of(2010, 1, 1), MIN, UTC);
 
     /**
      * 所有者在ID中占的位数

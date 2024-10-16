@@ -1,6 +1,6 @@
 package io.mercury.common.concurrent.disruptor.dynamic;
 
-import io.mercury.common.concurrent.ring.dynamic.example.ExampleDisruptorServer;
+import io.mercury.common.concurrent.disruptor.dynamic.example.ExampleDisruptorServer;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -2,7 +2,7 @@ package io.mercury.transport.rmq.declare;
 
 import io.mercury.common.collections.MutableLists;
 import io.mercury.common.lang.Asserter;
-import io.mercury.serialization.json.JsonWrapper;
+import io.mercury.serialization.json.JsonWriter;
 import io.mercury.transport.rmq.RmqOperator;
 import io.mercury.transport.rmq.exception.DeclareException;
 import org.apache.commons.collections4.CollectionUtils;
@@ -135,7 +135,7 @@ public final class QueueRelationship extends Relationship {
 
     @Override
     public String toString() {
-        return JsonWrapper.toJsonHasNulls(this);
+        return JsonWriter.toJsonHasNulls(this);
     }
 
     public static void main(String[] args) {

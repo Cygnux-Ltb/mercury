@@ -5,14 +5,14 @@
     <parent>
         <groupId>io.mercury</groupId>
         <artifactId>transport</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>transport-jetty</artifactId>
     <name>transport-jetty</name>
 
     <properties>
-        <jetty.version>9.4.55.v20240627</jetty.version>
+        <jetty.version>9.4.56.v20240826</jetty.version>
     </properties>
 
     <dependencies>

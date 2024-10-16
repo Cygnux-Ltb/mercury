@@ -23,8 +23,8 @@ public final class AvroJsonDeserializer<T extends SpecificRecord> implements Jso
 
     private final JsonDecoder decoder;
 
-    public AvroJsonDeserializer(Class<T> tClass) {
-        this.datumReader = new SpecificDatumReader<>(tClass);
+    public AvroJsonDeserializer(Class<T> type) {
+        this.datumReader = new SpecificDatumReader<>(type);
         this.decoder = initDecoder();
     }
 

@@ -60,50 +60,42 @@ public enum ZonedDateTimePattern implements TemporalPattern<ZonedDateTime> {
     /**
      * example: 18031413+0900
      */
-    YYMMDDHH_Z
-            (YYMMDDHH.getPattern() + "Z"),
+    YYMMDDHH_Z(YYMMDDHH.getPattern() + "Z"),
 
     /**
      * example: 1803141314+0900
      */
-    YYMMDDHHMM_Z
-            (YYMMDDHHMM.getPattern() + "Z"),
+    YYMMDDHHMM_Z(YYMMDDHHMM.getPattern() + "Z"),
 
     /**
      * example: 180314131423+0900
      */
-    YYMMDDHHMMSS_Z
-            (YYMMDDHHMMSS.getPattern() + "Z"),
+    YYMMDDHHMMSS_Z(YYMMDDHHMMSS.getPattern() + "Z"),
 
     /**
      * example: 180314131423678+0900
      */
-    YYMMDDHHMMSSSSS_Z
-            (YYMMDDHHMMSSSSS.getPattern() + "Z"),
+    YYMMDDHHMMSSSSS_Z(YYMMDDHHMMSSSSS.getPattern() + "Z"),
 
     /**
      * example: 2018031413+0900
      */
-    YYYYMMDDHH_Z
-            (YYYYMMDDHH.getPattern() + "Z"),
+    YYYYMMDDHH_Z(YYYYMMDDHH.getPattern() + "Z"),
 
     /**
      * example: 201803141314+0900
      */
-    YYYYMMDDHHMM_Z
-            (YYYYMMDDHHMM.getPattern() + "Z"),
+    YYYYMMDDHHMM_Z(YYYYMMDDHHMM.getPattern() + "Z"),
 
     /**
      * example: 20180314131423+0900
      */
-    YYYYMMDDHHMMSS_Z
-            (YYYYMMDDHHMMSS.getPattern() + "Z"),
+    YYYYMMDDHHMMSS_Z(YYYYMMDDHHMMSS.getPattern() + "Z"),
 
     /**
      * example: 20180314131423678+0900
      */
-    YYYYMMDDHHMMSSSSS_Z
-            (YYYYMMDDHHMMSSSSS.getPattern() + "Z"),
+    YYYYMMDDHHMMSSSSS_Z(YYYYMMDDHHMMSSSSS.getPattern() + "Z"),
 
     /*
      * =============================================================================================
@@ -112,74 +104,62 @@ public enum ZonedDateTimePattern implements TemporalPattern<ZonedDateTime> {
     /**
      * example: 180314 131423+0900
      */
-    YYMMDD_HHMMSS_Z
-            (YYMMDD_HHMMSS.getPattern() + "Z"),
+    YYMMDD_HHMMSS_Z(YYMMDD_HHMMSS.getPattern() + "Z"),
 
     /**
      * example: 180314 131423678+0900
      */
-    YYMMDD_HHMMSSSSS_Z
-            (YYMMDD_HHMMSSSSS.getPattern() + "Z"),
+    YYMMDD_HHMMSSSSS_Z(YYMMDD_HHMMSSSSS.getPattern() + "Z"),
 
     /**
      * example: 180314 131423678789+0900
      */
-    YYMMDD_HHMMSSSSSSSS_Z
-            (YYMMDD_HHMMSSSSSSSS.getPattern() + "Z"),
+    YYMMDD_HHMMSSSSSSSS_Z(YYMMDD_HHMMSSSSSSSS.getPattern() + "Z"),
 
     /**
      * example: 180314-131423+0900
      */
-    YYMMDD_L_HHMMSS_Z
-            (YYMMDD_L_HHMMSS.getPattern() + "Z"),
+    YYMMDD_L_HHMMSS_Z(YYMMDD_L_HHMMSS.getPattern() + "Z"),
 
     /**
      * example: 180314-131423678+0900
      */
-    YYMMDD_L_HHMMSSSSS_Z
-            (YYMMDD_L_HHMMSSSSS.getPattern() + "Z"),
+    YYMMDD_L_HHMMSSSSS_Z(YYMMDD_L_HHMMSSSSS.getPattern() + "Z"),
 
     /**
      * example: 180314-131423678789+0900
      */
-    YYMMDD_L_HHMMSSSSSSSS_Z
-            (YYMMDD_L_HHMMSSSSSSSS.getPattern() + "Z"),
+    YYMMDD_L_HHMMSSSSSSSS_Z(YYMMDD_L_HHMMSSSSSSSS.getPattern() + "Z"),
 
     /**
      * example: 20180314 131423+0900
      */
-    YYYYMMDD_HHMMSS_Z
-            (YYYYMMDD_HHMMSS.getPattern() + "Z"),
+    YYYYMMDD_HHMMSS_Z(YYYYMMDD_HHMMSS.getPattern() + "Z"),
 
     /**
      * example: 20180314 131423678+0900
      */
-    YYYYMMDD_HHMMSSSSS_Z
-            (YYYYMMDD_HHMMSSSSS.getPattern() + "Z"),
+    YYYYMMDD_HHMMSSSSS_Z(YYYYMMDD_HHMMSSSSS.getPattern() + "Z"),
 
     /**
      * example: 20180314 131423678789+0900
      */
-    YYYYMMDD_HHMMSSSSSSSS_Z
-            (YYYYMMDD_HHMMSSSSSSSS.getPattern() + "Z"),
+    YYYYMMDD_HHMMSSSSSSSS_Z(YYYYMMDD_HHMMSSSSSSSS.getPattern() + "Z"),
 
     /**
      * example: 20180314-131423+0900
      */
-    YYYYMMDD_L_HHMMSS_Z
-            (YYYYMMDD_L_HHMMSS.getPattern() + "Z"),
+    YYYYMMDD_L_HHMMSS_Z(YYYYMMDD_L_HHMMSS.getPattern() + "Z"),
 
     /**
      * example: 20180314-131423678+0900
      */
-    YYYYMMDD_L_HHMMSSSSS_Z
-            (YYYYMMDD_L_HHMMSSSSS.getPattern() + "Z"),
+    YYYYMMDD_L_HHMMSSSSS_Z(YYYYMMDD_L_HHMMSSSSS.getPattern() + "Z"),
 
     /**
      * example: 20180314-131423678789+0900
      */
-    YYYYMMDD_L_HHMMSSSSSSSS_Z
-            (YYYYMMDD_L_HHMMSSSSSSSS.getPattern() + "Z"),
+    YYYYMMDD_L_HHMMSSSSSSSS_Z(YYYYMMDD_L_HHMMSSSSSSSS.getPattern() + "Z"),
 
     /*
      * =============================================================================================
@@ -188,74 +168,62 @@ public enum ZonedDateTimePattern implements TemporalPattern<ZonedDateTime> {
     /**
      * example: 180314 13:14:23+0900
      */
-    YYMMDD_HH_MM_SS_Z
-            (YYMMDD_HH_MM_SS.getPattern() + "Z"),
+    YYMMDD_HH_MM_SS_Z(YYMMDD_HH_MM_SS.getPattern() + "Z"),
 
     /**
      * example: 180314 13:14:23.678+0900
      */
-    YYMMDD_HH_MM_SS_SSS_Z
-            (YYMMDD_HH_MM_SS_SSS.getPattern() + "Z"),
+    YYMMDD_HH_MM_SS_SSS_Z(YYMMDD_HH_MM_SS_SSS.getPattern() + "Z"),
 
     /**
      * example: 180314T13:14:23.678789+0900
      */
-    YYMMDD_HH_MM_SS_SSSSSS_Z
-            (YYMMDD_HH_MM_SS_SSSSSS.getPattern() + "Z"),
+    YYMMDD_HH_MM_SS_SSSSSS_Z(YYMMDD_HH_MM_SS_SSSSSS.getPattern() + "Z"),
 
     /**
      * example: 180314-13:14:23+0900
      */
-    YYMMDD_L_HH_MM_SS_Z
-            (YYMMDD_L_HH_MM_SS.getPattern() + "Z"),
+    YYMMDD_L_HH_MM_SS_Z(YYMMDD_L_HH_MM_SS.getPattern() + "Z"),
 
     /**
      * example: 180314-13:14:23.678+0900
      */
-    YYMMDD_L_HH_MM_SS_SSS_Z
-            (YYMMDD_L_HH_MM_SS_SSS.getPattern() + "Z"),
+    YYMMDD_L_HH_MM_SS_SSS_Z(YYMMDD_L_HH_MM_SS_SSS.getPattern() + "Z"),
 
     /**
      * example: 180314-13:14:23.678789+0900
      */
-    YYMMDD_L_HH_MM_SS_SSSSSS_Z
-            (YYMMDD_L_HH_MM_SS_SSSSSS.getPattern() + "Z"),
+    YYMMDD_L_HH_MM_SS_SSSSSS_Z(YYMMDD_L_HH_MM_SS_SSSSSS.getPattern() + "Z"),
 
     /**
      * example: 20180314 13:14:23+0900
      */
-    YYYYMMDD_HH_MM_SS_Z
-            (YYYYMMDD_HH_MM_SS.getPattern() + "Z"),
+    YYYYMMDD_HH_MM_SS_Z(YYYYMMDD_HH_MM_SS.getPattern() + "Z"),
 
     /**
      * example: 20180314 13:14:23.678+0900
      */
-    YYYYMMDD_HH_MM_SS_SSS_Z
-            (YYYYMMDD_HH_MM_SS_SSS.getPattern() + "Z"),
+    YYYYMMDD_HH_MM_SS_SSS_Z(YYYYMMDD_HH_MM_SS_SSS.getPattern() + "Z"),
 
     /**
      * example: 20180314 13:14:23.678789+0900
      */
-    YYYYMMDD_HH_MM_SS_SSSSSS_Z
-            (YYYYMMDD_HH_MM_SS_SSSSSS.getPattern() + "Z"),
+    YYYYMMDD_HH_MM_SS_SSSSSS_Z(YYYYMMDD_HH_MM_SS_SSSSSS.getPattern() + "Z"),
 
     /**
      * example: 20180314-13:14:23+0900
      */
-    YYYYMMDD_L_HH_MM_SS_Z
-            (YYYYMMDD_L_HH_MM_SS.getPattern() + "Z"),
+    YYYYMMDD_L_HH_MM_SS_Z(YYYYMMDD_L_HH_MM_SS.getPattern() + "Z"),
 
     /**
      * example: 20180314-13:14:23.678+0900
      */
-    YYYYMMDD_L_HH_MM_SS_SSS_Z
-            (YYYYMMDD_L_HH_MM_SS_SSS.getPattern() + "Z"),
+    YYYYMMDD_L_HH_MM_SS_SSS_Z(YYYYMMDD_L_HH_MM_SS_SSS.getPattern() + "Z"),
 
     /**
      * example: 20180314-13:14:23.678789+0900
      */
-    YYYYMMDD_L_HH_MM_SS_SSSSSS_Z
-            (YYYYMMDD_L_HH_MM_SS_SSSSSS.getPattern() + "Z"),
+    YYYYMMDD_L_HH_MM_SS_SSSSSS_Z(YYYYMMDD_L_HH_MM_SS_SSSSSS.getPattern() + "Z"),
 
     /*
      * =============================================================================================
@@ -264,38 +232,32 @@ public enum ZonedDateTimePattern implements TemporalPattern<ZonedDateTime> {
     /**
      * example: 18-03-14 131423+0900
      */
-    YY_MM_DD_HHMMSS_Z
-            (YY_MM_DD_HHMMSS.getPattern() + "Z"),
+    YY_MM_DD_HHMMSS_Z(YY_MM_DD_HHMMSS.getPattern() + "Z"),
 
     /**
      * example: 18-03-14 131423678+0900
      */
-    YY_MM_DD_HHMMSSSSS_Z
-            (YY_MM_DD_HHMMSSSSS.getPattern() + "Z"),
+    YY_MM_DD_HHMMSSSSS_Z(YY_MM_DD_HHMMSSSSS.getPattern() + "Z"),
 
     /**
      * example: 18-03-14 131423678789+0900
      */
-    YY_MM_DD_HHMMSSSSSSSS_Z
-            (YY_MM_DD_HHMMSSSSSSSS.getPattern() + "Z"),
+    YY_MM_DD_HHMMSSSSSSSS_Z(YY_MM_DD_HHMMSSSSSSSS.getPattern() + "Z"),
 
     /**
      * example: 2018-03-14 131423+0900
      */
-    YYYY_MM_DD_HHMMSS_Z
-            (YYYY_MM_DD_HHMMSS.getPattern() + "Z"),
+    YYYY_MM_DD_HHMMSS_Z(YYYY_MM_DD_HHMMSS.getPattern() + "Z"),
 
     /**
      * example: 2018-03-14 131423678+0900
      */
-    YYYY_MM_DD_HHMMSSSSS_Z
-            (YYYY_MM_DD_HHMMSSSSS.getPattern() + "Z"),
+    YYYY_MM_DD_HHMMSSSSS_Z(YYYY_MM_DD_HHMMSSSSS.getPattern() + "Z"),
 
     /**
      * example: 2018-03-14 131423678789+0900
      */
-    YYYY_MM_DD_HHMMSSSSSSSS_Z
-            (YYYY_MM_DD_HHMMSSSSSSSS.getPattern() + "Z"),
+    YYYY_MM_DD_HHMMSSSSSSSS_Z(YYYY_MM_DD_HHMMSSSSSSSS.getPattern() + "Z"),
 
     /*
      * =============================================================================================
@@ -304,38 +266,32 @@ public enum ZonedDateTimePattern implements TemporalPattern<ZonedDateTime> {
     /**
      * example: 18-03-14 13:14:23+0900
      */
-    YY_MM_DD_HH_MM_SS_Z
-            (YY_MM_DD_HH_MM_SS.getPattern() + "Z"),
+    YY_MM_DD_HH_MM_SS_Z(YY_MM_DD_HH_MM_SS.getPattern() + "Z"),
 
     /**
      * example: 18-03-14 13:14:23.678+0900
      */
-    YY_MM_DD_HH_MM_SS_SSS_Z
-            (YY_MM_DD_HH_MM_SS_SSS.getPattern() + "Z"),
+    YY_MM_DD_HH_MM_SS_SSS_Z(YY_MM_DD_HH_MM_SS_SSS.getPattern() + "Z"),
 
     /**
      * example: 18-03-14 13:14:23.678789+0900
      */
-    YY_MM_DD_HH_MM_SS_SSSSSS_Z
-            (YY_MM_DD_HH_MM_SS_SSSSSS.getPattern() + "Z"),
+    YY_MM_DD_HH_MM_SS_SSSSSS_Z(YY_MM_DD_HH_MM_SS_SSSSSS.getPattern() + "Z"),
 
     /**
      * example: 2018-03-14 13:14:23+0900
      */
-    YYYY_MM_DD_HH_MM_SS_Z
-            (YYYY_MM_DD_HH_MM_SS.getPattern() + "Z"),
+    YYYY_MM_DD_HH_MM_SS_Z(YYYY_MM_DD_HH_MM_SS.getPattern() + "Z"),
 
     /**
      * example: 2018-03-14 13:14:23.678+0900
      */
-    YYYY_MM_DD_HH_MM_SS_SSS_Z
-            (YYYY_MM_DD_HH_MM_SS_SSS.getPattern() + "Z"),
+    YYYY_MM_DD_HH_MM_SS_SSS_Z(YYYY_MM_DD_HH_MM_SS_SSS.getPattern() + "Z"),
 
     /**
      * example: 2018-03-14 13:14:23.678789+0900
      */
-    YYYY_MM_DD_HH_MM_SS_SSSSSS_Z
-            (YYYY_MM_DD_HH_MM_SS_SSSSSS.getPattern() + "Z"),
+    YYYY_MM_DD_HH_MM_SS_SSSSSS_Z(YYYY_MM_DD_HH_MM_SS_SSSSSS.getPattern() + "Z"),
 
 
     ;

@@ -13,11 +13,13 @@ import org.eclipse.collections.impl.set.immutable.primitive.ImmutableLongSetFact
 import org.eclipse.collections.impl.set.sorted.immutable.ImmutableSortedSetFactoryImpl;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
-public enum ImmutableSets {
+public final class ImmutableSets {
 
-    INSTANCE;
+    private ImmutableSets() {
+    }
 
     /**
      * @return E... array
@@ -69,7 +71,7 @@ public enum ImmutableSets {
      * @param iterable Iterable<E>
      * @return ImmutableSet
      */
-    public static <E> ImmutableSet<E> newImmutableSet(Iterable<E> iterable) {
+    public static <E> ImmutableSet<E> newImmutableSet(@Nullable Iterable<E> iterable) {
         if (iterable == null)
             return ImmutableSetFactoryImpl.INSTANCE.empty();
         return ImmutableSetFactoryImpl.INSTANCE.withAll(iterable);
@@ -92,7 +94,7 @@ public enum ImmutableSets {
      * @param iterable Iterable<E>
      * @return ImmutableSortedSet
      */
-    public static <E> ImmutableSortedSet<E> newImmutableSortedSet(Iterable<E> iterable) {
+    public static <E> ImmutableSortedSet<E> newImmutableSortedSet(@Nullable Iterable<E> iterable) {
         if (iterable == null)
             return ImmutableSortedSetFactoryImpl.INSTANCE.empty();
         return ImmutableSortedSetFactoryImpl.INSTANCE.withAll(iterable);

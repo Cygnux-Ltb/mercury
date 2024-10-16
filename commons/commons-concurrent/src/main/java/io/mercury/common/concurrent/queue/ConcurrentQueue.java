@@ -10,7 +10,7 @@ import org.jctools.queues.MpmcArrayQueue;
 import javax.annotation.concurrent.ThreadSafe;
 
 @ThreadSafe
-public final class ConcurrentQueue<E> implements McQueue<E> {
+public final class ConcurrentQueue<E> implements MultiConsumerQueue<E> {
 
     private final MpmcArrayQueue<E> queue;
 

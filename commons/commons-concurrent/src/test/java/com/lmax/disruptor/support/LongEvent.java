@@ -19,16 +19,16 @@ import com.lmax.disruptor.EventFactory;
 
 public class LongEvent {
 
-	private long value;
+    private long value;
 
-	public void set(long value) {
-		this.value = value;
-	}
+    public void set(long value) {
+        this.value = value;
+    }
 
-	public long get() {
-		return value;
-	}
+    public long get() {
+        return value;
+    }
 
-	public static final EventFactory<LongEvent> FACTORY = LongEvent::new;
+    public static final EventFactory<LongEvent> FACTORY = LongEvent::new;
 
 }

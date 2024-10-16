@@ -4,10 +4,10 @@ import java.time.LocalTime;
 
 public interface AvailableTime {
 
-    boolean isRunningAllTime();
+    boolean isAvailableAllTime();
 
     LocalTime[] getStartTimes();
 
-    LocalTime[] getEndTimes();
+    LocalTime[] getStopTimes();
 
 }

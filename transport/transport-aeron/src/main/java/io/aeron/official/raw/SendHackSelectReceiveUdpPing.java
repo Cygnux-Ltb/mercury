@@ -19,7 +19,6 @@ import io.aeron.driver.Configuration;
 import org.HdrHistogram.Histogram;
 import org.agrona.concurrent.SigInt;
 import org.agrona.hints.ThreadHints;
-import org.agrona.nio.NioSelectedKeySet;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -68,13 +67,13 @@ public class SendHackSelectReceiveUdpPing implements ToIntFunction<SelectionKey>
 
         final Selector selector = Selector.open();
         receiveChannel.register(selector, OP_READ, this);
-        final NioSelectedKeySet keySet = Common.keySet(selector);
+        // final NioSelectedKeySet keySet = Common.keySet(selector);
 
         final AtomicBoolean running = new AtomicBoolean(true);
         SigInt.register(() -> running.set(false));
 
         while (running.get()) {
-            measureRoundTrip(HISTOGRAM, SEND_ADDRESS, buffer, sendChannel, selector, keySet, running);
+            measureRoundTrip(HISTOGRAM, SEND_ADDRESS, buffer, sendChannel, selector, running);
 
             HISTOGRAM.reset();
             System.gc();
@@ -105,7 +104,7 @@ public class SendHackSelectReceiveUdpPing implements ToIntFunction<SelectionKey>
 
     public void measureRoundTrip(final Histogram histogram, final InetSocketAddress sendAddress,
                                  final ByteBuffer buffer, final DatagramChannel sendChannel,
-                                 final Selector selector, final NioSelectedKeySet keySet,
+                                 final Selector selector,
                                  final AtomicBoolean running) throws IOException {
         for (sequenceNumber = 0; sequenceNumber < Common.NUM_MESSAGES; sequenceNumber++) {
             final long timestampNs = System.nanoTime();
@@ -124,7 +123,6 @@ public class SendHackSelectReceiveUdpPing implements ToIntFunction<SelectionKey>
                 ThreadHints.onSpinWait();
             }
 
-            keySet.forEach(this);
         }
 
         histogram.outputPercentileDistribution(System.out, 1000.0);

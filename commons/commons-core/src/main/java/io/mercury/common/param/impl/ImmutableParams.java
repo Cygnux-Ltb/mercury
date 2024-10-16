@@ -1,6 +1,7 @@
 package io.mercury.common.param.impl;
 
 import io.mercury.common.collections.MutableMaps;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.param.ParamKey;
 import io.mercury.common.param.Params;
 import org.eclipse.collections.api.map.ImmutableMap;
@@ -26,7 +27,6 @@ import static io.mercury.common.datetime.pattern.StandardPattern.toZonedDateTime
 import static io.mercury.common.lang.Asserter.nonEmptyMap;
 import static io.mercury.common.lang.Asserter.nonNull;
 import static io.mercury.common.lang.Asserter.requiredLength;
-import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
 import static java.lang.Boolean.parseBoolean;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
@@ -34,7 +34,7 @@ import static java.lang.Long.parseLong;
 
 public class ImmutableParams implements Params {
 
-    private static final Logger log = getLogger(ImmutableParams.class);
+    private static final Logger log = Log4j2LoggerFactory.getLogger(ImmutableParams.class);
 
     private final ImmutableMap<ParamKey, String> params;
 
@@ -63,27 +63,7 @@ public class ImmutableParams implements Params {
                 if (inputValue instanceof String value) {
                     map.put(key, value);
                 } else {
-                    var value = switch (key.getValueType()) {
-                        case DATE -> inputValue instanceof LocalDate date
-                                ? fmt(date)
-                                : null;
-                        case TIME -> inputValue instanceof LocalTime time
-                                ? fmt(time)
-                                : null;
-                        case DATETIME -> inputValue instanceof LocalDateTime dateTime
-                                ? fmt(dateTime)
-                                : null;
-                        case ZONED_DATETIME -> inputValue instanceof ZonedDateTime zonedDateTime
-                                ? fmt(zonedDateTime)
-                                : null;
-                        default -> Objects.toString(inputValue, null);
-                    };
-                    if (value == null) {
-                        throw new IllegalArgumentException("Key -> [" + key.getParamName() + "] mapping value is illegal, "
-                                + "Type is [" + key.getValueType() + "], "
-                                + "input value is [" + inputValue + "]");
-                    }
-                    map.put(key, value);
+                    map.put(key, valueHandle(key, inputValue));
                 }
             } else {
                 log.warn("Key -> [{}] mapping value not provided", key.getParamName());
@@ -92,6 +72,30 @@ public class ImmutableParams implements Params {
         this.params = map.toImmutable();
         this.keys = newImmutableSet(keys);
     }
+
+    private String valueHandle(ParamKey key, Object inputValue) {
+        String value = switch (key.getValueType()) {
+            case DATE -> inputValue instanceof LocalDate date
+                    ? fmt(date) : null;
+            case TIME -> inputValue instanceof LocalTime time
+                    ? fmt(time) : null;
+            case DATETIME -> inputValue instanceof LocalDateTime dateTime
+                    ? fmt(dateTime) : null;
+            case ZONED_DATETIME -> inputValue instanceof ZonedDateTime zonedDateTime
+                    ? fmt(zonedDateTime) : null;
+            case INT -> Integer.toString(parseInt(inputValue.toString()));
+            case LONG -> Long.toString(parseLong(inputValue.toString()));
+            case DOUBLE -> Double.toString(parseDouble(inputValue.toString()));
+            case BOOLEAN -> Boolean.toString(parseBoolean(inputValue.toString()));
+            default -> Objects.toString(inputValue, null);
+        };
+        if (value == null)
+            throw new IllegalArgumentException("Key -> [" + key.getParamName() + "] mapping value is illegal, "
+                    + "Type is [" + key.getValueType() + "], "
+                    + "input value is [" + inputValue + "]");
+        return value;
+    }
+
 
     /**
      * 根据传入的Key获取Properties中的相应字段
@@ -223,7 +227,7 @@ public class ImmutableParams implements Params {
     }
 
     @Override
-    public void printParams(Logger log) {
+    public void showParams(Logger log) {
         if (log == null)
             params.forEachKeyValue((key, value) -> System.out.println(
                     "Param ID==" + key.getParamId() + ", ParamName -> " + key.getParamName() + ", Value -> " + value));

@@ -29,36 +29,33 @@
 
 package io.mercury.serialization.json;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSerializer;
-
 /**
  * The {@code Converters} class contains static methods for registering Java Time converters.
  */
 public final class TypeRegistrar {
 
-    public static <T> GsonBuilder registerAll(GsonBuilder builder) {
-        if (builder == null) {
-            throw new NullPointerException("builder cannot be null");
-        }
-        TypeAdaptors.TypeAdaptorMap.forEach(builder::registerTypeAdapter);
-        return builder;
-    }
-
-    /**
-     * @param builder    GsonBuilder
-     * @param type       Class<T>
-     * @param serializer JsonSerializer<T>
-     * @param <T>        T
-     * @return GsonBuilder
-     */
-    public static <T> GsonBuilder register(GsonBuilder builder, Class<T> type, JsonSerializer<T> serializer) {
-        if (builder == null) {
-            throw new NullPointerException("builder cannot be null");
-        }
-        builder.registerTypeAdapter(type, serializer);
-        return builder;
-    }
+//    public static <T> GsonBuilder registerAll(GsonBuilder builder) {
+//        if (builder == null) {
+//            throw new NullPointerException("builder cannot be null");
+//        }
+//        TypeAdaptors.TypeAdaptorMap.forEach(builder::registerTypeAdapter);
+//        return builder;
+//    }
+//
+//    /**
+//     * @param builder    GsonBuilder
+//     * @param type       Class<T>
+//     * @param serializer JsonSerializer<T>
+//     * @param <T>        T
+//     * @return GsonBuilder
+//     */
+//    public static <T> GsonBuilder register(GsonBuilder builder, Class<T> type, JsonSerializer<T> serializer) {
+//        if (builder == null) {
+//            throw new NullPointerException("builder cannot be null");
+//        }
+//        builder.registerTypeAdapter(type, serializer);
+//        return builder;
+//    }
 
 
 }

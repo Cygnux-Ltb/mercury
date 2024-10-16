@@ -127,19 +127,30 @@ public final class Asserter {
     }
 
     /**
-     * @param i       int
+     * @param value   int
      * @param min     int
      * @param max     int
      * @param objName String
      * @return int
      * @throws IllegalArgumentException exception
      */
-    public static int atWithinRange(int i, int min, int max, String objName)
+    public static int atWithinRange(int value, int min, int max, String objName)
             throws IllegalArgumentException {
-        if (i >= min && i <= max)
-            return i;
+        if (atWithinRangeNotThrows(value, min, max))
+            return value;
         throw new IllegalArgumentException(
                 "Param: [" + objName + "] must in the range of [" + min + "] to [" + max + "]");
+    }
+
+    /**
+     * @param value int
+     * @param min   int
+     * @param max   int
+     * @return int
+     * @throws IllegalArgumentException exception
+     */
+    public static boolean atWithinRangeNotThrows(int value, int min, int max) {
+        return value >= min && value <= max;
     }
 
     /**
@@ -178,7 +189,7 @@ public final class Asserter {
             throws NullPointerException {
         return requireNonNull(t, isNullOrEmpty(objName)
                 ? "param cannot be null"
-                : "[" + objName + "] cannot be null"
+                : "param [" + objName + "] cannot be null"
         );
     }
 

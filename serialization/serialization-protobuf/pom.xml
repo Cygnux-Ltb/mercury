@@ -5,14 +5,14 @@
     <parent>
         <groupId>io.mercury</groupId>
         <artifactId>serialization</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>serialization-protobuf</artifactId>
     <name>serialization-protobuf</name>
 
     <properties>
-        <protobuf.version>4.27.2</protobuf.version>
+        <protobuf.version>4.28.2</protobuf.version>
     </properties>
 
     <dependencies>

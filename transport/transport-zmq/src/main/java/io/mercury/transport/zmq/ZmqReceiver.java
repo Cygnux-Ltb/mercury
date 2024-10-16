@@ -3,7 +3,6 @@ package io.mercury.transport.zmq;
 import io.mercury.common.thread.Sleep;
 import io.mercury.common.thread.ThreadSupport;
 import io.mercury.transport.api.Receiver;
-import io.mercury.transport.zmq.base.ZmqType;
 import io.mercury.transport.zmq.exception.ZmqBindException;
 import org.slf4j.Logger;
 import org.zeromq.SocketType;
@@ -27,15 +26,15 @@ public class ZmqReceiver extends ZmqComponent implements Receiver, Closeable {
         super(configurator);
         nonNull(handler, "handler");
         this.handler = handler;
-        var addr = configurator.getAddr().getFullUri();
-        if (socket.bind(addr)) {
+        var addr = configurator.getAddr().fullUri();
+        if (socket.bind(addr))
             log.info("ZmqReceiver bound addr -> {}", addr);
-        } else {
+        else {
             log.error("ZmqReceiver unable to bind -> {}", addr);
             throw new ZmqBindException(addr);
         }
         setTcpKeepAlive(configurator.getTcpKeepAlive());
-        this.name = "ZReceiver$" + addr;
+        this.name = "ZRecv$" + addr;
         newStartTime();
     }
 
@@ -73,7 +72,7 @@ public class ZmqReceiver extends ZmqComponent implements Receiver, Closeable {
     }
 
     public static void main(String[] args) {
-        try (ZmqReceiver receiver = ZmqComponent.tcp(5551).createReceiver((byte[] recvMsg) -> {
+        try (ZmqReceiver receiver = ZmqConfigurator.tcp(5551).createReceiver((byte[] recvMsg) -> {
             System.out.println(new String(recvMsg));
             return null;
         })) {

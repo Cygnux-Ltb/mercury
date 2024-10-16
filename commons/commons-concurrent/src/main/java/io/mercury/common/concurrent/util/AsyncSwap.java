@@ -2,7 +2,6 @@ package io.mercury.common.concurrent.util;
 
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.thread.RunnableComponent;
-import net.openhft.chronicle.ticker.NanoTicker;
 import org.slf4j.Logger;
 
 import java.util.concurrent.SynchronousQueue;
@@ -12,11 +11,11 @@ import static io.mercury.common.datetime.DateTimeUtil.datetimeOfMillisecond;
 
 public final class AsyncSwap<E> extends RunnableComponent implements Runnable {
 
+    private static final Logger log = Log4j2LoggerFactory.getLogger(AsyncSwap.class);
+
     private final SynchronousQueue<E> swap = new SynchronousQueue<>();
 
     private final Consumer<E> consumer;
-
-    private static final Logger log = Log4j2LoggerFactory.getLogger(AsyncSwap.class);
 
     public AsyncSwap(Consumer<E> consumer) {
         this("swap-" + datetimeOfMillisecond(), consumer);
@@ -55,9 +54,4 @@ public final class AsyncSwap<E> extends RunnableComponent implements Runnable {
 
     }
 
-
-    public static void main(String[] args) {
-        System.out.println(System.currentTimeMillis());
-        System.out.println(NanoTicker.INSTANCE.countFromEpoch());
-    }
 }

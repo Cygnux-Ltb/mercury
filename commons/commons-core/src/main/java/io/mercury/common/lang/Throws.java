@@ -1,5 +1,9 @@
 package io.mercury.common.lang;
 
+import io.mercury.common.lang.exception.RuntimeIOException;
+
+import java.io.IOException;
+
 public final class Throws {
 
     /**
@@ -119,6 +123,31 @@ public final class Throws {
      */
     public static void unsupportedOperation(String msg) throws UnsupportedOperationException {
         throw new UnsupportedOperationException(msg);
+    }
+
+    /**
+     * @param msg String
+     * @throws RuntimeIOException e
+     */
+    public static void runtimeIOException(String msg) throws RuntimeIOException {
+        throw new RuntimeIOException(msg);
+    }
+
+    /**
+     * @param ioe IOException
+     * @throws RuntimeIOException e
+     */
+    public static void runtimeIOException(IOException ioe) throws RuntimeIOException {
+        throw new RuntimeIOException(ioe);
+    }
+
+    /**
+     * @param msg String
+     * @param ioe IOException
+     * @throws RuntimeIOException e
+     */
+    public static void runtimeIOException(String msg, IOException ioe) throws RuntimeIOException {
+        throw new RuntimeIOException(msg, ioe);
     }
 
 }

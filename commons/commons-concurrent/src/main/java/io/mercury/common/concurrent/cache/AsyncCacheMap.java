@@ -2,14 +2,14 @@ package io.mercury.common.concurrent.cache;
 
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.collections.MutableMaps;
-import io.mercury.common.concurrent.queue.ScQueue;
+import io.mercury.common.concurrent.queue.SingleConsumerQueue;
 import org.eclipse.collections.api.map.MutableMap;
 import org.eclipse.collections.api.map.primitive.MutableLongObjectMap;
 
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.function.Consumer;
 
-import static io.mercury.common.concurrent.queue.ScQueueWithJCT.mpscQueue;
+import static io.mercury.common.concurrent.queue.SingleConsumerQueueWithJCT.mpscQueue;
 import static io.mercury.common.util.StringSupport.isNullOrEmpty;
 
 /**
@@ -20,16 +20,17 @@ import static io.mercury.common.util.StringSupport.isNullOrEmpty;
 @ThreadSafe
 public final class AsyncCacheMap<K, V> {
 
-    private final MutableMap<K, V> mutableMap = MutableMaps.newUnifiedMap(Capacity.L08_256.size());
+    private final MutableMap<K, V> mutableMap = MutableMaps
+            .newUnifiedMap(Capacity.L08_256.size());
 
     private final MutableLongObjectMap<Consumer<V>> consumerMap = MutableMaps
             .newLongObjectMap(Capacity.L07_128.size());
 
     private final String cacheName;
 
-    private final ScQueue<ExecEvent> execQueue;
+    private final SingleConsumerQueue<ExecEvent> execQueue;
 
-    private final ScQueue<QueryResult> queryQueue;
+    private final SingleConsumerQueue<QueryResult<V>> queryQueue;
 
     // private ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -49,24 +50,19 @@ public final class AsyncCacheMap<K, V> {
         }
     }
 
-    private final class QueryResult {
-        private final V value;
-        private final long nanoTime;
-
-        public QueryResult(V value, long nanoTime) {
-            this.value = value;
-            this.nanoTime = nanoTime;
-        }
+    private record QueryResult<V>(
+            V value,
+            long nanoTime
+    ) {
     }
 
     /**
-     *
      * @param cacheName String
      */
     public AsyncCacheMap(String cacheName) {
         this.cacheName = isNullOrEmpty(cacheName) ? "AsyncCacheMap-" + hashCode() : cacheName;
         this.execQueue = mpscQueue(this.cacheName + "-ExecQueue")
-                .capacity(64).process(event -> asyncExec(event));
+                .capacity(64).process(this::asyncExec);
         this.queryQueue = mpscQueue(this.cacheName + "-QueryQueue")
                 .capacity(64).process(result -> consumerMap.remove(result.nanoTime).accept(result.value));
     }
@@ -81,7 +77,7 @@ public final class AsyncCacheMap<K, V> {
                 mutableMap.put(event.key, event.value);
         } else {
             V v = mutableMap.get(event.key);
-            queryQueue.enqueue(new QueryResult(v, event.nanoTime));
+            queryQueue.enqueue(new QueryResult<>(v, event.nanoTime));
         }
     }
 

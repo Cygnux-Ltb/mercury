@@ -4,7 +4,6 @@ import io.mercury.common.serialization.specific.BytesSerializer;
 import io.mercury.common.thread.Sleep;
 import io.mercury.transport.api.Publisher;
 import io.mercury.transport.exception.PublishFailedException;
-import io.mercury.transport.zmq.base.ZmqType;
 import io.mercury.transport.zmq.exception.ZmqBindException;
 import org.slf4j.Logger;
 import org.zeromq.SocketType;
@@ -24,7 +23,7 @@ public final class ZmqPublisher<T> extends ZmqComponent implements Publisher<byt
     // default topic
     private final byte[] sendMore;
 
-    private final BytesSerializer<T> ser;
+    private final BytesSerializer<T> serializer;
 
     /**
      * @param configurator ZmqConfigurator
@@ -38,11 +37,11 @@ public final class ZmqPublisher<T> extends ZmqComponent implements Publisher<byt
         nonNull(topic, "topic");
         nonNull(serializer, "serializer");
         this.sendMore = topic.getBytes(ZMQ.CHARSET);
-        this.ser = serializer;
-        var addr = configurator.getAddr().getFullUri();
-        if (socket.bind(addr)) {
+        this.serializer = serializer;
+        var addr = configurator.getAddr().fullUri();
+        if (socket.bind(addr))
             log.info("ZmqPublisher bound addr -> {}", addr);
-        } else {
+        else {
             log.error("ZmqPublisher unable to bind -> {}", addr);
             throw new ZmqBindException(addr);
         }
@@ -52,7 +51,7 @@ public final class ZmqPublisher<T> extends ZmqComponent implements Publisher<byt
     }
 
     public BytesSerializer<T> getSerializer() {
-        return ser;
+        return serializer;
     }
 
     @Override
@@ -73,7 +72,7 @@ public final class ZmqPublisher<T> extends ZmqComponent implements Publisher<byt
     @Override
     public void publish(@Nonnull byte[] target, @Nonnull T msg) throws PublishFailedException {
         if (isRunning.get()) {
-            byte[] bytes = ser.serialization(msg);
+            byte[] bytes = serializer.serialization(msg);
             if (bytes != null && bytes.length > 0) {
                 socket.sendMore(target);
                 socket.send(bytes, ZMQ.NOBLOCK);
@@ -83,7 +82,8 @@ public final class ZmqPublisher<T> extends ZmqComponent implements Publisher<byt
     }
 
     public static void main(String[] args) throws Exception {
-        try (ZmqPublisher<String> publisher = ZmqComponent.tcp("127.0.0.1", 13001).ioThreads(2)
+        try (ZmqPublisher<String> publisher = ZmqConfigurator.tcp("127.0.0.1", 13001)
+                .ioThreads(2)
                 .createPublisherWithString("test")) {
             Random random = new Random();
             while (true) {

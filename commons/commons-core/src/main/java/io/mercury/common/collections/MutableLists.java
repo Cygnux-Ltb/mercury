@@ -14,12 +14,14 @@ import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
 import org.eclipse.collections.impl.list.mutable.primitive.LongArrayList;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Iterator;
 
-public enum MutableLists {
+public final class MutableLists {
 
-    ;
+    private MutableLists() {
+    }
 
     // ******************** primitive list ********************
 
@@ -174,7 +176,9 @@ public enum MutableLists {
      * @param collection Collection
      * @return MutableList
      */
-    public static <E> MutableList<E> newFastList(Collection<E> collection) {
+    public static <E> MutableList<E> newFastList(@Nullable Collection<E> collection) {
+        if (collection == null)
+            return newFastList();
         return new FastList<>(collection);
     }
 
@@ -183,7 +187,7 @@ public enum MutableLists {
      * @param iterator Iterator
      * @return MutableList
      */
-    public static <E> MutableList<E> newFastList(Iterator<E> iterator) {
+    public static <E> MutableList<E> newFastList(@Nullable Iterator<E> iterator) {
         if (iterator != null && iterator.hasNext()) {
             MutableList<E> list = newFastList(Capacity.DEFAULT_SIZE);
             while (iterator.hasNext())
@@ -198,7 +202,7 @@ public enum MutableLists {
      * @param iterable Iterable
      * @return MutableList
      */
-    public static <E> MutableList<E> newFastList(Iterable<E> iterable) {
+    public static <E> MutableList<E> newFastList(@Nullable Iterable<E> iterable) {
         if (iterable == null)
             return newFastList();
         return FastList.newList(iterable);
@@ -210,7 +214,8 @@ public enum MutableLists {
      * @return MutableList
      */
     @SafeVarargs
-    public static <E> MutableList<E> newFastList(E... values) {
+    public static <E> MutableList<E> newFastList(
+            @Nullable E... values) {
         if (ArrayUtil.isNullOrEmpty(values))
             return newFastList();
         return FastList.newListWith(values);

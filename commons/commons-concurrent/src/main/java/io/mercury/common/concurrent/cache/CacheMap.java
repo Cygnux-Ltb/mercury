@@ -21,9 +21,9 @@ import java.util.function.Function;
 @ThreadSafe
 public class CacheMap<K, V> {
 
-    private final LoadingCache<K, V> cache;
-
     private static final Logger log = Log4j2LoggerFactory.getLogger(CacheMap.class);
+
+    private final LoadingCache<K, V> cache;
 
     private CacheMap(CacheMapBuilder builder, Function<K, V> refresher) {
         this.cache = CacheBuilder.newBuilder().maximumSize(builder.maximumSize)

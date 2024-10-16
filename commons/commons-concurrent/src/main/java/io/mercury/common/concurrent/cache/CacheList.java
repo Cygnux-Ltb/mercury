@@ -7,6 +7,8 @@ import javax.annotation.concurrent.ThreadSafe;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
+import static io.mercury.common.lang.Asserter.nonNull;
+
 /**
  * @param <T>
  * @author yellow013
@@ -16,7 +18,7 @@ public final class CacheList<T> {
 
     private final AtomicReference<Saved> savedRef;
 
-    private final Supplier<ImmutableList<T>> refresher;
+    private final Supplier<ImmutableList<T>> updater;
 
     /**
      * @author yellow013
@@ -24,23 +26,22 @@ public final class CacheList<T> {
     private final class Saved {
 
         private volatile boolean available;
-        private volatile ImmutableList<T> value;
+        private volatile ImmutableList<T> savedList;
 
-        private Saved(boolean available, ImmutableList<T> value) {
+        private Saved(boolean available, ImmutableList<T> savedList) {
             this.available = available;
-            this.value = value;
+            this.savedList = savedList;
         }
 
     }
 
     /**
-     * @param refresher Supplier<ImmutableList<T>>
+     * @param updater Supplier<ImmutableList<T>>
      */
-    public CacheList(Supplier<ImmutableList<T>> refresher) {
-        if (refresher == null)
-            throw new IllegalArgumentException("refresher is can't null...");
-        this.refresher = refresher;
-        this.savedRef = new AtomicReference<>(new Saved(true, refresher.get()));
+    public CacheList(Supplier<ImmutableList<T>> updater) {
+        nonNull(updater, "refresher");
+        this.updater = updater;
+        this.savedRef = new AtomicReference<>(new Saved(true, updater.get()));
     }
 
     /**
@@ -57,11 +58,11 @@ public final class CacheList<T> {
      */
     private ImmutableList<T> extractValue(Saved saved) {
         if (saved.available) {
-            return saved.value;
+            return saved.savedList;
         } else {
             return extractValue(savedRef.updateAndGet(save -> {
                 save.available = true;
-                save.value = refresher.get();
+                save.savedList = updater.get();
                 return save;
             }));
         }

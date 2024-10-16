@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import javax.annotation.Nullable;
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.function.Consumer;
 
 public final class ResourceUtil {
 
@@ -20,12 +21,12 @@ public final class ResourceUtil {
      */
     public static <O> void close(@Nullable O obj) throws Exception {
         if (obj != null) {
-            if (obj instanceof AutoCloseable)
-                close((AutoCloseable) obj);
-            if (obj instanceof Closeable)
-                close((Closeable) obj);
+            if (obj instanceof AutoCloseable autoCloseable)
+                close(autoCloseable);
+            if (obj instanceof Closeable closeable)
+                close(closeable);
         } else
-            log.warn("The object to be closed is NULL");
+            logNull();
     }
 
     /**
@@ -38,12 +39,38 @@ public final class ResourceUtil {
     }
 
     /**
+     * @param closeable        AutoCloseable
+     * @param exceptionHandler Consumer<Exception>
+     */
+    public static void close(@Nullable AutoCloseable closeable, Consumer<Exception> exceptionHandler) {
+        if (closeable != null)
+            try {
+                closeable.close();
+            } catch (Exception e) {
+                exceptionHandler.accept(e);
+            }
+    }
+
+    /**
      * @param closeable Closeable
      * @throws IOException ioe
      */
     public static void close(@Nullable Closeable closeable) throws IOException {
         if (closeable != null)
             closeable.close();
+    }
+
+    /**
+     * @param closeable        Closeable
+     * @param exceptionHandler Consumer<IOException>
+     */
+    public static void close(@Nullable Closeable closeable, Consumer<IOException> exceptionHandler) {
+        if (closeable != null)
+            try {
+                closeable.close();
+            } catch (IOException e) {
+                exceptionHandler.accept(e);
+            }
     }
 
     /**
@@ -54,11 +81,11 @@ public final class ResourceUtil {
             try {
                 close(obj);
             } catch (Exception e) {
-                log.error("Close object -> [{}] throw {}", obj.getClass().getName(),
-                        e.getClass().getName(), e);
+                log.error("Close object -> [{}] an {} was thrown!", obj.getClass().getName(),
+                        e.getClass().getSimpleName(), e);
             }
         else
-            log.warn("The object to be closed is NULL");
+            logNull();
     }
 
 
@@ -67,17 +94,15 @@ public final class ResourceUtil {
      */
     @SafeVarargs
     public static <O> void closeIgnoreException(@Nullable O... objs) {
-        if (objs != null) {
+        if (objs != null)
             for (O obj : objs)
-                try {
-                    close(obj);
-                } catch (Exception e) {
-                    log.error("Close object -> [{}] throw {}", obj.getClass().getName(),
-                            e.getClass().getName(), e);
-                }
-        } else {
-            log.warn("The objects to be closed is NULL");
-        }
+                closeIgnoreException(obj);
+        else
+            logNull();
+    }
+
+    private static void logNull() {
+        log.warn("The objects to be closed is NULL");
     }
 
 }

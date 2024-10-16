@@ -3,7 +3,7 @@ package io.mercury.transport.zmq;
 import io.mercury.transport.zmq.annotation.ZmqSubscribe;
 import org.junit.Test;
 
-import static io.mercury.transport.zmq.base.ZmqProtocol.IPC;
+import static io.mercury.transport.zmq.ZmqProtocol.ipc;
 
 public class ZmqSubscriberTest {
 
@@ -12,7 +12,7 @@ public class ZmqSubscriberTest {
 
     }
 
-    @ZmqSubscribe(protocol = IPC, addr = "", ioThreads = 2)
+    @ZmqSubscribe(protocol = ipc, addr = "", ioThreads = 2)
     private void handleZmqMsg() {
 
     }

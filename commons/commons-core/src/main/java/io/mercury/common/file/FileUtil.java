@@ -94,8 +94,9 @@ public final class FileUtil {
         File file = new File(USER_HOME, path);
         if (file.mkdirs())
             return file;
-        else
-            throw new NullPointerException();
+        else if (file.exists())
+            return file;
+        throw new RuntimeException(new IllegalAccessException("path -> [" + path + "] access exception"));
     }
 
     /**

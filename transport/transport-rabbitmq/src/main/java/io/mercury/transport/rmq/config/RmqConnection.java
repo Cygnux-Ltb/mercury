@@ -5,7 +5,7 @@ import com.typesafe.config.Config;
 import io.mercury.common.config.ConfigWrapper;
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.util.StringSupport;
-import io.mercury.serialization.json.JsonWrapper;
+import io.mercury.serialization.json.JsonWriter;
 import io.mercury.transport.TransportConfigurator;
 import io.mercury.transport.rmq.RmqTransport.ShutdownSignalHandler;
 import lombok.Getter;
@@ -149,7 +149,7 @@ public final class RmqConnection implements TransportConfigurator {
     @Override
     public String toString() {
         if (toStringCache == null)
-            toStringCache = JsonWrapper.toJsonHasNulls(this);
+            toStringCache = JsonWriter.toJsonHasNulls(this);
         return toStringCache;
     }
 

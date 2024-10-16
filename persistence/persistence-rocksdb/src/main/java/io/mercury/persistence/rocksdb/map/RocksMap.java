@@ -18,8 +18,7 @@ import org.rocksdb.StatsLevel;
 import java.io.Closeable;
 import java.util.Collection;
 
-public class RocksMap<K extends RocksKey, V extends RocksValue>
-        implements Closeable {
+public class RocksMap<K extends RocksKey, V extends RocksValue> implements Closeable {
 
     private final Options options;
     private final RocksDB rocksdb;

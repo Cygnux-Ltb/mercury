@@ -21,6 +21,7 @@ import org.agrona.concurrent.AtomicBuffer;
 import org.agrona.concurrent.ringbuffer.ManyToOneRingBuffer;
 
 public class SendAgent2 implements Agent {
+
     private final int sendCount;
     private final ManyToOneRingBuffer ringBuffer;
     private int currentCountItem;

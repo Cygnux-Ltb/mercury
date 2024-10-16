@@ -1,7 +1,7 @@
 package io.mercury.common.sequence;
 
 import io.mercury.common.collections.MutableLists;
-import io.mercury.common.datetime.EpochTime;
+import io.mercury.common.epoch.EpochTimeUtil;
 import io.mercury.common.util.BitFormatter;
 import org.eclipse.collections.api.list.primitive.MutableLongList;
 
@@ -145,7 +145,7 @@ public final class EpochSequence {
         System.out.println("========================================");
         System.out.println();
 
-        long epochMillis = EpochTime.getEpochMillis();
+        long epochMillis = EpochTimeUtil.getEpochMillis();
         System.out.println("epoch millis binary: ");
         System.out.println(longBinaryFormat(epochMillis));
         long lmEpochMillis = epochMillis << 16;

@@ -6,7 +6,7 @@ import io.mercury.serialization.avro.msg.AvroBinaryMsg;
 import io.mercury.serialization.avro.msg.ContentType;
 import org.junit.Test;
 
-import io.mercury.common.datetime.EpochTime;
+import io.mercury.common.epoch.EpochTimeUtil;
 
 public class AvroBinaryDeserializerTest {
 
@@ -17,11 +17,11 @@ public class AvroBinaryDeserializerTest {
 
 		AvroBinaryMsg msg0 = AvroBinaryMsgFactory.emptyBinaryMsg();
 		msg0.getEnvelope().setCode(1).setContentType(ContentType.INT).setVersion(1);
-		msg0.setEpoch(EpochTime.getEpochMillis()).setSequence(1).setContent(ByteBuffer.allocate(10));
+		msg0.setEpoch(EpochTimeUtil.getEpochMillis()).setSequence(1).setContent(ByteBuffer.allocate(10));
 
 		ByteBuffer buffer = serializer.serialization(msg0);
 
-		msg0.setEpoch(EpochTime.getEpochMillis() + 1000);
+		msg0.setEpoch(EpochTimeUtil.getEpochMillis() + 1000);
 		System.out.println(msg0);
 
 		AvroBinaryMsg msg = deserializer.deserialization(buffer.array());

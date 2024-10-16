@@ -20,64 +20,64 @@ import com.lmax.disruptor.EventTranslatorTwoArg;
 
 public final class StubEvent {
 
-	private int value;
-	private String testString;
+    private int value;
+    private String testString;
 
-	public static final EventTranslatorTwoArg<StubEvent, Integer, String> TRANSLATOR = (StubEvent event, long sequence,
-			Integer arg0, String arg1) -> {
-		event.setValue(arg0);
-		event.setTestString(arg1);
-	};
+    public static final EventTranslatorTwoArg<StubEvent, Integer, String> TRANSLATOR = (StubEvent event, long sequence,
+                                                                                        Integer arg0, String arg1) -> {
+        event.setValue(arg0);
+        event.setTestString(arg1);
+    };
 
-	public StubEvent(int i) {
-		this.value = i;
-	}
+    public StubEvent(int i) {
+        this.value = i;
+    }
 
-	public void copy(StubEvent event) {
-		value = event.value;
-	}
+    public void copy(StubEvent event) {
+        value = event.value;
+    }
 
-	public int getValue() {
-		return value;
-	}
+    public int getValue() {
+        return value;
+    }
 
-	public void setValue(int value) {
-		this.value = value;
-	}
+    public void setValue(int value) {
+        this.value = value;
+    }
 
-	public String getTestString() {
-		return testString;
-	}
+    public String getTestString() {
+        return testString;
+    }
 
-	public void setTestString(final String testString) {
-		this.testString = testString;
-	}
+    public void setTestString(final String testString) {
+        this.testString = testString;
+    }
 
-	public static final EventFactory<StubEvent> EVENT_FACTORY = () -> {
-		return new StubEvent(-1);
-	};
+    public static final EventFactory<StubEvent> EVENT_FACTORY = () -> {
+        return new StubEvent(-1);
+    };
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + value;
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + value;
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		StubEvent other = (StubEvent) obj;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        StubEvent other = (StubEvent) obj;
 
-		return value == other.value;
-	}
+        return value == other.value;
+    }
 }
