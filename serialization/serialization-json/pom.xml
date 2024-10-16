@@ -17,6 +17,13 @@
             <artifactId>commons-core</artifactId>
         </dependency>
 
+        <!-- Fastjson is a JSON processor (JSON parser + JSON generator) written in Java -->
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>2.0.53</version>
+        </dependency>
+
         <!-- General data-binding functionality for Jackson: works on core streaming API -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -59,27 +66,20 @@
             </exclusions>
         </dependency>
 
-        <!-- Fastjson is a JSON processor (JSON parser + JSON generator) written in Java -->
-        <dependency>
-            <groupId>com.alibaba.fastjson2</groupId>
-            <artifactId>fastjson2</artifactId>
-            <version>2.0.53</version>
-        </dependency>
-
         <!-- Gson is a Java library that can be used to convert Java Objects into their JSON representation.
             It can also be used to convert a JSON string to an equivalent Java object. -->
-<!--        <dependency>-->
-<!--            <groupId>com.google.code.gson</groupId>-->
-<!--            <artifactId>gson</artifactId>-->
-<!--            <version>2.11.0</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.google.code.gson</groupId>-->
+        <!--            <artifactId>gson</artifactId>-->
+        <!--            <version>2.11.0</version>-->
+        <!--        </dependency>-->
 
         <!-- Byte Buddy is a Java library for creating Java classes at run time.
             This artifact is a build of Byte Buddy with all ASM dependencies repackaged into its own name space. -->
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>1.15.1</version>
+            <version>1.15.3</version>
         </dependency>
 
     </dependencies>

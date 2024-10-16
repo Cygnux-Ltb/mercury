@@ -1,7 +1,7 @@
 package io.mercury.serialization.fury;
 
 import io.mercury.common.epoch.EpochUnit;
-import io.mercury.common.sequence.SerialObject;
+import io.mercury.common.sequence.OrderedObject;
 import io.mercury.common.serialization.ContentType;
 import io.mercury.common.serialization.specific.BytesDeserializable;
 import io.mercury.common.serialization.specific.BytesSerializable;
@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 /**
  *
  */
-public final class FuryMsg implements SerialObject<FuryMsg>,
+public final class FuryMsg implements OrderedObject<FuryMsg>,
         BytesSerializable, BytesDeserializable<FuryMsg> {
 
     private long sequence;
@@ -86,7 +86,7 @@ public final class FuryMsg implements SerialObject<FuryMsg>,
     }
 
     @Override
-    public long serialId() {
+    public long orderNum() {
         return sequence;
     }
 

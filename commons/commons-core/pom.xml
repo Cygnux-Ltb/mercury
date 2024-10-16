@@ -67,7 +67,6 @@
     </repositories>
 
     <dependencies>
-
         <!-- JSR305 Annotations for Find bugs -->
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -181,7 +180,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>33.3.0-jre</version>
+            <version>33.3.1-jre</version>
             <exclusions>
                 <exclusion>
                     <artifactId>error_prone_annotations</artifactId>
@@ -201,7 +200,6 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>24.1.0</version>
         </dependency>
 
         <!-- ####### Unit test mock tool ####### -->

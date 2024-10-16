@@ -19,7 +19,7 @@ import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYY_MM_DD
  *
  * @author yellow013
  */
-public class TimeWindow implements SerialObject<TimeWindow> {
+public class TimeWindow implements OrderedObject<TimeWindow> {
 
     private final long epochSecond;
 
@@ -180,7 +180,7 @@ public class TimeWindow implements SerialObject<TimeWindow> {
     }
 
     @Override
-    public long serialId() {
+    public long orderNum() {
         return epochSecond;
     }
 

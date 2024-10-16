@@ -46,13 +46,6 @@
                 <artifactId>commons-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- A set of annotations used for code inspection support
-                    and code documentation -->
-            <dependency>
-                <groupId>org.jetbrains</groupId>
-                <artifactId>annotations</artifactId>
-                <version>24.1.0</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
