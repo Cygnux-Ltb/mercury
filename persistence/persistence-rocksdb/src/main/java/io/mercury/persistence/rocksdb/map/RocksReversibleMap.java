@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.rocksdb.Options;
 
-import io.mercury.common.thread.ThreadSupport;
+import io.mercury.common.thread.Threads;
 import io.mercury.persistence.rocksdb.map.kv.RocksReversibleKey;
 import io.mercury.persistence.rocksdb.map.kv.RocksValue;
 
@@ -14,7 +14,7 @@ public class RocksReversibleMap<K extends RocksReversibleKey, V extends RocksVal
 
         try (Options options = new Options()) {
             Runtime.getRuntime()
-                    .addShutdownHook(ThreadSupport.newThread(
+                    .addShutdownHook(Threads.newThread(
                             "RocksContainerCloseThread", options::close));
         }
 
