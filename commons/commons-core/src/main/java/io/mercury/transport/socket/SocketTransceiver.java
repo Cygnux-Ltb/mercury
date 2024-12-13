@@ -2,7 +2,7 @@ package io.mercury.transport.socket;
 
 import io.mercury.common.collections.queue.Queue;
 import io.mercury.common.thread.Sleep;
-import io.mercury.common.thread.ThreadSupport;
+import io.mercury.common.thread.Threads;
 import io.mercury.transport.socket.configurator.SocketConfigurator;
 import org.apache.commons.io.IOUtils;
 
@@ -85,7 +85,7 @@ public final class SocketTransceiver extends BaseTransceiver<String> {
     private synchronized void startReceiveThread() {
         if (isReceiving.get())
             return;
-        ThreadSupport.startNewThread(() -> {
+        Threads.startNewThread(() -> {
             InputStream inputStream = null;
             while (isRun.get()) {
                 try {

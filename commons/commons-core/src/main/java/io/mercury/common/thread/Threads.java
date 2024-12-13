@@ -16,14 +16,14 @@ import java.util.List;
 
 import static io.mercury.common.thread.ThreadPriority.MAX;
 import static io.mercury.common.thread.ThreadPriority.MIN;
-import static io.mercury.common.thread.ThreadPriority.getOrDefault;
+import static io.mercury.common.thread.ThreadPriority.getOrDefValue;
 import static java.lang.Thread.ofPlatform;
 
-public final class ThreadSupport {
+public final class Threads {
 
-    private static final Logger log = Log4j2LoggerFactory.getLogger(ThreadSupport.class);
+    private static final Logger log = Log4j2LoggerFactory.getLogger(Threads.class);
 
-    private ThreadSupport() {
+    private Threads() {
     }
 
 
@@ -54,7 +54,7 @@ public final class ThreadSupport {
      */
     public static Thread newThread(ThreadPriority priority, Runnable task) {
         return ofPlatform()
-                .priority(getOrDefault(priority))
+                .priority(getOrDefValue(priority))
                 .unstarted(task);
     }
 
@@ -67,7 +67,7 @@ public final class ThreadSupport {
     public static Thread newThread(String name, ThreadPriority priority, Runnable task) {
         return ofPlatform()
                 .name(name)
-                .priority(getOrDefault(priority))
+                .priority(getOrDefValue(priority))
                 .unstarted(task);
     }
 
@@ -134,7 +134,7 @@ public final class ThreadSupport {
      */
     public static Thread startNewThread(ThreadPriority priority, Runnable task) {
         return ofPlatform()
-                .priority(getOrDefault(priority))
+                .priority(getOrDefValue(priority))
                 .start(task);
     }
 
@@ -147,7 +147,7 @@ public final class ThreadSupport {
     public static Thread startNewThread(String name, ThreadPriority priority, Runnable task) {
         return ofPlatform()
                 .name(name)
-                .priority(getOrDefault(priority))
+                .priority(getOrDefValue(priority))
                 .start(task);
     }
 

@@ -3,7 +3,7 @@ package io.mercury.common.concurrent.queue;
 import io.mercury.common.annotation.thread.SpinLock;
 import io.mercury.common.collections.Capacity;
 import io.mercury.common.thread.Sleep;
-import io.mercury.common.thread.ThreadSupport;
+import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringSupport;
 import org.jctools.queues.MpmcArrayQueue;
 
@@ -21,7 +21,7 @@ public final class ConcurrentQueue<E> implements MultiConsumerQueue<E> {
     public ConcurrentQueue(String queueName, Capacity capacity, WaitingStrategy strategy) {
         this.queue = new MpmcArrayQueue<>(Math.max(capacity.size(), 64));
         this.queueName = StringSupport.isNullOrEmpty(queueName)
-                ? "ConcurrentQueue-" + ThreadSupport.getCurrentThreadName()
+                ? "ConcurrentQueue-" + Threads.getCurrentThreadName()
                 : queueName;
         this.strategy = strategy == null ? WaitingStrategy.Sleep : strategy;
     }

@@ -151,7 +151,7 @@ public final class BytesUtil {
     public static short toUnsignedByte(byte[] bytes, int offset, int length) {
         checkBytes(bytes, offset, length, 1);
         short v = 0;
-        v |= bytes[offset] & 0xFF;
+        v |= (short) (bytes[offset] & 0xFF);
         return v;
     }
 
@@ -173,9 +173,9 @@ public final class BytesUtil {
     public static short toShort(byte[] bytes, int offset, int length) {
         checkBytes(bytes, offset, length, 2);
         short v = 0;
-        v |= bytes[offset] & 0xFF;
+        v |= (short) (bytes[offset] & 0xFF);
         v <<= 8;
-        v |= bytes[offset + 1] & 0xFF;
+        v |= (short) (bytes[offset + 1] & 0xFF);
         return v;
     }
 

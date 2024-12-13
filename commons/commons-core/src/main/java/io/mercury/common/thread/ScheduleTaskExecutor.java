@@ -12,7 +12,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
-import static io.mercury.common.thread.ThreadSupport.newMaxPriorityThread;
+import static io.mercury.common.thread.Threads.newMaxPriorityThread;
 import static java.time.Duration.between;
 import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 

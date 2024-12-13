@@ -24,6 +24,15 @@ public final class DateTimeUtil {
      *
      * @return int
      */
+    public static int date(ZoneId zoneId) {
+        return date(LocalDate.now(zoneId));
+    }
+
+    /**
+     * 返回 primitive int 表示的 yyyyMMdd
+     *
+     * @return int
+     */
     public static int date() {
         return date(LocalDate.now());
     }

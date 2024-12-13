@@ -2,7 +2,7 @@ package io.mercury.common.concurrent.disruptor;
 
 import com.lmax.disruptor.support.LongEvent;
 import io.mercury.common.thread.Sleep;
-import io.mercury.common.thread.ThreadSupport;
+import io.mercury.common.thread.Threads;
 import org.junit.Test;
 
 import java.util.concurrent.atomic.LongAdder;
@@ -30,7 +30,7 @@ public class RingProcessChainTest {
                     p2.increment();
                 }).name("Test-RingProcessChain").size(32).waitStrategy(Yielding.get()).create();
 
-        Thread thread = ThreadSupport.startNewThread(() -> {
+        Thread thread = Threads.startNewThread(() -> {
             for (long l = 0L; l < 1000; l++)
                 processChain.publishEvent(l);
         });

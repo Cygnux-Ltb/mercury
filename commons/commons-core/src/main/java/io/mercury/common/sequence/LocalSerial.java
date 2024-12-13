@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.concurrent.ThreadSafe;
 
-import io.mercury.common.thread.ThreadSupport;
+import io.mercury.common.thread.Threads;
 
 @ThreadSafe
 public final class LocalSerial {
@@ -51,7 +51,7 @@ public final class LocalSerial {
 
         SecureRandom random = new SecureRandom();
 
-        ThreadSupport.startNewThread(() -> {
+        Threads.startNewThread(() -> {
             if (atomicLong.get() < 0) {
             } else if (atomicLong.get() > 100) {
             } else {

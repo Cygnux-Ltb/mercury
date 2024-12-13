@@ -5,14 +5,14 @@ import io.mercury.common.annotation.thread.SpinLock;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.thread.Sleep;
-import io.mercury.common.thread.ThreadSupport;
+import io.mercury.common.thread.Threads;
 import org.jctools.queues.MpscArrayQueue;
 import org.jctools.queues.SpscArrayQueue;
 import org.slf4j.Logger;
 
 import java.util.Queue;
 
-import static io.mercury.common.thread.ThreadSupport.getCurrentThreadName;
+import static io.mercury.common.thread.Threads.getCurrentThreadName;
 import static io.mercury.common.util.StringSupport.isNullOrEmpty;
 import static java.lang.Math.max;
 
@@ -148,7 +148,7 @@ public abstract class SingleConsumerQueueWithJCT<E> extends SingleConsumerQueue<
 
     @Override
     protected void start0() {
-        ThreadSupport.startNewThread(name + "-SubThread", consumer);
+        Threads.startNewThread(name + "-SubThread", consumer);
         log.info("Queue -> {}, This queue is already working", name);
     }
 
