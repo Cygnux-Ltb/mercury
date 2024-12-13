@@ -2,7 +2,7 @@ package io.mercury.transport.zmq;
 
 import io.mercury.common.log4j2.Log4j2Configurator;
 import io.mercury.common.thread.Sleep;
-import io.mercury.common.thread.ThreadSupport;
+import io.mercury.common.thread.Threads;
 import io.mercury.transport.attr.Topics;
 import org.junit.Test;
 
@@ -21,7 +21,7 @@ public class ZmqTcpPubSubTest {
 
         String topic = "tcp-test";
 
-        ThreadSupport.startNewThread(() -> {
+        Threads.startNewThread(() -> {
             try (ZmqSubscriber subscriber = ZmqConfigurator.tcp("127.0.0.1", 13001).ioThreads(1)
                     .createSubscriber(Topics.with(topic), this::handleMag)) {
                 subscriber.subscribe();

@@ -19,7 +19,7 @@ import io.mercury.common.character.Charsets;
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.thread.Sleep;
-import io.mercury.common.thread.ThreadSupport;
+import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Publisher;
 import io.mercury.transport.api.Sender;
@@ -252,7 +252,7 @@ public class RmqPublisher extends RmqTransport implements Publisher<String, byte
 
         try (RmqPublisher publisher = new RmqPublisher(
                 RmqPublisherConfig.configuration(connection, fanoutExchange).build())) {
-            ThreadSupport.startNewThread(() -> {
+            Threads.startNewThread(() -> {
                 int count = 0;
                 while (true) {
                     Sleep.millis(5000);

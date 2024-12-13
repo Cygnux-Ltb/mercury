@@ -1,7 +1,7 @@
 package io.mercury.transport.zmq;
 
 import io.mercury.common.thread.Sleep;
-import io.mercury.common.thread.ThreadSupport;
+import io.mercury.common.thread.Threads;
 import io.mercury.transport.api.Receiver;
 import io.mercury.transport.zmq.exception.ZmqBindException;
 import org.slf4j.Logger;
@@ -77,7 +77,7 @@ public class ZmqReceiver extends ZmqComponent implements Receiver, Closeable {
             return null;
         })) {
             Sleep.millis(15000);
-            ThreadSupport.startNewThread(receiver::receive);
+            Threads.startNewThread(receiver::receive);
         } catch (IOException ignored) {
         }
     }

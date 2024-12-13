@@ -1,7 +1,7 @@
 package io.mercury.transport.zmq;
 
 import io.mercury.common.thread.Sleep;
-import io.mercury.common.thread.ThreadSupport;
+import io.mercury.common.thread.Threads;
 import io.mercury.transport.api.Subscriber;
 import io.mercury.transport.attr.Topics;
 import org.junit.Test;
@@ -17,7 +17,7 @@ public class ZmqIpcPubSubTest {
 
         String topic = "ipc-test";
 
-        ThreadSupport.startNewThread(() -> {
+        Threads.startNewThread(() -> {
             try (Subscriber subscriber = ZmqConfigurator.ipc("test/01").ioThreads(1).createSubscriber(Topics.with(topic),
                     this::handleMag)) {
                 subscriber.subscribe();

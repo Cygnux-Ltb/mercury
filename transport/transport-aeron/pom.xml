@@ -12,8 +12,8 @@
     <name>transport-aeron</name>
 
     <properties>
-        <aeron.version>1.46.5</aeron.version>
-        <byte-buddy.version>1.15.3</byte-buddy.version>
+        <aeron.version>1.46.6</aeron.version>
+        <byte-buddy.version>1.15.5</byte-buddy.version>
     </properties>
 
     <repositories>
