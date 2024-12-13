@@ -3,13 +3,16 @@ package io.mercury.serialization.fury;
 import io.mercury.common.epoch.EpochUnit;
 import io.mercury.common.sequence.OrderedObject;
 import io.mercury.common.serialization.ContentType;
-import org.apache.fury.Fury;
+import io.mercury.common.serialization.specific.BytesDeserializable;
+import io.mercury.common.serialization.specific.BytesSerializable;
 
 import javax.annotation.Nonnull;
-import javax.annotation.concurrent.NotThreadSafe;
 
-@NotThreadSafe
-public class NotThreadSafeFuryMsg implements OrderedObject<NotThreadSafeFuryMsg> {
+/**
+ *
+ */
+public final class FuryMsg implements OrderedObject<FuryMsg>,
+        BytesSerializable, BytesDeserializable<FuryMsg> {
 
     private long sequence;
     private long epoch;
@@ -23,7 +26,7 @@ public class NotThreadSafeFuryMsg implements OrderedObject<NotThreadSafeFuryMsg>
         return sequence;
     }
 
-    public NotThreadSafeFuryMsg setSequence(long sequence) {
+    public FuryMsg setSequence(long sequence) {
         this.sequence = sequence;
         return this;
     }
@@ -32,7 +35,7 @@ public class NotThreadSafeFuryMsg implements OrderedObject<NotThreadSafeFuryMsg>
         return epoch;
     }
 
-    public NotThreadSafeFuryMsg setEpoch(long epoch) {
+    public FuryMsg setEpoch(long epoch) {
         this.epoch = epoch;
         return this;
     }
@@ -41,7 +44,7 @@ public class NotThreadSafeFuryMsg implements OrderedObject<NotThreadSafeFuryMsg>
         return epochUnit;
     }
 
-    public NotThreadSafeFuryMsg setEpochUnit(EpochUnit epochUnit) {
+    public FuryMsg setEpochUnit(EpochUnit epochUnit) {
         this.epochUnit = epochUnit;
         return this;
     }
@@ -50,7 +53,7 @@ public class NotThreadSafeFuryMsg implements OrderedObject<NotThreadSafeFuryMsg>
         return envelope;
     }
 
-    public NotThreadSafeFuryMsg setEnvelope(int envelope) {
+    public FuryMsg setEnvelope(int envelope) {
         this.envelope = envelope;
         return this;
     }
@@ -59,7 +62,7 @@ public class NotThreadSafeFuryMsg implements OrderedObject<NotThreadSafeFuryMsg>
         return version;
     }
 
-    public NotThreadSafeFuryMsg setVersion(int version) {
+    public FuryMsg setVersion(int version) {
         this.version = version;
         return this;
     }
@@ -68,7 +71,7 @@ public class NotThreadSafeFuryMsg implements OrderedObject<NotThreadSafeFuryMsg>
         return contentType;
     }
 
-    public NotThreadSafeFuryMsg setContentType(ContentType contentType) {
+    public FuryMsg setContentType(ContentType contentType) {
         this.contentType = contentType;
         return this;
     }
@@ -77,7 +80,7 @@ public class NotThreadSafeFuryMsg implements OrderedObject<NotThreadSafeFuryMsg>
         return content;
     }
 
-    public NotThreadSafeFuryMsg setContent(byte[] content) {
+    public FuryMsg setContent(byte[] content) {
         this.content = content;
         return this;
     }
@@ -88,14 +91,15 @@ public class NotThreadSafeFuryMsg implements OrderedObject<NotThreadSafeFuryMsg>
     }
 
     @Nonnull
-    public NotThreadSafeFuryMsg fromBytes(@Nonnull Fury fury, @Nonnull byte[] bytes) {
-        return fury.deserializeJavaObject(bytes, NotThreadSafeFuryMsg.class);
+    @Override
+    public FuryMsg fromBytes(@Nonnull byte[] bytes) {
+        return FuryKeeper.FURY_MSG_USED.deserializeJavaObject(bytes, FuryMsg.class);
     }
 
     @Nonnull
-    public byte[] toBytes(@Nonnull Fury fury) {
-        return fury.serializeJavaObject(this);
+    @Override
+    public byte[] toBytes() {
+        return FuryKeeper.FURY_MSG_USED.serializeJavaObject(this);
     }
-
 
 }

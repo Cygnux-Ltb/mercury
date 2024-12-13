@@ -7,222 +7,162 @@ import org.eclipse.collections.api.map.MutableMap;
 import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
 
-public final class ThreadSupport {
+import static io.mercury.common.thread.ThreadPriority.MAX;
+import static io.mercury.common.thread.ThreadPriority.MIN;
+import static io.mercury.common.thread.ThreadPriority.getOrDefault;
+import static java.lang.Thread.ofVirtual;
 
-    private static final Logger log = Log4j2LoggerFactory.getLogger(ThreadSupport.class);
+public final class Fiber {
 
-    private ThreadSupport() {
+    private static final Logger log = Log4j2LoggerFactory.getLogger(Fiber.class);
+
+    private Fiber() {
     }
 
     /**
-     * @return ThreadPoolExecutor
+     * @param task Runnable
+     * @return java.lang.Thread
      */
-    public static ThreadPoolExecutor newCommonThreadPool() {
-        return CommonThreadPool.newBuilder().build();
+    public static Thread newFiber(Runnable task) {
+        return ofVirtual()
+                .unstarted(task);
     }
 
     /**
      * @param name String
-     * @return java.util.concurrent.ThreadFactory
+     * @param task Runnable
+     * @return java.lang.Thread
      */
-    public static ThreadFactory newThreadFactory(String name) {
-        return newThreadFactory(name, ThreadPriority.NORM);
+    public static Thread newFiber(String name, Runnable task) {
+        return ofVirtual()
+                .name(name)
+                .unstarted(task);
     }
 
+
+
     /**
-     * @param name     String
-     * @param priority ThreadPriority
-     * @return java.util.concurrent.ThreadFactory
+     * @param task Runnable
+     * @return java.lang.Thread
      */
-    public static ThreadFactory newThreadFactory(String name, ThreadPriority priority) {
-        return runnable -> newThread(name, priority, runnable);
+    public static Thread newMaxPriorityThread(Runnable task) {
+        return newFiber(MAX, task);
     }
 
     /**
      * @param name String
-     * @return java.util.concurrent.ThreadFactory
+     * @param task Runnable
+     * @return java.lang.Thread
      */
-    public static ThreadFactory newDaemonThreadFactory(String name) {
-        return newDaemonThreadFactory(name, ThreadPriority.NORM);
+    public static Thread newMaxPriorityThread(String name, Runnable task) {
+        return newFiber(name, MAX, task);
+    }
+
+    /**
+     * @param task Runnable
+     * @return java.lang.Thread
+     */
+    public static Thread newMinPriorityThread(Runnable task) {
+        return newFiber(MIN, task);
+    }
+
+    /**
+     * @param name String
+     * @param task Runnable
+     * @return java.lang.Thread
+     */
+    public static Thread newMinPriorityThread(String name, Runnable task) {
+        return newFiber(name, MIN, task);
+    }
+
+    /// ################################################################################ ///
+
+    /**
+     * @param task Runnable
+     * @return java.lang.Thread
+     */
+    public static Thread startNewThread(Runnable task) {
+        return ofPlatform()
+                .start(task);
+    }
+
+    /**
+     * @param name String
+     * @param task Runnable
+     * @return java.lang.Thread
+     */
+    public static Thread startNewThread(String name, Runnable task) {
+        return ofPlatform()
+                .name(name)
+                .start(task);
+    }
+
+    /**
+     * @param priority ThreadPriority
+     * @param task     Runnable
+     * @return java.lang.Thread
+     */
+    public static Thread startNewThread(ThreadPriority priority, Runnable task) {
+        return ofPlatform()
+                .priority(getOrDefault(priority))
+                .start(task);
     }
 
     /**
      * @param name     String
      * @param priority ThreadPriority
-     * @return java.util.concurrent.ThreadFactory
+     * @param task     Runnable
+     * @return java.lang.Thread
      */
-    public static ThreadFactory newDaemonThreadFactory(String name, ThreadPriority priority) {
-        return runnable -> setDaemonThread(newThread(name, priority, runnable));
+    public static Thread startNewThread(String name, ThreadPriority priority, Runnable task) {
+        return ofPlatform()
+                .name(name)
+                .priority(getOrDefault(priority))
+                .start(task);
     }
 
     /**
-     * @param thread   Thread
-     * @param priority ThreadPriority
+     * @param task Runnable
      * @return java.lang.Thread
      */
-    public static Thread setThreadPriority(Thread thread, ThreadPriority priority) {
-        thread.setPriority(priority != null ? priority.getValue() : ThreadPriority.NORM.getValue());
-        return thread;
+    public static Thread startNewMaxPriorityThread(Runnable task) {
+        return startNewThread(MAX, task);
     }
 
     /**
-     * @param thread Thread
+     * @param name String
+     * @param task Runnable
      * @return java.lang.Thread
      */
-    public static Thread setDaemonThread(Thread thread) {
-        thread.setDaemon(true);
-        return thread;
+    public static Thread startNewMaxPriorityThread(String name, Runnable task) {
+        return startNewThread(name, MAX, task);
     }
 
     /**
-     * @param thread  Thread
-     * @param handler UncaughtExceptionHandler
+     * @param task Runnable
      * @return java.lang.Thread
      */
-    public static Thread setThreadExceptionHandler(Thread thread, UncaughtExceptionHandler handler) {
-        thread.setUncaughtExceptionHandler(handler);
-        return thread;
+    public static Thread startNewMinPriorityThread(Runnable task) {
+        return startNewThread(MIN, task);
     }
 
     /**
-     * @param runnable Runnable
+     * @param name String
+     * @param task Runnable
      * @return java.lang.Thread
      */
-    public static Thread newThread(Runnable runnable) {
-        return new Thread(runnable);
+    public static Thread startNewMinPriorityThread(String name, Runnable task) {
+        return startNewThread(name, MIN, task);
     }
 
-    /**
-     * @param name     String
-     * @param runnable Runnable
-     * @return java.lang.Thread
-     */
-    public static Thread newThread(String name, Runnable runnable) {
-        return new Thread(runnable, name);
-    }
-
-    /**
-     * @param priority ThreadPriority
-     * @param runnable Runnable
-     * @return java.lang.Thread
-     */
-    public static Thread newThread(ThreadPriority priority, Runnable runnable) {
-        return setThreadPriority(new Thread(runnable), priority);
-    }
-
-    /**
-     * @param name     String
-     * @param priority ThreadPriority
-     * @param runnable Runnable
-     * @return java.lang.Thread
-     */
-    public static Thread newThread(String name, ThreadPriority priority, Runnable runnable) {
-        return setThreadPriority(new Thread(runnable, name), priority);
-    }
-
-    /**
-     * @param runnable Runnable
-     * @return java.lang.Thread
-     */
-    public static Thread newMaxPriorityThread(Runnable runnable) {
-        return setThreadPriority(new Thread(runnable), ThreadPriority.MAX);
-    }
-
-    /**
-     * @param name     String
-     * @param runnable Runnable
-     * @return java.lang.Thread
-     */
-    public static Thread newMaxPriorityThread(String name, Runnable runnable) {
-        return setThreadPriority(new Thread(runnable, name), ThreadPriority.MAX);
-    }
-
-    /**
-     * @param runnable Runnable
-     * @return java.lang.Thread
-     */
-    public static Thread newMinPriorityThread(Runnable runnable) {
-        return setThreadPriority(new Thread(runnable), ThreadPriority.MIN);
-    }
-
-    /**
-     * @param name     String
-     * @param runnable Runnable
-     * @return java.lang.Thread
-     */
-    public static Thread newMinPriorityThread(String name, Runnable runnable) {
-        return setThreadPriority(new Thread(runnable, name), ThreadPriority.MIN);
-    }
-
-    /**
-     * @param runnable Runnable
-     * @return java.lang.Thread
-     */
-    public static Thread startNewThread(Runnable runnable) {
-        return startThread(newThread(runnable));
-    }
-
-    /**
-     * @param name     String
-     * @param runnable Runnable
-     * @return java.lang.Thread
-     */
-    public static Thread startNewThread(String name, Runnable runnable) {
-        return startThread(new Thread(runnable, name));
-    }
-
-    /**
-     * @param runnable Runnable
-     * @return java.lang.Thread
-     */
-    public static Thread startNewMaxPriorityThread(Runnable runnable) {
-        return startThread(newMaxPriorityThread(runnable));
-    }
-
-    /**
-     * @param name     String
-     * @param runnable Runnable
-     * @return java.lang.Thread
-     */
-    public static Thread startNewMaxPriorityThread(String name, Runnable runnable) {
-        return startThread(newMaxPriorityThread(name, runnable));
-    }
-
-    /**
-     * @param runnable Runnable
-     * @return java.lang.Thread
-     */
-    public static Thread startNewMinPriorityThread(Runnable runnable) {
-        return startThread(newMinPriorityThread(runnable));
-    }
-
-    /**
-     * @param name     String
-     * @param runnable Runnable
-     * @return java.lang.Thread
-     */
-    public static Thread startNewMinPriorityThread(String name, Runnable runnable) {
-        return startThread(newMinPriorityThread(name, runnable));
-    }
-
-    /**
-     * @param thread Thread
-     * @return java.lang.Thread
-     */
-    public static Thread startThread(Thread thread) {
-        thread.start();
-        return thread;
-    }
+    /// ################################################################################ ///
 
     /**
      * @throws RuntimeInterruptedException re
