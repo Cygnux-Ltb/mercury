@@ -1,9 +1,9 @@
 package io.mercury.serialization.json;
 
+import org.junit.Test;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import org.junit.Test;
 
 public class JsonWriterTest {
 

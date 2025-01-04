@@ -1,14 +1,14 @@
 package org.zeromq.guide;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZFrame;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Poller;
 import org.zeromq.ZMQ.Socket;
+
+import java.util.HashMap;
+import java.util.Map;
 
 //  Last value cache
 //  Uses XPUB subscription messages to re-send data

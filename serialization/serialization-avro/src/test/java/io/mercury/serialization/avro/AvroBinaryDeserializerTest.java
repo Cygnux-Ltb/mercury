@@ -1,12 +1,11 @@
 package io.mercury.serialization.avro;
 
-import java.nio.ByteBuffer;
-
+import io.mercury.common.epoch.EpochTimeUtil;
 import io.mercury.serialization.avro.msg.AvroBinaryMsg;
 import io.mercury.serialization.avro.msg.ContentType;
 import org.junit.Test;
 
-import io.mercury.common.epoch.EpochTimeUtil;
+import java.nio.ByteBuffer;
 
 public class AvroBinaryDeserializerTest {
 

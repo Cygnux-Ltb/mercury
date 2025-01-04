@@ -1,10 +1,10 @@
 package com.conversantmedia.util.concurrent;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by jcairns on 2/12/16.

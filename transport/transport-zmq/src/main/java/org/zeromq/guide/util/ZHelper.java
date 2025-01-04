@@ -1,14 +1,14 @@
 package org.zeromq.guide.util;
 
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-
 import org.zeromq.SocketType;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
+
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public class ZHelper {
 	private static final Random rand = new Random(System.currentTimeMillis());

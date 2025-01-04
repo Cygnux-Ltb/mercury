@@ -1,11 +1,11 @@
 package io.mercury.serialization.kryo;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 
 public class KryoDemo {
 

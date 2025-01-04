@@ -1,6 +1,7 @@
 package io.mercury.library.ignite.user.controller;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Test the jwt, if the token is valid then return "Login Successful"

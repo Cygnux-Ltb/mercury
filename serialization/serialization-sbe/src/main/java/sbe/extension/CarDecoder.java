@@ -1,8 +1,8 @@
 /* Generated SBE (Simple Binary Encoding) message codec. */
 package sbe.extension;
 
-import org.agrona.MutableDirectBuffer;
 import org.agrona.DirectBuffer;
+import org.agrona.MutableDirectBuffer;
 
 
 /**

@@ -1,11 +1,10 @@
 package io.mercury.common.concurrent.queue;
 
-import java.util.function.Predicate;
+import io.mercury.common.collections.queue.Queue;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-
-import io.mercury.common.collections.queue.Queue;
+import java.util.function.Predicate;
 
 /**
  * 

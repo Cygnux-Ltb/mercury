@@ -1,8 +1,5 @@
 package org.zeromq.guide.clone;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
@@ -12,6 +9,9 @@ import org.zeromq.ZMsg;
 import org.zeromq.ZThread;
 import org.zeromq.ZThread.IAttachedRunnable;
 import org.zeromq.guide.util.KvMsg;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Clone {
 	private final ZContext ctx; // Our context wrapper

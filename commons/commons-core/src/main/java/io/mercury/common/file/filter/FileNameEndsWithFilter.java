@@ -1,9 +1,8 @@
 package io.mercury.common.file.filter;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.FileFilter;
-
-import javax.annotation.Nonnull;
 
 public class FileNameEndsWithFilter implements FileFilter {
 

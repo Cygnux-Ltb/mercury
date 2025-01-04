@@ -1,8 +1,5 @@
 package org.zeromq.guide.pirate;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZFrame;
@@ -10,6 +7,9 @@ import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Poller;
 import org.zeromq.ZMQ.Socket;
 import org.zeromq.ZMsg;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 //
 // Paranoid Pirate queue

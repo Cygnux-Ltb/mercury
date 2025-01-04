@@ -1,7 +1,6 @@
 package io.mercury.serialization.avro;
 
-import java.io.File;
-
+import io.mercury.common.sys.SysProperties;
 import io.mercury.serialization.avro.msg.AvroTextMsg;
 import io.mercury.serialization.avro.msg.ContentType;
 import io.mercury.serialization.avro.msg.Envelope;
@@ -10,7 +9,7 @@ import org.apache.avro.file.DataFileWriter;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.specific.SpecificDatumWriter;
 
-import io.mercury.common.sys.SysProperties;
+import java.io.File;
 
 public class WriteAsAvro {
 

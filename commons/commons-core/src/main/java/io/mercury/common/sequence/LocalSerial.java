@@ -1,11 +1,10 @@
 package io.mercury.common.sequence;
 
-import java.security.SecureRandom;
-import java.util.concurrent.atomic.AtomicLong;
+import io.mercury.common.thread.Threads;
 
 import javax.annotation.concurrent.ThreadSafe;
-
-import io.mercury.common.thread.Threads;
+import java.security.SecureRandom;
+import java.util.concurrent.atomic.AtomicLong;
 
 @ThreadSafe
 public final class LocalSerial {

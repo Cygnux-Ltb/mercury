@@ -1,10 +1,5 @@
 package io.mercury.actors.sample.supervision;
 
-import static akka.japi.Util.classTag;
-import static akka.pattern.Patterns.ask;
-
-import java.util.concurrent.TimeUnit;
-
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
@@ -16,6 +11,11 @@ import io.mercury.actors.sample.supervision.Expression.Multiply;
 import scala.concurrent.Await;
 import scala.concurrent.duration.Duration;
 import scala.concurrent.duration.FiniteDuration;
+
+import java.util.concurrent.TimeUnit;
+
+import static akka.japi.Util.classTag;
+import static akka.pattern.Patterns.ask;
 
 public class Main {
 

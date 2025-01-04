@@ -1,16 +1,15 @@
 package io.mercury.common.concurrent.queue;
 
-import static io.mercury.common.util.BitOperator.minPow2;
+import io.mercury.common.thread.Sleep;
+import io.mercury.common.thread.Threads;
+import org.jctools.queues.MessagePassingQueue;
+import org.jctools.queues.MpmcArrayQueue;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
-import org.jctools.queues.MessagePassingQueue;
-import org.jctools.queues.MpmcArrayQueue;
-
-import io.mercury.common.thread.Sleep;
-import io.mercury.common.thread.Threads;
+import static io.mercury.common.util.BitOperator.minPow2;
 
 @ThreadSafe
 public final class ConcurrentPriorityQueue<E> implements Comparable<ConcurrentPriorityQueue<E>> {

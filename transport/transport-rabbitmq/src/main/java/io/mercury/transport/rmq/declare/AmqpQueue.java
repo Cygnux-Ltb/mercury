@@ -1,12 +1,11 @@
 package io.mercury.transport.rmq.declare;
 
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
 import io.mercury.common.collections.MapUtil;
 import io.mercury.common.lang.Asserter;
 import io.mercury.serialization.json.JsonWriter;
+
+import javax.annotation.Nonnull;
+import java.util.Map;
 
 public final class AmqpQueue {
 

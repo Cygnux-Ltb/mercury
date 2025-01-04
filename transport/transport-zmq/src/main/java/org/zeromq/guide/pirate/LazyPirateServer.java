@@ -1,10 +1,10 @@
 package org.zeromq.guide.pirate;
 
-import java.util.Random;
-
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ.Socket;
+
+import java.util.Random;
 
 //
 // Lazy Pirate server

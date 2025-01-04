@@ -15,8 +15,6 @@
  */
 package io.netty.example.stomp.websocket;
 
-import java.util.List;
-
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
@@ -28,6 +26,8 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler.Han
 import io.netty.handler.codec.stomp.StompSubframe;
 import io.netty.handler.codec.stomp.StompSubframeAggregator;
 import io.netty.handler.codec.stomp.StompSubframeDecoder;
+
+import java.util.List;
 
 @Sharable
 public class StompWebSocketProtocolCodec extends MessageToMessageCodec<WebSocketFrame, StompSubframe> {

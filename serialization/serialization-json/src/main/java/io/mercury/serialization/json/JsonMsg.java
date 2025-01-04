@@ -1,8 +1,8 @@
 package io.mercury.serialization.json;
 
 import io.mercury.common.epoch.EpochUnit;
-import io.mercury.common.serialization.specific.JsonSerializable;
 import io.mercury.common.serialization.ContentType;
+import io.mercury.common.serialization.specific.JsonSerializable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

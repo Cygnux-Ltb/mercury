@@ -1,10 +1,10 @@
 package org.zeromq.guide.util;
 
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Socket;
+
+import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 /**
  * 

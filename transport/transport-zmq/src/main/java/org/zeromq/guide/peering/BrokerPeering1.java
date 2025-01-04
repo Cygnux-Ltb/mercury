@@ -1,12 +1,12 @@
 package org.zeromq.guide.peering;
 
-import java.util.Random;
-
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Poller;
 import org.zeromq.ZMQ.Socket;
+
+import java.util.Random;
 
 //  Broker peering simulation (part 1)
 //  Prototypes the state flow

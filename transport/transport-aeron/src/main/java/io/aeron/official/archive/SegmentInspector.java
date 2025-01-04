@@ -16,9 +16,9 @@
 package io.aeron.official.archive;
 
 import io.aeron.logbuffer.FrameDescriptor;
-import io.aeron.protocol.DataHeaderFlyweight;
 import io.aeron.official.LogInspector;
 import io.aeron.official.SamplesUtil;
+import io.aeron.protocol.DataHeaderFlyweight;
 import org.agrona.BitUtil;
 import org.agrona.concurrent.UnsafeBuffer;
 

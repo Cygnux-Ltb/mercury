@@ -1,5 +1,9 @@
 package com.conversantmedia.util.concurrent;
 
+import org.junit.Assert;
+import org.junit.Ignore;
+import org.junit.Test;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -9,10 +13,6 @@ import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
 
 /**
  * @author John Cairns <jcairns@dotomi.com> Date: 4//25/12 Time: 3:27 PM

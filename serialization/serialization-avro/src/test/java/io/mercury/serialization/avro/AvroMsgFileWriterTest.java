@@ -1,16 +1,15 @@
 package io.mercury.serialization.avro;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import io.mercury.common.sys.SysProperties;
 import io.mercury.serialization.avro.msg.AvroTextMsg;
 import io.mercury.serialization.avro.msg.ContentType;
 import io.mercury.serialization.avro.msg.Envelope;
 import org.junit.Test;
 
-import io.mercury.common.sys.SysProperties;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AvroMsgFileWriterTest {
 

@@ -10,13 +10,13 @@ import java.nio.charset.Charset;
 import static java.util.Optional.ofNullable;
 
 /**
- * 基于快速缓冲FastByteBuffer的OutputStream，随着数据的增长自动扩充缓冲区
+ * 基于快速缓冲FastByteBuffer的OutputStream, 随着数据的增长自动扩充缓冲区
  * <p>
  * 可以通过{@link #toByteArray()}和 {@link #toString()}来获取数据
  * <p>
- * {@link #close()}方法无任何效果，当流被关闭后不会抛出IOException
+ * {@link #close()}方法无任何效果, 当流被关闭后不会抛出IOException
  * <p>
- * 这种设计避免重新分配内存块而是分配新增的缓冲区，缓冲区不会被GC，数据也不会被拷贝到其他缓冲区。
+ * 这种设计避免重新分配内存块而是分配新增的缓冲区, 缓冲区不会被GC, 数据也不会被拷贝到其他缓冲区.
  *
  * @author biezhi
  */

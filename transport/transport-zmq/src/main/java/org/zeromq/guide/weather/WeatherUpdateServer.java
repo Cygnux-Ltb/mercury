@@ -1,10 +1,10 @@
 package org.zeromq.guide.weather;
 
-import java.util.Random;
-
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
+
+import java.util.Random;
 
 //
 //  Weather update server in Java

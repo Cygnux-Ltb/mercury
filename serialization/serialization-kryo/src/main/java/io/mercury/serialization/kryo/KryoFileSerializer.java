@@ -1,11 +1,10 @@
 package io.mercury.serialization.kryo;
 
-import java.io.File;
-import java.util.Collection;
-
 import io.mercury.common.serialization.specific.FileSerializer;
 
 import javax.annotation.Nonnull;
+import java.io.File;
+import java.util.Collection;
 
 public class KryoFileSerializer<T> implements FileSerializer<Collection<T>> {
 
