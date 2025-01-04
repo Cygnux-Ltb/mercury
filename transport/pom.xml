@@ -15,7 +15,6 @@
 
     <modules>
         <module>transport-aeron</module>
-        <module>transport-jetty</module>
         <module>transport-netty</module>
         <module>transport-rabbitmq</module>
         <module>transport-rsocket</module>

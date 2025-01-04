@@ -11,7 +11,7 @@
     <name>library-encryption</name>
 
     <properties>
-        <bouncycastle.version>1.78.1</bouncycastle.version>
+        <bouncycastle.version>1.79</bouncycastle.version>
     </properties>
 
     <licenses>
@@ -67,7 +67,7 @@
             the NTRU encryption algorithms. -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-ext-jdk18on</artifactId>
+            <artifactId>bcprov-jdk18on</artifactId>
             <version>${bouncycastle.version}</version>
         </dependency>
 
