@@ -4,6 +4,7 @@ import io.mercury.common.lang.Asserter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.Math.ceil;
@@ -365,6 +366,13 @@ public final class ArrayUtil {
                         min((i + 1) * chunkSize, original.length)
                 ))
                 .collect(toList());
+    }
+
+    public static int[] shiftLeft(final int[] array){
+         Arrays.sort(array);
+
+
+        return array;
     }
 
 }
