@@ -37,10 +37,10 @@
         <!-- Common library version -->
         <slf4j.version>2.0.16</slf4j.version>
         <junit.version>4.13.2</junit.version>
-        <jupiter.version>5.11.3</jupiter.version>
-        <netty.version>4.1.115.Final</netty.version>
+        <jupiter.version>5.11.4</jupiter.version>
+        <netty.version>4.1.117.Final</netty.version>
         <jackson.version>2.18.2</jackson.version>
-        <guava.version>33.3.1-jre</guava.version>
+        <guava.version>33.4.0-jre</guava.version>
     </properties>
 
     <build>
@@ -118,7 +118,7 @@
             <dependency>
                 <groupId>org.jetbrains</groupId>
                 <artifactId>annotations</artifactId>
-                <version>26.0.1</version>
+                <version>26.0.2</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

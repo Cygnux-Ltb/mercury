@@ -20,11 +20,10 @@ import io.aeron.ImageFragmentAssembler;
 import io.aeron.Subscription;
 import io.aeron.logbuffer.Header;
 import org.agrona.DirectBuffer;
+import org.agrona.UnsafeApi;
 import org.agrona.concurrent.IdleStrategy;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static org.agrona.UnsafeAccess.UNSAFE;
 
 class ImageRateSubscriberLhsPadding {
     byte p000, p001, p002, p003, p004, p005, p006, p007, p008, p009, p010, p011, p012, p013, p014, p015;
@@ -38,7 +37,7 @@ class ImageRateSubscriberValues extends ImageRateSubscriberLhsPadding {
 
     static {
         try {
-            TOTAL_BYTES_OFFSET = UNSAFE.objectFieldOffset(RateReporterValues.class.getDeclaredField("totalBytes"));
+            TOTAL_BYTES_OFFSET = UnsafeApi.objectFieldOffset(RateReporterValues.class.getDeclaredField("totalBytes"));
         } catch (final Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -114,7 +113,8 @@ public final class ImageRateSubscriber extends ImageRateSubscriberRhsPadding imp
     }
 
     private void onFragment(final DirectBuffer buffer, final int offset, final int length, final Header header) {
-        UNSAFE.putOrderedLong(this, TOTAL_BYTES_OFFSET, totalBytes + length);
+        UnsafeApi.putLong(this, TOTAL_BYTES_OFFSET, totalBytes + length);
+        //.putOrderedLong(this, TOTAL_BYTES_OFFSET, totalBytes + length);
     }
 
 }

@@ -15,9 +15,9 @@
  */
 package io.aeron.official;
 
-import java.util.concurrent.locks.LockSupport;
+import org.agrona.UnsafeApi;
 
-import static org.agrona.UnsafeAccess.UNSAFE;
+import java.util.concurrent.locks.LockSupport;
 
 class RateReporterLhsPadding {
     byte p000, p001, p002, p003, p004, p005, p006, p007, p008, p009, p010, p011, p012, p013, p014, p015;
@@ -33,9 +33,8 @@ class RateReporterValues extends RateReporterLhsPadding {
 
     static {
         try {
-            TOTAL_BYTES_OFFSET = UNSAFE.objectFieldOffset(RateReporterValues.class.getDeclaredField("totalBytes"));
-            TOTAL_MESSAGES_OFFSET = UNSAFE
-                    .objectFieldOffset(RateReporterValues.class.getDeclaredField("totalMessages"));
+            TOTAL_BYTES_OFFSET = UnsafeApi.objectFieldOffset(RateReporterValues.class.getDeclaredField("totalBytes"));
+            TOTAL_MESSAGES_OFFSET = UnsafeApi.objectFieldOffset(RateReporterValues.class.getDeclaredField("totalMessages"));
         } catch (final Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -132,7 +131,9 @@ public final class RateReporter extends RateReporterRhsPadding implements Runnab
      * @param length received, sent, etc.
      */
     public void onMessage(final long length) {
-        UNSAFE.putOrderedLong(this, TOTAL_BYTES_OFFSET, totalBytes + length);
-        UNSAFE.putOrderedLong(this, TOTAL_MESSAGES_OFFSET, totalMessages + 1);
+        UnsafeApi.putLong(this, TOTAL_BYTES_OFFSET, totalBytes + length);
+        UnsafeApi.putLong(this, TOTAL_MESSAGES_OFFSET, totalMessages + 1);
+//        UnsafeApi.putOrderedLong(this, TOTAL_BYTES_OFFSET, totalBytes + length);
+//        UnsafeApi.putOrderedLong(this, TOTAL_MESSAGES_OFFSET, totalMessages + 1);
     }
 }
