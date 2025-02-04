@@ -36,19 +36,16 @@ public final class SortedFixedDoubleArray {
     }
 
     public double getLast() {
-        if (count == length) {
+        if (count == length)
             return saved[lastIndex];
-        }
         return count == 0 ? 0 : saved[count - 1];
     }
 
     public double[] getSaved() {
         if (count == length)
             return saved;
-        else {
-            double[] copied = Arrays.copyOfRange(saved, 0, count);
-            return copied;
-        }
+        else
+            return Arrays.copyOfRange(saved, 0, count);
     }
 
     public String toString() {

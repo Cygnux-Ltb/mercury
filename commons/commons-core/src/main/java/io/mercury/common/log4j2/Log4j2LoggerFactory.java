@@ -30,7 +30,7 @@ public final class Log4j2LoggerFactory {
     /**
      * default log filename
      */
-    public static final String DefaultFileName = "runtime-" + now().format(ofPattern("yyMMdd-HHmmss"));
+    private static final String DEFAULT_FILE_NAME = "runtime-" + now().format(ofPattern("yyyyMMdd-HHmmss"));
 
     /**
      * @param obj Object
@@ -74,7 +74,7 @@ public final class Log4j2LoggerFactory {
         // 配置日志文件名
         String filename = Log4j2Configurator.getFilename();
         if (filename == null || filename.isEmpty()) {
-            Log4j2Configurator.setLogFilename(DefaultFileName);
+            Log4j2Configurator.setLogFilename(DEFAULT_FILE_NAME);
         }
         // 配置日志級別
         String level = Log4j2Configurator.getLogLevel();

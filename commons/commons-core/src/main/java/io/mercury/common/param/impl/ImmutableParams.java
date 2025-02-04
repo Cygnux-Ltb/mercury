@@ -56,14 +56,14 @@ public class ImmutableParams implements Params {
         // 只加载指定Key对应的Value
         for (ParamKey key : keys) {
             if (inputMap.containsKey(key.getParamName())) {
-                var inputValue = inputMap.get(key.getParamName());
-                if (inputValue == null) {
+                var input = inputMap.get(key.getParamName());
+                if (input == null) {
                     throw new NullPointerException("Key -> [" + key.getParamName() + "] mapping value is null");
                 }
-                if (inputValue instanceof String value) {
+                if (input instanceof String value) {
                     map.put(key, value);
                 } else {
-                    map.put(key, valueHandle(key, inputValue));
+                    map.put(key, valueHandle(key, input));
                 }
             } else {
                 log.warn("Key -> [{}] mapping value not provided", key.getParamName());
@@ -73,26 +73,22 @@ public class ImmutableParams implements Params {
         this.keys = newImmutableSet(keys);
     }
 
-    private String valueHandle(ParamKey key, Object inputValue) {
+    private String valueHandle(ParamKey key, Object input) {
         String value = switch (key.getValueType()) {
-            case DATE -> inputValue instanceof LocalDate date
-                    ? fmt(date) : null;
-            case TIME -> inputValue instanceof LocalTime time
-                    ? fmt(time) : null;
-            case DATETIME -> inputValue instanceof LocalDateTime dateTime
-                    ? fmt(dateTime) : null;
-            case ZONED_DATETIME -> inputValue instanceof ZonedDateTime zonedDateTime
-                    ? fmt(zonedDateTime) : null;
-            case INT -> Integer.toString(parseInt(inputValue.toString()));
-            case LONG -> Long.toString(parseLong(inputValue.toString()));
-            case DOUBLE -> Double.toString(parseDouble(inputValue.toString()));
-            case BOOLEAN -> Boolean.toString(parseBoolean(inputValue.toString()));
-            default -> Objects.toString(inputValue, null);
+            case DATE -> input instanceof LocalDate date ? fmt(date) : null;
+            case TIME -> input instanceof LocalTime time ? fmt(time) : null;
+            case DATETIME -> input instanceof LocalDateTime datetime ? fmt(datetime) : null;
+            case ZONED_DATETIME -> input instanceof ZonedDateTime zDatetime ? fmt(zDatetime) : null;
+            case INT -> Integer.toString(parseInt(input.toString()));
+            case LONG -> Long.toString(parseLong(input.toString()));
+            case DOUBLE -> Double.toString(parseDouble(input.toString()));
+            case BOOLEAN -> Boolean.toString(parseBoolean(input.toString()));
+            default -> Objects.toString(input, null);
         };
         if (value == null)
             throw new IllegalArgumentException("Key -> [" + key.getParamName() + "] mapping value is illegal, "
                     + "Type is [" + key.getValueType() + "], "
-                    + "input value is [" + inputValue + "]");
+                    + "input value is [" + input + "]");
         return value;
     }
 

@@ -142,7 +142,7 @@ public class TimeWindow implements OrderedObject<TimeWindow> {
                                                                @Nonnull ZoneOffset offset,
                                                                @Nonnull Duration duration) {
         if (end.isBefore(start))
-            throw new IllegalArgumentException("the [end time] can not before [start time]");
+            throw new IllegalArgumentException("the [end] can not before [start]");
         var between = Duration.between(start, end);
         long seconds = duration.getSeconds();
         long count = between.getSeconds() / seconds;
