@@ -12,8 +12,8 @@
     <name>transport-aeron</name>
 
     <properties>
-        <aeron.version>1.47.0</aeron.version>
-        <byte-buddy.version>1.16.1</byte-buddy.version>
+        <aeron.version>1.47.3</aeron.version>
+        <byte-buddy.version>1.17.2</byte-buddy.version>
     </properties>
 
     <repositories>
@@ -21,6 +21,11 @@
             <id>aeronic</id>
             <name>aeronic</name>
             <url>https://dl.cloudsmith.io/public/lob-software/aeronic/maven/</url>
+        </repository>
+        <repository>
+            <id>central_repository</id>
+            <name>CentralRepository</name>
+            <url>https://repo1.maven.org/maven2/</url>
         </repository>
     </repositories>
 

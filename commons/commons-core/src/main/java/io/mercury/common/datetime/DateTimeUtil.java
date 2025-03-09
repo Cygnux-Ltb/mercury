@@ -16,6 +16,8 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 
+import static io.mercury.common.datetime.TimeZone.SYS_DEFAULT;
+
 @ThreadSafe
 public final class DateTimeUtil {
 
@@ -24,8 +26,8 @@ public final class DateTimeUtil {
      *
      * @return int
      */
-    public static int date(ZoneId zoneId) {
-        return date(LocalDate.now(zoneId));
+    public static int date() {
+        return date(LocalDate.now());
     }
 
     /**
@@ -33,8 +35,8 @@ public final class DateTimeUtil {
      *
      * @return int
      */
-    public static int date() {
-        return date(LocalDate.now());
+    public static int date(ZoneId zoneId) {
+        return date(LocalDate.now(zoneId));
     }
 
     /**
@@ -358,7 +360,7 @@ public final class DateTimeUtil {
      * @return LocalDate
      */
     public static LocalDate toLocalDate(Date date) {
-        return LocalDateTime.ofInstant(date.toInstant(), TimeZone.SYS_DEFAULT).toLocalDate();
+        return LocalDateTime.ofInstant(date.toInstant(), SYS_DEFAULT).toLocalDate();
     }
 
     /**
@@ -387,8 +389,8 @@ public final class DateTimeUtil {
      * @param pattern DatePattern
      * @param str     String
      * @return LocalDate
-     * @throws IllegalArgumentException iae
-     * @throws DateTimeParseException   dte
+     * @throws IllegalArgumentException ie
+     * @throws DateTimeParseException   de
      */
     public static LocalDate toLocalDate(@Nonnull SpecifiedDatePattern pattern,
                                         @Nonnull String str)
@@ -401,8 +403,8 @@ public final class DateTimeUtil {
      * @param pattern TimePattern
      * @param str     String
      * @return LocalTime
-     * @throws IllegalArgumentException iae
-     * @throws DateTimeParseException   e
+     * @throws IllegalArgumentException ie
+     * @throws DateTimeParseException   de
      */
     public static LocalTime toLocalTime(@Nonnull TimePattern pattern,
                                         @Nonnull String str)
@@ -415,8 +417,8 @@ public final class DateTimeUtil {
      * @param pattern  DateTimePattern
      * @param datetime String
      * @return LocalDateTime
-     * @throws IllegalArgumentException iae
-     * @throws DateTimeParseException   dte
+     * @throws IllegalArgumentException ie
+     * @throws DateTimeParseException   de
      */
     public static LocalDateTime toLocalDateTime(@Nonnull DateTimePattern pattern,
                                                 @Nonnull String datetime)
@@ -439,7 +441,7 @@ public final class DateTimeUtil {
      * @return LocalDateTime
      */
     public static LocalDateTime toLocalDateTime(@Nonnull Date date) {
-        return LocalDateTime.ofInstant(date.toInstant(), TimeZone.SYS_DEFAULT);
+        return LocalDateTime.ofInstant(date.toInstant(), SYS_DEFAULT);
     }
 
     /**
