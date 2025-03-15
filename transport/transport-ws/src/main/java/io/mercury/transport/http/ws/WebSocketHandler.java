@@ -1,40 +1,35 @@
 package io.mercury.transport.http.ws;
 
 import io.mercury.common.functional.Handler;
-import io.mercury.common.functional.ThrowableHandler;
 import org.asynchttpclient.ws.WebSocket;
 
 public interface WebSocketHandler {
 
     @FunctionalInterface
-    interface WsOpenHandler extends Handler<WebSocket> {
+    interface OpenHandler extends Handler<WebSocket> {
     }
 
     @FunctionalInterface
-    interface WsCloseHandler {
+    interface CloseHandler {
         void handle(WebSocket webSocket, int code, String reason);
     }
 
     @FunctionalInterface
-    interface WsPingFrameHandler extends Handler<byte[]> {
+    interface PingFrameHandler extends Handler<byte[]> {
     }
 
     @FunctionalInterface
-    interface WsPongFrameHandler extends Handler<byte[]> {
+    interface PongFrameHandler extends Handler<byte[]> {
     }
 
     @FunctionalInterface
-    interface WsBinaryFrameHandler {
+    interface BinaryFrameHandler {
         void handle(byte[] payload, boolean finalFragment, int rsv);
     }
 
     @FunctionalInterface
-    interface WsTextFrameHandler {
+    interface TextFrameHandler {
         void handle(String payload, boolean finalFragment, int rsv);
-    }
-
-    @FunctionalInterface
-    interface WsThrowableHandler extends ThrowableHandler<Throwable> {
     }
 
 }

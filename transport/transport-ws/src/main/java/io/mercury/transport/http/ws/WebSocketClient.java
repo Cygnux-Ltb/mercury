@@ -1,14 +1,14 @@
 package io.mercury.transport.http.ws;
 
+import io.mercury.common.functional.ThrowableHandler;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.transport.http.AsyncHttpClientImpl;
-import io.mercury.transport.http.ws.WebSocketHandler.WsBinaryFrameHandler;
-import io.mercury.transport.http.ws.WebSocketHandler.WsCloseHandler;
-import io.mercury.transport.http.ws.WebSocketHandler.WsOpenHandler;
-import io.mercury.transport.http.ws.WebSocketHandler.WsPingFrameHandler;
-import io.mercury.transport.http.ws.WebSocketHandler.WsPongFrameHandler;
-import io.mercury.transport.http.ws.WebSocketHandler.WsTextFrameHandler;
-import io.mercury.transport.http.ws.WebSocketHandler.WsThrowableHandler;
+import io.mercury.transport.http.ws.WebSocketHandler.BinaryFrameHandler;
+import io.mercury.transport.http.ws.WebSocketHandler.CloseHandler;
+import io.mercury.transport.http.ws.WebSocketHandler.OpenHandler;
+import io.mercury.transport.http.ws.WebSocketHandler.PingFrameHandler;
+import io.mercury.transport.http.ws.WebSocketHandler.PongFrameHandler;
+import io.mercury.transport.http.ws.WebSocketHandler.TextFrameHandler;
 import org.asynchttpclient.ws.WebSocket;
 import org.asynchttpclient.ws.WebSocketListener;
 import org.asynchttpclient.ws.WebSocketUpgradeHandler.Builder;
@@ -33,22 +33,27 @@ public final class WebSocketClient {
     public static void connect(// WebSocket地址
                                String uri,
                                // [打开/关闭] 连接处理函数
-                               WsOpenHandler openHandler, WsCloseHandler closeHandler,
+                               OpenHandler openHandler, CloseHandler closeHandler,
                                // [Ping/Pong] 帧处理函数
-                               WsPingFrameHandler pingFrameHandler, WsPongFrameHandler pongFrameHandler,
+                               PingFrameHandler pingFrameHandler, PongFrameHandler pongFrameHandler,
                                // [二进制帧/文本帧] 处理函数
-                               WsBinaryFrameHandler binaryFrameHandler, WsTextFrameHandler textFrameHandler,
+                               BinaryFrameHandler binaryFrameHandler, TextFrameHandler textFrameHandler,
                                // 异常处理函数
-                               WsThrowableHandler throwableHandler) {
+                               ThrowableHandler<Throwable> throwableHandler) {
         try {
             var webSocket = AsyncHttpClientImpl.INSTANCE.prepareGet(uri)
                     .execute(new Builder().addWebSocketListener(
                             new WebSocketListenerImpl(
-                                    uri, // WebSocket地址
-                                    openHandler, closeHandler, // [打开/关闭] 连接处理函数
-                                    pingFrameHandler, pongFrameHandler, // [Ping/Pong] 帧处理函数
-                                    binaryFrameHandler, textFrameHandler, // [二进制/文本] 帧处理函数
-                                    throwableHandler // 异常处理函数
+                                    // WebSocket地址
+                                    uri,
+                                    // [打开/关闭] 连接处理函数
+                                    openHandler, closeHandler,
+                                    // [Ping/Pong] 帧处理函数
+                                    pingFrameHandler, pongFrameHandler,
+                                    // [二进制/文本] 帧处理函数
+                                    binaryFrameHandler, textFrameHandler,
+                                    // 异常处理函数
+                                    throwableHandler
                             )).build())
                     .get();
             log.info("Ws uri -> {}, Open==[{}]", uri, webSocket.isOpen());
@@ -60,16 +65,16 @@ public final class WebSocketClient {
     record WebSocketListenerImpl(
             String uri, // WebSocket地址
             // [打开/关闭] 连接处理函数
-            WsOpenHandler openHandler,
-            WsCloseHandler closeHandler,
+            OpenHandler openHandler,
+            CloseHandler closeHandler,
             // [Ping/Pong] 帧处理函数
-            WsPingFrameHandler pingFrameHandler,
-            WsPongFrameHandler pongFrameHandler,
+            PingFrameHandler pingFrameHandler,
+            PongFrameHandler pongFrameHandler,
             // [二进制/文本] 帧处理函数
-            WsBinaryFrameHandler binaryFrameHandler,
-            WsTextFrameHandler textFrameHandler,
+            BinaryFrameHandler binaryFrameHandler,
+            TextFrameHandler textFrameHandler,
             // 异常处理函数
-            WsThrowableHandler throwableHandler) implements WebSocketListener {
+            ThrowableHandler throwableHandler) implements WebSocketListener {
 
         @Override
         public void onOpen(WebSocket webSocket) {
