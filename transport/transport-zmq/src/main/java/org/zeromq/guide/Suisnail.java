@@ -1,15 +1,13 @@
 package org.zeromq.guide;
 
-import java.util.Random;
-
-//  Suicidal Snail
-
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Socket;
 import org.zeromq.ZThread;
 import org.zeromq.ZThread.IAttachedRunnable;
+
+import java.util.Random;
 
 public class Suisnail {
 

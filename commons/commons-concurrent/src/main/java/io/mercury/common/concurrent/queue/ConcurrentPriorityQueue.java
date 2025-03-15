@@ -1,16 +1,15 @@
 package io.mercury.common.concurrent.queue;
 
-import static io.mercury.common.util.BitOperator.minPow2;
+import io.mercury.common.thread.Sleep;
+import io.mercury.common.thread.Threads;
+import org.jctools.queues.MessagePassingQueue;
+import org.jctools.queues.MpmcArrayQueue;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
-import org.jctools.queues.MessagePassingQueue;
-import org.jctools.queues.MpmcArrayQueue;
-
-import io.mercury.common.thread.Sleep;
-import io.mercury.common.thread.ThreadSupport;
+import static io.mercury.common.util.BitOperator.minPow2;
 
 @ThreadSafe
 public final class ConcurrentPriorityQueue<E> implements Comparable<ConcurrentPriorityQueue<E>> {
@@ -80,7 +79,7 @@ public final class ConcurrentPriorityQueue<E> implements Comparable<ConcurrentPr
 
         ConcurrentPriorityQueue<String> queue = new ConcurrentPriorityQueue<>(0, 256, 1024);
 
-        ThreadSupport.startNewMaxPriorityThread("test0", () -> {
+        Threads.startNewMaxPriorityThread("test0", () -> {
             for (int i = 0; i < 50; i++) {
                 if (i % 6 == 0) {
                     queue.priorityOffer("TEST[0] priority put : " + i);
@@ -90,7 +89,7 @@ public final class ConcurrentPriorityQueue<E> implements Comparable<ConcurrentPr
                 Sleep.millis(2);
             }
         });
-        ThreadSupport.startNewMaxPriorityThread("test1", () -> {
+        Threads.startNewMaxPriorityThread("test1", () -> {
             for (int i = 0; i < 50; i++) {
                 if (i % 7 == 0) {
                     queue.priorityOffer("TEST[1] priority put : " + i);
@@ -100,7 +99,7 @@ public final class ConcurrentPriorityQueue<E> implements Comparable<ConcurrentPr
                 Sleep.millis(3);
             }
         });
-        ThreadSupport.startNewMaxPriorityThread("test2", () -> {
+        Threads.startNewMaxPriorityThread("test2", () -> {
             do {
                 String e = queue.poll();
                 if (e != null) {

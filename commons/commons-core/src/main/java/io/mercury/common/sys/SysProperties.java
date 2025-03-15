@@ -22,6 +22,14 @@ public final class SysProperties {
      */
     public static final String OS_NAME = System.getProperty("os.name");
 
+    public static boolean isWindows() {
+        return OS_NAME.toLowerCase().startsWith("windows");
+    }
+
+    public static boolean isLinux() {
+        return OS_NAME.toLowerCase().startsWith("linux");
+    }
+
     /**
      * System.getProperty("java.home")
      */

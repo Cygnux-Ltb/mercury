@@ -2,8 +2,8 @@ package io.mercury.transport.netty;
 
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.sequence.SysNanoSequence;
-import io.mercury.transport.api.Sender;
 import io.mercury.transport.TransportComponent;
+import io.mercury.transport.api.Sender;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;

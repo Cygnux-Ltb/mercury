@@ -146,7 +146,7 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
 
     public static void main(String[] args) {
 
-        ExpirableCounter counter = new ExpirableCounter(Duration.ofMillis(10000), Capacity.L10_2048);
+        ExpirableCounter counter = new ExpirableCounter(Duration.ofMillis(10000), Capacity.L10_1024);
 
         for (int i = 0; i < 20; i++) {
             counter.add(i, 10);
@@ -158,7 +158,7 @@ public final class ExpirableCounter implements Counter<ExpirableCounter> {
             Sleep.millis(2000);
         }
 
-        MutableLongLongMap map = MutableMaps.newLongLongMap(Capacity.L10_2048.size());
+        MutableLongLongMap map = MutableMaps.newLongLongMap(Capacity.L10_1024.size());
         map.put(1, 10);
         System.out.println(-19 - 15);
 

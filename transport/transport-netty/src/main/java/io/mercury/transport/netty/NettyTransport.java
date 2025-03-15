@@ -2,8 +2,8 @@ package io.mercury.transport.netty;
 
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.lang.Asserter;
-import io.mercury.transport.api.Transport;
 import io.mercury.transport.TransportComponent;
+import io.mercury.transport.api.Transport;
 import io.mercury.transport.netty.configurator.NettyConfigurator;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.EventLoopGroup;

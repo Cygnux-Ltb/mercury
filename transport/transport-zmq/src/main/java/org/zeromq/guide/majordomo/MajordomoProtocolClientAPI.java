@@ -1,12 +1,12 @@
 package org.zeromq.guide.majordomo;
 
-import java.util.Formatter;
-
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZFrame;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMsg;
+
+import java.util.Formatter;
 
 /**
  * Majordomo Protocol Client API, Java version Implements the MDP/Worker spec at

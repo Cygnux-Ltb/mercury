@@ -1,8 +1,8 @@
 package io.mercury.common.functional;
 
-import java.util.function.Consumer;
-
 import io.mercury.common.annotation.thread.MustBeThreadSafe;
+
+import java.util.function.Consumer;
 
 @FunctionalInterface
 public interface Handler<E> extends Consumer<E> {

@@ -7,7 +7,7 @@ import io.mercury.common.lang.Asserter;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.serialization.specific.BytesSerializer;
 import io.mercury.common.thread.Sleep;
-import io.mercury.common.thread.ThreadSupport;
+import io.mercury.common.thread.Threads;
 import io.mercury.transport.api.Publisher;
 import io.mercury.transport.api.Sender;
 import io.mercury.transport.exception.InitializeFailureException;
@@ -450,7 +450,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
 
         try (AdvancedRmqPublisher<String> publisher = AdvancedRmqPublisher
                 .createWithString(RmqPublisherConfig.configuration(connection, fanout).build())) {
-            ThreadSupport.startNewThread(() -> {
+            Threads.startNewThread(() -> {
                 int count = 0;
                 while (true) {
                     Sleep.millis(5000);

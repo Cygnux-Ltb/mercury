@@ -1,11 +1,10 @@
 package io.mercury.common.sequence;
 
-import java.security.SecureRandom;
-import java.util.concurrent.atomic.AtomicLong;
+import io.mercury.common.thread.Threads;
 
 import javax.annotation.concurrent.ThreadSafe;
-
-import io.mercury.common.thread.ThreadSupport;
+import java.security.SecureRandom;
+import java.util.concurrent.atomic.AtomicLong;
 
 @ThreadSafe
 public final class LocalSerial {
@@ -51,7 +50,7 @@ public final class LocalSerial {
 
         SecureRandom random = new SecureRandom();
 
-        ThreadSupport.startNewThread(() -> {
+        Threads.startNewThread(() -> {
             if (atomicLong.get() < 0) {
             } else if (atomicLong.get() > 100) {
             } else {

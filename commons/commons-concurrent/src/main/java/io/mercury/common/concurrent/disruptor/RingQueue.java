@@ -6,12 +6,12 @@ import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import io.mercury.common.collections.queue.EventContainer;
-import io.mercury.common.concurrent.queue.SingleConsumerQueue;
 import io.mercury.common.concurrent.disruptor.base.CommonStrategy;
+import io.mercury.common.concurrent.queue.SingleConsumerQueue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.thread.Sleep;
-import io.mercury.common.thread.ThreadSupport;
+import io.mercury.common.thread.Threads;
 import org.slf4j.Logger;
 
 import static io.mercury.common.thread.ThreadFactoryImpl.ofPlatform;
@@ -170,7 +170,7 @@ public class RingQueue<E> extends SingleConsumerQueue<E> {
         RingQueue<Integer> queue = RingQueue.singleProducer().name("Test-Queue")
                 .process(System.out::println);
 
-        ThreadSupport.startNewThread(() -> {
+        Threads.startNewThread(() -> {
             int i = 0;
             for (; ; )
                 queue.enqueue(++i);

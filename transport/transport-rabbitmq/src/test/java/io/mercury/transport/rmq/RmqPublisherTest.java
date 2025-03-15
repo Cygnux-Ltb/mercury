@@ -1,12 +1,12 @@
 package io.mercury.transport.rmq;
 
-import java.io.IOException;
-import java.util.Arrays;
-
 import io.mercury.transport.rmq.config.RmqConnection;
 import io.mercury.transport.rmq.config.RmqPublisherConfig;
 import io.mercury.transport.rmq.declare.AmqpQueue;
 import io.mercury.transport.rmq.declare.ExchangeRelationship;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 public class RmqPublisherTest {
 

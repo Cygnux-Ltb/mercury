@@ -1,13 +1,13 @@
 package io.mercury.common.concurrent.queue;
 
-import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
-
-import java.time.LocalDateTime;
-
 import io.mercury.common.collections.queue.Queue;
 import io.mercury.common.functional.Processor;
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.thread.RunnableComponent;
+
+import java.time.LocalDateTime;
+
+import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
 
 /**
  * @param <E> Single Consumer Queue base implements

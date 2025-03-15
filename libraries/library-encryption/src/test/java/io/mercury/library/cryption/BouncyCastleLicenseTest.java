@@ -1,9 +1,9 @@
 package io.mercury.library.cryption;
 
-import javax.annotation.Nullable;
-
 import org.bouncycastle.LICENSE;
 import org.slf4j.Logger;
+
+import javax.annotation.Nullable;
 
 public class BouncyCastleLicenseTest {
 

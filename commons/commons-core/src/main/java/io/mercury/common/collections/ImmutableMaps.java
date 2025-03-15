@@ -13,7 +13,6 @@ import org.eclipse.collections.impl.map.sorted.mutable.TreeSortedMap;
 
 import javax.annotation.Nullable;
 import java.util.Map;
-import java.util.SortedMap;
 import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
@@ -95,9 +94,12 @@ public final class ImmutableMaps {
      * @param map Map<K, V>
      * @return The new ImmutableMap<K, V>
      */
+    @SuppressWarnings("unchecked")
     public static <K, V> ImmutableMap<K, V> newImmutableMap(@Nullable Map<K, V> map) {
         if (map == null || map.isEmpty())
             return ImmutableMapFactoryImpl.INSTANCE.empty();
+        if (map instanceof ImmutableMap)
+            return (ImmutableMap<K, V>) map;
         return ImmutableMapFactoryImpl.INSTANCE.withAll(map);
     }
 
@@ -107,16 +109,10 @@ public final class ImmutableMaps {
      * @param supplier Map<K, V> Supplier
      * @return The new ImmutableMap<K, V>
      */
-    @SuppressWarnings("unchecked")
     public static <K, V> ImmutableMap<K, V> newImmutableMap(@Nullable Supplier<Map<K, V>> supplier) {
         if (supplier == null)
             return ImmutableMapFactoryImpl.INSTANCE.empty();
-        Map<K, V> map = supplier.get();
-        if (map == null)
-            return ImmutableMapFactoryImpl.INSTANCE.empty();
-        if (map instanceof ImmutableMap)
-            return (ImmutableMap<K, V>) map;
-        return newImmutableMap(map);
+        return newImmutableMap(supplier.get());
     }
 
     /**
@@ -125,11 +121,12 @@ public final class ImmutableMaps {
      * @param map Map<K, V>
      * @return ImmutableSortedMap<K, V>
      */
+    @SuppressWarnings("unchecked")
     public static <K, V> ImmutableSortedMap<K, V> newImmutableSortedMap(@Nullable Map<K, V> map) {
-        if (map == null)
+        if (map == null || map.isEmpty())
             return ImmutableSortedMapFactoryImpl.INSTANCE.empty();
-        if (map instanceof SortedMap)
-            return ImmutableSortedMapFactoryImpl.INSTANCE.withSortedMap((SortedMap<K, V>) map);
+        if (map instanceof ImmutableSortedMap)
+            return (ImmutableSortedMap<K, V>) map;
         else
             return ImmutableSortedMapFactoryImpl.INSTANCE.withSortedMap(TreeSortedMap.newMap(map));
     }
@@ -143,13 +140,7 @@ public final class ImmutableMaps {
     public static <K, V> ImmutableSortedMap<K, V> newImmutableSortedMap(@Nullable Supplier<Map<K, V>> supplier) {
         if (supplier == null)
             return ImmutableSortedMapFactoryImpl.INSTANCE.empty();
-        Map<K, V> map = supplier.get();
-        if (map == null)
-            return ImmutableSortedMapFactoryImpl.INSTANCE.empty();
-        if (map instanceof SortedMap)
-            return ImmutableSortedMapFactoryImpl.INSTANCE.withSortedMap((SortedMap<K, V>) map);
-        else
-            return ImmutableSortedMapFactoryImpl.INSTANCE.withSortedMap(TreeSortedMap.newMap(map));
+        return newImmutableSortedMap(supplier.get());
     }
 
 }

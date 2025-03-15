@@ -1,11 +1,10 @@
 package io.mercury.common.file.filter;
 
-import static io.mercury.common.lang.Asserter.requiredLength;
-
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.FileFilter;
 
-import javax.annotation.Nonnull;
+import static io.mercury.common.lang.Asserter.requiredLength;
 
 /**
  * GroupFileFilter

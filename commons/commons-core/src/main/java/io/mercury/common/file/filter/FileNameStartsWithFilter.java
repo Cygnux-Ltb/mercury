@@ -20,10 +20,9 @@ package io.mercury.common.file.filter;
  * #L%
  */
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.FileFilter;
-
-import javax.annotation.Nonnull;
 
 /**
  * Accepts a file based on whether its filename startsWith a specific string.

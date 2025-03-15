@@ -17,13 +17,13 @@ package io.aeron.official.archive;
 
 import io.aeron.Aeron;
 import io.aeron.ExclusivePublication;
-import io.aeron.official.SampleConfiguration;
 import io.aeron.archive.Archive;
 import io.aeron.archive.ArchivingMediaDriver;
 import io.aeron.archive.client.AeronArchive;
 import io.aeron.archive.codecs.SourceLocation;
 import io.aeron.archive.status.RecordingPos;
 import io.aeron.driver.MediaDriver;
+import io.aeron.official.SampleConfiguration;
 import org.agrona.CloseHelper;
 import org.agrona.concurrent.IdleStrategy;
 import org.agrona.concurrent.UnsafeBuffer;

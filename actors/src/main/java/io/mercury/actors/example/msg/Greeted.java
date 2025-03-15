@@ -1,8 +1,8 @@
 package io.mercury.actors.example.msg;
 
-import java.util.Objects;
-
 import akka.actor.typed.ActorRef;
+
+import java.util.Objects;
 
 /**
  * @author Akka official

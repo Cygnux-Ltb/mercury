@@ -1,13 +1,13 @@
 package org.zeromq.guide.load_balancing;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ.Poller;
 import org.zeromq.ZMQ.Socket;
 import org.zeromq.guide.util.ZHelper;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class LoadBalancingBroker {
 

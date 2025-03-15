@@ -58,7 +58,7 @@ public class MutableParams implements Params {
     public boolean getBoolean(ParamKey key) {
         if (key.getValueType() != ValueType.BOOLEAN)
             throw new ParamGettingException(
-                    "Key -> " + key + " ParamType is not [BOOLEAN], ParamType==" + key.getValueType());
+                    "Key -> [" + key + "] ParamType is not [BOOLEAN], ParamType==" + key.getValueType());
         return Boolean.parseBoolean(params.get(key.getParamId()));
     }
 
@@ -70,7 +70,7 @@ public class MutableParams implements Params {
     public int getInt(ParamKey key) {
         if (key.getValueType() != ValueType.INT)
             throw new ParamGettingException(
-                    "Key -> " + key + " ParamType is not [INT], ParamType==" + key.getValueType());
+                    "Key -> [" + key + "] ParamType is not [INT], ParamType==" + key.getValueType());
         return Integer.parseInt(params.get(key.getParamId()));
     }
 
@@ -94,7 +94,7 @@ public class MutableParams implements Params {
     public double getDouble(ParamKey key) {
         if (key.getValueType() != ValueType.DOUBLE)
             throw new ParamGettingException(
-                    "Key -> " + key + " ParamType is not [DOUBLE], ParamType==" + key.getValueType());
+                    "Key -> [" + key + "] ParamType is not [DOUBLE], ParamType==" + key.getValueType());
         return Double.parseDouble(params.get(key.getParamId()));
     }
 
@@ -106,7 +106,7 @@ public class MutableParams implements Params {
     public String getString(ParamKey key) {
         if (key.getValueType() != ValueType.STRING)
             throw new ParamGettingException(
-                    "Key -> " + key + " ParamType is not [STRING], ParamType==" + key.getValueType());
+                    "Key -> [" + key + "] ParamType is not [STRING], ParamType==" + key.getValueType());
         return params.get(key.getParamId());
     }
 
@@ -118,7 +118,7 @@ public class MutableParams implements Params {
     public LocalDate getDate(ParamKey key) {
         if (key.getValueType() != ValueType.DATE)
             throw new ParamGettingException(
-                    "Key -> " + key + " ParamType is not [DATE], ParamType==" + key.getValueType());
+                    "Key -> [" + key + "] ParamType is not [DATE], ParamType==" + key.getValueType());
         return StandardPattern.toDate(params.get(key.getParamId()));
     }
 
@@ -130,7 +130,7 @@ public class MutableParams implements Params {
     public LocalTime getTime(ParamKey key) {
         if (key.getValueType() != ValueType.TIME)
             throw new ParamGettingException(
-                    "Key -> " + key + " ParamType is not [TIME], ParamType==" + key.getValueType());
+                    "Key -> [" + key + "] ParamType is not [TIME], ParamType==" + key.getValueType());
         return StandardPattern.toTime(params.get(key.getParamId()));
     }
 

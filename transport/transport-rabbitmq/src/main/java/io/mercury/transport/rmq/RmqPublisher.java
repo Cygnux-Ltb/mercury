@@ -1,25 +1,11 @@
 package io.mercury.transport.rmq;
 
-import static io.mercury.common.datetime.DateTimeUtil.datetimeOfMillisecond;
-import static io.mercury.common.util.StringSupport.nonEmpty;
-
-import java.io.IOException;
-import java.util.concurrent.TimeoutException;
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.concurrent.ThreadSafe;
-
-import org.slf4j.Logger;
-
 import com.rabbitmq.client.AMQP.BasicProperties;
-
 import io.mercury.common.character.Charsets;
 import io.mercury.common.lang.Asserter;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.thread.Sleep;
-import io.mercury.common.thread.ThreadSupport;
+import io.mercury.common.thread.Threads;
 import io.mercury.common.util.StringSupport;
 import io.mercury.transport.api.Publisher;
 import io.mercury.transport.api.Sender;
@@ -30,6 +16,17 @@ import io.mercury.transport.rmq.declare.ExchangeRelationship;
 import io.mercury.transport.rmq.exception.DeclareException;
 import io.mercury.transport.rmq.exception.DeclareRuntimeException;
 import io.mercury.transport.rmq.exception.NoAckException;
+import org.slf4j.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+import java.util.function.Supplier;
+
+import static io.mercury.common.datetime.DateTimeUtil.datetimeOfMillisecond;
+import static io.mercury.common.util.StringSupport.nonEmpty;
 
 @ThreadSafe
 public class RmqPublisher extends RmqTransport implements Publisher<String, byte[]>, Sender<byte[]> {
@@ -252,7 +249,7 @@ public class RmqPublisher extends RmqTransport implements Publisher<String, byte
 
         try (RmqPublisher publisher = new RmqPublisher(
                 RmqPublisherConfig.configuration(connection, fanoutExchange).build())) {
-            ThreadSupport.startNewThread(() -> {
+            Threads.startNewThread(() -> {
                 int count = 0;
                 while (true) {
                     Sleep.millis(5000);

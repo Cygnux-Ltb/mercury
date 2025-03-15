@@ -1,10 +1,10 @@
 package io.mercury.common.datetime;
 
+import org.junit.Test;
+
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-
-import org.junit.Test;
 
 public class TimeZonesTest {
 

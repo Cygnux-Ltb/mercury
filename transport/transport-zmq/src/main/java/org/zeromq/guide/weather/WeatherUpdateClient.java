@@ -1,10 +1,10 @@
 package org.zeromq.guide.weather;
 
-import java.util.StringTokenizer;
-
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
+
+import java.util.StringTokenizer;
 
 //
 //  Weather update client in Java

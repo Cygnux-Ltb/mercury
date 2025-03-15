@@ -1,20 +1,31 @@
 package io.mercury.serialization.fury;
 
 import org.apache.fury.Fury;
-import org.apache.fury.ThreadLocalFury;
-import org.apache.fury.ThreadSafeFury;
-
-import static org.apache.fury.config.Language.JAVA;
+import org.apache.fury.config.Language;
 
 public final class FuryKeeper {
 
-    static final ThreadSafeFury FURY_MSG_USED = new ThreadLocalFury(classLoader -> {
+    /**
+     * @param classes Class<?> array
+     * @return Fury
+     */
+    public static Fury newInstance(Class<?>... classes) {
+        return newInstance(Language.JAVA, classes);
+    }
+
+    /**
+     * @param lang    Language
+     * @param classes Class<?> array
+     * @return Fury
+     */
+    public static Fury newInstance(Language lang, Class<?>... classes) {
         var fury = Fury.builder()
-                .withLanguage(JAVA)
-                .withClassLoader(classLoader)
+                .withLanguage(lang)
+                .requireClassRegistration(true)
                 .build();
-        fury.register(FuryMsg.class);
+        for (var clazz : classes)
+            fury.register(clazz);
         return fury;
-    });
+    }
 
 }

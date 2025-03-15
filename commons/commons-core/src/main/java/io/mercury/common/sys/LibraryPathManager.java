@@ -1,9 +1,9 @@
 package io.mercury.common.sys;
 
+import io.mercury.common.character.Separator;
+
 import java.io.File;
 import java.lang.reflect.Field;
-
-import io.mercury.common.character.Separator;
 
 public final class LibraryPathManager {
 

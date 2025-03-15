@@ -1,10 +1,10 @@
 package org.zeromq.guide.task;
 
-import java.util.Random;
-
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
+
+import java.util.Random;
 
 //
 //  Task ventilator in Java

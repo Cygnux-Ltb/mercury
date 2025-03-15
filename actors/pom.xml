@@ -12,7 +12,7 @@
     <name>actors</name>
 
     <properties>
-        <akka.version>2.9.5</akka.version>
+        <akka.version>2.10.0</akka.version>
     </properties>
 
     <build>
@@ -35,6 +35,13 @@
             <artifactId>serialization-json</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>eu.lucaventuri</groupId>
+            <artifactId>fibry</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+
         <dependency>
             <groupId>io.mercury</groupId>
             <artifactId>serialization-avro</artifactId>

@@ -1,10 +1,9 @@
 package io.mercury.common.number;
 
-import static java.lang.Math.abs;
-
+import javax.annotation.concurrent.NotThreadSafe;
 import java.security.SecureRandom;
 
-import javax.annotation.concurrent.NotThreadSafe;
+import static java.lang.Math.abs;
 
 @NotThreadSafe
 public final class Randoms {

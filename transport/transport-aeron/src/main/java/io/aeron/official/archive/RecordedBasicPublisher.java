@@ -16,10 +16,10 @@
 package io.aeron.official.archive;
 
 import io.aeron.Publication;
-import io.aeron.official.SampleConfiguration;
 import io.aeron.archive.client.AeronArchive;
 import io.aeron.archive.codecs.SourceLocation;
 import io.aeron.archive.status.RecordingPos;
+import io.aeron.official.SampleConfiguration;
 import org.agrona.BufferUtil;
 import org.agrona.concurrent.IdleStrategy;
 import org.agrona.concurrent.SigInt;

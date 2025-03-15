@@ -16,11 +16,11 @@
 package io.aeron.official.archive;
 
 import io.aeron.ChannelUri;
-import io.aeron.official.SampleConfiguration;
 import io.aeron.Subscription;
 import io.aeron.archive.client.AeronArchive;
 import io.aeron.archive.client.RecordingDescriptorConsumer;
 import io.aeron.logbuffer.FragmentHandler;
+import io.aeron.official.SampleConfiguration;
 import io.aeron.official.SamplesUtil;
 import org.agrona.collections.MutableLong;
 import org.agrona.concurrent.SigInt;

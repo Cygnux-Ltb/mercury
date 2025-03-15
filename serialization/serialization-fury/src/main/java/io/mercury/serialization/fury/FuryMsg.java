@@ -3,16 +3,13 @@ package io.mercury.serialization.fury;
 import io.mercury.common.epoch.EpochUnit;
 import io.mercury.common.sequence.OrderedObject;
 import io.mercury.common.serialization.ContentType;
-import io.mercury.common.serialization.specific.BytesDeserializable;
-import io.mercury.common.serialization.specific.BytesSerializable;
+import org.apache.fury.Fury;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 
-/**
- *
- */
-public final class FuryMsg implements OrderedObject<FuryMsg>,
-        BytesSerializable, BytesDeserializable<FuryMsg> {
+@NotThreadSafe
+public class FuryMsg implements OrderedObject<FuryMsg> {
 
     private long sequence;
     private long epoch;
@@ -37,6 +34,12 @@ public final class FuryMsg implements OrderedObject<FuryMsg>,
 
     public FuryMsg setEpoch(long epoch) {
         this.epoch = epoch;
+        return this;
+    }
+
+    public FuryMsg setEpoch(long epoch, EpochUnit epochUnit) {
+        this.epoch = epoch;
+        this.epochUnit = epochUnit;
         return this;
     }
 
@@ -91,15 +94,13 @@ public final class FuryMsg implements OrderedObject<FuryMsg>,
     }
 
     @Nonnull
-    @Override
-    public FuryMsg fromBytes(@Nonnull byte[] bytes) {
-        return FuryKeeper.FURY_MSG_USED.deserializeJavaObject(bytes, FuryMsg.class);
+    public byte[] toBytes(@Nonnull Fury fury) {
+        return fury.serializeJavaObject(this);
     }
 
     @Nonnull
-    @Override
-    public byte[] toBytes() {
-        return FuryKeeper.FURY_MSG_USED.serializeJavaObject(this);
+    public static FuryMsg fromBytes(@Nonnull Fury fury, @Nonnull byte[] bytes) {
+        return fury.deserializeJavaObject(bytes, FuryMsg.class);
     }
 
 }

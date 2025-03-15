@@ -15,7 +15,6 @@
 
     <modules>
         <module>transport-aeron</module>
-        <module>transport-jetty</module>
         <module>transport-netty</module>
         <module>transport-rabbitmq</module>
         <module>transport-rsocket</module>
@@ -43,7 +42,7 @@
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.34</version>
+                <version>1.18.36</version>
             </dependency>
 
             <dependency>

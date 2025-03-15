@@ -1,8 +1,7 @@
 package io.mercury.transport.rmq;
 
-import org.junit.Test;
-
 import io.mercury.transport.rmq.declare.ExchangeRelationship;
+import org.junit.Test;
 
 public class RmqDeclareOperatorTest {
 

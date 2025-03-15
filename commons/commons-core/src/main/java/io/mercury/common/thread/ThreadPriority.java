@@ -1,5 +1,7 @@
 package io.mercury.common.thread;
 
+import javax.annotation.Nullable;
+
 import static java.lang.Thread.MAX_PRIORITY;
 import static java.lang.Thread.MIN_PRIORITY;
 import static java.lang.Thread.NORM_PRIORITY;
@@ -32,6 +34,14 @@ public enum ThreadPriority {
 
     public int getValue() {
         return value;
+    }
+
+    public static int getOrDefValue(@Nullable ThreadPriority priority) {
+        return switch (priority) {
+            case MIN -> MIN.getValue();
+            case MAX -> MAX.getValue();
+            case null, default -> NORM.getValue();
+        };
     }
 
     public Thread newThread(Runnable runnable) {

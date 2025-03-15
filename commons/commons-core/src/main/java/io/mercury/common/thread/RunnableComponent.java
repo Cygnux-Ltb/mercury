@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static io.mercury.common.datetime.pattern.impl.DateTimePattern.YYYYMMDD_L_HHMMSSSSS;
 import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
-import static io.mercury.common.thread.ThreadSupport.startNewMaxPriorityThread;
+import static io.mercury.common.thread.Threads.startNewMaxPriorityThread;
 import static java.time.LocalDateTime.now;
 
 @ThreadSafe

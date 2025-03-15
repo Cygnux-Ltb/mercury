@@ -1,11 +1,11 @@
 package io.mercury.common.graph;
 
-import static io.mercury.common.collections.MutableSets.newUnifiedSet;
-
 import org.eclipse.collections.api.set.ImmutableSet;
 import org.jgrapht.Graph;
 import org.jgrapht.traverse.BreadthFirstIterator;
 import org.jgrapht.traverse.DepthFirstIterator;
+
+import static io.mercury.common.collections.MutableSets.newUnifiedSet;
 
 public final class VertexScanner {
 

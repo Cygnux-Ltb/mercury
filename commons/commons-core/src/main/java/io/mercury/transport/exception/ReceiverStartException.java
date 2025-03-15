@@ -2,7 +2,7 @@ package io.mercury.transport.exception;
 
 import java.io.Serial;
 
-public final class ReceiverStartException extends RuntimeException {
+public final class ReceiverStartException extends IllegalStateException {
 
     @Serial
     private static final long serialVersionUID = 5792361596324344884L;

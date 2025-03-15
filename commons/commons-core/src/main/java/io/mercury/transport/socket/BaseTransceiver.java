@@ -2,8 +2,8 @@ package io.mercury.transport.socket;
 
 import io.mercury.common.annotation.AbstractFunction;
 import io.mercury.common.collections.queue.Queue;
-import io.mercury.transport.api.Sender;
 import io.mercury.transport.TransportComponent;
+import io.mercury.transport.api.Sender;
 
 public abstract class BaseTransceiver<T> extends TransportComponent implements Transceiver<T> {
 

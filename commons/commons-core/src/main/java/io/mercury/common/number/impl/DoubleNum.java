@@ -1,13 +1,13 @@
 package io.mercury.common.number.impl;
 
+import io.mercury.common.number.api.Num;
+
 import static io.mercury.common.number.DoubleArithmetic.add4;
 import static io.mercury.common.number.DoubleArithmetic.add8;
 import static io.mercury.common.number.DoubleArithmetic.div;
 import static io.mercury.common.number.DoubleArithmetic.multiply4;
 import static io.mercury.common.number.DoubleArithmetic.multiply8;
 import static io.mercury.common.number.DoubleArithmetic.subtraction;
-
-import io.mercury.common.number.api.Num;
 
 public final class DoubleNum implements Num<DoubleNum> {
 

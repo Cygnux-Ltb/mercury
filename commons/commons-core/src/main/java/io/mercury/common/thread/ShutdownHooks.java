@@ -55,7 +55,7 @@ public final class ShutdownHooks {
      * @return Thread
      */
     public static Thread addShutdownHook(String threadName, Runnable hook) {
-        Thread thread = ThreadSupport.newThread(threadName, hook);
+        Thread thread = Threads.newThread(threadName, hook);
         getRuntime().addShutdownHook(thread);
         return thread;
     }

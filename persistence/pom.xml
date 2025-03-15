@@ -66,7 +66,7 @@
             <dependency>
                 <groupId>jakarta.persistence</groupId>
                 <artifactId>jakarta.persistence-api</artifactId>
-                <version>3.1.0</version>
+                <version>3.2.0</version>
             </dependency>
 
             <!-- Jakarta Transactions -->
@@ -88,7 +88,7 @@
             <dependency>
                 <groupId>com.zaxxer</groupId>
                 <artifactId>HikariCP</artifactId>
-                <version>5.1.0</version>
+                <version>6.2.1</version>
             </dependency>
 
             <!-- Apache Commons Compress software defines an API for working with

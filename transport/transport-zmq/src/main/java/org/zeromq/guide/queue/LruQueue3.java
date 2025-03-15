@@ -1,8 +1,5 @@
 package org.zeromq.guide.queue;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZFrame;
@@ -11,6 +8,9 @@ import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.PollItem;
 import org.zeromq.ZMQ.Socket;
 import org.zeromq.ZMsg;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class LruQueue3 {
 

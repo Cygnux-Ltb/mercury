@@ -1,10 +1,9 @@
 package io.mercury.common.number;
 
-import static java.lang.Math.abs;
-
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.concurrent.ThreadLocalRandom;
 
-import javax.annotation.concurrent.ThreadSafe;
+import static java.lang.Math.abs;
 
 @ThreadSafe
 public final class ThreadSafeRandoms {
