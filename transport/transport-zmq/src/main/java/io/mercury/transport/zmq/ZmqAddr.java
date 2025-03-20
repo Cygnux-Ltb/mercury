@@ -60,7 +60,7 @@ public final class ZmqAddr {
         atWithinRange(port, 4096, 65536, "port");
         if (!addr.equals("*"))
             IpAddressValidator.assertIpAddress(addr);
-        return new ZmqAddr(ZmqProtocol.tcp, addr + ":" + port);
+        return new ZmqAddr(ZmqProtocol.TCP, addr + ":" + port);
     }
 
     /**
@@ -71,7 +71,7 @@ public final class ZmqAddr {
      */
      static ZmqAddr ipc(@Nonnull String addr) {
         nonEmpty(addr, "addr");
-        return new ZmqAddr(ZmqProtocol.ipc, addr);
+        return new ZmqAddr(ZmqProtocol.IPC, addr);
     }
 
     /**
@@ -82,7 +82,7 @@ public final class ZmqAddr {
      */
     public static ZmqAddr inproc(@Nonnull String addr) {
         nonEmpty(addr, "addr");
-        return new ZmqAddr(ZmqProtocol.inproc, addr);
+        return new ZmqAddr(ZmqProtocol.INPROC, addr);
     }
 
     @Override
