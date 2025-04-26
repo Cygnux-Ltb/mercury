@@ -133,10 +133,10 @@ public final class RmqConnection implements TransportConfigurator {
      */
     public static Builder with(@Nonnull String module, @Nonnull Config config) {
         ConfigWrapper<RmqConfigOption> wrapper = new ConfigWrapper<>(module, config);
-        return new Builder(wrapper.getString(RmqConfigOption.Host),
-                wrapper.getInt(RmqConfigOption.Port),
-                wrapper.getString(RmqConfigOption.Username),
-                wrapper.getString(RmqConfigOption.Password));
+        return new Builder(wrapper.getString(RmqConfigOption.HOST),
+                wrapper.getInt(RmqConfigOption.PORT),
+                wrapper.getString(RmqConfigOption.USERNAME),
+                wrapper.getString(RmqConfigOption.PASSWORD));
     }
 
     @Override

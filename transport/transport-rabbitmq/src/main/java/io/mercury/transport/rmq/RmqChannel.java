@@ -43,7 +43,7 @@ public final class RmqChannel extends RmqTransport {
      * @return RmqChannel
      */
     public static RmqChannel with(RmqConnection connection) {
-        return new RmqChannel(null, connection);
+        return new RmqChannel("RmqChannel-" + ZonedDateTime.now(SYS_DEFAULT), connection);
     }
 
     /**
@@ -61,7 +61,7 @@ public final class RmqChannel extends RmqTransport {
      * @param connection RmqConnection
      */
     private RmqChannel(String tag, RmqConnection connection) {
-        super("RmqChannel-" + ZonedDateTime.now(SYS_DEFAULT), connection);
+        super(tag, connection);
         createConnection();
     }
 

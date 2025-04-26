@@ -285,6 +285,9 @@ public class RmqBatchReceiver<T> extends RmqTransport implements Receiver, Runna
                         cacheSize.reset();
                         log.info("cache clear, current size -> {}, cache -> {} , local tag -> {}", bufferList.size(),
                                 cacheSize.longValue(), lastDeliveryTag);
+                    } else {
+                        // TODO do failure handle
+                        log.warn("ack tag -> {}", lastDeliveryTag);
                     }
                 }
             } catch (IOException e) {

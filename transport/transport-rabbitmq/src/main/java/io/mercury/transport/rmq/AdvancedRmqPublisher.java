@@ -254,7 +254,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
                 log.error("Enables publisher acknowledgements failure, publisherName -> {}, connectionInfo -> {}",
                         publisherName, rmqConnection.getConnectionInfo(), ioe);
                 throw new InitializeFailureException(
-                        "Enables publisher acknowledgements failure, From publisher -> {}" + publisherName, ioe);
+                        "Enables publisher acknowledgements failure, From publisher -> " + publisherName, ioe);
             }
         }
         newStartTime();

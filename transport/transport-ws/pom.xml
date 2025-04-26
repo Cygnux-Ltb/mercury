@@ -104,17 +104,17 @@
         </dependency>
 
         <!-- A WebSocket client and server implementation written 100% in Java -->
-        <!-- <dependency>
+        <dependency>
             <groupId>org.java-websocket</groupId>
             <artifactId>Java-WebSocket</artifactId>
-            <version>1.5.2</version>
+            <version>1.6.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-api</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency> -->
+        </dependency>
 
     </dependencies>
 

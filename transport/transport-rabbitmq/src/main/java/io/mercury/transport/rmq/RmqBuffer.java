@@ -19,7 +19,6 @@ import javax.annotation.Nonnull;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 
@@ -100,8 +99,11 @@ public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
     private void declareQueue() throws DeclareException {
         QueueRelationship relationship = QueueRelationship.named(queueName).binding(
                 // 如果routingKeys为空集合, 则创建fanout交换器, 否则创建直接交换器
-                exchangeNames.stream().map(exchangeName -> routingKeys.isEmpty() ? AmqpExchange.fanout(exchangeName)
-                        : AmqpExchange.direct(exchangeName)).collect(Collectors.toList()),
+                exchangeNames.stream()
+                        .map(exchangeName -> routingKeys.isEmpty()
+                                ? AmqpExchange.fanout(exchangeName)
+                                : AmqpExchange.direct(exchangeName))
+                        .toList(),
                 routingKeys);
         relationship.declare(RmqOperator.with(channel.internalChannel()));
     }
@@ -198,7 +200,7 @@ public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
         return QueueType.MPMC;
     }
 
-    
+
     public static void main(String[] args) {
 
         RmqConnection connection = RmqConnection.with("127.0.0.1", 5672, "user", "password").build();
