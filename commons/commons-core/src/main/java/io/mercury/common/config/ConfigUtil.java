@@ -8,8 +8,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 
-import static java.lang.System.out;
-
 /**
  * @author yellow013
  */
@@ -37,7 +35,7 @@ public final class ConfigUtil {
                 log.info("Key -> [{}],  ValueType -> [{}],  Value -> [{}]",
                         entry.getKey(), value.valueType(), value.unwrapped());
             else
-                out.println("Key -> [" + entry.getKey() + "],  ValueType -> [" + value.valueType() + "],  Value -> [" + value.unwrapped() + "]");
+                System.out.println("Key -> [" + entry.getKey() + "],  ValueType -> [" + value.valueType() + "],  Value -> [" + value.unwrapped() + "]");
         });
     }
 

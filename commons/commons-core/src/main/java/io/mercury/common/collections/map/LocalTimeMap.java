@@ -5,14 +5,14 @@ import io.mercury.common.datetime.DateTimeUtil;
 import javax.annotation.concurrent.NotThreadSafe;
 import java.time.LocalTime;
 import java.util.function.BiPredicate;
-import java.util.function.Function;
 import java.util.function.ToLongFunction;
+import java.util.function.UnaryOperator;
 
 @NotThreadSafe
 public final class LocalTimeMap<V> extends TemporalMap<LocalTime, V, LocalTimeMap<V>> {
 
     private LocalTimeMap(ToLongFunction<LocalTime> keyFunc,
-                         Function<LocalTime, LocalTime> nextKeyFunc,
+                         UnaryOperator<LocalTime> nextKeyFunc,
                          BiPredicate<LocalTime, LocalTime> hasNextKey) {
         super(keyFunc, nextKeyFunc, hasNextKey);
     }

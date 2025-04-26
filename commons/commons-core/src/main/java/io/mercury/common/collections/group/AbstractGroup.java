@@ -24,7 +24,7 @@ public abstract class AbstractGroup<K, V> implements Group<K, V> {
 
     protected final Set<K> keys;
 
-    public AbstractGroup(Supplier<Map<K, V>> supplier) {
+    protected AbstractGroup(Supplier<Map<K, V>> supplier) {
         Map<K, V> map = supplier.get();
         if (map == null)
             throw new IllegalArgumentException("supplier result is null");

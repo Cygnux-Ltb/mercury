@@ -72,6 +72,8 @@ public final class CollectionUtil {
         return collection != null && collection.notEmpty();
     }
 
+    private static final String STR_COLLECTION = "collection";
+
     /**
      * @param <E>        type
      * @param <C>        collection type
@@ -82,7 +84,7 @@ public final class CollectionUtil {
     @SafeVarargs
     public static <E, C extends Collection<E>> C addAll(@Nonnull final C collection,
                                                         @Nonnull final E... values) {
-        nonNull(collection, "collection");
+        nonNull(collection, STR_COLLECTION);
         if (ArrayUtil.isNullOrEmpty(values))
             return collection;
         Collections.addAll(collection, values);
@@ -102,7 +104,7 @@ public final class CollectionUtil {
     public static <E, V, C extends Collection<E>> C addAll(@Nonnull final C collection,
                                                            @Nonnull final Function<V, E> converter,
                                                            @Nonnull final V... values) {
-        nonNull(collection, "collection");
+        nonNull(collection, STR_COLLECTION);
         nonNull(converter, "converter");
         if (ArrayUtil.isNullOrEmpty(values))
             return collection;
@@ -119,7 +121,7 @@ public final class CollectionUtil {
      */
     public static <E> E[] toArray(@Nonnull final Collection<E> collection,
                                   @Nonnull final IntFunction<E[]> arrayBuilder) {
-        nonNull(collection, "collection");
+        nonNull(collection, STR_COLLECTION);
         E[] values = arrayBuilder.apply(collection.size());
         Iterator<E> iterator = collection.iterator();
         int i = 0;

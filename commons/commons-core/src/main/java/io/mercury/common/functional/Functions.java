@@ -7,11 +7,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.BooleanSupplier;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
+import java.util.function.UnaryOperator;
 
 public enum Functions {
 
@@ -26,7 +26,7 @@ public enum Functions {
      * @return List<T>
      */
     public static <T> List<T> exec(@Nonnull final Supplier<List<T>> supplier,
-                                   @Nullable final Function<List<T>, List<T>> successFunc,
+                                   @Nullable final UnaryOperator<List<T>> successFunc,
                                    @Nullable final ThrowableHandler<? super Exception> failureFunc) {
         return exec(supplier, successFunc, failureFunc, FastList::new);
     }
@@ -40,7 +40,7 @@ public enum Functions {
      * @return R
      */
     public static <R> R exec(@Nonnull final Supplier<R> supplier,
-                             @Nullable final Function<R, R> successFunc,
+                             @Nullable final UnaryOperator<R> successFunc,
                              @Nullable final ThrowableHandler<? super Exception> failureFunc,
                              @Nullable final Supplier<R> defSupplier) {
         try {
