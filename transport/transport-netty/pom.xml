@@ -21,7 +21,7 @@
         <dependency>
             <groupId>io.projectreactor.netty</groupId>
             <artifactId>reactor-netty</artifactId>
-            <version>1.2.3</version>
+            <version>1.2.5</version>
         </dependency>
         <!-- Netty/Codec -->
         <dependency>
@@ -42,17 +42,10 @@
             <version>${netty.version}</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>com.google.protobuf</groupId>-->
-<!--            <artifactId>protobuf-java</artifactId>-->
-<!--            <version>4.28.0</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>3.25.5</version>
+            <version>3.25.7</version>
             <scope>test</scope>
         </dependency>
 
