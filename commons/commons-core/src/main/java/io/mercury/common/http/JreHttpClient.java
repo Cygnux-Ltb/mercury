@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -26,31 +25,31 @@ public abstract class JreHttpClient {
     private JreHttpClient() {
     }
 
-    public static HttpResponse<String> GET(@Nonnull String uri, PathParam... params)
-            throws IOException, InterruptedException, URISyntaxException {
-        return GET(uri, PathParamSet.with(params));
-    }
-
-    public static HttpResponse<String> GET(@Nonnull String uri, PathParamSet params)
-            throws IOException, InterruptedException, URISyntaxException {
-        return GET(params.toFullUri(uri));
-    }
-
-    public static HttpResponse<String> GET(@Nonnull URI uri)
+    public static HttpResponse<String> doGet(@Nonnull String uri, PathParam... params)
             throws IOException, InterruptedException {
-        return GET(HttpRequest.newBuilder().uri(uri).GET()
+        return doGet(uri, PathParamSet.with(params));
+    }
+
+    public static HttpResponse<String> doGet(@Nonnull String uri, PathParamSet params)
+            throws IOException, InterruptedException {
+        return doGet(params.toFullUri(uri));
+    }
+
+    public static HttpResponse<String> doGet(@Nonnull URI uri)
+            throws IOException, InterruptedException {
+        return doGet(HttpRequest.newBuilder().uri(uri).GET()
                 .headers(HttpHeaderName.CONTENT_TYPE.value(), MimeType.APPLICATION_JSON_UTF8)
                 .build());
     }
 
-    public static HttpResponse<String> GET(@Nonnull HttpRequest request)
+    public static HttpResponse<String> doGet(@Nonnull HttpRequest request)
             throws IOException, InterruptedException {
         return HC.send(
                 // GET request
                 request, BodyHandlers.ofString());
     }
 
-    public static HttpResponse<String> POST(@Nonnull URI uri, String body)
+    public static HttpResponse<String> doPost(@Nonnull URI uri, String body)
             throws IOException, InterruptedException {
         return HC.send(
                 // POST request
@@ -62,7 +61,7 @@ public abstract class JreHttpClient {
     }
 
 
-    public static HttpResponse<String> PUT(@Nonnull URI uri, String body)
+    public static HttpResponse<String> doPut(@Nonnull URI uri, String body)
             throws IOException, InterruptedException {
         return HC.send(
                 // PUT request
@@ -74,7 +73,7 @@ public abstract class JreHttpClient {
     }
 
 
-    public static HttpResponse<String> DELETE(URI uri)
+    public static HttpResponse<String> doDelete(URI uri)
             throws IOException, InterruptedException {
         return HC.send(
                 // DELETE request

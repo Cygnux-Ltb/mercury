@@ -52,7 +52,7 @@ public final class CouchConnector {
     private String sendGetRequest(String database, String documentId) {
         log.info("sendGetRequest() -> database==[{}], documentId==[{}]", database, documentId);
         try {
-            return JreHttpClient.GET(couchdbUrl + "/" + database + "/" + documentId).body();
+            return JreHttpClient.doGet(couchdbUrl + "/" + database + "/" + documentId).body();
         } catch (Exception e) {
             log.error("sendGetRequest() -> database==[{}], documentId==[{}]", database, documentId, e);
             return "";
