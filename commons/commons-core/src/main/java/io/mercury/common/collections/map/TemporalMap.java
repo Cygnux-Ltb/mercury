@@ -10,8 +10,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 import java.time.temporal.Temporal;
 import java.util.function.BiPredicate;
-import java.util.function.Function;
 import java.util.function.ToLongFunction;
+import java.util.function.UnaryOperator;
 
 @NotThreadSafe
 public abstract class TemporalMap<K extends Temporal, V, T extends TemporalMap<K, V, T>> {
@@ -24,7 +24,7 @@ public abstract class TemporalMap<K extends Temporal, V, T extends TemporalMap<K
     /**
      * 获取下一个Key
      */
-    private final Function<K, K> nextKeyFunc;
+    private final UnaryOperator<K> nextKeyFunc;
 
     /**
      * Scan判断是否有下一个Key
@@ -36,13 +36,13 @@ public abstract class TemporalMap<K extends Temporal, V, T extends TemporalMap<K
      */
     private final MutableLongObjectMap<V> savedMap;
 
-    public TemporalMap(ToLongFunction<K> keyFunc, Function<K, K> nextKeyFunc,
-                       BiPredicate<K, K> hasNextKey) {
-        this(keyFunc, nextKeyFunc, hasNextKey, Capacity.L07_128);
+    protected TemporalMap(ToLongFunction<K> keyFunc, UnaryOperator<K> nextKeyFunc,
+                          BiPredicate<K, K> hasNextKey) {
+        this(keyFunc, nextKeyFunc, hasNextKey, Capacity.HEX_80);
     }
 
-    public TemporalMap(ToLongFunction<K> keyFunc, Function<K, K> nextKeyFunc,
-                       BiPredicate<K, K> hasNextKey, Capacity capacity) {
+    protected TemporalMap(ToLongFunction<K> keyFunc, UnaryOperator<K> nextKeyFunc,
+                          BiPredicate<K, K> hasNextKey, Capacity capacity) {
         this.keyFunc = keyFunc;
         this.nextKeyFunc = nextKeyFunc;
         this.hasNextKey = hasNextKey;

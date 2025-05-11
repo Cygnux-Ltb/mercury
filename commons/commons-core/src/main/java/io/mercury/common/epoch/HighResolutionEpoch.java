@@ -33,6 +33,9 @@ public final class HighResolutionEpoch {
         MICROS_EPOCH_OFFSET = epochMicros - (baseline / NANOS_PER_MICROS);
     }
 
+    private HighResolutionEpoch() {
+    }
+
     /**
      * 获取<b>[纳秒]</b>单位的[Epoch]时间
      *

@@ -1,5 +1,6 @@
 package io.mercury.common.file;
 
+import io.mercury.common.lang.Asserter;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.serialization.specific.BytesSerializer;
 import org.apache.commons.collections4.CollectionUtils;
@@ -47,7 +48,7 @@ public final class FileChannelWriter {
     /**
      * @param lines  : written data
      * @param target : written target file
-     * @param append : append file end
+     * @param append : append the file end
      * @return File
      * @throws NullPointerException npe
      * @throws IOException          ioe
@@ -62,7 +63,7 @@ public final class FileChannelWriter {
      * @param charset  : Value charset
      * @param target   : Written target file
      * @param capacity : Buffer capacity
-     * @param append   : Is append to file end
+     * @param append   : Is append to the file end
      * @return File
      * @throws NullPointerException npe
      * @throws IOException          ioe
@@ -81,7 +82,7 @@ public final class FileChannelWriter {
      * @param serializer : Serialization function
      * @param target     : Written target file
      * @param capacity   : Buffer capacity
-     * @param append     : Is append to file end
+     * @param append     : Is append to the file end
      * @return File
      * @throws NullPointerException npe
      * @throws IOException          ioe
@@ -89,8 +90,7 @@ public final class FileChannelWriter {
     public static <T> File write(Collection<T> data, @Nonnull BytesSerializer<T> serializer,
                                  File target, int capacity, boolean append)
             throws NullPointerException, IOException {
-        if (target == null)
-            throw new NullPointerException("target file must not be null.");
+        Asserter.nonNull(target, "target");
         if (capacity < 128)
             capacity = 4096;
         File parentFile = target.getParentFile();
@@ -103,17 +103,17 @@ public final class FileChannelWriter {
             log.debug("create File -> {} is {}", parentFile, succeed);
         }
         if (CollectionUtils.isNotEmpty(data)) {
-            try (RandomAccessFile rafile = new RandomAccessFile(target, "rw")) {
+            try (RandomAccessFile raFile = new RandomAccessFile(target, "rw")) {
                 if (append) {
                     // Seek to end
-                    rafile.seek(rafile.length());
+                    raFile.seek(raFile.length());
                 }
-                try (FileChannel channel = rafile.getChannel()) {
+                try (FileChannel channel = raFile.getChannel()) {
                     // Allocate [capacity] direct buffer
                     ByteBuffer buffer = ByteBuffer.allocateDirect(capacity);
                     // for (int i = 0; i < data.size(); i++) {
                     for (T t : data) {
-                        byte[] bytes = serializer.serialization(t);
+                        byte[] bytes = serializer.serialize(t);
                         if (bytes == null || bytes.length == 0) {
                             continue;
                         }

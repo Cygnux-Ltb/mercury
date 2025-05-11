@@ -40,7 +40,7 @@ public class AvroJsonSerializer<T extends SpecificRecord> implements JsonSeriali
     }
 
     @Override
-    public String serialization(@Nonnull T obj) {
+    public String serialize(@Nonnull T obj) {
         try {
             // TODO 对象可重用
             encoder = EncoderFactory.get().jsonEncoder(obj.getSchema(), outputStream);

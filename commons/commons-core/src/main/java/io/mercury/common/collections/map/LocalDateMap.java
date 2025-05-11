@@ -6,14 +6,14 @@ import org.eclipse.collections.api.list.MutableList;
 import javax.annotation.concurrent.NotThreadSafe;
 import java.time.LocalDate;
 import java.util.function.BiPredicate;
-import java.util.function.Function;
 import java.util.function.ToLongFunction;
+import java.util.function.UnaryOperator;
 
 @NotThreadSafe
 public final class LocalDateMap<V> extends TemporalMap<LocalDate, V, LocalDateMap<V>> {
 
     private LocalDateMap(ToLongFunction<LocalDate> keyFunc,
-                         Function<LocalDate, LocalDate> nextKeyFunc,
+                         UnaryOperator<LocalDate> nextKeyFunc,
                          BiPredicate<LocalDate, LocalDate> hasNextKey) {
         super(keyFunc, nextKeyFunc, hasNextKey);
     }

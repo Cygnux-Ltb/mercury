@@ -14,11 +14,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <!-- <module>persistence-chronicle</module> -->
         <module>persistence-h2</module>
         <module>persistence-hsqldb</module>
-        <module>persistence-log4j2-hp</module>
-        <!-- <module>persistence-kyotocabinet</module> -->
         <module>persistence-rdb</module>
         <module>persistence-rocksdb</module>
         <module>persistence-sqlite</module>
@@ -66,7 +63,7 @@
             <dependency>
                 <groupId>jakarta.persistence</groupId>
                 <artifactId>jakarta.persistence-api</artifactId>
-                <version>3.2.0</version>
+                <version>3.1.0</version>
             </dependency>
 
             <!-- Jakarta Transactions -->

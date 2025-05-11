@@ -19,12 +19,12 @@
 
         <!-- jsoup is a Java library for working with real-world HTML. It provides
             a very convenient API for extracting and manipulating data, using the best
-            of DOM, CSS, and jquery-like methods. jsoup implements the WHATWG HTML5 specification,
+            of DOM, CSS, and jquery-like methods. jsoup implements the WHATWG HTML5 specification
             and parses HTML to the same DOM as modern browsers do. -->
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.18.3</version>
+            <version>1.19.1</version>
         </dependency>
 
         <!-- Netty Component -->
@@ -104,17 +104,17 @@
         </dependency>
 
         <!-- A WebSocket client and server implementation written 100% in Java -->
-        <!-- <dependency>
+        <dependency>
             <groupId>org.java-websocket</groupId>
             <artifactId>Java-WebSocket</artifactId>
-            <version>1.5.2</version>
+            <version>1.6.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-api</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency> -->
+        </dependency>
 
     </dependencies>
 

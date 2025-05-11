@@ -27,10 +27,6 @@
     <dependencies>
         <dependency>
             <groupId>io.mercury</groupId>
-            <artifactId>commons-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.mercury</groupId>
             <artifactId>commons-concurrent</artifactId>
         </dependency>
         <dependency>
@@ -51,7 +47,7 @@
         </dependency>
 
         <!-- ####### chronicle-core ####### -->
-        <!-- Low level access to native memory, JVM and OS. -->
+        <!-- Low-level access to native memory, JVM and OS. -->
         <dependency>
             <groupId>net.openhft</groupId>
             <artifactId>chronicle-core</artifactId>
@@ -69,9 +65,9 @@
         </dependency>
 
         <!-- ####### chronicle-bytes ####### -->
-        <!-- Chronicle Bytes contains all the low level memory access wrappers.It
+        <!-- Chronicle Bytes contains all the low-level memory access wrappers.It
             is built on Chronicle Core’s direct memory and OS system call access. Chronicle
-            Bytes has a similar purpose to Java NIO’s ByteBuffer with some extensions. -->
+            Bytes has a similar purpose to Java NIO ByteBuffer with some extensions. -->
         <dependency>
             <groupId>net.openhft</groupId>
             <artifactId>chronicle-bytes</artifactId>
@@ -89,9 +85,9 @@
         </dependency>
 
         <!-- ####### chronicle-threads ####### -->
-        <!-- This library provide a high performance thread pool. This thread pool
-            is design to share blocking, monitoring and busy waiting threads. Busy waiting
-            tasks can be prioritised for HIGH, MEDIUM, DAEMON (low priority) as well
+        <!-- This library provides a high-performance thread pool. This thread pool
+            is designed to share blocking, monitoring and busy waiting threads. Busy waiting
+            tasks can be prioritized for HIGH, MEDIUM, DAEMON (low priority) as well
             as TIMER (fixed rate events) tasks in a single thread without creating garbage. -->
         <dependency>
             <groupId>net.openhft</groupId>
@@ -132,9 +128,9 @@
         </dependency>
 
         <!-- ####### chronicle-values ####### -->
-        <!-- Generation of constantly-sized flyweight accessors to Chronicle Bytes
-            and simple bean-style on-heap implementations from interfaces. Interfaces,
-            that could be processed by Chronicle-Values generation, are called value
+        <!-- Generation of constantly sized flyweight accessors to Chronicle Bytes
+            and simple bean-style on-heap implementations from interfaces. Interfaces
+            that could be processed by Chronicle-Values generation are called value
             interfaces. -->
         <dependency>
             <groupId>net.openhft</groupId>
@@ -176,7 +172,7 @@
         </dependency>
 
         <!-- ######################################################### -->
-        <!-- chronicle-queue Java library for persisted low latency messaging,
+        <!-- chronicle-queue Java library for persisted low-latency messaging,
             Microsecond messaging that stores everything to disk -->
         <dependency>
             <groupId>net.openhft</groupId>
@@ -203,7 +199,7 @@
         </dependency>
 
         <!-- ######################################################### -->
-        <!-- chronicle-map off-heap and high performance map framework, Replicate
+        <!-- chronicle-map off-heap and high-performance map framework, Replicate
             your Key Value Store across your network, with consistency, persistence and
             performance. -->
         <dependency>
@@ -236,8 +232,10 @@
                     <artifactId>slf4j-api</artifactId>
                 </exclusion>
                 <!-- java 11 use this exclusion -->
-                <!-- <exclusion> <groupId>com.sun.java</groupId> <artifactId>tools</artifactId>
-                    </exclusion> -->
+                <exclusion>
+                    <groupId>com.sun.java</groupId>
+                    <artifactId>tools</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 

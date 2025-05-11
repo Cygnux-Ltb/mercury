@@ -96,7 +96,7 @@ public final class JsonMsg implements JsonSerializable {
      */
     @Nullable
     public static JsonMsg fromJson(String json) {
-        return JsonParser.toObject(json, JsonMsg.class);
+        return JsonReader.toObject(json, JsonMsg.class);
     }
 
 }

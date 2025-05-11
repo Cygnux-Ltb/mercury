@@ -83,7 +83,12 @@ public abstract sealed class RingEventbus<E> extends RunnableComponent
      * @return int
      */
     private int adjustSize(int size) {
-        return size < 16 ? 16 : size > 65536 ? 65536 : minPow2(size);
+        if (size < 16)
+            return 16;
+        if (size > 65536)
+            return 65536;
+        else
+            return minPow2(size);
     }
 
     @Override

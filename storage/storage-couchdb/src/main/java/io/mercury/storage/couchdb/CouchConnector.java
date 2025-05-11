@@ -4,7 +4,7 @@ import io.mercury.common.http.JreHttpClient;
 import io.mercury.common.log4j2.Log4j2LoggerFactory;
 import io.mercury.common.sys.SysProperties;
 import io.mercury.common.util.PropertiesUtil;
-import io.mercury.serialization.json.JsonParser;
+import io.mercury.serialization.json.JsonReader;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -40,7 +40,7 @@ public final class CouchConnector {
      * @return String
      */
     public String getCouchBeanValue(String database, CouchDocument document) {
-        CouchBean couchBean = JsonParser.toObject(sendGetRequest(database, document.documentId()), CouchBean.class);
+        CouchBean couchBean = JsonReader.toObject(sendGetRequest(database, document.documentId()), CouchBean.class);
         return couchBean.getValue();
     }
 
@@ -52,7 +52,7 @@ public final class CouchConnector {
     private String sendGetRequest(String database, String documentId) {
         log.info("sendGetRequest() -> database==[{}], documentId==[{}]", database, documentId);
         try {
-            return JreHttpClient.GET(couchdbUrl + "/" + database + "/" + documentId).body();
+            return JreHttpClient.doGet(couchdbUrl + "/" + database + "/" + documentId).body();
         } catch (Exception e) {
             log.error("sendGetRequest() -> database==[{}], documentId==[{}]", database, documentId, e);
             return "";

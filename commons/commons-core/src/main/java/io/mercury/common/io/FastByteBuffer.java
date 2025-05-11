@@ -99,7 +99,7 @@ public class FastByteBuffer {
         int remaining = len;
 
         if (currentBuffer != null) {
-            // first try to fill current buffer
+            // first try to fill the current buffer
             int part = Math.min(remaining, currentBuffer.length - offset);
             System.arraycopy(array, end - remaining, currentBuffer, offset, part);
             remaining -= part;

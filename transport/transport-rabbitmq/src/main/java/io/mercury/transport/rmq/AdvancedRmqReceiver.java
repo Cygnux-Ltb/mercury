@@ -110,10 +110,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
      */
     public static AdvancedRmqReceiver<byte[]> create(@Nonnull RmqReceiverConfig config,
                                                      @Nonnull Consumer<byte[]> consumer) {
-        Asserter.nonNull(config, "config");
-        Asserter.nonNull(consumer, "consumer");
-        return new AdvancedRmqReceiver<>(null, config, (msg, reuse) -> msg,
-                consumer, null);
+        return create(null, config, consumer);
     }
 
     /**
@@ -125,10 +122,7 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
     public static AdvancedRmqReceiver<byte[]> create(String tag,
                                                      @Nonnull RmqReceiverConfig config,
                                                      @Nonnull Consumer<byte[]> consumer) {
-        Asserter.nonNull(config, "config");
-        Asserter.nonNull(consumer, "consumer");
-        return new AdvancedRmqReceiver<>(tag, config, (msg, reuse) -> msg,
-                consumer, null);
+        return create(tag, config, (msg, reuse) -> msg, consumer);
     }
 
     /**
@@ -202,18 +196,19 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
      * @param cfg          RmqReceiverCfg
      * @param deserializer BytesDeserializer<T>
      * @param consumer     Consumer<T>
-     * @param ackConsumer  SelfAckConsumer<T>
+     * @param selfAckConsumer  SelfAckConsumer<T>
      */
     private AdvancedRmqReceiver(String tag,
                                 @Nonnull RmqReceiverConfig cfg,
                                 @Nonnull BytesDeserializer<T> deserializer,
                                 @Nullable Consumer<T> consumer,
-                                @Nullable SelfAckConsumer<T> ackConsumer)
+                                @Nullable SelfAckConsumer<T> selfAckConsumer)
             throws ConnectionFailedException {
         super(nonEmpty(tag) ? tag : "adv-recv-" + datetimeOfMillisecond(), cfg.getConnection());
-        if (consumer == null && ackConsumer == null) {
+        if (consumer == null && selfAckConsumer == null) {
             throw new NullPointerException("[Consumer] and [SelfAckConsumer] cannot all be null");
         }
+
         this.receiveQueue = cfg.getReceiveQueue();
         this.queueName = receiveQueue.getQueueName();
         this.deserializer = deserializer;
@@ -228,11 +223,11 @@ public class AdvancedRmqReceiver<T> extends RmqTransport implements Subscriber, 
         this.exclusive = cfg.isExclusive();
         this.args = cfg.getArgs();
         this.consumer = consumer;
-        this.selfAckConsumer = ackConsumer;
+        this.selfAckConsumer = selfAckConsumer;
         this.receiverName = "receiver::[" + rmqConnection.getConnectionInfo() + "$" + queueName + "]";
         createConnection();
         declareQueue();
-        if (ackConsumer != null) {
+        if (selfAckConsumer != null) {
             createAckDelegate();
         }
     }

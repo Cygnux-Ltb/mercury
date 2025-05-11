@@ -9,7 +9,7 @@ public final class SystemUtil {
 
     /**
      * PID value if a process id could not be determined. This value should be equal
-     * to a kernel only process id for the platform so that it does not indicate a
+     * to a kernel-only process id for the platform so that it does not indicate a
      * real process id.
      */
     public static final long PID_NOT_FOUND = 0;

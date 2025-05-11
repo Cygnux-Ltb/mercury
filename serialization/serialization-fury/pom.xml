@@ -12,7 +12,7 @@
     <name>serialization-fury</name>
 
     <properties>
-        <fury.version>0.10.0</fury.version>
+        <fury.version>0.10.1</fury.version>
     </properties>
 
     <dependencies>
@@ -46,14 +46,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <!-- Fastjson is a JSON processor (JSON parser + JSON generator) written in Java -->
-        <!--        <dependency>-->
-        <!--            <groupId>com.alibaba.fastjson2</groupId>-->
-        <!--            <artifactId>fastjson2</artifactId>-->
-        <!--            <version>2.0.53</version>-->
-        <!--        </dependency>-->
-
     </dependencies>
 
 </project>

@@ -37,17 +37,17 @@ public final class RingMulticaster<E, I> extends RingComponent<E, I> {
     private static final Logger log = Log4j2LoggerFactory.getLogger(RingMulticaster.class);
 
     /**
-     * @param name       Multicaster name
-     * @param size       RingBuffer size
-     * @param factory    EventFactory
-     * @param type       EventType
-     * @param strategy   WaitStrategy
+     * @param name       String
+     * @param size       int
      * @param mode       StartMode
-     * @param translator EventTranslator
-     * @param handlers   EventHandler collection
+     * @param type       ProducerType
+     * @param strategy   WaitStrategy
+     * @param factory    EventFactory<E>
+     * @param translator EventTranslatorOneArg<E, I>
+     * @param handlers   Collection<EventHandler<E>>
      */
     private RingMulticaster(String name, int size, StartMode mode, ProducerType type,
-                            EventFactory<E> factory, WaitStrategy strategy,
+                            WaitStrategy strategy, EventFactory<E> factory,
                             EventTranslatorOneArg<E, I> translator,
                             Collection<EventHandler<E>> handlers) {
         super(name, size, type, strategy, factory, translator);
@@ -175,8 +175,8 @@ public final class RingMulticaster<E, I> extends RingComponent<E, I> {
                 waitStrategy = handlers.size() > availableProcessors() ? CommonStrategy.Sleeping.get() : CommonStrategy.Yielding.get();
             if (StringSupport.isNullOrEmpty(name))
                 name = "RingMulticaster-" + YYYYMMDD_L_HHMMSSSSS.fmt(LocalDateTime.now());
-            return new RingMulticaster<>(name, size, mode, producerType, eventFactory,
-                    waitStrategy, eventTranslator, handlers);
+            return new RingMulticaster<>(name, size, mode, producerType, waitStrategy, eventFactory,
+                    eventTranslator, handlers);
         }
 
     }

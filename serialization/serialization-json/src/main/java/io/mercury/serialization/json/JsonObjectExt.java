@@ -6,18 +6,18 @@ import io.mercury.common.serialization.specific.JsonSerializable;
 
 import javax.annotation.Nonnull;
 
-public class JsonRecord implements JsonSerializable {
+public class JsonObjectExt implements JsonSerializable {
 
     private String title;
     private long epochTime;
     private EpochUnit epochUnit;
-    private JSONObject record;
+    private JSONObject object;
 
     public String getTitle() {
         return title;
     }
 
-    public JsonRecord setTitle(String title) {
+    public JsonObjectExt setTitle(String title) {
         this.title = title;
         return this;
     }
@@ -26,7 +26,7 @@ public class JsonRecord implements JsonSerializable {
         return epochTime;
     }
 
-    public JsonRecord setEpochTime(long epochTime) {
+    public JsonObjectExt setEpochTime(long epochTime) {
         this.epochTime = epochTime;
         return this;
     }
@@ -35,25 +35,25 @@ public class JsonRecord implements JsonSerializable {
         return epochUnit;
     }
 
-    public JsonRecord setEpochUnit(EpochUnit epochUnit) {
+    public JsonObjectExt setEpochUnit(EpochUnit epochUnit) {
         this.epochUnit = epochUnit;
         return this;
     }
 
-    public JSONObject getRecord() {
-        return record;
+    public JSONObject getObject() {
+        return object;
     }
 
-    public <T> T getRecordWith(Class<T> clazz) {
-        return record.to(clazz);
+    public <T> T getWith(Class<T> clazz) {
+        return object.to(clazz);
     }
 
-    public JsonRecord setRecord(Object record) {
-        return setRecord(JSONObject.from(record));
+    public JsonObjectExt setObject(Object object) {
+        return setObject(JSONObject.from(object));
     }
 
-    public JsonRecord setRecord(JSONObject record) {
-        this.record = record;
+    public JsonObjectExt setObject(JSONObject object) {
+        this.object = object;
         return this;
     }
 

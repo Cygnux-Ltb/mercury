@@ -22,16 +22,14 @@ import static io.mercury.common.collections.MutableLists.newFastList;
 import static io.mercury.common.collections.MutableMaps.newUnifiedMap;
 import static io.mercury.common.util.StringSupport.isNullOrEmpty;
 
-public final class JsonParser {
+public final class JsonReader {
 
-    private JsonParser() {
+    private JsonReader() {
     }
 
-    // TODO 添加反序列化属性
-    private static final ObjectMapper Mapper = new ObjectMapper();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    // TODO 添加配置信息
-    private static final TypeFactory TYPE_FACTORY = Mapper.getTypeFactory();
+    private static final TypeFactory TYPE_FACTORY = MAPPER.getTypeFactory();
 
     /**
      * @param json String
@@ -109,7 +107,7 @@ public final class JsonParser {
         try {
             if (isNullOrEmpty(json))
                 return new ArrayList<>();
-            return Mapper.readValue(json, new com.fasterxml.jackson.core.type.TypeReference<>() {
+            return MAPPER.readValue(json, new com.fasterxml.jackson.core.type.TypeReference<>() {
             });
         } catch (Exception e) {
             throw new JsonParseException(json, e);
@@ -240,7 +238,7 @@ public final class JsonParser {
                 return new HashMap<>();
             if (keyType == null || valueType == null)
                 return toMap(json);
-            return Mapper.readValue(json, TYPE_FACTORY.constructMapLikeType(Map.class, keyType, valueType));
+            return MAPPER.readValue(json, TYPE_FACTORY.constructMapLikeType(Map.class, keyType, valueType));
         } catch (Exception e) {
             throw new JsonParseException(json, e);
         }
@@ -277,22 +275,5 @@ public final class JsonParser {
                 toMap(json, keyType, valueType));
     }
 
-
-    public static void main(String[] args) {
-        Map<String, String> map0 = new HashMap<>();
-        map0.put("A", "1");
-        map0.put("B", "2");
-        map0.put("C", "11");
-        map0.put("D", null);
-        map0.put("E", null);
-        String json = JsonWriter.toJsonHasNulls(map0);
-        System.out.println(json);
-        Map<Object, Object> map1 = JsonParser.toMap(json);
-        System.out.println(map1);
-        map1.forEach((key, value) -> {
-            System.out.println(key.getClass());
-            System.out.println(value.getClass());
-        });
-    }
 
 }

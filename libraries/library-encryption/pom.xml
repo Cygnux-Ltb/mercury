@@ -51,12 +51,6 @@
             <artifactId>jsr305</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>ru.odnoklassniki</groupId>
-            <artifactId>one-nio</artifactId>
-            <version>2.0.0</version>
-        </dependency>
-
         <!-- The Bouncy Castle Java APIs for CMS, PKCS, EAC, TSP, CMP, CRMF, OCSP,
             and certificate generation. This jar contains APIs for JDK 1.5 and up. The
             APIs can be used in conjunction with a JCE/JCA provider such as the one provided

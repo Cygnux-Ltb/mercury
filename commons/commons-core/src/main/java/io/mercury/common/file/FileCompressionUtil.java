@@ -160,8 +160,8 @@ public class FileCompressionUtil {
      * compressed to "app.log.gz" and placed in the destination directory.
      *
      * @param sourceFile                      The uncompressed file
-     * @param targetDir                       The target directory or null if same
-     *                                        directory as sourceFile
+     * @param targetDir                       The target directory or null
+     *                                        if the same directory as sourceFile
      * @param algorithm                       The compression algorithm to use
      * @param deleteSourceFileAfterCompressed Delete the original source file only
      *                                        if the compression was successful.
@@ -177,7 +177,7 @@ public class FileCompressionUtil {
                     "Cannot compress file since target directory [" + targetDir + "] neither exists or is a directory");
         }
 
-        // try to find compression algorithm
+        // try to find a compression algorithm
         Algorithm a = Algorithm.findByName(algorithm);
 
         // was it found?
@@ -231,14 +231,14 @@ public class FileCompressionUtil {
      */
     public static File uncompress(File sourceFile, File targetDir, boolean deleteSourceFileAfterUncompressed)
             throws IOException {
-        // figure out compression algorithm used by its extension
+        // figure out the compression algorithm used by its extension
         String fileExt = FileUtil.parseFileExtension(sourceFile.getName());
 
         // was a file extension parsed
         if (fileExt == null)
             throw new IOException("File [" + sourceFile + "] must contain a file extension in order to lookup the compression algorithm");
 
-        // try to find compression algorithm
+        // try to find a compression algorithm
         Algorithm algo = Algorithm.findByFileExtension(fileExt);
 
         // was it not found?
@@ -275,7 +275,7 @@ public class FileCompressionUtil {
         // try to compress the file
         algo.getCompressor().compress(sourceFile, targetFile);
 
-        // delete file after compressing
+        // delete a file after compressing
         if (deleteSourceFileAfterCompressed) {
             boolean delete = sourceFile.delete();
             log.debug("file deleted -> {}", delete);
@@ -295,7 +295,7 @@ public class FileCompressionUtil {
         // try to uncompress the file
         a.getCompressor().uncompress(sourceFile, targetFile);
 
-        // delete file after uncompressing
+        // delete a file after uncompressing
         if (deleteSourceFileAfterUncompressed) {
             boolean delete = sourceFile.delete();
             log.debug("file deleted -> {}", delete);

@@ -18,7 +18,7 @@ public abstract class IntGroup<V> {
 
     protected final IntSet keys;
 
-    public IntGroup(Supplier<IntObjectMap<V>> supplier) {
+    protected IntGroup(Supplier<IntObjectMap<V>> supplier) {
         IntObjectMap<V> map = supplier.get();
         if (map == null)
             throw new IllegalArgumentException("supplier result is null");

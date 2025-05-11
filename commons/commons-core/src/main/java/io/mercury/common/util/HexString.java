@@ -72,14 +72,14 @@ public final class HexString {
      * @throws IllegalArgumentException iae
      */
     private static HexString createHexString(byte[] bytes) throws IllegalArgumentException {
-        // though method is private, leaving checks in place to show intent
+        // though the method is private, leaving checks in place to show intent
         if (bytes == null)
             throw new IllegalArgumentException("bytes argument cannot be null; use HexString.NULL instead");
         if (bytes.length == 0)
             throw new IllegalArgumentException("bytes argument cannot be zero length; use HexString.NULL instead");
-        byte[] copyOfbytes = copyByteArray(bytes);
-        String hex = HexUtil.toHex(copyOfbytes).toUpperCase();
-        return new HexString(copyOfbytes, hex);
+        byte[] copyOfBytes = copyByteArray(bytes);
+        String hex = HexUtil.toHex(copyOfBytes).toUpperCase();
+        return new HexString(copyOfBytes, hex);
     }
 
     /**

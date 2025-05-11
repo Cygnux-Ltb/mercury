@@ -254,7 +254,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
                 log.error("Enables publisher acknowledgements failure, publisherName -> {}, connectionInfo -> {}",
                         publisherName, rmqConnection.getConnectionInfo(), ioe);
                 throw new InitializeFailureException(
-                        "Enables publisher acknowledgements failure, From publisher -> {}" + publisherName, ioe);
+                        "Enables publisher acknowledgements failure, From publisher -> " + publisherName, ioe);
             }
         }
         newStartTime();
@@ -394,7 +394,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
     private void basicPublish(String routingKey, T msg, BasicProperties props) throws IOException {
         try {
             // TODO 添加序列化异常处理
-            byte[] bytes = serializer.serialization(msg);
+            byte[] bytes = serializer.serialize(msg);
             if (bytes != null) {
                 channel.basicPublish(
                         // exchange: the exchange to publish the message to

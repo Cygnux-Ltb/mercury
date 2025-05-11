@@ -17,7 +17,7 @@
             <artifactId>commons-core</artifactId>
         </dependency>
 
-        <!-- High performance Java reflection using code generation -->
+        <!-- High-performance Java reflection using code generation -->
         <dependency>
             <groupId>com.esotericsoftware</groupId>
             <artifactId>reflectasm</artifactId>

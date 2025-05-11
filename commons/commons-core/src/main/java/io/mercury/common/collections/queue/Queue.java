@@ -11,15 +11,10 @@ public interface Queue<E> {
     QueueType getQueueType();
 
     enum QueueType {
-
         SPSC,
-
         MPSC,
-
         SPMC,
-
         MPMC
-
     }
 
 }

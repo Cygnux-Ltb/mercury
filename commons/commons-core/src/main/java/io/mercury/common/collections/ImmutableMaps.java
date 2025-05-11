@@ -55,7 +55,7 @@ public final class ImmutableMaps {
      * @return The new ImmutableMap<K, V>
      */
     @SafeVarargs
-    public static <K, V> ImmutableMap<K, V> newImmutableMap(@Nullable Pair<K, V>... pairs) {
+    public static <K, V> ImmutableMap<K, V> newImmutableMap(Pair<K, V>... pairs) {
         if (ArrayUtil.isNullOrEmpty(pairs))
             return ImmutableMapFactoryImpl.INSTANCE.empty();
         switch (pairs.length) {

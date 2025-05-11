@@ -17,12 +17,6 @@
             <artifactId>serialization-json</artifactId>
         </dependency>
 
-        <!-- Reactor Netty -->
-        <dependency>
-            <groupId>io.projectreactor.netty</groupId>
-            <artifactId>reactor-netty</artifactId>
-            <version>1.2.3</version>
-        </dependency>
         <!-- Netty/Codec -->
         <dependency>
             <groupId>io.netty</groupId>
@@ -41,18 +35,17 @@
             <artifactId>netty-transport-native-kqueue</artifactId>
             <version>${netty.version}</version>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>com.google.protobuf</groupId>-->
-<!--            <artifactId>protobuf-java</artifactId>-->
-<!--            <version>4.28.0</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
+        <!-- Netty codec module for encoding and decoding HTTP messages and handling HTTP protocol logic. -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-codec-http</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>3.25.5</version>
+            <version>3.25.7</version>
             <scope>test</scope>
         </dependency>
 

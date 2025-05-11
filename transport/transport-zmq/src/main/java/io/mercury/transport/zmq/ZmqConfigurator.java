@@ -10,7 +10,7 @@ import io.mercury.common.serialization.specific.BytesSerializer;
 import io.mercury.common.serialization.specific.JsonDeserializable;
 import io.mercury.common.serialization.specific.JsonSerializable;
 import io.mercury.common.util.StringSupport;
-import io.mercury.serialization.json.JsonParser;
+import io.mercury.serialization.json.JsonReader;
 import io.mercury.serialization.json.JsonWriter;
 import io.mercury.transport.TransportConfigurator;
 import io.mercury.transport.attr.TcpKeepAlive;
@@ -29,10 +29,10 @@ import static io.mercury.common.lang.Asserter.greaterThan;
 import static io.mercury.common.lang.Asserter.nonNull;
 import static io.mercury.common.log4j2.Log4j2LoggerFactory.getLogger;
 import static io.mercury.common.sys.CurrentRuntime.availableProcessors;
-import static io.mercury.transport.zmq.ZmqConfigOption.Addr;
-import static io.mercury.transport.zmq.ZmqConfigOption.IoThreads;
-import static io.mercury.transport.zmq.ZmqConfigOption.Port;
-import static io.mercury.transport.zmq.ZmqConfigOption.Protocol;
+import static io.mercury.transport.zmq.ZmqConfigOption.ADDR;
+import static io.mercury.transport.zmq.ZmqConfigOption.IO_THREADS;
+import static io.mercury.transport.zmq.ZmqConfigOption.PORT;
+import static io.mercury.transport.zmq.ZmqConfigOption.PROTOCOL;
 
 @OnlyOverrideEquals
 public final class ZmqConfigurator implements TransportConfigurator,
@@ -56,14 +56,14 @@ public final class ZmqConfigurator implements TransportConfigurator,
     public static ZmqConfigurator config(String module, @Nonnull Config config) {
         nonNull(config, "config");
         var wrapper = new ConfigWrapper<ZmqConfigOption>(module, config);
-        var protocol = ZmqProtocol.of(wrapper.getStringOrThrows(Protocol));
+        var protocol = ZmqProtocol.of(wrapper.getStringOrThrows(PROTOCOL));
         ZmqConfigurator conf;
         switch (protocol) {
             // 使用tcp协议
-            case tcp -> {
-                int port = wrapper.getIntOrThrows(Port);
-                if (wrapper.hasOption(Addr)) {
-                    var tcpAddr = wrapper.getStringOrThrows(Addr);
+            case TCP -> {
+                int port = wrapper.getIntOrThrows(PORT);
+                if (wrapper.hasOption(ADDR)) {
+                    var tcpAddr = wrapper.getStringOrThrows(ADDR);
                     Asserter.isValid(tcpAddr, IpAddressValidator::isIpAddress,
                             new IpAddressIllegalException(tcpAddr));
                     conf = new ZmqConfigurator(ZmqAddr.tcp(tcpAddr, port));
@@ -73,18 +73,18 @@ public final class ZmqConfigurator implements TransportConfigurator,
                 }
             }
             // 使用ipc或inproc协议
-            case ipc, inproc -> {
-                var localAddr = wrapper.getStringOrThrows(Addr);
+            case IPC, INPROC -> {
+                var localAddr = wrapper.getStringOrThrows(ADDR);
                 var addr = switch (protocol) {
-                    case ipc -> ZmqAddr.ipc(localAddr);
-                    case inproc -> ZmqAddr.inproc(localAddr);
+                    case IPC -> ZmqAddr.ipc(localAddr);
+                    case INPROC -> ZmqAddr.inproc(localAddr);
                     default -> null;
                 };
                 conf = new ZmqConfigurator(addr);
             }
             default -> throw new UnsupportedOperationException(StringSupport.toString(protocol));
         }
-        conf.ioThreads(wrapper.getInt(IoThreads, 1));
+        conf.ioThreads(wrapper.getInt(IO_THREADS, 1));
         log.info("created ZmqConfigurator object -> {}", conf);
         return conf;
     }
@@ -365,11 +365,11 @@ public final class ZmqConfigurator implements TransportConfigurator,
     @Nonnull
     @Override
     public ZmqConfigurator fromJson(@Nonnull String json) {
-        Map<String, Object> map = JsonParser.toMap(json);
+        Map<String, Object> map = JsonReader.toMap(json);
         var protocol = ZmqProtocol.of((String) map.get("protocol"));
         String addr = (String) map.get("addr");
         int ioThreads = (int) map.get("ioThreads");
-        var tcpKeepAlive = JsonParser.toObject((String) map.get("tcpKeepAlive"), TcpKeepAlive.class);
+        var tcpKeepAlive = JsonReader.toObject((String) map.get("tcpKeepAlive"), TcpKeepAlive.class);
         assert tcpKeepAlive != null;
         return new ZmqConfigurator(protocol.addr(addr)).ioThreads(ioThreads).tcpKeepAlive(tcpKeepAlive);
     }

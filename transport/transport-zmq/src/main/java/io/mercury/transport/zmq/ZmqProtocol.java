@@ -7,11 +7,11 @@ package io.mercury.transport.zmq;
  */
 public enum ZmqProtocol {
 
-    tcp("tcp://"),
+    TCP("tcp://"),
 
-    ipc("ipc://"),
+    IPC("ipc://"),
 
-    inproc("inproc://");
+    INPROC("inproc://");
 
     private final String prefix;
 
@@ -44,10 +44,6 @@ public enum ZmqProtocol {
                 return protocol;
         }
         throw new IllegalArgumentException("Unsupported protocol -> " + name);
-    }
-
-    public static void main(String[] args) {
-        System.out.println(ZmqProtocol.of("ipc"));
     }
 
 }

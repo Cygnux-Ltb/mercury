@@ -5,15 +5,15 @@ import lombok.Getter;
 
 public enum RmqConfigOption implements ConfigOption {
 
-    Host("rmq.host", "rabbitmq.host"),
+    HOST("rmq.host", "rabbitmq.host"),
 
-    Port("rmq.port", "rabbitmq.port"),
+    PORT("rmq.port", "rabbitmq.port"),
 
-    Username("rmq.username", "rabbitmq.username"),
+    USERNAME("rmq.username", "rabbitmq.username"),
 
-    Password("rmq.password", "rabbitmq.password"),
+    PASSWORD("rmq.password", "rabbitmq.password"),
 
-    VirtualHost("rmq.virtualHost", "rabbitmq.virtualHost");
+    VIRTUAL_HOST("rmq.virtualHost", "rabbitmq.virtualHost");
 
     @Getter
     private final String configName;

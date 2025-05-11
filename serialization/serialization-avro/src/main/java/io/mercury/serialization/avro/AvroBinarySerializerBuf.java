@@ -39,9 +39,9 @@ public final class AvroBinarySerializerBuf<T extends SpecificRecord> implements 
     }
 
     @Override
-    public ByteBuffer serialization(@Nonnull T obj) {
+    public ByteBuffer serialize(@Nonnull T obj) {
         try {
-            return getSerializer().serialization(obj);
+            return getSerializer().serialize(obj);
         } catch (Exception e) {
             log.error("serialization func -> {}", e.getMessage(), e);
             throw e;

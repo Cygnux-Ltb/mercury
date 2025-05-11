@@ -2,7 +2,7 @@ package io.mercury.transport.zmq.exception;
 
 import java.io.Serial;
 
-public class ZmqProxyException extends RuntimeException {
+public final class ZmqProxyException extends RuntimeException {
 
     @Serial
     private static final long serialVersionUID = -5914113116108192726L;
