@@ -9,7 +9,7 @@ import java.util.Collection;
 public class KryoFileSerializer<T> implements FileSerializer<Collection<T>> {
 
     @Override
-    public File serialization(@Nonnull Collection<T> source) {
+    public File serialize(@Nonnull Collection<T> source) {
         // TODO Auto-generated method stub
         return null;
     }

@@ -23,8 +23,7 @@ public final class JsonWriter {
      * @return String
      */
     public static String toJson(@Nullable Object obj) {
-        return obj == null ? EMPTY_STRING
-                : toJSONString(obj);
+        return obj == null ? EMPTY_STRING : toJSONString(obj);
     }
 
     /**
@@ -34,8 +33,7 @@ public final class JsonWriter {
      * @return String
      */
     public static String toPrettyJson(Object obj) {
-        return obj == null ? EMPTY_STRING
-                : toJSONString(obj, PrettyFormat);
+        return obj == null ? EMPTY_STRING : toJSONString(obj, PrettyFormat);
     }
 
     /**

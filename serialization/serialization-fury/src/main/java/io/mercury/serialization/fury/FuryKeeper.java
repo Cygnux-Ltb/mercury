@@ -5,6 +5,9 @@ import org.apache.fury.config.Language;
 
 public final class FuryKeeper {
 
+    private FuryKeeper() {
+    }
+
     /**
      * @param classes Class<?> array
      * @return Fury

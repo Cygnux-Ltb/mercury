@@ -48,7 +48,7 @@ public final class AvroBinarySerializer<T extends SpecificRecord> implements Byt
     }
 
     @Override
-    public ByteBuffer serialization(@Nonnull T obj) {
+    public ByteBuffer serialize(@Nonnull T obj) {
         try {
             encoder = EncoderFactory.get().binaryEncoder(outputStream, encoder);
             writer.write(obj, encoder);

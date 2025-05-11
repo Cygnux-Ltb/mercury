@@ -18,7 +18,7 @@ public class AvroBinaryDeserializerTest {
 		msg0.getEnvelope().setCode(1).setContentType(ContentType.INT).setVersion(1);
 		msg0.setEpoch(EpochTimeUtil.getEpochMillis()).setSequence(1).setContent(ByteBuffer.allocate(10));
 
-		ByteBuffer buffer = serializer.serialization(msg0);
+		ByteBuffer buffer = serializer.serialize(msg0);
 
 		msg0.setEpoch(EpochTimeUtil.getEpochMillis() + 1000);
 		System.out.println(msg0);
