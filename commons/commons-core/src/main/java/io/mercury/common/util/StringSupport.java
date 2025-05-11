@@ -93,7 +93,9 @@ public final class StringSupport {
      */
     @Nonnull
     public static String toString(Charset charset, byte[] bs) {
-        return bs == null ? CONST_NULL : new String(bs, charset == null ? Charsets.UTF8 : charset);
+        if (bs == null)
+            return CONST_NULL;
+        return new String(bs, charset == null ? Charsets.UTF8 : charset);
     }
 
     /**
@@ -259,43 +261,6 @@ public final class StringSupport {
     }
 
     /**
-     * @param str String
-     * @return boolean
-     */
-    @Deprecated
-    public static boolean isDecimalDeprecated(String str) {
-        // Character.isDigit(ch);
-        if (isNullOrEmpty(str))
-            return false;
-        char[] chars = str.toCharArray();
-        // 判断是否负数
-        if (chars[0] == '-')
-            chars[0] = '0';
-        // 获取最后一个字符
-        char lastChar = chars[chars.length - 1];
-        // 判断是否为long double float的写法
-        if (lastChar == 'L' || lastChar == 'l' || lastChar == 'D' || lastChar == 'd' || lastChar == 'F'
-                || lastChar == 'f')
-            chars[chars.length - 1] = '0';
-        // 小数点标识
-        boolean hasDecimalPoint = false;
-        for (char ch : chars) {
-            // 判断每个字母是否为数字
-            if (!(ch >= '0' && ch <= '9'))
-                // 出现第二个小数点返回false
-                if (hasDecimalPoint)
-                    return false;
-                    // 标识已出现一个小数点
-                else if (ch == '.')
-                    hasDecimalPoint = true;
-                    // 出现其他字符返回false
-                else
-                    return false;
-        }
-        return true;
-    }
-
-    /**
      * 检查输入参数是否为数字
      *
      * @param str String
@@ -311,15 +276,13 @@ public final class StringSupport {
         else {
             // 定义开始检查索引
             int offset = 0;
-            // 判断是否负数,如果是负数,跳过第一位的检查
-            if (str.charAt(0) == '-')
+            // 判断是否负数, 如果是负数, 跳过第一位的检查
+            if (isAllowedNonDigit(str.charAt(0)))
                 offset = 1;
             // 定义结束位置
             int end = str.length();
-            // 获取最后一个字符
-            char lc = str.charAt(str.length() - 1);
-            // 判断是否为long double float的写法
-            if (lc == 'L' || lc == 'l' || lc == 'D' || lc == 'd' || lc == 'F' || lc == 'f')
+            // 判断最后一个字符是否为long double float的写法
+            if (isAllowedNonDigit(str.charAt(str.length() - 1)))
                 end = str.length() - 1;
             // 如果没有数字可以检查且(第一位)与(最后一位)都跳过了检查,
             // 则[offset == endPoint], 此时输入参数不是数字
@@ -345,6 +308,14 @@ public final class StringSupport {
             return true;
         }
     }
+
+    private static boolean isAllowedNonDigit(char c) {
+        return switch (c) {
+            case '-', 'L', 'l', 'D', 'd', 'F', 'f' -> true;
+            default -> false;
+        };
+    }
+
 
     /**
      * 检查输入参数是否非数字
@@ -483,8 +454,9 @@ public final class StringSupport {
      * @return String
      */
     public static String fixPath(String path) {
-        return isNullOrEmpty(path) ? "/"
-                : path.endsWith("/") || path.endsWith("\\") ? path : path + Separator.FILE_SEPARATOR;
+        if (isNullOrEmpty(path)) return "/";
+        else if (path.endsWith("/") || path.endsWith("\\")) return path;
+        else return path + Separator.FILE_SEPARATOR;
     }
 
     /**

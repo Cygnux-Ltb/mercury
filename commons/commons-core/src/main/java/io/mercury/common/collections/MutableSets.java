@@ -67,7 +67,7 @@ public final class MutableSets {
     }
 
     /**
-     * primitive long set
+     * simple long set
      *
      * @param capacity Capacity
      * @return MutableLongSet
@@ -77,7 +77,7 @@ public final class MutableSets {
     }
 
     /**
-     * primitive long set
+     * simple long set
      *
      * @param values long[]
      * @return MutableLongSet
@@ -89,7 +89,7 @@ public final class MutableSets {
     }
 
     /**
-     * primitive double set
+     * simple double set
      *
      * @return MutableDoubleSet
      */
@@ -98,7 +98,7 @@ public final class MutableSets {
     }
 
     /**
-     * primitive double set
+     * simple double set
      *
      * @param capacity Capacity
      * @return MutableDoubleSet

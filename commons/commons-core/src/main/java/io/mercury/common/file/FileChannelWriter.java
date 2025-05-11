@@ -48,7 +48,7 @@ public final class FileChannelWriter {
     /**
      * @param lines  : written data
      * @param target : written target file
-     * @param append : append file end
+     * @param append : append the file end
      * @return File
      * @throws NullPointerException npe
      * @throws IOException          ioe
@@ -63,7 +63,7 @@ public final class FileChannelWriter {
      * @param charset  : Value charset
      * @param target   : Written target file
      * @param capacity : Buffer capacity
-     * @param append   : Is append to file end
+     * @param append   : Is append to the file end
      * @return File
      * @throws NullPointerException npe
      * @throws IOException          ioe
@@ -82,7 +82,7 @@ public final class FileChannelWriter {
      * @param serializer : Serialization function
      * @param target     : Written target file
      * @param capacity   : Buffer capacity
-     * @param append     : Is append to file end
+     * @param append     : Is append to the file end
      * @return File
      * @throws NullPointerException npe
      * @throws IOException          ioe
@@ -113,7 +113,7 @@ public final class FileChannelWriter {
                     ByteBuffer buffer = ByteBuffer.allocateDirect(capacity);
                     // for (int i = 0; i < data.size(); i++) {
                     for (T t : data) {
-                        byte[] bytes = serializer.serialization(t);
+                        byte[] bytes = serializer.serialize(t);
                         if (bytes == null || bytes.length == 0) {
                             continue;
                         }

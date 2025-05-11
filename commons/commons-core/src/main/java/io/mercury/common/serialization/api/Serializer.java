@@ -7,11 +7,11 @@ import java.util.function.Function;
 public interface Serializer<T, R> extends Function<T, R> {
 
     @Nullable
-    R serialization(T source);
+    R serialize(T source);
 
     @Override
     default R apply(T t) {
-        return serialization(t);
+        return serialize(t);
     }
 
 }

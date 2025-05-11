@@ -185,12 +185,9 @@ public final class Asserter {
      * @return T
      * @throws NullPointerException exception
      */
-    public static <T> T nonNull(T t, @Nonnull String objName)
-            throws NullPointerException {
+    public static <T> T nonNull(T t, @Nonnull String objName) throws NullPointerException {
         return requireNonNull(t, isNullOrEmpty(objName)
-                ? "param cannot be null"
-                : "param [" + objName + "] cannot be null"
-        );
+                ? "param cannot be null" : "param [" + objName + "] cannot be null");
     }
 
     /**

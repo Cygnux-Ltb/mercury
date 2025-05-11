@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
  */
 public final class HexUtil {
 
-    public static final char[] HEX_TABLE =
+    private static final char[] HEX_TABLE =
             // 16进制Table
             {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
@@ -59,6 +59,8 @@ public final class HexUtil {
         return builder.toString();
     }
 
+    private static final String BUILDER_VARIABLE_NAME = "builder";
+
     /**
      * @param builder StringBuilder
      * @param bytes   byte[]
@@ -66,7 +68,7 @@ public final class HexUtil {
      * @param length  int
      */
     public static void appendHex(@Nonnull StringBuilder builder, byte[] bytes, int offset, int length) {
-        Asserter.nonNull(builder, "builder");
+        Asserter.nonNull(builder, BUILDER_VARIABLE_NAME);
         if (bytes == null)
             return;
         assertOffsetAndLength(offset, length, bytes.length);
@@ -81,7 +83,7 @@ public final class HexUtil {
      * @param bytes   byte[]
      */
     public static void appendHex(@Nonnull StringBuilder builder, byte[] bytes) {
-        Asserter.nonNull(builder, "builder");
+        Asserter.nonNull(builder, BUILDER_VARIABLE_NAME);
         if (bytes == null)
             return;
         appendHex(builder, bytes, 0, bytes.length);
@@ -102,7 +104,7 @@ public final class HexUtil {
      * @param value   byte
      */
     public static void appendHex(@Nonnull StringBuilder builder, byte value) {
-        Asserter.nonNull(builder, "builder");
+        Asserter.nonNull(builder, BUILDER_VARIABLE_NAME);
         builder.append(HEX_TABLE[(value & 0xF0) >>> 4]).append(HEX_TABLE[(value & 0x0F)]);
     }
 
@@ -121,7 +123,7 @@ public final class HexUtil {
      * @param value   short
      */
     public static void appendHex(@Nonnull StringBuilder builder, short value) {
-        Asserter.nonNull(builder, "builder");
+        Asserter.nonNull(builder, BUILDER_VARIABLE_NAME);
         builder.append(HEX_TABLE[(value & 0xF000) >>> 12]).append(HEX_TABLE[(value & 0x0F00) >>> 8])
                 .append(HEX_TABLE[(value & 0x00F0) >>> 4]).append(HEX_TABLE[(value & 0x000F)]);
     }
@@ -141,7 +143,7 @@ public final class HexUtil {
      * @param value   int
      */
     public static void appendHex(@Nonnull StringBuilder builder, int value) {
-        Asserter.nonNull(builder, "builder");
+        Asserter.nonNull(builder, BUILDER_VARIABLE_NAME);
         builder.append(HEX_TABLE[(value & 0xF000_0000) >>> 28])
                 .append(HEX_TABLE[(value & 0x0F00_0000) >>> 24])
                 .append(HEX_TABLE[(value & 0x00F0_0000) >>> 20])
@@ -218,30 +220,30 @@ public final class HexUtil {
      */
     public static byte[] toByteArray(CharSequence hex) {
         if (hex == null)
-            return null;
+            return new byte[0];
         return toByteArray(hex, 0, hex.length());
     }
 
     /**
      * Creates a byte array from a CharSequence (String, StringBuilder, etc.)
-     * containing only valid hexidecimal formatted characters. Each grouping of 2
-     * characters represent a byte in "Big Endian" format. The hex CharSequence must
+     * containing only valid hexadecimal-formatted characters. Each grouping of 2
+     * characters represents a byte in "Big Endian" format. The hex CharSequence must
      * be an even length of characters. For example, a String of "1234" would return
      * the byte array { 0x12, 0x34 }.
      *
      * @param hex    The String, StringBuilder, etc. that contains the sequence of
-     *               hexidecimal character values.
+     *               hexadecimal character values.
      * @param offset The offset within the sequence to start from. If the offset is
-     *               invalid, will cause an IllegalArgumentException.
+     *               invalid, it will cause an IllegalArgumentException.
      * @param length The length from the offset to convert. If the length is
-     *               invalid, will cause an IllegalArgumentException.
+     *               invalid, it will cause an IllegalArgumentException.
      * @return A new byte array representing the sequence of bytes created from the
-     * sequence of hexidecimal characters. If the hexString is null, then
+     * sequence of hexadecimal characters. If the hexString is null, then
      * this method will return null.
      */
     public static byte[] toByteArray(CharSequence hex, int offset, int length) {
         if (hex == null)
-            return null;
+            return new byte[0];
         assertOffsetAndLength(offset, length, hex.length());
 
         // a hex string must be in increments of 2
@@ -249,7 +251,7 @@ public final class HexUtil {
             throw new IllegalArgumentException(
                     "The hex string did not contain an even number of characters [actual=" + length + "]");
 
-        // convert hex string to byte array
+        // convert hex string to a byte array
         byte[] bytes = new byte[length / 2];
 
         int j = 0;

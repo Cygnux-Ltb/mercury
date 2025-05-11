@@ -89,18 +89,16 @@ public final class FileUtil {
      * @param path String
      * @return File
      */
-    public static File mkdirInHome(@Nonnull String path) {
+    public static File mkdirInHome(@Nonnull String path) throws RuntimeException {
         Asserter.nonEmpty(path, "path");
         File file = new File(USER_HOME, path);
-        if (file.mkdirs())
-            return file;
-        else if (file.exists())
+        if (file.mkdirs() || file.exists())
             return file;
         throw new RuntimeException(new IllegalAccessException("path -> [" + path + "] access exception"));
     }
 
     /**
-     * Tests whether the contents of two files equals each other by performing a
+     * Tests whether the contents of two files equal each other by performing a
      * byte-by-byte comparison. Each byte must match each other in both files.
      *
      * @param file0 The file to compare
@@ -113,19 +111,9 @@ public final class FileUtil {
         // file lengths must match
         if (file0.length() != file1.length())
             return false;
-
-        InputStream is0 = null;
-        InputStream is1 = null;
-        try {
-            is0 = new FileInputStream(file0);
-            is1 = new FileInputStream(file1);
+        try (InputStream is0 = new FileInputStream(file0);
+             InputStream is1 = new FileInputStream(file1)) {
             return equals(is0, is1);
-        } finally {
-            // make sure input streams are closed
-            if (is0 != null)
-                IOUtils.close(is0);
-            if (is1 != null)
-                IOUtils.close(is1);
         }
     }
 
@@ -172,7 +160,7 @@ public final class FileUtil {
      * and an underscore character.
      *
      * @param extension The file extension to validate
-     * @return True if its valid, otherwise false
+     * @return True if it's valid, otherwise false
      */
     public static boolean isValidFileExtension(String extension) {
         for (int i = 0; i < extension.length(); i++) {
@@ -189,8 +177,8 @@ public final class FileUtil {
      * the last file extension. For example, if the filename ends with ".log.gz",
      * then this method will return "gz"
      *
-     * @param filename String to process containing the filename
-     * @return The file extension (without leading period) such as "gz" or "txt" or
+     * @param filename String to a process containing the filename
+     * @return The file extension (without a leading period) such as "gz" or "txt" or
      * null if none exists.
      */
     public static String parseFileExtension(String filename) {
@@ -198,7 +186,7 @@ public final class FileUtil {
         if (filename == null)
             return null;
 
-        // find position of last period
+        // find position of the last period
         int pos = filename.lastIndexOf('.');
 
         // did one exist or have any length?
@@ -226,7 +214,7 @@ public final class FileUtil {
         if (!dir.isDirectory())
             throw new FileNotFoundException("File [" + dir + "] is not a directory.");
 
-        // being matching process, create array for returning results
+        // being matching process, create an array for returning results
         List<File> files = new FastList<>();
 
         // get all files in this directory
@@ -237,10 +225,9 @@ public final class FileUtil {
             // loop through every file in the dir
             for (File file : dirFiles) {
                 // only match files, not a directory
-                if (file.isFile()) {
+                if (file.isFile() && filter.accept(file)) {
                     // delegate matching to provided file matcher
-                    if (filter.accept(file))
-                        files.add(file);
+                    files.add(file);
                 }
             }
         }
@@ -345,31 +332,30 @@ public final class FileUtil {
      *                                    specific reason.
      * @throws IOException                Thrown if an error during the copy
      */
-    public static void copy(File source, File target) throws FileAlreadyExistsException, IOException {
+    public static void copy(File source, File target) throws IOException {
         copy(source, target, false);
     }
 
     /**
      * Copy the source file to the target file while optionally permitting an
-     * overwrite to occur in case the target file already exists.
+     * overwriting to occur in case the target file already exists.
      *
      * @param source The source file to copy from
      * @param target The target file to copy to
-     *               //@return True if an overwrite occurred, otherwise false.
+     *               //@return True if an overwriting occurred, otherwise false.
      * @throws FileAlreadyExistsException Thrown if the target file already exists
-     *                                    and an overwrite is not permitted. This
+     *                                    and an overwriting is not permitted. This
      *                                    exception is a subclass of IOException, so
      *                                    catching an IOException is enough if you
      *                                    don't care about this specific reason.
      * @throws IOException                Thrown if an error during the copy
      */
     public static void copy(File source, File target, boolean overwrite)
-            throws FileAlreadyExistsException, IOException {
+            throws IOException {
         // check if the target file already exists
-        if (target.exists()) {
+        if (target.exists() && !overwrite) {
             // if overwrite is not allowed, throw an exception
-            if (!overwrite)
-                throw new FileAlreadyExistsException("Target file : [" + target.getName() + "] already exists");
+            throw new FileAlreadyExistsException("Target file : [" + target.getName() + "] already exists");
         }
         // proceed with copy
         try (final FileInputStream fis = new FileInputStream(source);
@@ -478,7 +464,7 @@ public final class FileUtil {
         }
 
         public int compare(File file0, File file1) {
-            // extract datetimes from both files
+            // extract datetime from both files
             ZonedDateTime zdt0 = ZonedDateTime.of(LocalDateTime.parse(file0.getName(), pattern.getFormatter()), zoneId);
             ZonedDateTime zdt1 = ZonedDateTime.of(LocalDateTime.parse(file1.getName(), pattern.getFormatter()), zoneId);
             // compare these two

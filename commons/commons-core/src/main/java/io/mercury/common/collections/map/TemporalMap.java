@@ -38,7 +38,7 @@ public abstract class TemporalMap<K extends Temporal, V, T extends TemporalMap<K
 
     protected TemporalMap(ToLongFunction<K> keyFunc, UnaryOperator<K> nextKeyFunc,
                           BiPredicate<K, K> hasNextKey) {
-        this(keyFunc, nextKeyFunc, hasNextKey, Capacity.L07_128);
+        this(keyFunc, nextKeyFunc, hasNextKey, Capacity.HEX_80);
     }
 
     protected TemporalMap(ToLongFunction<K> keyFunc, UnaryOperator<K> nextKeyFunc,

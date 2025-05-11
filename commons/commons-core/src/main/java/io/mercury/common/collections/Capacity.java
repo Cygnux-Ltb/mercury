@@ -9,200 +9,124 @@ import static io.mercury.common.collections.MutableMaps.newIntObjectMap;
 public enum Capacity {
 
     /**
-     * <pre>
-     * Size : 1 << 3 == 8
-     * </pre>
+     * 0x8 == 8
      */
-    L03_8(1 << 3),
+    HEX_8(0x8),
 
     /**
-     * <pre>
-     * Size : 1 << 4 == 16
-     * </pre>
+     * 0x10 == 16
      */
-    L04_16(1 << 4),
+    HEX_10(0x10),
 
     /**
-     * <pre>
-     * Size : 1 << 5 == 32
-     * </pre>
+     * 0x20 == 32
      */
-    L05_32(1 << 5),
+    HEX_20(0x20),
 
     /**
-     * <pre>
-     * Size : 1 << 6 == 64
-     * </pre>
+     * 0x40 == 64
      */
-    L06_64(1 << 6),
+    HEX_40(0x40),
 
     /**
-     * <pre>
-     * Size : 1 << 7 == 128
-     * </pre>
+     * 0x80 == 128
      */
-    L07_128(1 << 7),
+    HEX_80(0x80),
 
     /**
-     * <pre>
-     * Size : 1 << 8 == 256
-     * </pre>
+     * 0x100 == 256
      */
-    L08_256(1 << 8),
+    HEX_100(0x100),
 
     /**
-     * <pre>
-     * Size : 1 << 9 == 512
-     * </pre>
+     * 0x200 == 512
      */
-    L09_512(1 << 9),
+    HEX_200(0x200),
 
     /**
-     * <pre>
-     * Size : 1 << 10 == 1024
-     * </pre>
+     * 0x400 == 1024
      */
-    L10_1024(1 << 10),
+    HEX_400(0x400),
 
     /**
-     * <pre>
-     * Size : 1 << 11 == 2048
-     * </pre>
+     * 0x800 == 2048
      */
-    L11_2048(1 << 11),
+    HEX_800(0x800),
 
     /**
-     * <pre>
-     * Size : 1 << 12 == 4096
-     * </pre>
+     * 0x1_000 == 4096
      */
-    L12_4096(1 << 12),
+    HEX_1_000(0x1_000),
 
     /**
-     * <pre>
-     * Size : 1 << 13 == 8192
-     * </pre>
+     * 0x2_000 == 8192
      */
-    L13_8192(1 << 13),
+    HEX_2_000(0x2_000),
 
     /**
-     * <pre>
-     * Size : 1 << 14 == 16384
-     * </pre>
+     * 0x4_000 == 16384
      */
-    L14_16384(1 << 14),
+    HEX_4_000(0x4_000),
 
     /**
-     * <pre>
-     * Size : 1 << 15 == 32768
-     * </pre>
+     * 0x8_000 == 32768
      */
-    L15_32768(1 << 15),
+    HEX_8_000(0x8_000),
 
     /**
-     * <pre>
-     * Size : 1 << 16 == 65536
-     * </pre>
+     * 0x10_000 == 65536
      */
-    L16_65536(1 << 16),
+    HEX_10_000(0x10_000),
 
     /**
-     * <pre>
-     * Size : 1 << 17 == 131072
-     * </pre>
+     * 0x20_000 == 131072
      */
-    L17_131072(1 << 17),
+    HEX_20_000(0x20_000),
 
     /**
-     * <pre>
-     * Size : 1 << 18 == 262144
-     * </pre>
+     * 0x40_000 == 262144
      */
-    L18_262144(1 << 18),
+    HEX_40_000(0x40_000),
 
     /**
-     * <pre>
-     * Size : 1 << 19 == 524288
-     * </pre>
+     * 0x80_000 == 524288
      */
-    L19_524288(1 << 19),
+    HEX_80_000(0x80_000),
 
     /**
-     * <pre>
-     * Size : 1 << 20 == 1048576
-     * </pre>
+     * 0x100_000 == 1048576
      */
-    L20_1048576(1 << 20),
+    HEX_100_000(0x100_000),
 
     /**
-     * <pre>
-     * Size : 1 << 21 == 2097152
-     * </pre>
+     * 0x200_000 == 2097152
      */
-    L21_2097152(1 << 21),
+    HEX_200_000(0x200_000),
 
     /**
-     * <pre>
-     * Size : 1 << 22 == 4194304
-     * </pre>
+     * 0x400_000 == 4194304
      */
-    L22_4194304(1 << 22),
+    HEX_400_000(0x400_000),
 
     /**
-     * <pre>
-     * Size : 1 << 23 == 8388608
-     * </pre>
+     * 0x800_000 == 8388608
      */
-    L23_8388608(1 << 23),
+    HEX_800_000(0x800_000),
 
     /**
-     * <pre>
-     * Size : 1 << 24 == 16777216
-     * </pre>
+     * 0x1_000_000 == 16777216
      */
-    L24_16777216(1 << 24),
+    HEX_1_000_000(0x1_000_000),
 
     /**
-     * <pre>
-     * Size : 1 << 25 == 33554432
-     * </pre>
+     * 0x2_000_000 == 33554432
      */
-    L25_33554432(1 << 25),
+    HEX_2_000_000(0x2_000_000),
 
     /**
-     * <pre>
-     * Size : 1 << 26 == 67108864
-     * </pre>
+     * 0x4_000_000 == 67108864
      */
-    L26_67108864(1 << 26),
-
-    /**
-     * <pre>
-     * Size : 1 << 27 == 134217728
-     * </pre>
-     */
-    L27_134217728(1 << 27),
-
-    /**
-     * <pre>
-     * Size : 1 << 28 == 268435456
-     * </pre>
-     */
-    L28_268435456(1 << 28),
-
-    /**
-     * <pre>
-     * Size : 1 << 29 == 536870912
-     * </pre>
-     */
-    L29_536870912(1 << 29),
-
-    /**
-     * <pre>
-     * Size : 1 << 30 == 1073741824
-     * </pre>
-     */
-    L30_1073741824(1 << 30),
+    HEX_4_000_000(0x4_000_000),
 
     ;
 
@@ -222,7 +146,7 @@ public enum Capacity {
      * @return int
      */
     public static int checkAndGet(Capacity capacity) {
-        return capacity == null ? Capacity.DEFAULT_SIZE : capacity.size();
+        return capacity == null ? DEFAULT_SIZE : capacity.size();
     }
 
     /**
@@ -239,19 +163,18 @@ public enum Capacity {
         return get(size >> 1);
     }
 
-
     /**
      * @param value int
      * @return Capacity
      */
     public Capacity get(int value) {
         int pow2 = BitOperator.minPow2(value);
-        return pow2 >= DEFAULT_SIZE ? Capacity.L04_16 : VALUE_MAP.get(pow2);
+        return pow2 >= DEFAULT_SIZE ? HEX_10 : VALUE_MAP.get(pow2);
     }
 
     public static void main(String[] args) {
 
-        System.out.println(1 << 30);
+        System.out.println(1 << 26);
         System.out.println(BitFormatter.intBinaryFormat(1 << 30));
         System.out.println(1 << 31);
         System.out.println(BitFormatter.intBinaryFormat(1 << 31));

@@ -21,7 +21,7 @@ public abstract class AbstractKeeper<K, V> implements Keeper<K, V> {
     protected final ConcurrentMutableMap<K, V> savedMap;
 
     protected AbstractKeeper() {
-        this(Capacity.L06_64);
+        this(Capacity.HEX_40);
     }
 
     protected AbstractKeeper(Capacity capacity) {
