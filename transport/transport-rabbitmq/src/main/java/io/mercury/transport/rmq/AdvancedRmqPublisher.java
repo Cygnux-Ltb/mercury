@@ -394,7 +394,7 @@ public class AdvancedRmqPublisher<T> extends RmqTransport implements Publisher<S
     private void basicPublish(String routingKey, T msg, BasicProperties props) throws IOException {
         try {
             // TODO 添加序列化异常处理
-            byte[] bytes = serializer.serialization(msg);
+            byte[] bytes = serializer.serialize(msg);
             if (bytes != null) {
                 channel.basicPublish(
                         // exchange: the exchange to publish the message to

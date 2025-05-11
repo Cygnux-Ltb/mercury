@@ -117,7 +117,7 @@ public class RmqBuffer<E> implements MultiConsumerQueue<E>, Closeable {
 
     @Override
     public boolean enqueue(E e) {
-        byte[] msg = serializer.serialization(e);
+        byte[] msg = serializer.serialize(e);
         try {
             channel.internalChannel().basicPublish("", queueName, null, msg);
             return true;

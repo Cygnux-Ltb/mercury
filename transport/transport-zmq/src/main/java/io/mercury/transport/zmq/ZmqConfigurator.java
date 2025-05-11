@@ -10,7 +10,7 @@ import io.mercury.common.serialization.specific.BytesSerializer;
 import io.mercury.common.serialization.specific.JsonDeserializable;
 import io.mercury.common.serialization.specific.JsonSerializable;
 import io.mercury.common.util.StringSupport;
-import io.mercury.serialization.json.JsonParser;
+import io.mercury.serialization.json.JsonReader;
 import io.mercury.serialization.json.JsonWriter;
 import io.mercury.transport.TransportConfigurator;
 import io.mercury.transport.attr.TcpKeepAlive;
@@ -365,11 +365,11 @@ public final class ZmqConfigurator implements TransportConfigurator,
     @Nonnull
     @Override
     public ZmqConfigurator fromJson(@Nonnull String json) {
-        Map<String, Object> map = JsonParser.toMap(json);
+        Map<String, Object> map = JsonReader.toMap(json);
         var protocol = ZmqProtocol.of((String) map.get("protocol"));
         String addr = (String) map.get("addr");
         int ioThreads = (int) map.get("ioThreads");
-        var tcpKeepAlive = JsonParser.toObject((String) map.get("tcpKeepAlive"), TcpKeepAlive.class);
+        var tcpKeepAlive = JsonReader.toObject((String) map.get("tcpKeepAlive"), TcpKeepAlive.class);
         assert tcpKeepAlive != null;
         return new ZmqConfigurator(protocol.addr(addr)).ioThreads(ioThreads).tcpKeepAlive(tcpKeepAlive);
     }

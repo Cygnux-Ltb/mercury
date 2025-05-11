@@ -53,7 +53,7 @@ public class ZmqSender<T> extends ZmqComponent implements Sender<T>, Closeable {
 
     @Override
     public void send(T msg) {
-        byte[] bytes = serializer.serialization(msg);
+        byte[] bytes = serializer.serialize(msg);
         if (bytes != null && bytes.length > 0) {
             socket.send(bytes);
             socket.recv();

@@ -72,7 +72,7 @@ public final class ZmqPublisher<T> extends ZmqComponent implements Publisher<byt
     @Override
     public void publish(@Nonnull byte[] target, @Nonnull T msg) throws PublishFailedException {
         if (isRunning.get()) {
-            byte[] bytes = serializer.serialization(msg);
+            byte[] bytes = serializer.serialize(msg);
             if (bytes != null && bytes.length > 0) {
                 socket.sendMore(target);
                 socket.send(bytes, ZMQ.NOBLOCK);
