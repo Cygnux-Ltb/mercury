@@ -7,6 +7,9 @@ import org.jctools.maps.NonBlockingHashMapLong;
 
 public final class NonBlockingMaps {
 
+    private NonBlockingMaps() {
+    }
+
     /**
      * @param <K> Key type
      * @param <V> Value type

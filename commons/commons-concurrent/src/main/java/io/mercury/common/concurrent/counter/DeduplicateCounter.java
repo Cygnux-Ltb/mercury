@@ -17,7 +17,7 @@ import javax.annotation.concurrent.ThreadSafe;
 @ThreadSafe
 public final class DeduplicateCounter<T extends Comparable<T>> {
 
-    private final MutableSet<T> deRepeatSet = MutableSets.newUnifiedSet(Capacity.L06_64);
+    private final MutableSet<T> deRepeatSet = MutableSets.newUnifiedSet(Capacity.HEX_40);
 
     private volatile int count;
     private final int initCount;
@@ -84,7 +84,7 @@ public final class DeduplicateCounter<T extends Comparable<T>> {
      * @return long
      */
     public synchronized long count() {
-        return initCount + count;
+        return (long) initCount + count;
     }
 
     /**

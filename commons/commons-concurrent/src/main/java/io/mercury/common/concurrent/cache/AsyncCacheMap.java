@@ -21,10 +21,10 @@ import static io.mercury.common.util.StringSupport.isNullOrEmpty;
 public final class AsyncCacheMap<K, V> {
 
     private final MutableMap<K, V> mutableMap = MutableMaps
-            .newUnifiedMap(Capacity.L08_256.size());
+            .newUnifiedMap(Capacity.HEX_100.size());
 
     private final MutableLongObjectMap<Consumer<V>> consumerMap = MutableMaps
-            .newLongObjectMap(Capacity.L07_128.size());
+            .newLongObjectMap(Capacity.HEX_80.size());
 
     private final String cacheName;
 

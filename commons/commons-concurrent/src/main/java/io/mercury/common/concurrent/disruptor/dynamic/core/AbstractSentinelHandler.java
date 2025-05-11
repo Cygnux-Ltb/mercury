@@ -6,6 +6,8 @@ import com.lmax.disruptor.WorkHandler;
 import io.mercury.common.concurrent.disruptor.dynamic.sentinel.ConsumeStatusInfo;
 import io.mercury.common.concurrent.disruptor.dynamic.sentinel.SentinelClient;
 import io.mercury.common.concurrent.disruptor.dynamic.sentinel.ThreadStatusInfo;
+import io.mercury.common.log4j2.Log4j2LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -16,9 +18,11 @@ import java.util.concurrent.CountDownLatch;
 public abstract class AbstractSentinelHandler
         implements WorkHandler<HandlerEvent>, LifecycleAware, ThreadStatusInfo, ConsumeStatusInfo {
 
+    private static Logger log = Log4j2LoggerFactory.getLogger(AbstractSentinelHandler.class);
+
     private final SentinelClient sentinelClient;
 
-    public AbstractSentinelHandler(SentinelClient sentinelClient) {
+    protected AbstractSentinelHandler(SentinelClient sentinelClient) {
         this.sentinelClient = sentinelClient;
     }
 
@@ -35,7 +39,7 @@ public abstract class AbstractSentinelHandler
             threadRun();
             deal(event);
         } catch (Exception e) {
-            System.out.println("deal transmit err");
+            log.error("deal transmit err: {}", e.getMessage(), e);
         } finally {
             addConsumeCount();
             threadWait();
