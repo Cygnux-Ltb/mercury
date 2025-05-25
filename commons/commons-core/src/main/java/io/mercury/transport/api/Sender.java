@@ -1,10 +1,10 @@
 package io.mercury.transport.api;
 
-public interface Sender<M> extends Transport {
+public interface Sender<T> extends Transport {
 
     /**
-     * @param msg T
+     * @param msg T msg
      */
-    void send(M msg);
+    void send(T msg);
 
 }

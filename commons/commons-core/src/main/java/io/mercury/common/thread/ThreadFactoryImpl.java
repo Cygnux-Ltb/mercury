@@ -35,15 +35,14 @@ public final class ThreadFactoryImpl implements ThreadFactory {
 
     @Override
     public Thread newThread(@Nonnull Runnable runnable) {
-        var threadName = name + "-" + incr.get();
         return isVirtual
                 ?
                 Thread.ofVirtual()
-                        .name(name)
+                        .name(name + "-" + incr.get())
                         .unstarted(runnable)
                 :
                 Thread.ofPlatform()
-                        .name(name)
+                        .name(name + "-" + incr.get())
                         .priority(priority)
                         .daemon(isDaemon)
                         .unstarted(runnable);

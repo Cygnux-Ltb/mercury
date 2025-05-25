@@ -19,7 +19,7 @@ public final class BitOperator {
      */
     public static char bytesToChar(byte[] bytes) throws ArrayIndexOutOfBoundsException {
         Asserter.requiredLength(bytes, 2, "bytes array");
-        return (char) (((bytes[0] & 0xFF) << 8) | ((bytes[1] & 0xFF)));
+        return (char) (((bytes[0] & 0xFF) << 8) | (bytes[1] & 0xFF));
     }
 
 
@@ -32,7 +32,7 @@ public final class BitOperator {
     public static char bytesToChar(byte[] bytes, int offset) throws ArrayIndexOutOfBoundsException {
         if (bytes == null || bytes.length < offset + 2)
             throw new ArrayIndexOutOfBoundsException("byte array length must be greater than [offset + 2]");
-        return (char) (((bytes[offset] & 0xFF) << 8) | ((bytes[offset + 1] & 0xFF)));
+        return (char) (((bytes[offset] & 0xFF) << 8) | (bytes[offset + 1] & 0xFF));
     }
 
 
@@ -43,7 +43,7 @@ public final class BitOperator {
      */
     public static int bytesToInt(@Nonnull byte[] bytes) throws ArrayIndexOutOfBoundsException {
         Asserter.requiredLength(bytes, 4, "bytes array");
-        return ((bytes[0] & 0xFF) << 24) | ((bytes[1] & 0xFF) << 16) | ((bytes[2] & 0xFF) << 8) | ((bytes[3] & 0xFF));
+        return ((bytes[0] & 0xFF) << 24) | ((bytes[1] & 0xFF) << 16) | ((bytes[2] & 0xFF) << 8) | (bytes[3] & 0xFF);
     }
 
 
@@ -56,8 +56,10 @@ public final class BitOperator {
     public static int bytesToInt(byte[] bytes, int offset) throws ArrayIndexOutOfBoundsException {
         if (bytes == null || bytes.length < offset + 4)
             throw new ArrayIndexOutOfBoundsException("byte array length must be greater than [offset + 4]");
-        return ((bytes[offset] & 0xFF) << 24) | ((bytes[offset + 1] & 0xFF) << 16) | ((bytes[offset + 2] & 0xFF) << 8)
-                | ((bytes[offset + 3] & 0xFF));
+        return ((bytes[offset] & 0xFF) << 24)
+                | ((bytes[offset + 1] & 0xFF) << 16)
+                | ((bytes[offset + 2] & 0xFF) << 8)
+                | (bytes[offset + 3] & 0xFF);
     }
 
 
@@ -69,7 +71,7 @@ public final class BitOperator {
      * @return int
      */
     public static int merge(char highPos, char lowPos) {
-        return (((int) highPos) << 16) | ((int) lowPos);
+        return (highPos << 16) | lowPos;
     }
 
 
@@ -81,7 +83,7 @@ public final class BitOperator {
      * @return int
      */
     public static int merge(short highPos, short lowPos) {
-        return (((int) highPos) << 16) | ((int) lowPos);
+        return (highPos << 16) | lowPos;
     }
 
 
@@ -95,7 +97,10 @@ public final class BitOperator {
      * @return long
      */
     public static long merge(char highPos, char second, char third, char lowPos) {
-        return (((long) highPos) << 48) | ((long) second << 32) | ((long) third << 16) | ((int) lowPos);
+        return (((long) highPos) << 48)
+                | ((long) second << 32)
+                | ((long) third << 16)
+                | lowPos;
     }
 
 
@@ -109,7 +114,10 @@ public final class BitOperator {
      * @return long
      */
     public static long merge(short highPos, short second, short third, short lowPos) {
-        return (((long) highPos) << 48) | ((long) second << 32) | ((long) third << 16) | ((int) lowPos);
+        return (((long) highPos) << 48)
+                | ((long) second << 32)
+                | ((long) third << 16)
+                | lowPos;
     }
 
 
@@ -121,32 +129,33 @@ public final class BitOperator {
      * @return long
      */
     public static long merge(int highPos, int lowPos) {
-        return (((long) highPos) << 32) | ((long) lowPos);
+        return (((long) highPos) << 32)
+                | lowPos;
     }
 
 
     //高位掩码
-    public static final long LongHighPosMask = 0xFFFF_FFFF_0000_0000L;
+    public static final long LONG_HIGH_POS_MASK = 0xFFFF_FFFF_0000_0000L;
 
     /**
      * @param l long
      * @return int
      */
     public static int getLongHighPos(long l) {
-        return (int) ((l & LongHighPosMask) >> 32);
+        return (int) ((l & LONG_HIGH_POS_MASK) >> 32);
     }
 
     /*
      * 低位掩码
      */
-    public static final long LongLowPosMask = 0x0000_0000_FFFF_FFFFL;
+    public static final long LONG_LOW_POS_MASK = 0x0000_0000_FFFF_FFFFL;
 
     /**
      * @param l long
      * @return int
      */
     public static int getLongLowPos(long l) {
-        return (int) (l & LongLowPosMask);
+        return (int) (l & LONG_LOW_POS_MASK);
     }
 
     /**
@@ -241,27 +250,7 @@ public final class BitOperator {
         x ^= y;
     }
 
-    /**
-     * 清理DirectMemory
-     *
-     * @param
-     * @since 1.8
-     */
-//	@SuppressWarnings("restriction")
-//	public static boolean cleanDirectMemory(final ByteBuffer buffer) throws RuntimeException {
-//		if (buffer.isDirect()) {
-//			if (buffer instanceof sun.nio.ch.DirectBuffer) {
-//				try {
-//					((sun.nio.ch.DirectBuffer) buffer).cleaner().clean();
-//				} catch (Exception e) {
-//					throw new RuntimeException("call '((sun.nio.ch.DirectBuffer) buffer).cleaner().clean()' exception",
-//							e);
-//				}
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
+
     public static void main(String[] args) {
         System.out.println(minPow2(129));
         int i = 46346;

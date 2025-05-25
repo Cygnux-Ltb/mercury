@@ -11,7 +11,6 @@ import static java.lang.Math.ceil;
 import static java.lang.Math.min;
 import static java.lang.System.arraycopy;
 import static java.util.Arrays.copyOfRange;
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 
 public final class ArrayUtil {
@@ -189,13 +188,15 @@ public final class ArrayUtil {
         return target;
     }
 
+    private static final String COPY_ORIGIN = "origin";
+
     /**
      * @param origin boolean[]
      * @param target boolean[]
      * @return boolean[]
      */
     public static boolean[] copy(@Nonnull boolean[] origin, @Nullable boolean[] target) {
-        Asserter.requiredLength(origin, 1, "origin");
+        Asserter.requiredLength(origin, 1, COPY_ORIGIN);
         if (target == null)
             target = new boolean[origin.length];
         arraycopy(origin, 0, target, 0, min(target.length, origin.length));
@@ -208,7 +209,7 @@ public final class ArrayUtil {
      * @return byte[]
      */
     public static byte[] copy(@Nonnull byte[] origin, @Nullable byte[] target) {
-        Asserter.requiredLength(origin, 1, "origin");
+        Asserter.requiredLength(origin, 1, COPY_ORIGIN);
         if (target == null)
             target = new byte[origin.length];
         arraycopy(origin, 0, target, 0, min(target.length, origin.length));
@@ -221,7 +222,7 @@ public final class ArrayUtil {
      * @return char[]
      */
     public static char[] copy(@Nonnull char[] origin, @Nullable char[] target) {
-        Asserter.requiredLength(origin, 1, "origin");
+        Asserter.requiredLength(origin, 1, COPY_ORIGIN);
         if (target == null)
             target = new char[origin.length];
         arraycopy(origin, 0, target, 0, min(target.length, origin.length));
@@ -234,7 +235,7 @@ public final class ArrayUtil {
      * @return int[]
      */
     public static int[] copy(@Nonnull int[] origin, @Nullable int[] target) {
-        Asserter.requiredLength(origin, 1, "origin");
+        Asserter.requiredLength(origin, 1, COPY_ORIGIN);
         if (target == null)
             target = new int[origin.length];
         arraycopy(origin, 0, target, 0, min(target.length, origin.length));
@@ -247,7 +248,7 @@ public final class ArrayUtil {
      * @return long[]
      */
     public static long[] copy(@Nonnull long[] origin, @Nullable long[] target) {
-        Asserter.requiredLength(origin, 1, "origin");
+        Asserter.requiredLength(origin, 1, COPY_ORIGIN);
         if (target == null)
             target = new long[origin.length];
         arraycopy(origin, 0, target, 0, min(target.length, origin.length));
@@ -260,7 +261,7 @@ public final class ArrayUtil {
      * @return float[]
      */
     public static float[] copy(@Nonnull float[] origin, @Nullable float[] target) {
-        Asserter.requiredLength(origin, 1, "origin");
+        Asserter.requiredLength(origin, 1, COPY_ORIGIN);
         if (target == null)
             target = new float[origin.length];
         arraycopy(origin, 0, target, 0, min(target.length, origin.length));
@@ -273,7 +274,7 @@ public final class ArrayUtil {
      * @return double[]
      */
     public static double[] copy(@Nonnull double[] origin, @Nullable double[] target) {
-        Asserter.requiredLength(origin, 1, "origin");
+        Asserter.requiredLength(origin, 1, COPY_ORIGIN);
         if (target == null)
             target = new double[origin.length];
         arraycopy(origin, 0, target, 0, min(target.length, origin.length));
@@ -286,7 +287,7 @@ public final class ArrayUtil {
      * @return String[]
      */
     public static String[] copy(@Nonnull String[] origin, @Nullable String[] target) {
-        Asserter.requiredLength(origin, 1, "origin");
+        Asserter.requiredLength(origin, 1, COPY_ORIGIN);
         if (target == null)
             target = new String[origin.length];
         arraycopy(origin, 0, target, 0, min(target.length, origin.length));
@@ -299,7 +300,7 @@ public final class ArrayUtil {
      * @return Object[]
      */
     public static Object[] copy(@Nonnull Object[] origin, @Nullable Object[] target) {
-        Asserter.requiredLength(origin, 1, "origin");
+        Asserter.requiredLength(origin, 1, COPY_ORIGIN);
         if (target == null)
             target = new Object[origin.length];
         arraycopy(origin, 0, target, 0, min(target.length, origin.length));
@@ -317,7 +318,7 @@ public final class ArrayUtil {
                         //to
                         min((i + 1) * chunkSize, original.length)
                 ))
-                .collect(toList());
+                .toList();
     }
 
     public static List<byte[]> splitArray(int chunkSize, byte... original) {
@@ -329,7 +330,7 @@ public final class ArrayUtil {
                         //to
                         min((i + 1) * chunkSize, original.length)
                 ))
-                .collect(toList());
+                .toList();
     }
 
     public static List<int[]> splitArray(int chunkSize, int... original) {
@@ -341,7 +342,7 @@ public final class ArrayUtil {
                         //to
                         min((i + 1) * chunkSize, original.length)
                 ))
-                .collect(toList());
+                .toList();
     }
 
     public static List<long[]> splitArray(int chunkSize, long... original) {
@@ -353,7 +354,7 @@ public final class ArrayUtil {
                         //to
                         min((i + 1) * chunkSize, original.length)
                 ))
-                .collect(toList());
+                .toList();
     }
 
     public static List<double[]> splitArray(int chunkSize, double... original) {
@@ -365,13 +366,11 @@ public final class ArrayUtil {
                         //to
                         min((i + 1) * chunkSize, original.length)
                 ))
-                .collect(toList());
+                .toList();
     }
 
-    public static int[] shiftLeft(final int[] array){
-         Arrays.sort(array);
-
-
+    public static int[] shiftLeft(final int[] array) {
+        Arrays.sort(array);
         return array;
     }
 

@@ -20,7 +20,7 @@ import static io.mercury.common.collections.MutableMaps.newLongLongMap;
  * 采用惰性求值, 只在获取当前最新值时排除已过期的值<br>
  * 未进行堆外缓存, 仅在当前JVM进程内有效, JVM重启后, 计数器归零
  * <p>
- * TODO 增加强一致性, 使用自旋锁
+ * NEXT 增加强一致性, 使用自旋锁
  *
  * @author yellow013
  */

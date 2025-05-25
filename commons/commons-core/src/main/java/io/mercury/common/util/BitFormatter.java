@@ -17,7 +17,7 @@ public final class BitFormatter {
      */
     public static String byteBinary(byte b) {
         String binary = toBinaryString(b);
-        return highPosFill(Byte.SIZE, Byte.SIZE - binary.length(), binary);
+        return highPosFill(Byte.SIZE - binary.length(), binary);
     }
 
     /**
@@ -28,7 +28,7 @@ public final class BitFormatter {
      */
     public static String charBinary(char c) {
         String binary = toBinaryString(c);
-        return highPosFill(Character.SIZE, Character.SIZE - binary.length(), binary);
+        return highPosFill(Character.SIZE - binary.length(), binary);
     }
 
     /**
@@ -49,7 +49,7 @@ public final class BitFormatter {
      */
     public static String shortBinary(short s) {
         String binary = toBinaryString(s);
-        return highPosFill(Short.SIZE, Short.SIZE - binary.length(), binary);
+        return highPosFill(Short.SIZE - binary.length(), binary);
     }
 
     /**
@@ -71,7 +71,7 @@ public final class BitFormatter {
      */
     public static String intBinary(int i) {
         String binary = toBinaryString(i);
-        return highPosFill(Integer.SIZE, Integer.SIZE - binary.length(), binary);
+        return highPosFill(Integer.SIZE - binary.length(), binary);
     }
 
     /**
@@ -94,7 +94,7 @@ public final class BitFormatter {
      */
     public static String longBinary(long l) {
         String binary = toBinaryString(l);
-        return highPosFill(Long.SIZE, Long.SIZE - binary.length(), binary);
+        return highPosFill(Long.SIZE - binary.length(), binary);
     }
 
     /**
@@ -112,14 +112,13 @@ public final class BitFormatter {
     }
 
     /**
-     * 指定总长度, 空白长度, 实际值, 返回的字符串填充指定长度的0
+     * 空白长度, 实际值, 返回的字符串填充指定长度的0
      *
-     * @param sumLen    int
      * @param blankLen  int
      * @param binaryStr String
      * @return String
      */
-    private static String highPosFill(int sumLen, int blankLen, String binaryStr) {
+    private static String highPosFill(int blankLen, String binaryStr) {
         return "0".repeat(max(0, blankLen)) + binaryStr;
     }
 

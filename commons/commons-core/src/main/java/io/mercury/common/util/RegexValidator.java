@@ -73,9 +73,10 @@ public final class RegexValidator implements Serializable {
      * Construct a validator for a single regular expression with the specified case
      * sensitivity.
      *
-     * @param caseSensitive when <code>true</code> matching is <i>case
-     *                      sensitive</i>, otherwise matching is <i>case
-     *                      in-sensitive</i>
+     * @param caseSensitive when <code>true</code> matching
+     *                      is <i>case-sensitive</i>,
+     *                      otherwise matching is
+     *                      <i>case in-sensitive</i>
      * @param regex         The regular expression this validator will validate
      *                      against
      */
