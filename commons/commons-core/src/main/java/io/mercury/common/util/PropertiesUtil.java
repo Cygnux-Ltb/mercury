@@ -158,7 +158,6 @@ public final class PropertiesUtil {
         try {
             LibraryPathManager.addLibraryDir("~/java_lib");
         } catch (Exception _) {
-            
         }
         System.out.println("---new---");
         PropertiesUtil.show(System.getProperties());
