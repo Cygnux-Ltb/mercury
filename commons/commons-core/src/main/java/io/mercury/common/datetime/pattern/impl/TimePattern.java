@@ -122,7 +122,7 @@ public enum TimePattern implements TemporalPattern<LocalTime> {
         for (TimePattern pattern : TimePattern.values()) {
             try {
                 return LocalTime.parse(text, pattern.formatter);
-            } catch (DateTimeParseException ignored) {
+            } catch (DateTimeParseException _) {
             }
         }
         throw new DateTimeParseException("No matching pattern", text, 0);

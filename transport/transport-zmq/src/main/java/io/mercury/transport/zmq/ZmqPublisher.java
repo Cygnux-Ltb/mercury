@@ -61,7 +61,7 @@ public final class ZmqPublisher<T> extends ZmqComponent implements Publisher<byt
 
     @Override
     public ZmqType getZmqType() {
-        return ZmqType.ZPublisher;
+        return ZmqType.Z_PUBLISHER;
     }
 
     @Override

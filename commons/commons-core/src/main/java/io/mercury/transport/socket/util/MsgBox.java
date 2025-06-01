@@ -30,6 +30,7 @@ public class MsgBox {
         try {
             box.put(msg);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             throw new RuntimeInterruptedException("blockingInMsg throw InterruptedException", e);
         }
     }
@@ -38,6 +39,7 @@ public class MsgBox {
         try {
             return box.take();
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             throw new RuntimeInterruptedException("blockingOutMsg throw InterruptedException", e);
         }
     }

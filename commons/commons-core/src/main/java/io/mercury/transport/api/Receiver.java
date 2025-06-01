@@ -9,7 +9,7 @@ public interface Receiver extends Transport, Runnable {
     /**
      * Start receive
      *
-     * @throws ReceiverStartException re
+     * @throws ReceiverStartException e
      */
     @AsyncFunction
     void receive() throws ReceiverStartException;

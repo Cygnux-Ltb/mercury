@@ -31,20 +31,22 @@ public interface Transport extends Closeable {
     boolean isConnected();
 
     /**
-     * @return Is destroy
+     * @return Is destroyed
      */
     boolean closeIgnoreException();
 
     @Override
     default void close() throws IOException {
-        boolean isClosed;
-        try {
-            isClosed = closeIgnoreException();
-        } catch (Exception e) {
-            throw new IOException(getName() + " -> " + e.getMessage(), e);
+        synchronized (this) {
+            boolean isClosed;
+            try {
+                isClosed = closeIgnoreException();
+            } catch (Exception e) {
+                throw new IOException(getName() + " -> " + e.getMessage(), e);
+            }
+            if (!isClosed)
+                throw new IOException(getName() + " -> Close failed");
         }
-        if (!isClosed)
-            throw new IOException(getName() + " -> Close failed");
     }
 
 }

@@ -15,7 +15,7 @@ public class ZmqBroker extends ZmqComponent {
 
     @Override
     public ZmqType getZmqType() {
-        return ZmqType.ZBroker;
+        return ZmqType.Z_BROKER;
     }
 
 }

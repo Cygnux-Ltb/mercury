@@ -6,7 +6,7 @@ public interface Requester<T> extends Transport {
 
 	/**
 	 * 
-	 * @return <T> T
+	 * @return <T> T t
 	 */
 	T request() throws RequestException;
 

@@ -49,7 +49,7 @@ public class ZmqReceiver extends ZmqComponent implements Receiver, Closeable {
 
     @Override
     public ZmqType getZmqType() {
-        return ZmqType.ZReceiver;
+        return ZmqType.Z_RECEIVER;
     }
 
     private final byte[] emptyMsg = new byte[]{};

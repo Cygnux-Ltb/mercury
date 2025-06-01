@@ -48,7 +48,7 @@ public class ZmqSender<T> extends ZmqComponent implements Sender<T>, Closeable {
 
     @Override
     public ZmqType getZmqType() {
-        return ZmqType.ZSender;
+        return ZmqType.Z_SENDER;
     }
 
     @Override

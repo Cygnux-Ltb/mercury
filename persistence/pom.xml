@@ -85,7 +85,7 @@
             <dependency>
                 <groupId>com.zaxxer</groupId>
                 <artifactId>HikariCP</artifactId>
-                <version>6.2.1</version>
+                <version>6.3.0</version>
             </dependency>
 
             <!-- Apache Commons Compress software defines an API for working with
@@ -125,7 +125,7 @@
             <dependency>
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
-                <version>2.13.0</version>
+                <version>2.14.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

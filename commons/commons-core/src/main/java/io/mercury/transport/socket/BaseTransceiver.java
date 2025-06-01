@@ -9,11 +9,8 @@ public abstract class BaseTransceiver<T> extends TransportComponent implements T
 
     private final Sender<T> sender;
 
-    private final Queue<T> queue;
-
     protected BaseTransceiver() {
-        this.queue = initSendQueue();
-        this.sender = new InnerSender(queue);
+        this.sender = new InnerSender(initSendQueue());
     }
 
     private class InnerSender extends TransportComponent implements Sender<T> {

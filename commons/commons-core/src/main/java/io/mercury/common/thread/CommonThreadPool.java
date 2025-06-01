@@ -108,7 +108,7 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
         return threadPoolName;
     }
 
-    public final static class ThreadPoolBuilder {
+    public static final class ThreadPoolBuilder {
 
         private int corePoolSize = CurrentRuntime.availableProcessors();
 
@@ -198,12 +198,12 @@ public final class CommonThreadPool extends ThreadPoolExecutor {
     }
 
     public static void main(String[] args) {
-        int COUNT_BITS = Integer.SIZE - 3;
-        System.out.println(Integer.toBinaryString(-1 << COUNT_BITS));
+        int countBits = Integer.SIZE - 3;
+        System.out.println(Integer.toBinaryString(-1 << countBits));
         System.out.println(Integer.toBinaryString(0));
-        System.out.println(Integer.toBinaryString(1 << COUNT_BITS));
-        System.out.println(Integer.toBinaryString(2 << COUNT_BITS));
-        System.out.println(Integer.toBinaryString(3 << COUNT_BITS));
+        System.out.println(Integer.toBinaryString(1 << countBits));
+        System.out.println(Integer.toBinaryString(2 << countBits));
+        System.out.println(Integer.toBinaryString(3 << countBits));
     }
 
 }

@@ -145,13 +145,13 @@ public class NativeTime {
         return ticks_per_nanosecond;
     }
 
-    public native static long rdtsc();
+    public static native long rdtsc();
 
-    public native static long cpuid_rdtsc();
+    public static native long cpuid_rdtsc();
 
-    public native static long rdtscp();
+    public static native long rdtscp();
 
-    public native static long clocknanos();
+    public static native long clocknanos();
 
     public static void main(String[] args) {
 
