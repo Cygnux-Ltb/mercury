@@ -2,16 +2,16 @@ package io.mercury.transport.zmq;
 
 public enum ZmqType {
 
-    ZBroker,
+    Z_BROKER,
 
-    ZProxy,
+    Z_PROXY,
 
-    ZPublisher,
+    Z_PUBLISHER,
 
-    ZSubscriber,
+    Z_SUBSCRIBER,
 
-    ZSender,
+    Z_SENDER,
 
-    ZReceiver,
+    Z_RECEIVER,
 
 }

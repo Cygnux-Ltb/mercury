@@ -43,7 +43,8 @@ import static java.util.Objects.requireNonNullElse;
  * 扩展多写和单写 [DONE]
  */
 public abstract sealed class RingEventbus<E> extends RunnableComponent
-        permits RingEventbus.MultiProducerRingEventbus, RingEventbus.SingleProducerRingEventbus {
+        permits RingEventbus.MultiProducerRingEventbus,
+        RingEventbus.SingleProducerRingEventbus {
 
     private static final Logger log = getLogger(RingEventbus.class);
 
@@ -67,7 +68,7 @@ public abstract sealed class RingEventbus<E> extends RunnableComponent
                 factory, adjustSize(size),
                 // ThreadFactory
                 ofPlatform(this.name + "-worker").priority(MAX).build(),
-                // 生产者策略, Waiting策略
+                // 生产者类型, Waiting策略
                 type, strategy);
         this.manager = manager;
         this.manager.deploy(this.disruptor);

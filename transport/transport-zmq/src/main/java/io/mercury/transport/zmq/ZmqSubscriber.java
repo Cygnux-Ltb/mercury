@@ -66,7 +66,7 @@ public final class ZmqSubscriber extends ZmqComponent implements Subscriber {
 
     @Override
     public ZmqType getZmqType() {
-        return ZmqType.ZSubscriber;
+        return ZmqType.Z_SUBSCRIBER;
     }
 
     @Override
