@@ -26,7 +26,7 @@ import static java.time.Instant.EPOCH;
  *
  * @author yellow013
  */
-public final class EpochTimeUtil {
+public final class EpochUtil {
 
     /**
      * EpochTime Zero Point : UTC 1970-01-01 00:00:00.0000
@@ -62,7 +62,8 @@ public final class EpochTimeUtil {
      * @return long
      */
     public static long getEpochMillis(@Nonnull ZonedDateTime datetime) {
-        return datetime.toEpochSecond() * MILLIS_PER_SECONDS + datetime.getNano() / NANOS_PER_MILLIS;
+        return datetime.toEpochSecond() * MILLIS_PER_SECONDS
+                + datetime.getNano() / NANOS_PER_MILLIS;
     }
 
     /**
@@ -246,8 +247,7 @@ public final class EpochTimeUtil {
      * @param zoneId  ZoneId
      * @return long
      */
-    public static ZonedDateTime ofEpochSeconds(long seconds,
-                                               @Nonnull ZoneId zoneId) {
+    public static ZonedDateTime ofEpochSeconds(long seconds, @Nonnull ZoneId zoneId) {
         return ZonedDateTime.ofInstant(Instant.ofEpochSecond(seconds), zoneId);
     }
 

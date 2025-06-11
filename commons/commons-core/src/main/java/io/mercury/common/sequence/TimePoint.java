@@ -1,6 +1,6 @@
 package io.mercury.common.sequence;
 
-import io.mercury.common.epoch.EpochTimeUtil;
+import io.mercury.common.epoch.EpochUtil;
 import io.mercury.common.lang.Asserter;
 
 import java.time.ZonedDateTime;
@@ -100,8 +100,8 @@ public class TimePoint implements OrderedObject<TimePoint> {
         System.out.println(timeStarted1.getEpochSecond());
         System.out.println(timeStarted1.orderNum());
 
-        System.out.println(EpochTimeUtil.getEpochMillis());
-        System.out.println(EpochTimeUtil.getEpochSeconds());
+        System.out.println(EpochUtil.getEpochMillis());
+        System.out.println(EpochUtil.getEpochSeconds());
 
         System.out.println(Long.MAX_VALUE);
 
